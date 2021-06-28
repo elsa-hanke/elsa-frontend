@@ -1,7 +1,10 @@
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router'
 import Meta from 'vue-meta'
 
+import LoginView from '@/views/login/login-view.vue'
+import Login from '@/views/login/login.vue'
+import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import Arvioinnit from '../views/arvioinnit/arvioinnit.vue'
 import Arviointi from '../views/arvioinnit/arviointi.vue'
 import Arviointipyynto from '../views/arvioinnit/arviointipyynto.vue'
@@ -10,7 +13,6 @@ import Asiakirjat from '../views/asiakirjat/asiakirjat.vue'
 import Etusivu from '../views/etusivu.vue'
 import Itsearviointi from '../views/arvioinnit/itsearviointi.vue'
 import ItsearviointiValmis from '../views/arvioinnit/itsearviointi-valmis.vue'
-import Kayttooikeus from '../views/kayttooikeus.vue'
 import Koulutukset from '../views/koulutukset.vue'
 import Koulutussuunnitelma from '../views/koulutussuunnitelma.vue'
 import MuokkaaArviointia from '../views/arvioinnit/muokkaa-arviointia.vue'
@@ -36,15 +38,37 @@ import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoi
 import KouluttajaKoulutussopimus from '../views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus.vue'
 import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
 import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
+import store from '@/store'
+import { restoreRoute, storeRoute } from '@/utils/local-storage'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
+
+const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
+  await store.dispatch('auth/authorize')
+
+  if (store.getters['auth/isLoggedIn']) {
+    // Ohjataan rooliton käyttäjä roolien lisäämisen näkymään kirjautumisen jälkeen
+    if (store.getters['auth/account'].authorities.length === 0 && to.name !== 'kayttooikeus') {
+      next({
+        name: 'kayttooikeus',
+        replace: true
+      })
+    } else {
+      restoreRoute(next)
+    }
+  } else {
+    storeRoute(to)
+    next('/login')
+  }
+}
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'root',
     component: Root,
+    beforeEnter: guard,
     redirect: {
       name: 'etusivu'
     },
@@ -258,9 +282,53 @@ const routes: Array<RouteConfig> = [
     ]
   },
   {
-    path: '/kayttooikeus',
-    name: 'kayttooikeus',
-    component: Kayttooikeus
+    path: '/login',
+    component: LoginView,
+    children: [
+      {
+        path: '',
+        name: 'login',
+        component: Login,
+        beforeEnter: async (to, from, next) => {
+          await store.dispatch('auth/authorize')
+
+          if (store.getters['auth/isLoggedIn']) {
+            // Ohjataan rooliton käyttäjä roolien lisäämisen näkymään kirjautumisen jälkeen
+            if (
+              store.getters['auth/account'].authorities.length === 0 &&
+              to.name !== 'kayttooikeus'
+            ) {
+              next({
+                name: 'kayttooikeus',
+                replace: true
+              })
+            } else {
+              next('/etusivu')
+            }
+          } else {
+            next()
+          }
+        }
+      },
+      {
+        path: '/kayttooikeus',
+        name: 'kayttooikeus',
+        component: Kayttooikeus,
+        beforeEnter: async (to, from, next) => {
+          await store.dispatch('auth/authorize')
+
+          if (store.getters['auth/isLoggedIn']) {
+            if (store.getters['auth/account'].authorities.length > 0) {
+              next('/etusivu')
+            } else {
+              next()
+            }
+          } else {
+            next('/login')
+          }
+        }
+      }
+    ]
   },
   {
     path: '*',

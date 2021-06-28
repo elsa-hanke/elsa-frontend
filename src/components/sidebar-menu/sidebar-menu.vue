@@ -1,10 +1,6 @@
 <template>
   <div>
-    <nav
-      id="sidebar-menu"
-      class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar"
-      :style="{ paddingTop: paddingTop + 'px' }"
-    >
+    <nav id="sidebar-menu" class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar">
       <div class="sidebar-sticky font-weight-500">
         <b-nav vertical>
           <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
@@ -91,14 +87,14 @@
   $navbar-height: 64px;
 
   .sidebar {
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 100;
+    height: 100%;
     padding: 0;
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-    padding-top: $navbar-height;
 
     .nav-link {
       padding: 1rem;

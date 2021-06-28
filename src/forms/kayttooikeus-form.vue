@@ -1,10 +1,5 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('erikoistuva-laakari')">
-      <template v-slot="{ uid }">
-        <user-avatar :id="uid" />
-      </template>
-    </elsa-form-group>
     <elsa-form-group :label="$t('valitse-oma-yliopistosi')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-multiselect
@@ -17,9 +12,9 @@
       </template>
     </elsa-form-group>
     <div class="text-right">
-      <elsa-button variant="back" @click="logout()">{{ $t('peruuta') }}</elsa-button>
+      <elsa-button variant="back" @click="logout()">{{ $t('kirjaudu-ulos') }}</elsa-button>
       <elsa-button type="submit" :disabled="!value.yliopisto" variant="primary" class="ml-2">
-        {{ $t('jatka') }}
+        {{ $t('jatka-eteenpain') }}
       </elsa-button>
     </div>
   </b-form>
@@ -58,7 +53,7 @@
 
     onSubmit() {
       this.$emit('submit', {
-        yliopisto: this.value.yliopisto?.value
+        yliopisto: this.value.yliopisto?.value.toString()
       })
     }
   }

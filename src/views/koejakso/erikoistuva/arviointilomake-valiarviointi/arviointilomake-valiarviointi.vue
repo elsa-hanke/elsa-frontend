@@ -19,7 +19,7 @@
 
       <hr />
 
-      <b-form>
+      <b-form v-if="editable">
         <b-row>
           <b-col lg="10">
             <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
@@ -99,6 +99,19 @@
           </b-col>
         </b-row>
       </b-form>
+
+      <div v-if="!editable">
+        <b-row>
+          <b-col lg="10">
+            <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
+            <h5>{{ $t('lahikouluttaja') }}</h5>
+            {{ valiarviointiLomake.lahikouluttaja.nimi }}
+
+            <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
+            {{ valiarviointiLomake.lahiesimies.nimi }}
+          </b-col>
+        </b-row>
+      </div>
     </b-container>
 
     <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
@@ -220,7 +233,7 @@
     }
 
     get editable() {
-      switch (this.koejaksoData.aloituskeskustelunTila) {
+      switch (this.koejaksoData.valiarvioinninTila) {
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return true
         case LomakeTilat.UUSI:
@@ -304,7 +317,6 @@
       if (this.$v.$anyError) {
         return
       }
-      console.log('lomake', this.valiarviointiLomake)
       return this.$bvModal.show('confirm-send')
     }
 
