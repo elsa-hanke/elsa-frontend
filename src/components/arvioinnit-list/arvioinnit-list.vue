@@ -4,11 +4,11 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('suoritusarvioinnit') }}</h1>
+          <h1>{{ $t('arvioinnit') }}</h1>
           <search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
-            :placeholder="$t('hae-suoritusarviointeja')"
+            :placeholder="$t('hae-tapahtuman-nimella')"
           />
         </b-col>
       </b-row>
