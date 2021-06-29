@@ -11,6 +11,10 @@ export const durationOptions = reactive({
 export class DatePlugin {
   public install(vue: typeof Vue) {
     function parseAndFormat(value: string, pattern: string) {
+      if (!value) {
+        return ''
+      }
+
       const date = parseISO(value)
       let locale
       switch (VueI18n.locale) {
@@ -28,14 +32,24 @@ export class DatePlugin {
     }
 
     vue.prototype.$date = function (value: string) {
+      if (!value) {
+        return ''
+      }
       return parseAndFormat(value, 'P')
     }
 
     vue.prototype.$datetime = function (value: string) {
+      if (!value) {
+        return ''
+      }
       return parseAndFormat(value, 'Pp')
     }
 
     vue.prototype.$duration = function (value: number) {
+      if (!value) {
+        return ''
+      }
+
       if (durationOptions.showInDays) {
         return `${Math.round(value)} vrk`
       }

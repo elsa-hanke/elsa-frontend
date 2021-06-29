@@ -1,11 +1,16 @@
 export type ErikoistuvaLaakari = {
-  erikoisalaId: number
   id: number | null
   kayttajaId: number
+  erikoisalaId: number
+  erikoisalaNimi: string
   opintojenAloitusvuosi: string
   opiskelijatunnus: string
   puhelinnumero: string
   sahkoposti: string
+  syntymaaika: string
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
+  yliopisto: string
 }
 
 export interface UserAccount {
@@ -91,12 +96,14 @@ export interface KoulutussopimusLomake {
   lahetetty: boolean
   muokkauspaiva: string
   opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymisspaiva: string
   vastuuhenkilo: Vastuuhenkilo | null
   erikoistuvanAllekirjoitusaika?: string
 }
 
 export type Esimies = {
   id: number | null
+  kayttajaUserId: string | null
   kuittausaika: string
   nimi: string
   sopimusHyvaksytty: boolean
