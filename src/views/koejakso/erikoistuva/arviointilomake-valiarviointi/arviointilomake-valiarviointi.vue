@@ -208,12 +208,14 @@
       korjausehdotus: '',
       lahiesimies: {
         id: null,
+        kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
         id: 0,
+        kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false

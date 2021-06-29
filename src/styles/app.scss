@@ -141,6 +141,11 @@ textarea::placeholder {
   background-color: $danger;
 }
 
+.alert-success {
+  color: $white;
+  background-color: $green;
+}
+
 // Piilotetaan validoinnin ikonit
 .was-validated .form-control:invalid,
 .was-validated .form-control:valid,

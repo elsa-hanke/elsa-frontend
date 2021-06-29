@@ -375,12 +375,14 @@
       lahetetty: false,
       lahiesimies: {
         id: null,
+        kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
         id: null,
+        kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
         sopimusHyvaksytty: false

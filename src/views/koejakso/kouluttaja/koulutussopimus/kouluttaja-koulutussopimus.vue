@@ -78,13 +78,17 @@
         <hr />
 
         <b-row>
-          <b-col lg="8">
+          <b-col lg="12">
             <h3>{{ $t('koulutuspaikan-tiedot') }}</h3>
             <div v-for="(koulutuspaikka, index) in form.koulutuspaikat" :key="index">
               <h5>{{ $t('toimipaikan-nimi') }}</h5>
               <p>{{ koulutuspaikka.nimi }}</p>
               <h5>{{ $t('toimipaikalla-koulutussopimus.header') }}</h5>
-              <p>TODO</p>
+              <p v-if="!koulutuspaikka.yliopisto">{{ $t('kylla') }}</p>
+              <p v-else>
+                {{ $t('toimipaikalla-koulutussopimus.ei-sopimusta') }}:
+                {{ koulutuspaikka.yliopisto }}
+              </p>
             </div>
           </b-col>
         </b-row>
@@ -210,7 +214,6 @@
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
   import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
-  import UserDetails from '@/components/user-details/user-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
@@ -218,8 +221,7 @@
       KouluttajaKoulutussopimusForm,
       ElsaFormGroup,
       ElsaButton,
-      KouluttajaKoulutussopimusReadonly,
-      UserDetails
+      KouluttajaKoulutussopimusReadonly
     },
     validations: {
       form: {
@@ -269,6 +271,7 @@
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
+      opintooikeudenPaattymisspaiva: '',
       vastuuhenkilo: null
     }
 
@@ -328,10 +331,8 @@
       )
     }
 
-    //TODO switch to email when it is added to KayttajaDTO
     currentKouluttaja(kouluttaja: any) {
-      const nimi = this.account.firstName.concat(' ', this.account.lastName)
-      return kouluttaja.nimi === nimi
+      return this.account.email === kouluttaja.sahkoposti
     }
 
     async returnToSender() {
