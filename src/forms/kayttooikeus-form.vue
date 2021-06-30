@@ -28,7 +28,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import { yliopistot } from '@/utils/constants'
+  import { getYliopistot } from '@/api/erikoistuva'
 
   @Component({
     components: {
@@ -39,12 +39,13 @@
     }
   })
   export default class KayttooikeusForm extends Vue {
+    yliopistot = []
     value = {
       yliopisto: null
     } as any
 
-    get yliopistot() {
-      return yliopistot
+    async mounted() {
+      this.yliopistot = (await getYliopistot()).data
     }
 
     async logout() {

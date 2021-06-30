@@ -65,3 +65,13 @@ export async function deleteTyoskentelyjakso(id: string) {
   const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
   await axios.delete(path)
 }
+
+export async function getKoulutussopimusLomake() {
+  const path = 'erikoistuva-laakari/koulutussopimus-lomake'
+  return await axios.get(path)
+}
+
+export async function getYliopistot() {
+  const path = '/yliopistot'
+  return await axios.get(path)
+}

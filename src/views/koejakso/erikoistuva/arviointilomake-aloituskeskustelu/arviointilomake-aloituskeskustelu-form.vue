@@ -83,7 +83,7 @@
               :id="uid"
               v-model="form.koejaksonAlkamispaiva"
               :state="validateState('koejaksonAlkamispaiva')"
-              :min="opintooikeudenMyontamispaiva"
+              :min="account.erikoistuvaLaakari.opintooikeudenMyontamispaiva"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -399,10 +399,6 @@
     params = {
       saving: false,
       deleting: false
-    }
-
-    get opintooikeudenMyontamispaiva() {
-      return this.form?.koejaksonAlkamispaiva
     }
 
     get hasErrors() {

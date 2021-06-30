@@ -62,7 +62,7 @@
                     >
                       <elsa-button
                         variant="primary"
-                        :disabled="form.tyoskentelyjakso === null"
+                        :disabled="!form.tyoskentelyjakso"
                         :loading="tyoskentelyjaksoUpdating"
                         @click="onTyoskentelyjaksoAttached"
                       >
@@ -232,7 +232,6 @@
     async mounted() {
       this.loading = true
       await store.dispatch('erikoistuva/getKoejakso')
-      await store.dispatch('erikoistuva/getKouluttajat')
       this.tyoskentelyjaksotMutable = store.getters['erikoistuva/koejakso'].tyoskentelyjaksot
       this.tyoskentelyjaksotKoejakso = this.mapTyoskentelyjaksotKoejakso(
         this.tyoskentelyjaksotMutable?.filter((t: any) => t.liitettyKoejaksoon) ?? []

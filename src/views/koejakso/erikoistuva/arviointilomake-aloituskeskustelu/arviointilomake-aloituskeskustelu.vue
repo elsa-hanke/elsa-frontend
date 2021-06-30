@@ -19,7 +19,7 @@
       <hr />
       <b-row>
         <b-col>
-          <user-details :account="account" :show-birthdate="false"></user-details>
+          <erikoistuva-details :account="account" :show-birthdate="false"></erikoistuva-details>
         </b-col>
       </b-row>
       <hr />
@@ -51,13 +51,13 @@
   import { AloituskeskusteluLomake } from '@/types'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
-  import UserDetails from '@/components/user-details/user-details.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ArviointilomakeAloituskeskusteluForm from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-form.vue'
   import ArviointilomakeAloituskeskusteluReadonly from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-readonly.vue'
 
   @Component({
     components: {
-      UserDetails,
+      ErikoistuvaDetails,
       ArviointilomakeAloituskeskusteluForm,
       ArviointilomakeAloituskeskusteluReadonly
     }
@@ -179,7 +179,9 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('erikoistuva/getKoejakso')
+      if (!this.koejaksoData) {
+        await store.dispatch('erikoistuva/getKoejakso')
+      }
       await store.dispatch('erikoistuva/getKouluttajat')
       this.setKoejaksoData()
       this.loading = false

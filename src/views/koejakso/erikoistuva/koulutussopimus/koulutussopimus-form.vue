@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <b-row>
-      <b-col lg="4">
+      <b-col v-if="!account.erikoistuvaLaakari.opintooikeudenMyontamispaiva" lg="4">
         <elsa-form-group :label="$t('opinto-oikeuden-alkamispäivä')" :required="true">
           <template v-slot="{ uid }">
             <elsa-form-datepicker
@@ -15,6 +15,12 @@
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
+      </b-col>
+      <b-col v-else lg="8">
+        <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
+        <p v-if="account.erikoistuvaLaakari.opintooikeudenMyontamispaiva">
+          {{ $date(account.erikoistuvaLaakari.opintooikeudenMyontamispaiva) }}
+        </p>
       </b-col>
     </b-row>
     <b-row>
@@ -33,9 +39,12 @@
               :id="uid"
               v-model="form.koejaksonAlkamispaiva"
               :state="validateState('koejaksonAlkamispaiva')"
-              :min="opintooikeudenMyontamispaiva"
-              :max="koejaksonPaattymispaiva"
-              :disabled="!form.opintooikeudenMyontamispaiva"
+              :min="form.opintooikeudenMyontamispaiva"
+              :max="maxKoejaksonAlkamispaiva"
+              :disabled="
+                !form.opintooikeudenMyontamispaiva &&
+                !account.erikoistuvaLaakari.opintooikeudenMyontamispaiva
+              "
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -86,6 +95,7 @@
           v-for="(koulutuspaikka, index) in form.koulutuspaikat"
           :key="index"
           :koulutuspaikka="koulutuspaikka"
+          :yliopistot="yliopistot"
           v-model="form.koulutuspaikat"
         ></koulutuspaikka-details>
         <elsa-button
@@ -135,10 +145,14 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row>
+    <b-row v-if="vastuuhenkilot !== null">
       <b-col lg="8">
         <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
-        <elsa-form-group :label="$t('erikoisala-vastuuhenkilö-label')" :required="true">
+        <elsa-form-group
+          v-if="vastuuhenkilot.length > 1"
+          :label="$t('erikoisala-vastuuhenkilö-label')"
+          :required="true"
+        >
           <template v-slot="{ uid }">
             <b-form-radio-group
               :id="uid"
@@ -157,6 +171,10 @@
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
+        <div v-if="vastuuhenkilot.length === 1">
+          <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
+          <p>{{ vastuuhenkilot[0].nimi }}, {{ vastuuhenkilot[0].nimike }}</p>
+        </div>
       </b-col>
     </b-row>
     <hr />
@@ -181,9 +199,10 @@
   import { Vue, Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
-  import { Kouluttaja, KoulutussopimusLomake, UserAccount } from '@/types'
+  import { format } from 'date-fns'
+  import { Kouluttaja, KoulutussopimusLomake, UserAccount, Vastuuhenkilo } from '@/types'
   import _get from 'lodash/get'
-  import { defaultKouluttaja, defaultKoulutuspaikka, vastuuhenkilot } from '@/utils/constants'
+  import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -228,8 +247,14 @@
     @Prop({ required: true, default: {} })
     account!: UserAccount
 
-    @Prop({ required: false, default: () => [] })
+    @Prop({ required: true, default: () => [] })
     kouluttajat!: Kouluttaja[]
+
+    @Prop({ required: true, default: () => [] })
+    vastuuhenkilot!: Vastuuhenkilo[]
+
+    @Prop({ required: true, default: () => [] })
+    yliopistot!: []
 
     @Prop({ required: true })
     editable!: boolean
@@ -240,7 +265,7 @@
       erikoistuvanOpiskelijatunnus: '',
       erikoistuvanPuhelinnumero: '',
       erikoistuvanSahkoposti: '',
-      erikoistuvanSyntymaaika: '2021-03-31',
+      erikoistuvanSyntymaaika: '',
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
@@ -249,6 +274,7 @@
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
+      opintooikeudenPaattymisspaiva: '',
       vastuuhenkilo: null
     }
     selected: any = {
@@ -265,20 +291,8 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    get opintooikeudenMyontamispaiva() {
-      return this.form?.opintooikeudenMyontamispaiva
-    }
-
-    get opintooikeudenPaattymispaiva() {
-      return ''
-    }
-
     get koejaksonPaattymispaiva() {
       return ''
-    }
-
-    get vastuuhenkilot() {
-      return vastuuhenkilot
     }
 
     addKoulutuspaikka() {
@@ -318,6 +332,14 @@
       })
     }
 
+    get maxKoejaksonAlkamispaiva() {
+      const d = new Date(this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva)
+      // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
+      // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
+      d.setMonth(d.getMonth() - 6)
+      return format(d, 'yyyy-MM-dd')
+    }
+
     updateVastuuhenkilo(id: number) {
       const hloId = this.vastuuhenkilot.find((a) => (a.id = id))
       if (hloId) this.form.vastuuhenkilo = hloId
@@ -343,6 +365,20 @@
 
       this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)
 
+      // Asetetaan ei-muokattavien kenttien arvot
+      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
+      this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
+      this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
+
+      // Asetetaan arvot kentille, jotka saatavissa erikoistuvan lääkärin tiedoista, mutta jotka
+      // käyttäjä on saattanut yliajaa lomakkeen välitallennuksen yhteydessä. Kuitenkaan opinto-oikeuden
+      // alkamispäivää käyttäjä ei voi yliajaa, mikäli se on saatu opintotietojärjestelmästä.
+      if (!this.form.opintooikeudenMyontamispaiva) {
+        this.form.opintooikeudenMyontamispaiva = this.account.erikoistuvaLaakari.opintooikeudenMyontamispaiva
+      }
+      if (!this.form.erikoistuvanPuhelinnumero) {
+        this.form.erikoistuvanPuhelinnumero = this.account.erikoistuvaLaakari.puhelinnumero
+      }
       if (!this.form.erikoistuvanSahkoposti) {
         this.form.erikoistuvanSahkoposti = this.account.email
       }
