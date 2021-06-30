@@ -1,4 +1,4 @@
-import { Kouluttaja, Koulutuspaikka, Vastuuhenkilo } from '@/types'
+import { Kouluttaja, Koulutuspaikka } from '@/types'
 
 export const vaativuustasot = [
   {
@@ -130,45 +130,3 @@ export const defaultKouluttaja: Kouluttaja = {
   sopimusHyvaksytty: false,
   toimipaikka: ''
 }
-
-// TODO remove dummy
-export const yliopistot = [
-  {
-    name: 'Yliopisto 1',
-    value: 1
-  },
-  {
-    name: 'Yliopisto 2',
-    value: 2
-  },
-  {
-    name: 'Yliopisto 3',
-    value: 3
-  },
-  {
-    name: 'Yliopisto 4',
-    value: 4
-  },
-  {
-    name: 'Yliopisto 5',
-    value: 5
-  }
-]
-
-// TODO remove dummy
-export const vastuuhenkilot: Vastuuhenkilo[] = [
-  {
-    nimi: 'Ville Vastaava',
-    nimike: 'dosentti',
-    id: 1,
-    kuittausaika: '',
-    sopimusHyvaksytty: false
-  },
-  {
-    nimi: 'Erkki Erikoinen',
-    nimike: 'professori',
-    id: 2,
-    kuittausaika: '',
-    sopimusHyvaksytty: false
-  }
-]

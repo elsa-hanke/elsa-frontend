@@ -56,3 +56,13 @@ export async function putTyoskentelyjakso(formData: FormData) {
 export async function deleteTyoskentelyjakso(id: string) {
   await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/${id}`)
 }
+
+export async function getKoulutussopimusLomake() {
+  const path = 'erikoistuva-laakari/koulutussopimus-lomake'
+  return await axios.get(path)
+}
+
+export async function getYliopistot() {
+  const path = '/yliopistot'
+  return await axios.get(path)
+}

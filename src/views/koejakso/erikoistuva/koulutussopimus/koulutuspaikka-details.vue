@@ -27,8 +27,7 @@
         <b-form-radio-group
           v-if="form.toimipaikallaKoulutussopimus === false"
           v-model="koulutuspaikka.yliopisto"
-          :options="yliopistot"
-          text-field="name"
+          :options="yliopistotOptions"
           name="koulutuspaikat"
           stacked
           class="pl-4"
@@ -48,7 +47,6 @@
   import { required } from 'vuelidate/lib/validators'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { yliopistot } from '@/utils/constants'
   import { Koulutuspaikka } from '@/types'
 
   @Component({
@@ -65,6 +63,9 @@
     }
   })
   export default class KoulutuspaikkaDetails extends Mixins(validationMixin) {
+    @Prop({ required: true, default: () => [] })
+    yliopistot!: []
+
     @Prop({
       type: Object,
       default: {}
@@ -73,10 +74,6 @@
     form = {
       toimipaikallaKoulutussopimus: null
     } as any
-
-    get yliopistot() {
-      return yliopistot
-    }
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
@@ -87,6 +84,10 @@
       if (!this.koulutuspaikka.yliopisto) {
         this.form.toimipaikallaKoulutussopimus = true
       }
+    }
+
+    get yliopistotOptions() {
+      return this.yliopistot.map((y: any) => ({ text: y.nimi, value: y.nimi }))
     }
   }
 </script>

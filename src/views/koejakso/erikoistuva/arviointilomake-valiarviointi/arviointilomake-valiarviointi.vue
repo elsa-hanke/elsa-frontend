@@ -13,7 +13,7 @@
       <hr />
       <b-row>
         <b-col>
-          <user-details :account="account" :show-birthdate="false"></user-details>
+          <erikoistuva-details :account="account" :show-birthdate="false"></erikoistuva-details>
         </b-col>
       </b-row>
 
@@ -130,7 +130,7 @@
   import store from '@/store'
   import { ValiarviointiLomake } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
-  import UserDetails from '@/components/user-details/user-details.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -138,7 +138,7 @@
 
   @Component({
     components: {
-      UserDetails,
+      ErikoistuvaDetails,
       KouluttajaForm,
       ElsaFormGroup,
       ElsaFormMultiselect,
@@ -327,7 +327,9 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('erikoistuva/getKoejakso')
+      if (!this.koejaksoData) {
+        await store.dispatch('erikoistuva/getKoejakso')
+      }
       await store.dispatch('erikoistuva/getKouluttajat')
       this.setKoejaksoData()
       this.loading = false

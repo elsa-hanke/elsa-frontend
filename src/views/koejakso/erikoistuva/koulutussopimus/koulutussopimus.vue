@@ -23,7 +23,7 @@
       <hr />
       <b-row>
         <b-col>
-          <user-details :account="account"></user-details>
+          <erikoistuva-details :account="account"></erikoistuva-details>
         </b-col>
       </b-row>
       <hr />
@@ -35,6 +35,8 @@
             :data="koejaksoData.koulutussopimus"
             :account="account"
             :kouluttajat="kouluttajat"
+            :vastuuhenkilot="vastuuhenkilot"
+            :yliopistot="yliopistot"
             @saveAndExit="onSaveDraftAndExit"
             @submit="onSubmit"
           ></koulutussopimus-form>
@@ -56,15 +58,16 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import UserDetails from '@/components/user-details/user-details.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import KoulutussopimusForm from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus-form.vue'
   import KoulutussopimusReadonly from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus-readonly.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
+  import { getKoulutussopimusLomake } from '@/api/erikoistuva'
 
   @Component({
     components: {
-      UserDetails,
+      ErikoistuvaDetails,
       KoulutussopimusForm,
       KoulutussopimusReadonly
     }
@@ -86,6 +89,8 @@
     ]
     loading = true
     koulutussopimusLomake: null | KoulutussopimusLomake = null
+    vastuuhenkilot = []
+    yliopistot = []
 
     get account() {
       return store.getters['auth/account']
@@ -119,6 +124,7 @@
       if (this.koejaksoData.koulutussopimus) {
         this.koulutussopimusLomake = this.koejaksoData.koulutussopimus
       }
+
       if (!this.editable) {
         this.skipRouteExitConfirm = true
       }
@@ -187,10 +193,20 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('erikoistuva/getKoejakso')
+
+      if (!this.koejaksoData) {
+        await store.dispatch('erikoistuva/getKoejakso')
+      }
       await store.dispatch('erikoistuva/getKouluttajat')
-      await this.setKoejaksoData()
+
+      this.setKoejaksoData()
+
+      const koulutussopimusLomake = (await getKoulutussopimusLomake()).data
+      this.vastuuhenkilot = koulutussopimusLomake.vastuuhenkilot
+      this.yliopistot = koulutussopimusLomake.yliopistot
+
       this.loading = false
+
       if (!this.editable) {
         this.skipRouteExitConfirm = true
       }
