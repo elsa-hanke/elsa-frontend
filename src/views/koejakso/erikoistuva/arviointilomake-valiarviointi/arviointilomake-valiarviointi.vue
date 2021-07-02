@@ -13,7 +13,14 @@
       <hr />
       <b-row>
         <b-col>
-          <erikoistuva-details :account="account" :show-birthdate="false"></erikoistuva-details>
+          <erikoistuva-details
+            :firstName="account.firstName"
+            :lastName="account.lastName"
+            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+            :yliopisto="account.erikoistuvaLaakari.yliopisto"
+            :show-birthdate="false"
+          ></erikoistuva-details>
         </b-col>
       </b-row>
 

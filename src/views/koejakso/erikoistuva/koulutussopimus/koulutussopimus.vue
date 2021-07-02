@@ -23,7 +23,14 @@
       <hr />
       <b-row>
         <b-col>
-          <erikoistuva-details :account="account"></erikoistuva-details>
+          <erikoistuva-details
+            :firstName="account.firstName"
+            :lastName="account.lastName"
+            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+            :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
+            :yliopisto="account.erikoistuvaLaakari.yliopisto"
+          ></erikoistuva-details>
         </b-col>
       </b-row>
       <hr />
