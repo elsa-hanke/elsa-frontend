@@ -42,30 +42,16 @@
           <span>{{ $t('aloituskeskustelu-hyvaksytty-kaikkien-toimesta') }}</span>
         </div>
       </b-alert>
-
       <hr />
-
-      <div>
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('erikoistuva-laakari') }}:</b-col>
-          <b-col>
-            {{ aloituskeskustelu.erikoistuvanNimi }}, {{ aloituskeskustelu.erikoistuvanErikoisala }}
-          </b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('opiskelijanumero') }}:</b-col>
-          <b-col>{{ aloituskeskustelu.erikoistuvanOpiskelijatunnus }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('yliopisto-opiskeluoikeus') }}:</b-col>
-          <b-col>{{ aloituskeskustelu.erikoistuvanYliopisto }}</b-col>
-        </b-row>
-      </div>
-
+      <erikoistuva-details
+        :firstName="erikoistuvanEtunimi"
+        :lastName="erikoistuvanSukunimi"
+        :erikoisala="aloituskeskustelu.erikoistuvanErikoisala"
+        :opiskelijatunnus="aloituskeskustelu.erikoistuvanOpiskelijatunnus"
+        :yliopisto="aloituskeskustelu.erikoistuvanYliopisto"
+        :show-birthdate="false"
+      />
       <hr />
-
       <div>
         <b-row>
           <b-col>
@@ -361,6 +347,14 @@
         this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty &&
         !this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty
       )
+    }
+
+    get erikoistuvanEtunimi() {
+      return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[0]
+    }
+
+    get erikoistuvanSukunimi() {
+      return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[1]
     }
 
     async returnToSender() {

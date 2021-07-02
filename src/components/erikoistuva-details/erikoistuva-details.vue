@@ -17,26 +17,26 @@
             :size="32"
             class="d-inline-block avatar"
           ></avatar>
-          {{ displayName }}, {{ account.erikoistuvaLaakari.erikoisalaNimi.toLowerCase() }}
+          {{ displayName }}, {{ erikoisala }}
         </td>
       </tr>
       <tr>
         <th scope="row" class="font-weight-500">
           {{ $t('opiskelijanumero') }}
         </th>
-        <td class="pl-5">{{ erikoistuvaDetails.opiskelijatunnus }}</td>
+        <td class="pl-5">{{ opiskelijatunnus }}</td>
       </tr>
       <tr v-if="showBirthdate">
         <th scope="row" class="font-weight-500">
           {{ $t('syntymaaika') }}
         </th>
-        <td class="pl-5">{{ $date(account.erikoistuvaLaakari.syntymaaika) }}</td>
+        <td class="pl-5">{{ $date(syntymaaika) }}</td>
       </tr>
       <tr>
         <th scope="row" class="font-weight-500">
           {{ $t('yliopisto-opiskeluoikeus') }}
         </th>
-        <td class="pl-5">{{ account.erikoistuvaLaakari.yliopisto }}</td>
+        <td class="pl-5">{{ yliopisto }}</td>
       </tr>
     </table>
   </div>
@@ -47,7 +47,6 @@
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
   import Avatar from 'vue-avatar'
-  import { UserAccount } from '@/types'
 
   @Component({
     components: {
@@ -55,39 +54,43 @@
     }
   })
   export default class ErikoistuvaDetails extends Vue {
-    @Prop({ required: true, default: {} })
-    account!: UserAccount
+    @Prop({ required: true, type: String })
+    firstName!: string
+
+    @Prop({ required: true, type: String })
+    lastName!: string
+
+    @Prop({ required: true, type: String })
+    erikoisala!: string
+
+    @Prop({ required: true, type: String })
+    opiskelijatunnus!: string
+
+    @Prop({ required: false, type: String })
+    syntymaaika!: string
+
+    @Prop({ required: true, type: String })
+    yliopisto!: string
+
+    @Prop({ required: false })
+    profilePicture!: any
 
     @Prop({ required: false, default: true })
     showBirthdate!: boolean
 
     get displayName() {
-      return this.account ? `${this.account.firstName} ${this.account.lastName}` : ''
-    }
-
-    get erikoistuvaDetails() {
-      return this.account ? this.account?.erikoistuvaLaakari : {}
+      return `${this.firstName} ${this.lastName}`
     }
 
     get imageSrc() {
       /*if (this.account.profilePicture.srcContentType && this.account.profilePicture.srcBase64) {
         return `data:${this.account.profilePicture.srcContentType};base64,${this.account.profilePicture.srcBase64}`
       } else */
-      if (this.account.profilePicture.src) {
-        return this.account.profilePicture.src
+      if (this.profilePicture?.src) {
+        return this.profilePicture?.src
       } else {
         return undefined
       }
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .avatar {
-    min-width: 32px;
-  }
-
-  .avatar-line-height {
-    line-height: 0;
-  }
-</style>

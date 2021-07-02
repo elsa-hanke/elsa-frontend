@@ -24,33 +24,20 @@
           </div>
         </div>
       </div>
-
       <hr />
-
-      <div>
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('erikoistuva-laakari') }}:</b-col>
-          <b-col>{{ form.erikoistuvanNimi }}, {{ form.erikoistuvanErikoisala }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('opiskelijanumero') }}:</b-col>
-          <b-col>{{ form.erikoistuvanOpiskelijatunnus }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('syntymaaika') }}:</b-col>
-          <b-col>{{ $date(form.erikoistuvanSyntymaaika) }}</b-col>
-        </b-row>
-
-        <b-row>
-          <b-col lg="3" class="font-weight-500">{{ $t('yliopisto-opiskeluoikeus') }}:</b-col>
-          <b-col>{{ form.erikoistuvanYliopisto }}</b-col>
-        </b-row>
-      </div>
-
+      <b-row>
+        <b-col>
+          <erikoistuva-details
+            :firstName="erikoistuvanEtunimi"
+            :lastName="erikoistuvanSukunimi"
+            :erikoisala="form.erikoistuvanErikoisala"
+            :opiskelijatunnus="form.erikoistuvanOpiskelijatunnus"
+            :syntymaaika="form.erikoistuvanSyntymaaika"
+            :yliopisto="form.erikoistuvanYliopisto"
+          ></erikoistuva-details>
+        </b-col>
+      </b-row>
       <hr />
-
       <b-form @submit.stop.prevent="onSubmit">
         <b-row>
           <b-col lg="8">
@@ -141,11 +128,25 @@
           <b-row>
             <b-col lg="4">
               <h5>{{ $t('päiväys') }}</h5>
-              <p>TODO</p>
+              <p v-if="form.erikoistuvanAllekirjoitusaika">
+                {{ $date(form.erikoistuvanAllekirjoitusaika) }}
+              </p>
+              <div v-for="(kouluttaja, index) in form.kouluttajat" :key="index">
+                <p v-if="kouluttaja.sopimusHyvaksytty">{{ $date(kouluttaja.kuittausaika) }}</p>
+              </div>
+              <p v-if="form.vastuuhenkilo.sopimusHyvaksytty">
+                {{ $date(form.vastuuhenkilo.kuittausaika) }}
+              </p>
             </b-col>
             <b-col lg="4">
               <h5>{{ $t('nimi-ja-nimike') }}</h5>
-              <p>{{ form.erikoistuvanNimi }}</p>
+              <p v-if="form.erikoistuvanAllekirjoitusaika">
+                {{ form.erikoistuvanNimi }}
+              </p>
+              <div v-for="(kouluttaja, index) in form.kouluttajat" :key="index">
+                <p v-if="kouluttaja.sopimusHyvaksytty">{{ kouluttaja.nimi }}</p>
+              </div>
+              <p v-if="form.vastuuhenkilo.sopimusHyvaksytty">{{ form.vastuuhenkilo.nimi }}</p>
             </b-col>
           </b-row>
         </div>
@@ -214,6 +215,7 @@
   import { KoulutussopimusLomake, Kouluttaja } from '@/types'
   import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
@@ -221,7 +223,8 @@
       KouluttajaKoulutussopimusForm,
       ElsaFormGroup,
       ElsaButton,
-      KouluttajaKoulutussopimusReadonly
+      KouluttajaKoulutussopimusReadonly,
+      ErikoistuvaDetails
     },
     validations: {
       form: {
@@ -329,6 +332,14 @@
       return (
         this.koulutussopimusTila.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
       )
+    }
+
+    get erikoistuvanEtunimi() {
+      return this.form.erikoistuvanNimi.split(' ')[0]
+    }
+
+    get erikoistuvanSukunimi() {
+      return this.form.erikoistuvanNimi.split(' ')[1]
     }
 
     currentKouluttaja(kouluttaja: any) {
