@@ -53,35 +53,7 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row>
-      <b-col lg="8">
-        <h3>{{ $t('allekirjoitukset') }}</h3>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col lg="4">
-        <h5>{{ $t('päiväys') }}</h5>
-        <p v-if="erikoistuvaAllekirjoitus">{{ $date(erikoistuvaAllekirjoitus) }}</p>
-        <div v-if="kouluttajatAllekirjoitus.length > 1">
-          <p v-for="(k, index) in kouluttajatAllekirjoitus" :key="index">
-            {{ $date(k.kuittausaika) }}
-          </p>
-        </div>
-        <p v-if="vastuuhenkiloAllekirjoitus">{{ $date(vastuuhenkiloAllekirjoitus) }}</p>
-      </b-col>
-      <b-col lg="4">
-        <h5>{{ $t('nimi-ja-nimike') }}</h5>
-        <p v-if="erikoistuvaAllekirjoitus">{{ data.erikoistuvanNimi }}</p>
-        <div v-if="kouluttajatAllekirjoitus.length > 1">
-          <p v-for="(k, index) in kouluttajatAllekirjoitus" :key="index">
-            {{ k.nimi }}
-          </p>
-        </div>
-        <p v-if="vastuuhenkiloAllekirjoitus">
-          {{ data.vastuuhenkilo.nimi }}, {{ data.vastuuhenkilo.nimike }}
-        </p>
-      </b-col>
-    </b-row>
+    <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
   </div>
 </template>
 
@@ -90,8 +62,15 @@
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
   import { KoulutussopimusLomake } from '@/types'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
-  @Component
+  @Component({
+    components: {
+      KoejaksonVaiheAllekirjoitukset
+    }
+  })
   export default class KoulutussopimusReadonly extends Vue {
     @Prop({ required: true, default: {} })
     data!: KoulutussopimusLomake
@@ -109,8 +88,24 @@
       })
     }
 
-    get vastuuhenkiloAllekirjoitus() {
-      return this.data.vastuuhenkilo?.kuittausaika
+    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.data.erikoistuvanNimi,
+        this.data.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+        this.data.kouluttajat
+      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+        this.data.vastuuhenkilo
+      ) as KoejaksonVaiheAllekirjoitus
+
+      return [
+        allekirjoitusErikoistuva,
+        ...allekirjoituksetKouluttajat,
+        allekirjoitusVastuuhenkilo
+      ].filter((a) => a !== null)
     }
   }
 </script>

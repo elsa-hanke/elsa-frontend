@@ -107,50 +107,7 @@
           </b-col>
         </b-row>
         <hr />
-        <b-row v-if="showAllekirjoitukset">
-          <b-col lg="8">
-            <h3>{{ $t('allekirjoitukset') }}</h3>
-          </b-col>
-        </b-row>
-        <b-row v-if="aloituskeskustelu.erikoistuvanAllekirjoitusaika !== null">
-          <b-col lg="2">
-            <h5>{{ $t('päiväys') }}</h5>
-            <p>{{ $date(aloituskeskustelu.erikoistuvanAllekirjoitusaika) }}</p>
-          </b-col>
-          <b-col lg="6">
-            <h5>{{ $t('nimi-ja-nimike') }}</h5>
-            <p>
-              {{ aloituskeskustelu.erikoistuvanNimi }},
-              {{ $t('erikoistuva-laakari').toLowerCase() }}
-            </p>
-          </b-col>
-        </b-row>
-        <b-row v-if="aloituskeskustelu.lahikouluttaja.sopimusHyvaksytty">
-          <b-col lg="2">
-            <h5>{{ $t('päiväys') }}</h5>
-            <p>{{ $date(aloituskeskustelu.lahikouluttaja.kuittausaika) }}</p>
-          </b-col>
-          <b-col lg="6">
-            <h5>{{ $t('nimi-ja-nimike') }}</h5>
-            <p>
-              {{ aloituskeskustelu.lahikouluttaja.nimi }},
-              {{ $t('lahikouluttaja').toLowerCase() }}
-            </p>
-          </b-col>
-        </b-row>
-        <b-row v-if="aloituskeskustelu.lahiesimies.sopimusHyvaksytty">
-          <b-col lg="2">
-            <h5>{{ $t('päiväys') }}</h5>
-            <p>{{ $date(aloituskeskustelu.lahiesimies.kuittausaika) }}</p>
-          </b-col>
-          <b-col lg="6">
-            <h5>{{ $t('nimi-ja-nimike') }}</h5>
-            <p>
-              {{ aloituskeskustelu.lahiesimies.nimi }},
-              {{ $t('lahiesimies').toLowerCase() }}
-            </p>
-          </b-col>
-        </b-row>
+        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
       </div>
       <hr v-if="showAllekirjoitukset && editable" />
       <b-row v-if="editable">
@@ -241,12 +198,16 @@
   import { LomakeTilat } from '@/utils/constants'
   import { AloituskeskusteluLomake } from '@/types'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {
       ErikoistuvaDetails,
       ElsaFormGroup,
-      ElsaButton
+      ElsaButton,
+      KoejaksonVaiheAllekirjoitukset
     },
     validations: {
       korjausehdotus: {
@@ -355,6 +316,28 @@
 
     get erikoistuvanSukunimi() {
       return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[1]
+    }
+
+    get allekirjoitukset() {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.aloituskeskustelu?.erikoistuvanNimi,
+        this.aloituskeskustelu?.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+        this,
+        this.aloituskeskustelu?.lahikouluttaja
+      )
+      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+        this,
+        this.aloituskeskustelu?.lahiesimies
+      )
+
+      return [
+        allekirjoitusErikoistuva,
+        allekirjoitusLahikouluttaja,
+        allekirjoitusLahiesimies
+      ].filter((a) => a !== null)
     }
 
     async returnToSender() {

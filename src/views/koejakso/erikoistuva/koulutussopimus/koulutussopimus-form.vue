@@ -157,15 +157,12 @@
             <b-form-radio-group
               :id="uid"
               v-model="selected.vastuuhenkilo"
+              :options="vastuuhenkilotOptions"
               :state="validateState('vastuuhenkilo')"
               name="erikoisalan-vastuuhenkilo"
               stacked
               @change="updateVastuuhenkilo"
-            >
-              <b-form-radio v-for="(v, index) in vastuuhenkilot" :value="v.id" :key="index">
-                {{ v.nimi }}, {{ v.nimike }}
-              </b-form-radio>
-            </b-form-radio-group>
+            ></b-form-radio-group>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
@@ -274,8 +271,8 @@
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
-      opintooikeudenPaattymisspaiva: '',
-      vastuuhenkilo: null
+      opintooikeudenPaattymispaiva: '',
+      vastuuhenkilo: undefined
     }
     selected: any = {
       vastuuhenkilo: null
@@ -341,8 +338,11 @@
     }
 
     updateVastuuhenkilo(id: number) {
-      const hloId = this.vastuuhenkilot.find((a) => (a.id = id))
-      if (hloId) this.form.vastuuhenkilo = hloId
+      this.form.vastuuhenkilo = this.vastuuhenkilot.find((a) => (a.id = id)) as Vastuuhenkilo
+    }
+
+    get vastuuhenkilotOptions() {
+      return this.vastuuhenkilot.map((v: any) => ({ text: `${v.nimi}, ${v.nimike}`, value: v.id }))
     }
 
     saveAndExit() {

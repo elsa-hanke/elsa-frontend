@@ -116,43 +116,9 @@
             <p>{{ form.vastuuhenkilo.nimi }}, {{ form.vastuuhenkilo.nimike }}</p>
           </b-col>
         </b-row>
-
         <hr />
-
-        <div v-if="editable">
-          <b-row>
-            <b-col lg="8">
-              <h3>{{ $t('allekirjoitukset') }}</h3>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col lg="4">
-              <h5>{{ $t('päiväys') }}</h5>
-              <p v-if="form.erikoistuvanAllekirjoitusaika">
-                {{ $date(form.erikoistuvanAllekirjoitusaika) }}
-              </p>
-              <div v-for="(kouluttaja, index) in form.kouluttajat" :key="index">
-                <p v-if="kouluttaja.sopimusHyvaksytty">{{ $date(kouluttaja.kuittausaika) }}</p>
-              </div>
-              <p v-if="form.vastuuhenkilo.sopimusHyvaksytty">
-                {{ $date(form.vastuuhenkilo.kuittausaika) }}
-              </p>
-            </b-col>
-            <b-col lg="4">
-              <h5>{{ $t('nimi-ja-nimike') }}</h5>
-              <p v-if="form.erikoistuvanAllekirjoitusaika">
-                {{ form.erikoistuvanNimi }}
-              </p>
-              <div v-for="(kouluttaja, index) in form.kouluttajat" :key="index">
-                <p v-if="kouluttaja.sopimusHyvaksytty">{{ kouluttaja.nimi }}</p>
-              </div>
-              <p v-if="form.vastuuhenkilo.sopimusHyvaksytty">{{ form.vastuuhenkilo.nimi }}</p>
-            </b-col>
-          </b-row>
-        </div>
-
+        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
         <hr v-if="editable" />
-
         <b-row v-if="editable">
           <b-col>
             <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
@@ -217,6 +183,9 @@
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {
@@ -224,7 +193,8 @@
       ElsaFormGroup,
       ElsaButton,
       KouluttajaKoulutussopimusReadonly,
-      ErikoistuvaDetails
+      ErikoistuvaDetails,
+      KoejaksonVaiheAllekirjoitukset
     },
     validations: {
       form: {
@@ -274,8 +244,8 @@
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
-      opintooikeudenPaattymisspaiva: '',
-      vastuuhenkilo: null
+      opintooikeudenPaattymispaiva: '',
+      vastuuhenkilo: undefined
     }
 
     loading = true
@@ -405,6 +375,26 @@
       if (!this.editable) {
         this.skipRouteExitConfirm = true
       }
+    }
+
+    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.form.erikoistuvanNimi,
+        this.form.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+        this.form.kouluttajat
+      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+        this.form.vastuuhenkilo
+      ) as KoejaksonVaiheAllekirjoitus
+
+      return [
+        allekirjoitusErikoistuva,
+        ...allekirjoituksetKouluttajat,
+        allekirjoitusVastuuhenkilo
+      ].filter((a) => a !== null)
     }
   }
 </script>

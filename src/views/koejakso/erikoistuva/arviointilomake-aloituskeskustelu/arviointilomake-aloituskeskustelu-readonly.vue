@@ -78,25 +78,7 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row>
-      <b-col lg="8">
-        <h3>{{ $t('allekirjoitukset') }}</h3>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col lg="4">
-        <h5>{{ $t('päiväys') }}</h5>
-        <p v-if="erikoistuvaAllekirjoitus">{{ $date(erikoistuvaAllekirjoitus) }}</p>
-        <p v-if="kouluttajaAllekirjoitus">{{ $date(kouluttajaAllekirjoitus) }}</p>
-        <p v-if="lahiesimiesAllekirjoitus">{{ $date(lahiesimiesAllekirjoitus) }}</p>
-      </b-col>
-      <b-col lg="4">
-        <h5>{{ $t('nimi-ja-nimike') }}</h5>
-        <p v-if="erikoistuvaAllekirjoitus">{{ data.erikoistuvanNimi }}</p>
-        <p v-if="kouluttajaAllekirjoitus">{{ data.lahikouluttaja.nimi }}</p>
-        <p v-if="lahiesimiesAllekirjoitus">{{ data.lahiesimies.nimi }}</p>
-      </b-col>
-    </b-row>
+    <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
   </div>
 </template>
 
@@ -105,8 +87,15 @@
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
   import { AloituskeskusteluLomake } from '@/types'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
-  @Component
+  @Component({
+    components: {
+      KoejaksonVaiheAllekirjoitukset
+    }
+  })
   export default class ArviointilomakeAloituskeskusteluReadonly extends Vue {
     @Prop({ required: true, default: {} })
     data!: AloituskeskusteluLomake
@@ -126,16 +115,26 @@
       )
     }
 
-    get erikoistuvaAllekirjoitus() {
-      return this.data.erikoistuvanAllekirjoitusaika
-    }
+    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.data.erikoistuvanNimi,
+        this.data.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+        this,
+        this.data.lahikouluttaja
+      )
+      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+        this,
+        this.data.lahiesimies
+      )
 
-    get kouluttajaAllekirjoitus() {
-      return this.data.lahikouluttaja.kuittausaika
-    }
-
-    get lahiesimiesAllekirjoitus() {
-      return this.data.lahiesimies.kuittausaika
+      return [
+        allekirjoitusErikoistuva,
+        allekirjoitusLahikouluttaja,
+        allekirjoitusLahiesimies
+      ].filter((a) => a !== null)
     }
   }
 </script>
