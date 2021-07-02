@@ -10,7 +10,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import store from '@/store'
-  import KoejaksonVaiheetList from '@/components/koejakson-vaiheet-list/koejakson-vaiheet-list.vue'
+  import KoejaksonVaiheetList from '@/components/koejakson-vaiheet/koejakson-vaiheet-list.vue'
 
   @Component({
     components: {
