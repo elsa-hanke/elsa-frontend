@@ -38,7 +38,7 @@
     publicPath = process.env.BASE_URL
 
     loginSuomiFi() {
-      return (window.location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`)
+      return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`)
     }
   }
 </script>
