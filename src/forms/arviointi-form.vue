@@ -242,7 +242,10 @@
           </p>
         </template>
       </elsa-form-group>
-      <div v-if="!value.arviointiAika && value.itsearviointiAika" class="text-right">
+      <div
+        v-if="!value.arviointiAika && value.itsearviointiAika && $isErikoistuva()"
+        class="text-right"
+      >
         <elsa-button
           variant="primary"
           :to="{
