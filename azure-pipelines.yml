@@ -46,7 +46,7 @@ stages:
             artifact: ElsaFrontendApp
 
   - stage: Deploy
-    displayName: Deploy stage
+    displayName: Deploy dev
     dependsOn: Build
     condition: and(succeeded(), eq(variables.isMain, true))
     jobs:
@@ -121,7 +121,7 @@ stages:
                     regionName: "eu-west-1"
                     awsCommand: "cloudfront"
                     awsSubCommand: "create-invalidation"
-                    awsArguments: '--distribution-id E38QJR989CC6DM --paths "/*"'
+                    awsArguments: '--distribution-id E45AQGQKD12C0 --paths "/*"'
 
   - stage: Deploy_prod
     displayName: Deploy prod
