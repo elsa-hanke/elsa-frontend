@@ -83,6 +83,7 @@ export type Vastuuhenkilo = {
 
 export interface KoulutussopimusLomake {
   erikoistuvanNimi: string
+  erikoistuvanErikoisala: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanPuhelinnumero: string
   erikoistuvanSahkoposti: string

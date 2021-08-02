@@ -259,6 +259,7 @@
     form: KoulutussopimusLomake = {
       id: null,
       erikoistuvanNimi: '',
+      erikoistuvanErikoisala: '',
       erikoistuvanOpiskelijatunnus: '',
       erikoistuvanPuhelinnumero: '',
       erikoistuvanSahkoposti: '',
