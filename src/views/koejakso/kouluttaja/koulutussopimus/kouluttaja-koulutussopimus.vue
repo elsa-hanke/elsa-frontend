@@ -30,7 +30,7 @@
           <erikoistuva-details
             :firstName="erikoistuvanEtunimi"
             :lastName="erikoistuvanSukunimi"
-            :erikoisala="form.erikoistuvanErikoisala"
+            :erikoisala="erikoistuvanErikoisala"
             :opiskelijatunnus="form.erikoistuvanOpiskelijatunnus"
             :syntymaaika="form.erikoistuvanSyntymaaika"
             :yliopisto="form.erikoistuvanYliopisto"
@@ -232,10 +232,11 @@
     form: KoulutussopimusLomake = {
       id: null,
       erikoistuvanNimi: '',
+      erikoistuvanErikoisala: '',
       erikoistuvanOpiskelijatunnus: '',
       erikoistuvanPuhelinnumero: '',
       erikoistuvanSahkoposti: '',
-      erikoistuvanSyntymaaika: '2021-03-31',
+      erikoistuvanSyntymaaika: '',
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
@@ -310,6 +311,10 @@
 
     get erikoistuvanSukunimi() {
       return this.form.erikoistuvanNimi.split(' ')[1]
+    }
+
+    get erikoistuvanErikoisala() {
+      return this.form.erikoistuvanErikoisala ?? ''
     }
 
     currentKouluttaja(kouluttaja: any) {

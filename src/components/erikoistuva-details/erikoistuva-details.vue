@@ -17,7 +17,7 @@
             :size="32"
             class="d-inline-block avatar"
           ></avatar>
-          {{ displayName }}, {{ erikoisala }}
+          {{ displayNameAndErikoisala }}
         </td>
       </tr>
       <tr>
@@ -80,6 +80,10 @@
 
     get displayName() {
       return `${this.firstName} ${this.lastName}`
+    }
+
+    get displayNameAndErikoisala() {
+      return this.erikoisala ? `${this.displayName}, ${this.erikoisala}` : this.displayName
     }
 
     get imageSrc() {
