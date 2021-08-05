@@ -234,10 +234,5 @@
     &.is-invalid .multiselect__tags {
       border-color: $form-feedback-invalid-color;
     }
-
-    &.is-valid .multiselect__content-wrapper,
-    &.is-valid .multiselect__tags {
-      border-color: $form-feedback-valid-color;
-    }
   }
 </style>

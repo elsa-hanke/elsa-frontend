@@ -56,6 +56,7 @@ export type Koulutuspaikka = {
   erikoisala: string
   nimi: string
   id: number | null
+  toimipaikallaKoulutussopimus: boolean | null
   yliopisto: string
 }
 
