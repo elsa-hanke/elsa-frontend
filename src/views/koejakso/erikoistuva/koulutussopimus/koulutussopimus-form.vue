@@ -93,10 +93,10 @@
       <b-col lg="8">
         <koulutuspaikka-details
           v-for="(koulutuspaikka, index) in form.koulutuspaikat"
+          ref="koulutuspaikkaDetails"
           :key="index"
           :koulutuspaikka="koulutuspaikka"
           :yliopistot="yliopistot"
-          v-model="form.koulutuspaikat"
         ></koulutuspaikka-details>
         <elsa-button
           v-if="form.koulutuspaikat.length >= 2"
@@ -123,13 +123,13 @@
         <h3>{{ $t('koulutuspaikan-lahikouluttaja') }}</h3>
         <kouluttaja-details
           v-for="(k, index) in form.kouluttajat"
+          ref="kouluttajaDetails"
           :key="index"
           :index="index"
           :kouluttaja="k"
           :kouluttajat="kouluttajatList"
           @kouluttajaSelected="selectKouluttaja"
         ></kouluttaja-details>
-
         <elsa-button
           v-if="form.kouluttajat.length >= 2"
           @click="deleteKouluttaja"
@@ -160,10 +160,13 @@
               :options="vastuuhenkilotOptions"
               :state="validateState('vastuuhenkilo')"
               name="erikoisalan-vastuuhenkilo"
-              stacked
               @change="updateVastuuhenkilo"
+              stacked
             ></b-form-radio-group>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :state="validateState('vastuuhenkilo')"
+            >
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
           </template>
@@ -232,12 +235,19 @@
           required
         },
         vastuuhenkilo: {
-          required
+          id: {
+            required
+          }
         }
       }
     }
   })
   export default class KoulutussopimusForm extends Mixins(validationMixin) {
+    $refs!: {
+      kouluttajaDetails: any
+      koulutuspaikkaDetails: any
+    }
+
     @Prop({ required: true, default: {} })
     data!: KoulutussopimusLomake
 
@@ -267,8 +277,8 @@
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
-      kouluttajat: [defaultKouluttaja],
-      koulutuspaikat: [defaultKoulutuspaikka],
+      kouluttajat: [],
+      koulutuspaikat: [],
       lahetetty: false,
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
@@ -294,7 +304,7 @@
     }
 
     addKoulutuspaikka() {
-      this.form.koulutuspaikat.push(defaultKoulutuspaikka)
+      this.form.koulutuspaikat.push(Object.assign({}, defaultKoulutuspaikka))
     }
 
     deleteKoulutuspaikka() {
@@ -314,10 +324,9 @@
     }
 
     get kouluttajatList() {
-      const selectedKouluttajat =
-        this.form.kouluttajat[0].kayttajaId !== null
-          ? this.form.kouluttajat.map((k) => k.kayttajaId)
-          : null
+      const selectedKouluttajat = this.form.kouluttajat[0]?.kayttajaId
+        ? this.form.kouluttajat.map((k) => k.kayttajaId)
+        : null
 
       return this.kouluttajat.map((k) => {
         if (selectedKouluttajat?.includes(k.id)) {
@@ -338,12 +347,12 @@
       return format(d, 'yyyy-MM-dd')
     }
 
-    updateVastuuhenkilo(id: number) {
-      this.form.vastuuhenkilo = this.vastuuhenkilot.find((a) => (a.id = id)) as Vastuuhenkilo
-    }
-
     get vastuuhenkilotOptions() {
       return this.vastuuhenkilot.map((v: any) => ({ text: `${v.nimi}, ${v.nimike}`, value: v.id }))
+    }
+
+    updateVastuuhenkilo(id: number) {
+      this.form.vastuuhenkilo = this.vastuuhenkilot.filter((a) => a.id === id)[0]
     }
 
     saveAndExit() {
@@ -351,10 +360,24 @@
     }
 
     onSubmit() {
+      let childFormsValid = true
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      this.$refs.kouluttajaDetails.forEach((k: any) => {
+        if (!k.checkForm()) {
+          childFormsValid = false
+        }
+      })
+
+      this.$refs.koulutuspaikkaDetails.forEach((k: any) => {
+        if (!k.checkForm()) {
+          childFormsValid = false
+        }
+      })
+
+      if (this.$v.form.$anyError || !childFormsValid) {
         return
       }
+
       this.$emit('submit', this.form, this.params)
     }
 
@@ -362,6 +385,14 @@
       if (this.data !== null) {
         this.form = this.data
         this.selected.vastuuhenkilo = this.data.vastuuhenkilo?.id
+      } else {
+        this.form.kouluttajat.push(defaultKouluttaja)
+        // Luo kopio defaultKoulutuspaikasta, koska muutoin mahdollinen toinen koulutuspaikka mäppäytyy samaan objektiin.
+        this.form.koulutuspaikat.push(Object.assign({}, defaultKoulutuspaikka))
+      }
+
+      if (this.vastuuhenkilot.length === 1) {
+        this.form.vastuuhenkilo = this.vastuuhenkilot[0]
       }
 
       this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)

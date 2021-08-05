@@ -11,14 +11,13 @@
     </template>
     <template v-slot="{ uid }">
       <elsa-form-multiselect
-        :value="kouluttajaData"
+        v-model="form.kouluttaja"
         :id="uid"
-        :options="multiselectOptions"
+        :options="kouluttajat"
         :state="validateState('kouluttaja')"
         label="nimi"
         track-by="id"
         @select="onKouluttajaSelect"
-        :allow-empty="true"
       >
         <template v-slot:option="{ option }">
           <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
@@ -58,7 +57,9 @@
     validations: {
       form: {
         kouluttaja: {
-          required
+          id: {
+            required
+          }
         }
       }
     }
@@ -91,13 +92,24 @@
       params.saving = false
     }
 
+    form = {
+      kouluttaja: null
+    } as any
+
+    mounted(): void {
+      if (this.kouluttaja.kayttajaId) {
+        this.form.kouluttaja = this.kouluttaja
+      }
+    }
+
     onKouluttajaSelect(kouluttaja: any) {
       const value = {
         ...defaultKouluttaja,
         kayttajaId: kouluttaja.id,
         nimi: kouluttaja.nimi
       }
-      this.$emit('kouluttajaSelected', value, this.kouluttajaIndex)
+      this.form.kouluttaja = value
+      this.$emit('kouluttajaSelected', value, this.index)
     }
 
     optionDisplayName(option: any) {
@@ -106,19 +118,15 @@
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
-      return $dirty ? ($error ? false : null) : null
+      return $dirty ? !$error : null
     }
 
-    get kouluttajaData() {
-      return this.kouluttaja
-    }
-
-    get multiselectOptions() {
-      return this.kouluttajat
-    }
-
-    get kouluttajaIndex() {
-      return this.index
+    checkForm(): boolean {
+      this.$v.form.$touch()
+      if (this.$v.$anyError) {
+        return false
+      }
+      return true
     }
   }
 </script>

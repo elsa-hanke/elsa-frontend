@@ -112,6 +112,7 @@ export enum TaskStatus {
 
 export const defaultKoulutuspaikka: Koulutuspaikka = {
   id: null,
+  toimipaikallaKoulutussopimus: null,
   erikoisala: '',
   nimi: '',
   yliopisto: ''
