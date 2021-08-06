@@ -210,7 +210,9 @@
 
       const koulutussopimusLomake = (await getKoulutussopimusLomake()).data
       this.vastuuhenkilot = koulutussopimusLomake.vastuuhenkilot
-      this.yliopistot = koulutussopimusLomake.yliopistot
+      this.yliopistot = koulutussopimusLomake.yliopistot.filter(
+        (y: any) => y.nimi !== this.account.erikoistuvaLaakari.yliopisto
+      )
 
       this.loading = false
 
