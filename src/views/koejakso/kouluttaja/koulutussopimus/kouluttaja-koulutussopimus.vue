@@ -9,7 +9,10 @@
 
       <div v-if="signed" class="d-flex bg-light border rounded px-4 py-3 mb-4">
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
-        <div>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
+        <div v-if="allKouluttajatSigned">
+          {{ $t('koulutussopimus-kouluttajat-allekirjoitettu') }}
+        </div>
+        <div v-else>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
       </div>
 
       <div v-if="returned" class="bg-light border rounded px-4 py-3 mb-4">
@@ -91,7 +94,7 @@
               class="kouluttaja-section"
             >
               <kouluttaja-koulutussopimus-form
-                v-if="currentKouluttaja(kouluttaja) && editable"
+                v-if="isCurrentKouluttaja(kouluttaja) && editable"
                 ref="kouluttajaKoulutussopimusForm"
                 v-model="form.kouluttajat[index]"
                 :kouluttaja="kouluttaja"
@@ -100,7 +103,7 @@
               ></kouluttaja-koulutussopimus-form>
 
               <kouluttaja-koulutussopimus-readonly
-                v-if="!currentKouluttaja(kouluttaja) || !editable"
+                v-if="!isCurrentKouluttaja(kouluttaja) || !editable"
                 :kouluttaja="kouluttaja"
               ></kouluttaja-koulutussopimus-readonly>
             </div>
@@ -292,11 +295,17 @@
     }
 
     get signed() {
-      return this.form.kouluttajat.every((k: Kouluttaja) => {
-        if (this.currentKouluttaja(k)) {
-          return k.sopimusHyvaksytty
+      let signed = false
+      this.form.kouluttajat.forEach((k: Kouluttaja) => {
+        if (this.isCurrentKouluttaja(k)) {
+          signed = k.sopimusHyvaksytty
         }
       })
+      return signed
+    }
+
+    get allKouluttajatSigned() {
+      return this.form.kouluttajat.every((k: Kouluttaja) => k.sopimusHyvaksytty)
     }
 
     get returned() {
@@ -317,7 +326,7 @@
       return this.form.erikoistuvanErikoisala ?? ''
     }
 
-    currentKouluttaja(kouluttaja: any) {
+    isCurrentKouluttaja(kouluttaja: any) {
       return this.account.email === kouluttaja.sahkoposti
     }
 
