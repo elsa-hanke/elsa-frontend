@@ -309,7 +309,7 @@
     }
 
     get editable() {
-      return !this.loading && this.koulutussopimusTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      return !this.loading && this.koulutussopimusTila.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     get signed() {
@@ -353,7 +353,7 @@
     }
 
     isCurrentKouluttaja(kouluttaja: any) {
-      return this.account.email === kouluttaja.sahkoposti
+      return this.account.id === kouluttaja.kayttajaUserId
     }
 
     async returnToSender() {
