@@ -122,7 +122,7 @@
         <hr />
         <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
         <hr v-if="editable" />
-        <b-row v-if="editable">
+        <b-row v-if="editable && !signed">
           <b-col>
             <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
               {{ $t('palauta-muokattavaksi') }}
@@ -138,7 +138,11 @@
       </b-form>
     </b-container>
 
-    <b-modal id="return-to-sender" :title="$t('palauta-erikoistuvalle-muokattavaksi')">
+    <b-modal
+      v-if="editable && !signed"
+      id="return-to-sender"
+      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+    >
       <div class="d-block">
         <b-form>
           <elsa-form-group :label="$t('syy-palautukseen')" :required="true">
