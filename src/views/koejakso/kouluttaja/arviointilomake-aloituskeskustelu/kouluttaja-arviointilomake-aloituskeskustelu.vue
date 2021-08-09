@@ -401,7 +401,7 @@
       this.aloituskeskustelu = data
       this.loading = false
 
-      if (!this.editable) {
+      if (!this.editable || this.returned) {
         this.skipRouteExitConfirm = true
       }
     }

@@ -160,12 +160,26 @@
       </div>
 
       <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal">
+        <elsa-button variant="back" @click="hideModal('return-to-sender')">
           {{ $t('peruuta') }}
         </elsa-button>
 
         <elsa-button variant="primary" @click="returnToSender">
           {{ $t('palauta-muokattavaksi') }}
+        </elsa-button>
+      </template>
+    </b-modal>
+
+    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
+      <div class="d-block">
+        <p>{{ $t('vahvista-koulutussopimus-kouluttajat-hyvaksytty') }}</p>
+      </div>
+      <template #modal-footer>
+        <elsa-button variant="back" @click="hideModal('confirm-send')">
+          {{ $t('peruuta') }}
+        </elsa-button>
+        <elsa-button variant="primary" @click="updateSentForm">
+          {{ $t('allekirjoita-laheta') }}
         </elsa-button>
       </template>
     </b-modal>
@@ -257,12 +271,7 @@
     }
 
     loading = true
-
     formValid = false
-
-    hideModal() {
-      return this.$bvModal.hide('return-to-sender')
-    }
 
     validateState(value: string) {
       const form = this.$v.form
@@ -275,6 +284,11 @@
       if (this.$v.$anyError) {
         return
       }
+    }
+
+    hideModal(id: string) {
+      this.params.saving = false
+      return this.$bvModal.hide(id)
     }
 
     isValid(index: number, form: Kouluttaja) {
@@ -295,7 +309,7 @@
     }
 
     get editable() {
-      return this.koulutussopimusTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      return !this.loading && this.koulutussopimusTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     get signed() {
@@ -314,6 +328,7 @@
 
     get returned() {
       return (
+        !this.loading &&
         this.koulutussopimusTila.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
       )
     }
@@ -328,6 +343,13 @@
 
     get erikoistuvanErikoisala() {
       return this.form.erikoistuvanErikoisala ?? ''
+    }
+
+    get isLastKouluttajaToAccept() {
+      return (
+        this.form.kouluttajat.length === 1 ||
+        this.form.kouluttajat.filter((k) => k.sopimusHyvaksytty).length === 1
+      )
     }
 
     isCurrentKouluttaja(kouluttaja: any) {
@@ -353,6 +375,7 @@
     }
 
     async updateSentForm() {
+      this.skipRouteExitConfirm = true
       try {
         await store.dispatch('kouluttaja/putKoulutussopimus', this.form)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
@@ -362,8 +385,8 @@
       }
     }
 
-    onSubmit(params: any) {
-      params.saving = true
+    onSubmit() {
+      this.params.saving = true
 
       if (this.$refs.kouluttajaKoulutussopimusForm.length === 2) {
         this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
@@ -373,10 +396,14 @@
       }
 
       if (this.formValid) {
-        this.skipRouteExitConfirm = true
-        this.updateSentForm()
+        if (this.isLastKouluttajaToAccept) {
+          this.$bvModal.show('confirm-send')
+        } else {
+          this.updateSentForm()
+        }
       }
-      params.saving = false
+
+      this.params.saving = false
     }
 
     async mounted() {
@@ -386,11 +413,7 @@
       this.form = data
       this.loading = false
 
-      if (this.returned) {
-        this.skipRouteExitConfirm = true
-      }
-
-      if (!this.editable) {
+      if (!this.editable || this.returned) {
         this.skipRouteExitConfirm = true
       }
     }
