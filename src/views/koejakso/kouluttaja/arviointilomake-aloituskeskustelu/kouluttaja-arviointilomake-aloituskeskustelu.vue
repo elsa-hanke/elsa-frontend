@@ -151,6 +151,9 @@
                 rows="4"
                 class="textarea-min-height"
               ></b-form-textarea>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
             </template>
           </elsa-form-group>
         </b-form>

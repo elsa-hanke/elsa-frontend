@@ -1,5 +1,5 @@
 <template>
-  <div v-if="allekirjoitukset">
+  <div v-if="showAllekirjoitukset">
     <b-row class="mb-3">
       <b-col>
         <h3>{{ $t('allekirjoitukset') }}</h3>
@@ -28,8 +28,12 @@
 
   @Component({})
   export default class KoejaksonVaiheAllekirjoitukset extends Vue {
-    @Prop({ required: true, default: undefined })
+    @Prop({ required: true, default: [] })
     allekirjoitukset!: KoejaksonVaiheAllekirjoitus[] | null
+
+    get showAllekirjoitukset() {
+      return this.allekirjoitukset ? this.allekirjoitukset.length > 0 : false
+    }
   }
 </script>
 
