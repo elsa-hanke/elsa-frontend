@@ -358,9 +358,9 @@
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
+        toastSuccess(this, this.$t('aloituskeskustelu-palautettu-erikoistuvalle-muokattavaksi'))
       } catch (err) {
-        toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
+        toastFail(this, this.$t('aloituskeskustelu-palautus-epaonnistui'))
       }
     }
 
