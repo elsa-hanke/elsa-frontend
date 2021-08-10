@@ -99,7 +99,7 @@
                 v-model="form.kouluttajat[index]"
                 :kouluttaja="kouluttaja"
                 :index="index"
-                @ready="isValid"
+                @ready="onChildFormValid"
               ></kouluttaja-koulutussopimus-form>
 
               <kouluttaja-koulutussopimus-readonly
@@ -154,16 +154,17 @@
                 rows="4"
                 class="textarea-min-height"
               ></b-form-textarea>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
             </template>
           </elsa-form-group>
         </b-form>
       </div>
-
       <template #modal-footer>
         <elsa-button variant="back" @click="hideModal('return-to-sender')">
           {{ $t('peruuta') }}
         </elsa-button>
-
         <elsa-button variant="primary" @click="returnToSender">
           {{ $t('palauta-muokattavaksi') }}
         </elsa-button>
@@ -271,7 +272,7 @@
     }
 
     loading = true
-    formValid = false
+    childFormValid = false
 
     validateState(value: string) {
       const form = this.$v.form
@@ -279,11 +280,12 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    checkForm() {
+    isFormValid(): boolean {
       this.$v.$touch()
       if (this.$v.$anyError) {
-        return
+        return false
       }
+      return true
     }
 
     hideModal(id: string) {
@@ -291,9 +293,9 @@
       return this.$bvModal.hide(id)
     }
 
-    isValid(index: number, form: Kouluttaja) {
+    onChildFormValid(index: number, form: Kouluttaja) {
       this.form.kouluttajat[index] = form
-      this.formValid = true
+      this.childFormValid = true
     }
 
     get koulutussopimusTila() {
@@ -327,10 +329,7 @@
     }
 
     get returned() {
-      return (
-        !this.loading &&
-        this.koulutussopimusTila.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
-      )
+      return !this.loading && this.koulutussopimusTila.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     get erikoistuvanEtunimi() {
@@ -357,7 +356,9 @@
     }
 
     async returnToSender() {
-      this.checkForm()
+      if (!this.isFormValid()) {
+        return
+      }
 
       const form = {
         ...this.form,
@@ -395,7 +396,7 @@
         this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
       }
 
-      if (this.formValid) {
+      if (this.childFormValid) {
         if (this.isLastKouluttajaToAccept) {
           this.$bvModal.show('confirm-send')
         } else {
