@@ -84,6 +84,7 @@
               v-model="form.koejaksonAlkamispaiva"
               :state="validateState('koejaksonAlkamispaiva')"
               :min="account.erikoistuvaLaakari.opintooikeudenMyontamispaiva"
+              :max="maxKoejaksonAlkamispaiva"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -97,8 +98,10 @@
           <template v-slot="{ uid }">
             <elsa-form-datepicker
               :id="uid"
+              :disabled="!form.koejaksonAlkamispaiva"
               v-model="form.koejaksonPaattymispaiva"
-              :min="form.koejaksonAlkamispaiva"
+              :min="minKoejaksonPaattymispaiva"
+              :max="maxKoejaksonPaattymispaiva"
               :state="validateState('koejaksonPaattymispaiva')"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -159,17 +162,7 @@
         </elsa-form-group>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col>
-        <elsa-form-group :label="$t('tarvittavat-liitteet')" :required="true">
-          <p>{{ $t('tarvittavat-liitteet-selite') }}</p>
-          <b-form-file class="mt-3" plain></b-form-file>
-        </elsa-form-group>
-      </b-col>
-    </b-row>
-
     <hr />
-
     <b-row>
       <b-col lg="10">
         <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
@@ -280,6 +273,7 @@
   import { required, email } from 'vuelidate/lib/validators'
   import _get from 'lodash/get'
   import store from '@/store'
+  import { format } from 'date-fns'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -460,6 +454,52 @@
         }
         return k
       })
+    }
+
+    get maxKoejaksonAlkamispaiva() {
+      const dateFormat = 'yyyy-MM-dd'
+      const opintooikeudenPaattymispaivaDate = new Date(
+        this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva
+      )
+      // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
+      // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
+      opintooikeudenPaattymispaivaDate.setMonth(opintooikeudenPaattymispaivaDate.getMonth() - 6)
+      return format(opintooikeudenPaattymispaivaDate, dateFormat)
+    }
+
+    get minKoejaksonPaattymispaiva() {
+      const dateFormat = 'yyyy-MM-dd'
+      const koejaksonAlkamispaiva = this.form.koejaksonAlkamispaiva
+      if (!koejaksonAlkamispaiva) {
+        return null
+      }
+
+      const koejaksonAlkamispaivaDate = new Date(koejaksonAlkamispaiva)
+      // Koejakson kesto on vähintään 6kk.
+      koejaksonAlkamispaivaDate.setMonth(koejaksonAlkamispaivaDate.getMonth() + 6)
+      return format(koejaksonAlkamispaivaDate, dateFormat)
+    }
+
+    get maxKoejaksonPaattymispaiva() {
+      const dateFormat = 'yyyy-MM-dd'
+      const koejaksonAlkamispaiva = this.form.koejaksonAlkamispaiva
+      if (!koejaksonAlkamispaiva) {
+        return null
+      }
+
+      const koejaksonAlkamispaivaDate = new Date(this.form.koejaksonAlkamispaiva)
+      // Koejakson kesto on maksimissaan 2 vuotta.
+      koejaksonAlkamispaivaDate.setFullYear(koejaksonAlkamispaivaDate.getFullYear() + 2)
+      const opintooikeudenPaattymispaivaDate = new Date(
+        this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva
+      )
+      // Mikäli maksimikesto 2 vuotta ylittää opinto-oikeuden päättymispäivän,
+      // on maksimi päättymispäivä opinto-oikeuden päättymispäivä.
+      if (koejaksonAlkamispaivaDate > opintooikeudenPaattymispaivaDate) {
+        return format(opintooikeudenPaattymispaivaDate, dateFormat)
+      }
+
+      return format(koejaksonAlkamispaivaDate, dateFormat)
     }
 
     saveAndExit() {

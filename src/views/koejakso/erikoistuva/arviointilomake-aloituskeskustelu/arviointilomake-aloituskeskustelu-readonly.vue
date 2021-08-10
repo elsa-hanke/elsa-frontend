@@ -28,33 +28,6 @@
         <p>{{ suoritettuKokoaikatyossa }}</p>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col lg="8">
-        <h5>{{ $t('tarvittavat-liitteet') }}</h5>
-        <b-table-simple fixed class="mb-0">
-          <b-thead>
-            <b-tr>
-              <b-th class="border-top-0">
-                {{ $t('tiedoston-nimi') }}
-              </b-th>
-              <b-th class="border-top-0">
-                {{ $t('lisatty') }}
-              </b-th>
-            </b-tr>
-          </b-thead>
-          <b-tbody>
-            <b-tr>
-              <b-td>Todo.pdf</b-td>
-              <b-td>1.1.2021</b-td>
-            </b-tr>
-            <b-tr>
-              <b-td>Todo.pdf</b-td>
-              <b-td>1.1.2021</b-td>
-            </b-tr>
-          </b-tbody>
-        </b-table-simple>
-      </b-col>
-    </b-row>
     <hr />
     <b-row>
       <b-col>
