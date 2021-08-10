@@ -340,11 +340,12 @@
     }
 
     get maxKoejaksonAlkamispaiva() {
+      const dateFormat = 'yyyy-MM-dd'
       const d = new Date(this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva)
       // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
       // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
       d.setMonth(d.getMonth() - 6)
-      return format(d, 'yyyy-MM-dd')
+      return format(d, dateFormat)
     }
 
     get vastuuhenkilotOptions() {
