@@ -301,7 +301,7 @@
     }
 
     get tyotunnitViikossa() {
-      return this.aloituskeskustelu?.tyotunnitViikossa
+      return this.aloituskeskustelu?.tyotunnitViikossa?.toString().replace('.', ',')
     }
 
     get showWaitingForLahiesimies() {
