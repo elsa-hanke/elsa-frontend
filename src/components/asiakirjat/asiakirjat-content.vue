@@ -1,25 +1,18 @@
 <template>
   <div>
-    <div v-if="searchVisible" class="search-box form-group col-xs-12 col-sm-6 col-xl-4 p-0">
-      <b-form-input
-        v-model="hakusana"
-        :placeholder="$t('hae-asiakirjoja')"
-        class="rounded-pill"
-        responsive
-      ></b-form-input>
-      <font-awesome-icon
-        :icon="['fas', 'search']"
-        class="text-primary position-absolute search-icon"
-      />
-    </div>
+    <search-input
+      :hakutermi.sync="hakutermi"
+      :visible="searchVisible"
+      :placeholder="$t('hae-asiakirjoja')"
+    />
     <div v-if="!loading">
-      <b-alert v-if="showInfoIfEmpty && rows === 0" variant="dark" show>
+      <b-alert v-if="showInfoIfEmpty && rows === 0" variant="dark" class="mt-3" show>
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-        <span v-if="noContentInfoText">
-          {{ noContentInfoText }}
+        <span v-if="noResultsInfoText === undefined">
+          {{ $t('ei-hakutuloksia') }}
         </span>
         <span v-else>
-          {{ $t('ei-asiakirjoja') }}
+          {{ noResultsInfoText }}
         </span>
       </b-alert>
     </div>
@@ -81,17 +74,12 @@
         </elsa-button>
       </template>
     </b-table>
-    <b-pagination
-      class="mt-4"
-      v-if="paginationEnabled && rows > perPage"
-      v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
-      :prev-text="$t('edellinen')"
-      :next-text="$t('seuraava')"
-      first-number
-      last-number
-    ></b-pagination>
+    <pagination
+      :currentPage.sync="currentPage"
+      :perPage="perPage"
+      :rows="rows"
+      :loading="loading"
+    />
   </div>
 </template>
 
@@ -99,17 +87,21 @@
   import { Component, Prop, Vue } from 'vue-property-decorator'
   import ElsaButton from '@/components/button/button.vue'
   import { Asiakirja } from '@/types'
+  import Pagination from '@/components/pagination/pagination.vue'
   import { toastFail } from '@/utils/toast'
   import { saveBlob, fetchAndSaveBlob, openBlob, fetchAndOpenBlob } from '@/utils/blobs'
+  import SearchInput from '@/components/search-input/search-input.vue'
 
   @Component({
     components: {
-      ElsaButton
+      ElsaButton,
+      SearchInput,
+      Pagination
     }
   })
   export default class AsiakirjatContent extends Vue {
     private endpointUrl = 'erikoistuva-laakari/asiakirjat/'
-    private hakusana = ''
+    private hakutermi = ''
     private currentPage = 1
 
     @Prop({ required: true, default: undefined })
@@ -140,7 +132,7 @@
     showInfoIfEmpty!: boolean
 
     @Prop({ required: false, type: String, default: undefined })
-    noContentInfoText!: string
+    noResultsInfoText!: string
 
     @Prop({ required: false, type: Boolean, default: false })
     loading!: boolean
@@ -211,10 +203,10 @@
     }
 
     get tulokset() {
-      if (this.hakusana) {
+      if (this.hakutermi) {
         this.currentPage = 1
         return this.asiakirjat?.filter((item) =>
-          item.nimi.toLowerCase().includes(this.hakusana.toLowerCase())
+          item.nimi.toLowerCase().includes(this.hakutermi.toLowerCase())
         )
       }
 
@@ -235,44 +227,9 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import '~bootstrap/scss/mixins/breakpoints';
-  @import '~@/styles/variables';
-
-  .search-box {
-    margin: 0.625rem 0 0.25rem 0 !important;
-
-    @include media-breakpoint-down(xs) {
-      margin: 0.625rem 0 1rem 0 !important;
-    }
-  }
-</style>
-
 <style lang="scss">
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
-
-  .asiakirjat-table {
-    border-bottom: 0.0625rem solid $gray-300;
-    th {
-      border-top: none;
-      padding-bottom: 0.375rem;
-      font-weight: normal;
-    }
-
-    td {
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
-      vertical-align: middle;
-
-      &.file-name {
-        button {
-          word-break: break-all;
-          text-align: justify;
-        }
-      }
-    }
-  }
 
   @include media-breakpoint-down(xs) {
     .asiakirjat-table {
@@ -281,7 +238,7 @@
         padding: 0.375rem 0 0.375rem 0;
         border: 0.0625rem solid $gray-300;
         border-radius: 0.25rem;
-        margin-bottom: 0.375rem;
+        margin-bottom: 0.5rem;
       }
 
       td {

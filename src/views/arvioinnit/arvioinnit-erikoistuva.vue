@@ -42,15 +42,15 @@
                     </elsa-form-group>
                   </b-col>
                   <b-col md="4">
-                    <elsa-form-group :label="$t('kouluttaja-tai-lahikouluttaja')" class="mb-0">
+                    <elsa-form-group :label="$t('kouluttaja-tai-vastuuhenkilo')" class="mb-0">
                       <template v-slot="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
-                          v-model="selected.kouluttaja"
-                          :options="options.kouluttajat"
+                          v-model="selected.kouluttajaOrVastuuhenkilo"
+                          :options="options.kouluttajatAndVastuuhenkilot"
                           label="nimi"
                           track-by="id"
-                          @select="onKouluttajaSelect"
+                          @select="onKouluttajaOrVastuuhenkiloSelect"
                         ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
@@ -63,7 +63,7 @@
                         v-if="
                           selected.tyoskentelyjakso ||
                           selected.epaOsaamisalue ||
-                          selected.kouluttaja
+                          selected.kouluttajaOrVastuuhenkilo
                         "
                         variant="link"
                         class="shadow-none text-size-sm font-weight-500"
@@ -118,7 +118,7 @@
                                   {{ $t('tyoskentelypaikka') | uppercase }}
                                 </th>
                                 <th scope="col">
-                                  {{ $t('kouluttaja') | uppercase }}
+                                  {{ $t('arvioinnin-antaja') | uppercase }}
                                 </th>
                               </tr>
                             </thead>
@@ -238,6 +238,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
+  import { decorate } from '@/utils/arvioinninAntajaListDecorator'
 
   @Component({
     components: {
@@ -252,12 +253,12 @@
     selected = {
       tyoskentelyjakso: null,
       epaOsaamisalue: null,
-      kouluttaja: null
+      kouluttajaOrVastuuhenkilo: null
     } as any
     options = {
       tyoskentelyjaksot: [],
       epaOsaamisalueet: [],
-      kouluttajat: []
+      kouluttajatAndVastuuhenkilot: []
     } as any
     omat: null | any[] = null
     items = [
@@ -281,7 +282,7 @@
       this.selected = {
         tyoskentelyjakso: null,
         epaOsaamisalue: null,
-        kouluttaja: null
+        kouluttajaOrVastuuhenkilo: null
       }
       this.omat = null
       if (value === 0) {
@@ -304,8 +305,8 @@
       await this.fetch()
     }
 
-    async onKouluttajaSelect(selected: any) {
-      this.selected.kouluttaja = selected
+    async onKouluttajaOrVastuuhenkiloSelect(selected: any) {
+      this.selected.kouluttajaOrVastuuhenkilo = selected
       await this.fetch()
     }
 
@@ -313,7 +314,7 @@
       this.selected = {
         tyoskentelyjakso: null,
         epaOsaamisalue: null,
-        kouluttaja: null
+        kouluttajaOrVastuuhenkilo: null
       }
       await this.fetch()
       this.solveKategoriat()
@@ -321,6 +322,10 @@
 
     async fetchOptions() {
       this.options = (await axios.get('erikoistuva-laakari/suoritusarvioinnit-rajaimet')).data
+      this.options.kouluttajatAndVastuuhenkilot = decorate(
+        this,
+        this.options.kouluttajatAndVastuuhenkilot
+      )
     }
 
     async fetch(options: any = {}) {
@@ -332,7 +337,7 @@
               sort: 'tapahtumanAjankohta,desc',
               'tyoskentelyjaksoId.equals': this.selected.tyoskentelyjakso?.id,
               'arvioitavaOsaalueId.equals': this.selected.epaOsaamisalue?.id,
-              'arvioinninAntajaId.equals': this.selected.kouluttaja?.id
+              'arvioinninAntajaId.equals': this.selected.kouluttajaOrVastuuhenkilo?.id
             }
           })
         ).data
@@ -344,7 +349,7 @@
 
     solveKategoriat() {
       // Muodostetaan osa-alueet lista
-      const osaalueet = (this.selected.tyoskentelyjakso || this.selected.kouluttaja
+      const osaalueet = (this.selected.tyoskentelyjakso || this.selected.kouluttajaOrVastuuhenkilo
         ? this.omat?.map((oma: any) => oma.arvioitavaOsaalue)
         : this.options.epaOsaamisalueet.filter((oa: any) =>
             this.selected.epaOsaamisalue ? oa.id === this.selected.epaOsaamisalue?.id : true

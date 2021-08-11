@@ -16,7 +16,7 @@
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :epa-osaamisalueen-kategoriat="epaOsaamisalueenKategoriat"
-            :kouluttajat="kouluttajat"
+            :kouluttajatAndVastuuhenkilot="kouluttajatAndVastuuhenkilot"
             :editing="editing"
             @submit="onSubmit"
             @delete="onDelete"
@@ -41,6 +41,7 @@
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { dateBetween } from '@/utils/date'
+  import { decorate } from '@/utils/arvioinninAntajaListDecorator'
 
   @Component({
     components: {
@@ -76,6 +77,12 @@
         this.arviointipyyntoLomake = (
           await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
         ).data
+        if (this.arviointipyyntoLomake !== null) {
+          this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot = decorate(
+            this,
+            this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot
+          )
+        }
       } catch (err) {
         toastFail(this, this.$t('arviointipyynnon-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -201,9 +208,9 @@
       }
     }
 
-    get kouluttajat() {
+    get kouluttajatAndVastuuhenkilot() {
       if (this.arviointipyyntoLomake) {
-        return this.arviointipyyntoLomake.kouluttajat
+        return this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot
       } else {
         return []
       }
@@ -218,7 +225,7 @@
             label: tyoskentelyjaksoLabel(this, this.arviointipyynto.tyoskentelyjakso)
           },
           epaOsaamisalue: this.arviointipyynto.arvioitavaOsaalue,
-          kouluttaja: this.arviointipyynto.arvioinninAntaja
+          kouluttajaOrVastuuhenkilo: this.arviointipyynto.arvioinninAntaja
         }
       } else {
         return undefined

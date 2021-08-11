@@ -260,8 +260,19 @@ h6 {
 }
 
 table {
+  border-bottom: 0.0625rem solid $gray-300;
+
   th {
     font-weight: $font-weight-500;
+    border-top: none !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  td {
+    word-wrap: break-word;
+    button {
+      text-align: justify !important;
+    }
   }
 }
 

@@ -32,7 +32,7 @@
               </tr>
               <tr>
                 <th scope="row" class="py-0 pl-0 pr-1 font-weight-500">
-                  {{ $t('kouluttaja-tai-lahikouluttaja') }}
+                  {{ $t('kouluttaja-tai-vastuuhenkilo') }}
                 </th>
                 <td class="py-0 pr-0 pl-1">
                   {{ value.arvioinninAntaja.nimi }}

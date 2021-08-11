@@ -11,27 +11,23 @@
   import Component from 'vue-class-component'
   import store from '@/store'
   import KoejaksonVaiheetList from '@/components/koejakson-vaiheet-list/koejakson-vaiheet-list.vue'
-  import { LomakeTyypit } from '@/utils/constants'
 
   @Component({
     components: {
       KoejaksonVaiheetList
     }
   })
-  export default class KoejaksoViewKouluttaja extends Vue {
+  export default class KoejaksoViewVastuuhenkilo extends Vue {
     private loading = true
-    private componentLinks = new Map([
-      [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus-kouluttaja'],
-      [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja']
-    ])
+    private componentLinks = new Map()
 
     async mounted() {
-      await store.dispatch('kouluttaja/getKoejaksot')
+      await store.dispatch('vastuuhenkilo/getKoejaksot')
       this.loading = false
     }
 
     get koejaksot() {
-      return store.getters['kouluttaja/koejaksot']
+      return store.getters['vastuuhenkilo/koejaksot']
     }
   }
 </script>

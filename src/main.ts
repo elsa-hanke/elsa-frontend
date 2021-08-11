@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 import 'mutationobserver-shim'
 import '@/plugins/registerComponentHooks'
 import Vue from 'vue'

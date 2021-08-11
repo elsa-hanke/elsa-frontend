@@ -32,7 +32,7 @@ export interface ArviointipyyntoLomake {
   kunnat: any[]
   erikoisalat: any[]
   epaOsaamisalueenKategoriat: any[]
-  kouluttajat: any[]
+  kouluttajatAndVastuuhenkilot: any[]
 }
 
 export interface SuoritemerkintaLomake {

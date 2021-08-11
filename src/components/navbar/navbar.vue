@@ -121,6 +121,8 @@
         return this.$t('kouluttaja')
       } else if (this.authorities.includes(ELSA_ROLE.Lahikouluttaja)) {
         return this.$t('lahikouluttaja')
+      } else if (this.authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
+        return this.$t('vastuuhenkilo')
       }
 
       return undefined

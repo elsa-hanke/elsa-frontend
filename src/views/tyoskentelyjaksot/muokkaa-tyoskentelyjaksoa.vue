@@ -98,7 +98,7 @@
         data.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
         formData.append('deletedAsiakirjaIdsJson', JSON.stringify(data.deletedAsiakirjaIds))
 
-        putTyoskentelyjakso(formData)
+        await putTyoskentelyjakso(formData)
 
         toastSuccess(this, this.$t('tyoskentelyjakson-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true

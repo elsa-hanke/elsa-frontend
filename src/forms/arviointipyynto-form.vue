@@ -73,7 +73,7 @@
     </elsa-form-group>
     <b-form-row>
       <elsa-form-group
-        :label="$t('kouluttaja-tai-lahikouluttaja')"
+        :label="$t('kouluttaja-tai-vastuuhenkilo')"
         :add-new-enabled="!editing"
         :add-new-label="$t('lisaa-kouluttaja')"
         :required="true"
@@ -86,9 +86,9 @@
         <template v-slot="{ uid }">
           <elsa-form-multiselect
             :id="uid"
-            v-model="form.kouluttaja"
-            :options="kouluttajat"
-            :state="validateState('kouluttaja')"
+            v-model="form.kouluttajaOrVastuuhenkilo"
+            :options="kouluttajatAndVastuuhenkilot"
+            :state="validateState('kouluttajaOrVastuuhenkilo')"
             :disabled="editing"
             label="nimi"
             track-by="nimi"
@@ -181,7 +181,7 @@
         arvioitavaTapahtuma: {
           required
         },
-        kouluttaja: {
+        kouluttajaOrVastuuhenkilo: {
           required
         },
         tapahtumanAjankohta: {
@@ -204,7 +204,7 @@
     epaOsaamisalueenKategoriat!: any[]
 
     @Prop({ required: false, default: () => [] })
-    kouluttajat!: any[]
+    kouluttajatAndVastuuhenkilot!: any[]
 
     @Prop({ required: false, default: false })
     editing!: boolean
@@ -216,7 +216,7 @@
         tyoskentelyjakso: null,
         epaOsaamisalue: null,
         arvioitavaTapahtuma: null,
-        kouluttaja: null,
+        kouluttajaOrVastuuhenkilo: null,
         tapahtumanAjankohta: null,
         lisatiedot: null
       })
@@ -227,7 +227,7 @@
       tyoskentelyjakso: null,
       epaOsaamisalue: null,
       arvioitavaTapahtuma: null,
-      kouluttaja: null,
+      kouluttajaOrVastuuhenkilo: null,
       tapahtumanAjankohta: null,
       lisatiedot: null
     } as any
@@ -240,7 +240,7 @@
       this.form.tyoskentelyjakso = this.value.tyoskentelyjakso
       this.form.epaOsaamisalue = this.value.epaOsaamisalue
       this.form.arvioitavaTapahtuma = this.value.arvioitavaTapahtuma
-      this.form.kouluttaja = this.value.kouluttaja
+      this.form.kouluttajaOrVastuuhenkilo = this.value.kouluttajaOrVastuuhenkilo
       this.form.tapahtumanAjankohta = this.value.tapahtumanAjankohta
       this.form.lisatiedot = this.value.lisatiedot
     }
@@ -261,7 +261,7 @@
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
           arvioitavaOsaalueId: this.form.epaOsaamisalue?.id,
           arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
-          arvioinninAntajaId: this.form.kouluttaja?.id,
+          arvioinninAntajaId: this.form.kouluttajaOrVastuuhenkilo?.id,
           tapahtumanAjankohta: this.form.tapahtumanAjankohta,
           lisatiedot: this.form.lisatiedot
         },
@@ -277,8 +277,8 @@
       params.saving = true
       try {
         const kouluttaja = (await axios.post('/erikoistuva-laakari/lahikouluttajat', value)).data
-        this.kouluttajat.push(kouluttaja)
-        this.form.kouluttaja = kouluttaja
+        this.kouluttajatAndVastuuhenkilot.push(kouluttaja)
+        this.form.kouluttajaOrVastuuhenkilo = kouluttaja
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
       } catch (err) {

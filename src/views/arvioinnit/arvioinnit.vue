@@ -5,8 +5,8 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import ArvioinnitErikoistuva from '@/views/arvioinnit-erikoistuva.vue'
-  import ArvioinnitKouluttaja from '@/views/arvioinnit-kouluttaja.vue'
+  import ArvioinnitErikoistuva from '@/views/arvioinnit/arvioinnit-erikoistuva.vue'
+  import ArvioinnitKouluttaja from '@/views/arvioinnit/arvioinnit-kouluttaja.vue'
 
   @Component({
     components: {

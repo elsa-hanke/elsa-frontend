@@ -34,7 +34,7 @@
             {{ $t('arvioinnit') }}
           </b-nav-item>
           <b-nav-item
-            v-if="$isErikoistuva() || $isKouluttaja()"
+            v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()"
             class="border-bottom"
             :to="{ name: 'koejakso' }"
           >
