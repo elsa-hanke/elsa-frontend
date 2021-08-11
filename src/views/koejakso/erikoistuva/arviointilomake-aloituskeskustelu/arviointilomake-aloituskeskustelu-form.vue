@@ -552,7 +552,11 @@
         this.form.erikoistuvanSahkoposti = this.account.email
       }
 
+      // Asetetaan ei-muokattavien kenttien arvot
       this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)
+      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
+      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.erikoisalaNimi
+      this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
 
       if (!this.form.koejaksonAlkamispaiva) {
         this.form.koejaksonAlkamispaiva = this.data?.koejaksonAlkamispaiva

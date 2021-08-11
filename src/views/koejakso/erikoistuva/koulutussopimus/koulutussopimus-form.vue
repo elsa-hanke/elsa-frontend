@@ -396,9 +396,8 @@
         this.form.vastuuhenkilo = this.vastuuhenkilot[0]
       }
 
-      this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)
-
       // Asetetaan ei-muokattavien kenttien arvot
+      this.form.erikoistuvanNimi = this.account.firstName.concat(' ', this.account.lastName)
       this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
       this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
       this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
