@@ -68,7 +68,7 @@
     </b-row>
 
     <b-row class="mt-4">
-      <b-col lg="4">
+      <b-col xl="4" lg="8">
         <elsa-form-group :label="$t('koejakson-alkamispäivä')" :required="true">
           <template #label-help>
             <elsa-popover>
@@ -93,7 +93,7 @@
         </elsa-form-group>
       </b-col>
 
-      <b-col lg="4">
+      <b-col xl="4" lg="8">
         <elsa-form-group :label="$t('koejakson-päättymispäivä')" :required="true">
           <template v-slot="{ uid }">
             <elsa-form-datepicker
