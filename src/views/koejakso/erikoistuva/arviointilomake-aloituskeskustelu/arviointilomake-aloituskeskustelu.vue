@@ -166,6 +166,7 @@
     async onSubmit(form: AloituskeskusteluLomake, params: any) {
       params.saving = true
       this.aloituskeskusteluLomake = form
+
       this.aloituskeskusteluLomake.lahetetty = true
       if (
         this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
