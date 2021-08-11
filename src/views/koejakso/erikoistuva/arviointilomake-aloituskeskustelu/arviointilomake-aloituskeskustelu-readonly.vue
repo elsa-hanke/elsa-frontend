@@ -25,7 +25,10 @@
     <b-row>
       <b-col lg="8">
         <h5>{{ $t('koejakso-suoritettu-kokoaikatyössä') }}</h5>
-        <p>{{ suoritettuKokoaikatyossa }}</p>
+        <p v-if="data.suoritettuKokoaikatyossa">{{ $t('kylla') }}</p>
+        <p v-else>
+          {{ $t('suoritettu-osa-aikatyossa-tuntia-viikossa', { tyotunnitViikossa }) }}
+        </p>
       </b-col>
     </b-row>
     <hr />
@@ -73,19 +76,8 @@
     @Prop({ required: true, default: {} })
     data!: AloituskeskusteluLomake
 
-    get suoritettuKokoaikatyossa() {
-      return this.data.suoritettuKokoaikatyossa ? this.$t('kylla') : this.suoritettuOsaAikatyossa
-    }
-
-    get suoritettuOsaAikatyossa() {
-      return (
-        this.$t('ei') +
-        ', ' +
-        this.$t('suoritettu-osa-aikatyossa').toString().toLowerCase() +
-        ': ' +
-        this.data.tyotunnitViikossa +
-        this.$t('tuntia-viikossa')
-      )
+    get tyotunnitViikossa() {
+      return this.data?.tyotunnitViikossa?.toString().replace('.', ',')
     }
 
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {

@@ -136,7 +136,10 @@
               name="suoritettu-kokoaikatyossa"
               stacked
             ></b-form-radio-group>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :state="validateState('suoritettuKokoaikatyossa')"
+            >
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
           </template>
@@ -150,13 +153,26 @@
             <div class="d-inline-flex align-items-center">
               <b-form-input
                 :id="uid"
-                v-model="form.tyotunnitViikossa"
+                v-model="local.tyotunnitViikossa"
+                class="tyotunnit-viikossa-input"
                 :state="validateState('tyotunnitViikossa')"
+                @change="onTyotunnitViikossaChange"
               />
-              <span class="ml-2">{{ $t('tuntia-viikossa') }}</span>
+              <span class="ml-2">({{ $t('tuntia-viikossa') }})</span>
             </div>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
+            <b-form-invalid-feedback
+              v-if="!$v.form.tyotunnitViikossa.required"
+              :state="validateState('tyotunnitViikossa')"
+              :id="`${uid}-feedback`"
+            >
               {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              v-if="!$v.form.tyotunnitViikossa.between"
+              :state="validateState('tyotunnitViikossa')"
+              :id="`${uid}-feedback`"
+            >
+              {{ $t('koejakso-suoritettu-osaaikatyossa.invalid') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -240,6 +256,9 @@
               rows="7"
               class="textarea-min-height"
             ></b-form-textarea>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
       </b-col>
@@ -270,7 +289,7 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { required, email } from 'vuelidate/lib/validators'
+  import { required, requiredIf, email, between } from 'vuelidate/lib/validators'
   import _get from 'lodash/get'
   import store from '@/store'
   import { format } from 'date-fns'
@@ -317,7 +336,9 @@
             required
           },
           koejaksonToinenSuorituspaikka: {
-            required: this.local.toinenSuorituspaikka
+            required: requiredIf(() => {
+              return this.local.toinenSuorituspaikka
+            })
           },
           koejaksonAlkamispaiva: {
             required
@@ -329,7 +350,10 @@
             required
           },
           tyotunnitViikossa: {
-            required: !this.form.suoritettuKokoaikatyossa
+            required: requiredIf((value) => {
+              return value.suoritettuKokoaikatyossa == false
+            }),
+            between: between(19.125, 38.25)
           },
           lahikouluttaja: {
             nimi: {
@@ -387,6 +411,7 @@
     }
 
     local: any = {
+      tyotunnitViikossa: String,
       toinenSuorituspaikka: false
     }
 
@@ -412,6 +437,10 @@
 
     optionDisplayName(option: any) {
       return option.nimike ? option.nimi + ', ' + option.nimike : option.nimi
+    }
+
+    onTyotunnitViikossaChange(val: string) {
+      this.form.tyotunnitViikossa = parseFloat(val.replace(',', '.'))
     }
 
     async onKouluttajaSubmit(value: any, params: any, modal: any) {
@@ -528,6 +557,8 @@
       if (!this.form.koejaksonAlkamispaiva) {
         this.form.koejaksonAlkamispaiva = this.data?.koejaksonAlkamispaiva
       }
+
+      this.local.tyotunnitViikossa = this.form.tyotunnitViikossa?.toString().replace('.', ',')
     }
   }
 </script>
@@ -535,5 +566,9 @@
 <style lang="scss">
   .textarea-min-height {
     min-height: 200px;
+  }
+
+  .tyotunnit-viikossa-input {
+    width: 5rem;
   }
 </style>
