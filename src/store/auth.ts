@@ -1,13 +1,13 @@
 import { Module } from 'vuex'
 import axios from 'axios'
+import * as api from '@/api'
 
 const auth: Module<any, any> = {
   namespaced: true,
   state: {
     status: '',
     account: null,
-    loggedIn: false,
-    unauthorized: true
+    loggedIn: false
   },
   mutations: {
     authRequest(state) {
@@ -41,11 +41,11 @@ const auth: Module<any, any> = {
     async authorize({ commit }) {
       commit('authRequest')
       try {
-        const account = (await axios.get('kayttaja')).data
-        if (account.authorities.includes('ROLE_ERIKOISTUVA_LAAKARI')) {
-          account.erikoistuvaLaakari = (await axios.get('erikoistuva-laakari')).data
+        const { data } = await api.getKayttaja()
+        if (data.authorities.includes('ROLE_ERIKOISTUVA_LAAKARI')) {
+          data.erikoistuvaLaakari = (await axios.get('erikoistuva-laakari')).data
         }
-        commit('authSuccess', account)
+        commit('authSuccess', data)
       } catch (err) {
         if (err.response.status === 401) {
           commit('authUnauthorized')
@@ -57,9 +57,9 @@ const auth: Module<any, any> = {
     async logout({ commit }) {
       commit('logoutRequest')
       try {
-        const logoutDetails = (await axios.post('logout', {})).data
+        await axios.post('logout', {})
         commit('logoutSuccess')
-        window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${window.location.origin}/`
+        window.location.href = `${window.location.origin}/`
       } catch (err) {
         commit('logoutError')
         window.location.reload()

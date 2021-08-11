@@ -3,9 +3,9 @@
     <navbar :isMobile="isMobile" />
     <b-container fluid>
       <mobile-nav v-if="isMobile" />
-      <b-row>
+      <b-row class="position-relative">
         <sidebar-menu />
-        <main role="main" class="offset-lg-2 col-lg-10 mb-5">
+        <main role="main" class="offset-lg-2 col-lg-10 vh-100">
           <router-view />
         </main>
       </b-row>

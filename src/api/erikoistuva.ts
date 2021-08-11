@@ -1,6 +1,11 @@
 import axios from 'axios'
 import { AloituskeskusteluLomake, KoulutussopimusLomake, ValiarviointiLomake } from '@/types'
 
+export async function putKayttooikeushakemus(value: any) {
+  const path = 'erikoistuva-laakari/kayttooikeushakemus'
+  return await axios.put(path, value)
+}
+
 export async function getKoejakso() {
   const path = '/erikoistuva-laakari/koejakso'
   return await axios.get(path)
@@ -37,15 +42,18 @@ export async function getKouluttajat() {
 }
 
 export async function getTyoskentelyjakso(id: string) {
-  return await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${id}`)
+  const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
+  return await axios.get(path)
 }
 
 export async function getTyoskentelyjaksoLomake() {
-  return await axios.get(`erikoistuva-laakari/tyoskentelyjakso-lomake`)
+  const path = 'erikoistuva-laakari/tyoskentelyjakso-lomake'
+  return await axios.get(path)
 }
 
 export async function putTyoskentelyjakso(formData: FormData) {
-  await axios.put('erikoistuva-laakari/tyoskentelyjaksot', formData, {
+  const path = 'erikoistuva-laakari/tyoskentelyjaksot'
+  await axios.put(path, formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     },
@@ -54,5 +62,6 @@ export async function putTyoskentelyjakso(formData: FormData) {
 }
 
 export async function deleteTyoskentelyjakso(id: string) {
-  await axios.delete(`erikoistuva-laakari/tyoskentelyjaksot/${id}`)
+  const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
+  await axios.delete(path)
 }

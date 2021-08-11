@@ -1,5 +1,4 @@
 import { Route, NavigationGuardNext } from 'vue-router'
-import { ELSA_API_LOCATION } from '@/api'
 
 // Palauttaa tallennetun näkymän polun selaimen muistista.
 export function restoreRoute(next: NavigationGuardNext) {
@@ -22,7 +21,7 @@ export function restoreRoute(next: NavigationGuardNext) {
       next()
     }
   } else {
-    next()
+    next('/etusivu')
   }
 }
 
@@ -54,5 +53,5 @@ export function storeRoute(to?: Route) {
 // Tallentaa näkymän polun selaimen muistiin.
 export function storeRouteAndRedirectToLogin(to?: Route) {
   storeRoute(to)
-  window.location.href = `${ELSA_API_LOCATION}/oauth2/authorization/oidc`
+  // window.location.href = `${process.env.BASE_URL}/oauth2/authorization/oidc`
 }
