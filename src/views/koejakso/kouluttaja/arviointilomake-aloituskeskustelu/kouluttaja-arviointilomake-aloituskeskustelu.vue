@@ -111,27 +111,39 @@
       </div>
       <hr v-if="showAllekirjoitukset && editable" />
       <b-row v-if="editable">
-        <b-col>
-          <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
+        <b-col class="text-right">
+          <elsa-button
+            class="ml-1 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block text-left"
+            style="max-width: 14rem"
+            variant="back"
+            :to="{ name: 'koejakso' }"
+          >
+            {{ $t('peruuta') }}
+          </elsa-button>
+          <elsa-button
+            class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+            style="width: 14rem"
+            variant="outline-primary"
+            v-b-modal.return-to-sender
+          >
             {{ $t('palauta-muokattavaksi') }}
           </elsa-button>
-        </b-col>
-        <b-col class="text-right">
-          <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
           <elsa-button
             v-if="isCurrentUserLahiesimies"
+            class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+            style="width: 14rem"
             v-b-modal.confirm-send
             variant="primary"
-            class="ml-4 px-5"
           >
             {{ $t('allekirjoita-laheta') }}
           </elsa-button>
           <elsa-button
             v-else
+            class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+            style="width: 14rem"
             :loading="params.saving"
             @click="onSubmit"
             variant="primary"
-            class="ml-4 px-5"
           >
             {{ $t('allekirjoita-laheta') }}
           </elsa-button>

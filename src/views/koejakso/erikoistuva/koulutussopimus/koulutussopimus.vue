@@ -38,7 +38,6 @@
         <b-col>
           <koulutussopimus-form
             v-if="editable"
-            :editable="editable"
             :data="koejaksoData.koulutussopimus"
             :account="account"
             :kouluttajat="kouluttajat"

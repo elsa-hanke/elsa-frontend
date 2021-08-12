@@ -123,14 +123,30 @@
         <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
         <hr v-if="editable" />
         <b-row v-if="editable && !signed">
-          <b-col>
-            <elsa-button variant="outline-primary" v-b-modal.return-to-sender>
+          <b-col class="text-right">
+            <elsa-button
+              class="ml-1 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block text-left"
+              style="max-width: 14rem"
+              variant="back"
+              :to="{ name: 'koejakso' }"
+            >
+              {{ $t('peruuta') }}
+            </elsa-button>
+            <elsa-button
+              class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+              style="width: 14rem"
+              variant="outline-primary"
+              v-b-modal.return-to-sender
+            >
               {{ $t('palauta-muokattavaksi') }}
             </elsa-button>
-          </b-col>
-          <b-col class="text-right">
-            <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-            <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-4 px-5">
+            <elsa-button
+              class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+              style="width: 14rem"
+              :loading="params.saving"
+              type="submit"
+              variant="primary"
+            >
               {{ $t('allekirjoita-laheta') }}
             </elsa-button>
           </b-col>

@@ -32,7 +32,6 @@
       <hr />
       <arviointilomake-aloituskeskustelu-form
         v-if="editable"
-        :editable="editable"
         :account="account"
         :data="koejaksoData.aloituskeskustelu"
         :kouluttajat="kouluttajat"
