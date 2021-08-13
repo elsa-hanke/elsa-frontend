@@ -6,8 +6,8 @@
           :id="uid"
           v-model="value.yliopisto"
           :options="yliopistot"
-          label="name"
-          track-by="name"
+          label="nimi"
+          track-by="nimi"
         ></elsa-form-multiselect>
       </template>
     </elsa-form-group>
@@ -54,7 +54,7 @@
 
     onSubmit() {
       this.$emit('submit', {
-        yliopisto: this.value.yliopisto?.value.toString()
+        yliopisto: this.value.yliopisto?.id
       })
     }
   }
