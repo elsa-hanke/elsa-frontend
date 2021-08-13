@@ -55,7 +55,12 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
+      <koejakso-card-content
+        v-if="
+          tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
+          tila === lomaketilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA
+        "
+      >
         <template v-slot:content>
           <p class="pr-5">{{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}</p>
         </template>

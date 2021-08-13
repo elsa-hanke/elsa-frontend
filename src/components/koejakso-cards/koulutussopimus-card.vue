@@ -29,7 +29,13 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
+      <koejakso-card-content
+        v-if="
+          tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
+          tila === lomaketilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
+          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+        "
+      >
         <template v-slot:content>
           <p class="pr-5" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
         </template>
