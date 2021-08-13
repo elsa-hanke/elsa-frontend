@@ -354,6 +354,10 @@
 
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
+      if (!this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva) {
+        return null
+      }
+
       const d = new Date(this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva)
       // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
       // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
