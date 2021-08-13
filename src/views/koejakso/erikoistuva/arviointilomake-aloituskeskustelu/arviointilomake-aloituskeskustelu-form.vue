@@ -500,6 +500,10 @@
 
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
+      if (!this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva) {
+        return null
+      }
+
       const opintooikeudenPaattymispaivaDate = new Date(
         this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva
       )
@@ -525,7 +529,7 @@
     get maxKoejaksonPaattymispaiva() {
       const dateFormat = 'yyyy-MM-dd'
       const koejaksonAlkamispaiva = this.form.koejaksonAlkamispaiva
-      if (!koejaksonAlkamispaiva) {
+      if (!this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva || !koejaksonAlkamispaiva) {
         return null
       }
 
