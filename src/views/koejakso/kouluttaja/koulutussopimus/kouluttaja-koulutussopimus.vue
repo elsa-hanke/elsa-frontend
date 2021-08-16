@@ -3,30 +3,47 @@
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid v-if="!loading">
       <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
-      <div v-if="!signed">
+      <div v-if="!signed && !returned">
         <p>{{ $t('koulutussopimus-kouluttaja-ingressi') }}</p>
       </div>
-
-      <div v-if="signed" class="d-flex bg-light border rounded px-4 py-3 mb-4">
-        <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
-        <div v-if="allKouluttajatSigned">
-          {{ $t('koulutussopimus-kouluttajat-allekirjoitettu') }}
+      <b-alert :show="showWaitingForVastuuhenkilo" variant="dark" class="mt-3">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+          </em>
+          <div>{{ $t('koulutussopimus-tila-odottaa-vastuuhenkilon-hyvaksyntaa') }}</div>
         </div>
-        <div v-else>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
-      </div>
-
-      <div v-if="returned" class="bg-light border rounded px-4 py-3 mb-4">
-        <div class="d-flex">
-          <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
+      </b-alert>
+      <b-alert :show="showWaitingForAnotherKouluttaja" variant="dark" class="mt-3">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+          </em>
+          <div>{{ $t('koulutussopimus-tila-odottaa-toisen-kouluttajan-hyvaksyntaa') }}</div>
+        </div>
+      </b-alert>
+      <b-alert :show="returned" variant="dark" class="mt-3">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+          </em>
           <div>
-            <div>{{ $t('koulutussopimus-kouluttaja-palautettu') }}</div>
-            <div>
-              <span>{{ $t('syy') }}</span>
-              <span>&nbsp;{{ form.korjausehdotus }}</span>
-            </div>
+            {{ $t('koulutussopimus-kouluttaja-palautettu') }}
+            <span class="d-block">{{ $t('syy') }}&nbsp;{{ form.korjausehdotus }}</span>
           </div>
         </div>
-      </div>
+      </b-alert>
+      <b-alert variant="success" :show="showAcceptedByEveryone">
+        <div class="d-flex flex-row">
+          <em class="align-middle">
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+          </em>
+          <div>
+            {{ $t('koulutussopimus-tila-hyvaksytty') }}
+            <span class="d-block">{{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}</span>
+          </div>
+        </div>
+      </b-alert>
       <hr />
       <b-row>
         <b-col>
@@ -314,7 +331,7 @@
       this.childFormValid = true
     }
 
-    get koulutussopimusTila() {
+    get koulutussopimusData() {
       return store.getters['kouluttaja/koejaksot'].find((a: any) => a.id === this.koulutussopimusId)
     }
 
@@ -327,7 +344,7 @@
     }
 
     get editable() {
-      return !this.loading && this.koulutussopimusTila.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      return !this.loading && this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     get signed() {
@@ -345,7 +362,19 @@
     }
 
     get returned() {
-      return !this.loading && this.koulutussopimusTila.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      return !this.loading && this.koulutussopimusData.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get showAcceptedByEveryone() {
+      return this.koulutussopimusData.tila === LomakeTilat.HYVAKSYTTY
+    }
+
+    get showWaitingForVastuuhenkilo() {
+      return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+    }
+
+    get showWaitingForAnotherKouluttaja() {
+      return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA
     }
 
     get erikoistuvanEtunimi() {

@@ -5,6 +5,20 @@
       <b-row lg>
         <b-col>
           <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
+          <b-alert :show="showReturned" variant="danger" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+              </em>
+              <div>
+                {{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}
+                <span class="d-block">
+                  {{ $t('syy') }}&nbsp;
+                  <span class="font-weight-500">{{ korjausehdotus }}</span>
+                </span>
+              </div>
+            </div>
+          </b-alert>
           <div v-if="editable">
             <p>{{ $t('koulutussopimus-ingressi-1') }}</p>
             <p>
@@ -14,10 +28,25 @@
               </b-link>
             </p>
           </div>
-          <div v-if="odottaaHyvaksyntaa" class="d-flex bg-light border rounded px-4 py-3">
-            <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
-            <div>{{ $t('koulutussopimus-text-odottaa-hyväksyntää') }}</div>
-          </div>
+          <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+              </em>
+              <div>{{ $t('koulutussopimus-tila-odottaa-hyvaksyntaa') }}</div>
+            </div>
+          </b-alert>
+          <b-alert variant="success" :show="showAcceptedByEveryone">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+              </em>
+              <div>
+                {{ $t('koulutussopimus-tila-hyvaksytty') }}
+                <span class="d-block">{{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}</span>
+              </div>
+            </div>
+          </b-alert>
         </b-col>
       </b-row>
       <hr />
@@ -114,8 +143,21 @@
       return false
     }
 
-    get odottaaHyvaksyntaa() {
-      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+    get showWaitingForAcceptance() {
+      return (
+        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
+        this.koejaksoData.koulutusSopimuksenTila ===
+          LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
+        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+      )
+    }
+
+    get showReturned() {
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get showAcceptedByEveryone() {
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.HYVAKSYTTY
     }
 
     get kouluttajat() {
@@ -124,6 +166,10 @@
 
     get koejaksoData() {
       return store.getters['erikoistuva/koejakso']
+    }
+
+    get korjausehdotus() {
+      return this.koejaksoData.koulutussopimus?.korjausehdotus
     }
 
     setKoejaksoData() {
@@ -180,6 +226,7 @@
       params.saving = true
       this.koulutussopimusLomake = form
       this.koulutussopimusLomake.lahetetty = true
+
       if (
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI

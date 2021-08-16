@@ -5,6 +5,20 @@
       <b-row lg>
         <b-col>
           <h1 class="mb-3">{{ $t('koejakson-aloituskeskustelu') }}</h1>
+          <b-alert :show="showReturned" variant="danger" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+              </em>
+              <div>
+                {{ $t('aloituskeskustelu-tila-palautettu-korjattavaksi') }}
+                <span class="d-block">
+                  {{ $t('syy') }}&nbsp;
+                  <span class="font-weight-500">{{ korjausehdotus }}</span>
+                </span>
+              </div>
+            </div>
+          </b-alert>
           <div v-if="editable">
             <p>{{ $t('koejakson-aloituskeskustelu-ingressi-1') }}</p>
             <p>
@@ -14,6 +28,24 @@
               </b-link>
             </p>
           </div>
+          <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+              </em>
+              <div>
+                {{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}
+              </div>
+            </div>
+          </b-alert>
+          <b-alert variant="success" :show="showAcceptedByEveryone">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+              </em>
+              <span>{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
+            </div>
+          </b-alert>
         </b-col>
       </b-row>
       <hr />
@@ -104,12 +136,31 @@
       return false
     }
 
+    get showWaitingForAcceptance() {
+      return (
+        this.koejaksoData.aloituskeskustelunTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
+        this.koejaksoData.aloituskeskustelunTila === LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA
+      )
+    }
+
+    get showReturned() {
+      return this.koejaksoData.aloituskeskustelunTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get showAcceptedByEveryone() {
+      return this.koejaksoData.aloituskeskustelunTila === LomakeTilat.HYVAKSYTTY
+    }
+
     get kouluttajat() {
       return store.getters['erikoistuva/kouluttajat']
     }
 
     get koejaksoData() {
       return store.getters['erikoistuva/koejakso']
+    }
+
+    get korjausehdotus() {
+      return this.koejaksoData.aloituskeskustelu?.korjausehdotus
     }
 
     setKoejaksoData() {

@@ -192,7 +192,7 @@
           class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
           style="width: 14rem"
           variant="outline-primary"
-          @click="saveAndExit"
+          v-b-modal.confirm-save
         >
           {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
@@ -200,13 +200,39 @@
           class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
           style="width: 14rem"
           :loading="params.saving"
-          type="submit"
+          @click="sendForm"
           variant="primary"
         >
           {{ $t('allekirjoita-laheta') }}
         </elsa-button>
       </b-col>
     </b-row>
+    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
+      <div class="d-block">
+        <p>{{ $t('vahvista-koulutussopimus-lahetys') }}</p>
+      </div>
+      <template #modal-footer>
+        <elsa-button variant="back" @click="hideModal('confirm-send')">
+          {{ $t('peruuta') }}
+        </elsa-button>
+        <elsa-button variant="primary" @click="onSubmit">
+          {{ $t('allekirjoita-laheta') }}
+        </elsa-button>
+      </template>
+    </b-modal>
+    <b-modal id="confirm-save" :title="$t('vahvista-tallennus-keskeneraisena.title')">
+      <div class="d-block">
+        <p>{{ $t('vahvista-tallennus-keskeneraisena.body') }}</p>
+      </div>
+      <template #modal-footer>
+        <elsa-button variant="back" @click="hideModal('confirm-save')">
+          {{ $t('peruuta') }}
+        </elsa-button>
+        <elsa-button variant="primary" @click="saveAndExit">
+          {{ $t('tallenna-keskeneraisena') }}
+        </elsa-button>
+      </template>
+    </b-modal>
   </b-form>
 </template>
 
@@ -377,7 +403,7 @@
       this.$emit('saveAndExit', this.form, this.params)
     }
 
-    onSubmit() {
+    sendForm() {
       let childFormsValid = true
       this.$v.form.$touch()
       this.$refs.kouluttajaDetails.forEach((k: any) => {
@@ -396,6 +422,14 @@
         return
       }
 
+      return this.$bvModal.show('confirm-send')
+    }
+
+    hideModal(id: string) {
+      return this.$bvModal.hide(id)
+    }
+
+    onSubmit() {
       this.$emit('submit', this.form, this.params)
     }
 

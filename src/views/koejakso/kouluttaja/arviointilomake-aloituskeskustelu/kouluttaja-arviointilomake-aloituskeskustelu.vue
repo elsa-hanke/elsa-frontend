@@ -39,7 +39,7 @@
           <em class="align-middle">
             <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
           </em>
-          <span>{{ $t('aloituskeskustelu-hyvaksytty-kaikkien-toimesta') }}</span>
+          <span>{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
         </div>
       </b-alert>
       <hr />
