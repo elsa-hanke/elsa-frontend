@@ -1,10 +1,10 @@
 <template>
-  <b-container class="d-flex vh-100">
-    <div class="w-100 align-self-center">
+  <b-container>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50rem">
       <b-row>
-        <b-col lg="5">
+        <b-col lg="5" class="mt-3 mr-2">
           <h1 class="text-primary mb-4">{{ $t('palvelu-erikoistuville-laakareille') }}</h1>
-          <p>{{ $t('login-ingressi') }}</p>
+          <p class="mb-4">{{ $t('login-ingressi') }}</p>
           <elsa-button variant="primary" @click="loginSuomiFi">
             {{ $t('kirjaudu-sisaan') }} (Suomi.fi)
           </elsa-button>

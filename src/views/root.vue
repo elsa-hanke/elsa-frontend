@@ -5,7 +5,7 @@
       <mobile-nav v-if="isMobile" />
       <b-row class="position-relative">
         <sidebar-menu />
-        <main role="main" class="offset-lg-2 col-lg-10 vh-100">
+        <main role="main" class="offset-lg-2 col-lg-10 mb-5">
           <router-view />
         </main>
       </b-row>
@@ -62,7 +62,6 @@
   @import '~@/styles/variables';
 
   .gray-backdrop {
-    min-height: 100vh;
     background-color: $backdrop-background-color;
   }
 </style>

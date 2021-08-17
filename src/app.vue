@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
     <router-view />
 
-    <footer class="pb-5">
+    <footer class="pb-5 w-100">
       <b-container class="footer-links pt-4">
         <b-row align-h="center">
           <b-col lg="2">

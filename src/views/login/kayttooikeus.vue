@@ -1,8 +1,8 @@
 <template>
-  <b-container class="d-flex vh-100">
-    <div class="w-100 align-self-center">
-      <b-row>
-        <b-col lg="5">
+  <b-container>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50rem">
+      <b-row class="w-100">
+        <b-col lg="5" class="mt-2">
           <h1 class="text-primary mb-4">{{ $t('oletko-erikoistuva-laakari') }}</h1>
           <kayttooikeus-form @submit="onSubmit" />
         </b-col>
