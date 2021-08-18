@@ -29,6 +29,7 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import ArviointiForm from '@/forms/arviointi-form.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
 
   @Component({
     components: {
@@ -55,7 +56,9 @@
     async mounted() {
       if (this.$route && this.$route.params && this.$route.params.arviointiId) {
         this.value = (
-          await axios.get(`kouluttaja/suoritusarvioinnit/${this.$route.params.arviointiId}`)
+          await axios.get(
+            `${resolveRolePath()}/suoritusarvioinnit/${this.$route.params.arviointiId}`
+          )
         ).data
       }
     }
@@ -63,7 +66,7 @@
     async onSubmit(value: any, params: any) {
       params.saving = true
       try {
-        await axios.put('kouluttaja/suoritusarvioinnit', value)
+        await axios.put(`${resolveRolePath()}/suoritusarvioinnit`, value)
         toastSuccess(this, this.$t('arvioinnin-tallentaminen-onnistui'))
         this.skipRouteExitConfirm = true
         this.$router.push({
