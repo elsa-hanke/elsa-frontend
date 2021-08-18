@@ -93,7 +93,7 @@
       try {
         const kommentti = (
           await axios.put(
-            `erikoistuva-laakari/suoritusarvioinnit/${this.value.kommentti.suoritusarviointiId}/kommentti`,
+            `suoritusarvioinnit/${this.value.kommentti.suoritusarviointiId}/kommentti`,
             {
               ...this.value.kommentti,
               teksti: this.kommentti.teksti
@@ -105,6 +105,7 @@
         this.kommentti = {
           teksti: null
         }
+        this.$emit('updated', kommentti)
       } catch (err) {
         toastFail(this, this.$t('kommentin-tallentaminen-epaonnistui'))
       }

@@ -7,7 +7,7 @@
           <h1>{{ $t('arviointi') }}</h1>
           <hr />
           <div v-if="value">
-            <arviointi-form :value="value" :editing="false" @submit="onSubmit" />
+            <arviointi-form :value="value" :editing="false" />
             <hr />
             <h4>{{ $t('kommentit') }}</h4>
             <p>{{ $t('kommentit-kuvaus') }}</p>
@@ -17,6 +17,7 @@
                   v-for="(kommentti, index) in kommentit"
                   :key="index"
                   :value="kommentti"
+                  @updated="onKommenttiUpdated"
                 />
               </div>
               <div v-else>
@@ -73,6 +74,7 @@
   import KommenttiCard from '@/components/kommentti-card/kommentti-card.vue'
   import ElsaButton from '@/components/button/button.vue'
   import { toastFail } from '@/utils/toast'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
 
   @Component({
     components: {
@@ -108,9 +110,8 @@
       const arviointiId = this.$route?.params?.arviointiId
       if (arviointiId) {
         try {
-          this.value = (Vue.prototype.$isErikoistuva()
-            ? await axios.get(`erikoistuva-laakari/suoritusarvioinnit/${arviointiId}`)
-            : await axios.get(`kouluttaja/suoritusarvioinnit/${arviointiId}`)
+          this.value = (
+            await axios.get(`${resolveRolePath()}/suoritusarvioinnit/${arviointiId}`)
           ).data
         } catch (err) {
           this.$router.replace({ name: 'arvioinnit' })
@@ -118,19 +119,21 @@
       }
     }
 
-    onSubmit(form: any) {
-      console.log(form)
+    onKommenttiUpdated(kommentti: any) {
+      const updatedKommentti = this.value.kommentit.find((k: any) => k.id === kommentti.id)
+      if (updatedKommentti) {
+        updatedKommentti.teksti = kommentti.teksti
+        updatedKommentti.muokkausaika = kommentti.muokkausaika
+      }
     }
 
     async onKommenttiSubmit() {
       this.saving = true
       try {
         const kommentti = (
-          await axios.post(
-            `erikoistuva-laakari/suoritusarvioinnit/${this.value.id}/kommentti`,
-            this.kommentti
-          )
+          await axios.post(`suoritusarvioinnit/${this.value.id}/kommentti`, this.kommentti)
         ).data
+        kommentti.kommentoija.nimi = `${this.account.firstName} ${this.account.lastName}`
         this.value.kommentit.push(kommentti)
         this.kommentti = {
           teksti: null
@@ -150,7 +153,7 @@
           .map((k: any) => {
             return {
               kommentti: k,
-              self: k.kommentoija?.id === this.account?.erikoistuvaLaakari?.kayttajaId
+              self: k.kommentoija?.userId === this.account?.id
             }
           })
       } else {

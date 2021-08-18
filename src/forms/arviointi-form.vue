@@ -333,7 +333,7 @@
           </template>
         </elsa-form-group>
       </b-form-row>
-      <b-form-row v-if="$isKouluttaja()">
+      <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
         <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-6">
           <template v-slot="{ uid }">
             <elsa-form-multiselect
@@ -550,9 +550,7 @@
             this.value.arviointiPerustuu !== null &&
             this.value.arviointiPerustuu !== arvioinninPerustuminen.LasnaolevaHavainnointi
         }
-        this.arviointityokalut = (
-          await axios.get(`kouluttaja/suoritusarvioinnit/arviointityokalut`)
-        ).data
+        this.arviointityokalut = (await axios.get(`/arviointityokalut`)).data
       }
     }
 
