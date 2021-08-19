@@ -28,6 +28,10 @@
   font-size: $font-size-lg;
 }
 
+.text-lighter {
+  color: lighten($black, 50%)
+}
+
 label {
   font-weight: $font-weight-500;
 }
@@ -265,6 +269,10 @@ h6 {
   white-space: pre-wrap;
 }
 
+.text-preline {
+  white-space: pre-line;
+}
+
 .capitalize-first {
   text-transform: lowercase;
 }
@@ -277,8 +285,10 @@ table {
 
   th {
     font-weight: $font-weight-500;
-    border-top: none !important;
     padding-bottom: 0.25rem !important;
+    &[scope=col] {
+      border-top: none !important;
+    }
   }
 
   td {

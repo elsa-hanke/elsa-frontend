@@ -15,7 +15,11 @@
             <span v-else class="text-size-sm">{{ $datetime(value.kommentti.luontiaika) }}</span>
           </template>
         </user-avatar>
-        <b-link v-if="value.self && !editing" class="text-white ml-3" @click="startEditing">
+        <b-link
+          v-if="!locked && value.self && !editing"
+          class="text-white ml-3"
+          @click="startEditing"
+        >
           {{ $t('muokkaa') }}
         </b-link>
       </div>
@@ -72,6 +76,9 @@
   export default class KommenttiCard extends Vue {
     @Prop({ required: true })
     value!: any
+
+    @Prop({ required: false, type: Boolean, default: false })
+    locked!: boolean
 
     editing = false
     kommentti = {
