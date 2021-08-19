@@ -3,6 +3,7 @@
     <elsa-form-group
       :label="$t('erikoistuva-laakari')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0"
     >
@@ -13,6 +14,7 @@
     <elsa-form-group
       :label="$t('tyoskentelyjakso')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0"
     >
@@ -33,6 +35,7 @@
     <elsa-form-group
       :label="$t('epa-osaamisalue')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0"
     >
@@ -59,6 +62,7 @@
     <elsa-form-group
       :label="$t('arvioitava-tapahtuma')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0"
     >
@@ -69,6 +73,7 @@
     <elsa-form-group
       :label="$t('ajankohta')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0"
     >
@@ -80,16 +85,18 @@
       v-if="value.lisatiedot"
       :label="$t('lisatiedot')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid" class="text-prewrap">{{ value.lisatiedot }}</span>
+        <span :id="uid" class="text-preline text-break">{{ value.lisatiedot }}</span>
       </template>
     </elsa-form-group>
     <elsa-form-group
       :label="$t('arvioija')"
       label-cols-md="4"
+      label-cols-xl="3"
       label-cols="12"
       class="align-items-center mb-md-0 kouluttaja-form-input"
     >
@@ -101,21 +108,23 @@
       <elsa-form-group
         :label="$t('arviointipaiva')"
         label-cols-md="4"
+        label-cols-xl="3"
         label-cols="12"
         class="align-items-center mb-md-0"
       >
         <template v-slot="{ uid }">
-          <span :id="uid" class="text-prewrap">{{ $date(value.arviointiAika) }}</span>
+          <span :id="uid" class="text-preline text-break">{{ $date(value.arviointiAika) }}</span>
         </template>
       </elsa-form-group>
       <elsa-form-group
         :label="$t('arviointityokalu')"
         label-cols-md="4"
+        label-cols-xl="3"
         label-cols="12"
         class="align-items-center mb-md-0"
       >
         <template v-slot="{ uid }">
-          <span :id="uid" class="text-prewrap">
+          <span :id="uid" class="text-preline text-break">
             {{ value.arviointityokalut.map((el) => el.nimi).join(', ') }}
           </span>
         </template>
@@ -123,11 +132,12 @@
       <elsa-form-group
         :label="$t('arviointi-perustuu')"
         label-cols-md="4"
+        label-cols-xl="3"
         label-cols="12"
         class="align-items-center mb-md-0"
       >
         <template v-slot="{ uid }">
-          <span :id="uid" class="text-prewrap">
+          <span :id="uid" class="text-preline text-break">
             {{ muuValittu ? value.muuPeruste : $t(value.arviointiPerustuu) }}
           </span>
         </template>
@@ -159,7 +169,7 @@
             <td>
               <div v-if="!value.arviointiAika" class="d-inline-flex">
                 <elsa-button
-                  v-if="$isKouluttaja()"
+                  v-if="$isKouluttaja() || $isVastuuhenkilo()"
                   variant="primary"
                   class="d-flex align-items-center text-decoration-none"
                   :to="{
@@ -169,7 +179,9 @@
                 >
                   {{ $t('tee-arviointi') }}
                 </elsa-button>
-                <span v-else>{{ $t('arviointia-ei-ole-viela-annettu') }}</span>
+                <span class="text-size-sm text-lighter ml-2" v-else>
+                  {{ $t('arviointia-ei-ole-viela-annettu') }}
+                </span>
               </div>
               <elsa-luottamuksen-taso v-if="value.arviointiAika" :value="value.luottamuksenTaso" />
             </td>
@@ -186,7 +198,12 @@
                 >
                   {{ $t('tee-itsearviointi') }}
                 </elsa-button>
-                <span v-else>{{ $t('arviointia-ei-ole-viela-annettu') }}</span>
+                <span class="text-size-sm text-lighter ml-2" v-else-if="!value.lukittu">
+                  {{ $t('itsearviointia-ei-viela-tehty') }}
+                </span>
+                <span class="text-size-sm text-lighter ml-2" v-else>
+                  {{ $t('itsearviointia-ei-tehty') }}
+                </span>
               </div>
               <elsa-luottamuksen-taso
                 v-if="value.itsearviointiAika"
@@ -221,10 +238,13 @@
       </b-table-simple>
       <elsa-form-group v-if="value.arviointiAika" :label="$t('sanallinen-arviointi')">
         <template v-slot="{ uid }">
-          <p :id="uid" class="text-prewrap">{{ value.sanallinenArviointi }}</p>
+          <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
-      <div v-if="value.arviointiAika && $isKouluttaja()" class="text-right">
+      <div
+        v-if="!value.lukittu && value.arviointiAika && ($isKouluttaja() || $isVastuuhenkilo())"
+        class="text-right"
+      >
         <elsa-button
           variant="primary"
           :to="{
@@ -237,15 +257,12 @@
       </div>
       <elsa-form-group v-if="value.itsearviointiAika" :label="$t('sanallinen-itsearviointi')">
         <template v-slot="{ uid }">
-          <p :id="uid" class="text-prewrap">
+          <p :id="uid" class="text-preline text-break">
             {{ value.sanallinenItsearviointi }}
           </p>
         </template>
       </elsa-form-group>
-      <div
-        v-if="!value.arviointiAika && value.itsearviointiAika && $isErikoistuva()"
-        class="text-right"
-      >
+      <div v-if="!value.lukittu && value.itsearviointiAika && $isErikoistuva()" class="text-right">
         <elsa-button
           variant="primary"
           :to="{
@@ -383,7 +400,10 @@
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
-      <elsa-form-group v-if="editing && $isKouluttaja()" :label="$t('lisatiedot')">
+      <elsa-form-group
+        v-if="editing && ($isKouluttaja() || $isVastuuhenkilo())"
+        :label="$t('lisatiedot')"
+      >
         <template v-slot="{ uid }">
           <b-form-checkbox v-model="form.perustuuMuuhun">
             {{ $t('arviointi-perustuu-lasna') }}

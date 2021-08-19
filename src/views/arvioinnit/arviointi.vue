@@ -10,47 +10,54 @@
             <arviointi-form :value="value" :editing="false" />
             <hr />
             <h4>{{ $t('kommentit') }}</h4>
-            <p>{{ $t('kommentit-kuvaus') }}</p>
-            <div class="border-bottom mb-3">
+            <p v-if="!value.lukittu">{{ $t('kommentit-kuvaus') }}</p>
+            <p v-else>
+              {{ $t('arviointi-hyvaksytty-kommentointi-ei-mahdollista') }}
+            </p>
+            <div class="mb-3">
               <div v-if="kommentit && kommentit.length > 0" class="d-flex flex-column">
                 <kommentti-card
                   v-for="(kommentti, index) in kommentit"
                   :key="index"
                   :value="kommentti"
+                  :locked="value.lukittu"
                   @updated="onKommenttiUpdated"
                 />
               </div>
-              <div v-else>
+              <div v-else-if="!value.lukittu">
                 <b-alert variant="dark" show>
                   <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
                   {{ $t('suoritusarviointia-ei-ole-kommentoitu') }}
                 </b-alert>
               </div>
             </div>
-            <b-form @submit.stop.prevent="onKommenttiSubmit">
-              <div class="uusi-kommentti mb-3">
-                <elsa-form-group :label="$t('uusi-kommentti')">
-                  <template v-slot="{ uid }">
-                    <b-form-textarea
-                      :id="uid"
-                      v-model="kommentti.teksti"
-                      :placeholder="$t('kirjoita-kommenttisi-tahan')"
-                      rows="5"
-                    ></b-form-textarea>
-                  </template>
-                </elsa-form-group>
-                <div class="text-right">
-                  <elsa-button
-                    :disabled="!kommentti.teksti || saving"
-                    :loading="saving"
-                    type="submit"
-                    variant="primary"
-                  >
-                    {{ $t('lisaa-kommentti') }}
-                  </elsa-button>
+            <hr v-if="!value.lukittu" />
+            <div v-if="!value.lukittu">
+              <b-form @submit.stop.prevent="onKommenttiSubmit">
+                <div class="uusi-kommentti mb-3">
+                  <elsa-form-group :label="$t('uusi-kommentti')">
+                    <template v-slot="{ uid }">
+                      <b-form-textarea
+                        :id="uid"
+                        v-model="kommentti.teksti"
+                        :placeholder="$t('kirjoita-kommenttisi-tahan')"
+                        rows="5"
+                      ></b-form-textarea>
+                    </template>
+                  </elsa-form-group>
+                  <div class="text-right">
+                    <elsa-button
+                      :disabled="!kommentti.teksti || saving"
+                      :loading="saving"
+                      type="submit"
+                      variant="primary"
+                    >
+                      {{ $t('lisaa-kommentti') }}
+                    </elsa-button>
+                  </div>
                 </div>
-              </div>
-            </b-form>
+              </b-form>
+            </div>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
