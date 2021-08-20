@@ -204,12 +204,25 @@
       </template>
     </b-modal>
 
-    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
+    <b-modal id="confirm-send-kouluttaja" :title="$t('vahvista-lomakkeen-lahetys')">
       <div class="d-block">
         <p>{{ $t('vahvista-koulutussopimus-kouluttajat-hyvaksytty') }}</p>
       </div>
       <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-send')">
+        <elsa-button variant="back" @click="hideModal('confirm-send-kouluttaja')">
+          {{ $t('peruuta') }}
+        </elsa-button>
+        <elsa-button variant="primary" @click="updateSentForm">
+          {{ $t('allekirjoita-laheta') }}
+        </elsa-button>
+      </template>
+    </b-modal>
+    <b-modal id="confirm-send-vastuuhenkilo" :title="$t('vahvista-lomakkeen-lahetys')">
+      <div class="d-block">
+        <p>{{ $t('vahvista-koulutussopimus-hyvaksytty') }}</p>
+      </div>
+      <template #modal-footer>
+        <elsa-button variant="back" @click="hideModal('confirm-send-vastuuhenkilo')">
           {{ $t('peruuta') }}
         </elsa-button>
         <elsa-button variant="primary" @click="updateSentForm">
@@ -226,7 +239,8 @@
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import * as api from '@/api/kouluttaja'
+  import { getKoulutussopimus as getKoulutussopimusKouluttaja } from '@/api/kouluttaja'
+  import { getKoulutussopimus as getKoulutussopimusVastuuhenkilo } from '@/api/vastuuhenkilo'
   import store from '@/store'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -241,6 +255,7 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
 
   @Component({
     components: {
@@ -259,7 +274,7 @@
       }
     }
   })
-  export default class KouluttajaKoulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
+  export default class Koulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
     skipRouteExitConfirm!: boolean
     $refs!: {
       kouluttajaKoulutussopimusForm: any
@@ -332,7 +347,9 @@
     }
 
     get koulutussopimusData() {
-      return store.getters['kouluttaja/koejaksot'].find((a: any) => a.id === this.koulutussopimusId)
+      return store.getters[`${resolveRolePath()}/koejaksot`].find(
+        (a: any) => a.id === this.koulutussopimusId
+      )
     }
 
     get koulutussopimusId() {
@@ -411,7 +428,7 @@
         lahetetty: false
       }
       try {
-        await store.dispatch('kouluttaja/putKoulutussopimus', form)
+        await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, form)
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
@@ -423,7 +440,7 @@
     async updateSentForm() {
       this.skipRouteExitConfirm = true
       try {
-        await store.dispatch('kouluttaja/putKoulutussopimus', this.form)
+        await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, this.form)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
       } catch (err) {
@@ -434,6 +451,16 @@
     onSubmit() {
       this.params.saving = true
 
+      if (this.$isVastuuhenkilo()) {
+        this.handleSubmitVastuuhenkilo()
+      } else {
+        this.handleSubmitKouluttaja()
+      }
+
+      this.params.saving = false
+    }
+
+    private handleSubmitKouluttaja() {
       if (this.$refs.kouluttajaKoulutussopimusForm.length === 2) {
         this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
         this.$refs.kouluttajaKoulutussopimusForm[1].checkForm()
@@ -443,19 +470,23 @@
 
       if (this.childFormValid) {
         if (this.isLastKouluttajaToAccept) {
-          this.$bvModal.show('confirm-send')
+          this.$bvModal.show('confirm-send-kouluttaja')
         } else {
           this.updateSentForm()
         }
       }
+    }
 
-      this.params.saving = false
+    private handleSubmitVastuuhenkilo() {
+      this.$bvModal.show('confirm-send-vastuuhenkilo')
     }
 
     async mounted() {
       this.loading = true
-      await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await api.getKoulutussopimus(this.koulutussopimusId)
+      await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
+      const { data } = await (this.$isVastuuhenkilo()
+        ? getKoulutussopimusVastuuhenkilo(this.koulutussopimusId)
+        : getKoulutussopimusKouluttaja(this.koulutussopimusId))
       this.form = data
       this.loading = false
 

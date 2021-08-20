@@ -35,7 +35,7 @@ import KoejaksoContainer from '@/views/koejakso/koejakso-container.vue'
 import KoejaksoTavoitteet from '../views/koejakso/erikoistuva/koejakso-tavoitteet.vue'
 import ErikoistuvaKoulutussopimus from '../views/koejakso/erikoistuva/koulutussopimus/koulutussopimus.vue'
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
-import KouluttajaKoulutussopimus from '../views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus.vue'
+import Koulutussopimus from '../views/koejakso/kouluttajavastuuhenkilo/koulutussopimus/koulutussopimus.vue'
 import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
 import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 import store from '@/store'
@@ -219,7 +219,7 @@ const routes: Array<RouteConfig> = [
           },
           {
             path: 'koulutussopimus',
-            name: 'koulutussopimus',
+            name: 'koulutussopimus-erikoistuva',
             component: ErikoistuvaKoulutussopimus,
             beforeEnter: (to, from, next) => {
               if (Vue.prototype.$isErikoistuva()) {
@@ -255,10 +255,10 @@ const routes: Array<RouteConfig> = [
           },
           {
             path: 'koulutussopimus/:id',
-            name: 'koulutussopimus-kouluttaja',
-            component: KouluttajaKoulutussopimus,
+            name: 'koulutussopimus',
+            component: Koulutussopimus,
             beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isKouluttaja()) {
+              if (Vue.prototype.$isKouluttaja() || Vue.prototype.$isVastuuhenkilo()) {
                 next()
               } else {
                 next(from.fullPath)

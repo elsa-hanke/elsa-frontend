@@ -11,6 +11,7 @@
   import Component from 'vue-class-component'
   import store from '@/store'
   import KoejaksonVaiheetList from '@/components/koejakson-vaiheet/koejakson-vaiheet-list.vue'
+  import { LomakeTyypit } from '@/utils/constants'
 
   @Component({
     components: {
@@ -19,7 +20,7 @@
   })
   export default class KoejaksoViewVastuuhenkilo extends Vue {
     private loading = true
-    private componentLinks = new Map()
+    private componentLinks = new Map([[LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus']])
 
     async mounted() {
       await store.dispatch('vastuuhenkilo/getKoejaksot')
