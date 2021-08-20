@@ -76,6 +76,9 @@
     @Prop({ required: true, default: null })
     koulutuspaikka!: Koulutuspaikka
 
+    @Prop({ required: true, type: String })
+    erikoistuvanYliopisto!: string
+
     form: Koulutuspaikka = defaultKoulutuspaikka
 
     validateState(name: string) {
@@ -93,6 +96,9 @@
 
     mounted(): void {
       this.form = this.koulutuspaikka
+      this.form.toimipaikallaKoulutussopimus =
+        this.koulutuspaikka.yliopisto === this.erikoistuvanYliopisto
+
       if (this.koulutuspaikka.yliopisto === '') {
         this.form.toimipaikallaKoulutussopimus = true
       }

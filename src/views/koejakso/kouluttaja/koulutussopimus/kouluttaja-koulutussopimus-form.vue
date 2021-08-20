@@ -77,8 +77,15 @@
               v-model="form.sahkoposti"
               :state="validateState('sahkoposti')"
             />
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
+            <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              v-if="!$v.form.sahkoposti.email"
+              :state="validateState('sahkoposti')"
+              :id="`${uid}-feedback`"
+            >
+              {{ $t('sahkopostiosoite-ei-kelvollinen') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
