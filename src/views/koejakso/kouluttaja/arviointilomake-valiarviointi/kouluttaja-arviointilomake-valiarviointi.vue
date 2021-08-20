@@ -120,11 +120,13 @@
         </b-row>
         <b-row v-if="valiarviointi.edistyminenTavoitteidenMukaista === false">
           <b-col lg="8">
-            <div v-if="!editable" class="mb-3">
+            <div v-if="!editable">
               <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
-              <li v-for="kategoria in sortedKategoriat" :key="kategoria">
-                {{ naytaKehittamistoimenpideKategoria(kategoria) }}
-              </li>
+              <ul class="pl-4">
+                <li v-for="kategoria in sortedKategoriat" :key="kategoria">
+                  {{ naytaKehittamistoimenpideKategoria(kategoria) }}
+                </li>
+              </ul>
             </div>
             <elsa-form-group
               v-else
@@ -358,7 +360,7 @@
       KehittamistoimenpideKategoria.MUU
     ]
 
-    valiarviointi!: ValiarviointiLomake
+    valiarviointi: ValiarviointiLomake | null = null
 
     validateState(value: string) {
       const form = this.$v.valiarviointi
@@ -449,7 +451,7 @@
     }
 
     async returnToSender(korjausehdotus: string) {
-      this.valiarviointi.korjausehdotus = korjausehdotus
+      if (this.valiarviointi) this.valiarviointi.korjausehdotus = korjausehdotus
       this.$v.$touch()
       if (this.$v.$anyError) {
         return
@@ -466,6 +468,7 @@
     }
 
     async updateSentForm() {
+      if (!this.valiarviointi) return
       if (this.valiarviointi.edistyminenTavoitteidenMukaista === true) {
         this.valiarviointi.kehittamistoimenpideKategoriat = null
       }

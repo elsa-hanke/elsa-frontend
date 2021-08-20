@@ -1,4 +1,4 @@
-import { KehittamistoimenpideKategoria } from "@/utils/constants"
+import { KehittamistoimenpideKategoria } from '@/utils/constants'
 
 export type ErikoistuvaLaakari = {
   id: number | null
