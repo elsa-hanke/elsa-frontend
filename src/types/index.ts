@@ -1,3 +1,5 @@
+import { KehittamistoimenpideKategoria } from "@/utils/constants"
+
 export type ErikoistuvaLaakari = {
   id: number | null
   kayttajaId: number
@@ -147,11 +149,13 @@ export interface ValiarviointiLomake {
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
   id: number | null
+  kehittamistoimenpideKategoriat: KehittamistoimenpideKategoria[] | null
   kehittamistoimenpiteet: string
   korjausehdotus: string
   lahiesimies: KoejaksonVaiheHyvaksyja
   lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
+  muuKategoria: string | null
   vahvuudet: string
 }
 

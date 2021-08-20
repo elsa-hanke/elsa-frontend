@@ -36,6 +36,11 @@ export async function postValiarviointi(form: ValiarviointiLomake) {
   return await axios.post(path, form)
 }
 
+export async function putValiarviointi(form: ValiarviointiLomake) {
+  const path = 'erikoistuva-laakari/koejakso/valiarviointi'
+  return await axios.put(path, form)
+}
+
 export async function getKouluttajat() {
   const path = '/kouluttajat'
   return await axios.get(path)

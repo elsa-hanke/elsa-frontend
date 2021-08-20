@@ -129,6 +129,22 @@ const erikoistuva: Module<any, any> = {
           })
       })
     },
+    async putValiarviointi({ dispatch, commit }, valiarviointiLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .putValiarviointi(valiarviointiLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejakso')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
+    },
     async getKouluttajat({ commit }) {
       commit('kouluttajatRequest')
       try {

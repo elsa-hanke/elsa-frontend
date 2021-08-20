@@ -37,6 +37,7 @@ import ErikoistuvaKoulutussopimus from '../views/koejakso/erikoistuva/koulutusso
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
 import Koulutussopimus from '../views/koejakso/kouluttajavastuuhenkilo/koulutussopimus/koulutussopimus.vue'
 import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
+import KouluttajaArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja/arviointilomake-valiarviointi/kouluttaja-arviointilomake-valiarviointi.vue'
 import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
@@ -269,6 +270,18 @@ const routes: Array<RouteConfig> = [
             path: 'aloituskeskustelu/:id',
             name: 'aloituskeskustelu-kouluttaja',
             component: KouluttajaArviointilomakeAloituskeskustelu,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isKouluttaja()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
+          },
+          {
+            path: 'valiarviointi/:id',
+            name: 'valiarviointi-kouluttaja',
+            component: KouluttajaArviointilomakeValiarviointi,
             beforeEnter: (to, from, next) => {
               if (Vue.prototype.$isKouluttaja()) {
                 next()
