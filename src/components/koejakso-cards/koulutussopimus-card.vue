@@ -122,7 +122,7 @@
     }
 
     get url() {
-      return 'koulutussopimus'
+      return 'koulutussopimus-erikoistuva'
     }
   }
 </script>

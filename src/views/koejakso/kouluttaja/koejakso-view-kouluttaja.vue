@@ -21,7 +21,7 @@
   export default class KoejaksoViewKouluttaja extends Vue {
     private loading = true
     private componentLinks = new Map([
-      [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus-kouluttaja'],
+      [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
       [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja']
     ])
 
