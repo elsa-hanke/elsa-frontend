@@ -134,11 +134,13 @@
           </b-col>
         </b-row>
         <b-row v-if="valiarviointiLomake.edistyminenTavoitteidenMukaista === false">
-          <b-col lg="8" class="mb-3">
+          <b-col lg="8">
             <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
-            <li v-for="kategoria in sortedKategoriat" :key="kategoria">
-              {{ naytaKehittamistoimenpideKategoria(kategoria) }}
-            </li>
+            <ul class="pl-4">
+              <li v-for="kategoria in sortedKategoriat" :key="kategoria">
+                {{ naytaKehittamistoimenpideKategoria(kategoria) }}
+              </li>
+            </ul>
           </b-col>
         </b-row>
         <b-row>
