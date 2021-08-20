@@ -69,6 +69,22 @@ const kouluttaja: Module<any, any> = {
             reject(error)
           })
       })
+    },
+    async putValiarviointi({ commit, dispatch }, ValiarviointiLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .putValiarviointi(ValiarviointiLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejaksot')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     }
   },
   getters: {

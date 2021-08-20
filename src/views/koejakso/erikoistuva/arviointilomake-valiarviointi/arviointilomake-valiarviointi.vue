@@ -5,6 +5,34 @@
       <b-row lg>
         <b-col>
           <h1 class="mb-3">{{ $t('koejakson-valiarviointi') }}</h1>
+          <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+              </em>
+              <div>
+                {{ $t('valiarviointi-tila-odottaa-hyvaksyntaa') }}
+              </div>
+            </div>
+          </b-alert>
+          <b-alert :show="showWaitingForErikoistuva" variant="dark" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+              </em>
+              <div>
+                {{ $t('valiarviointi-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
+              </div>
+            </div>
+          </b-alert>
+          <b-alert variant="success" :show="showAcceptedByEveryone">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+              </em>
+              <span>{{ $t('valiarviointi-tila-hyvaksytty') }}</span>
+            </div>
+          </b-alert>
           <div v-if="editable">
             <p>{{ $t('koejakson-valiarviointi-ingressi') }}</p>
           </div>
@@ -89,23 +117,44 @@
             </elsa-form-group>
           </b-col>
         </b-row>
+      </b-form>
 
-        <hr />
-
+      <div v-if="showWaitingForErikoistuva || showAcceptedByEveryone">
+        <h3 class="mb-3">{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
         <b-row>
-          <b-col class="text-right">
-            <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-            <elsa-button
-              @click="sendForm"
-              :loading="params.saving"
-              variant="primary"
-              class="ml-4 px-5"
-            >
-              {{ $t('laheta') }}
-            </elsa-button>
+          <b-col lg="8">
+            <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
+            <p>
+              {{
+                valiarviointiLomake.edistyminenTavoitteidenMukaista
+                  ? $t('kylla')
+                  : $t('ei-huolenaiheita-on')
+              }}
+            </p>
           </b-col>
         </b-row>
-      </b-form>
+        <b-row v-if="valiarviointiLomake.edistyminenTavoitteidenMukaista === false">
+          <b-col lg="8" class="mb-3">
+            <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
+            <li v-for="kategoria in sortedKategoriat" :key="kategoria">
+              {{ naytaKehittamistoimenpideKategoria(kategoria) }}
+            </li>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <h5>{{ $t('vahvuudet') }}</h5>
+            <p>{{ valiarviointiLomake.vahvuudet }}</p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
+            <p>{{ valiarviointiLomake.kehittamistoimenpiteet }}</p>
+          </b-col>
+        </b-row>
+        <hr />
+      </div>
 
       <div v-if="!editable">
         <b-row>
@@ -119,23 +168,40 @@
           </b-col>
         </b-row>
       </div>
+
+      <div v-if="editable || showWaitingForErikoistuva">
+        <hr />
+
+        <b-row>
+          <b-col class="text-right">
+            <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
+            <elsa-button
+              @click="sendForm(showWaitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
+              :loading="params.saving"
+              variant="primary"
+              class="ml-4 px-5"
+            >
+              {{ $t('laheta') }}
+            </elsa-button>
+          </b-col>
+        </b-row>
+      </div>
     </b-container>
 
-    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-valiarviointi-lahetys') }}</p>
-      </div>
-
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal">
-          {{ $t('peruuta') }}
-        </elsa-button>
-
-        <elsa-button variant="primary" @click="onSubmit">
-          {{ $t('laheta') }}
-        </elsa-button>
-      </template>
-    </b-modal>
+    <elsa-confirmation-modal
+      id="confirm-send"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="$t('vahvista-valiarviointi-lahetys')"
+      :submitText="$t('laheta')"
+      @submit="onSubmit"
+    />
+    <elsa-confirmation-modal
+      id="confirm-sign"
+      :title="$t('allekirjoita-valiarviointi')"
+      :text="$t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })"
+      :submitText="$t('allekirjoita')"
+      @submit="onSign"
+    />
   </div>
 </template>
 
@@ -149,12 +215,13 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import { ValiarviointiLomake } from '@/types'
-  import { LomakeTilat } from '@/utils/constants'
+  import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
 
   @Component({
     components: {
@@ -162,7 +229,8 @@
       KouluttajaForm,
       ElsaFormGroup,
       ElsaFormMultiselect,
-      ElsaButton
+      ElsaButton,
+      ElsaConfirmationModal
     }
   })
   export default class ErikoistuvaArviointilomakeValiarviointi extends Mixins(validationMixin) {
@@ -203,14 +271,17 @@
       saving: false
     }
 
+    koejaksonVaihe = 'väliarviointi'
+
     valiarviointiLomake: ValiarviointiLomake = {
       edistyminenTavoitteidenMukaista: null,
       erikoistuvaAllekirjoittanut: false,
-      erikoistuvanErikoisala: '',
-      erikoistuvanNimi: '',
-      erikoistuvanOpiskelijatunnus: '',
-      erikoistuvanYliopisto: '',
+      erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
+      erikoistuvanNimi: this.account.firstName.concat(' ', this.account.lastName),
+      erikoistuvanOpiskelijatunnus: '', //this.account.erikoistuvaLaakari.opiskelijatunnus,
+      erikoistuvanYliopisto: this.account.erikoistuvaLaakari.yliopisto,
       id: null,
+      kehittamistoimenpideKategoriat: [],
       kehittamistoimenpiteet: '',
       korjausehdotus: '',
       lahiesimies: {
@@ -228,8 +299,16 @@
         sopimusHyvaksytty: false
       },
       muokkauspaiva: '',
+      muuKategoria: '',
       vahvuudet: ''
     }
+
+    kategoriaOrder = [
+      KehittamistoimenpideKategoria.TYOSSASUORIUTUMINEN,
+      KehittamistoimenpideKategoria.TYOKAYTTAYTYMINEN,
+      KehittamistoimenpideKategoria.POTILASPALAUTE,
+      KehittamistoimenpideKategoria.MUU
+    ]
 
     validateState(value: string) {
       const form = this.$v.valiarviointiLomake
@@ -253,6 +332,18 @@
       return false
     }
 
+    get showWaitingForAcceptance() {
+      return this.koejaksoData.valiarvioinninTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+    }
+
+    get showWaitingForErikoistuva() {
+      return this.koejaksoData.valiarvioinninTila === LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA
+    }
+
+    get showAcceptedByEveryone() {
+      return this.koejaksoData.valiarvioinninTila === LomakeTilat.HYVAKSYTTY
+    }
+
     get kouluttajat() {
       return store.getters['erikoistuva/kouluttajat']
     }
@@ -264,10 +355,6 @@
     setKoejaksoData() {
       if (this.koejaksoData.valiarviointi) {
         this.valiarviointiLomake = this.koejaksoData.valiarviointi
-        this.valiarviointiLomake.erikoistuvanNimi = this.account.firstName.concat(
-          ' ',
-          this.account.lastName
-        )
       }
     }
 
@@ -295,6 +382,18 @@
       })
     }
 
+    naytaKehittamistoimenpideKategoria(kategoria: string) {
+      if (kategoria === KehittamistoimenpideKategoria.MUU)
+        return this.valiarviointiLomake?.muuKategoria
+      return this.$t('kehittamistoimenpidekategoria-' + kategoria)
+    }
+
+    get sortedKategoriat() {
+      return this.valiarviointiLomake?.kehittamistoimenpideKategoriat?.sort(
+        (a, b) => this.kategoriaOrder.indexOf(a) - this.kategoriaOrder.indexOf(b)
+      )
+    }
+
     optionDisplayName(option: any) {
       return option.nimike ? option.nimi + ', ' + option.nimike : option.nimi
     }
@@ -317,22 +416,33 @@
       this.params.saving = false
     }
 
-    hideModal() {
-      return this.$bvModal.hide('confirm-send')
+    hideModal(id: string) {
+      return this.$bvModal.hide(id)
     }
 
-    sendForm() {
+    sendForm(modalId: string) {
       this.$v.$touch()
       if (this.$v.$anyError) {
         return
       }
-      return this.$bvModal.show('confirm-send')
+      return this.$bvModal.show(modalId)
     }
 
     async saveNewForm() {
       try {
         await store.dispatch('erikoistuva/postValiarviointi', this.valiarviointiLomake)
+        this.hideModal('confirm-send')
         toastSuccess(this, this.$t('valiarviointi-lahetetty-onnistuneesti'))
+      } catch (err) {
+        toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
+      }
+    }
+
+    async updateForm() {
+      try {
+        await store.dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
+        this.hideModal('confirm-sign')
+        toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
       }
@@ -340,8 +450,13 @@
 
     async onSubmit() {
       this.params.saving = true
-      this.valiarviointiLomake.erikoistuvaAllekirjoittanut = true
       this.saveNewForm()
+      this.params.saving = false
+    }
+
+    async onSign() {
+      this.params.saving = true
+      this.updateForm()
       this.params.saving = false
     }
 

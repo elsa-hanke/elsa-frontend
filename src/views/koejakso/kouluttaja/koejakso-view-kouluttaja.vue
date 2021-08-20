@@ -22,7 +22,8 @@
     private loading = true
     private componentLinks = new Map([
       [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
-      [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja']
+      [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja'],
+      [LomakeTyypit.VALIARVIOINTI, 'valiarviointi-kouluttaja']
     ])
 
     async mounted() {

@@ -131,3 +131,10 @@ export const defaultKouluttaja: Kouluttaja = {
   sopimusHyvaksytty: false,
   toimipaikka: ''
 }
+
+export enum KehittamistoimenpideKategoria {
+  TYOSSASUORIUTUMINEN = 'TYOSSASUORIUTUMINEN',
+  TYOKAYTTAYTYMINEN = 'TYOKAYTTAYTYMINEN',
+  POTILASPALAUTE = 'POTILASPALAUTE',
+  MUU = 'MUU'
+}
