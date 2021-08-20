@@ -37,6 +37,22 @@ const vastuuhenkilo: Module<any, any> = {
       } catch (err) {
         commit('koejaksotError')
       }
+    },
+    async putKoulutussopimus({ commit, dispatch }, koulutussopimusLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .putKoulutussopimus(koulutussopimusLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejaksot')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     }
   },
   getters: {
