@@ -62,8 +62,18 @@
               v-model="form.erikoistuvanSahkoposti"
               :state="validateState('erikoistuvanSahkoposti')"
             />
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
+            <b-form-invalid-feedback
+              v-if="!$v.form.erikoistuvanSahkoposti.required"
+              :id="`${uid}-feedback`"
+            >
               {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              v-if="!$v.form.erikoistuvanSahkoposti.email"
+              :state="validateState('erikoistuvanSahkoposti')"
+              :id="`${uid}-feedback`"
+            >
+              {{ $t('sahkopostiosoite-ei-kelvollinen') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -96,6 +106,7 @@
           ref="koulutuspaikkaDetails"
           :key="index"
           :koulutuspaikka="koulutuspaikka"
+          :erikoistuvanYliopisto="form.erikoistuvanYliopisto"
           :yliopistot="yliopistot"
         ></koulutuspaikka-details>
         <elsa-button
