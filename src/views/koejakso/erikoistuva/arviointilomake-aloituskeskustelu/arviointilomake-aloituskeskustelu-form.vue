@@ -295,32 +295,20 @@
         </elsa-button>
       </b-col>
     </b-row>
-    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-aloituskeskustelu-lahetys') }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-send')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="onSubmit">
-          {{ $t('allekirjoita-laheta') }}
-        </elsa-button>
-      </template>
-    </b-modal>
-    <b-modal id="confirm-save" :title="$t('vahvista-tallennus-keskeneraisena.title')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-tallennus-keskeneraisena.body') }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-save')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="saveAndExit">
-          {{ $t('tallenna-keskeneraisena') }}
-        </elsa-button>
-      </template>
-    </b-modal>
+    <elsa-confirmation-modal
+      id="confirm-send"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="$t('vahvista-koejakson-vaihe-lahetys')"
+      :submitText="$t('allekirjoita-laheta')"
+      @submit="onSubmit"
+    />
+    <elsa-confirmation-modal
+      id="confirm-save"
+      :title="$t('vahvista-tallennus-keskeneraisena.title')"
+      :text="$t('vahvista-tallennus-keskeneraisena.body')"
+      :submitText="$t('tallenna-keskeneraisena')"
+      @submit="saveAndExit"
+    />
   </b-form>
 </template>
 
@@ -342,6 +330,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import { AloituskeskusteluLomake, Kouluttaja, UserAccount } from '@/types'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
 
   @Component({
     mixins: [validationMixin],
@@ -351,7 +340,8 @@
       ElsaButton,
       ElsaPopover,
       ElsaFormMultiselect,
-      KouluttajaForm
+      KouluttajaForm,
+      ElsaConfirmationModal
     }
   })
   export default class ArviointilomakeAloituskeskusteluForm extends Vue {

@@ -171,6 +171,10 @@
         </b-row>
       </div>
 
+      <div v-if="showWaitingForErikoistuva || showAcceptedByEveryone">
+        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+      </div>
+
       <div v-if="editable || showWaitingForErikoistuva">
         <hr />
 
@@ -183,7 +187,7 @@
               variant="primary"
               class="ml-4 px-5"
             >
-              {{ $t('laheta') }}
+              {{ showWaitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
             </elsa-button>
           </b-col>
         </b-row>
@@ -193,7 +197,7 @@
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('vahvista-valiarviointi-lahetys')"
+      :text="$t('vahvista-koejakson-vaihe-lahetys')"
       :submitText="$t('laheta')"
       @submit="onSubmit"
     />
@@ -224,6 +228,9 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {
@@ -232,7 +239,8 @@
       ElsaFormGroup,
       ElsaFormMultiselect,
       ElsaButton,
-      ElsaConfirmationModal
+      ElsaConfirmationModal,
+      KoejaksonVaiheAllekirjoitukset
     }
   })
   export default class ErikoistuvaArviointilomakeValiarviointi extends Mixins(validationMixin) {
@@ -280,7 +288,7 @@
       erikoistuvaAllekirjoittanut: false,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
       erikoistuvanNimi: this.account.firstName.concat(' ', this.account.lastName),
-      erikoistuvanOpiskelijatunnus: '', //this.account.erikoistuvaLaakari.opiskelijatunnus,
+      erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
       erikoistuvanYliopisto: this.account.erikoistuvaLaakari.yliopisto,
       id: null,
       kehittamistoimenpideKategoriat: [],
@@ -323,15 +331,7 @@
     }
 
     get editable() {
-      switch (this.koejaksoData.valiarvioinninTila) {
-        case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
-          return true
-        case LomakeTilat.UUSI:
-          return true
-        case LomakeTilat.TALLENNETTU_KESKENERAISENA:
-          return true
-      }
-      return false
+      return this.koejaksoData.valiarvioinninTila === LomakeTilat.UUSI
     }
 
     get showWaitingForAcceptance() {
@@ -394,6 +394,28 @@
       return this.valiarviointiLomake?.kehittamistoimenpideKategoriat?.sort(
         (a, b) => this.kategoriaOrder.indexOf(a) - this.kategoriaOrder.indexOf(b)
       )
+    }
+
+    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.valiarviointiLomake?.erikoistuvanNimi,
+        this.valiarviointiLomake?.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+        this,
+        this.valiarviointiLomake?.lahikouluttaja
+      )
+      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+        this,
+        this.valiarviointiLomake?.lahiesimies
+      )
+
+      return [
+        allekirjoitusErikoistuva,
+        allekirjoitusLahikouluttaja,
+        allekirjoitusLahiesimies
+      ].filter((a) => a !== null)
     }
 
     optionDisplayName(option: any) {
