@@ -221,6 +221,7 @@
           </b-col>
         </b-row>
       </div>
+      <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
 
       <hr v-if="editable" />
 
@@ -249,8 +250,8 @@
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="
         isCurrentUserLahiesimies
-          ? $t('vahvista-valiarviointi-lahetys-esimies')
-          : $t('vahvista-valiarviointi-lahetys-kouluttaja')
+          ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
+          : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
       :submitText="$t('allekirjoita-laheta')"
       @submit="onSubmit"
@@ -282,6 +283,9 @@
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {
@@ -289,7 +293,8 @@
       ElsaFormGroup,
       ElsaButton,
       ElsaConfirmationModal,
-      ElsaReturnToSenderModal
+      ElsaReturnToSenderModal,
+      KoejaksonVaiheAllekirjoitukset
     },
     validations: {
       valiarviointi: {
@@ -450,15 +455,37 @@
       return this.valiarvioinninTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
+    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.valiarviointi?.erikoistuvanNimi,
+        this.valiarviointi?.erikoistuvanAllekirjoitusaika
+      ) as KoejaksonVaiheAllekirjoitus
+      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+        this,
+        this.valiarviointi?.lahikouluttaja
+      )
+      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+        this,
+        this.valiarviointi?.lahiesimies
+      )
+
+      return [
+        allekirjoitusErikoistuva,
+        allekirjoitusLahikouluttaja,
+        allekirjoitusLahiesimies
+      ].filter((a) => a !== null)
+    }
+
     async returnToSender(korjausehdotus: string) {
-      if (this.valiarviointi) this.valiarviointi.korjausehdotus = korjausehdotus
-      this.$v.$touch()
-      if (this.$v.$anyError) {
-        return
+      const form = {
+        ...this.valiarviointi,
+        korjausehdotus: korjausehdotus,
+        lahetetty: false
       }
 
       try {
-        await store.dispatch('kouluttaja/putValiarviointi', this.valiarviointi)
+        await store.dispatch('kouluttaja/putValiarviointi', form)
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))

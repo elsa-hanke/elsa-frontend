@@ -218,32 +218,20 @@
         </elsa-button>
       </b-col>
     </b-row>
-    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-koulutussopimus-lahetys') }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-send')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="onSubmit">
-          {{ $t('allekirjoita-laheta') }}
-        </elsa-button>
-      </template>
-    </b-modal>
-    <b-modal id="confirm-save" :title="$t('vahvista-tallennus-keskeneraisena.title')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-tallennus-keskeneraisena.body') }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-save')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="saveAndExit">
-          {{ $t('tallenna-keskeneraisena') }}
-        </elsa-button>
-      </template>
-    </b-modal>
+    <elsa-confirmation-modal
+      id="confirm-send"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="$t('vahvista-koulutussopimus-lahetys')"
+      :submitText="$t('allekirjoita-laheta')"
+      @submit="onSubmit"
+    />
+    <elsa-confirmation-modal
+      id="confirm-save"
+      :title="$t('vahvista-tallennus-keskeneraisena.title')"
+      :text="$t('vahvista-tallennus-keskeneraisena.body')"
+      :submitText="$t('tallenna-keskeneraisena')"
+      @submit="saveAndExit"
+    />
   </b-form>
 </template>
 
@@ -262,6 +250,7 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
   import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
 
   @Component({
     components: {
@@ -270,7 +259,8 @@
       ElsaFormGroup,
       ElsaFormDatepicker,
       ElsaButton,
-      ElsaPopover
+      ElsaPopover,
+      ElsaConfirmationModal
     },
     validations: {
       form: {

@@ -144,6 +144,7 @@ export interface AloituskeskusteluLomake {
 export interface ValiarviointiLomake {
   edistyminenTavoitteidenMukaista: boolean | null
   erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanAllekirjoitusaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string

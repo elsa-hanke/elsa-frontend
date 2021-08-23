@@ -106,7 +106,6 @@
             <p>{{ aloituskeskustelu.koejaksonOsaamistavoitteet }}</p>
           </b-col>
         </b-row>
-        <hr />
         <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
       </div>
       <hr v-if="showAllekirjoitukset && editable" />
@@ -129,20 +128,9 @@
             {{ $t('palauta-muokattavaksi') }}
           </elsa-button>
           <elsa-button
-            v-if="isCurrentUserLahiesimies"
             class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
             style="width: 14rem"
             v-b-modal.confirm-send
-            variant="primary"
-          >
-            {{ $t('allekirjoita-laheta') }}
-          </elsa-button>
-          <elsa-button
-            v-else
-            class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-            style="width: 14rem"
-            :loading="params.saving"
-            @click="onSubmit"
             variant="primary"
           >
             {{ $t('allekirjoita-laheta') }}
@@ -151,48 +139,22 @@
       </b-row>
     </b-container>
 
-    <b-modal id="return-to-sender" :title="$t('palauta-erikoistuvalle-muokattavaksi')">
-      <div class="d-block">
-        <b-form>
-          <elsa-form-group :label="$t('syy-palautukseen')" :required="true">
-            <template v-slot="{ uid }">
-              <b-form-textarea
-                :id="uid"
-                v-model="korjausehdotus"
-                :state="validateState('korjausehdotus')"
-                rows="4"
-                class="textarea-min-height"
-              ></b-form-textarea>
-              <b-form-invalid-feedback :id="`${uid}-feedback`">
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
-            </template>
-          </elsa-form-group>
-        </b-form>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('return-to-sender')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="returnToSender">
-          {{ $t('palauta-muokattavaksi') }}
-        </elsa-button>
-      </template>
-    </b-modal>
-
-    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe }) }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-send')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="onSubmit">
-          {{ $t('allekirjoita-laheta') }}
-        </elsa-button>
-      </template>
-    </b-modal>
+    <elsa-confirmation-modal
+      id="confirm-send"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="
+        isCurrentUserLahiesimies
+          ? $t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })
+          : $t('vahvista-koejakson-vaihe-esimiehelle')
+      "
+      :submitText="$t('allekirjoita-laheta')"
+      @submit="onSubmit"
+    />
+    <elsa-return-to-sender-modal
+      id="return-to-sender"
+      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+      @submit="returnToSender"
+    />
   </div>
 </template>
 
@@ -200,7 +162,6 @@
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { required } from 'vuelidate/lib/validators'
   import { format } from 'date-fns'
   import _get from 'lodash/get'
   import * as api from '@/api/kouluttaja'
@@ -216,18 +177,17 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
 
   @Component({
     components: {
       ErikoistuvaDetails,
       ElsaFormGroup,
       ElsaButton,
-      KoejaksonVaiheAllekirjoitukset
-    },
-    validations: {
-      korjausehdotus: {
-        required
-      }
+      KoejaksonVaiheAllekirjoitukset,
+      ElsaConfirmationModal,
+      ElsaReturnToSenderModal
     }
   })
   export default class KouluttajaArviointilomakeAloituskeskustelu extends Mixins(
@@ -255,7 +215,6 @@
     }
     loading = true
     aloituskeskustelu: null | AloituskeskusteluLomake = null
-    korjausehdotus = ''
     koejaksonVaihe = 'aloituskeskustelu'
 
     validateState(value: string) {
@@ -355,15 +314,10 @@
       ].filter((a) => a !== null)
     }
 
-    async returnToSender() {
-      this.$v.$touch()
-      if (this.$v.$anyError) {
-        return
-      }
-
+    async returnToSender(korjausehdotus: string) {
       const form = {
         ...this.aloituskeskustelu,
-        korjausehdotus: this.korjausehdotus,
+        korjausehdotus: korjausehdotus,
         lahetetty: false
       }
       try {

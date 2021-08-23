@@ -3,47 +3,30 @@
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid v-if="!loading">
       <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
-      <div v-if="!signed && !returned">
+      <div v-if="!signed">
         <p>{{ $t('koulutussopimus-kouluttaja-ingressi') }}</p>
       </div>
-      <b-alert :show="showWaitingForVastuuhenkilo" variant="dark" class="mt-3">
-        <div class="d-flex flex-row">
-          <em class="align-middle">
-            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-          </em>
-          <div>{{ $t('koulutussopimus-tila-odottaa-vastuuhenkilon-hyvaksyntaa') }}</div>
+
+      <div v-if="signed" class="d-flex bg-light border rounded px-4 py-3 mb-4">
+        <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
+        <div v-if="allKouluttajatSigned">
+          {{ $t('koulutussopimus-kouluttajat-allekirjoitettu') }}
         </div>
-      </b-alert>
-      <b-alert :show="showWaitingForAnotherKouluttaja" variant="dark" class="mt-3">
-        <div class="d-flex flex-row">
-          <em class="align-middle">
-            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-          </em>
-          <div>{{ $t('koulutussopimus-tila-odottaa-toisen-kouluttajan-hyvaksyntaa') }}</div>
-        </div>
-      </b-alert>
-      <b-alert :show="returned" variant="dark" class="mt-3">
-        <div class="d-flex flex-row">
-          <em class="align-middle">
-            <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-          </em>
+        <div v-else>{{ $t('koulutussopimus-kouluttaja-allekirjoitettu') }}</div>
+      </div>
+
+      <div v-if="returned" class="bg-light border rounded px-4 py-3 mb-4">
+        <div class="d-flex">
+          <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
           <div>
-            {{ $t('koulutussopimus-kouluttaja-palautettu') }}
-            <span class="d-block">{{ $t('syy') }}&nbsp;{{ form.korjausehdotus }}</span>
+            <div>{{ $t('koulutussopimus-kouluttaja-palautettu') }}</div>
+            <div>
+              <span>{{ $t('syy') }}</span>
+              <span>&nbsp;{{ form.korjausehdotus }}</span>
+            </div>
           </div>
         </div>
-      </b-alert>
-      <b-alert variant="success" :show="showAcceptedByEveryone">
-        <div class="d-flex flex-row">
-          <em class="align-middle">
-            <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-          </em>
-          <div>
-            {{ $t('koulutussopimus-tila-hyvaksytty') }}
-            <span class="d-block">{{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}</span>
-          </div>
-        </div>
-      </b-alert>
+      </div>
       <hr />
       <b-row>
         <b-col>
@@ -171,16 +154,9 @@
     </b-container>
 
     <elsa-confirmation-modal
-      id="confirm-send-kouluttaja"
+      id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koulutussopimus-kouluttajat-hyvaksytty')"
-      :submitText="$t('allekirjoita-laheta')"
-      @submit="updateSentForm"
-    />
-    <elsa-confirmation-modal
-      id="confirm-send-vastuuhenkilo"
-      :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('vahvista-koulutussopimus-hyvaksytty')"
       :submitText="$t('allekirjoita-laheta')"
       @submit="updateSentForm"
     />
@@ -198,8 +174,7 @@
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import { getKoulutussopimus as getKoulutussopimusKouluttaja } from '@/api/kouluttaja'
-  import { getKoulutussopimus as getKoulutussopimusVastuuhenkilo } from '@/api/vastuuhenkilo'
+  import * as api from '@/api/kouluttaja'
   import store from '@/store'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -214,7 +189,6 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
-  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
 
@@ -237,7 +211,7 @@
       }
     }
   })
-  export default class Koulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
+  export default class KouluttajaKoulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
     skipRouteExitConfirm!: boolean
     $refs!: {
       kouluttajaKoulutussopimusForm: any
@@ -309,10 +283,8 @@
       this.childFormValid = true
     }
 
-    get koulutussopimusData() {
-      return store.getters[`${resolveRolePath()}/koejaksot`].find(
-        (a: any) => a.id === this.koulutussopimusId
-      )
+    get koulutussopimusTila() {
+      return store.getters['kouluttaja/koejaksot'].find((a: any) => a.id === this.koulutussopimusId)
     }
 
     get koulutussopimusId() {
@@ -324,7 +296,7 @@
     }
 
     get editable() {
-      return !this.loading && this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      return !this.loading && this.koulutussopimusTila.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     get signed() {
@@ -342,19 +314,7 @@
     }
 
     get returned() {
-      return !this.loading && this.koulutussopimusData.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
-    }
-
-    get showAcceptedByEveryone() {
-      return this.koulutussopimusData.tila === LomakeTilat.HYVAKSYTTY
-    }
-
-    get showWaitingForVastuuhenkilo() {
-      return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
-    }
-
-    get showWaitingForAnotherKouluttaja() {
-      return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA
+      return !this.loading && this.koulutussopimusTila.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     get erikoistuvanEtunimi() {
@@ -387,7 +347,7 @@
         lahetetty: false
       }
       try {
-        await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, form)
+        await store.dispatch('kouluttaja/putKoulutussopimus', form)
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
@@ -399,7 +359,7 @@
     async updateSentForm() {
       this.skipRouteExitConfirm = true
       try {
-        await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, this.form)
+        await store.dispatch('kouluttaja/putKoulutussopimus', this.form)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
       } catch (err) {
@@ -410,16 +370,6 @@
     onSubmit() {
       this.params.saving = true
 
-      if (this.$isVastuuhenkilo()) {
-        this.handleSubmitVastuuhenkilo()
-      } else {
-        this.handleSubmitKouluttaja()
-      }
-
-      this.params.saving = false
-    }
-
-    private handleSubmitKouluttaja() {
       if (this.$refs.kouluttajaKoulutussopimusForm.length === 2) {
         this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
         this.$refs.kouluttajaKoulutussopimusForm[1].checkForm()
@@ -429,23 +379,19 @@
 
       if (this.childFormValid) {
         if (this.isLastKouluttajaToAccept) {
-          this.$bvModal.show('confirm-send-kouluttaja')
+          this.$bvModal.show('confirm-send')
         } else {
           this.updateSentForm()
         }
       }
-    }
 
-    private handleSubmitVastuuhenkilo() {
-      this.$bvModal.show('confirm-send-vastuuhenkilo')
+      this.params.saving = false
     }
 
     async mounted() {
       this.loading = true
-      await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
-      const { data } = await (this.$isVastuuhenkilo()
-        ? getKoulutussopimusVastuuhenkilo(this.koulutussopimusId)
-        : getKoulutussopimusKouluttaja(this.koulutussopimusId))
+      await store.dispatch('kouluttaja/getKoejaksot')
+      const { data } = await api.getKoulutussopimus(this.koulutussopimusId)
       this.form = data
       this.loading = false
 
