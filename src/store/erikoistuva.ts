@@ -81,7 +81,7 @@ const erikoistuva: Module<any, any> = {
           })
       })
     },
-    postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
+    async postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
       commit('formRequest')
       return new Promise((resolve, reject) => {
         api
@@ -113,7 +113,7 @@ const erikoistuva: Module<any, any> = {
           })
       })
     },
-    postValiarviointi({ dispatch, commit }, valiarviointiLomake) {
+    async postValiarviointi({ dispatch, commit }, valiarviointiLomake) {
       commit('formRequest')
       return new Promise((resolve, reject) => {
         api
@@ -134,6 +134,38 @@ const erikoistuva: Module<any, any> = {
       return new Promise((resolve, reject) => {
         api
           .putValiarviointi(valiarviointiLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejakso')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
+    },
+    async postKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .postKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejakso')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
+    },
+    async putKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .putKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
           .then((response) => {
             commit('formSuccess')
             dispatch('getKoejakso')

@@ -38,6 +38,12 @@
         </th>
         <td class="pl-5">{{ yliopisto }}</td>
       </tr>
+      <tr v-if="kehittamistoimenpiteet">
+        <th scope="row" class="font-weight-500">
+          {{ $t('kehittamistoimenpiteet-otsikko') }}
+        </th>
+        <td class="pl-5">{{ kehittamistoimenpiteet }}</td>
+      </tr>
     </table>
   </div>
 </template>
@@ -71,6 +77,9 @@
 
     @Prop({ required: true, type: String })
     yliopisto!: string
+
+    @Prop({ required: false, type: String, default: undefined })
+    kehittamistoimenpiteet!: string
 
     @Prop({ required: false })
     profilePicture!: any

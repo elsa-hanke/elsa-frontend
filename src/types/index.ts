@@ -162,6 +162,7 @@ export interface ValiarviointiLomake {
 
 export interface KehittamistoimenpiteetLomake {
   erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanAllekirjoitusaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
