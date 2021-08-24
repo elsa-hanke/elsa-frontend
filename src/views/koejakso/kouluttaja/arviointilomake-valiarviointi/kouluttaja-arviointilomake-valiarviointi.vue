@@ -208,19 +208,11 @@
           </b-col>
         </b-row>
         <hr />
-        <b-row>
-          <b-col>
-            <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
-            <h5>{{ $t('lahikouluttaja') }}</h5>
-            <p>{{ valiarviointi.lahikouluttaja.nimi }}</p>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
-            <p>{{ valiarviointi.lahiesimies.nimi }}</p>
-          </b-col>
-        </b-row>
+        <koulutuspaikan-arvioijat
+          :lahikouluttaja="valiarviointi.lahikouluttaja"
+          :lahiesimies="valiarviointi.lahiesimies"
+          :isReadOnly="true"
+        />
       </div>
       <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
 
@@ -284,6 +276,7 @@
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
@@ -295,6 +288,7 @@
       ElsaButton,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
+      KoulutuspaikanArvioijat,
       KoejaksonVaiheAllekirjoitukset
     },
     validations: {
