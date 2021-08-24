@@ -1,6 +1,5 @@
 <template>
   <div v-if="showAllekirjoitukset">
-    <hr />
     <b-row class="mb-3">
       <b-col>
         <h3>{{ $t('allekirjoitukset') }}</h3>

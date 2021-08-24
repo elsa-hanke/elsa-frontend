@@ -538,7 +538,8 @@
 
     sendForm() {
       this.$v.$touch()
-      if (this.$v.$anyError || this.$refs.koulutuspaikanArvioijat.hasErrors()) {
+      const childFormValid = this.$refs.koulutuspaikanArvioijat.checkForm()
+      if (this.$v.$anyError || !childFormValid) {
         return
       }
       return this.$bvModal.show('confirm-send')
