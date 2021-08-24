@@ -179,69 +179,14 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row>
-      <b-col lg="10">
-        <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
-        <elsa-form-group
-          :label="$t('lahikouluttaja')"
-          :add-new-enabled="true"
-          :add-new-label="$t('lisaa-kouluttaja')"
-          :required="true"
-          @submit="onKouluttajaSubmit"
-        >
-          <template v-slot:modal-content="{ submit, cancel }">
-            <kouluttaja-form @submit="submit" @cancel="cancel" />
-          </template>
-          <template v-slot="{ uid }">
-            <elsa-form-multiselect
-              v-model="form.lahikouluttaja"
-              :id="uid"
-              :options="lahikouluttajatList"
-              :state="validateState('lahikouluttaja.nimi')"
-              label="nimi"
-              track-by="nimi"
-            >
-              <template v-slot:option="{ option }">
-                <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
-              </template>
-            </elsa-form-multiselect>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
-          </template>
-        </elsa-form-group>
-
-        <elsa-form-group
-          :label="$t('lahiesimies-tai-muu')"
-          :add-new-enabled="true"
-          :add-new-label="$t('lisaa-henkilo')"
-          :required="true"
-          @submit="onKouluttajaSubmit"
-        >
-          <template v-slot:modal-content="{ submit, cancel }">
-            <kouluttaja-form @submit="submit" @cancel="cancel" />
-          </template>
-          <template v-slot="{ uid }">
-            <elsa-form-multiselect
-              v-model="form.lahiesimies"
-              :id="uid"
-              :options="lahiesimiesList"
-              :state="validateState('lahiesimies.nimi')"
-              label="nimi"
-              track-by="nimi"
-            >
-              <template v-slot:option="{ option }">
-                <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
-              </template>
-            </elsa-form-multiselect>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
-          </template>
-        </elsa-form-group>
-      </b-col>
-    </b-row>
-
+    <koulutuspaikan-arvioijat
+      ref="koulutuspaikanArvioijat"
+      :lahikouluttaja="form.lahikouluttaja"
+      :lahiesimies="form.lahiesimies"
+      :params="params"
+      @lahikouluttajaSelect="onLahikouluttajaSelect"
+      @lahiesimiesSelect="onLahiesimiesSelect"
+    />
     <hr />
 
     <b-row>
@@ -329,8 +274,14 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
-  import { AloituskeskusteluLomake, Kouluttaja, UserAccount } from '@/types'
+  import {
+    AloituskeskusteluLomake,
+    Kouluttaja,
+    UserAccount,
+    KoejaksonVaiheHyvaksyja
+  } from '@/types'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
 
   @Component({
     mixins: [validationMixin],
@@ -341,10 +292,15 @@
       ElsaPopover,
       ElsaFormMultiselect,
       KouluttajaForm,
-      ElsaConfirmationModal
+      ElsaConfirmationModal,
+      KoulutuspaikanArvioijat
     }
   })
   export default class ArviointilomakeAloituskeskusteluForm extends Vue {
+    $refs!: {
+      koulutuspaikanArvioijat: any
+    }
+
     @Prop({ required: true, default: {} })
     data!: AloituskeskusteluLomake
 
@@ -564,6 +520,14 @@
       return format(koejaksonAlkamispaivaDate, dateFormat)
     }
 
+    onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
+      this.form.lahikouluttaja = lahikouluttaja
+    }
+
+    onLahiesimiesSelect(lahiesimies: KoejaksonVaiheHyvaksyja) {
+      this.form.lahiesimies = lahiesimies
+    }
+
     saveAndExit() {
       this.$emit('saveAndExit', this.form, this.params)
     }
@@ -574,7 +538,7 @@
 
     sendForm() {
       this.$v.$touch()
-      if (this.$v.$anyError) {
+      if (this.$v.$anyError || this.$refs.koulutuspaikanArvioijat.hasErrors()) {
         return
       }
       return this.$bvModal.show('confirm-send')
