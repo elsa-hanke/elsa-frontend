@@ -32,19 +32,11 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row>
-      <b-col>
-        <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
-        <h5>{{ $t('lahikouluttaja') }}</h5>
-        <p>{{ data.lahikouluttaja.nimi }}</p>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
-        <p>{{ data.lahiesimies.nimi }}</p>
-      </b-col>
-    </b-row>
+    <koulutuspaikan-arvioijat
+      :lahikouluttaja="data.lahikouluttaja"
+      :lahiesimies="data.lahiesimies"
+      :isReadonly="true"
+    />
     <hr />
     <b-row>
       <b-col>
@@ -65,9 +57,11 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
 
   @Component({
     components: {
+      KoulutuspaikanArvioijat,
       KoejaksonVaiheAllekirjoitukset
     }
   })

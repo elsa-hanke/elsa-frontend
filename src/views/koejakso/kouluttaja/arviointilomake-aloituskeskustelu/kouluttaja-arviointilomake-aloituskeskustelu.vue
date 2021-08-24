@@ -85,19 +85,11 @@
           </b-col>
         </b-row>
         <hr />
-        <b-row>
-          <b-col>
-            <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
-            <h5>{{ $t('lahikouluttaja') }}</h5>
-            <p>{{ aloituskeskustelu.lahikouluttaja.nimi }}</p>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
-            <p>{{ aloituskeskustelu.lahiesimies.nimi }}</p>
-          </b-col>
-        </b-row>
+        <koulutuspaikan-arvioijat
+          :lahikouluttaja="aloituskeskustelu.lahikouluttaja"
+          :lahiesimies="aloituskeskustelu.lahiesimies"
+          :isReadonly="true"
+        />
         <hr />
         <b-row>
           <b-col>
@@ -161,7 +153,6 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
   import { format } from 'date-fns'
   import _get from 'lodash/get'
   import * as api from '@/api/kouluttaja'
@@ -179,6 +170,7 @@
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
 
   @Component({
     components: {
@@ -187,14 +179,11 @@
       ElsaButton,
       KoejaksonVaiheAllekirjoitukset,
       ElsaConfirmationModal,
-      ElsaReturnToSenderModal
+      ElsaReturnToSenderModal,
+      KoulutuspaikanArvioijat
     }
   })
-  export default class KouluttajaArviointilomakeAloituskeskustelu extends Mixins(
-    ConfirmRouteExit,
-    validationMixin
-  ) {
-    skipRouteExitConfirm!: boolean
+  export default class KouluttajaArviointilomakeAloituskeskustelu extends Mixins(ConfirmRouteExit) {
     items = [
       {
         text: this.$t('etusivu'),
