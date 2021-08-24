@@ -99,7 +99,6 @@
                 v-model="form.kouluttajat[index]"
                 :kouluttaja="kouluttaja"
                 :index="index"
-                @ready="onChildFormValid"
               ></kouluttaja-koulutussopimus-form>
 
               <kouluttaja-koulutussopimus-readonly

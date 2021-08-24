@@ -1,156 +1,151 @@
 <template>
   <div class="koulutussopimus col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid v-if="!loading">
-      <b-row lg>
-        <b-col>
-          <h1 class="mb-3">{{ $t('koejakson-kehittamistoimenpiteet') }}</h1>
-          <div v-if="newOrReturned">
-            <p>{{ $t('koejakson-kehittamistoimenpiteet-ingressi') }}</p>
-          </div>
-          <div v-else>
-            <b-alert :show="waitingForKouluttaja" variant="dark" class="mt-3">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                </em>
-                <div>
-                  {{ $t('kehittamistoimenpiteet-tila-odottaa-hyvaksyntaa') }}
+    <b-container fluid>
+      <h1 class="mb-3">{{ $t('koejakson-kehittamistoimenpiteet') }}</h1>
+      <div v-if="!this.loading">
+        <b-row lg>
+          <b-col>
+            <div v-if="editable">
+              <p>{{ $t('koejakson-kehittamistoimenpiteet-ingressi') }}</p>
+            </div>
+            <div v-else>
+              <b-alert :show="waitingForKouluttaja" variant="dark" class="mt-3">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                  </em>
+                  <div>
+                    {{ $t('kehittamistoimenpiteet-tila-odottaa-hyvaksyntaa') }}
+                  </div>
                 </div>
-              </div>
-            </b-alert>
-            <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                </em>
-                <div>
-                  {{ $t('kehittamistoimenpiteet-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
+              </b-alert>
+              <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                  </em>
+                  <div>
+                    {{ $t('kehittamistoimenpiteet-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
+                  </div>
                 </div>
-              </div>
-            </b-alert>
-            <b-alert variant="success" :show="signed">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-                </em>
-                <span>{{ $t('kehittamistoimenpiteet-tila-hyvaksytty') }}</span>
-              </div>
-            </b-alert>
-          </div>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <erikoistuva-details
-            :firstName="account.firstName"
-            :lastName="account.lastName"
-            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
-            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
-            :yliopisto="account.erikoistuvaLaakari.yliopisto"
-            :kehittamistoimenpiteet="koejaksoData.valiarviointi.kehittamistoimenpiteet"
-            :show-birthdate="false"
-          ></erikoistuva-details>
-        </b-col>
-      </b-row>
-
-      <hr />
-
-      <b-form v-if="newOrReturned">
-        <koulutuspaikan-arvioijat
-          ref="koulutuspaikanArvioijat"
-          :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
-          :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
-          :params="params"
-          @lahikouluttajaSelect="onLahikouluttajaSelect"
-          @lahiesimiesSelect="onLahiesimiesSelect"
-        />
-
-        <hr />
-
-        <b-row v-if="newOrReturned">
-          <b-col class="text-right">
-            <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-            <elsa-button
-              @click="validateAndConfirmSend"
-              :loading="params.saving"
-              variant="primary"
-              class="ml-4 px-5"
-            >
-              {{ $t('laheta') }}
-            </elsa-button>
+              </b-alert>
+              <b-alert variant="success" :show="signed">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                  </em>
+                  <span>{{ $t('kehittamistoimenpiteet-tila-hyvaksytty') }}</span>
+                </div>
+              </b-alert>
+            </div>
           </b-col>
         </b-row>
-      </b-form>
-
-      <div v-if="waitingForErikoistuva || signed">
+        <hr />
         <b-row>
-          <b-col lg="10">
-            <h3>{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
-            <p v-if="koejaksoData.kehittamistoimenpiteet.kehittamistoimenpiteetRiittavat">
-              {{ $t('kehittamistoimenpiteet-riittavat') }}
-            </p>
-            <p v-else>{{ $t('kehittamistoimenpiteet-ei-riittavat') }}</p>
+          <b-col>
+            <erikoistuva-details
+              :firstName="account.firstName"
+              :lastName="account.lastName"
+              :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+              :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+              :yliopisto="account.erikoistuvaLaakari.yliopisto"
+              :kehittamistoimenpiteet="koejaksoData.valiarviointi.kehittamistoimenpiteet"
+              :show-birthdate="false"
+              :showKehittamistoimenpiteet="true"
+            ></erikoistuva-details>
           </b-col>
         </b-row>
-        <hr />
-      </div>
 
-      <div v-if="waitingForKouluttaja || waitingForErikoistuva || signed">
-        <koulutuspaikan-arvioijat
-          :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
-          :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
-          :isReadonly="true"
-        />
         <hr />
-        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
-        <hr v-if="waitingForErikoistuva" />
-      </div>
 
-      <b-form>
-        <b-row v-if="waitingForErikoistuva">
-          <b-col class="text-right">
-            <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-            <elsa-button
-              :loading="params.saving"
-              variant="primary"
-              class="ml-4 px-5"
-              v-b-modal.confirm-sign
-            >
-              {{ $t('allekirjoita') }}
-            </elsa-button>
-          </b-col>
-        </b-row>
-      </b-form>
+        <b-form v-if="editable">
+          <koulutuspaikan-arvioijat
+            ref="koulutuspaikanArvioijat"
+            :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
+            :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
+            :params="params"
+            @lahikouluttajaSelect="onLahikouluttajaSelect"
+            @lahiesimiesSelect="onLahiesimiesSelect"
+            @ready="onChildFormReady"
+          />
+          <hr />
+          <b-row>
+            <b-col class="text-right">
+              <elsa-button variant="back" :to="{ name: 'koejakso' }">
+                {{ $t('peruuta') }}
+              </elsa-button>
+              <elsa-button
+                @click="validateAndConfirmSend"
+                :disabled="!childFormReady"
+                :loading="params.saving"
+                variant="primary"
+                class="ml-4 px-5"
+              >
+                {{ $t('laheta') }}
+              </elsa-button>
+            </b-col>
+          </b-row>
+        </b-form>
+
+        <div v-if="!editable">
+          <b-row>
+            <b-col lg="10">
+              <h3>{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
+              <p v-if="koejaksoData.kehittamistoimenpiteet.kehittamistoimenpiteetRiittavat">
+                {{ $t('kehittamistoimenpiteet-riittavat') }}
+              </p>
+              <p v-else>{{ $t('kehittamistoimenpiteet-ei-riittavat') }}</p>
+            </b-col>
+          </b-row>
+          <hr />
+          <koulutuspaikan-arvioijat
+            :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
+            :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
+            :isReadonly="true"
+          />
+          <hr />
+          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <hr v-if="waitingForErikoistuva" />
+        </div>
+
+        <b-form>
+          <b-row v-if="waitingForErikoistuva">
+            <b-col class="text-right">
+              <elsa-button variant="back" :to="{ name: 'koejakso' }">
+                {{ $t('peruuta') }}
+              </elsa-button>
+              <elsa-button
+                :loading="params.saving"
+                variant="primary"
+                class="ml-4 px-5"
+                v-b-modal.confirm-sign
+              >
+                {{ $t('allekirjoita') }}
+              </elsa-button>
+            </b-col>
+          </b-row>
+        </b-form>
+      </div>
+      <div v-else class="text-center">
+        <b-spinner variant="primary" :label="$t('ladataan')" />
+      </div>
     </b-container>
 
-    <b-modal id="confirm-send" :title="$t('vahvista-lomakkeen-lahetys')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-kehittamistoimenpiteet-lahetys') }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="onSendForm">
-          {{ $t('laheta') }}
-        </elsa-button>
-      </template>
-    </b-modal>
-    <b-modal id="confirm-sign" :title="$t('allekirjoita-kehittamistoimenpiteet')">
-      <div class="d-block">
-        <p>{{ $t('vahvista-allekirjoita-kehittamistoimenpiteet') }}</p>
-      </div>
-      <template #modal-footer>
-        <elsa-button variant="back" @click="hideModal('confirm-sign')">
-          {{ $t('peruuta') }}
-        </elsa-button>
-        <elsa-button variant="primary" @click="onSignForm">
-          {{ $t('allekirjoita') }}
-        </elsa-button>
-      </template>
-    </b-modal>
+    <elsa-confirmation-modal
+      id="confirm-send"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="$t('vahvista-koejakson-vaihe-lahetys')"
+      :submitText="$t('laheta')"
+      @submit="onSubmit"
+    />
+    <elsa-confirmation-modal
+      id="confirm-sign"
+      :title="$t('allekirjoita-kehittamistoimenpiteet')"
+      :text="$t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })"
+      :submitText="$t('allekirjoita')"
+      @submit="onSign"
+    />
   </div>
 </template>
 
@@ -166,6 +161,8 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
 
   @Component({
@@ -173,6 +170,8 @@
       ErikoistuvaDetails,
       ElsaFormGroup,
       ElsaButton,
+      ElsaConfirmationModal,
+      ElsaReturnToSenderModal,
       KoulutuspaikanArvioijat,
       KoejaksonVaiheAllekirjoitukset
     }
@@ -197,10 +196,13 @@
     ]
 
     loading = true
+    childFormReady = false
 
     params = {
       saving: false
     }
+
+    koejaksonVaihe = (this.$t('kehittamistoimenpiteiden-arviointi') as string).toLowerCase()
 
     kehittamistoimenpiteetLomake: KehittamistoimenpiteetLomake = {
       erikoistuvaAllekirjoittanut: false,
@@ -233,14 +235,8 @@
       return store.getters['auth/account']
     }
 
-    get newOrReturned() {
-      switch (this.koejaksoData.kehittamistoimenpiteidenTila) {
-        case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
-          return true
-        case LomakeTilat.UUSI:
-          return true
-      }
-      return false
+    get editable() {
+      return this.koejaksoData.kehittamistoimenpiteidenTila === LomakeTilat.UUSI
     }
 
     get signed() {
@@ -312,14 +308,14 @@
       return this.$bvModal.show('confirm-send')
     }
 
-    async onSendForm() {
+    async onSubmit() {
       this.params.saving = true
       this.hideModal('confirm-send')
       this.saveNewForm()
       this.params.saving = false
     }
 
-    async onSignForm() {
+    async onSign() {
       this.params.saving = true
       this.hideModal('confirm-sign')
       this.kehittamistoimenpiteetLomake.erikoistuvaAllekirjoittanut = true
@@ -333,6 +329,10 @@
 
     onLahiesimiesSelect(lahiesimies: KoejaksonVaiheHyvaksyja) {
       this.kehittamistoimenpiteetLomake.lahiesimies = lahiesimies
+    }
+
+    onChildFormReady() {
+      this.childFormReady = true
     }
 
     async saveNewForm() {
@@ -363,7 +363,6 @@
     }
 
     async mounted() {
-      this.loading = true
       if (!this.koejaksoData) {
         await store.dispatch('erikoistuva/getKoejakso')
       }

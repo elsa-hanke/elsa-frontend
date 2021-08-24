@@ -2,65 +2,70 @@
   <b-row>
     <b-col v-if="!isReadonly" lg="10">
       <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
-      <elsa-form-group
-        :label="$t('lahikouluttaja')"
-        :add-new-enabled="true"
-        :add-new-label="$t('lisaa-kouluttaja')"
-        :required="true"
-        @submit="onLahikouluttajaSubmit"
-      >
-        <template v-slot:modal-content="{ submit, cancel }">
-          <kouluttaja-form @submit="submit" @cancel="cancel" />
-        </template>
-        <template v-slot="{ uid }">
-          <elsa-form-multiselect
-            v-model="form.lahikouluttaja"
-            :id="uid"
-            :options="lahikouluttajatList"
-            :state="validateState('lahikouluttaja')"
-            label="nimi"
-            track-by="nimi"
-            @select="onLahikouluttajaSelect"
-          >
-            <template v-slot:option="{ option }">
-              <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
-            </template>
-          </elsa-form-multiselect>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </template>
-      </elsa-form-group>
+      <div v-if="!loading">
+        <elsa-form-group
+          :label="$t('lahikouluttaja')"
+          :add-new-enabled="true"
+          :add-new-label="$t('lisaa-kouluttaja')"
+          :required="true"
+          @submit="onLahikouluttajaSubmit"
+        >
+          <template v-slot:modal-content="{ submit, cancel }">
+            <kouluttaja-form @submit="submit" @cancel="cancel" />
+          </template>
+          <template v-slot="{ uid }">
+            <elsa-form-multiselect
+              v-model="form.lahikouluttaja"
+              :id="uid"
+              :options="lahikouluttajatList"
+              :state="validateState('lahikouluttaja')"
+              label="nimi"
+              track-by="nimi"
+              @select="onLahikouluttajaSelect"
+            >
+              <template v-slot:option="{ option }">
+                <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
+              </template>
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
 
-      <elsa-form-group
-        :label="$t('lahiesimies-tai-muu')"
-        :add-new-enabled="true"
-        :add-new-label="$t('lisaa-henkilo')"
-        :required="true"
-        @submit="onLahiesimiesSubmit"
-      >
-        <template v-slot:modal-content="{ submit, cancel }">
-          <kouluttaja-form @submit="submit" @cancel="cancel" />
-        </template>
-        <template v-slot="{ uid }">
-          <elsa-form-multiselect
-            v-model="form.lahiesimies"
-            :id="uid"
-            :options="lahiesimiesList"
-            :state="validateState('lahiesimies')"
-            label="nimi"
-            track-by="nimi"
-            @select="onLahiesimiesSelect"
-          >
-            <template v-slot:option="{ option }">
-              <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
-            </template>
-          </elsa-form-multiselect>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </template>
-      </elsa-form-group>
+        <elsa-form-group
+          :label="$t('lahiesimies-tai-muu')"
+          :add-new-enabled="true"
+          :add-new-label="$t('lisaa-henkilo')"
+          :required="true"
+          @submit="onLahiesimiesSubmit"
+        >
+          <template v-slot:modal-content="{ submit, cancel }">
+            <kouluttaja-form @submit="submit" @cancel="cancel" />
+          </template>
+          <template v-slot="{ uid }">
+            <elsa-form-multiselect
+              v-model="form.lahiesimies"
+              :id="uid"
+              :options="lahiesimiesList"
+              :state="validateState('lahiesimies')"
+              label="nimi"
+              track-by="nimi"
+              @select="onLahiesimiesSelect"
+            >
+              <template v-slot:option="{ option }">
+                <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
+              </template>
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </div>
+      <div v-else class="text-center">
+        <b-spinner variant="primary" :label="$t('ladataan')" />
+      </div>
     </b-col>
     <b-col v-else lg="10">
       <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
@@ -127,12 +132,14 @@
       lahiesimies: null
     } as any
 
+    loading = true
+
     get kouluttajat() {
       return store.getters['erikoistuva/kouluttajat']
     }
 
     get lahikouluttajatList() {
-      return this.kouluttajat.map((k: any) => {
+      return this.kouluttajat?.map((k: any) => {
         if (this.lahiesimies?.id === k.id) {
           return {
             ...k,
@@ -144,7 +151,7 @@
     }
 
     get lahiesimiesList() {
-      return this.kouluttajat.map((k: any) => {
+      return this.kouluttajat?.map((k: any) => {
         if (this.lahikouluttaja?.id === k.id) {
           return {
             ...k,
@@ -216,6 +223,7 @@
       await store.dispatch('erikoistuva/getKouluttajat')
       this.form.lahikouluttaja = this.lahikouluttaja?.id ? this.lahikouluttaja : null
       this.form.lahiesimies = this.lahiesimies?.id ? this.lahiesimies : null
+      this.loading = false
     }
   }
 </script>
