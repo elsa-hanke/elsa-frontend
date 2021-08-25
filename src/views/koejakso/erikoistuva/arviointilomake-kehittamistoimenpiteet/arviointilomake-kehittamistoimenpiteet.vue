@@ -30,7 +30,7 @@
                   </div>
                 </div>
               </b-alert>
-              <b-alert variant="success" :show="signed">
+              <b-alert variant="success" :show="acceptedByEveryone">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
@@ -56,39 +56,8 @@
             ></erikoistuva-details>
           </b-col>
         </b-row>
-
         <hr />
-
-        <b-form v-if="editable">
-          <koulutuspaikan-arvioijat
-            ref="koulutuspaikanArvioijat"
-            :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
-            :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
-            :params="params"
-            @lahikouluttajaSelect="onLahikouluttajaSelect"
-            @lahiesimiesSelect="onLahiesimiesSelect"
-            @ready="onChildFormReady"
-          />
-          <hr />
-          <b-row>
-            <b-col class="text-right">
-              <elsa-button variant="back" :to="{ name: 'koejakso' }">
-                {{ $t('peruuta') }}
-              </elsa-button>
-              <elsa-button
-                @click="validateAndConfirmSend"
-                :disabled="!childFormReady"
-                :loading="params.saving"
-                variant="primary"
-                class="ml-4 px-5"
-              >
-                {{ $t('laheta') }}
-              </elsa-button>
-            </b-col>
-          </b-row>
-        </b-form>
-
-        <div v-if="!editable">
+        <div v-if="waitingForErikoistuva || acceptedByEveryone">
           <b-row>
             <b-col lg="10">
               <h3>{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
@@ -99,33 +68,42 @@
             </b-col>
           </b-row>
           <hr />
-          <koulutuspaikan-arvioijat
-            :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
-            :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
-            :isReadonly="true"
-          />
-          <hr />
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
-          <hr v-if="waitingForErikoistuva" />
         </div>
 
-        <b-form>
-          <b-row v-if="waitingForErikoistuva">
+        <koulutuspaikan-arvioijat
+          ref="koulutuspaikanArvioijat"
+          :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
+          :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
+          :params="params"
+          :isReadonly="!editable"
+          @lahikouluttajaSelect="onLahikouluttajaSelect"
+          @lahiesimiesSelect="onLahiesimiesSelect"
+        />
+        <hr />
+
+        <div v-if="waitingForErikoistuva || acceptedByEveryone">
+          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+        </div>
+
+        <div v-if="editable || waitingForErikoistuva">
+          <hr v-if="allekirjoitukset.length > 0" />
+          <b-row>
             <b-col class="text-right">
               <elsa-button variant="back" :to="{ name: 'koejakso' }">
                 {{ $t('peruuta') }}
               </elsa-button>
               <elsa-button
+                v-if="!loading"
+                @click="sendForm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
                 :loading="params.saving"
                 variant="primary"
                 class="ml-4 px-5"
-                v-b-modal.confirm-sign
               >
-                {{ $t('allekirjoita') }}
+                {{ waitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
-        </b-form>
+        </div>
       </div>
       <div v-else class="text-center">
         <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -196,7 +174,6 @@
     ]
 
     loading = true
-    childFormReady = false
 
     params = {
       saving: false
@@ -239,7 +216,7 @@
       return this.koejaksoData.kehittamistoimenpiteidenTila === LomakeTilat.UUSI
     }
 
-    get signed() {
+    get acceptedByEveryone() {
       return this.koejaksoData.kehittamistoimenpiteidenTila == LomakeTilat.HYVAKSYTTY
     }
 
@@ -300,12 +277,11 @@
       return this.$bvModal.hide(id)
     }
 
-    validateAndConfirmSend() {
-      if (this.$refs.koulutuspaikanArvioijat.hasErrors()) {
+    sendForm(modalId: string) {
+      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
         return
       }
-
-      return this.$bvModal.show('confirm-send')
+      return this.$bvModal.show(modalId)
     }
 
     async onSubmit() {
@@ -329,10 +305,6 @@
 
     onLahiesimiesSelect(lahiesimies: KoejaksonVaiheHyvaksyja) {
       this.kehittamistoimenpiteetLomake.lahiesimies = lahiesimies
-    }
-
-    onChildFormReady() {
-      this.childFormReady = true
     }
 
     async saveNewForm() {
