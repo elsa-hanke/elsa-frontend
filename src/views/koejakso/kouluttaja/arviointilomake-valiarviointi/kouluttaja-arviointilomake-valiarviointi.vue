@@ -486,9 +486,9 @@
       )
 
       return [
-        allekirjoitusErikoistuva,
         allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies
+        allekirjoitusLahiesimies,
+        allekirjoitusErikoistuva
       ].filter((a) => a !== null)
     }
 
