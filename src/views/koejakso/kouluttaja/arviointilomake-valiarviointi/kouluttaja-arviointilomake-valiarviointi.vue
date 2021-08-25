@@ -139,6 +139,7 @@
                   :options="kehittamistoimenpideKategoriat"
                   :required="true"
                   :state="validateState('kehittamistoimenpideKategoriat')"
+                  stacked
                 ></b-form-checkbox-group>
                 <b-form-invalid-feedback
                   :id="`${uid}-feedback`"
@@ -552,5 +553,10 @@
 <style lang="scss">
   .textarea-min-height {
     min-height: 100px;
+  }
+
+  .custom-control.custom-checkbox {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
   }
 </style>
