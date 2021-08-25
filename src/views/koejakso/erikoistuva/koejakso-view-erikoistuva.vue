@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid v-if="!loading">
+    <b-container fluid>
       <b-row lg>
         <b-col>
           <h1>{{ $t('koejakso') }}</h1>
@@ -13,134 +13,138 @@
           </p>
         </b-col>
       </b-row>
-
-      <b-row lg>
-        <b-col>
-          <div class="d-flex justify-content-center border rounded pt-3 pb-3 mb-4">
-            <div class="container-fluid">
-              <h2>{{ $t('koejakson-suorituspaikka') }}</h2>
-              <p>{{ $t('koejakson-suorituspaikka-kuvaus') }}</p>
-              <b-row>
-                <b-col>
-                  <b-row>
-                    <b-col class="mt-2" cols="12" md="9">
-                      <elsa-form-group
-                        :label="$t('tyoskentelyjakso')"
-                        :add-new-enabled="true"
-                        :add-new-label="$t('lisaa-tyoskentelyjakso')"
-                        :required="false"
-                        @submit="onTyoskentelyjaksoSubmit"
+      <div v-if="!loading">
+        <b-row lg>
+          <b-col>
+            <div class="d-flex justify-content-center border rounded pt-3 pb-3 mb-4">
+              <div class="container-fluid">
+                <h2>{{ $t('koejakson-suorituspaikka') }}</h2>
+                <p>{{ $t('koejakson-suorituspaikka-kuvaus') }}</p>
+                <b-row>
+                  <b-col>
+                    <b-row>
+                      <b-col class="mt-2" cols="12" md="9">
+                        <elsa-form-group
+                          :label="$t('tyoskentelyjakso')"
+                          :add-new-enabled="true"
+                          :add-new-label="$t('lisaa-tyoskentelyjakso')"
+                          :required="false"
+                          @submit="onTyoskentelyjaksoSubmit"
+                        >
+                          <template v-slot:modal-content="{ submit, cancel }">
+                            <tyoskentelyjakso-form
+                              :kunnat="kunnat"
+                              :erikoisalat="erikoisalat"
+                              @submit="submit"
+                              @cancel="cancel"
+                            />
+                          </template>
+                          <template v-slot="{ uid }">
+                            <elsa-form-multiselect
+                              :id="uid"
+                              v-model="form.tyoskentelyjakso"
+                              :options="tyoskentelyjaksotFormatted"
+                              label="label"
+                              track-by="id"
+                              @select="onTyoskentelyjaksoSelect"
+                            />
+                            <b-form-invalid-feedback :id="`${uid}-feedback`">
+                              {{ $t('pakollinen-tieto') }}
+                            </b-form-invalid-feedback>
+                          </template>
+                        </elsa-form-group>
+                      </b-col>
+                      <b-col
+                        align-self="center"
+                        class="mt-md-3 mb-3 mb-md-0 pl-3 pl-md-0"
+                        cols="9"
+                        md="3"
                       >
-                        <template v-slot:modal-content="{ submit, cancel }">
-                          <tyoskentelyjakso-form
-                            :kunnat="kunnat"
-                            :erikoisalat="erikoisalat"
-                            @submit="submit"
-                            @cancel="cancel"
-                          />
-                        </template>
-                        <template v-slot="{ uid }">
-                          <elsa-form-multiselect
-                            :id="uid"
-                            v-model="form.tyoskentelyjakso"
-                            :options="tyoskentelyjaksotFormatted"
-                            label="label"
-                            track-by="id"
-                            @select="onTyoskentelyjaksoSelect"
-                          />
-                          <b-form-invalid-feedback :id="`${uid}-feedback`">
-                            {{ $t('pakollinen-tieto') }}
-                          </b-form-invalid-feedback>
-                        </template>
-                      </elsa-form-group>
-                    </b-col>
-                    <b-col
-                      align-self="center"
-                      class="mt-md-3 mb-3 mb-md-0 pl-3 pl-md-0"
-                      cols="9"
-                      md="3"
-                    >
-                      <elsa-button
-                        variant="primary"
-                        :disabled="!form.tyoskentelyjakso"
-                        :loading="tyoskentelyjaksoUpdating"
-                        @click="onTyoskentelyjaksoAttached"
-                      >
-                        {{ $t('liita-koejaksoon') }}
-                      </elsa-button>
-                    </b-col>
-                  </b-row>
-                </b-col>
-                <b-table
-                  class="tyoskentelyjaksot-koejakso-table mt-1 mr-3 mr-md-4 ml-3"
-                  v-if="tyoskentelyjaksotKoejakso.length > 0"
-                  :items="tyoskentelyjaksotKoejakso"
-                  :fields="fields"
-                  :sort-by.sync="sortBy"
-                  :sort-desc.sync="sortDesc"
-                  stacked="sm"
-                >
-                  <template #table-colgroup="scope">
-                    <col
-                      v-for="field in scope.fields"
-                      :key="field.key"
-                      :style="{ width: `${field.width}%` }"
-                    />
-                  </template>
-                  <template #cell(formattedNimi)="row">
-                    <elsa-button
-                      :to="{
-                        name: 'tyoskentelyjakso',
-                        params: { tyoskentelyjaksoId: row.item.id }
-                      }"
-                      variant="link"
-                      class="shadow-none p-0 text-left"
-                    >
-                      {{ row.item.formattedNimi }}
-                    </elsa-button>
-                  </template>
-                  <template #cell(delete)="row">
-                    <elsa-button
-                      @click="onTyoskentelyjaksoDetached(row.item)"
-                      variant="outline-primary"
-                      class="border-0 p-0"
-                      :loading="row.item.disableDelete"
-                    >
-                      <font-awesome-icon
-                        :hidden="row.item.disableDelete"
-                        :icon="['far', 'trash-alt']"
-                        fixed-width
-                        size="lg"
+                        <elsa-button
+                          variant="primary"
+                          :disabled="!form.tyoskentelyjakso"
+                          :loading="tyoskentelyjaksoUpdating"
+                          @click="onTyoskentelyjaksoAttached"
+                        >
+                          {{ $t('liita-koejaksoon') }}
+                        </elsa-button>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-table
+                    class="tyoskentelyjaksot-koejakso-table mt-1 mr-3 mr-md-4 ml-3"
+                    v-if="tyoskentelyjaksotKoejakso.length > 0"
+                    :items="tyoskentelyjaksotKoejakso"
+                    :fields="fields"
+                    :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc"
+                    stacked="sm"
+                  >
+                    <template #table-colgroup="scope">
+                      <col
+                        v-for="field in scope.fields"
+                        :key="field.key"
+                        :style="{ width: `${field.width}%` }"
                       />
-                    </elsa-button>
-                  </template>
-                </b-table>
-              </b-row>
+                    </template>
+                    <template #cell(formattedNimi)="row">
+                      <elsa-button
+                        :to="{
+                          name: 'tyoskentelyjakso',
+                          params: { tyoskentelyjaksoId: row.item.id }
+                        }"
+                        variant="link"
+                        class="shadow-none p-0 text-left"
+                      >
+                        {{ row.item.formattedNimi }}
+                      </elsa-button>
+                    </template>
+                    <template #cell(delete)="row">
+                      <elsa-button
+                        @click="onTyoskentelyjaksoDetached(row.item)"
+                        variant="outline-primary"
+                        class="border-0 p-0"
+                        :loading="row.item.disableDelete"
+                      >
+                        <font-awesome-icon
+                          :hidden="row.item.disableDelete"
+                          :icon="['far', 'trash-alt']"
+                          fixed-width
+                          size="lg"
+                        />
+                      </elsa-button>
+                    </template>
+                  </b-table>
+                </b-row>
+              </div>
             </div>
-          </div>
-        </b-col>
-      </b-row>
+          </b-col>
+        </b-row>
 
-      <b-row lg>
-        <b-col>
-          <elsa-koulutussopimus-card></elsa-koulutussopimus-card>
-        </b-col>
-      </b-row>
+        <b-row lg>
+          <b-col>
+            <elsa-koulutussopimus-card></elsa-koulutussopimus-card>
+          </b-col>
+        </b-row>
 
-      <b-row lg>
-        <b-col>
-          <h1>{{ $t('koejakson-arviointi') }}</h1>
-          <elsa-aloituskeskustelu-card></elsa-aloituskeskustelu-card>
+        <b-row lg>
+          <b-col>
+            <h1>{{ $t('koejakson-arviointi') }}</h1>
+            <elsa-aloituskeskustelu-card></elsa-aloituskeskustelu-card>
 
-          <elsa-valiarviointi-card></elsa-valiarviointi-card>
+            <elsa-valiarviointi-card></elsa-valiarviointi-card>
 
-          <elsa-kehittamistoimenpiteet-card></elsa-kehittamistoimenpiteet-card>
+            <elsa-kehittamistoimenpiteet-card></elsa-kehittamistoimenpiteet-card>
 
-          <elsa-loppukeskustelu-card></elsa-loppukeskustelu-card>
+            <elsa-loppukeskustelu-card></elsa-loppukeskustelu-card>
 
-          <elsa-vastuuhenkilon-arvio-card></elsa-vastuuhenkilon-arvio-card>
-        </b-col>
-      </b-row>
+            <elsa-vastuuhenkilon-arvio-card></elsa-vastuuhenkilon-arvio-card>
+          </b-col>
+        </b-row>
+      </div>
+      <div v-else class="text-center">
+        <b-spinner variant="primary" :label="$t('ladataan')" />
+      </div>
     </b-container>
   </div>
 </template>

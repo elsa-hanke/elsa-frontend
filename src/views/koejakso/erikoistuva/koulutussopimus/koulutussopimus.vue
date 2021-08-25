@@ -1,87 +1,94 @@
 <template>
   <div class="koulutussopimus col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid v-if="!loading">
-      <b-row lg>
-        <b-col>
-          <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
-          <b-alert :show="showReturned" variant="danger" class="mt-3">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
-              </em>
-              <div>
-                {{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}
-                <span class="d-block">
-                  {{ $t('syy') }}&nbsp;
-                  <span class="font-weight-500">{{ korjausehdotus }}</span>
-                </span>
+    <b-container fluid>
+      <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
+      <div v-if="!loading">
+        <b-row lg>
+          <b-col>
+            <b-alert :show="showReturned" variant="danger" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                </em>
+                <div>
+                  {{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}
+                  <span class="d-block">
+                    {{ $t('syy') }}&nbsp;
+                    <span class="font-weight-500">{{ korjausehdotus }}</span>
+                  </span>
+                </div>
               </div>
+            </b-alert>
+            <div v-if="editable">
+              <p>{{ $t('koulutussopimus-ingressi-1') }}</p>
+              <p>
+                {{ $t('koulutussopimus-ingressi-2') }}
+                <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
+                  {{ $t('koejakso-tavoitteet-linkki') }}
+                </b-link>
+              </p>
             </div>
-          </b-alert>
-          <div v-if="editable">
-            <p>{{ $t('koulutussopimus-ingressi-1') }}</p>
-            <p>
-              {{ $t('koulutussopimus-ingressi-2') }}
-              <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
-                {{ $t('koejakso-tavoitteet-linkki') }}
-              </b-link>
-            </p>
-          </div>
-          <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-              </em>
-              <div>{{ $t('koulutussopimus-tila-odottaa-hyvaksyntaa') }}</div>
-            </div>
-          </b-alert>
-          <b-alert variant="success" :show="showAcceptedByEveryone">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-              </em>
-              <div>
-                {{ $t('koulutussopimus-tila-hyvaksytty') }}
-                <span class="d-block">{{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}</span>
+            <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>{{ $t('koulutussopimus-tila-odottaa-hyvaksyntaa') }}</div>
               </div>
-            </div>
-          </b-alert>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <erikoistuva-details
-            :firstName="account.firstName"
-            :lastName="account.lastName"
-            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
-            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
-            :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
-            :yliopisto="account.erikoistuvaLaakari.yliopisto"
-          ></erikoistuva-details>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <koulutussopimus-form
-            v-if="editable"
-            :data="koejaksoData.koulutussopimus"
-            :account="account"
-            :kouluttajat="kouluttajat"
-            :vastuuhenkilot="vastuuhenkilot"
-            :yliopistot="yliopistot"
-            @saveAndExit="onSaveDraftAndExit"
-            @submit="onSubmit"
-          ></koulutussopimus-form>
+            </b-alert>
+            <b-alert variant="success" :show="showAcceptedByEveryone">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                <div>
+                  {{ $t('koulutussopimus-tila-hyvaksytty') }}
+                  <span class="d-block">
+                    {{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}
+                  </span>
+                </div>
+              </div>
+            </b-alert>
+          </b-col>
+        </b-row>
+        <hr />
+        <b-row>
+          <b-col>
+            <erikoistuva-details
+              :firstName="account.firstName"
+              :lastName="account.lastName"
+              :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+              :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+              :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
+              :yliopisto="account.erikoistuvaLaakari.yliopisto"
+            ></erikoistuva-details>
+          </b-col>
+        </b-row>
+        <hr />
+        <b-row>
+          <b-col>
+            <koulutussopimus-form
+              v-if="editable"
+              :data="koejaksoData.koulutussopimus"
+              :account="account"
+              :kouluttajat="kouluttajat"
+              :vastuuhenkilot="vastuuhenkilot"
+              :yliopistot="yliopistot"
+              @saveAndExit="onSaveDraftAndExit"
+              @submit="onSubmit"
+            ></koulutussopimus-form>
 
-          <koulutussopimus-readonly
-            v-if="!editable"
-            :data="koejaksoData.koulutussopimus"
-          ></koulutussopimus-readonly>
-        </b-col>
-      </b-row>
+            <koulutussopimus-readonly
+              v-if="!editable"
+              :data="koejaksoData.koulutussopimus"
+            ></koulutussopimus-readonly>
+          </b-col>
+        </b-row>
+      </div>
+      <div v-else class="text-center">
+        <b-spinner variant="primary" :label="$t('ladataan')" />
+      </div>
     </b-container>
   </div>
 </template>

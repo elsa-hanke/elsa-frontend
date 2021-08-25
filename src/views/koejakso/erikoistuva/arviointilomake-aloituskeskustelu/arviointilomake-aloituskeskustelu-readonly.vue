@@ -45,6 +45,7 @@
         <p>{{ data.koejaksonOsaamistavoitteet }}</p>
       </b-col>
     </b-row>
+    <hr />
     <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
   </div>
 </template>
