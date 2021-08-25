@@ -56,6 +56,7 @@
         <p>{{ data.vastuuhenkilo.nimi }}, {{ data.vastuuhenkilo.nimike }}</p>
       </b-col>
     </b-row>
+    <hr />
     <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
   </div>
 </template>

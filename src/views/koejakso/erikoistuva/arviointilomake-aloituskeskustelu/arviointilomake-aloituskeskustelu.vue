@@ -1,81 +1,86 @@
 <template>
   <div class="koulutussopimus col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid v-if="!loading">
-      <b-row lg>
-        <b-col>
-          <h1 class="mb-3">{{ $t('koejakson-aloituskeskustelu') }}</h1>
-          <b-alert :show="showReturned" variant="danger" class="mt-3">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
-              </em>
-              <div>
-                {{ $t('aloituskeskustelu-tila-palautettu-korjattavaksi') }}
-                <span class="d-block">
-                  {{ $t('syy') }}&nbsp;
-                  <span class="font-weight-500">{{ korjausehdotus }}</span>
-                </span>
+    <b-container fluid>
+      <h1 class="mb-3">{{ $t('koejakson-aloituskeskustelu') }}</h1>
+      <div v-if="!loading">
+        <b-row lg>
+          <b-col>
+            <b-alert :show="showReturned" variant="danger" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                </em>
+                <div>
+                  {{ $t('aloituskeskustelu-tila-palautettu-korjattavaksi') }}
+                  <span class="d-block">
+                    {{ $t('syy') }}&nbsp;
+                    <span class="font-weight-500">{{ korjausehdotus }}</span>
+                  </span>
+                </div>
               </div>
+            </b-alert>
+            <div v-if="editable">
+              <p>{{ $t('koejakson-aloituskeskustelu-ingressi-1') }}</p>
+              <p>
+                {{ $t('koejakson-aloituskeskustelu-ingressi-2') }}
+                <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
+                  {{ $t('koejakso-tavoitteet-linkki') }}
+                </b-link>
+              </p>
             </div>
-          </b-alert>
-          <div v-if="editable">
-            <p>{{ $t('koejakson-aloituskeskustelu-ingressi-1') }}</p>
-            <p>
-              {{ $t('koejakson-aloituskeskustelu-ingressi-2') }}
-              <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
-                {{ $t('koejakso-tavoitteet-linkki') }}
-              </b-link>
-            </p>
-          </div>
-          <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-              </em>
-              <div>
-                {{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}
+            <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}
+                </div>
               </div>
-            </div>
-          </b-alert>
-          <b-alert variant="success" :show="showAcceptedByEveryone">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-              </em>
-              <span>{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
-            </div>
-          </b-alert>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <erikoistuva-details
-            :firstName="account.firstName"
-            :lastName="account.lastName"
-            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
-            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
-            :yliopisto="account.erikoistuvaLaakari.yliopisto"
-            :show-birthdate="false"
-          ></erikoistuva-details>
-        </b-col>
-      </b-row>
-      <hr />
-      <arviointilomake-aloituskeskustelu-form
-        v-if="editable"
-        :account="account"
-        :data="koejaksoData.aloituskeskustelu"
-        :kouluttajat="kouluttajat"
-        :henkilot="kouluttajat"
-        @saveAndExit="onSaveDraftAndExit"
-        @submit="onSubmit"
-      ></arviointilomake-aloituskeskustelu-form>
+            </b-alert>
+            <b-alert variant="success" :show="showAcceptedByEveryone">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                <span>{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
+              </div>
+            </b-alert>
+          </b-col>
+        </b-row>
+        <hr />
+        <b-row>
+          <b-col>
+            <erikoistuva-details
+              :firstName="account.firstName"
+              :lastName="account.lastName"
+              :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+              :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+              :yliopisto="account.erikoistuvaLaakari.yliopisto"
+              :show-birthdate="false"
+            ></erikoistuva-details>
+          </b-col>
+        </b-row>
+        <hr />
+        <arviointilomake-aloituskeskustelu-form
+          v-if="editable"
+          :account="account"
+          :data="koejaksoData.aloituskeskustelu"
+          :kouluttajat="kouluttajat"
+          :henkilot="kouluttajat"
+          @saveAndExit="onSaveDraftAndExit"
+          @submit="onSubmit"
+        ></arviointilomake-aloituskeskustelu-form>
 
-      <arviointilomake-aloituskeskustelu-readonly
-        v-if="!editable"
-        :data="koejaksoData.aloituskeskustelu"
-      ></arviointilomake-aloituskeskustelu-readonly>
+        <arviointilomake-aloituskeskustelu-readonly
+          v-if="!editable"
+          :data="koejaksoData.aloituskeskustelu"
+        ></arviointilomake-aloituskeskustelu-readonly>
+      </div>
+      <div v-else class="text-center">
+        <b-spinner variant="primary" :label="$t('ladataan')" />
+      </div>
     </b-container>
   </div>
 </template>

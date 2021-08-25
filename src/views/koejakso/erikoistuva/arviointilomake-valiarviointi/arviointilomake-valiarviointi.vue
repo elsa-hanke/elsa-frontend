@@ -1,137 +1,146 @@
 <template>
   <div class="koulutussopimus col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid v-if="!loading">
-      <b-row lg>
-        <b-col>
-          <h1 class="mb-3">{{ $t('koejakson-valiarviointi') }}</h1>
-          <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-              </em>
-              <div>
-                {{ $t('valiarviointi-tila-odottaa-hyvaksyntaa') }}
-              </div>
-            </div>
-          </b-alert>
-          <b-alert :show="showWaitingForErikoistuva" variant="dark" class="mt-3">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-              </em>
-              <div>
-                {{ $t('valiarviointi-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
-              </div>
-            </div>
-          </b-alert>
-          <b-alert variant="success" :show="showAcceptedByEveryone">
-            <div class="d-flex flex-row">
-              <em class="align-middle">
-                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-              </em>
-              <span>{{ $t('valiarviointi-tila-hyvaksytty') }}</span>
-            </div>
-          </b-alert>
-          <div v-if="editable">
-            <p>{{ $t('koejakson-valiarviointi-ingressi') }}</p>
-          </div>
-        </b-col>
-      </b-row>
-      <hr />
-      <b-row>
-        <b-col>
-          <erikoistuva-details
-            :firstName="account.firstName"
-            :lastName="account.lastName"
-            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
-            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
-            :yliopisto="account.erikoistuvaLaakari.yliopisto"
-            :show-birthdate="false"
-          ></erikoistuva-details>
-        </b-col>
-      </b-row>
 
-      <hr />
-
-      <b-form v-if="editable">
-        <koulutuspaikan-arvioijat
-          ref="koulutuspaikanArvioijat"
-          :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
-          :lahiesimies="valiarviointiLomake.lahiesimies"
-          :params="params"
-          @lahikouluttajaSelect="onLahikouluttajaSelect"
-          @lahiesimiesSelect="onLahiesimiesSelect"
-        />
-      </b-form>
-
-      <div v-if="showWaitingForErikoistuva || showAcceptedByEveryone">
-        <h3 class="mb-3">{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
-        <b-row>
-          <b-col lg="8">
-            <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
-            <p>
-              {{
-                valiarviointiLomake.edistyminenTavoitteidenMukaista
-                  ? $t('kylla')
-                  : $t('ei-huolenaiheita-on')
-              }}
-            </p>
-          </b-col>
-        </b-row>
-        <b-row v-if="valiarviointiLomake.edistyminenTavoitteidenMukaista === false">
-          <b-col lg="8">
-            <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
-            <ul class="pl-4">
-              <li v-for="kategoria in sortedKategoriat" :key="kategoria">
-                {{ naytaKehittamistoimenpideKategoria(kategoria) }}
-              </li>
-            </ul>
-          </b-col>
-        </b-row>
-        <b-row>
+    <b-container fluid>
+      <h1 class="mb-3">{{ $t('koejakson-valiarviointi') }}</h1>
+      <div v-if="!loading">
+        <b-row lg>
           <b-col>
-            <h5>{{ $t('vahvuudet') }}</h5>
-            <p>{{ valiarviointiLomake.vahvuudet }}</p>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
-            <p>{{ valiarviointiLomake.kehittamistoimenpiteet }}</p>
+            <b-alert :show="showWaitingForAcceptance" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('valiarviointi-tila-odottaa-hyvaksyntaa') }}
+                </div>
+              </div>
+            </b-alert>
+            <b-alert :show="showWaitingForErikoistuva" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('valiarviointi-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
+                </div>
+              </div>
+            </b-alert>
+            <b-alert variant="success" :show="showAcceptedByEveryone">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                <span>{{ $t('valiarviointi-tila-hyvaksytty') }}</span>
+              </div>
+            </b-alert>
+            <div v-if="editable">
+              <p>{{ $t('koejakson-valiarviointi-ingressi') }}</p>
+            </div>
           </b-col>
         </b-row>
         <hr />
-      </div>
-
-      <div v-if="!editable">
-        <koulutuspaikan-arvioijat
-          :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
-          :lahiesimies="valiarviointiLomake.lahiesimies"
-          :isReadonly="true"
-        />
-      </div>
-
-      <div v-if="showWaitingForErikoistuva || showAcceptedByEveryone">
-        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
-      </div>
-
-      <div v-if="editable || showWaitingForErikoistuva">
-        <hr />
-
         <b-row>
-          <b-col class="text-right">
-            <elsa-button variant="back" :to="{ name: 'koejakso' }">{{ $t('peruuta') }}</elsa-button>
-            <elsa-button
-              @click="sendForm(showWaitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
-              :loading="params.saving"
-              variant="primary"
-              class="ml-4 px-5"
-            >
-              {{ showWaitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
-            </elsa-button>
+          <b-col>
+            <erikoistuva-details
+              :firstName="account.firstName"
+              :lastName="account.lastName"
+              :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
+              :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+              :yliopisto="account.erikoistuvaLaakari.yliopisto"
+              :show-birthdate="false"
+            ></erikoistuva-details>
           </b-col>
         </b-row>
+
+        <hr />
+
+        <b-form v-if="editable">
+          <koulutuspaikan-arvioijat
+            ref="koulutuspaikanArvioijat"
+            :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
+            :lahiesimies="valiarviointiLomake.lahiesimies"
+            :params="params"
+            @lahikouluttajaSelect="onLahikouluttajaSelect"
+            @lahiesimiesSelect="onLahiesimiesSelect"
+          />
+          <hr />
+        </b-form>
+        <div v-if="showWaitingForErikoistuva || showAcceptedByEveryone">
+          <h3 class="mb-3">{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
+          <b-row>
+            <b-col lg="8">
+              <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
+              <p>
+                {{
+                  valiarviointiLomake.edistyminenTavoitteidenMukaista
+                    ? $t('kylla')
+                    : $t('ei-huolenaiheita-on')
+                }}
+              </p>
+            </b-col>
+          </b-row>
+          <b-row v-if="valiarviointiLomake.edistyminenTavoitteidenMukaista === false">
+            <b-col lg="8">
+              <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
+              <ul class="pl-4">
+                <li v-for="kategoria in sortedKategoriat" :key="kategoria">
+                  {{ naytaKehittamistoimenpideKategoria(kategoria) }}
+                </li>
+              </ul>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('vahvuudet') }}</h5>
+              <p>{{ valiarviointiLomake.vahvuudet }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
+              <p>{{ valiarviointiLomake.kehittamistoimenpiteet }}</p>
+            </b-col>
+          </b-row>
+          <hr />
+        </div>
+
+        <div v-if="!editable">
+          <koulutuspaikan-arvioijat
+            :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
+            :lahiesimies="valiarviointiLomake.lahiesimies"
+            :isReadonly="true"
+          />
+          <hr />
+        </div>
+
+        <div v-if="showWaitingForErikoistuva || showAcceptedByEveryone">
+          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+        </div>
+
+        <div v-if="editable || showWaitingForErikoistuva">
+          <hr v-if="allekirjoitukset.length > 0" />
+          <b-row>
+            <b-col class="text-right">
+              <elsa-button variant="back" :to="{ name: 'koejakso' }">
+                {{ $t('peruuta') }}
+              </elsa-button>
+              <elsa-button
+                v-if="!loading"
+                @click="sendForm(showWaitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
+                :loading="params.saving"
+                variant="primary"
+                class="ml-4 px-5"
+              >
+                {{ showWaitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
+              </elsa-button>
+            </b-col>
+          </b-row>
+        </div>
+      </div>
+      <div v-else class="text-center">
+        <b-spinner variant="primary" :label="$t('ladataan')" />
       </div>
     </b-container>
 
@@ -308,9 +317,9 @@
       )
 
       return [
-        allekirjoitusErikoistuva,
         allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies
+        allekirjoitusLahiesimies,
+        allekirjoitusErikoistuva
       ].filter((a) => a !== null)
     }
 
@@ -323,7 +332,7 @@
     }
 
     sendForm(modalId: string) {
-      if (this.$refs.koulutuspaikanArvioijat.hasErrors()) {
+      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
         return
       }
       return this.$bvModal.show(modalId)
@@ -349,7 +358,13 @@
 
     async updateForm() {
       try {
-        await store.dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
+        await store
+          .dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
+          .then((res) => {
+            this.valiarviointiLomake.erikoistuvanAllekirjoitusaika =
+              res.data.erikoistuvanAllekirjoitusaika
+          })
+
         this.hideModal('confirm-sign')
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-onnistuneesti'))
       } catch (err) {
