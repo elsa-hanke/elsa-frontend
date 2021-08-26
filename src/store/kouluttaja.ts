@@ -85,6 +85,22 @@ const kouluttaja: Module<any, any> = {
             reject(error)
           })
       })
+    },
+    async putKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
+      commit('formRequest')
+      return new Promise((resolve, reject) => {
+        api
+          .putKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
+          .then((response) => {
+            commit('formSuccess')
+            dispatch('getKoejakso')
+            resolve(response)
+          })
+          .catch((error) => {
+            commit('formError')
+            reject(error)
+          })
+      })
     }
   },
   getters: {

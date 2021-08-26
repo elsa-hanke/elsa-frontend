@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { AloituskeskusteluLomake, KoulutussopimusLomake, ValiarviointiLomake } from '@/types'
+import {
+  AloituskeskusteluLomake,
+  KehittamistoimenpiteetLomake,
+  KoulutussopimusLomake,
+  ValiarviointiLomake
+} from '@/types'
 
 export async function getKoejaksot() {
   const path = 'kouluttaja/koejaksot'
@@ -33,5 +38,15 @@ export async function getValiarviointi(id: number) {
 
 export async function putValiarviointi(form: ValiarviointiLomake) {
   const path = 'kouluttaja/koejakso/valiarviointi'
+  return await axios.put(path, form)
+}
+
+export async function getKehittamistoimenpiteet(id: number) {
+  const path = `/kouluttaja/koejakso/kehittamistoimenpiteet/${id}`
+  return await axios.get(path)
+}
+
+export async function putKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
+  const path = 'kouluttaja/koejakso/kehittamistoimenpiteet'
   return await axios.put(path, form)
 }

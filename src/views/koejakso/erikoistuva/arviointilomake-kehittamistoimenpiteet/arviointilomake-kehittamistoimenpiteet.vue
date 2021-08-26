@@ -313,9 +313,9 @@
           'erikoistuva/postKehittamistoimenpiteet',
           this.kehittamistoimenpiteetLomake
         )
-        toastSuccess(this, this.$t('kehittamistoimenpiteet-lahetetty-onnistuneesti'))
+        toastSuccess(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-onnistui'))
       } catch (err) {
-        toastFail(this, this.$t('kehittamistoimenpiteet-tallennus-epaonnistui'))
+        toastFail(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-epaonnistui'))
       }
     }
 

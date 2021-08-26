@@ -38,6 +38,7 @@ import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoi
 import Koulutussopimus from '../views/koejakso/kouluttajavastuuhenkilo/koulutussopimus/koulutussopimus.vue'
 import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
 import KouluttajaArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja/arviointilomake-valiarviointi/kouluttaja-arviointilomake-valiarviointi.vue'
+import KouluttajaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/kouluttaja/arviointilomake-kehittamistoimenpiteet/kouluttaja-arviointilomake-kehittamistoimenpiteet.vue'
 import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/erikoistuva/arviointilomake-kehittamistoimenpiteet/arviointilomake-kehittamistoimenpiteet.vue'
 import store from '@/store'
@@ -295,6 +296,18 @@ const routes: Array<RouteConfig> = [
             path: 'valiarviointi/:id',
             name: 'valiarviointi-kouluttaja',
             component: KouluttajaArviointilomakeValiarviointi,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isKouluttaja()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
+          },
+          {
+            path: 'kehittamistoimenpiteet/:id',
+            name: 'kehittamistoimenpiteet-kouluttaja',
+            component: KouluttajaArviointilomakeKehittamistoimenpiteet,
             beforeEnter: (to, from, next) => {
               if (Vue.prototype.$isKouluttaja()) {
                 next()
