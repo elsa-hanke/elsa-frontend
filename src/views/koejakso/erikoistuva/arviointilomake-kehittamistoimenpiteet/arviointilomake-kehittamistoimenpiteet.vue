@@ -328,7 +328,7 @@
               res.data.erikoistuvanAllekirjoitusaika
           })
 
-        toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitettu-onnistuneesti'))
+        toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-onnistui'))
       } catch (err) {
         toastFail(this, this.$t('kehittamistoimenpiteet-allekirjoitus-epaonnistui'))
       }
