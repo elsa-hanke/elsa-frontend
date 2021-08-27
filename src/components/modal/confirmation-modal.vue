@@ -53,6 +53,7 @@
 
     // Välitä tapahtuma vanhemmalle
     onSubmit(value: any, params: any) {
+      this.hideModal()
       this.$emit('submit', value, params)
     }
   }

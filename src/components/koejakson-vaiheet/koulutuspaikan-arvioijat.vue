@@ -124,9 +124,6 @@
     @Prop({ required: false, default: false })
     isReadonly!: boolean
 
-    @Prop({ required: false, default: null })
-    params!: any
-
     form = {
       lahikouluttaja: null,
       lahiesimies: null
@@ -173,15 +170,18 @@
     }
 
     async onLahikouluttajaSubmit(value: any, params: any, modal: any) {
-      this.onKoejaksonVaiheHyvaksyjaSubmit(value, modal, false)
+      params.saving = true
+      await this.onKoejaksonVaiheHyvaksyjaSubmit(value, modal, false)
+      params.saving = false
     }
 
     async onLahiesimiesSubmit(value: any, params: any, modal: any) {
-      this.onKoejaksonVaiheHyvaksyjaSubmit(value, modal, true)
+      params.saving = true
+      await this.onKoejaksonVaiheHyvaksyjaSubmit(value, modal, true)
+      params.saving = false
     }
 
     private async onKoejaksonVaiheHyvaksyjaSubmit(value: any, modal: any, isLahiesimies: boolean) {
-      this.params.saving = true
       try {
         const koejaksonVaiheHyvaksyja = (
           await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
@@ -202,7 +202,6 @@
           })
         )
       }
-      this.params.saving = false
     }
 
     optionDisplayName(option: any) {

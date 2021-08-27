@@ -74,8 +74,7 @@
     @Prop({ required: true, default: null })
     index!: number
 
-    async onKouluttajaSubmit(value: any, params: any, modal: any) {
-      params.saving = true
+    async onKouluttajaSubmit(value: any, modal: any) {
       try {
         await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
         modal.hide('confirm')
@@ -89,7 +88,6 @@
           })
         )
       }
-      params.saving = false
     }
 
     form = {

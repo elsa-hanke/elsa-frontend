@@ -169,7 +169,7 @@
               <elsa-button
                 v-if="isCurrentUserLahiesimies"
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                style="width: 14rem"
+                style="min-width: 14rem"
                 variant="outline-primary"
                 v-b-modal.return-to-sender
               >
@@ -177,7 +177,7 @@
               </elsa-button>
               <elsa-button
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                style="width: 14rem"
+                style="min-width: 14rem"
                 variant="primary"
                 :loading="params.saving"
                 @click="sendForm"

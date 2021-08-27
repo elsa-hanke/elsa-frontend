@@ -138,7 +138,7 @@
           </b-row>
           <hr />
           <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
-          <hr v-if="editable" />
+          <hr v-if="allekirjoitukset.length > 0" />
           <b-row v-if="editable && !signed">
             <b-col class="text-right">
               <elsa-button
@@ -151,16 +151,19 @@
               </elsa-button>
               <elsa-button
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                style="width: 14rem"
+                style="min-width: 14rem"
                 variant="outline-primary"
+                :disabled="buttonStates.primaryButtonLoading"
+                :loading="buttonStates.secondaryButtonLoading"
                 v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
               <elsa-button
                 class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                style="width: 14rem"
-                :loading="params.saving"
+                style="min-width: 14rem"
+                :disabled="buttonStates.secondaryButtonLoading"
+                :loading="buttonStates.primaryButtonLoading"
                 type="submit"
                 variant="primary"
               >
@@ -211,7 +214,7 @@
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
-  import { KoulutussopimusLomake, Kouluttaja } from '@/types'
+  import { KoulutussopimusLomake, Kouluttaja, KoejaksonVaiheButtonStates } from '@/types'
   import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
   import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -262,11 +265,6 @@
       }
     ]
 
-    params = {
-      saving: false,
-      deleting: false
-    }
-
     form: KoulutussopimusLomake = {
       id: null,
       erikoistuvanNimi: '',
@@ -289,6 +287,10 @@
 
     loading = true
     childFormValid = false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
+    }
 
     validateState(value: string) {
       const form = this.$v.form
@@ -302,11 +304,6 @@
         return false
       }
       return true
-    }
-
-    hideModal(id: string) {
-      this.params.saving = false
-      return this.$bvModal.hide(id)
     }
 
     onChildFormValid(index: number, form: Kouluttaja) {
@@ -392,7 +389,9 @@
         lahetetty: false
       }
       try {
+        this.buttonStates.secondaryButtonLoading = true
         await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, form)
+        this.buttonStates.secondaryButtonLoading = false
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
@@ -404,7 +403,9 @@
     async updateSentForm() {
       this.skipRouteExitConfirm = true
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, this.form)
+        this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
       } catch (err) {
@@ -413,15 +414,11 @@
     }
 
     onSubmit() {
-      this.params.saving = true
-
       if (this.$isVastuuhenkilo()) {
         this.handleSubmitVastuuhenkilo()
       } else {
         this.handleSubmitKouluttaja()
       }
-
-      this.params.saving = false
     }
 
     private handleSubmitKouluttaja() {

@@ -61,7 +61,6 @@
             ref="koulutuspaikanArvioijat"
             :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
             :lahiesimies="valiarviointiLomake.lahiesimies"
-            :params="params"
             @lahikouluttajaSelect="onLahikouluttajaSelect"
             @lahiesimiesSelect="onLahiesimiesSelect"
           />
@@ -128,8 +127,10 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="sendForm(showWaitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
-                :loading="params.saving"
+                @click="
+                  onValidateAndConfirm(showWaitingForErikoistuva ? 'confirm-sign' : 'confirm-send')
+                "
+                :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-5"
               >
@@ -149,7 +150,7 @@
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
       :submitText="$t('laheta')"
-      @submit="onSubmit"
+      @submit="onSend"
     />
     <elsa-confirmation-modal
       id="confirm-sign"
@@ -170,7 +171,8 @@
     ValiarviointiLomake,
     Koejakso,
     KoejaksonVaiheAllekirjoitus,
-    KoejaksonVaiheHyvaksyja
+    KoejaksonVaiheHyvaksyja,
+    KoejaksonVaiheButtonStates
   } from '@/types'
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -214,8 +216,9 @@
 
     loading = true
 
-    params = {
-      saving: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     koejaksonVaihe = this.$t('valiarviointi')
@@ -335,13 +338,6 @@
       return this.$bvModal.hide(id)
     }
 
-    sendForm(modalId: string) {
-      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
-        return
-      }
-      return this.$bvModal.show(modalId)
-    }
-
     onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
       this.valiarviointiLomake.lahikouluttaja = lahikouluttaja
     }
@@ -350,37 +346,34 @@
       this.valiarviointiLomake.lahiesimies = lahiesimies
     }
 
-    async saveNewForm() {
+    onValidateAndConfirm(modalId: string) {
+      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
+        return
+      }
+      return this.$bvModal.show(modalId)
+    }
+
+    async onSend() {
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/postValiarviointi', this.valiarviointiLomake)
-        this.hideModal('confirm-send')
+        this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('valiarviointi-lahetetty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
       }
     }
 
-    async updateForm() {
+    async onSign() {
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
         this.valiarviointiLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
-        this.hideModal('confirm-sign')
+        this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-onnistuneesti'))
       } catch (err) {
-        toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
+        toastFail(this, this.$t('valiarviointi-allekirjoitus-epaonnistui'))
       }
-    }
-
-    async onSubmit() {
-      this.params.saving = true
-      this.saveNewForm()
-      this.params.saving = false
-    }
-
-    async onSign() {
-      this.params.saving = true
-      this.updateForm()
-      this.params.saving = false
     }
 
     async mounted() {

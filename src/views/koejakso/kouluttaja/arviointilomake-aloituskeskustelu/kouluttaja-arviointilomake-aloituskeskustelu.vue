@@ -114,7 +114,9 @@
           </elsa-button>
           <elsa-button
             class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-            style="width: 14rem"
+            style="min-width: 14rem"
+            :disabled="buttonStates.primaryButtonLoading"
+            :loading="buttonStates.secondaryButtonLoading"
             variant="outline-primary"
             v-b-modal.return-to-sender
           >
@@ -122,7 +124,9 @@
           </elsa-button>
           <elsa-button
             class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-            style="width: 14rem"
+            style="min-width: 14rem"
+            :disabled="buttonStates.secondaryButtonLoading"
+            :loading="buttonStates.primaryButtonLoading"
             v-b-modal.confirm-send
             variant="primary"
           >
@@ -167,7 +171,7 @@
   import { AloituskeskusteluLomake } from '@/types'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import { KoejaksonVaiheAllekirjoitus, KoejaksonVaiheButtonStates } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -199,9 +203,9 @@
         active: true
       }
     ]
-    params = {
-      saving: false,
-      deleting: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
     loading = true
     aloituskeskustelu: null | AloituskeskusteluLomake = null
@@ -311,7 +315,9 @@
         lahetetty: false
       }
       try {
+        this.buttonStates.secondaryButtonLoading = true
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
+        this.buttonStates.secondaryButtonLoading = false
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-palautettu-erikoistuvalle-muokattavaksi'))
@@ -320,7 +326,7 @@
       }
     }
 
-    async updateSentForm() {
+    async onSubmit() {
       const form = this.isCurrentUserLahiesimies
         ? {
             ...this.aloituskeskustelu,
@@ -337,20 +343,15 @@
             }
           }
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
-
+        this.buttonStates.primaryButtonLoading = false
+        this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
-    }
-
-    onSubmit(params: any) {
-      params.saving = true
-      this.updateSentForm()
-      this.skipRouteExitConfirm = true
-      params.saving = false
     }
 
     async mounted() {

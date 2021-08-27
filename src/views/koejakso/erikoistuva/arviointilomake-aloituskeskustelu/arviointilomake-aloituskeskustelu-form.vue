@@ -183,7 +183,7 @@
       ref="koulutuspaikanArvioijat"
       :lahikouluttaja="form.lahikouluttaja"
       :lahiesimies="form.lahiesimies"
-      :params="params"
+      :buttonStates="buttonStates"
       @lahikouluttajaSelect="onLahikouluttajaSelect"
       @lahiesimiesSelect="onLahiesimiesSelect"
     />
@@ -223,18 +223,21 @@
         </elsa-button>
         <elsa-button
           class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-          style="width: 14rem"
+          style="min-width: 14rem"
           variant="outline-primary"
+          :disabled="buttonStates.primaryButtonLoading"
+          :loading="buttonStates.secondaryButtonLoading"
           v-b-modal.confirm-save
         >
           {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
         <elsa-button
           class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-          style="width: 14rem"
-          :loading="params.saving"
+          style="min-width: 14rem"
+          :disabled="buttonStates.secondaryButtonLoading"
+          :loading="buttonStates.primaryButtonLoading"
           variant="primary"
-          @click="sendForm"
+          @click="validateAndConfirm"
         >
           {{ $t('allekirjoita-laheta') }}
         </elsa-button>
@@ -259,14 +262,11 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import axios from 'axios'
   import Component from 'vue-class-component'
-  import { toastFail, toastSuccess } from '@/utils/toast'
   import { Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf, email, between } from 'vuelidate/lib/validators'
   import _get from 'lodash/get'
-  import store from '@/store'
   import { format } from 'date-fns'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -278,7 +278,8 @@
     AloituskeskusteluLomake,
     Kouluttaja,
     UserAccount,
-    KoejaksonVaiheHyvaksyja
+    KoejaksonVaiheHyvaksyja,
+    KoejaksonVaiheButtonStates
   } from '@/types'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
@@ -400,9 +401,9 @@
       toinenSuorituspaikka: false
     }
 
-    params = {
-      saving: false,
-      deleting: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     get hasErrors() {
@@ -426,24 +427,6 @@
 
     onTyotunnitViikossaChange(val: string) {
       this.form.tyotunnitViikossa = parseFloat(val.replace(',', '.'))
-    }
-
-    async onKouluttajaSubmit(value: any, params: any, modal: any) {
-      params.saving = true
-      try {
-        await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
-        modal.hide('confirm')
-        toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
-        await store.dispatch('erikoistuva/getKouluttajat')
-      } catch (err) {
-        toastFail(
-          this,
-          this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: err.response.data.title
-          })
-        )
-      }
-      params.saving = false
     }
 
     get lahikouluttajatList() {
@@ -529,14 +512,14 @@
     }
 
     saveAndExit() {
-      this.$emit('saveAndExit', this.form, this.params)
+      this.$emit('saveAndExit', this.form, this.buttonStates)
     }
 
     onSubmit() {
-      this.$emit('submit', this.form, this.params)
+      this.$emit('submit', this.form, this.buttonStates)
     }
 
-    sendForm() {
+    validateAndConfirm() {
       this.$v.$touch()
       const childFormValid = this.$refs.koulutuspaikanArvioijat.checkForm()
       if (this.$v.$anyError || !childFormValid) {

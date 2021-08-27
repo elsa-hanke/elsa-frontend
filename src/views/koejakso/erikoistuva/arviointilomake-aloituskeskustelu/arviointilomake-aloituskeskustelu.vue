@@ -91,7 +91,7 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { AloituskeskusteluLomake, Koejakso } from '@/types'
+  import { AloituskeskusteluLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -177,8 +177,11 @@
       }
     }
 
-    async onSaveDraftAndExit(form: AloituskeskusteluLomake, params: any) {
-      params.saving = true
+    async onSaveDraftAndExit(
+      form: AloituskeskusteluLomake,
+      buttonStates: KoejaksonVaiheButtonStates
+    ) {
+      buttonStates.secondaryButtonLoading = true
       this.aloituskeskusteluLomake = form
       try {
         if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.UUSI) {
@@ -195,7 +198,7 @@
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-tallennus-epaonnistui'))
       }
-      params.saving = false
+      buttonStates.secondaryButtonLoading = false
     }
 
     async saveNewForm() {
@@ -218,20 +221,20 @@
       }
     }
 
-    async onSubmit(form: AloituskeskusteluLomake, params: any) {
-      params.saving = true
+    async onSubmit(form: AloituskeskusteluLomake, buttonStates: KoejaksonVaiheButtonStates) {
+      buttonStates.primaryButtonLoading = true
       this.aloituskeskusteluLomake = form
-
       this.aloituskeskusteluLomake.lahetetty = true
+
       if (
         this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
         this.koejaksoData.aloituskeskustelunTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
       ) {
-        this.updateSentForm()
+        await this.updateSentForm()
       } else {
-        this.saveNewForm()
+        await this.saveNewForm()
       }
-      params.saving = false
+      buttonStates.primaryButtonLoading = false
     }
 
     watch() {

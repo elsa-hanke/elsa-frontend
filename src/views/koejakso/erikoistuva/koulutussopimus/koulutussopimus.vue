@@ -96,7 +96,7 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
-  import { KoulutussopimusLomake, Koejakso } from '@/types'
+  import { KoulutussopimusLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
@@ -189,8 +189,11 @@
       }
     }
 
-    async onSaveDraftAndExit(form: KoulutussopimusLomake, params: any) {
-      params.saving = true
+    async onSaveDraftAndExit(
+      form: KoulutussopimusLomake,
+      buttonStates: KoejaksonVaiheButtonStates
+    ) {
+      buttonStates.secondaryButtonLoading = true
       this.koulutussopimusLomake = form
       try {
         if (this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.UUSI) {
@@ -206,7 +209,7 @@
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
       }
-      params.saving = false
+      buttonStates.secondaryButtonLoading = false
     }
 
     async saveNewForm() {
@@ -229,8 +232,8 @@
       }
     }
 
-    async onSubmit(form: KoulutussopimusLomake, params: any) {
-      params.saving = true
+    async onSubmit(form: KoulutussopimusLomake, buttonStates: KoejaksonVaiheButtonStates) {
+      buttonStates.primaryButtonLoading = true
       this.koulutussopimusLomake = form
       this.koulutussopimusLomake.lahetetty = true
 
@@ -238,11 +241,11 @@
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
       ) {
-        this.updateSentForm()
+        await this.updateSentForm()
       } else {
-        this.saveNewForm()
+        await this.saveNewForm()
       }
-      params.saving = false
+      buttonStates.primaryButtonLoading = false
     }
 
     watch() {
