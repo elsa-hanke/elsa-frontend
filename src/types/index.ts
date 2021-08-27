@@ -168,7 +168,7 @@ export interface KehittamistoimenpiteetLomake {
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
   id: number | null
-  kehittamistoimenpiteetRiittavat: boolean
+  kehittamistoimenpiteetRiittavat: boolean | null
   korjausehdotus: string
   lahiesimies: KoejaksonVaiheHyvaksyja
   lahikouluttaja: KoejaksonVaiheHyvaksyja

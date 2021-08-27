@@ -189,7 +189,7 @@
       erikoistuvanOpiskelijatunnus: '',
       erikoistuvanYliopisto: '',
       id: null,
-      kehittamistoimenpiteetRiittavat: false,
+      kehittamistoimenpiteetRiittavat: null,
       korjausehdotus: '',
       lahiesimies: {
         id: null,
