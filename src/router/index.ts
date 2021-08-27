@@ -41,6 +41,8 @@ import KouluttajaArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja/
 import KouluttajaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/kouluttaja/arviointilomake-kehittamistoimenpiteet/kouluttaja-arviointilomake-kehittamistoimenpiteet.vue'
 import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/erikoistuva/arviointilomake-kehittamistoimenpiteet/arviointilomake-kehittamistoimenpiteet.vue'
+import ErikoistuvaArviointilomakeLoppukeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-loppukeskustelu/arviointilomake-loppukeskustelu.vue'
+import KouluttajaArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-loppukeskustelu/kouluttaja-arviointilomake-loppukeskustelu.vue'
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
 
@@ -269,6 +271,18 @@ const routes: Array<RouteConfig> = [
             }
           },
           {
+            path: 'loppukeskustelu',
+            name: 'koejakson-loppukeskustelu',
+            component: ErikoistuvaArviointilomakeLoppukeskustelu,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isErikoistuva()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
+          },
+          {
             path: 'koulutussopimus/:id',
             name: 'koulutussopimus',
             component: Koulutussopimus,
@@ -308,6 +322,18 @@ const routes: Array<RouteConfig> = [
             path: 'kehittamistoimenpiteet/:id',
             name: 'kehittamistoimenpiteet-kouluttaja',
             component: KouluttajaArviointilomakeKehittamistoimenpiteet,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isKouluttaja()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
+          },
+          {
+            path: 'loppukeskustelu/:id',
+            name: 'loppukeskustelu-kouluttaja',
+            component: KouluttajaArviointilomakeLoppukeskustelu,
             beforeEnter: (to, from, next) => {
               if (Vue.prototype.$isKouluttaja()) {
                 next()

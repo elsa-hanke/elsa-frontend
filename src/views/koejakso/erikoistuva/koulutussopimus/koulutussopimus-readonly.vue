@@ -109,7 +109,7 @@
         allekirjoitusErikoistuva,
         ...allekirjoituksetKouluttajat,
         allekirjoitusVastuuhenkilo
-      ].filter((a) => a !== null)
+      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
   }
 </script>

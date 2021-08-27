@@ -1,5 +1,5 @@
 <template>
-  <div class="koulutussopimus col-lg-8 px-0">
+  <div class="col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
 
     <b-container fluid>
@@ -166,7 +166,12 @@
   import _get from 'lodash/get'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
-  import { ValiarviointiLomake } from '@/types'
+  import {
+    ValiarviointiLomake,
+    Koejakso,
+    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksyja
+  } from '@/types'
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -174,7 +179,6 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus, KoejaksonVaiheHyvaksyja } from '@/types'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
@@ -191,7 +195,7 @@
   })
   export default class ErikoistuvaArviointilomakeValiarviointi extends Vue {
     $refs!: {
-      koulutuspaikanArvioijat: any
+      koulutuspaikanArvioijat: KoulutuspaikanArvioijat
     }
     items = [
       {
@@ -279,7 +283,7 @@
       return this.koejaksoData.valiarvioinninTila === LomakeTilat.HYVAKSYTTY
     }
 
-    get koejaksoData() {
+    get koejaksoData(): Koejakso {
       return store.getters['erikoistuva/koejakso']
     }
 
@@ -306,7 +310,7 @@
         this,
         this.valiarviointiLomake?.erikoistuvanNimi,
         this.valiarviointiLomake?.erikoistuvanAllekirjoitusaika
-      ) as KoejaksonVaiheAllekirjoitus
+      )
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,
         this.valiarviointiLomake?.lahikouluttaja
@@ -320,7 +324,7 @@
         allekirjoitusLahikouluttaja,
         allekirjoitusLahiesimies,
         allekirjoitusErikoistuva
-      ].filter((a) => a !== null)
+      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
 
     optionDisplayName(option: any) {
@@ -358,13 +362,8 @@
 
     async updateForm() {
       try {
-        await store
-          .dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
-          .then((res) => {
-            this.valiarviointiLomake.erikoistuvanAllekirjoitusaika =
-              res.data.erikoistuvanAllekirjoitusaika
-          })
-
+        await store.dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
+        this.valiarviointiLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
         this.hideModal('confirm-sign')
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-onnistuneesti'))
       } catch (err) {

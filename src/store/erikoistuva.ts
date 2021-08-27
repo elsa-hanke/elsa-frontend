@@ -51,131 +51,103 @@ const erikoistuva: Module<any, any> = {
     },
     async postKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .postKoulutussopimus(koulutussopimusLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.postKoulutussopimus(koulutussopimusLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async putKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .putKoulutussopimus(koulutussopimusLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.putKoulutussopimus(koulutussopimusLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .postAloituskeskustelu(aloituskeskusteluLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.postAloituskeskustelu(aloituskeskusteluLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async putAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .putAloituskeskustelu(aloituskeskusteluLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.putAloituskeskustelu(aloituskeskusteluLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async postValiarviointi({ dispatch, commit }, valiarviointiLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .postValiarviointi(valiarviointiLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.postValiarviointi(valiarviointiLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async putValiarviointi({ dispatch, commit }, valiarviointiLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .putValiarviointi(valiarviointiLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.putValiarviointi(valiarviointiLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async postKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .postKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.postKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async putKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
       commit('formRequest')
-      return new Promise((resolve, reject) => {
-        api
-          .putKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
-          .then((response) => {
-            commit('formSuccess')
-            dispatch('getKoejakso')
-            resolve(response)
-          })
-          .catch((error) => {
-            commit('formError')
-            reject(error)
-          })
-      })
+      try {
+        await api.putKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
+    },
+    async postLoppukeskustelu({ dispatch, commit }, loppukeskusteluLomake) {
+      commit('formRequest')
+      try {
+        await api.postLoppukeskustelu(loppukeskusteluLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
+    },
+    async putLoppukeskustelu({ dispatch, commit }, loppukeskusteluLomake) {
+      commit('formRequest')
+      try {
+        await api.putLoppukeskustelu(loppukeskusteluLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
     },
     async getKouluttajat({ commit }) {
       commit('kouluttajatRequest')

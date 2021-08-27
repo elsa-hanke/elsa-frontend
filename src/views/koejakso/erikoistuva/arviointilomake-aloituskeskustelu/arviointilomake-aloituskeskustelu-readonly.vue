@@ -93,7 +93,7 @@
         allekirjoitusErikoistuva,
         allekirjoitusLahikouluttaja,
         allekirjoitusLahiesimies
-      ].filter((a) => a !== null)
+      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
   }
 </script>

@@ -2,13 +2,14 @@
   <div class="col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <h1 class="mb-3">{{ $t('valiarviointi-kouluttaja') }}</h1>
+      <h1 class="mb-3">{{ $t('loppukeskustelu-kouluttaja') }}</h1>
+
       <div v-if="!loading">
         <div v-if="editableForEsimies">
-          <p>{{ $t('valiarviointi-esimies-ingressi') }}</p>
+          <p>{{ $t('loppukeskustelu-esimies-ingressi') }}</p>
         </div>
         <div v-else-if="editable">
-          <p>{{ $t('valiarviointi-kouluttaja-ingressi') }}</p>
+          <p>{{ $t('loppukeskustelu-kouluttaja-ingressi') }}</p>
         </div>
 
         <b-alert :show="showWaitingForLahiesimiesOrErikoistuva" variant="dark" class="mt-3">
@@ -17,7 +18,7 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
             <div>
-              {{ $t('valiarviointi-kouluttaja-allekirjoitettu') }}
+              {{ $t('loppukeskustelu-kouluttaja-allekirjoitettu') }}
             </div>
           </div>
         </b-alert>
@@ -28,7 +29,7 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
             <div>
-              {{ $t('valiarviointi-esimies-allekirjoitettu') }}
+              {{ $t('loppukeskustelu-esimies-allekirjoitettu') }}
             </div>
           </div>
         </b-alert>
@@ -49,12 +50,12 @@
             </em>
             <div>
               <span v-if="isCurrentUserLahiesimies">
-                {{ $t('valiarviointi-palautettu-kouluttajalle-muokattavaksi-esimies') }}
+                {{ $t('loppukeskustelu-palautettu-kouluttajalle-muokattavaksi-esimies') }}
               </span>
               <span v-else>
-                {{ $t('valiarviointi-palautettu-kouluttajalle-muokattavaksi-kouluttaja') }}
+                {{ $t('loppukeskustelu-palautettu-kouluttajalle-muokattavaksi-kouluttaja') }}
               </span>
-              <span class="d-block">{{ $t('syy') }} {{ valiarviointi.korjausehdotus }}</span>
+              <span class="d-block">{{ $t('syy') }} {{ loppukeskustelu.korjausehdotus }}</span>
             </div>
           </div>
         </b-alert>
@@ -64,7 +65,7 @@
             <em class="align-middle">
               <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
             </em>
-            <span>{{ $t('valiarviointi-tila-hyvaksytty') }}</span>
+            <span>{{ $t('loppukeskustelu-tila-hyvaksytty') }}</span>
           </div>
         </b-alert>
 
@@ -73,135 +74,65 @@
         <erikoistuva-details
           :firstName="erikoistuvanEtunimi"
           :lastName="erikoistuvanSukunimi"
-          :erikoisala="valiarviointi.erikoistuvanErikoisala"
-          :opiskelijatunnus="valiarviointi.erikoistuvanOpiskelijatunnus"
-          :yliopisto="valiarviointi.erikoistuvanYliopisto"
+          :erikoisala="loppukeskustelu.erikoistuvanErikoisala"
+          :opiskelijatunnus="loppukeskustelu.erikoistuvanOpiskelijatunnus"
+          :yliopisto="loppukeskustelu.erikoistuvanYliopisto"
           :show-birthdate="false"
         />
 
         <hr />
 
         <div>
-          <h3 class="mb-3">{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
           <b-row>
             <b-col lg="8">
               <div v-if="!editable">
-                <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
+                <h3>{{ $t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa') }}</h3>
                 <p>
                   {{
-                    valiarviointi.edistyminenTavoitteidenMukaista
-                      ? $t('kylla')
-                      : $t('ei-huolenaiheita-on')
+                    loppukeskustelu.esitetaanKoejaksonHyvaksymista
+                      ? $t('loppukeskustelu-kayty-hyvaksytty')
+                      : $t('loppukeskustelu-kayty-jatkotoimenpiteet')
                   }}
                 </p>
               </div>
               <elsa-form-group
                 v-else
-                :label="$t('edistyminen-osaamistavoitteiden-mukaista')"
+                :label="$t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa')"
                 :required="true"
               >
                 <template v-slot="{ uid }">
                   <b-form-radio-group
                     :id="uid"
-                    v-model="valiarviointi.edistyminenTavoitteidenMukaista"
-                    :options="edistyminenVaihtoehdot"
-                    :state="validateState('edistyminenTavoitteidenMukaista')"
+                    v-model="loppukeskustelu.esitetaanKoejaksonHyvaksymista"
+                    :options="hyvaksyttyVaihtoehdot"
+                    :state="validateState('esitetaanKoejaksonHyvaksymista')"
                     stacked
                   ></b-form-radio-group>
                   <b-form-invalid-feedback
                     :id="`${uid}-feedback`"
-                    :state="validateState('edistyminenTavoitteidenMukaista')"
+                    :state="validateState('esitetaanKoejaksonHyvaksymista')"
                   >
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </b-col>
-          </b-row>
-          <b-row v-if="valiarviointi.edistyminenTavoitteidenMukaista === false">
-            <b-col lg="8">
-              <div v-if="!editable">
-                <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
-                <ul class="pl-4">
-                  <li v-for="kategoria in sortedKategoriat" :key="kategoria">
-                    {{ naytaKehittamistoimenpideKategoria(kategoria) }}
-                  </li>
-                </ul>
-              </div>
-              <elsa-form-group
-                v-else
-                :label="$t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista')"
-              >
-                <template v-slot="{ uid }">
-                  <b-form-checkbox-group
-                    :id="uid"
-                    v-model="valiarviointi.kehittamistoimenpideKategoriat"
-                    :options="kehittamistoimenpideKategoriat"
+                  <elsa-form-group
+                    class="mt-4"
+                    v-if="loppukeskustelu.esitetaanKoejaksonHyvaksymista === false"
+                    :label="$t('selvitys-jatkotoimista')"
                     :required="true"
-                    :state="validateState('kehittamistoimenpideKategoriat')"
-                  ></b-form-checkbox-group>
-                  <b-form-invalid-feedback
-                    :id="`${uid}-feedback`"
-                    :state="validateState('kehittamistoimenpideKategoriat')"
                   >
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                  <div class="ml-4">
-                    <b-form-input
-                      v-if="muuValittu"
-                      v-model="valiarviointi.muuKategoria"
-                      :state="validateState('muuKategoria')"
-                    ></b-form-input>
-                    <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
-                  </div>
-                </template>
-              </elsa-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <div v-if="!editable">
-                <h5>{{ $t('vahvuudet') }}</h5>
-                <p v-if="!editable">{{ valiarviointi.vahvuudet }}</p>
-              </div>
-              <elsa-form-group v-else :label="$t('vahvuudet')" :required="true">
-                <template v-slot="{ uid }">
-                  <b-form-textarea
-                    :id="uid"
-                    v-model="valiarviointi.vahvuudet"
-                    :state="validateState('vahvuudet')"
-                    rows="7"
-                    class="textarea-min-height"
-                  ></b-form-textarea>
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <div v-if="!editable">
-                <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
-                <p v-if="!editable">{{ valiarviointi.kehittamistoimenpiteet }}</p>
-              </div>
-              <elsa-form-group
-                v-else
-                :label="$t('selvitys-kehittamistoimenpiteista')"
-                :required="true"
-              >
-                <template v-slot="{ uid }">
-                  <b-form-textarea
-                    :id="uid"
-                    v-model="valiarviointi.kehittamistoimenpiteet"
-                    :state="validateState('kehittamistoimenpiteet')"
-                    rows="7"
-                    class="textarea-min-height"
-                  ></b-form-textarea>
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
+                    <template v-slot="{ uid }">
+                      <b-form-textarea
+                        :id="uid"
+                        v-model="loppukeskustelu.jatkotoimenpiteet"
+                        :state="validateState('jatkotoimenpiteet')"
+                        rows="7"
+                        class="textarea-min-height"
+                      ></b-form-textarea>
+                      <b-form-invalid-feedback :id="`${uid}-feedback`">
+                        {{ $t('pakollinen-tieto') }}
+                      </b-form-invalid-feedback>
+                    </template>
+                  </elsa-form-group>
                 </template>
               </elsa-form-group>
             </b-col>
@@ -209,8 +140,8 @@
           <hr />
         </div>
         <koulutuspaikan-arvioijat
-          :lahikouluttaja="valiarviointi.lahikouluttaja"
-          :lahiesimies="valiarviointi.lahiesimies"
+          :lahikouluttaja="loppukeskustelu.lahikouluttaja"
+          :lahiesimies="loppukeskustelu.lahiesimies"
           :isReadonly="true"
         />
         <hr />
@@ -291,9 +222,9 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { ValiarviointiLomake } from '@/types'
+  import { LoppukeskusteluLomake } from '@/types'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
+  import { LomakeTilat } from '@/utils/constants'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
@@ -312,30 +243,19 @@
       KoejaksonVaiheAllekirjoitukset
     },
     validations: {
-      valiarviointi: {
-        edistyminenTavoitteidenMukaista: {
+      loppukeskustelu: {
+        esitetaanKoejaksonHyvaksymista: {
           required
         },
-        vahvuudet: {
-          required
-        },
-        kehittamistoimenpiteet: {
-          required
-        },
-        kehittamistoimenpideKategoriat: {
+        jatkotoimenpiteet: {
           required: requiredIf((value) => {
-            return value.edistyminenTavoitteidenMukaista === false
-          })
-        },
-        muuKategoria: {
-          required: requiredIf((value) => {
-            return value.kehittamistoimenpideKategoriat?.includes(KehittamistoimenpideKategoria.MUU)
+            return value.esitetaanKoejaksonHyvaksymista === false
           })
         }
       }
     }
   })
-  export default class KouluttajaArviointilomakeValiarviointi extends Mixins(
+  export default class KouluttajaArviointilomakeLoppukeskustelu extends Mixins(
     ConfirmRouteExit,
     validationMixin
   ) {
@@ -350,18 +270,18 @@
         to: { name: 'koejakso' }
       },
       {
-        text: this.$t('valiarviointi-kouluttaja'),
+        text: this.$t('loppukeskustelu-kouluttaja'),
         active: true
       }
     ]
 
-    edistyminenVaihtoehdot = [
+    hyvaksyttyVaihtoehdot = [
       {
-        text: this.$t('kylla'),
+        text: this.$t('loppukeskustelu-kayty-hyvaksytty'),
         value: true
       },
       {
-        text: this.$t('ei-huolenaiheita-on'),
+        text: this.$t('loppukeskustelu-kayty-jatkotoimenpiteet'),
         value: false
       }
     ]
@@ -373,17 +293,10 @@
 
     loading = true
 
-    kategoriaOrder = [
-      KehittamistoimenpideKategoria.TYOSSASUORIUTUMINEN,
-      KehittamistoimenpideKategoria.TYOKAYTTAYTYMINEN,
-      KehittamistoimenpideKategoria.POTILASPALAUTE,
-      KehittamistoimenpideKategoria.MUU
-    ]
-
-    valiarviointi: ValiarviointiLomake | null = null
+    loppukeskustelu: LoppukeskusteluLomake | null = null
 
     validateState(value: string) {
-      const form = this.$v.valiarviointi
+      const form = this.$v.loppukeskustelu
       const { $dirty, $error } = _get(form, value) as any
       return $dirty ? ($error ? false : null) : null
     }
@@ -392,97 +305,76 @@
       return this.$bvModal.hide(id)
     }
 
-    get valiarvioinninTila() {
-      return store.getters['kouluttaja/koejaksot'].find((k: any) => k.id === this.valiarviointi?.id)
-        ?.tila
+    get loppukeskustelunTila() {
+      return store.getters['kouluttaja/koejaksot'].find(
+        (k: any) => k.id === this.loppukeskustelu?.id
+      )?.tila
     }
 
-    get valiarviointiId() {
+    get loppukeskusteluId() {
       return Number(this.$route.params.id)
     }
 
     get editable() {
-      return !this.isCurrentUserLahiesimies && !this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty
+      return (
+        !this.isCurrentUserLahiesimies && !this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty
+      )
     }
 
     get editableForEsimies() {
       return (
         this.isCurrentUserLahiesimies &&
-        this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty &&
-        !this.valiarviointi?.lahiesimies.sopimusHyvaksytty
+        this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty &&
+        !this.loppukeskustelu?.lahiesimies.sopimusHyvaksytty
       )
     }
 
     get isCurrentUserLahiesimies() {
       const currentUser = store.getters['auth/account']
-      return this.valiarviointi?.lahiesimies.kayttajaUserId === currentUser.id
+      return this.loppukeskustelu?.lahiesimies.kayttajaUserId === currentUser.id
     }
 
     get erikoistuvanEtunimi() {
-      return this.valiarviointi?.erikoistuvanNimi.split(' ')[0]
+      return this.loppukeskustelu?.erikoistuvanNimi.split(' ')[0]
     }
 
     get erikoistuvanSukunimi() {
-      return this.valiarviointi?.erikoistuvanNimi.split(' ')[1]
-    }
-
-    get kehittamistoimenpideKategoriat() {
-      return Object.keys(KehittamistoimenpideKategoria).map((k) => ({
-        text: this.$t('kehittamistoimenpidekategoria-' + k),
-        value: k
-      }))
-    }
-
-    naytaKehittamistoimenpideKategoria(kategoria: string) {
-      if (kategoria === KehittamistoimenpideKategoria.MUU) return this.valiarviointi?.muuKategoria
-      return this.$t('kehittamistoimenpidekategoria-' + kategoria)
-    }
-
-    get muuValittu() {
-      return this.valiarviointi?.kehittamistoimenpideKategoriat?.includes(
-        KehittamistoimenpideKategoria.MUU
-      )
-    }
-
-    get sortedKategoriat() {
-      return this.valiarviointi?.kehittamistoimenpideKategoriat?.sort(
-        (a, b) => this.kategoriaOrder.indexOf(a) - this.kategoriaOrder.indexOf(b)
-      )
+      return this.loppukeskustelu?.erikoistuvanNimi.split(' ')[1]
     }
 
     get showWaitingForLahiesimiesOrErikoistuva() {
       return (
         !this.isCurrentUserLahiesimies &&
-        this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty &&
-        !this.valiarviointi?.erikoistuvaAllekirjoittanut
+        this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty &&
+        !this.loppukeskustelu?.erikoistuvaAllekirjoittanut
       )
     }
 
     get showWaitingForErikoistuva() {
-      return this.isCurrentUserLahiesimies && this.valiarviointi?.lahiesimies.sopimusHyvaksytty
+      return this.isCurrentUserLahiesimies && this.loppukeskustelu?.lahiesimies.sopimusHyvaksytty
     }
 
     get acceptedByEveryone() {
-      return this.valiarviointi?.erikoistuvaAllekirjoittanut
+      return this.loppukeskustelu?.erikoistuvaAllekirjoittanut
     }
 
     get returned() {
-      return this.valiarvioinninTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      return this.loppukeskustelunTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
-        this.valiarviointi?.erikoistuvanNimi,
-        this.valiarviointi?.erikoistuvanAllekirjoitusaika
+        this.loppukeskustelu?.erikoistuvanNimi,
+        this.loppukeskustelu?.erikoistuvanAllekirjoitusaika
       )
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,
-        this.valiarviointi?.lahikouluttaja
+        this.loppukeskustelu?.lahikouluttaja
       )
       const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
         this,
-        this.valiarviointi?.lahiesimies
+        this.loppukeskustelu?.lahiesimies
       )
 
       return [
@@ -494,54 +386,49 @@
 
     async returnToSender(korjausehdotus: string) {
       const form = {
-        ...this.valiarviointi,
+        ...this.loppukeskustelu,
         korjausehdotus: korjausehdotus,
         lahetetty: false
       }
 
       try {
-        await store.dispatch('kouluttaja/putValiarviointi', form)
+        await store.dispatch('kouluttaja/putLoppukeskustelu', form)
         this.skipRouteExitConfirm = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))
+        toastSuccess(this, this.$t('loppukeskustelu-palautettu-muokattavaksi'))
       } catch (err) {
-        toastFail(this, this.$t('valiarviointi-palautus-epaonnistui'))
+        toastFail(this, this.$t('loppukeskustelu-palautus-epaonnistui'))
       }
     }
 
     async updateSentForm() {
-      if (!this.valiarviointi) return
-      if (this.valiarviointi.edistyminenTavoitteidenMukaista === true) {
-        this.valiarviointi.kehittamistoimenpideKategoriat = null
-      }
-      if (
-        !this.valiarviointi.kehittamistoimenpideKategoriat?.includes(
-          KehittamistoimenpideKategoria.MUU
-        )
-      ) {
-        this.valiarviointi.muuKategoria = null
+      if (!this.loppukeskustelu) return
+      if (this.loppukeskustelu.esitetaanKoejaksonHyvaksymista === true) {
+        this.loppukeskustelu.jatkotoimenpiteet = null
       }
       try {
-        await store.dispatch('kouluttaja/putValiarviointi', this.valiarviointi)
+        await store.dispatch('kouluttaja/putLoppukeskustelu', this.loppukeskustelu)
 
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-ja-lahetetty-onnistuneesti'))
+        toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-ja-lahetetty-onnistuneesti'))
       } catch (err) {
-        toastFail(this, this.$t('valiarvioinnin-tallennus-epaonnistui'))
+        toastFail(this, this.$t('loppukeskustelun-tallennus-epaonnistui'))
       }
     }
 
     sendForm() {
-      if (!this.isCurrentUserLahiesimies) {
-        this.$v.$touch()
-        if (this.$v.$anyError) {
-          return
-        }
+      this.$v.$touch()
+      if (this.$v.$anyError) {
+        return
       }
       return this.$bvModal.show('confirm-send')
     }
 
     onSubmit(params: any) {
+      this.$v.$touch()
+      if (this.$v.$anyError) {
+        return
+      }
       params.saving = true
       this.updateSentForm()
       this.skipRouteExitConfirm = true
@@ -551,8 +438,8 @@
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await api.getValiarviointi(this.valiarviointiId)
-      this.valiarviointi = data
+      const { data } = await api.getLoppukeskustelu(this.loppukeskusteluId)
+      this.loppukeskustelu = data
       this.loading = false
 
       if (!this.editable) {
@@ -565,10 +452,5 @@
 <style lang="scss">
   .textarea-min-height {
     min-height: 100px;
-  }
-
-  .custom-control.custom-checkbox {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
   }
 </style>
