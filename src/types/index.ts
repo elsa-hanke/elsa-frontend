@@ -177,12 +177,14 @@ export interface KehittamistoimenpiteetLomake {
 
 export interface LoppukeskusteluLomake {
   erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanAllekirjoitusaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
-  esitetaanKoejaksonHyvaksymista: boolean
+  esitetaanKoejaksonHyvaksymista: boolean | null
   id: number | null
+  jatkotoimenpiteet: string | null
   korjausehdotus: string
   lahiesimies: KoejaksonVaiheHyvaksyja
   lahikouluttaja: KoejaksonVaiheHyvaksyja

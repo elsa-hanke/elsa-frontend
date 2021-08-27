@@ -91,7 +91,7 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { AloituskeskusteluLomake } from '@/types'
+  import { AloituskeskusteluLomake, Koejakso } from '@/types'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -160,7 +160,7 @@
       return store.getters['erikoistuva/kouluttajat']
     }
 
-    get koejaksoData() {
+    get koejaksoData(): Koejakso {
       return store.getters['erikoistuva/koejakso']
     }
 

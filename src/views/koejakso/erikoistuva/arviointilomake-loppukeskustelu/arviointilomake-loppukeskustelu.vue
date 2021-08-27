@@ -3,21 +3,21 @@
     <b-breadcrumb :items="items" class="mb-0" />
 
     <b-container fluid>
-      <h1 class="mb-3">{{ $t('koejakson-kehittamistoimenpiteet') }}</h1>
-      <div v-if="!this.loading">
+      <h1 class="mb-3">{{ $t('koejakson-loppukeskustelu') }}</h1>
+      <div v-if="!loading">
         <b-row lg>
           <b-col>
             <div v-if="editable">
-              <p>{{ $t('koejakson-kehittamistoimenpiteet-ingressi') }}</p>
+              <p>{{ $t('koejakson-loppukeskustelu-ingressi') }}</p>
             </div>
             <div v-else>
-              <b-alert :show="waitingForKouluttaja" variant="dark" class="mt-3">
+              <b-alert :show="waitingForAcceptance" variant="dark" class="mt-3">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                   </em>
                   <div>
-                    {{ $t('kehittamistoimenpiteet-tila-odottaa-hyvaksyntaa') }}
+                    {{ $t('loppukeskustelu-tila-odottaa-hyvaksyntaa') }}
                   </div>
                 </div>
               </b-alert>
@@ -27,7 +27,7 @@
                     <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                   </em>
                   <div>
-                    {{ $t('kehittamistoimenpiteet-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
+                    {{ $t('loppukeskustelu-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
                   </div>
                 </div>
               </b-alert>
@@ -36,7 +36,7 @@
                   <em class="align-middle">
                     <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                   </em>
-                  <span>{{ $t('kehittamistoimenpiteet-tila-hyvaksytty') }}</span>
+                  <span>{{ $t('loppukeskustelu-tila-hyvaksytty') }}</span>
                 </div>
               </b-alert>
             </div>
@@ -51,21 +51,23 @@
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
               :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
               :yliopisto="account.erikoistuvaLaakari.yliopisto"
-              :kehittamistoimenpiteet="koejaksoData.valiarviointi.kehittamistoimenpiteet"
               :show-birthdate="false"
-              :showKehittamistoimenpiteet="true"
             ></erikoistuva-details>
           </b-col>
         </b-row>
+
         <hr />
+
         <div v-if="waitingForErikoistuva || acceptedByEveryone">
-          <b-row>
-            <b-col lg="10">
-              <h3>{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
-              <p v-if="koejaksoData.kehittamistoimenpiteet.kehittamistoimenpiteetRiittavat">
-                {{ $t('kehittamistoimenpiteet-riittavat') }}
-              </p>
-              <p v-else>{{ $t('kehittamistoimenpiteet-ei-riittavat') }}</p>
+          <h3 class="mb-3">{{ $t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa') }}</h3>
+          <p v-if="loppukeskusteluLomake.esitetaanKoejaksonHyvaksymista">
+            {{ $t('loppukeskustelu-kayty-hyvaksytty') }}
+          </p>
+          <p v-else>{{ $t('loppukeskustelu-kayty-jatkotoimenpiteet') }}</p>
+          <b-row v-if="!loppukeskusteluLomake.esitetaanKoejaksonHyvaksymista">
+            <b-col lg="8">
+              <h5>{{ $t('selvitys-jatkotoimista') }}</h5>
+              <p>{{ loppukeskusteluLomake.selvitys }}</p>
             </b-col>
           </b-row>
           <hr />
@@ -73,8 +75,8 @@
 
         <koulutuspaikan-arvioijat
           ref="koulutuspaikanArvioijat"
-          :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
-          :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
+          :lahikouluttaja="loppukeskusteluLomake.lahikouluttaja"
+          :lahiesimies="loppukeskusteluLomake.lahiesimies"
           :params="params"
           :isReadonly="!editable"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
@@ -88,6 +90,7 @@
 
         <div v-if="editable || waitingForErikoistuva">
           <hr v-if="allekirjoitukset.length > 0" />
+
           <b-row>
             <b-col class="text-right">
               <elsa-button variant="back" :to="{ name: 'koejakso' }">
@@ -120,7 +123,7 @@
     />
     <elsa-confirmation-modal
       id="confirm-sign"
-      :title="$t('allekirjoita-kehittamistoimenpiteet')"
+      :title="$t('allekirjoita-loppukeskustelu')"
       :text="$t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })"
       :submitText="$t('allekirjoita')"
       @submit="onSign"
@@ -129,33 +132,39 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
+  import Component from 'vue-class-component'
+  import { Mixins } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
+  import { required } from 'vuelidate/lib/validators'
+  import _get from 'lodash/get'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
-  import { KehittamistoimenpiteetLomake, Koejakso, KoejaksonVaiheHyvaksyja } from '@/types'
+  import { LoppukeskusteluLomake, KoejaksonVaiheHyvaksyja, Koejakso } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
-  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
-  import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
 
   @Component({
     components: {
       ErikoistuvaDetails,
+      KouluttajaForm,
       ElsaFormGroup,
+      ElsaFormMultiselect,
       ElsaButton,
       ElsaConfirmationModal,
-      ElsaReturnToSenderModal,
-      KoulutuspaikanArvioijat,
-      KoejaksonVaiheAllekirjoitukset
+      KoejaksonVaiheAllekirjoitukset,
+      KoulutuspaikanArvioijat
     }
   })
-  export default class ErikoistuvaArviointilomakeKehittamistoimenpiteet extends Vue {
+  export default class ErikoistuvaArviointilomakeLoppukeskustelu extends Mixins(validationMixin) {
     $refs!: {
       koulutuspaikanArvioijat: KoulutuspaikanArvioijat
     }
@@ -169,10 +178,26 @@
         to: { name: 'koejakso' }
       },
       {
-        text: this.$t('koejakson-kehittamistoimenpiteet'),
+        text: this.$t('koejakson-loppukeskustelu'),
         active: true
       }
     ]
+    validations() {
+      return {
+        loppukeskusteluLomake: {
+          lahikouluttaja: {
+            nimi: {
+              required
+            }
+          },
+          lahiesimies: {
+            nimi: {
+              required
+            }
+          }
+        }
+      }
+    }
 
     loading = true
 
@@ -180,17 +205,17 @@
       saving: false
     }
 
-    koejaksonVaihe = (this.$t('kehittamistoimenpiteiden-arviointi') as string).toLowerCase()
+    koejaksonVaihe = 'väliarviointi'
 
-    kehittamistoimenpiteetLomake: KehittamistoimenpiteetLomake = {
+    loppukeskusteluLomake: LoppukeskusteluLomake = {
       erikoistuvaAllekirjoittanut: false,
-      erikoistuvanAllekirjoitusaika: undefined,
-      erikoistuvanErikoisala: '',
-      erikoistuvanNimi: '',
-      erikoistuvanOpiskelijatunnus: '',
-      erikoistuvanYliopisto: '',
+      erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
+      erikoistuvanNimi: this.account.firstName.concat(' ', this.account.lastName),
+      erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
+      erikoistuvanYliopisto: this.account.erikoistuvaLaakari.yliopisto,
+      esitetaanKoejaksonHyvaksymista: null,
       id: null,
-      kehittamistoimenpiteetRiittavat: null,
+      jatkotoimenpiteet: null,
       korjausehdotus: '',
       lahiesimies: {
         id: null,
@@ -200,7 +225,7 @@
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
-        id: null,
+        id: 0,
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
@@ -209,30 +234,34 @@
       muokkauspaiva: ''
     }
 
+    validateState(value: string) {
+      const form = this.$v.loppukeskusteluLomake
+      const { $dirty, $error } = _get(form, value) as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
     get account() {
       return store.getters['auth/account']
     }
 
     get editable() {
-      return this.koejaksoData.kehittamistoimenpiteidenTila === LomakeTilat.UUSI
+      return this.koejaksoData.loppukeskustelunTila === LomakeTilat.UUSI
     }
 
-    get acceptedByEveryone() {
-      return this.koejaksoData.kehittamistoimenpiteidenTila == LomakeTilat.HYVAKSYTTY
-    }
-
-    get waitingForKouluttaja() {
-      return (
-        this.koejaksoData.kehittamistoimenpiteidenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
-        this.koejaksoData.kehittamistoimenpiteidenTila === LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA
-      )
+    get waitingForAcceptance() {
+      return this.koejaksoData.loppukeskustelunTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     get waitingForErikoistuva() {
-      return (
-        this.koejaksoData.kehittamistoimenpiteidenTila ==
-        LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA
-      )
+      return this.koejaksoData.loppukeskustelunTila === LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA
+    }
+
+    get acceptedByEveryone() {
+      return this.koejaksoData.loppukeskustelunTila === LomakeTilat.HYVAKSYTTY
+    }
+
+    get kouluttajat() {
+      return store.getters['erikoistuva/kouluttajat']
     }
 
     get koejaksoData(): Koejakso {
@@ -240,31 +269,32 @@
     }
 
     setKoejaksoData() {
-      if (this.koejaksoData.kehittamistoimenpiteet) {
-        this.kehittamistoimenpiteetLomake = this.koejaksoData.kehittamistoimenpiteet
+      if (this.koejaksoData.loppukeskustelu) {
+        this.loppukeskusteluLomake = this.koejaksoData.loppukeskustelu
       }
-      this.kehittamistoimenpiteetLomake.erikoistuvanNimi = this.account.firstName.concat(
-        ' ',
-        this.account.lastName
-      )
-      this.kehittamistoimenpiteetLomake.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
-      this.kehittamistoimenpiteetLomake.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.erikoisalaNimi
-      this.kehittamistoimenpiteetLomake.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
+    }
+
+    onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
+      this.loppukeskusteluLomake.lahikouluttaja = lahikouluttaja
+    }
+
+    onLahiesimiesSelect(lahiesimies: KoejaksonVaiheHyvaksyja) {
+      this.loppukeskusteluLomake.lahiesimies = lahiesimies
     }
 
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
+      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+        this,
+        this.loppukeskusteluLomake?.erikoistuvanNimi,
+        this.loppukeskusteluLomake?.erikoistuvanAllekirjoitusaika
+      )
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,
-        this.kehittamistoimenpiteetLomake.lahikouluttaja
+        this.loppukeskusteluLomake?.lahikouluttaja
       )
       const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
         this,
-        this.kehittamistoimenpiteetLomake.lahiesimies
-      )
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
-        this,
-        this.kehittamistoimenpiteetLomake.erikoistuvanNimi,
-        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika
+        this.loppukeskusteluLomake?.lahiesimies
       )
 
       return [
@@ -274,15 +304,38 @@
       ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
 
+    optionDisplayName(option: any) {
+      return option.nimike ? option.nimi + ', ' + option.nimike : option.nimi
+    }
+
     hideModal(id: string) {
       return this.$bvModal.hide(id)
     }
 
     sendForm(modalId: string) {
-      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
+      this.$v.$touch()
+      if (this.$v.$anyError) {
         return
       }
       return this.$bvModal.show(modalId)
+    }
+
+    async saveNewForm() {
+      try {
+        await store.dispatch('erikoistuva/postLoppukeskustelu', this.loppukeskusteluLomake)
+        toastSuccess(this, this.$t('loppukeskustelu-lahetetty-onnistuneesti'))
+      } catch (err) {
+        toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
+      }
+    }
+
+    async updateForm() {
+      try {
+        await store.dispatch('erikoistuva/putLoppukeskustelu', this.loppukeskusteluLomake)
+        toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-onnistuneesti'))
+      } catch (err) {
+        toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
+      }
     }
 
     async onSubmit() {
@@ -295,49 +348,16 @@
     async onSign() {
       this.params.saving = true
       this.hideModal('confirm-sign')
-      this.kehittamistoimenpiteetLomake.erikoistuvaAllekirjoittanut = true
-      this.signForm()
+      this.updateForm()
       this.params.saving = false
     }
 
-    onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
-      this.kehittamistoimenpiteetLomake.lahikouluttaja = lahikouluttaja
-    }
-
-    onLahiesimiesSelect(lahiesimies: KoejaksonVaiheHyvaksyja) {
-      this.kehittamistoimenpiteetLomake.lahiesimies = lahiesimies
-    }
-
-    async saveNewForm() {
-      try {
-        await store.dispatch(
-          'erikoistuva/postKehittamistoimenpiteet',
-          this.kehittamistoimenpiteetLomake
-        )
-        toastSuccess(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-onnistui'))
-      } catch (err) {
-        toastFail(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-epaonnistui'))
-      }
-    }
-
-    async signForm() {
-      try {
-        await store.dispatch(
-          'erikoistuva/putKehittamistoimenpiteet',
-          this.kehittamistoimenpiteetLomake
-        )
-        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
-
-        toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-onnistui'))
-      } catch (err) {
-        toastFail(this, this.$t('kehittamistoimenpiteet-allekirjoitus-epaonnistui'))
-      }
-    }
-
     async mounted() {
+      this.loading = true
       if (!this.koejaksoData) {
         await store.dispatch('erikoistuva/getKoejakso')
       }
+      await store.dispatch('erikoistuva/getKouluttajat')
       this.setKoejaksoData()
       this.loading = false
     }

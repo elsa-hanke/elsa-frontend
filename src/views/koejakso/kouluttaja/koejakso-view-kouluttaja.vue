@@ -24,7 +24,8 @@
       [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
       [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja'],
       [LomakeTyypit.VALIARVIOINTI, 'valiarviointi-kouluttaja'],
-      [LomakeTyypit.KEHITTAMISTOIMENPITEET, 'kehittamistoimenpiteet-kouluttaja']
+      [LomakeTyypit.KEHITTAMISTOIMENPITEET, 'kehittamistoimenpiteet-kouluttaja'],
+      [LomakeTyypit.LOPPUKESKUSTELU, 'loppukeskustelu-kouluttaja']
     ])
 
     async mounted() {

@@ -3,6 +3,7 @@ import {
   AloituskeskusteluLomake,
   KehittamistoimenpiteetLomake,
   KoulutussopimusLomake,
+  LoppukeskusteluLomake,
   ValiarviointiLomake
 } from '@/types'
 
@@ -48,5 +49,15 @@ export async function getKehittamistoimenpiteet(id: number) {
 
 export async function putKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
   const path = 'kouluttaja/koejakso/kehittamistoimenpiteet'
+  return await axios.put(path, form)
+}
+
+export async function getLoppukeskustelu(id: number) {
+  const path = `/kouluttaja/koejakso/loppukeskustelu/${id}`
+  return await axios.get(path)
+}
+
+export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
+  const path = 'kouluttaja/koejakso/loppukeskustelu'
   return await axios.put(path, form)
 }

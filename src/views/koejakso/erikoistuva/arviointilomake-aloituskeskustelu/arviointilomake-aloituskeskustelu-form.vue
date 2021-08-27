@@ -298,7 +298,7 @@
   })
   export default class ArviointilomakeAloituskeskusteluForm extends Vue {
     $refs!: {
-      koulutuspaikanArvioijat: any
+      koulutuspaikanArvioijat: KoulutuspaikanArvioijat
     }
 
     @Prop({ required: true, default: {} })

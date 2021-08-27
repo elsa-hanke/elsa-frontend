@@ -96,7 +96,7 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
-  import { KoulutussopimusLomake } from '@/types'
+  import { KoulutussopimusLomake, Koejakso } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
@@ -171,7 +171,7 @@
       return store.getters['erikoistuva/kouluttajat']
     }
 
-    get koejaksoData() {
+    get koejaksoData(): Koejakso {
       return store.getters['erikoistuva/koejakso']
     }
 

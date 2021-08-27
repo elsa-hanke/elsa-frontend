@@ -10,62 +10,59 @@ export function mapAllekirjoitusErikoistuva(
   vue: Vue,
   erikoistuvanNimi?: string,
   allekirjoitusPvm?: string
-): KoejaksonVaiheAllekirjoitus {
+): KoejaksonVaiheAllekirjoitus | null {
   return allekirjoitusPvm
-    ? ({
+    ? {
         nimiAndNimike: `${erikoistuvanNimi}, ${(vue.$t(
           'erikoistuva-laakari'
         ) as string).toLowerCase()}`,
         pvm: allekirjoitusPvm
-      } as KoejaksonVaiheAllekirjoitus)
-    : (null as any)
+      }
+    : null
 }
 
 export function mapAllekirjoituksetSopimuksenKouluttajat(
   kouluttajat: Kouluttaja[]
-): KoejaksonVaiheAllekirjoitus[] {
+): KoejaksonVaiheAllekirjoitus[] | null {
   return kouluttajat
     .filter((k) => k.sopimusHyvaksytty)
-    .map(
-      (k) =>
-        ({
-          nimiAndNimike: `${k.nimi}, ${k.nimike}`,
-          pvm: k.kuittausaika
-        } as KoejaksonVaiheAllekirjoitus)
-    )
+    .map((k) => ({
+      nimiAndNimike: `${k.nimi}, ${k.nimike}`,
+      pvm: k.kuittausaika
+    }))
 }
 
 export function mapAllekirjoitusLahikouluttaja(
   vue: Vue,
   kouluttaja?: KoejaksonVaiheHyvaksyja
-): KoejaksonVaiheAllekirjoitus {
+): KoejaksonVaiheAllekirjoitus | null {
   return kouluttaja?.sopimusHyvaksytty
-    ? ({
+    ? {
         nimiAndNimike: `${kouluttaja.nimi}, ${(vue.$t('lahikouluttaja') as string).toLowerCase()}`,
         pvm: kouluttaja.kuittausaika
-      } as KoejaksonVaiheAllekirjoitus)
-    : (null as any)
+      }
+    : null
 }
 
 export function mapAllekirjoitusLahiesimies(
   vue: Vue,
   esimies?: KoejaksonVaiheHyvaksyja
-): KoejaksonVaiheAllekirjoitus {
+): KoejaksonVaiheAllekirjoitus | null {
   return esimies?.sopimusHyvaksytty
-    ? ({
+    ? {
         nimiAndNimike: `${esimies.nimi}, ${(vue.$t('lahiesimies') as string).toLowerCase()}`,
         pvm: esimies.kuittausaika
-      } as KoejaksonVaiheAllekirjoitus)
-    : (null as any)
+      }
+    : null
 }
 
 export function mapAllekirjoitusVastuuhenkilo(
   vastuuhenkilo?: Vastuuhenkilo
-): KoejaksonVaiheAllekirjoitus {
+): KoejaksonVaiheAllekirjoitus | null {
   return vastuuhenkilo && vastuuhenkilo.sopimusHyvaksytty
-    ? ({
+    ? {
         nimiAndNimike: `${vastuuhenkilo.nimi}, ${vastuuhenkilo.nimike}`,
         pvm: vastuuhenkilo.kuittausaika
-      } as KoejaksonVaiheAllekirjoitus)
-    : (null as any)
+      }
+    : null
 }
