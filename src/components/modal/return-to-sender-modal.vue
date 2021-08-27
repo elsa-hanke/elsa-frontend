@@ -75,6 +75,7 @@
       if (this.$v.$anyError) {
         return
       }
+      this.hideModal()
       this.$emit('submit', this.korjausehdotus)
     }
   }

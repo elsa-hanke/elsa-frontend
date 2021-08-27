@@ -233,18 +233,21 @@
               <elsa-button
                 v-if="isCurrentUserLahiesimies"
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                style="width: 14rem"
+                style="min-width: 14rem"
                 variant="outline-primary"
+                :disabled="buttonStates.primaryButtonLoading"
+                :loading="buttonStates.secondaryButtonLoading"
                 v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
               <elsa-button
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                style="width: 14rem"
+                style="min-width: 14rem"
                 variant="primary"
-                :loading="params.saving"
-                @click="sendForm"
+                :disabled="buttonStates.secondaryButtonLoading"
+                :loading="buttonStates.primaryButtonLoading"
+                @click="onValidateAndConfirm"
               >
                 {{ $t('allekirjoita-laheta') }}
               </elsa-button>
@@ -266,13 +269,13 @@
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
       :submitText="$t('allekirjoita-laheta')"
-      @submit="onSubmit"
+      @submit="onSign"
     />
 
     <elsa-return-to-sender-modal
       id="return-to-sender"
       :title="$t('palauta-kouluttajalle-muokattavaksi')"
-      @submit="returnToSender"
+      @submit="onReturnToSender"
     />
   </div>
 </template>
@@ -290,8 +293,7 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { ValiarviointiLomake } from '@/types'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import { ValiarviointiLomake, KoejaksonVaiheButtonStates } from '@/types'
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -328,11 +330,7 @@
       }
     }
   })
-  export default class KouluttajaArviointilomakeValiarviointi extends Mixins(
-    ConfirmRouteExit,
-    validationMixin
-  ) {
-    skipRouteExitConfirm!: boolean
+  export default class KouluttajaArviointilomakeValiarviointi extends Mixins(validationMixin) {
     items = [
       {
         text: this.$t('etusivu'),
@@ -359,9 +357,9 @@
       }
     ]
 
-    params = {
-      saving: false,
-      deleting: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     loading = true
@@ -379,10 +377,6 @@
       const form = this.$v.valiarviointi
       const { $dirty, $error } = _get(form, value) as any
       return $dirty ? ($error ? false : null) : null
-    }
-
-    hideModal(id: string) {
-      return this.$bvModal.hide(id)
     }
 
     get valiarvioinninTila() {
@@ -489,7 +483,7 @@
       ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
 
-    async returnToSender(korjausehdotus: string) {
+    async onReturnToSender(korjausehdotus: string) {
       const form = {
         ...this.valiarviointi,
         korjausehdotus: korjausehdotus,
@@ -497,8 +491,9 @@
       }
 
       try {
+        this.buttonStates.secondaryButtonLoading = true
         await store.dispatch('kouluttaja/putValiarviointi', form)
-        this.skipRouteExitConfirm = true
+        this.buttonStates.secondaryButtonLoading = true
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))
       } catch (err) {
@@ -506,7 +501,7 @@
       }
     }
 
-    async updateSentForm() {
+    async onSign() {
       if (!this.valiarviointi) return
       if (this.valiarviointi.edistyminenTavoitteidenMukaista === true) {
         this.valiarviointi.kehittamistoimenpideKategoriat = null
@@ -519,8 +514,9 @@
         this.valiarviointi.muuKategoria = null
       }
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('kouluttaja/putValiarviointi', this.valiarviointi)
-
+        this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-ja-lahetetty-onnistuneesti'))
       } catch (err) {
@@ -528,7 +524,7 @@
       }
     }
 
-    sendForm() {
+    onValidateAndConfirm() {
       if (!this.isCurrentUserLahiesimies) {
         this.$v.$touch()
         if (this.$v.$anyError) {
@@ -538,23 +534,12 @@
       return this.$bvModal.show('confirm-send')
     }
 
-    onSubmit(params: any) {
-      params.saving = true
-      this.updateSentForm()
-      this.skipRouteExitConfirm = true
-      params.saving = false
-    }
-
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
       const { data } = await api.getValiarviointi(this.valiarviointiId)
       this.valiarviointi = data
       this.loading = false
-
-      if (!this.editable) {
-        this.skipRouteExitConfirm = true
-      }
     }
   }
 </script>

@@ -75,7 +75,6 @@
           ref="koulutuspaikanArvioijat"
           :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
           :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
-          :params="params"
           :isReadonly="!editable"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
@@ -95,8 +94,10 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="sendForm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
-                :loading="params.saving"
+                @click="
+                  onValidateAndConfirm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')
+                "
+                :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-5"
               >
@@ -116,7 +117,7 @@
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
       :submitText="$t('laheta')"
-      @submit="onSubmit"
+      @submit="onSend"
     />
     <elsa-confirmation-modal
       id="confirm-sign"
@@ -138,7 +139,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaButton from '@/components/button/button.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus } from '@/types'
+  import { KoejaksonVaiheAllekirjoitus, KoejaksonVaiheButtonStates } from '@/types'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -176,8 +177,9 @@
 
     loading = true
 
-    params = {
-      saving: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     koejaksonVaihe = (this.$t('kehittamistoimenpiteiden-arviointi') as string).toLowerCase()
@@ -278,26 +280,11 @@
       return this.$bvModal.hide(id)
     }
 
-    sendForm(modalId: string) {
+    onValidateAndConfirm(modalId: string) {
       if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
         return
       }
       return this.$bvModal.show(modalId)
-    }
-
-    async onSubmit() {
-      this.params.saving = true
-      this.hideModal('confirm-send')
-      this.saveNewForm()
-      this.params.saving = false
-    }
-
-    async onSign() {
-      this.params.saving = true
-      this.hideModal('confirm-sign')
-      this.kehittamistoimenpiteetLomake.erikoistuvaAllekirjoittanut = true
-      this.signForm()
-      this.params.saving = false
     }
 
     onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
@@ -308,26 +295,30 @@
       this.kehittamistoimenpiteetLomake.lahiesimies = lahiesimies
     }
 
-    async saveNewForm() {
+    async onSend() {
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch(
           'erikoistuva/postKehittamistoimenpiteet',
           this.kehittamistoimenpiteetLomake
         )
+        this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-onnistui'))
       } catch (err) {
         toastFail(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-epaonnistui'))
       }
     }
 
-    async signForm() {
+    async onSign() {
       try {
+        this.buttonStates.primaryButtonLoading = true
+        this.kehittamistoimenpiteetLomake.erikoistuvaAllekirjoittanut = true
         await store.dispatch(
           'erikoistuva/putKehittamistoimenpiteet',
           this.kehittamistoimenpiteetLomake
         )
-        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
-
+        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.kehittamistoimenpiteet.erikoistuvanAllekirjoitusaika
+        this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-onnistui'))
       } catch (err) {
         toastFail(this, this.$t('kehittamistoimenpiteet-allekirjoitus-epaonnistui'))

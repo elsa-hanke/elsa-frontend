@@ -244,3 +244,8 @@ export interface KoejaksonVaiheAllekirjoitus {
   nimiAndNimike: string
   pvm: string
 }
+
+export type KoejaksonVaiheButtonStates = {
+  primaryButtonLoading: boolean
+  secondaryButtonLoading: boolean
+}

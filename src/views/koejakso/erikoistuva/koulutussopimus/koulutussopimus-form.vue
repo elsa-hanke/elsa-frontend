@@ -201,17 +201,20 @@
         </elsa-button>
         <elsa-button
           class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-          style="width: 14rem"
+          style="min-width: 14rem"
           variant="outline-primary"
+          :disabled="buttonStates.primaryButtonLoading"
+          :loading="buttonStates.secondaryButtonLoading"
           v-b-modal.confirm-save
         >
           {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
         <elsa-button
           class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-          style="width: 14rem"
-          :loading="params.saving"
-          @click="sendForm"
+          style="min-width: 14rem"
+          :disabled="buttonStates.secondaryButtonLoading"
+          :loading="buttonStates.primaryButtonLoading"
+          @click="validateAndConfirm"
           variant="primary"
         >
           {{ $t('allekirjoita-laheta') }}
@@ -241,7 +244,13 @@
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
   import { format } from 'date-fns'
-  import { Kouluttaja, KoulutussopimusLomake, UserAccount, Vastuuhenkilo } from '@/types'
+  import {
+    KoejaksonVaiheButtonStates,
+    Kouluttaja,
+    KoulutussopimusLomake,
+    UserAccount,
+    Vastuuhenkilo
+  } from '@/types'
   import _get from 'lodash/get'
   import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -328,9 +337,9 @@
     selected: any = {
       vastuuhenkilo: null
     }
-    params = {
-      saving: false,
-      deleting: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     validateState(value: string) {
@@ -401,10 +410,10 @@
     }
 
     saveAndExit() {
-      this.$emit('saveAndExit', this.form, this.params)
+      this.$emit('saveAndExit', this.form, this.buttonStates)
     }
 
-    sendForm() {
+    validateAndConfirm() {
       let childFormsValid = true
       this.$v.form.$touch()
       this.$refs.kouluttajaDetails.forEach((k: any) => {
@@ -426,12 +435,8 @@
       return this.$bvModal.show('confirm-send')
     }
 
-    hideModal(id: string) {
-      return this.$bvModal.hide(id)
-    }
-
     onSubmit() {
-      this.$emit('submit', this.form, this.params)
+      this.$emit('submit', this.form, this.buttonStates)
     }
 
     mounted(): void {
