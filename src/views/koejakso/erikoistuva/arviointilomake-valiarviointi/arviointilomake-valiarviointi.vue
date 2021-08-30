@@ -92,13 +92,13 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col>
+            <b-col v-if="valiarviointiLomake.vahvuudet">
               <h5>{{ $t('vahvuudet') }}</h5>
               <p>{{ valiarviointiLomake.vahvuudet }}</p>
             </b-col>
           </b-row>
           <b-row>
-            <b-col>
+            <b-col v-if="valiarviointiLomake.kehittamistoimenpiteet">
               <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
               <p>{{ valiarviointiLomake.kehittamistoimenpiteet }}</p>
             </b-col>
