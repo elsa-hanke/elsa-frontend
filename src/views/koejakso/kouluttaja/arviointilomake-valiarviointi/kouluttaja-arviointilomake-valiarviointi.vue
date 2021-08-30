@@ -139,6 +139,7 @@
                     :options="kehittamistoimenpideKategoriat"
                     :required="true"
                     :state="validateState('kehittamistoimenpideKategoriat')"
+                    stacked
                   ></b-form-checkbox-group>
                   <b-form-invalid-feedback
                     :id="`${uid}-feedback`"
@@ -161,15 +162,16 @@
           <b-row>
             <b-col>
               <div v-if="!editable">
-                <h5>{{ $t('vahvuudet') }}</h5>
-                <p v-if="!editable">{{ valiarviointi.vahvuudet }}</p>
+                <div v-if="valiarviointi.vahvuudet">
+                  <h5>{{ $t('vahvuudet') }}</h5>
+                  <p v-if="!editable">{{ valiarviointi.vahvuudet }}</p>
+                </div>
               </div>
-              <elsa-form-group v-else :label="$t('vahvuudet')" :required="true">
+              <elsa-form-group v-else :label="$t('vahvuudet')">
                 <template v-slot="{ uid }">
                   <b-form-textarea
                     :id="uid"
                     v-model="valiarviointi.vahvuudet"
-                    :state="validateState('vahvuudet')"
                     rows="7"
                     class="textarea-min-height"
                   ></b-form-textarea>
@@ -183,19 +185,16 @@
           <b-row>
             <b-col>
               <div v-if="!editable">
-                <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
-                <p v-if="!editable">{{ valiarviointi.kehittamistoimenpiteet }}</p>
+                <div v-if="valiarviointi.kehittamistoimenpiteet">
+                  <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
+                  <p v-if="!editable">{{ valiarviointi.kehittamistoimenpiteet }}</p>
+                </div>
               </div>
-              <elsa-form-group
-                v-else
-                :label="$t('selvitys-kehittamistoimenpiteista')"
-                :required="true"
-              >
+              <elsa-form-group v-else :label="$t('selvitys-kehittamistoimenpiteista')">
                 <template v-slot="{ uid }">
                   <b-form-textarea
                     :id="uid"
                     v-model="valiarviointi.kehittamistoimenpiteet"
-                    :state="validateState('kehittamistoimenpiteet')"
                     rows="7"
                     class="textarea-min-height"
                   ></b-form-textarea>
@@ -314,12 +313,6 @@
     validations: {
       valiarviointi: {
         edistyminenTavoitteidenMukaista: {
-          required
-        },
-        vahvuudet: {
-          required
-        },
-        kehittamistoimenpiteet: {
           required
         },
         kehittamistoimenpideKategoriat: {
