@@ -67,7 +67,7 @@
           <b-row v-if="!loppukeskusteluLomake.esitetaanKoejaksonHyvaksymista">
             <b-col lg="8">
               <h5>{{ $t('selvitys-jatkotoimista') }}</h5>
-              <p>{{ loppukeskusteluLomake.selvitys }}</p>
+              <p>{{ loppukeskusteluLomake.jatkotoimenpiteet }}</p>
             </b-col>
           </b-row>
           <hr />
