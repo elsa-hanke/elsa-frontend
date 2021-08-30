@@ -314,7 +314,9 @@
 
     get showWaitingForErikoistuva() {
       return (
-        this.isCurrentUserLahiesimies && this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty
+        this.isCurrentUserLahiesimies &&
+        this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty &&
+        !this.kehittamistoimenpiteet?.erikoistuvaAllekirjoittanut
       )
     }
 
@@ -345,7 +347,7 @@
         allekirjoitusLahikouluttaja,
         allekirjoitusLahiesimies,
         allekirjoitusErikoistuva
-      ].filter((a) => a !== null)
+      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
 
     async returnToSender(korjausehdotus: string) {

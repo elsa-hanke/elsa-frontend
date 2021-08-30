@@ -94,6 +94,10 @@
                       : $t('loppukeskustelu-kayty-jatkotoimenpiteet')
                   }}
                 </p>
+                <div v-if="!loppukeskustelu.esitetaanKoejaksonHyvaksymista">
+                  <h5>{{ $t('selvitys-jatkotoimista') }}</h5>
+                  <p>{{ loppukeskustelu.jatkotoimenpiteet }}</p>
+                </div>
               </div>
               <elsa-form-group
                 v-else
@@ -351,7 +355,11 @@
     }
 
     get showWaitingForErikoistuva() {
-      return this.isCurrentUserLahiesimies && this.loppukeskustelu?.lahiesimies.sopimusHyvaksytty
+      return (
+        this.isCurrentUserLahiesimies &&
+        this.loppukeskustelu?.lahiesimies.sopimusHyvaksytty &&
+        !this.loppukeskustelu?.erikoistuvaAllekirjoittanut
+      )
     }
 
     get acceptedByEveryone() {

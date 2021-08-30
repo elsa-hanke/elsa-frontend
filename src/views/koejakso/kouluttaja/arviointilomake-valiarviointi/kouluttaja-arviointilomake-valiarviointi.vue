@@ -459,7 +459,11 @@
     }
 
     get showWaitingForErikoistuva() {
-      return this.isCurrentUserLahiesimies && this.valiarviointi?.lahiesimies.sopimusHyvaksytty
+      return (
+        this.isCurrentUserLahiesimies &&
+        this.valiarviointi?.lahiesimies.sopimusHyvaksytty &&
+        !this.valiarviointi?.erikoistuvaAllekirjoittanut
+      )
     }
 
     get acceptedByEveryone() {
