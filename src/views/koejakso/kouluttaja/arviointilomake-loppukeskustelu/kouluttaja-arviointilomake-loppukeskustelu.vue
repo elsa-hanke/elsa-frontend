@@ -171,6 +171,8 @@
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 variant="outline-primary"
+                :disabled="buttonStates.primaryButtonLoading"
+                :loading="buttonStates.secondaryButtonLoading"
                 v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
@@ -179,8 +181,9 @@
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 variant="primary"
-                :loading="params.saving"
-                @click="sendForm"
+                :disabled="buttonStates.secondaryButtonLoading"
+                :loading="buttonStates.primaryButtonLoading"
+                @click="onValidateAndConfirm"
               >
                 {{ $t('allekirjoita-laheta') }}
               </elsa-button>
@@ -202,13 +205,13 @@
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
       :submitText="$t('allekirjoita-laheta')"
-      @submit="onSubmit"
+      @submit="onSign"
     />
 
     <elsa-return-to-sender-modal
       id="return-to-sender"
       :title="$t('palauta-kouluttajalle-muokattavaksi')"
-      @submit="returnToSender"
+      @submit="onReturnToSender"
     />
   </div>
 </template>
@@ -226,8 +229,7 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { LoppukeskusteluLomake } from '@/types'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import { LoppukeskusteluLomake, KoejaksonVaiheButtonStates } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -259,10 +261,7 @@
       }
     }
   })
-  export default class KouluttajaArviointilomakeLoppukeskustelu extends Mixins(
-    ConfirmRouteExit,
-    validationMixin
-  ) {
+  export default class KouluttajaArviointilomakeLoppukeskustelu extends Mixins(validationMixin) {
     skipRouteExitConfirm!: boolean
     items = [
       {
@@ -290,9 +289,9 @@
       }
     ]
 
-    params = {
-      saving: false,
-      deleting: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     loading = true
@@ -303,10 +302,6 @@
       const form = this.$v.loppukeskustelu
       const { $dirty, $error } = _get(form, value) as any
       return $dirty ? ($error ? false : null) : null
-    }
-
-    hideModal(id: string) {
-      return this.$bvModal.hide(id)
     }
 
     get loppukeskustelunTila() {
@@ -392,7 +387,7 @@
       ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
     }
 
-    async returnToSender(korjausehdotus: string) {
+    async onReturnToSender(korjausehdotus: string) {
       const form = {
         ...this.loppukeskustelu,
         korjausehdotus: korjausehdotus,
@@ -400,8 +395,9 @@
       }
 
       try {
+        this.buttonStates.secondaryButtonLoading = true
         await store.dispatch('kouluttaja/putLoppukeskustelu', form)
-        this.skipRouteExitConfirm = true
+        this.buttonStates.secondaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('loppukeskustelu-palautettu-muokattavaksi'))
       } catch (err) {
@@ -409,13 +405,15 @@
       }
     }
 
-    async updateSentForm() {
+    async onSign() {
       if (!this.loppukeskustelu) return
       if (this.loppukeskustelu.esitetaanKoejaksonHyvaksymista === true) {
         this.loppukeskustelu.jatkotoimenpiteet = null
       }
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('kouluttaja/putLoppukeskustelu', this.loppukeskustelu)
+        this.buttonStates.primaryButtonLoading = false
 
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-ja-lahetetty-onnistuneesti'))
@@ -424,23 +422,12 @@
       }
     }
 
-    sendForm() {
+    onValidateAndConfirm() {
       this.$v.$touch()
       if (this.$v.$anyError) {
         return
       }
       return this.$bvModal.show('confirm-send')
-    }
-
-    onSubmit(params: any) {
-      this.$v.$touch()
-      if (this.$v.$anyError) {
-        return
-      }
-      params.saving = true
-      this.updateSentForm()
-      this.skipRouteExitConfirm = true
-      params.saving = false
     }
 
     async mounted() {
@@ -449,10 +436,6 @@
       const { data } = await api.getLoppukeskustelu(this.loppukeskusteluId)
       this.loppukeskustelu = data
       this.loading = false
-
-      if (!this.editable) {
-        this.skipRouteExitConfirm = true
-      }
     }
   }
 </script>

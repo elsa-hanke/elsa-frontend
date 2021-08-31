@@ -77,7 +77,6 @@
           ref="koulutuspaikanArvioijat"
           :lahikouluttaja="loppukeskusteluLomake.lahikouluttaja"
           :lahiesimies="loppukeskusteluLomake.lahiesimies"
-          :params="params"
           :isReadonly="!editable"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
@@ -98,8 +97,10 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="sendForm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
-                :loading="params.saving"
+                @click="
+                  onValidateAndConfirm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')
+                "
+                :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-5"
               >
@@ -119,7 +120,7 @@
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
       :submitText="$t('laheta')"
-      @submit="onSubmit"
+      @submit="onSend"
     />
     <elsa-confirmation-modal
       id="confirm-sign"
@@ -139,7 +140,12 @@
   import _get from 'lodash/get'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import store from '@/store'
-  import { LoppukeskusteluLomake, KoejaksonVaiheHyvaksyja, Koejakso } from '@/types'
+  import {
+    LoppukeskusteluLomake,
+    KoejaksonVaiheHyvaksyja,
+    Koejakso,
+    KoejaksonVaiheButtonStates
+  } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
@@ -201,8 +207,9 @@
 
     loading = true
 
-    params = {
-      saving: false
+    buttonStates: KoejaksonVaiheButtonStates = {
+      primaryButtonLoading: false,
+      secondaryButtonLoading: false
     }
 
     koejaksonVaihe = 'väliarviointi'
@@ -312,44 +319,33 @@
       return this.$bvModal.hide(id)
     }
 
-    sendForm(modalId: string) {
-      this.$v.$touch()
-      if (this.$v.$anyError) {
+    onValidateAndConfirm(modalId: string) {
+      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
         return
       }
       return this.$bvModal.show(modalId)
     }
 
-    async saveNewForm() {
+    async onSend() {
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/postLoppukeskustelu', this.loppukeskusteluLomake)
+        this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-lahetetty-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
       }
     }
 
-    async updateForm() {
+    async onSign() {
       try {
+        this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/putLoppukeskustelu', this.loppukeskusteluLomake)
+        this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-onnistuneesti'))
       } catch (err) {
         toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
       }
-    }
-
-    async onSubmit() {
-      this.params.saving = true
-      this.hideModal('confirm-send')
-      this.saveNewForm()
-      this.params.saving = false
-    }
-
-    async onSign() {
-      this.params.saving = true
-      this.hideModal('confirm-sign')
-      this.updateForm()
-      this.params.saving = false
     }
 
     async mounted() {

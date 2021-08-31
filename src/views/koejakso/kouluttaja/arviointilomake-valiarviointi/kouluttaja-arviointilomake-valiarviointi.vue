@@ -493,7 +493,7 @@
       try {
         this.buttonStates.secondaryButtonLoading = true
         await store.dispatch('kouluttaja/putValiarviointi', form)
-        this.buttonStates.secondaryButtonLoading = true
+        this.buttonStates.secondaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))
       } catch (err) {
