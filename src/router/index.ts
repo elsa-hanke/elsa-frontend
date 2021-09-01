@@ -44,6 +44,7 @@ import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/e
 import ErikoistuvaArviointilomakeLoppukeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-loppukeskustelu/arviointilomake-loppukeskustelu.vue'
 import ErikoistuvaArviointilomakeVastuuhenkilonArvio from '@/views/koejakso/erikoistuva/arviointilomake-vastuuhenkilon-arvio/arviointilomake-vastuuhenkilon-arvio.vue'
 import KouluttajaArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-loppukeskustelu/kouluttaja-arviointilomake-loppukeskustelu.vue'
+import VastuuhenkilonArvioVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/vastuuhenkilon-arvio-vastuuhenkilo.vue'
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
 
@@ -349,6 +350,18 @@ const routes: Array<RouteConfig> = [
             component: KouluttajaArviointilomakeLoppukeskustelu,
             beforeEnter: (to, from, next) => {
               if (Vue.prototype.$isKouluttaja()) {
+                next()
+              } else {
+                next(from.fullPath)
+              }
+            }
+          },
+          {
+            path: 'vastuuhenkilon-arvio/:id',
+            name: 'vastuuhenkilon-arvio-vastuuhenkilo',
+            component: VastuuhenkilonArvioVastuuhenkilo,
+            beforeEnter: (to, from, next) => {
+              if (Vue.prototype.$isVastuuhenkilo()) {
                 next()
               } else {
                 next(from.fullPath)

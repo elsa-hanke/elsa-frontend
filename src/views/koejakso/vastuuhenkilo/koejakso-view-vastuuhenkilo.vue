@@ -20,7 +20,10 @@
   })
   export default class KoejaksoViewVastuuhenkilo extends Vue {
     private loading = true
-    private componentLinks = new Map([[LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus']])
+    private componentLinks = new Map([
+      [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
+      [LomakeTyypit.VASTUUHENKILON_ARVIO, 'vastuuhenkilon-arvio-vastuuhenkilo']
+    ])
 
     async mounted() {
       await store.dispatch('vastuuhenkilo/getKoejaksot')
