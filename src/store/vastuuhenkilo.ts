@@ -47,6 +47,16 @@ const vastuuhenkilo: Module<any, any> = {
       } catch (err) {
         commit('formError')
       }
+    },
+    async putVastuuhenkilonArvio({ commit, dispatch }, vastuuhenkilonArvioLomake) {
+      commit('formRequest')
+      try {
+        await api.putVastuuhenkilonArvio(vastuuhenkilonArvioLomake)
+        commit('formSuccess')
+        dispatch('getKoejaksot')
+      } catch (err) {
+        commit('formError')
+      }
     }
   },
   getters: {
