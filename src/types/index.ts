@@ -248,13 +248,26 @@ export interface LoppukeskusteluLomake {
 
 export interface VastuuhenkilonArvioLomake {
   erikoistuvaAllekirjoittanut: boolean
+  erikoistuvanAllekirjoitusaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
+  koejaksoHyvaksytty: boolean | null
   id: number | null
   muokkauspaiva: string
-  vastuuhenkilo: KoejaksonVaiheHyvaksyja
+  vastuuhenkilo: Vastuuhenkilo | undefined
+  vastuuhenkiloHyvaksynyt: boolean | null
+  perusteluHylkaamiselle: string | null
+  hylattyArviointiKaytyLapiKeskustellen: boolean | null
+  vastuuhenkilonKuittausaika?: string
+}
+
+export interface VastuuhenkilonArvioLomakeData {
+  vastuuhenkilot: Vastuuhenkilo[]
+  tyoskentelyjaksoLiitetty: boolean
+  tyoskentelyjaksonPituusRiittava: boolean
+  tyotodistusLiitetty: boolean
 }
 
 export interface PoissaoloLomake {

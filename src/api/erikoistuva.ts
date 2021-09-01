@@ -4,7 +4,8 @@ import {
   KehittamistoimenpiteetLomake,
   KoulutussopimusLomake,
   LoppukeskusteluLomake,
-  ValiarviointiLomake
+  ValiarviointiLomake,
+  VastuuhenkilonArvioLomake
 } from '@/types'
 
 export async function putKayttooikeushakemus(value: any) {
@@ -67,6 +68,16 @@ export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
   return await axios.put(path, form)
 }
 
+export async function postVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
+  const path = 'erikoistuva-laakari/koejakso/vastuuhenkilonarvio'
+  return await axios.post(path, form)
+}
+
+export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
+  const path = 'erikoistuva-laakari/koejakso/vastuuhenkilonarvio'
+  return await axios.put(path, form)
+}
+
 export async function getKouluttajat() {
   const path = '/kouluttajat'
   return await axios.get(path)
@@ -104,5 +115,10 @@ export async function getKoulutussopimusLomake() {
 
 export async function getYliopistot() {
   const path = '/yliopistot'
+  return await axios.get(path)
+}
+
+export async function getVastuuhenkilonArvioLomake() {
+  const path = '/erikoistuva-laakari/vastuuhenkilonarvio-lomake'
   return await axios.get(path)
 }

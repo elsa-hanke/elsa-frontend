@@ -149,6 +149,26 @@ const erikoistuva: Module<any, any> = {
         commit('formError')
       }
     },
+    async postVastuuhenkilonArvio({ dispatch, commit }, vastuuhenkilonArvioLomake) {
+      commit('formRequest')
+      try {
+        await api.postVastuuhenkilonArvio(vastuuhenkilonArvioLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
+    },
+    async putVastuuhenkilonArvio({ dispatch, commit }, vastuuhenkilonArvioLomake) {
+      commit('formRequest')
+      try {
+        await api.putVastuuhenkilonArvio(vastuuhenkilonArvioLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+      }
+    },
     async getKouluttajat({ commit }) {
       commit('kouluttajatRequest')
       try {

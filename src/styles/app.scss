@@ -273,6 +273,11 @@ h6 {
   white-space: pre-line;
 }
 
+.text-error {
+  color: $red;
+  font-size: $font-size-sm;
+}
+
 .capitalize-first {
   text-transform: lowercase;
 }

@@ -39,6 +39,17 @@
         </template>
       </koejakso-card-content>
 
+      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA">
+        <template v-slot:content>
+          <p class="pr-5">{{ $t('vastuuhenkilon-arvio-tila-odottaa-erikoistuvan-hyvaksyntaa') }}</p>
+        </template>
+        <template v-slot:button>
+          <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
+            {{ $t('nayta-arviointipyynto') }}
+          </elsa-button>
+        </template>
+      </koejakso-card-content>
+
       <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template v-slot:content>
           <div class="d-inline-flex">
@@ -86,7 +97,7 @@
     }
 
     get url() {
-      return 'koejakson-loppukeskustelu'
+      return 'koejakson-vastuuhenkilon-arvio'
     }
   }
 </script>
