@@ -1,5 +1,5 @@
 <template>
-  <div class="koulutussopimus col-lg-8 px-0">
+  <div class="col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <h1 class="mb-3">{{ $t('kehittamistoimenpiteet-otsikko') }}</h1>
@@ -10,7 +10,7 @@
         <div v-else-if="editable">
           <p>{{ $t('kehittamistoimenpiteet-kouluttaja-ingressi') }}</p>
         </div>
-        <b-alert :show="showWaitingForLahiesimiesOrErikoistuva" variant="dark" class="mt-3">
+        <b-alert :show="waitingForLahiesimiesOrErikoistuva" variant="dark" class="mt-3">
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
@@ -20,7 +20,7 @@
             </div>
           </div>
         </b-alert>
-        <b-alert :show="showWaitingForErikoistuva" variant="dark" class="mt-3">
+        <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3">
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
@@ -184,7 +184,7 @@
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
   import _get from 'lodash/get'
-  import * as api from '@/api/kouluttaja'
+  import { getKehittamistoimenpiteet } from '@/api/kouluttaja'
   import store from '@/store'
   import ElsaButton from '@/components/button/button.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
@@ -300,7 +300,7 @@
       return this.kehittamistoimenpiteet?.erikoistuvanNimi.split(' ')[1]
     }
 
-    get showWaitingForLahiesimiesOrErikoistuva() {
+    get waitingForLahiesimiesOrErikoistuva() {
       return (
         !this.isCurrentUserLahiesimies &&
         this.kehittamistoimenpiteet?.lahikouluttaja.sopimusHyvaksytty &&
@@ -308,7 +308,7 @@
       )
     }
 
-    get showWaitingForErikoistuva() {
+    get waitingForErikoistuva() {
       return (
         this.isCurrentUserLahiesimies &&
         this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty &&
@@ -390,7 +390,7 @@
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await api.getKehittamistoimenpiteet(this.kehittamistoimenpiteetId)
+      const { data } = await getKehittamistoimenpiteet(this.kehittamistoimenpiteetId)
       this.kehittamistoimenpiteet = data
       this.loading = false
     }

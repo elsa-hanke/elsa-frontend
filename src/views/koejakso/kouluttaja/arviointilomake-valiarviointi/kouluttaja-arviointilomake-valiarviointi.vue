@@ -286,7 +286,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
   import _get from 'lodash/get'
-  import * as api from '@/api/kouluttaja'
+  import { getValiarviointi } from '@/api/kouluttaja'
   import store from '@/store'
   import ElsaButton from '@/components/button/button.vue'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
@@ -537,7 +537,7 @@
     async mounted() {
       this.loading = true
       await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await api.getValiarviointi(this.valiarviointiId)
+      const { data } = await getValiarviointi(this.valiarviointiId)
       this.valiarviointi = data
       this.loading = false
     }
