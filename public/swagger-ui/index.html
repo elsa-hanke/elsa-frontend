@@ -52,7 +52,6 @@
           .get(elsaApiLocation + "/swagger-resources")
           .then(function(response) {
             response.data.forEach(function(resource) {
-              console.log(resource);
               urls.push({ name: resource.name, url: elsaApiLocation + resource.location });
             });
 
