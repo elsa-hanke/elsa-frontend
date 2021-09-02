@@ -207,6 +207,7 @@
   import { toastFail } from '@/utils/toast'
   import { tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
   import { durationOptions } from '@/plugins/date'
+  import { KaytannonKoulutusTyyppi } from '@/utils/constants'
 
   @Component({
     components: {
@@ -379,14 +380,17 @@
     get tilastotKaytannonKoulutusSorted() {
       return [
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) => kk.kaytannonKoulutus === 'OMAN_ERIKOISALAN_KOULUTUS'
+          (kk: any) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS
         ),
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) => kk.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'
+          (kk: any) =>
+            kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
         ),
-        this.tilastotKaytannonKoulutus.find((kk: any) => kk.kaytannonKoulutus === 'TUTKIMUSTYO'),
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) => kk.kaytannonKoulutus === 'TERVEYSKESKUSTYO'
+          (kk: any) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TUTKIMUSTYO
+        ),
+        this.tilastotKaytannonKoulutus.find(
+          (kk: any) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
         )
       ].filter((kk: any) => kk !== null)
     }
