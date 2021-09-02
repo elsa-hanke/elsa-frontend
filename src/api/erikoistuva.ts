@@ -92,7 +92,7 @@ export async function putTyoskentelyjakso(formData: FormData) {
   })
 }
 
-export async function deleteTyoskentelyjakso(id: string) {
+export async function deleteTyoskentelyjakso(id: number) {
   const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
   await axios.delete(path)
 }

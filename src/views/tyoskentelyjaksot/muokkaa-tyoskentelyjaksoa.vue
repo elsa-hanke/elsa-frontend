@@ -32,7 +32,7 @@
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { confirmDelete } from '@/utils/confirm'
-  import { TyoskentelyjaksoLomake } from '@/types'
+  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
   import {
     getTyoskentelyjakso,
     getTyoskentelyjaksoLomake,
@@ -61,7 +61,7 @@
       }
     ]
     tyoskentelyjaksoLomake: null | TyoskentelyjaksoLomake = null
-    tyoskentelyjakso: any = null
+    tyoskentelyjakso: null | Tyoskentelyjakso = null
     loading = true
 
     async mounted() {
@@ -105,7 +105,7 @@
         this.$router.push({
           name: 'tyoskentelyjakso',
           params: {
-            tyoskentelyjaksoId: `${this.tyoskentelyjakso.id}`
+            tyoskentelyjaksoId: `${this.tyoskentelyjakso?.id}`
           }
         })
       } catch (err) {
@@ -115,6 +115,7 @@
     }
 
     async onDelete(params: any) {
+      if (!this.tyoskentelyjakso?.id) return
       if (
         await confirmDelete(
           this,

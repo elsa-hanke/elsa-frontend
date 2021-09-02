@@ -1,4 +1,9 @@
-import { KehittamistoimenpideKategoria } from '@/utils/constants'
+import {
+  ErikoisalaTyyppi,
+  KaytannonKoulutusTyyppi,
+  KehittamistoimenpideKategoria,
+  TyoskentelyjaksoTyyppi
+} from '@/utils/constants'
 
 export type ErikoistuvaLaakari = {
   id: number | null
@@ -52,6 +57,56 @@ export interface SuoritemerkintaLomake {
 export interface TyoskentelyjaksoLomake {
   kunnat: any[]
   erikoisalat: any[]
+}
+
+export interface Tyoskentelyjakso {
+  id?: number | null
+  alkamispaiva: Date | null
+  paattymispaiva: Date | null
+  osaaikaprosentti: number | null
+  kaytannonKoulutus: KaytannonKoulutusTyyppi | null
+  hyvaksyttyAiempaanErikoisalaan: boolean | null
+  tyoskentelypaikka: Tyoskentelypaikka
+  omaaErikoisalaaTukevaId?: number
+  omaaErikoisalaaTukeva: Erikoisala | null
+  erikoistuvaLaakariId?: number
+  suoritusarvioinnit?: boolean
+  liitettyKoejaksoon?: boolean
+  asiakirjat?: Asiakirja[]
+}
+
+export interface Tyoskentelypaikka {
+  id?: number | null
+  nimi: string | null
+  tyyppi: TyoskentelyjaksoTyyppi | null
+  muuTyyppi: string | null
+  kuntaId?: string
+  kunta: Kunta | null
+}
+
+export interface Kunta {
+  id?: number | null
+  abbreviation: string | null
+  shortName?: string
+  longName?: string
+  description?: string
+  kortnamn?: string
+  korvaavaKoodi?: string
+  langtNamn?: string
+  maakunta?: string
+  sairaanhoitopiiri?: string
+}
+
+export interface Erikoisala {
+  id?: number | null
+  nimi: string | null
+  voimassaoloAlkaa: Date
+  voimassaoloPaattyy: Date | null
+  tyyppi: ErikoisalaTyyppi | null
+  kaytannonKoulutuksenVahimmaispituus: number
+  terveyskeskuskoulutusjaksonVahimmaispituus: number
+  yliopistosairaalajaksonVahimmaispituus: number
+  yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituus: number
 }
 
 export type Koulutuspaikka = {

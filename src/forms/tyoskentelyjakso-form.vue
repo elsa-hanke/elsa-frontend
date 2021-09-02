@@ -77,7 +77,7 @@
           </b-form-invalid-feedback>
         </div>
         <div v-else>
-          <span :id="uid">{{ form.tyoskentelypaikka.tyyppiLabel }}</span>
+          <span :id="uid">{{ tyyppiLabel }}</span>
           <span v-if="form.tyoskentelypaikka.muuTyyppi">
             : {{ form.tyoskentelypaikka.muuTyyppi }}
           </span>
@@ -146,9 +146,6 @@
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
           ></elsa-form-datepicker>
-          <small :id="`${uid}-help`" class="form-text text-muted">
-            {{ $t('tyoskentelyjakson-minimikesto-on-30-taytta-tyopaivaa') }}
-          </small>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -159,7 +156,7 @@
             v-model="form.kaytannonKoulutus"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
-            value="OMAN_ERIKOISALAN_KOULUTUS"
+            :value="omanErikoisalanKoulutus"
           >
             {{ $t('oman-erikoisalan-koulutus') }}
           </b-form-radio>
@@ -167,16 +164,16 @@
             v-model="form.kaytannonKoulutus"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
-            value="OMAA_ERIKOISALAA_TUKEVA_KOULUTUS"
+            :value="omaaErikoisalaaTukeva"
             class="mb-0"
           >
             {{ $t('omaa-erikoisalaa-tukeva-tai-taydentava-koulutus') }}
-            <span v-if="form.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'">
+            <span v-if="form.kaytannonKoulutus === omaaErikoisalaaTukeva">
               , {{ $t('valitse-erikoisala') | lowercase }}
               <span class="text-primary">*</span>
             </span>
           </b-form-radio>
-          <div v-if="form.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'" class="pl-4">
+          <div v-if="form.kaytannonKoulutus === omaaErikoisalaaTukeva" class="pl-4">
             <elsa-form-multiselect
               v-model="form.omaaErikoisalaaTukeva"
               :options="erikoisalatFormatted"
@@ -190,7 +187,7 @@
             v-model="form.kaytannonKoulutus"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
-            value="TUTKIMUSTYO"
+            :value="tutkimustyo"
           >
             {{ $t('tutkimustyo') }}
           </b-form-radio>
@@ -198,7 +195,7 @@
             v-model="form.kaytannonKoulutus"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
-            value="TERVEYSKESKUSTYO"
+            :value="terveyskeskustyo"
           >
             {{ $t('terveyskeskustyo') }}
           </b-form-radio>
@@ -207,7 +204,7 @@
           </b-form-invalid-feedback>
         </div>
         <div v-else>
-          <span :id="uid">{{ form.kaytannonKoulutusLabel }}</span>
+          <span :id="uid">{{ kaytannonKoulutusLabel }}</span>
           <span v-if="form.omaaErikoisalaaTukeva">: {{ form.omaaErikoisalaaTukeva.nimi }}</span>
         </div>
       </template>
@@ -274,20 +271,19 @@
   import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, between, requiredIf, integer } from 'vuelidate/lib/validators'
-  import { parseISO, addDays, subDays, formatISO } from 'date-fns'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import { clamp } from '@/utils/functions'
-  import {
-    tyoskentelypaikkaTyyppiLabel,
-    tyoskentelyjaksoKaytannonKoulutusLabel
-  } from '@/utils/tyoskentelyjakso'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
-  import { Asiakirja } from '@/types'
+  import { Asiakirja, Tyoskentelyjakso } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
+  import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import {
+    tyoskentelyjaksoKaytannonKoulutusLabel,
+    tyoskentelypaikkaTyyppiLabel
+  } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -330,7 +326,9 @@
         },
         omaaErikoisalaaTukeva: {
           required: requiredIf((value) => {
-            return value.kaytannonKoulutus === 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS'
+            return (
+              value.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
+            )
           })
         }
       }
@@ -373,35 +371,35 @@
         hyvaksyttyAiempaanErikoisalaan: null
       })
     })
-    value!: any
+    value!: Tyoskentelyjakso
 
     addedFiles: File[] = []
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     reservedAsiakirjaNimetMutable: string[] = []
 
-    form = {
+    form: Tyoskentelyjakso = {
       alkamispaiva: null,
       paattymispaiva: null,
       osaaikaprosentti: 100,
       tyoskentelypaikka: {
         nimi: null,
-        kunta: {},
+        kunta: { abbreviation: null },
         tyyppi: null,
         muuTyyppi: null
       },
       kaytannonKoulutus: null,
       omaaErikoisalaaTukeva: null,
       hyvaksyttyAiempaanErikoisalaan: null
-    } as any
+    }
     tyypit = [
-      { text: this.$t('terveyskeskus'), value: 'TERVEYSKESKUS' },
-      { text: this.$t('keskussairaala'), value: 'KESKUSSAIRAALA' },
+      { text: this.$t('terveyskeskus'), value: TyoskentelyjaksoTyyppi.TERVEYSKESKUS },
+      { text: this.$t('keskussairaala'), value: TyoskentelyjaksoTyyppi.KESKUSSAIRAALA },
       {
         text: this.$t('yliopistollinen-sairaala'),
-        value: 'YLIOPISTOLLINEN_SAIRAALA'
+        value: TyoskentelyjaksoTyyppi.YLIOPISTOLLINEN_SAIRAALA
       },
-      { text: this.$t('yksityinen'), value: 'YKSITYINEN' }
+      { text: this.$t('yksityinen'), value: TyoskentelyjaksoTyyppi.YKSITYINEN }
     ]
     params = {
       saving: false,
@@ -410,15 +408,7 @@
 
     async mounted() {
       this.form = {
-        ...this.value,
-        tyoskentelypaikka: {
-          ...this.value.tyoskentelypaikka,
-          tyyppiLabel: tyoskentelypaikkaTyyppiLabel(this, this.value.tyoskentelypaikka.tyyppi)
-        },
-        kaytannonKoulutusLabel: tyoskentelyjaksoKaytannonKoulutusLabel(
-          this,
-          this.value.kaytannonKoulutus
-        )
+        ...this.value
       }
 
       this.reservedAsiakirjaNimetMutable = this.reservedAsiakirjaNimet
@@ -529,31 +519,11 @@
     }
 
     get maxAlkamispaiva() {
-      if (this.form.paattymispaiva) {
-        // Työskentelyjakson minimikesto on 30 täyttä työpäivää
-        return formatISO(
-          subDays(
-            parseISO(this.form.paattymispaiva),
-            Math.floor(30 * (100 / clamp(this.form.osaaikaprosentti, 50, 100))) - 1
-          ),
-          { representation: 'date' }
-        )
-      }
-      return undefined
+      return this.form.paattymispaiva
     }
 
     get minPaattymispaiva() {
-      if (this.form.alkamispaiva) {
-        // Työskentelyjakson minimikesto on 30 täyttä työpäivää
-        return formatISO(
-          addDays(
-            parseISO(this.form.alkamispaiva),
-            Math.ceil(30 * (100 / clamp(this.form.osaaikaprosentti, 50, 100))) - 1
-          ),
-          { representation: 'date' }
-        )
-      }
-      return undefined
+      return this.form.alkamispaiva
     }
 
     get kunnatFormatted() {
@@ -592,6 +562,36 @@
       return this.reservedAsiakirjaNimetMutable?.filter(
         (nimi) => !this.existingFileNamesForCurrentView.includes(nimi)
       )
+    }
+
+    get omaaErikoisalaaTukeva() {
+      return KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
+    }
+
+    get omanErikoisalanKoulutus() {
+      return KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS
+    }
+
+    get tutkimustyo() {
+      return KaytannonKoulutusTyyppi.TUTKIMUSTYO
+    }
+
+    get terveyskeskustyo() {
+      return KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
+    }
+
+    get kaytannonKoulutusLabel() {
+      if (this.form?.kaytannonKoulutus) {
+        return tyoskentelyjaksoKaytannonKoulutusLabel(this, this.form?.kaytannonKoulutus)
+      }
+      return undefined
+    }
+
+    get tyyppiLabel() {
+      if (this.form?.tyoskentelypaikka?.tyyppi) {
+        return tyoskentelypaikkaTyyppiLabel(this, this.form?.tyoskentelypaikka?.tyyppi)
+      }
+      return undefined
     }
 
     private mapFiles(files: File[]): Asiakirja[] {

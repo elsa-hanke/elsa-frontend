@@ -56,21 +56,6 @@ export const luottamuksenTasot = [
   }
 ]
 
-export const tyoskentelypaikkaTyypit = {
-  TERVEYSKESKUS: 'terveyskeskus',
-  KESKUSSAIRAALA: 'keskussairaala',
-  YLIOPISTOLLINEN_SAIRAALA: 'yliopistollinen-sairaala',
-  YKSITYINEN: 'yksityinen',
-  MUU: 'muu'
-} as any
-
-export const tyoskentelyjaksoKaytannonKoulutusTyypit = {
-  OMAN_ERIKOISALAN_KOULUTUS: 'oman-erikoisalan-koulutus',
-  OMAA_ERIKOISALAA_TUKEVA_KOULUTUS: 'omaa-erikoisalaa-tukeva-tai-taydentava-koulutus',
-  TUTKIMUSTYO: 'tutkimustyo',
-  TERVEYSKESKUSTYO: 'terveyskeskustyo'
-} as any
-
 export const arvioinninPerustuminen = {
   LasnaolevaHavainnointi: 'LASNA',
   KirjallinenMateriaali: 'KIRJALLINEN',
@@ -136,5 +121,25 @@ export enum KehittamistoimenpideKategoria {
   TYOSSASUORIUTUMINEN = 'TYOSSASUORIUTUMINEN',
   TYOKAYTTAYTYMINEN = 'TYOKAYTTAYTYMINEN',
   POTILASPALAUTE = 'POTILASPALAUTE',
+  MUU = 'MUU'
+}
+
+export enum KaytannonKoulutusTyyppi {
+  OMAN_ERIKOISALAN_KOULUTUS = 'OMAN_ERIKOISALAN_KOULUTUS',
+  OMAA_ERIKOISALAA_TUKEVA_KOULUTUS = 'OMAA_ERIKOISALAA_TUKEVA_KOULUTUS',
+  TUTKIMUSTYO = 'TUTKIMUSTYO',
+  TERVEYSKESKUSTYO = 'TERVEYSKESKUSTYO'
+}
+
+export enum ErikoisalaTyyppi {
+  LAAKETIEDE = 'LAAKETIEDE',
+  HAMMASLAAKETIEDE = 'HAMMASLAAKETIEDE'
+}
+
+export enum TyoskentelyjaksoTyyppi {
+  TERVEYSKESKUS = 'TERVEYSKESKUS',
+  KESKUSSAIRAALA = 'KESKUSSAIRAALA',
+  YLIOPISTOLLINEN_SAIRAALA = 'YLIOPISTOLLINEN_SAIRAALA',
+  YKSITYINEN = 'YKSITYINEN',
   MUU = 'MUU'
 }
