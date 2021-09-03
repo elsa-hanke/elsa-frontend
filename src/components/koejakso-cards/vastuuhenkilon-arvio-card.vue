@@ -45,7 +45,7 @@
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
-            {{ $t('nayta-arviointipyynto') }}
+            {{ $t('hyvaksy-arviointi') }}
           </elsa-button>
         </template>
       </koejakso-card-content>
