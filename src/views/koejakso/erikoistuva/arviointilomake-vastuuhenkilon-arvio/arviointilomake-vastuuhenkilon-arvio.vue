@@ -39,15 +39,17 @@
               </div>
             </b-alert>
             <div v-if="editable">
-              <p class="text-error" v-if="formData.tyoskentelyjaksoLiitetty === false">
+              <div class="text-error" v-if="formData.tyoskentelyjaksoLiitetty === false">
                 {{ $t('tyoskentelyjaksoa-ei-liitetty-koejaksoon') }}
-              </p>
-              <p class="text-error" v-else-if="formData.tyoskentelyjaksonPituusRiittava === false">
-                {{ $t('tyoskentelyjakson-pituus-alle-6-kk') }}
-              </p>
-              <p class="text-error" v-else-if="formData.tyotodistusLiitetty === false">
-                {{ $t('tyotodistusta-ei-liitetty-tyoskentelyjaksoon') }}
-              </p>
+              </div>
+              <div v-else>
+                <div class="text-error" v-if="formData.tyoskentelyjaksonPituusRiittava === false">
+                  {{ $t('tyoskentelyjakson-pituus-alle-6-kk') }}
+                </div>
+                <div class="text-error" v-if="formData.tyotodistusLiitetty === false">
+                  {{ $t('tyotodistusta-ei-liitetty-tyoskentelyjaksoon') }}
+                </div>
+              </div>
             </div>
             <b-alert :show="waitingForAcceptance" variant="dark" class="mt-3 mb-2">
               <div class="d-flex flex-row">
