@@ -257,7 +257,7 @@ export interface VastuuhenkilonArvioLomake {
   id: number | null
   muokkauspaiva: string
   vastuuhenkilo: Vastuuhenkilo | undefined
-  vastuuhenkiloHyvaksynyt: boolean | null
+  vastuuhenkiloAllekirjoittanut: boolean | null
   perusteluHylkaamiselle: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
   vastuuhenkilonKuittausaika?: string

@@ -273,7 +273,7 @@
       muokkauspaiva: '',
       koejaksoHyvaksytty: null,
       vastuuhenkilo: undefined,
-      vastuuhenkiloHyvaksynyt: null,
+      vastuuhenkiloAllekirjoittanut: null,
       perusteluHylkaamiselle: null,
       hylattyArviointiKaytyLapiKeskustellen: null,
       vastuuhenkilonKuittausaika: undefined
