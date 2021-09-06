@@ -41,7 +41,7 @@
       </b-nav>
       <b-nav class="bg-light font-weight-500" vertical>
         <b-nav-item class="text-nowrap px-3" link-classes="text-dark px-0 py-1" disabled>
-          <user-avatar :title="title" />
+          <user-avatar :title="title ? $t(title) : undefined" />
         </b-nav-item>
         <b-nav-item class="ml-5" link-classes="p-0 pt-1 pb-2 pb-2">
           {{ $t('oma-profiilini') }}
@@ -70,7 +70,7 @@
   import store from '@/store'
   import Avatar from 'vue-avatar'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
-  import { ELSA_ROLE } from '@/utils/roles'
+  import { getTitleFromAuthorities } from '@/utils/functions'
 
   @Component({
     components: {
@@ -91,17 +91,7 @@
     }
 
     get title() {
-      if (this.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
-        return this.$t('erikoistuva-laakari')
-      } else if (this.authorities.includes(ELSA_ROLE.Kouluttaja)) {
-        return this.$t('kouluttaja')
-      } else if (this.authorities.includes(ELSA_ROLE.Lahikouluttaja)) {
-        return this.$t('lahikouluttaja')
-      } else if (this.authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
-        return this.$t('vastuuhenkilo')
-      }
-
-      return undefined
+      return getTitleFromAuthorities(this.authorities)
     }
 
     get currentLocale() {

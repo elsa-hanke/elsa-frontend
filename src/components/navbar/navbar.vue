@@ -34,12 +34,10 @@
 
         <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
           <template #button-content>
-            <user-avatar :title="title" />
+            <user-avatar :title="title ? $t(title) : undefined" />
           </template>
-          <b-dropdown-item class="border-bottom" link-class="py-2">
-            <b-link :to="{ name: 'oma-profiili' }" class="text-dark text-decoration-none">
-              {{ $t('oma-profiilini') }}
-            </b-link>
+          <b-dropdown-item :to="{ name: 'profiili' }">
+            {{ $t('oma-profiilini') }}
           </b-dropdown-item>
           <b-dropdown-item @click="logout">
             {{ $t('kirjaudu-ulos') }}
@@ -71,7 +69,7 @@
   import Avatar from 'vue-avatar'
   import store from '@/store'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
-  import { ELSA_ROLE } from '@/utils/roles'
+  import { getTitleFromAuthorities } from '@/utils/functions'
 
   @Component({
     components: {
@@ -92,17 +90,7 @@
     }
 
     get title() {
-      if (this.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
-        return this.$t('erikoistuva-laakari')
-      } else if (this.authorities.includes(ELSA_ROLE.Kouluttaja)) {
-        return this.$t('kouluttaja')
-      } else if (this.authorities.includes(ELSA_ROLE.Lahikouluttaja)) {
-        return this.$t('lahikouluttaja')
-      } else if (this.authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
-        return this.$t('vastuuhenkilo')
-      }
-
-      return undefined
+      return getTitleFromAuthorities(this.authorities)
     }
 
     get currentLocale() {
