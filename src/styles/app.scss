@@ -304,6 +304,21 @@ table {
   }
 }
 
+.dropdown-menu {
+  & > li:not(:last-child) {
+    border-bottom: $dropdown-border-width solid $dropdown-border-color;
+  }
+
+  .dropdown-item:last-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .dropdown-item:first-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
