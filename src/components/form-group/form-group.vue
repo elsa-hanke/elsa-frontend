@@ -2,7 +2,7 @@
   <b-form-group :label-for="uid" v-bind="$attrs">
     <template v-slot:label>
       <div class="d-flex justify-content-between align-items-center flex-wrap">
-        <div class="text-nowrap" :class="{ 'mr-3': addNewEnabled }">
+        <div :class="{ 'mr-3': addNewEnabled }">
           {{ label }}
           <span class="text-primary">
             {{ required ? '*' : '' }}

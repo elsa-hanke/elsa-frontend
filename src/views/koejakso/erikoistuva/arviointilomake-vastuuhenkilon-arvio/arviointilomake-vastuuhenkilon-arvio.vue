@@ -128,13 +128,24 @@
             </div>
           </b-col>
           <b-col v-else-if="waitingForErikoistuva || acceptedByEveryone">
-            <elsa-form-group class="mb-4 mt-2" :label="$t('koejakso-on')">
+            <elsa-form-group
+              class="mt-2"
+              :class="{ 'mb-4': form.koejaksoHyvaksytty === false }"
+              :label="$t('koejakso-on')"
+            >
               {{ form.koejaksoHyvaksytty ? $t('hyvaksytty') : $t('hylatty') }}
             </elsa-form-group>
-            <elsa-form-group class="mb-4" :label="$t('perustelu-hylkaamiselle')">
+            <elsa-form-group
+              v-if="form.koejaksoHyvaksytty === false"
+              class="mb-4"
+              :label="$t('perustelu-hylkaamiselle')"
+            >
               {{ form.perusteluHylkaamiselle }}
             </elsa-form-group>
-            <elsa-form-group :label="$t('hylatyn-koejakson-arviointi-kayty-lapi-keskustellen')">
+            <elsa-form-group
+              v-if="form.koejaksoHyvaksytty === false"
+              :label="$t('hylatyn-koejakson-arviointi-kayty-lapi-keskustellen')"
+            >
               {{ $t('kylla') }}
             </elsa-form-group>
           </b-col>

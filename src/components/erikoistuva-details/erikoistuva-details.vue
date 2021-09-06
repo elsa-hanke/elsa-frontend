@@ -1,6 +1,9 @@
 <template>
   <div class="table-responsive">
-    <table class="table table-borderless border-0 table-sm" :summary="$t('henkilotiedot')">
+    <table
+      class="table table-borderless border-0 table-sm erikoistuva-details-table"
+      :summary="$t('henkilotiedot')"
+    >
       <tr class="sr-only">
         <th scope="col">{{ $t('kentta') }}</th>
         <th scope="col">{{ $t('arvo') }}</th>
@@ -107,3 +110,26 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
+  ::v-deep {
+    @include media-breakpoint-down(xs) {
+      .erikoistuva-details-table {
+        th {
+          padding-left: 0;
+        }
+        tr {
+          margin-top: 0.5rem !important;
+        }
+        tr,
+        td {
+          display: block;
+          padding-left: 0 !important;
+        }
+      }
+    }
+  }
+</style>
