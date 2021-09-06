@@ -21,24 +21,10 @@
       </template>
     </b-navbar-toggle>
 
-    <!--
-    <div class="d-flex justify-content-center w-100">
-      <div class="input-group" style="width: 500px;">
-        <input
-          class="form-control text-center rounded-pill"
-          type="text"
-          :placeholder="$t('etsi')"
-          :aria-label="$t('etsi')"
-        />
-      </div>
-    </div>
-    -->
-
     <b-collapse is-nav>
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto pr-3 font-weight-500">
         <b-nav-item
-          href="#"
           class="border-right text-nowrap align-self-center px-3"
           :to="{ name: 'viestit' }"
         >
@@ -46,12 +32,7 @@
           {{ $t('viestit') }}
         </b-nav-item>
 
-        <b-nav-item-dropdown
-          href="#"
-          class="align-self-center px-3 user-dropdown"
-          menu-class="user-dropdown-content py-0"
-          right
-        >
+        <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
           <template #button-content>
             <user-avatar :title="title" />
           </template>
@@ -60,7 +41,7 @@
               {{ $t('oma-profiilini') }}
             </b-link>
           </b-dropdown-item>
-          <b-dropdown-item link-class="py-2 text-dark text-decoration-none" @click="logout">
+          <b-dropdown-item @click="logout">
             {{ $t('kirjaudu-ulos') }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -146,16 +127,13 @@
   .brand-text {
     font-size: 0.725rem;
   }
-</style>
 
-<style lang="scss">
   .user-dropdown {
-    .dropdown-toggle {
-      display: flex;
-      align-items: center;
-    }
-    &-content {
-      margin-top: -0.25rem !important;
+    ::v-deep {
+      .dropdown-toggle {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 </style>

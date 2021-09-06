@@ -8,9 +8,9 @@ $black: #222222;
 $yellow: #ffb406;
 $red: #fb462f;
 $green: #41b257;
-$font-family-sans-serif: "Montserrat", system-ui, -apple-system, "Segoe UI",
-  Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
-  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-sans-serif: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto,
+  'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol', 'Noto Color Emoji';
 $font-size-base: 0.9375rem;
 $line-height-base: 1.466666667;
 $text-muted: #808080;
@@ -25,7 +25,7 @@ $card-cap-bg: $primary;
 $card-border-width: 0;
 $card-cap-color: $white;
 $breadcrumb-bg: none;
-$breadcrumb-divider: quote(">");
+$breadcrumb-divider: quote('>');
 $body-color: $black;
 $h1-font-size: 1.375rem;
 $h2-font-size: 1.25rem;
@@ -40,10 +40,7 @@ $btn-box-shadow: none;
 $component-active-bg: $primary;
 $input-btn-focus-color-opacity: 0.25;
 $input-btn-focus-width: 0.2rem;
-$input-btn-focus-color: rgba(
-  $component-active-bg,
-  $input-btn-focus-color-opacity
-);
+$input-btn-focus-color: rgba($component-active-bg, $input-btn-focus-color-opacity);
 $input-btn-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color;
 $btn-focus-box-shadow: $input-btn-focus-box-shadow;
 $btn-active-box-shadow: none;
@@ -79,6 +76,12 @@ $progress-border-radius: none;
 $border-width: 1px;
 $table-border-width: $border-width;
 $table-border-color: $border-color;
+$dropdown-padding-y: 0;
+$spacer: 1rem;
+$dropdown-item-padding-y: $spacer * 0.5;
+$dropdown-item-padding-x: $spacer * 0.75;
+$dropdown-border-color: rgba($black, 0.15);
+$dropdown-border-width: $border-width;
 
 // Custom variables
 $font-weight-400: 400;
@@ -99,4 +102,3 @@ $btn-danger-hover-border-color: #fb462f;
 $backdrop-background-color: #f7f7f7;
 $b-table-sort-icon-bg-not-sorted: none;
 $b-table-sort-icon-bg-dark-not-sorted: none;
-
