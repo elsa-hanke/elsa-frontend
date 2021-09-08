@@ -1,6 +1,6 @@
-import { Module } from 'vuex'
-import axios from 'axios'
 import * as api from '@/api'
+import axios from 'axios'
+import { Module } from 'vuex'
 
 const auth: Module<any, any> = {
   namespaced: true,
@@ -35,6 +35,16 @@ const auth: Module<any, any> = {
     },
     logoutError(state) {
       state.status = 'error'
+    },
+    formRequest(state) {
+      state.status = 'loading'
+    },
+    formSuccess(state, account) {
+      state.status = 'success'
+      state.account = account
+    },
+    formError(state) {
+      state.status = 'error'
     }
   },
   actions: {
@@ -47,7 +57,7 @@ const auth: Module<any, any> = {
         }
         commit('authSuccess', data)
       } catch (err) {
-        if (err.response.status === 401) {
+        if ((err as any).response.status === 401) {
           commit('authUnauthorized')
         } else {
           commit('authError')
@@ -63,6 +73,15 @@ const auth: Module<any, any> = {
       } catch (err) {
         commit('logoutError')
         window.location.reload()
+      }
+    },
+    async putUser({ commit }, userDetails) {
+      commit('formRequest')
+      try {
+        const { data } = await api.putKayttaja(userDetails)
+        commit('formSuccess', data)
+      } catch (err) {
+        commit('formError')
       }
     }
   },

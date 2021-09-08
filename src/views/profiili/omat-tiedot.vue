@@ -79,16 +79,29 @@
         <elsa-form-group :label="$t('profiilikuva')">
           <template>
             <avatar
+              :src="form.avatar"
+              :src-content-type="form.avatarContentType"
               :username="displayName"
               background-color="gray"
               color="white"
               :size="160"
             ></avatar>
             <div class="mt-2">
-              <elsa-button variant="primary" class="mr-2">
+              <input
+                ref="avatar-file-input"
+                id="avatar-file-input"
+                type="file"
+                @change="avatarChange"
+                hidden
+              />
+              <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
                 {{ $t('valitse-profiilikuva') }}
               </elsa-button>
-              <elsa-button variant="outline-danger" v-if="true">
+              <elsa-button
+                variant="outline-danger"
+                v-if="form.avatar && form.avatarContentType"
+                @click="removeAvatar"
+              >
                 <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
                 {{ $t('poista-kuva') }}
               </elsa-button>
@@ -100,7 +113,7 @@
           <elsa-button variant="back" @click="onCancel">
             {{ $t('peruuta') }}
           </elsa-button>
-          <elsa-button type="submit" variant="primary" class="ml-2">
+          <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
             {{ $t('tallenna') }}
           </elsa-button>
         </div>
@@ -119,6 +132,8 @@
   import { confirmExit } from '@/utils/confirm'
   import { getTitleFromAuthorities } from '@/utils/functions'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import { OmatTiedotLomake } from '@/types'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
@@ -138,23 +153,86 @@
     @Prop({ required: false, default: false })
     editing!: boolean
 
-    form = {
+    form: OmatTiedotLomake = {
       email: null,
-      phoneNumber: null
-    } as any
+      phoneNumber: null,
+      avatar: null,
+      avatarContentType: null
+    }
+    params = {
+      saving: false
+    }
+
+    mounted() {
+      this.form = this.initForm()
+    }
+
+    selectAvatar() {
+      const inputEl = this.$refs['avatar-file-input'] as HTMLInputElement
+      inputEl.click()
+    }
+
+    removeAvatar() {
+      this.form.avatar = null
+      this.form.avatarContentType = null
+      const inputEl = this.$refs['avatar-file-input'] as HTMLInputElement
+      inputEl.value = ''
+    }
+
+    avatarChange(e: Event) {
+      const inputElement = e.target as HTMLInputElement
+      if (inputElement.files && inputElement.files?.length > 0) {
+        const file = inputElement.files[0]
+        const fileSrc = URL.createObjectURL(file)
+        this.form.avatar = fileSrc
+        this.form.avatarContentType = file.type
+      }
+    }
+
+    initForm() {
+      return {
+        email: this.account?.email || null,
+        phoneNumber: this.account?.phoneNumber || null,
+        avatar: this.account?.avatar || null,
+        avatarContentType: this.account?.avatarContentType || null
+      }
+    }
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
     }
 
+    async onSubmit() {
+      this.$v.form.$touch()
+      if (this.$v.form.$anyError) {
+        return
+      }
+
+      try {
+        this.params.saving = true
+        await store.dispatch('auth/putUser', this.form)
+        toastSuccess(this, this.$t('omat-tiedot-paivitetty'))
+        this.$v.form.$reset()
+        this.form = this.initForm()
+        this.$emit('change', false)
+      } catch (err) {
+        toastFail(
+          this,
+          this.$t('omien-tietojen-paivittaminen-epaonnistui', {
+            virhe: err.response.data.title
+          })
+        )
+      } finally {
+        this.params.saving = false
+      }
+    }
+
     async onCancel() {
       if (await confirmExit(this)) {
-        this.form = {
-          email: null,
-          phoneNumber: null
-        }
-        this.$emit('change', !this.editing)
+        this.form = this.initForm()
+        this.$v.form.$reset()
+        this.$emit('change', false)
       }
     }
 
@@ -178,6 +256,20 @@
 
     get title() {
       return getTitleFromAuthorities(this.authorities)
+    }
+
+    get avatar() {
+      if (this.account) {
+        return this.account.avatar
+      }
+      return null
+    }
+
+    get avatarContentType() {
+      if (this.account) {
+        return this.account.avatarContentType
+      }
+      return null
     }
   }
 </script>

@@ -156,7 +156,7 @@ export interface KoulutussopimusLomake {
   muokkauspaiva: string
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
-  vastuuhenkilo: Vastuuhenkilo | undefined
+  vastuuhenkilo?: Vastuuhenkilo
   erikoistuvanAllekirjoitusaika?: string
 }
 
@@ -256,7 +256,7 @@ export interface VastuuhenkilonArvioLomake {
   koejaksoHyvaksytty: boolean | null
   id: number | null
   muokkauspaiva: string
-  vastuuhenkilo: Vastuuhenkilo | undefined
+  vastuuhenkilo?: Vastuuhenkilo
   vastuuhenkiloAllekirjoittanut: boolean | null
   perusteluHylkaamiselle: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
@@ -321,8 +321,6 @@ export type KoejaksonVaiheButtonStates = {
 export interface Kayttaja {
   id?: number
   nimi: string
-  profiilikuva: ArrayBuffer
-  profiilikuvaContentType: string
   userId: string
   nimike: string
   yliopisto: Yliopisto
@@ -339,4 +337,11 @@ export interface KouluttajaValtuutus {
   alkamispaiva: Date
   paattymispaiva: Date
   valtuutettu: Kayttaja
+}
+
+export type OmatTiedotLomake = {
+  email: string | null
+  phoneNumber: string | null
+  avatar: string | null
+  avatarContentType: string | null
 }
