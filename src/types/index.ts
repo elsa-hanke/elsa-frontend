@@ -10,11 +10,11 @@ export type ErikoistuvaLaakari = {
   kayttajaId: number
   erikoisalaId: number
   erikoisalaNimi: string
-  opintojenAloitusvuosi: string
   opiskelijatunnus: string
   puhelinnumero: string
   sahkoposti: string
   syntymaaika: string
+  opintosuunnitelmaKaytossaPvm: string
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
   yliopisto: string
