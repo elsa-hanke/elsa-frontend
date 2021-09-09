@@ -82,6 +82,7 @@ const auth: Module<any, any> = {
         commit('formSuccess', data)
       } catch (err) {
         commit('formError')
+        throw err
       }
     }
   },

@@ -34,7 +34,7 @@
 
         <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
           <template #button-content>
-            <user-avatar :title="title ? $t(title) : undefined" />
+            <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
           </template>
           <b-dropdown-item :to="{ name: 'profiili' }">
             {{ $t('oma-profiilini') }}
@@ -90,7 +90,15 @@
     }
 
     get title() {
-      return getTitleFromAuthorities(this.authorities)
+      const value = getTitleFromAuthorities(this.authorities)
+      return value ? this.$t(value) : undefined
+    }
+
+    get avatar() {
+      if (this.account) {
+        return this.account.avatar
+      }
+      return undefined
     }
 
     get currentLocale() {

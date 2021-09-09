@@ -4,11 +4,12 @@
       <div class="d-flex align-items-center">
         <div class="d-none d-lg-block d-xl-block mr-3">
           <avatar
+            :src="avatarSrc"
             :username="displayName"
             background-color="gray"
             color="white"
             :size="160"
-          ></avatar>
+          />
         </div>
         <div class="flex-fill">
           <elsa-form-group
@@ -79,29 +80,26 @@
         <elsa-form-group :label="$t('profiilikuva')">
           <template>
             <avatar
-              :src="form.avatar"
-              :src-content-type="form.avatarContentType"
+              :src="previewSrc"
+              src-content-type="image/jpeg"
               :username="displayName"
               background-color="gray"
               color="white"
               :size="160"
-            ></avatar>
+            />
             <div class="mt-2">
               <input
                 ref="avatar-file-input"
                 id="avatar-file-input"
                 type="file"
+                accept="image/jpeg,image/png"
                 @change="avatarChange"
                 hidden
               />
               <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
                 {{ $t('valitse-profiilikuva') }}
               </elsa-button>
-              <elsa-button
-                variant="outline-danger"
-                v-if="form.avatar && form.avatarContentType"
-                @click="removeAvatar"
-              >
+              <elsa-button variant="outline-danger" v-if="form.avatar" @click="removeAvatar">
                 <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
                 {{ $t('poista-kuva') }}
               </elsa-button>
@@ -157,7 +155,7 @@
       email: null,
       phoneNumber: null,
       avatar: null,
-      avatarContentType: null
+      avatarUpdated: false
     }
     params = {
       saving: false
@@ -174,7 +172,7 @@
 
     removeAvatar() {
       this.form.avatar = null
-      this.form.avatarContentType = null
+      this.form.avatarUpdated = true
       const inputEl = this.$refs['avatar-file-input'] as HTMLInputElement
       inputEl.value = ''
     }
@@ -183,18 +181,17 @@
       const inputElement = e.target as HTMLInputElement
       if (inputElement.files && inputElement.files?.length > 0) {
         const file = inputElement.files[0]
-        const fileSrc = URL.createObjectURL(file)
-        this.form.avatar = fileSrc
-        this.form.avatarContentType = file.type
+        this.form.avatar = file
+        this.form.avatarUpdated = true
       }
     }
 
-    initForm() {
+    initForm(): OmatTiedotLomake {
       return {
         email: this.account?.email || null,
         phoneNumber: this.account?.phoneNumber || null,
         avatar: this.account?.avatar || null,
-        avatarContentType: this.account?.avatarContentType || null
+        avatarUpdated: false
       }
     }
 
@@ -211,7 +208,16 @@
 
       try {
         this.params.saving = true
-        await store.dispatch('auth/putUser', this.form)
+        await store.dispatch(
+          'auth/putUser',
+          // Ohitetaan olemassa olevan avatarin lähettäminen
+          !this.form.avatar?.name
+            ? {
+                ...this.form,
+                avatar: null
+              }
+            : this.form
+        )
         toastSuccess(this, this.$t('omat-tiedot-paivitetty'))
         this.$v.form.$reset()
         this.form = this.initForm()
@@ -236,6 +242,15 @@
       }
     }
 
+    get previewSrc() {
+      if (this.form.avatar && this.form.avatar.name) {
+        return URL.createObjectURL(this.form.avatar)
+      } else if (this.form.avatar) {
+        return `data:image/jpeg;base64,${this.account.avatar}`
+      }
+      return undefined
+    }
+
     get account() {
       return store.getters['auth/account']
     }
@@ -245,6 +260,13 @@
         return `${this.account.firstName} ${this.account.lastName}`
       }
       return ''
+    }
+
+    get avatarSrc() {
+      if (this.account) {
+        return `data:image/jpeg;base64,${this.account.avatar}`
+      }
+      return undefined
     }
 
     get authorities() {
@@ -261,13 +283,6 @@
     get avatar() {
       if (this.account) {
         return this.account.avatar
-      }
-      return null
-    }
-
-    get avatarContentType() {
-      if (this.account) {
-        return this.account.avatarContentType
       }
       return null
     }

@@ -2,7 +2,11 @@
   <div class="kommentti" :class="{ 'ml-auto': value.self && !editing, 'mr-auto': !value.self }">
     <div :class="selfClass">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <user-avatar :display-name="value.kommentti.kommentoija.nimi">
+        <user-avatar
+          :src-base64="value.kommentti.kommentoija.avatar"
+          src-content-type="image/jpeg"
+          :display-name="value.kommentti.kommentoija.nimi"
+        >
           <template #display-name>
             {{ value.kommentti.kommentoija.nimi }} |
             <span

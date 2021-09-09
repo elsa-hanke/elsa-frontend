@@ -46,6 +46,7 @@
         <b-row>
           <b-col>
             <erikoistuva-details
+              :avatar="account.avatar"
               :firstName="account.firstName"
               :lastName="account.lastName"
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
