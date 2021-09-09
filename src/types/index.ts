@@ -317,3 +317,26 @@ export type KoejaksonVaiheButtonStates = {
   primaryButtonLoading: boolean
   secondaryButtonLoading: boolean
 }
+
+export interface Kayttaja {
+  id?: number
+  nimi: string
+  profiilikuva: ArrayBuffer
+  profiilikuvaContentType: string
+  userId: string
+  nimike: string
+  yliopisto: Yliopisto
+}
+
+export interface Yliopisto {
+  id?: number
+  nimi: string
+  erikoisalat: Erikoisala[]
+}
+
+export interface KouluttajaValtuutus {
+  id?: number
+  alkamispaiva: Date
+  paattymispaiva: Date
+  valtuutettu: Kayttaja
+}

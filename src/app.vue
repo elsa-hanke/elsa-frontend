@@ -16,7 +16,7 @@
           </b-col>
         </b-row>
 
-        <b-row align-h="center" class="pt-4 flex-nowrap justify-content-center">
+        <b-row align-h="center" class="pt-4 justify-content-center">
           <b-col>
             <img :src="`${publicPath}img/elsa_oulun_yliopisto.svg`" alt="Oulun Yliopisto" />
           </b-col>

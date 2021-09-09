@@ -13,6 +13,7 @@ import Asiakirjat from '../views/asiakirjat/asiakirjat.vue'
 import Etusivu from '../views/etusivu.vue'
 import Itsearviointi from '../views/arvioinnit/itsearviointi.vue'
 import ItsearviointiValmis from '../views/arvioinnit/itsearviointi-valmis.vue'
+import KayttajaProfiili from '../views/kayttajaprofiili.vue'
 import Koulutukset from '../views/koulutukset.vue'
 import Koulutussuunnitelma from '../views/koulutussuunnitelma.vue'
 import MuokkaaArviointia from '../views/arvioinnit/muokkaa-arviointia.vue'
@@ -369,6 +370,11 @@ const routes: Array<RouteConfig> = [
             }
           }
         ]
+      },
+      {
+        path: '/profiili',
+        name: 'oma-profiili',
+        component: KayttajaProfiili
       }
     ]
   },
