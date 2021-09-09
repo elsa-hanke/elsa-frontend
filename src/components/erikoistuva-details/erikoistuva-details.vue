@@ -14,8 +14,9 @@
         </th>
         <td class="pl-5">
           <avatar
-            background-color="gray"
+            :src="avatarSrc"
             :username="displayName"
+            background-color="gray"
             color="white"
             :size="32"
             class="d-inline-block avatar"
@@ -63,6 +64,9 @@
     }
   })
   export default class ErikoistuvaDetails extends Vue {
+    @Prop({ required: false, type: String })
+    avatar!: string
+
     @Prop({ required: true, type: String })
     firstName!: string
 
@@ -89,6 +93,13 @@
 
     @Prop({ required: false, default: true })
     showBirthdate!: boolean
+
+    get avatarSrc() {
+      if (this.avatar) {
+        return `data:image/jpeg;base64,${this.avatar}`
+      }
+      return undefined
+    }
 
     get displayName() {
       return `${this.firstName} ${this.lastName}`

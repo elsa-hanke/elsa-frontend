@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('erikoistuva-laakari')">
       <template v-slot="{ uid }">
-        <user-avatar :id="uid" />
+        <user-avatar :id="uid" :src-base64="avatar" src-content-type="image/jpeg" />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -95,9 +95,9 @@
           >
             <template v-slot:option="{ option }">
               <user-avatar
+                :src-base64="option.avatar"
+                src-content-type="image/jpeg"
                 :display-name="option.nimi"
-                :src-content-type="option.profiilikuvaContentType"
-                :src-base64="option.profiilikuva"
               />
             </template>
           </elsa-form-multiselect>
@@ -159,6 +159,7 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaButton from '@/components/button/button.vue'
   import { toastSuccess, toastFail } from '@/utils/toast'
+  import store from '@/store'
 
   @Component({
     components: {
@@ -290,6 +291,17 @@
         )
       }
       params.saving = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
+    }
+
+    get avatar() {
+      if (this.account) {
+        return this.account.avatar
+      }
+      return undefined
     }
   }
 </script>

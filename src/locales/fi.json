@@ -412,7 +412,7 @@
   "oman-erikoisalan-koulutus": "Oman erikoisalan koulutus",
   "omat-tiedot": "Omat tiedot",
   "omat-tiedot-paivitetty": "Omat tiedot päivitetty",
-  "omien-tietojen-paivittaminen-epaonnistui": "Omien tietojen päivittäminen epäonnistui",
+  "omien-tietojen-paivittaminen-epaonnistui": "Omien tietojen päivittäminen epäonnistui: {virhe}",
   "opinto-oikeuden-alkamispäivä": "Määräaikaisen opinto-oikeuden myöntämispäivä",
   "opintooikeuden-tarkistaminen": "Opinto-oikeuden tarkistaminen",
   "opintooikeus": "Opinto-oikeus",

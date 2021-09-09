@@ -21,6 +21,7 @@
           <div class="d-flex align-items-center">
             <div class="d-none d-lg-block d-xl-block mr-3">
               <avatar
+                :src="avatarSrc"
                 :username="displayName"
                 background-color="gray"
                 color="white"
@@ -117,6 +118,13 @@
   export default class Etusivu extends Vue {
     get account() {
       return store.getters['auth/account']
+    }
+
+    get avatarSrc() {
+      if (this.account) {
+        return `data:image/jpeg;base64,${this.account.avatar}`
+      }
+      return undefined
     }
 
     get displayName() {

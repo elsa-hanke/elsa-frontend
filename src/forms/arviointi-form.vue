@@ -8,7 +8,12 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <user-avatar :id="uid" :display-name="value.arvioinninSaaja.nimi" />
+        <user-avatar
+          :id="uid"
+          :src-base64="value.arvioinninSaaja.avatar"
+          src-content-type="image/jpeg"
+          :display-name="value.arvioinninSaaja.nimi"
+        />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -101,7 +106,12 @@
       class="align-items-center mb-md-0 kouluttaja-form-input"
     >
       <template v-slot="{ uid }">
-        <user-avatar :id="uid" :display-name="value.arvioinninAntaja.nimi" />
+        <user-avatar
+          :id="uid"
+          :src-base64="value.arvioinninAntaja.avatar"
+          src-content-type="image/jpeg"
+          :display-name="value.arvioinninAntaja.nimi"
+        />
       </template>
     </elsa-form-group>
     <div v-if="!editing">

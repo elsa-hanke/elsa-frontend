@@ -342,6 +342,6 @@ export interface KouluttajaValtuutus {
 export type OmatTiedotLomake = {
   email: string | null
   phoneNumber: string | null
-  avatar: string | null
-  avatarContentType: string | null
+  avatar: any
+  avatarUpdated: boolean
 }

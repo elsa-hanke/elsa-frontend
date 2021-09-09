@@ -23,3 +23,13 @@ export function getTitleFromAuthorities(authorities: string[]) {
 
   return undefined
 }
+
+export function wrapToFormData(form: { [key: string]: any }): FormData {
+  const formData = new FormData()
+  for (const [key, value] of Object.entries(form)) {
+    if (value) {
+      formData.append(key, value)
+    }
+  }
+  return formData
+}

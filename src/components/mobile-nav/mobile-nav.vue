@@ -41,7 +41,7 @@
       </b-nav>
       <b-nav class="bg-light font-weight-500" vertical>
         <b-nav-item class="text-nowrap px-3" link-classes="text-dark px-0 py-1" disabled>
-          <user-avatar :title="title ? $t(title) : undefined" />
+          <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
         </b-nav-item>
         <b-nav-item class="ml-5" link-classes="p-0 pt-1 pb-2 pb-2">
           {{ $t('oma-profiilini') }}
@@ -83,6 +83,13 @@
       return store.getters['auth/account']
     }
 
+    get avatar() {
+      if (this.account) {
+        return this.account.avatar
+      }
+      return undefined
+    }
+
     get authorities() {
       if (this.account) {
         return this.account.authorities
@@ -91,7 +98,8 @@
     }
 
     get title() {
-      return getTitleFromAuthorities(this.authorities)
+      const value = getTitleFromAuthorities(this.authorities)
+      return value ? this.$t(value) : undefined
     }
 
     get currentLocale() {
