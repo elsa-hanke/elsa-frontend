@@ -1,18 +1,20 @@
 <template>
-  <div class="itsearviointi">
+  <div class="profiili">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <b-card-skeleton
-            :loading="false"
-            class="mb-3 itsearviointi-card"
-            :header="$t('tee-itsearviointi')"
-          >
-            Käyttäjäprofiili - oma rooli - opiskeluoikeudet
-          </b-card-skeleton>
+          <h1>{{ $t('oma-profiili') }}</h1>
+          <p>{{ $t('oma-profiili-kuvaus') }}</p>
+          <b-tabs content-class="mt-3" :no-fade="true">
+            <b-tab :title="$t('omat-tiedot')" active>
+              <!-- TODO: omat tiedot komponentti -->
+            </b-tab>
+            <b-tab :title="$t('katseluoikeudet')">
+              <katseluoikeudet />
+            </b-tab>
+          </b-tabs>
         </b-col>
-        <b-col class="pl-3 pr-0" lg="2"></b-col>
       </b-row>
     </b-container>
   </div>
@@ -20,12 +22,29 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import BCardSkeleton from '@/components/card/card.vue'
+  import Katseluoikeudet from '@/components/profiili/katseluoikeudet.vue'
 
   @Component({
     components: {
-      BCardSkeleton
+      Katseluoikeudet
     }
   })
-  export default class Kayttajaprofiili extends Vue {}
+  export default class Kayttajaprofiili extends Vue {
+    items = [
+      {
+        text: this.$t('etusivu'),
+        to: { name: 'etusivu' }
+      },
+      {
+        text: this.$t('oma-profiili'),
+        active: true
+      }
+    ]
+  }
 </script>
+
+<style lang="scss" scoped>
+  .profiili {
+    max-width: 768px;
+  }
+</style>

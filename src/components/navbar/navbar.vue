@@ -56,7 +56,7 @@
             <user-avatar :title="title" />
           </template>
           <b-dropdown-item class="border-bottom" link-class="py-2">
-            <b-link :to="{}" class="text-dark text-decoration-none">
+            <b-link :to="{ name: 'oma-profiili' }" class="text-dark text-decoration-none">
               {{ $t('oma-profiilini') }}
             </b-link>
           </b-dropdown-item>
