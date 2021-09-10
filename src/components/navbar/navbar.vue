@@ -14,7 +14,7 @@
       <span class="brand-text d-inline-block align-text-top">-{{ $t('palvelu') | lowercase }}</span>
     </b-navbar-brand>
 
-    <b-navbar-toggle v-if="isMobile" target="sidebar-right" class="border-0">
+    <b-navbar-toggle v-if="!$screen.lg" target="sidebar-right" class="border-0">
       <template #default="{ expanded }">
         <font-awesome-icon v-if="expanded" :icon="['fas', 'times']" size="lg" />
         <font-awesome-icon v-else :icon="['fas', 'bars']" size="lg" />
@@ -87,7 +87,6 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import { Prop } from 'vue-property-decorator'
   import Avatar from 'vue-avatar'
   import store from '@/store'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
@@ -100,9 +99,6 @@
     }
   })
   export default class Navbar extends Vue {
-    @Prop({ required: true })
-    isMobile!: string
-
     get account() {
       return store.getters['auth/account']
     }

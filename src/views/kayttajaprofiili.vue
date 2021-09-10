@@ -10,7 +10,7 @@
             <b-tab :title="$t('omat-tiedot')" active>
               <!-- TODO: omat tiedot komponentti -->
             </b-tab>
-            <b-tab :title="$t('katseluoikeudet')">
+            <b-tab v-if="$isErikoistuva()" :title="$t('katseluoikeudet')">
               <katseluoikeudet />
             </b-tab>
           </b-tabs>

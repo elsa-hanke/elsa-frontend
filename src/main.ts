@@ -18,12 +18,7 @@ import VueScreen from 'vue-screen'
 import '@/styles/app.scss'
 
 Vue.use(Vuelidate)
-Vue.use(VueScreen, {
-  xs: 0,
-  sm: 480,
-  md: 768,
-  mobile: (screen: any) => screen.xs && !screen.sm
-})
+Vue.use(VueScreen, 'bootstrap')
 Vue.config.productionTip = false
 
 new Vue({
