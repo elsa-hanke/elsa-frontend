@@ -8,7 +8,7 @@
           :add-new-enabled="true"
           :add-new-label="$t('lisaa-kouluttaja')"
           @submit="onKouluttajaSubmit"
-          class="kouluttajaFormGroup"
+          class="mb-2"
         >
           <template v-slot:modal-content="{ submit, cancel }">
             <kouluttaja-form @submit="submit" @cancel="cancel" />
@@ -33,7 +33,7 @@
         </elsa-form-group>
       </b-col>
       <b-col cols="4" class="pl-0 myonnaOikeusCol">
-        <div class="myonnaSubmit">
+        <div class="mt-sm-45">
           <elsa-button
             type="submit"
             variant="primary"
@@ -270,21 +270,9 @@
     }
   }
 
-  .myonnaSubmit {
-    margin-top: 1.8rem;
-  }
-
   @include media-breakpoint-down(xs) {
     .kouluttajaRow {
       justify-content: end;
-    }
-
-    .myonnaSubmit {
-      margin-top: 0rem;
-    }
-
-    .kouluttajaFormGroup {
-      margin-bottom: 0.5rem;
     }
 
     .myonnaOikeusCol {
