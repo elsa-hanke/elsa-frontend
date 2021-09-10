@@ -45,7 +45,7 @@
         </div>
       </b-col>
     </b-row>
-    <div v-if="valtuutukset.length">
+    <div v-if="valtuutukset.length > 0">
       <b-card-group class="mt-4" v-if="!$screen.sm" deck>
         <b-card class="mt-2 border" v-for="(valtuutus, index) in valtuutukset" :key="index">
           <b-card-text>
@@ -73,7 +73,7 @@
       <b-table-simple class="katseluoikeusTable" v-else responsive>
         <b-thead>
           <b-tr>
-            <b-th>{{ $t('nimi') }}</b-th>
+            <b-th style="width: 33%">{{ $t('nimi') }}</b-th>
             <b-th>{{ $t('sahkoposti') }}</b-th>
             <b-th>{{ $t('katseluoikeuden-viimeinen-voimassaolopaiva') }}</b-th>
             <b-th></b-th>
