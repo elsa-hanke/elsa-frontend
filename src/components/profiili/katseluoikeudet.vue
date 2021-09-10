@@ -46,7 +46,7 @@
       </b-col>
     </b-row>
     <div v-if="valtuutukset.length">
-      <b-card-group class="mt-4" v-if="$screen.mobile" deck>
+      <b-card-group class="mt-4" v-if="!$screen.sm" deck>
         <b-card class="mt-2 border" v-for="(valtuutus, index) in valtuutukset" :key="index">
           <b-card-text>
             <h4>{{ valtuutus.valtuutettu.nimi }}</h4>
@@ -70,7 +70,7 @@
           </b-card-text>
         </b-card>
       </b-card-group>
-      <b-table-simple v-else responsive>
+      <b-table-simple class="katseluoikeusTable" v-else responsive>
         <b-thead>
           <b-tr>
             <b-th>{{ $t('nimi') }}</b-th>
@@ -262,14 +262,12 @@
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
-  table {
-    td {
-      vertical-align: middle;
+  .katseluoikeusTable {
+    table {
+      td {
+        vertical-align: middle;
+      }
     }
-  }
-
-  .valtuutusItem {
-    border-top-width: 1;
   }
 
   .myonnaSubmit {

@@ -37,11 +37,11 @@
     @Prop({ required: false, type: Boolean, default: undefined })
     state!: boolean | undefined
 
-    @Prop({ required: false, type: Date })
-    min!: Date | undefined
+    @Prop({ required: false, type: [String, Date] })
+    min!: string | Date | undefined
 
-    @Prop({ required: false, type: String })
-    max!: string | undefined
+    @Prop({ required: false, type: [String, Date] })
+    max!: string | Date | undefined
 
     @Prop({ required: false, type: Boolean, default: undefined })
     disabled!: boolean | undefined
