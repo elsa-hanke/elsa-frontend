@@ -9,7 +9,7 @@
     sidebar-class="mobile-menu"
   >
     <template>
-      <b-nav vertical>
+      <b-nav vertical class="main-mobile-nav">
         <b-nav-item class="border-bottom" :to="{ name: 'etusivu' }">
           <font-awesome-icon icon="home" fixed-width size="lg" />
           {{ $t('etusivu') }}
@@ -135,14 +135,16 @@
       padding: 0.75rem;
     }
 
-    .router-link-active {
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        border-left: 5px solid $primary;
+    .main-mobile-nav {
+      .router-link-active {
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          border-left: 5px solid $primary;
+        }
       }
     }
 
