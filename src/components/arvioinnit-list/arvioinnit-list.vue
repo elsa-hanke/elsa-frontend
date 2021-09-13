@@ -250,7 +250,7 @@
 
         tr {
           padding: 0.375rem 0 0.375rem 0;
-          border: 0.0625rem solid $gray-300;
+          border: $table-border-width solid $table-border-color;
           border-radius: 0.25rem;
           margin-bottom: 0.75rem;
         }

@@ -29,7 +29,7 @@
 }
 
 .text-lighter {
-  color: lighten($black, 50%)
+  color: lighten($black, 50%);
 }
 
 label {
@@ -286,12 +286,12 @@ h6 {
 }
 
 table {
-  border-bottom: 0.0625rem solid $gray-300;
+  border-bottom: $table-border-width solid $table-border-color;
 
   th {
     font-weight: $font-weight-500;
     padding-bottom: 0.25rem !important;
-    &[scope=col] {
+    &[scope='col'] {
       border-top: none !important;
     }
   }
