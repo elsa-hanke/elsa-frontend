@@ -43,7 +43,7 @@
         <b-nav-item class="text-nowrap px-3" link-classes="text-dark px-0 py-1" disabled>
           <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
         </b-nav-item>
-        <b-nav-item class="ml-5" link-classes="p-0 pt-1 pb-2 pb-2">
+        <b-nav-item class="ml-5" link-classes="p-0 pt-1 pb-2 pb-2" :to="{ name: 'profiili' }">
           {{ $t('oma-profiilini') }}
         </b-nav-item>
         <b-nav-item @click="logout()" class="ml-5" link-classes="p-0 pt-1 pb-3">
