@@ -1,6 +1,15 @@
 <template>
   <div class="omat-tiedot">
     <div v-if="!editing">
+      <div class="d-block d-lg-none d-xl-none">
+        <avatar
+          :src="avatarSrc"
+          :username="displayName"
+          background-color="gray"
+          color="white"
+          :size="160"
+        />
+      </div>
       <div class="d-flex align-items-center">
         <div class="d-none d-lg-block d-xl-block mr-3">
           <avatar
@@ -87,22 +96,26 @@
               color="white"
               :size="160"
             />
-            <div class="mt-2">
-              <input
-                ref="avatar-file-input"
-                id="avatar-file-input"
-                type="file"
-                accept="image/jpeg,image/png"
-                @change="avatarChange"
-                hidden
-              />
-              <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
-                {{ $t('valitse-profiilikuva') }}
-              </elsa-button>
-              <elsa-button variant="outline-danger" v-if="form.avatar" @click="removeAvatar">
-                <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
-                {{ $t('poista-kuva') }}
-              </elsa-button>
+            <input
+              ref="avatar-file-input"
+              id="avatar-file-input"
+              type="file"
+              accept="image/jpeg,image/png"
+              @change="avatarChange"
+              hidden
+            />
+            <div class="d-flex flex-wrap">
+              <div class="mt-2">
+                <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
+                  {{ $t('valitse-profiilikuva') }}
+                </elsa-button>
+              </div>
+              <div class="mt-2">
+                <elsa-button variant="outline-danger" v-if="form.avatar" @click="removeAvatar">
+                  <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
+                  {{ $t('poista-kuva') }}
+                </elsa-button>
+              </div>
             </div>
           </template>
         </elsa-form-group>
