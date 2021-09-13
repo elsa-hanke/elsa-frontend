@@ -11,7 +11,7 @@
               <omat-tiedot :editing="editing" @change="changeEditing" />
             </b-tab>
             <b-tab :title="$t('katseluoikeudet')">
-              <!-- TODO: katseluoikeudet komponentti -->
+              <katseluoikeudet />
             </b-tab>
           </b-tabs>
         </b-col>
@@ -24,10 +24,12 @@
   import { Component, Mixins } from 'vue-property-decorator'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import OmatTiedot from './omat-tiedot.vue'
+  import Katseluoikeudet from '@/components/profiili/katseluoikeudet.vue'
 
   @Component({
     components: {
-      OmatTiedot
+      OmatTiedot,
+      Katseluoikeudet
     }
   })
   export default class Profiili extends Mixins(ConfirmRouteExit) {
