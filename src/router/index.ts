@@ -67,7 +67,7 @@ const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
     }
   } else {
     storeRoute(to)
-    next('/login')
+    next('/kirjautuminen')
   }
 }
 
@@ -379,7 +379,7 @@ const routes: Array<RouteConfig> = [
     ]
   },
   {
-    path: '/login',
+    path: '/kirjautuminen',
     component: LoginView,
     children: [
       {
@@ -421,7 +421,7 @@ const routes: Array<RouteConfig> = [
               next()
             }
           } else {
-            next('/login')
+            next('/kirjautuminen')
           }
         }
       }
