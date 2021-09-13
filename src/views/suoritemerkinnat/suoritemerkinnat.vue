@@ -1,9 +1,9 @@
 <template>
   <div class="suoritemerkinnat">
-    <b-breadcrumb :items="items" class="mb-0 px-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
     <b-container fluid>
       <b-row lg>
-        <b-col class="px-0">
+        <b-col>
           <h1>{{ $t('suoritemerkinnat') }}</h1>
           <p>{{ $t('suoritemerkinnat-kuvaus') }}</p>
           <elsa-button variant="primary" :to="{ name: 'uusi-suoritemerkinta' }" class="mb-4">

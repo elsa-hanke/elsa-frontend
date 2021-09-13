@@ -5,7 +5,7 @@
       <mobile-nav v-if="!$screen.lg" />
       <b-row class="position-relative">
         <sidebar-menu />
-        <main role="main" class="offset-lg-2 col-lg-10 mb-5">
+        <main role="main" class="offset-lg-2 col-lg-10 mb-5 px-0 px-lg-3">
           <router-view />
         </main>
       </b-row>
