@@ -1,6 +1,6 @@
 <template>
   <div class="bar-chart user-select-none">
-    <b-table-simple borderless class="text-size-sm mt-3">
+    <b-table-simple borderless class="text-size-sm mt-3 border-0">
       <b-tr v-for="(row, index) in value" :key="index">
         <b-td
           class="text-right text-nowrap"
