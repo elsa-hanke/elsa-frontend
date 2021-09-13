@@ -44,8 +44,8 @@
       </b-alert>
       <hr />
       <erikoistuva-details
-        :firstName="erikoistuvanEtunimi"
-        :lastName="erikoistuvanSukunimi"
+        :avatar="erikoistuvanAvatar"
+        :name="erikoistuvanNimi"
         :erikoisala="aloituskeskustelu.erikoistuvanErikoisala"
         :opiskelijatunnus="aloituskeskustelu.erikoistuvanOpiskelijatunnus"
         :yliopisto="aloituskeskustelu.erikoistuvanYliopisto"
@@ -278,12 +278,12 @@
       )
     }
 
-    get erikoistuvanEtunimi() {
-      return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[0]
+    get erikoistuvanAvatar() {
+      return this.aloituskeskustelu?.erikoistuvanAvatar
     }
 
-    get erikoistuvanSukunimi() {
-      return this.aloituskeskustelu?.erikoistuvanNimi.split(' ')[1]
+    get erikoistuvanNimi() {
+      return this.aloituskeskustelu?.erikoistuvanNimi
     }
 
     get allekirjoitukset() {

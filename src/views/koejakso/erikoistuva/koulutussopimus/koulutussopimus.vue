@@ -57,8 +57,7 @@
           <b-col>
             <erikoistuva-details
               :avatar="account.avatar"
-              :firstName="account.firstName"
-              :lastName="account.lastName"
+              :name="`${account.firstName} ${account.lastName}`"
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
               :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
               :syntymaaika="account.erikoistuvaLaakari.syntymaaika"

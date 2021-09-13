@@ -39,8 +39,8 @@
         </b-row>
         <hr />
         <erikoistuva-details
-          :firstName="erikoistuvanEtunimi"
-          :lastName="erikoistuvanSukunimi"
+          :avatar="erikoistuvanAvatar"
+          :name="erikoistuvanNimi"
           :erikoisala="vastuuhenkilonArvio.erikoistuvanErikoisala"
           :opiskelijatunnus="vastuuhenkilonArvio.erikoistuvanOpiskelijatunnus"
           :yliopisto="vastuuhenkilonArvio.erikoistuvanYliopisto"
@@ -277,12 +277,12 @@
       return Number(this.$route.params.id)
     }
 
-    get erikoistuvanEtunimi() {
-      return this.vastuuhenkilonArvio?.erikoistuvanNimi.split(' ')[0]
+    get erikoistuvanAvatar() {
+      return this.vastuuhenkilonArvio?.erikoistuvanAvatar
     }
 
-    get erikoistuvanSukunimi() {
-      return this.vastuuhenkilonArvio?.erikoistuvanNimi.split(' ')[1]
+    get erikoistuvanNimi() {
+      return this.vastuuhenkilonArvio?.erikoistuvanNimi
     }
 
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {

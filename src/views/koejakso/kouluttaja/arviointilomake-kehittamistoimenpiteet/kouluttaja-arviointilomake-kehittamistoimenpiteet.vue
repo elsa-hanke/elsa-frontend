@@ -67,8 +67,8 @@
         </b-alert>
         <hr />
         <erikoistuva-details
-          :firstName="erikoistuvanEtunimi"
-          :lastName="erikoistuvanSukunimi"
+          :avatar="erikoistuvanAvatar"
+          :name="erikoistuvanNimi"
           :erikoisala="kehittamistoimenpiteet.erikoistuvanErikoisala"
           :opiskelijatunnus="kehittamistoimenpiteet.erikoistuvanOpiskelijatunnus"
           :yliopisto="kehittamistoimenpiteet.erikoistuvanYliopisto"
@@ -292,12 +292,12 @@
       return this.kehittamistoimenpiteet?.lahiesimies.kayttajaUserId === currentUser.id
     }
 
-    get erikoistuvanEtunimi() {
-      return this.kehittamistoimenpiteet?.erikoistuvanNimi.split(' ')[0]
+    get erikoistuvanAvatar() {
+      return this.kehittamistoimenpiteet?.erikoistuvanAvatar
     }
 
-    get erikoistuvanSukunimi() {
-      return this.kehittamistoimenpiteet?.erikoistuvanNimi.split(' ')[1]
+    get erikoistuvanNimi() {
+      return this.kehittamistoimenpiteet?.erikoistuvanNimi
     }
 
     get waitingForLahiesimiesOrErikoistuva() {

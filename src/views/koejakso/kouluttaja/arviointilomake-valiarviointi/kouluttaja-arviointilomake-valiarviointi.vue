@@ -71,8 +71,8 @@
         <hr />
 
         <erikoistuva-details
-          :firstName="erikoistuvanEtunimi"
-          :lastName="erikoistuvanSukunimi"
+          :avatar="erikoistuvanAvatar"
+          :name="erikoistuvanNimi"
           :erikoisala="valiarviointi.erikoistuvanErikoisala"
           :opiskelijatunnus="valiarviointi.erikoistuvanOpiskelijatunnus"
           :yliopisto="valiarviointi.erikoistuvanYliopisto"
@@ -405,12 +405,12 @@
       return this.valiarviointi?.lahiesimies.kayttajaUserId === currentUser.id
     }
 
-    get erikoistuvanEtunimi() {
-      return this.valiarviointi?.erikoistuvanNimi.split(' ')[0]
+    get erikoistuvanAvatar() {
+      return this.valiarviointi?.erikoistuvanAvatar
     }
 
-    get erikoistuvanSukunimi() {
-      return this.valiarviointi?.erikoistuvanNimi.split(' ')[1]
+    get erikoistuvanNimi() {
+      return this.valiarviointi?.erikoistuvanNimi
     }
 
     get kehittamistoimenpideKategoriat() {

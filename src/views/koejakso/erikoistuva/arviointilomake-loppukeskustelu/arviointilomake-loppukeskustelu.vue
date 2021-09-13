@@ -47,8 +47,7 @@
           <b-col>
             <erikoistuva-details
               :avatar="account.avatar"
-              :firstName="account.firstName"
-              :lastName="account.lastName"
+              :name="`${account.firstName} ${account.lastName}`"
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
               :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
               :yliopisto="account.erikoistuvaLaakari.yliopisto"
@@ -218,7 +217,7 @@
     loppukeskusteluLomake: LoppukeskusteluLomake = {
       erikoistuvaAllekirjoittanut: false,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
-      erikoistuvanNimi: this.account.firstName.concat(' ', this.account.lastName),
+      erikoistuvanNimi: `${this.account.firstName} ${this.account.lastName}`,
       erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
       erikoistuvanYliopisto: this.account.erikoistuvaLaakari.yliopisto,
       esitetaanKoejaksonHyvaksymista: null,
