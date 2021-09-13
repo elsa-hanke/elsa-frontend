@@ -49,8 +49,8 @@
         <b-row>
           <b-col>
             <erikoistuva-details
-              :firstName="erikoistuvanEtunimi"
-              :lastName="erikoistuvanSukunimi"
+              :avatar="erikoistuvanAvatar"
+              :name="erikoistuvanNimi"
               :erikoisala="erikoistuvanErikoisala"
               :opiskelijatunnus="form.erikoistuvanOpiskelijatunnus"
               :syntymaaika="form.erikoistuvanSyntymaaika"
@@ -359,12 +359,12 @@
       return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA
     }
 
-    get erikoistuvanEtunimi() {
-      return this.form.erikoistuvanNimi.split(' ')[0]
+    get erikoistuvanAvatar() {
+      return this.form.erikoistuvanAvatar
     }
 
-    get erikoistuvanSukunimi() {
-      return this.form.erikoistuvanNimi.split(' ')[1]
+    get erikoistuvanNimi() {
+      return this.form.erikoistuvanNimi
     }
 
     get erikoistuvanErikoisala() {

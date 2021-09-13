@@ -72,8 +72,8 @@
         <hr />
 
         <erikoistuva-details
-          :firstName="erikoistuvanEtunimi"
-          :lastName="erikoistuvanSukunimi"
+          :avatar="erikoistuvanAvatar"
+          :name="erikoistuvanNimi"
           :erikoisala="loppukeskustelu.erikoistuvanErikoisala"
           :opiskelijatunnus="loppukeskustelu.erikoistuvanOpiskelijatunnus"
           :yliopisto="loppukeskustelu.erikoistuvanYliopisto"
@@ -333,12 +333,12 @@
       return this.loppukeskustelu?.lahiesimies.kayttajaUserId === currentUser.id
     }
 
-    get erikoistuvanEtunimi() {
-      return this.loppukeskustelu?.erikoistuvanNimi.split(' ')[0]
+    get erikoistuvanAvatar() {
+      return this.loppukeskustelu?.erikoistuvanAvatar
     }
 
-    get erikoistuvanSukunimi() {
-      return this.loppukeskustelu?.erikoistuvanNimi.split(' ')[1]
+    get erikoistuvanNimi() {
+      return this.loppukeskustelu?.erikoistuvanNimi
     }
 
     get showWaitingForLahiesimiesOrErikoistuva() {

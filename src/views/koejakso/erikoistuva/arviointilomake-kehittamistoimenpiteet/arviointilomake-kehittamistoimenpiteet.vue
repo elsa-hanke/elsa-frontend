@@ -47,8 +47,7 @@
           <b-col>
             <erikoistuva-details
               :avatar="account.avatar"
-              :firstName="account.firstName"
-              :lastName="account.lastName"
+              :name="`${account.firstName} ${account.lastName}`"
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
               :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
               :yliopisto="account.erikoistuvaLaakari.yliopisto"
@@ -246,10 +245,7 @@
       if (this.koejaksoData.kehittamistoimenpiteet) {
         this.kehittamistoimenpiteetLomake = this.koejaksoData.kehittamistoimenpiteet
       }
-      this.kehittamistoimenpiteetLomake.erikoistuvanNimi = this.account.firstName.concat(
-        ' ',
-        this.account.lastName
-      )
+      this.kehittamistoimenpiteetLomake.erikoistuvanNimi = `${this.account.firstName} ${this.account.lastName}`
       this.kehittamistoimenpiteetLomake.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
       this.kehittamistoimenpiteetLomake.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.erikoisalaNimi
       this.kehittamistoimenpiteetLomake.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto

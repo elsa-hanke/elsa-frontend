@@ -25,6 +25,7 @@ export interface UserAccount {
   firstName: string
   lastName: string
   email: string
+  phoneNumber: string
   authorities: string[]
   erikoistuvaLaakari: ErikoistuvaLaakari
   id: string
@@ -34,9 +35,6 @@ export interface UserAccount {
   createdDate: string
   lastModifiedBy: string
   lastModifiedDate: string
-  profilePicture: {
-    src: string
-  }
 }
 
 export interface ArviointipyyntoLomake {
@@ -147,6 +145,7 @@ export interface KoulutussopimusLomake {
   erikoistuvanSahkoposti: string
   erikoistuvanSyntymaaika: string
   erikoistuvanYliopisto: string
+  erikoistuvanAvatar?: string
   id: number | null
   koejaksonAlkamispaiva: string
   korjausehdotus: string
@@ -180,6 +179,7 @@ export interface AloituskeskusteluLomake {
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanSahkoposti: string
   erikoistuvanYliopisto: string
+  erikoistuvanAvatar?: string
   id: number | null
   koejaksonAlkamispaiva: string
   koejaksonOsaamistavoitteet: string
@@ -204,6 +204,7 @@ export interface ValiarviointiLomake {
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
+  erikoistuvanAvatar?: string
   id: number | null
   kehittamistoimenpideKategoriat: KehittamistoimenpideKategoria[] | null
   kehittamistoimenpiteet: string
@@ -222,6 +223,7 @@ export interface KehittamistoimenpiteetLomake {
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
+  erikoistuvanAvatar?: string
   id: number | null
   kehittamistoimenpiteetRiittavat: boolean | null
   korjausehdotus: string
@@ -237,6 +239,7 @@ export interface LoppukeskusteluLomake {
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
+  erikoistuvanAvatar?: string
   esitetaanKoejaksonHyvaksymista: boolean | null
   id: number | null
   jatkotoimenpiteet: string | null
@@ -253,6 +256,7 @@ export interface VastuuhenkilonArvioLomake {
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
+  erikoistuvanAvatar?: string
   koejaksoHyvaksytty: boolean | null
   id: number | null
   muokkauspaiva: string

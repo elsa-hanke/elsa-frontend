@@ -13,15 +13,15 @@
           {{ $t('erikoistuva-laakari') }}
         </th>
         <td class="pl-5">
-          <avatar
-            :src="avatarSrc"
-            :username="displayName"
-            background-color="gray"
-            color="white"
-            :size="32"
-            class="d-inline-block avatar"
-          ></avatar>
-          {{ displayNameAndErikoisala }}
+          <user-avatar
+            :src-base64="avatar"
+            src-content-type="image/jpeg"
+            :display-name="displayName"
+          >
+            <template #display-name>
+              {{ displayNameAndErikoisala }}
+            </template>
+          </user-avatar>
         </td>
       </tr>
       <tr>
@@ -56,11 +56,11 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
-  import Avatar from 'vue-avatar'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 
   @Component({
     components: {
-      Avatar
+      UserAvatar
     }
   })
   export default class ErikoistuvaDetails extends Vue {
@@ -68,10 +68,7 @@
     avatar!: string
 
     @Prop({ required: true, type: String })
-    firstName!: string
-
-    @Prop({ required: true, type: String })
-    lastName!: string
+    name!: string
 
     @Prop({ required: true, type: String })
     erikoisala!: string
@@ -88,36 +85,15 @@
     @Prop({ required: false, type: String, default: undefined })
     kehittamistoimenpiteet!: string
 
-    @Prop({ required: false })
-    profilePicture!: any
-
     @Prop({ required: false, default: true })
     showBirthdate!: boolean
 
-    get avatarSrc() {
-      if (this.avatar) {
-        return `data:image/jpeg;base64,${this.avatar}`
-      }
-      return undefined
-    }
-
     get displayName() {
-      return `${this.firstName} ${this.lastName}`
+      return this.name
     }
 
     get displayNameAndErikoisala() {
       return this.erikoisala ? `${this.displayName}, ${this.erikoisala}` : this.displayName
-    }
-
-    get imageSrc() {
-      /*if (this.account.profilePicture.srcContentType && this.account.profilePicture.srcBase64) {
-        return `data:${this.account.profilePicture.srcContentType};base64,${this.account.profilePicture.srcBase64}`
-      } else */
-      if (this.profilePicture?.src) {
-        return this.profilePicture?.src
-      } else {
-        return undefined
-      }
     }
   }
 </script>
