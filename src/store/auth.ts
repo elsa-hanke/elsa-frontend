@@ -1,5 +1,5 @@
 import * as api from '@/api'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Module } from 'vuex'
 
 const auth: Module<any, any> = {
@@ -57,7 +57,7 @@ const auth: Module<any, any> = {
         }
         commit('authSuccess', data)
       } catch (err) {
-        if ((err as any).response.status === 401) {
+        if ((err as AxiosError<unknown>).response?.status === 401) {
           commit('authUnauthorized')
         } else {
           commit('authError')
