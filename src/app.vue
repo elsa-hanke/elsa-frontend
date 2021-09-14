@@ -9,19 +9,44 @@
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('palaute') }}</b-link>
       </div>
       <div class="d-flex flex-wrap justify-content-center">
-        <a href="https://www.oulu.fi/fi" target="_blank" class="m-2 m-lg-3">
+        <a
+          href="https://www.oulu.fi/fi"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="m-2 m-lg-3"
+        >
           <img src="@/assets/elsa-oulun-yliopisto.svg" alt="Oulun Yliopisto" />
         </a>
-        <a href="https://www.tuni.fi/fi" target="_blank" class="m-2 m-lg-3">
+        <a
+          href="https://www.tuni.fi/fi"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="m-2 m-lg-3"
+        >
           <img src="@/assets/elsa-tampereen-yliopisto.svg" alt="Tampereen Yliopisto" />
         </a>
-        <a href="https://www.utu.fi/fi" target="_blank" class="m-2 m-lg-3">
+        <a
+          href="https://www.utu.fi/fi"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="m-2 m-lg-3"
+        >
           <img src="@/assets/elsa-turun-yliopisto.svg" alt="Turun Yliopisto" />
         </a>
-        <a href="https://www.uef.fi/fi" target="_blank" class="m-2 m-lg-3">
+        <a
+          href="https://www.uef.fi/fi"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="m-2 m-lg-3"
+        >
           <img src="@/assets/elsa-itasuomen-yliopisto.svg" alt="Itä-Suomen Yliopisto" />
         </a>
-        <a href="https://www.helsinki.fi/fi" target="_blank" class="m-2 m-lg-3">
+        <a
+          href="https://www.helsinki.fi/fi"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="m-2 m-lg-3"
+        >
           <img src="@/assets/elsa-helsingin-yliopisto.svg" alt="Helsingin Yliopisto" />
         </a>
       </div>
