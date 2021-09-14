@@ -36,37 +36,37 @@
   })
   export default class ElsaFormMultiselect extends Vue {
     @Prop({ required: false, type: String })
-    id!: string | undefined
+    id?: string
 
     @Prop({ required: false, type: String })
-    placeholder!: string | undefined
+    placeholder?: string
 
     @Prop({ required: false, type: String })
-    tagPlaceholder!: string | undefined
+    tagPlaceholder?: string
 
     @Prop({ required: false, type: String })
-    selectLabel!: string | undefined
+    selectLabel?: string
 
     @Prop({ required: false, type: String })
-    selectGroupLabel!: string | undefined
+    selectGroupLabel?: string
 
     @Prop({ required: false, type: String })
-    selectedLabel!: string | undefined
+    selectedLabel?: string
 
     @Prop({ required: false, type: String })
-    deselectLabel!: string | undefined
+    deselectLabel?: string
 
     @Prop({ required: false, type: String })
-    deselectGroupLabel!: string | undefined
+    deselectGroupLabel?: string
 
     @Prop({ required: false, type: Number })
-    max!: number | undefined
+    max?: number
 
-    @Prop({ required: false })
-    state!: boolean | undefined
+    @Prop({ required: false, type: Boolean })
+    state?: boolean
 
     @Prop({ required: false, type: Boolean, default: false })
-    allowEmpty!: boolean | undefined
+    allowEmpty!: boolean
 
     get isValid() {
       return this.state

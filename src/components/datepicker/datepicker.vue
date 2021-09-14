@@ -32,19 +32,19 @@
   @Component({})
   export default class ElsaFormDatepicker extends Vue {
     @Prop({ required: false, type: String })
-    id!: string | undefined
+    id?: string
 
-    @Prop({ required: false, type: Boolean, default: undefined })
-    state!: boolean | undefined
-
-    @Prop({ required: false, type: [String, Date] })
-    min!: string | Date | undefined
+    @Prop({ required: false, type: Boolean })
+    state?: boolean
 
     @Prop({ required: false, type: [String, Date] })
-    max!: string | Date | undefined
+    min?: string | Date
 
-    @Prop({ required: false, type: Boolean, default: undefined })
-    disabled!: boolean | undefined
+    @Prop({ required: false, type: [String, Date] })
+    max?: string | Date
+
+    @Prop({ required: false, type: Boolean })
+    disabled?: boolean
 
     get currentLocale() {
       if (this.$i18n) {

@@ -78,13 +78,13 @@
     opiskelijatunnus!: string
 
     @Prop({ required: false, type: String })
-    syntymaaika!: string
+    syntymaaika?: string
 
     @Prop({ required: true, type: String })
     yliopisto!: string
 
-    @Prop({ required: false, type: String, default: undefined })
-    kehittamistoimenpiteet!: string
+    @Prop({ required: false, type: String })
+    kehittamistoimenpiteet?: string
 
     @Prop({ required: false, default: true })
     showBirthdate!: boolean

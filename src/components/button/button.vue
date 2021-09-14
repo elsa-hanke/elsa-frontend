@@ -17,11 +17,11 @@
 
   @Component({})
   export default class ElsaButton extends Vue {
-    @Prop({ required: false, default: undefined })
-    loading!: boolean | undefined
+    @Prop({ required: false })
+    loading?: boolean
 
-    @Prop({ required: false, default: undefined })
-    disabled!: boolean | undefined
+    @Prop({ required: false })
+    disabled?: boolean
 
     get loadingEnabled() {
       return this.loading !== undefined

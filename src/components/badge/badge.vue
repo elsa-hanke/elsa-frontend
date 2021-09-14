@@ -20,6 +20,6 @@
     value!: number | string
 
     @Prop({ required: false, type: String })
-    help!: string
+    help?: string
   }
 </script>

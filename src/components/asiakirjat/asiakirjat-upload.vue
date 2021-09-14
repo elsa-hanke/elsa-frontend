@@ -102,8 +102,8 @@
     private duplicateFilesForOtherViews: File[] = []
     private filesToUploadCount = 0
 
-    @Prop({ required: false, default: undefined })
-    uploading!: boolean | false
+    @Prop({ required: false })
+    uploading?: boolean
 
     @Prop({ required: false, type: Boolean, default: true })
     isPrimaryButton!: boolean
@@ -111,11 +111,11 @@
     @Prop({ required: true, type: String })
     buttonText!: string
 
-    @Prop({ required: true, default: undefined })
-    existingFileNamesForCurrentView!: string[]
+    @Prop({ required: true })
+    existingFileNamesForCurrentView?: string[]
 
-    @Prop({ required: false, default: undefined })
-    existingFileNamesForOtherViews!: string[]
+    @Prop({ required: false })
+    existingFileNamesForOtherViews?: string[]
 
     @Prop({ required: false, type: Boolean, default: false })
     disabled!: boolean

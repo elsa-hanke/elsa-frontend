@@ -50,7 +50,7 @@
     label!: string
 
     @Prop({ required: false, type: String })
-    addNewLabel!: string
+    addNewLabel?: string
 
     @Prop({ required: false, default: false })
     addNewEnabled!: boolean
@@ -59,7 +59,7 @@
     required!: boolean
 
     @Prop({ required: false, type: String })
-    help!: string
+    help?: string
 
     async onHide(event: any) {
       // Tarkista, onko poistuminen jo vahvistettu

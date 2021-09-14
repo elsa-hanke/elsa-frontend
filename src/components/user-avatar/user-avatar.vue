@@ -33,20 +33,20 @@
     }
   })
   export default class UserAvatar extends Vue {
-    @Prop({ required: false })
-    displayName!: string
-
-    @Prop({ required: false })
-    src!: undefined | string
-
-    @Prop({ required: false })
-    srcContentType!: undefined | string
-
-    @Prop({ required: false })
-    srcBase64!: undefined | string
+    @Prop({ required: false, type: String })
+    displayName?: string
 
     @Prop({ required: false, type: String })
-    title!: undefined | string
+    src?: string
+
+    @Prop({ required: false, type: String })
+    srcContentType?: string
+
+    @Prop({ required: false, type: String })
+    srcBase64?: string
+
+    @Prop({ required: false, type: String })
+    title?: string
 
     get imageSrc() {
       if (this.srcContentType && this.srcBase64) {

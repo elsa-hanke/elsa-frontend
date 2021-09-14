@@ -24,10 +24,10 @@
     minRequired!: number
 
     @Prop({ required: false })
-    color!: string
+    color?: string
 
     @Prop({ required: false })
-    backgroundColor!: string
+    backgroundColor?: string
 
     get ratio() {
       return clamp((this.value / this.minRequired) * 100, 0, 100)

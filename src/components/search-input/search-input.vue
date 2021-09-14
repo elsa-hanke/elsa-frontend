@@ -27,8 +27,8 @@
     @Prop({ required: false, type: Boolean, default: true })
     visible!: boolean
 
-    @Prop({ required: true, type: String, default: undefined })
-    placeholder!: string
+    @Prop({ required: true, type: String })
+    placeholder?: string
 
     get hakutermiMutable() {
       return this.hakutermi

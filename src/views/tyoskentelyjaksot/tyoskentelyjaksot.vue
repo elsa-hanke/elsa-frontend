@@ -208,6 +208,7 @@
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
   import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
+  import { BarChartRow } from '@/types'
 
   @Component({
     components: {
@@ -311,7 +312,7 @@
       }
     }
 
-    get barValues() {
+    get barValues(): BarChartRow[] {
       if (this.tilastot) {
         return [
           {

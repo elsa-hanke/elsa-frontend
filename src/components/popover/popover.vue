@@ -23,7 +23,7 @@
   })
   export default class ElsaPopover extends Vue {
     @Prop({ required: false, type: String })
-    title!: string | undefined
+    title?: string
 
     get uid() {
       return `elsa-popover-${(this as any)._uid}`

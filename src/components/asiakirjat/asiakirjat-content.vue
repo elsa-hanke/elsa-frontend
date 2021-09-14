@@ -132,8 +132,8 @@
     @Prop({ required: false, type: Boolean, default: true })
     showInfoIfEmpty!: boolean
 
-    @Prop({ required: false, type: String, default: undefined })
-    noResultsInfoText!: string
+    @Prop({ required: false, type: String })
+    noResultsInfoText?: string
 
     @Prop({ required: false, type: Boolean, default: false })
     loading!: boolean
