@@ -6,12 +6,18 @@
         <b-col>
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
           <p>{{ $t('tyoskentelyjaksot-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'uusi-tyoskentelyjakso' }" class="mb-4 mr-2">
-            {{ $t('lisaa-tyoskentelyjakso') }}
-          </elsa-button>
-          <elsa-button variant="outline-primary" :to="{ name: 'uusi-poissaolo' }" class="mb-4">
-            {{ $t('lisaa-poissaolo') }}
-          </elsa-button>
+          <div class="d-flex flex-wrap mb-3 mb-lg-4">
+            <elsa-button
+              variant="primary"
+              :to="{ name: 'uusi-tyoskentelyjakso' }"
+              class="mb-2 mr-2"
+            >
+              {{ $t('lisaa-tyoskentelyjakso') }}
+            </elsa-button>
+            <elsa-button variant="outline-primary" :to="{ name: 'uusi-poissaolo' }" class="mb-2">
+              {{ $t('lisaa-poissaolo') }}
+            </elsa-button>
+          </div>
           <div v-if="!loading">
             <div class="d-flex justify-content-center border rounded pt-3 mb-4">
               <div class="container-fluid">

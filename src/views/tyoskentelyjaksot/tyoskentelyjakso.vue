@@ -79,33 +79,34 @@
             <elsa-form-group :label="$t('liitetiedostot')">
               <template v-slot="{ uid }">
                 <asiakirjat-content
-                  class="mb-5"
                   :id="uid"
                   :asiakirjat="tyoskentelyjakso.asiakirjat"
-                  :sortingEnabled="false"
-                  :paginationEnabled="false"
-                  :enableSearch="false"
-                  :enableDelete="false"
-                  :noContentInfoText="$t('ei-liitetiedostoja')"
+                  :sorting-enabled="false"
+                  :pagination-enabled="false"
+                  :enable-search="false"
+                  :enable-delete="false"
+                  :no-results-info-text="$t('ei-liitetiedostoja')"
                   :loading="loading"
                 />
               </template>
             </elsa-form-group>
-            <div class="text-right">
+            <hr />
+            <div class="d-flex flex-row-reverse flex-wrap">
+              <elsa-button
+                :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
+                variant="primary"
+                class="ml-2 mb-2"
+              >
+                {{ $t('muokkaa-jaksoa') }}
+              </elsa-button>
               <elsa-button
                 v-if="!tyoskentelyjakso.suoritusarvioinnit"
                 :loading="deleting"
                 variant="outline-danger"
                 @click="onTyoskentelyjaksoDelete"
+                class="mb-2"
               >
-                {{ $t('poista-tyoskentelyjakso') }}
-              </elsa-button>
-              <elsa-button
-                :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
-                variant="primary"
-                class="ml-2"
-              >
-                {{ $t('muokkaa-tyoskentelyjaksoa') }}
+                {{ $t('poista-jakso') }}
               </elsa-button>
             </div>
           </div>
