@@ -15,11 +15,11 @@
     <b-row>
       <b-col lg="4">
         <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
-        <p>{{ $date(data.koejaksonAlkamispaiva) }}</p>
+        <p>{{ data.koejaksonAlkamispaiva ? $date(data.koejaksonAlkamispaiva) : '' }}</p>
       </b-col>
       <b-col lg="4">
         <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
-        <p>{{ $date(data.koejaksonPaattymispaiva) }}</p>
+        <p>{{ data.koejaksonPaattymispaiva ? $date(data.koejaksonPaattymispaiva) : '' }}</p>
       </b-col>
     </b-row>
     <b-row>

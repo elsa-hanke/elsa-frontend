@@ -20,7 +20,9 @@
             <b-form-row>
               <elsa-form-group :label="$t('alkamispaiva')" class="col-sm-12 col-md-6 pr-md-3">
                 <template v-slot="{ uid }">
-                  <span :id="uid">{{ $date(poissaoloWrapper.alkamispaiva) }}</span>
+                  <span :id="uid">
+                    {{ poissaoloWrapper.alkamispaiva ? $date(poissaoloWrapper.alkamispaiva) : '' }}
+                  </span>
                 </template>
               </elsa-form-group>
               <elsa-form-group

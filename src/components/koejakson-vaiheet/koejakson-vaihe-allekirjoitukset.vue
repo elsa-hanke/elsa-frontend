@@ -9,7 +9,7 @@
       <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
         <h5>{{ $t('päiväys') }}</h5>
         <p>
-          {{ $date(allekirjoitus.pvm) }}
+          {{ allekirjoitus.pvm ? $date(allekirjoitus.pvm) : '' }}
         </p>
       </b-col>
       <b-col>
