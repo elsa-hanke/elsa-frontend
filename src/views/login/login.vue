@@ -1,26 +1,30 @@
 <template>
-  <b-container>
-    <div class="d-flex align-items-center justify-content-center" style="height: 50rem">
-      <b-row>
-        <b-col lg="5" class="mt-3 mr-2">
-          <h1 class="text-primary mb-4">{{ $t('palvelu-erikoistuville-laakareille') }}</h1>
-          <p class="mb-4">{{ $t('login-ingressi') }}</p>
-          <elsa-button variant="primary" @click="loginSuomiFi">
+  <b-container class="mt-4 mb-5">
+    <b-row>
+      <b-col lg>
+        <b-alert variant="dark" show>
+          <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+          {{ $t('piloottikaytto-kuvaus') }}
+        </b-alert>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col lg="5">
+        <h1 class="text-primary mb-lg-3">{{ $t('palvelu-erikoistuville-laakareille') }}</h1>
+        <p class="mb-lg-4">{{ $t('login-ingressi') }}</p>
+        <div class="d-flex flex-wrap mb-4">
+          <elsa-button variant="primary" @click="loginSuomiFi" class="mr-3 mb-2">
             {{ $t('kirjaudu-sisaan') }} (Suomi.fi)
           </elsa-button>
-          <elsa-button variant="primary" class="ml-2">
+          <elsa-button variant="primary" @click="loginHaka" class="mb-2">
             {{ $t('kirjaudu-sisaan') }} (HAKA)
           </elsa-button>
-        </b-col>
-        <b-col>
-          <img
-            :src="`${publicPath}img/elsa_kirjautuminen.svg`"
-            class="mr-3"
-            :alt="$t('elsa-palvelu')"
-          />
-        </b-col>
-      </b-row>
-    </div>
+        </div>
+      </b-col>
+      <b-col class="">
+        <img src="@/assets/elsa-kirjautuminen.svg" :alt="$t('elsa-palvelu')" class="img-fluid" />
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -35,10 +39,12 @@
     }
   })
   export default class Login extends Vue {
-    publicPath = process.env.BASE_URL
-
     loginSuomiFi() {
       return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`)
+    }
+
+    loginHaka() {
+      // TODO
     }
   }
 </script>

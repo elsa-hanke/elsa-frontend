@@ -1,20 +1,14 @@
 <template>
-  <b-container>
-    <div class="d-flex align-items-center justify-content-center" style="height: 50rem">
-      <b-row class="w-100">
-        <b-col lg="5" class="mt-2">
-          <h1 class="text-primary mb-4">{{ $t('oletko-erikoistuva-laakari') }}</h1>
-          <kayttooikeus-form @submit="onSubmit" />
-        </b-col>
-        <b-col>
-          <img
-            :src="`${publicPath}img/elsa_kirjautuminen.svg`"
-            class="mr-3"
-            :alt="$t('elsa-palvelu')"
-          />
-        </b-col>
-      </b-row>
-    </div>
+  <b-container class="mt-4 mb-5">
+    <b-row>
+      <b-col lg="5">
+        <h1 class="text-primary">{{ $t('oletko-erikoistuva-laakari') }}</h1>
+        <kayttooikeus-form @submit="onSubmit" class="mb-3" />
+      </b-col>
+      <b-col>
+        <img src="@/assets/elsa-kirjautuminen.svg" :alt="$t('elsa-palvelu')" class="img-fluid" />
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -31,7 +25,6 @@
   })
   export default class Kayttooikeus extends Vue {
     loading = false
-    publicPath = process.env.BASE_URL
 
     async onSubmit(value: any) {
       this.loading = true
