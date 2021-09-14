@@ -4,6 +4,7 @@ import {
   KehittamistoimenpideKategoria,
   TyoskentelyjaksoTyyppi
 } from '@/utils/constants'
+import { LocaleMessages } from 'vue-i18n'
 
 export type ErikoistuvaLaakari = {
   id: number | null
@@ -348,4 +349,13 @@ export type OmatTiedotLomake = {
   phoneNumber: string | null
   avatar: any
   avatarUpdated: boolean
+}
+
+export interface BarChartRow {
+  text: string | LocaleMessages
+  color: string
+  backgroundColor: string
+  value: number
+  minRequired: number
+  highlight: boolean
 }

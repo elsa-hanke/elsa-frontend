@@ -45,6 +45,7 @@
   import { Prop } from 'vue-property-decorator'
 
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
+  import { BarChartRow } from '@/types'
 
   @Component({
     components: {
@@ -52,8 +53,8 @@
     }
   })
   export default class ElsaBarChart extends Vue {
-    @Prop({ required: false, default: [] })
-    value!: any[]
+    @Prop({ required: true, default: [] })
+    value!: BarChartRow[]
   }
 </script>
 

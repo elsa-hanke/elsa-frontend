@@ -148,7 +148,7 @@
     @Prop({ required: true, default: {} })
     kouluttaja!: Kouluttaja
 
-    @Prop({ required: false, default: null })
+    @Prop({ required: true })
     index!: number
 
     form: Kouluttaja = defaultKouluttaja
