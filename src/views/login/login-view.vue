@@ -41,7 +41,9 @@
     }
   })
   export default class LoginView extends Vue {
-    loading = false
+    changeLocale(lang: string) {
+      this.$i18n.locale = lang
+    }
 
     get currentLocale() {
       return this.$i18n.locale
@@ -49,10 +51,6 @@
 
     get locales() {
       return Object.keys(this.$i18n.messages)
-    }
-
-    changeLocale(lang: string) {
-      this.$i18n.locale = lang
     }
   }
 </script>

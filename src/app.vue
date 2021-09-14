@@ -2,41 +2,29 @@
   <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
     <router-view />
 
-    <footer class="pb-5 w-100">
-      <b-container class="footer-links pt-4">
-        <b-row align-h="center">
-          <b-col lg="2">
-            <b-link>{{ $t('tietosuoja') }}</b-link>
-          </b-col>
-          <b-col lg="2">
-            <b-link>{{ $t('kayttoehdot') }}</b-link>
-          </b-col>
-          <b-col lg="2">
-            <b-link>{{ $t('palaute') }}</b-link>
-          </b-col>
-        </b-row>
-
-        <b-row align-h="center" class="pt-4 justify-content-center">
-          <b-col>
-            <img :src="`${publicPath}img/elsa_oulun_yliopisto.svg`" alt="Oulun Yliopisto" />
-          </b-col>
-          <b-col>
-            <img :src="`${publicPath}img/elsa_tampereen_yliopisto.svg`" alt="Tampereen Yliopisto" />
-          </b-col>
-          <b-col>
-            <img :src="`${publicPath}img/elsa_turun_yliopisto.svg`" alt="Turun Yliopisto" />
-          </b-col>
-          <b-col>
-            <img
-              :src="`${publicPath}img/elsa_eastern_finland_yliopisto.svg`"
-              alt="Itä-Suomen Yliopisto"
-            />
-          </b-col>
-          <b-col>
-            <img :src="`${publicPath}img/elsa_helsingin_yliopisto.svg`" alt="Helsingin Yliopisto" />
-          </b-col>
-        </b-row>
-      </b-container>
+    <footer class="pb-4">
+      <div class="d-flex justify-content-center">
+        <b-link class="my-4 mx-3 mx-lg-4">{{ $t('tietosuoja') }}</b-link>
+        <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link>
+        <b-link class="my-4 mx-3 mx-lg-4">{{ $t('palaute') }}</b-link>
+      </div>
+      <div class="d-flex flex-wrap justify-content-center">
+        <a href="https://www.oulu.fi/fi" target="_blank" class="m-2 m-lg-3">
+          <img src="@/assets/elsa-oulun-yliopisto.svg" alt="Oulun Yliopisto" />
+        </a>
+        <a href="https://www.tuni.fi/fi" target="_blank" class="m-2 m-lg-3">
+          <img src="@/assets/elsa-tampereen-yliopisto.svg" alt="Tampereen Yliopisto" />
+        </a>
+        <a href="https://www.utu.fi/fi" target="_blank" class="m-2 m-lg-3">
+          <img src="@/assets/elsa-turun-yliopisto.svg" alt="Turun Yliopisto" />
+        </a>
+        <a href="https://www.uef.fi/fi" target="_blank" class="m-2 m-lg-3">
+          <img src="@/assets/elsa-itasuomen-yliopisto.svg" alt="Itä-Suomen Yliopisto" />
+        </a>
+        <a href="https://www.helsinki.fi/fi" target="_blank" class="m-2 m-lg-3">
+          <img src="@/assets/elsa-helsingin-yliopisto.svg" alt="Helsingin Yliopisto" />
+        </a>
+      </div>
     </footer>
   </div>
 </template>
@@ -61,8 +49,6 @@
         titleTemplate: null
       }
     }
-
-    publicPath = process.env.BASE_URL
   }
 </script>
 
@@ -70,6 +56,6 @@
   @import '~@/styles/variables';
 
   footer {
-    border-top: 2px solid rgba($border-color, 0.5);
+    border-top: 5px solid #f5f5f6;
   }
 </style>
