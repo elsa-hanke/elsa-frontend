@@ -229,7 +229,6 @@
           @selectedFiles="onFilesAdded"
         />
         <asiakirjat-content
-          class="mb-5"
           :id="uid"
           :asiakirjat="asiakirjatTableItems"
           :sortingEnabled="false"
@@ -247,19 +246,12 @@
         </b-form-checkbox>
       </template>
     </elsa-form-group>
-    <div class="text-right">
-      <elsa-button variant="back" @click.stop.prevent="onCancel">{{ $t('peruuta') }}</elsa-button>
-      <elsa-button
-        v-if="editing && !value.suoritusarvioinnit"
-        :loading="params.deleting"
-        variant="outline-danger"
-        class="ml-2"
-        @click="onTyoskentelyjaksoDelete"
-      >
-        {{ $t('poista-tyoskentelyjakso') }}
-      </elsa-button>
-      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
+    <div class="d-flex flex-row-reverse flex-wrap">
+      <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ editing ? $t('tallenna') : $t('lisaa') }}
+      </elsa-button>
+      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+        {{ $t('peruuta') }}
       </elsa-button>
     </div>
   </b-form>
@@ -457,10 +449,6 @@
       delete submitData.tyoskentelyjakso.asiakirjat
 
       this.$emit('submit', submitData, this.params)
-    }
-
-    async onTyoskentelyjaksoDelete() {
-      this.$emit('delete', this.params)
     }
 
     onFilesAdded(files: File[]) {

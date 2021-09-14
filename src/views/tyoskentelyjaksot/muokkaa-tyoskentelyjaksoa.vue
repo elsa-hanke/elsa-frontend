@@ -14,7 +14,6 @@
             :erikoisalat="tyoskentelyjaksoLomake.erikoisalat"
             :asiakirjat="tyoskentelyjakso.asiakirjat"
             @submit="onSubmit"
-            @delete="onDelete"
             @cancel="onCancel"
           />
           <div v-else class="text-center">
@@ -29,17 +28,15 @@
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
 
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import { toastFail, toastSuccess } from '@/utils/toast'
+  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
   import {
     getTyoskentelyjakso,
     getTyoskentelyjaksoLomake,
-    putTyoskentelyjakso,
-    deleteTyoskentelyjakso
+    putTyoskentelyjakso
   } from '@/api/erikoistuva'
-  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
-  import { confirmDelete } from '@/utils/confirm'
-  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
@@ -113,30 +110,6 @@
         toastFail(this, this.$t('tyoskentelyjakson-tallentaminen-epaonnistui'))
       }
       params.saving = false
-    }
-
-    async onDelete(params: any) {
-      if (!this.tyoskentelyjakso?.id) return
-      if (
-        await confirmDelete(
-          this,
-          this.$t('poista-tyoskentelyjakso') as string,
-          (this.$t('tyoskentelyjakson') as string).toLowerCase()
-        )
-      ) {
-        params.deleting = true
-        try {
-          deleteTyoskentelyjakso(this.tyoskentelyjakso.id)
-          toastSuccess(this, this.$t('tyoskentelyjakso-poistettu-onnistuneesti'))
-          this.skipRouteExitConfirm = true
-          this.$router.push({
-            name: 'tyoskentelyjaksot'
-          })
-        } catch (err) {
-          toastFail(this, this.$t('tyoskentelyjakson-poistaminen-epaonnistui'))
-        }
-        params.deleting = false
-      }
     }
 
     onCancel() {
