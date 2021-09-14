@@ -1,3 +1,4 @@
+import { OmatTiedotLomake } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 import axios from 'axios'
 
@@ -14,7 +15,7 @@ export async function getKayttaja() {
   return await axios.get('kayttaja')
 }
 
-export async function putKayttaja(form: FormData) {
+export async function putKayttaja(form: OmatTiedotLomake) {
   return await axios.put('kayttaja', wrapToFormData(form), {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
