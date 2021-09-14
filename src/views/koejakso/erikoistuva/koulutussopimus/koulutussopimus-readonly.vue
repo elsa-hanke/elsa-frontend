@@ -3,13 +3,15 @@
     <b-row>
       <b-col lg="8">
         <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
-        <p>{{ $date(data.opintooikeudenMyontamispaiva) }}</p>
+        <p>
+          {{ data.opintooikeudenMyontamispaiva ? $date(data.opintooikeudenMyontamispaiva) : '' }}
+        </p>
       </b-col>
     </b-row>
     <b-row>
       <b-col lg="8">
         <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
-        <p>{{ $date(data.koejaksonAlkamispaiva) }}</p>
+        <p>{{ data.koejaksonAlkamispaiva ? $date(data.koejaksonAlkamispaiva) : '' }}</p>
       </b-col>
     </b-row>
     <b-row>

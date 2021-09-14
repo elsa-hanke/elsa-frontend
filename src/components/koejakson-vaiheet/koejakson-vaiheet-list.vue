@@ -78,7 +78,7 @@
 
             <template #cell(pvm)="data">
               <span class="text-nowrap">
-                {{ $date(data.item.pvm) }}
+                {{ data.item.pvm ? $date(data.item.pvm) : '' }}
               </span>
             </template>
 
@@ -132,7 +132,7 @@
                 </template>
 
                 <template #cell(pvm)="data">
-                  {{ $date(data.item.pvm) }}
+                  {{ data.item.pvm ? $date(data.item.pvm) : '' }}
                 </template>
               </b-table>
             </template>

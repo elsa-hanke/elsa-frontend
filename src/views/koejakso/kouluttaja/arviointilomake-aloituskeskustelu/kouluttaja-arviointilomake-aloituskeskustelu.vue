@@ -68,11 +68,23 @@
         <b-row>
           <b-col lg="4">
             <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
-            <p>{{ $date(aloituskeskustelu.koejaksonAlkamispaiva) }}</p>
+            <p>
+              {{
+                aloituskeskustelu.koejaksonAlkamispaiva
+                  ? $date(aloituskeskustelu.koejaksonAlkamispaiva)
+                  : ''
+              }}
+            </p>
           </b-col>
           <b-col lg="4">
             <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
-            <p>{{ $date(aloituskeskustelu.koejaksonPaattymispaiva) }}</p>
+            <p>
+              {{
+                aloituskeskustelu.koejaksonPaattymispaiva
+                  ? $date(aloituskeskustelu.koejaksonPaattymispaiva)
+                  : ''
+              }}
+            </p>
           </b-col>
         </b-row>
         <b-row>

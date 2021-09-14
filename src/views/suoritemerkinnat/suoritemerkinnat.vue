@@ -67,7 +67,11 @@
                           variant="link"
                           class="shadow-none p-0"
                         >
-                          {{ $date(row.suoritemerkinta.suorituspaiva) }}
+                          {{
+                            row.suoritemerkinta.suorituspaiva
+                              ? $date(row.suoritemerkinta.suorituspaiva)
+                              : ''
+                          }}
                           <font-awesome-icon icon="edit" fixed-width class="ml-2" />
                         </elsa-button>
                       </div>

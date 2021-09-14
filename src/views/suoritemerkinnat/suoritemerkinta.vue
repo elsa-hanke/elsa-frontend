@@ -44,7 +44,13 @@
             </elsa-form-group>
             <elsa-form-group :label="$t('suorituspaiva')">
               <template v-slot="{ uid }">
-                <span :id="uid">{{ $date(suoritemerkintaWrapper.suorituspaiva) }}</span>
+                <span :id="uid">
+                  {{
+                    suoritemerkintaWrapper.suorituspaiva
+                      ? $date(suoritemerkintaWrapper.suorituspaiva)
+                      : ''
+                  }}
+                </span>
               </template>
             </elsa-form-group>
             <elsa-form-group v-if="suoritemerkintaWrapper.lisatiedot" :label="$t('lisatiedot')">

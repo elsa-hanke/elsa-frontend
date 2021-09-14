@@ -34,7 +34,7 @@
         <th scope="row" class="font-weight-500">
           {{ $t('syntymaaika') }}
         </th>
-        <td class="pl-5">{{ $date(syntymaaika) }}</td>
+        <td class="pl-5">{{ syntymaaika ? $date(syntymaaika) : '' }}</td>
       </tr>
       <tr>
         <th scope="row" class="font-weight-500">

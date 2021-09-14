@@ -62,7 +62,7 @@
                   variant="link"
                   @click="muokkaaKatseluoikeutta(valtuutus)"
                 >
-                  {{ $date(valtuutus.paattymispaiva) }}
+                  {{ valtuutus.paattymispaiva ? $date(valtuutus.paattymispaiva) : '' }}
                   <font-awesome-icon icon="edit" fixed-width class="ml-1" />
                 </elsa-button>
               </dd>
@@ -85,7 +85,7 @@
             <b-td>{{ valtuutus.valtuutettu.sahkoposti }}</b-td>
             <b-td>
               <elsa-button variant="link" @click="muokkaaKatseluoikeutta(valtuutus)">
-                {{ $date(valtuutus.paattymispaiva) }}
+                {{ valtuutus.paattymispaiva ? $date(valtuutus.paattymispaiva) : '' }}
                 <font-awesome-icon icon="edit" fixed-width class="ml-1" />
               </elsa-button>
             </b-td>
