@@ -10,7 +10,7 @@
           :size="160"
         />
       </div>
-      <div class="d-flex align-items-center">
+      <div class="d-flex">
         <div class="d-none d-lg-block d-xl-block mr-3">
           <avatar
             :src="avatarSrc"
