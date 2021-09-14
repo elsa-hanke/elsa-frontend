@@ -31,6 +31,7 @@
             <template>{{ displayName }}</template>
           </elsa-form-group>
           <elsa-form-group
+            v-if="account.email"
             :label="$t('sahkopostiosoite')"
             label-cols-md="4"
             label-cols-xl="4"
@@ -40,6 +41,7 @@
             <template>{{ account.email }}</template>
           </elsa-form-group>
           <elsa-form-group
+            v-if="account.phoneNumber"
             :label="$t('puhelinnumero')"
             label-cols-md="4"
             label-cols-xl="4"
