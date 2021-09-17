@@ -86,7 +86,7 @@
               </div>
             </div>
             <div class="tyoskentelyjaksot-table">
-              <b-table :items="tyoskentelyjaksotFormatted" :fields="fields" responsive>
+              <b-table :items="tyoskentelyjaksotFormatted" :fields="fields" stacked="md" responsive>
                 <template #table-colgroup="scope">
                   <col
                     v-for="field in scope.fields"
@@ -133,8 +133,8 @@
                   </span>
                 </template>
                 <template #row-details="row">
-                  <div class="px-3">
-                    <b-table-simple responsive>
+                  <div class="px-md-3">
+                    <b-table-simple stacked="md">
                       <b-thead>
                         <b-tr>
                           <b-th>
@@ -151,7 +151,7 @@
                       </b-thead>
                       <b-tbody>
                         <b-tr v-for="(keskeytysaika, index) in row.item.keskeytykset" :key="index">
-                          <b-td>
+                          <b-td :stacked-heading="$t('poissaolon-syy')">
                             <elsa-button
                               :to="{
                                 name: 'poissaolo',
@@ -163,7 +163,7 @@
                               {{ keskeytysaika.poissaolonSyy.nimi }}
                             </elsa-button>
                           </b-td>
-                          <b-td>
+                          <b-td :stacked-heading="$t('ajankohta')">
                             {{
                               keskeytysaika.alkamispaiva != keskeytysaika.paattymispaiva
                                 ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
@@ -172,7 +172,7 @@
                                 : $date(keskeytysaika.alkamispaiva)
                             }}
                           </b-td>
-                          <b-td>
+                          <b-td :stacked-heading="$t('tyoaika')">
                             <span
                               v-if="keskeytysaika.osaaikaprosentti === row.item.osaaikaprosentti"
                             >
@@ -550,6 +550,7 @@
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
 
   .tyoskentelyjaksot {
     max-width: 1024px;
@@ -561,33 +562,94 @@
 
   .tyoskentelyjaksot-table {
     ::v-deep table {
-      thead th {
-        border-top: none;
-
-        // Ilman tätä, rikkoo responsiivisuuden
-        .sr-only {
-          display: none;
-        }
-      }
       td {
         padding-top: 0;
         padding-bottom: 0;
         vertical-align: middle;
-        div {
-          min-height: $font-size-base * 2.5;
+
+        .btn {
+          text-align: left;
         }
       }
       .b-table-details {
         td {
           padding-left: 0;
           padding-right: 0;
-          background: #f5f5f6;
+          background-color: #f5f5f6;
         }
         table {
           th {
             padding-bottom: 0.3rem;
             padding-left: 0;
             padding-right: 0;
+          }
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    .tyoskentelyjaksot-table {
+      ::v-deep table {
+        border-bottom: 0;
+
+        tr {
+          border: $table-border-width solid $table-border-color;
+          border-radius: $border-radius;
+          margin-top: 0.5rem;
+          padding-top: $table-cell-padding;
+          padding-bottom: $table-cell-padding;
+        }
+
+        td {
+          border: none;
+
+          & > div {
+            padding: 0 0 0.5rem 0 !important;
+          }
+
+          .btn {
+            padding: 0 0 !important;
+          }
+
+          &::before {
+            text-align: left !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            padding-right: 0 !important;
+          }
+        }
+
+        .b-table-details {
+          background-color: #f5f5f6;
+          padding: 0 !important;
+
+          & > td > div {
+            padding: 0 !important;
+          }
+
+          table {
+            tr {
+              border: none;
+              padding: 0 !important;
+              border-bottom: $table-border-width solid $table-border-color;
+              margin: 0;
+              padding-top: $table-cell-padding !important;
+              padding-bottom: $table-cell-padding !important;
+            }
+            tr:last-child {
+              border-bottom: 0;
+            }
+            td {
+              padding-left: $table-cell-padding;
+              padding-right: $table-cell-padding;
+
+              &:last-child > div {
+                padding-bottom: 0 !important;
+              }
+            }
+            margin: 0;
           }
         }
       }

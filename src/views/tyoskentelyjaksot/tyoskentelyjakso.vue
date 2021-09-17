@@ -95,7 +95,7 @@
               <elsa-button
                 :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
                 variant="primary"
-                class="ml-2 mb-2"
+                class="ml-2 mb-3"
               >
                 {{ $t('muokkaa-jaksoa') }}
               </elsa-button>
@@ -104,9 +104,16 @@
                 :loading="deleting"
                 variant="outline-danger"
                 @click="onTyoskentelyjaksoDelete"
-                class="mb-2"
+                class="mb-3"
               >
                 {{ $t('poista-jakso') }}
+              </elsa-button>
+              <elsa-button
+                :to="{ name: 'tyoskentelyjaksot' }"
+                variant="link"
+                class="mb-3 mr-auto tyoskentelyjaksot-link"
+              >
+                {{ $t('palaa-tyoskentelyjaksoihin') }}
               </elsa-button>
             </div>
           </div>
@@ -240,5 +247,11 @@
     @include media-breakpoint-down(sm) {
       display: none;
     }
+  }
+
+  .tyoskentelyjaksot-link::before {
+    content: '<';
+    position: absolute;
+    left: 1rem;
   }
 </style>
