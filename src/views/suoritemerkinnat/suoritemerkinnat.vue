@@ -16,10 +16,10 @@
               :key="index"
               class="mb-2"
             >
-              <b-table-simple responsive>
+              <b-table-simple responsive stacked="md">
                 <b-thead>
                   <b-tr>
-                    <b-th>{{ kategoria.nimi }} ({{ $t('toimenpiteita') }})</b-th>
+                    <b-th>{{ `${$t('suorite')}: ${kategoria.nimi}` }}</b-th>
                     <b-th>
                       {{ $t('luottamuksen-taso') }}
                       <elsa-popover>
@@ -42,12 +42,12 @@
                     :key="index"
                     :class="{ 'row-details': row.details }"
                   >
-                    <b-td style="width: 45%">
+                    <b-td :stacked-heading="`${$t('suorite')}: ${kategoria.nimi}`">
                       <div v-if="!row.details" class="d-flex align-items-center">
                         {{ row.nimi }}
                       </div>
                     </b-td>
-                    <b-td style="width: 40%">
+                    <b-td :stacked-heading="$t('luottamuksen-taso')">
                       <div class="d-flex align-items-center">
                         <elsa-luottamuksen-taso
                           v-if="row.suoritemerkinta"
@@ -55,7 +55,10 @@
                         />
                       </div>
                     </b-td>
-                    <b-td style="width: 15%">
+                    <b-td
+                      :stacked-heading="$t('suorituspaiva')"
+                      :class="{ last: !(row.hasDetails && row.suoritemerkinta) }"
+                    >
                       <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
                         <elsa-button
                           :to="{
@@ -76,7 +79,7 @@
                         </elsa-button>
                       </div>
                     </b-td>
-                    <b-td>
+                    <b-td :class="{ empty: !(row.hasDetails && row.suoritemerkinta) }">
                       <elsa-button
                         v-if="row.hasDetails && row.suoritemerkinta"
                         variant="link"
@@ -219,6 +222,7 @@
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
 
   .suoritemerkinnat {
     max-width: 1024px;
@@ -234,6 +238,62 @@
       vertical-align: middle;
       div {
         min-height: $font-size-base * 2.5;
+      }
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    ::v-deep table {
+      border-bottom: 0;
+
+      tr {
+        border: $table-border-width solid $table-border-color;
+        border-radius: $border-radius;
+        margin-top: 0.5rem;
+        padding-top: $table-cell-padding;
+        padding-bottom: $table-cell-padding;
+
+        &.row-details {
+          & > td:first-child,
+          & > td:last-child {
+            display: none;
+          }
+          td {
+            &:nth-last-child(2) > div {
+              padding-bottom: 0 !important;
+            }
+          }
+        }
+      }
+
+      td {
+        border: none;
+        div {
+          min-height: $font-size-base;
+        }
+
+        & > div {
+          padding: 0 0 0.5rem 0 !important;
+        }
+
+        &::before {
+          text-align: left !important;
+          font-weight: 500 !important;
+          width: 100% !important;
+          padding-right: 0 !important;
+        }
+
+        &:last-child > div {
+          padding-bottom: 0 !important;
+        }
+
+        &.last > div {
+          padding-bottom: 0 !important;
+        }
+
+        &.empty {
+          display: none !important;
+        }
       }
     }
   }
