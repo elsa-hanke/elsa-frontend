@@ -34,8 +34,8 @@
     @Prop({ required: false, type: String })
     id?: string
 
-    @Prop({ required: false, type: Boolean, default: true })
-    state!: boolean
+    @Prop({ required: false, type: Boolean, default: undefined })
+    state?: boolean
 
     @Prop({ required: false, type: [String, Date] })
     min?: string | Date
