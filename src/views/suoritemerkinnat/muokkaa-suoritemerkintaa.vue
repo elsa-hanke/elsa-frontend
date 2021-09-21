@@ -28,11 +28,12 @@
 <script lang="ts">
   import axios from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+
   import SuoritemerkintaForm from '@/forms/suoritemerkinta-form.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { SuoritemerkintaLomake } from '@/types'
-  import { toastFail, toastSuccess } from '@/utils/toast'
   import { confirmDelete } from '@/utils/confirm'
+  import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({

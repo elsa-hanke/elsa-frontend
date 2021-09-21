@@ -61,14 +61,15 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import axios from 'axios'
   import { Prop } from 'vue-property-decorator'
-  import { toastFail } from '@/utils/toast'
-  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {

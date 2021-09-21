@@ -232,13 +232,14 @@
 <script lang="ts">
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
+
   import ArviointipyyntoCard from '@/components/arviointipyynto-card/arviointipyynto-card.vue'
+  import ElsaBadge from '@/components/badge/badge.vue'
+  import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import ElsaBadge from '@/components/badge/badge.vue'
-  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
   import { decorate } from '@/utils/arvioinninAntajaListDecorator'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {

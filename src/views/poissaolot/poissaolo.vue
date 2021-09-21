@@ -61,11 +61,11 @@
 <script lang="ts">
   import axios from 'axios'
   import { Vue, Component } from 'vue-property-decorator'
+
+  import ElsaBadge from '@/components/badge/badge.vue'
+  import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import ElsaBadge from '@/components/badge/badge.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
-  import ElsaButton from '@/components/button/button.vue'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -75,7 +75,6 @@
       ElsaFormGroup,
       ElsaPopover,
       ElsaBadge,
-      ElsaLuottamuksenTaso,
       ElsaButton
     }
   })

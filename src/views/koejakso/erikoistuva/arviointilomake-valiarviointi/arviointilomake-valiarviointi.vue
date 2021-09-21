@@ -163,9 +163,16 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
   import _get from 'lodash/get'
-  import { toastFail, toastSuccess } from '@/utils/toast'
+  import { Component, Vue } from 'vue-property-decorator'
+
+  import ElsaButton from '@/components/button/button.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import store from '@/store'
   import {
     ValiarviointiLomake,
@@ -175,14 +182,8 @@
     KoejaksonVaiheButtonStates
   } from '@/types'
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
-  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

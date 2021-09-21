@@ -156,12 +156,19 @@
 </template>
 
 <script lang="ts">
+  import _get from 'lodash/get'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
-  import _get from 'lodash/get'
-  import { toastFail, toastSuccess } from '@/utils/toast'
+
+  import { getVastuuhenkilonArvio } from '@/api/vastuuhenkilo'
+  import ElsaButton from '@/components/button/button.vue'
+  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import store from '@/store'
   import {
     Koejakso,
@@ -169,16 +176,10 @@
     KoejaksonVaiheButtonStates,
     VastuuhenkilonArvioLomake
   } from '@/types'
-  import { getVastuuhenkilonArvio } from '@/api/vastuuhenkilo'
-  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { LomakeTilat } from '@/utils/constants'
-  import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

@@ -96,16 +96,17 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
-  import { KoulutussopimusLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import store from '@/store'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+
+  import { getKoulutussopimusLomake } from '@/api/erikoistuva'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import store from '@/store'
+  import { KoulutussopimusLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
+  import { LomakeTilat } from '@/utils/constants'
+  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
+  import { toastFail, toastSuccess } from '@/utils/toast'
   import KoulutussopimusForm from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus-form.vue'
   import KoulutussopimusReadonly from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus-readonly.vue'
-  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import { LomakeTilat } from '@/utils/constants'
-  import { getKoulutussopimusLomake } from '@/api/erikoistuva'
 
   @Component({
     components: {

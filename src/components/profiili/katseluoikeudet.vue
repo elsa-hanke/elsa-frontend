@@ -139,15 +139,16 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import ElsaButton from '@/components/button/button.vue'
   import { Component, Vue } from 'vue-property-decorator'
+
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
-  import { toastSuccess, toastFail } from '@/utils/toast'
-  import { Kayttaja, KouluttajaValtuutus } from '@/types'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
+  import { Kayttaja, KouluttajaValtuutus } from '@/types'
+  import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
     components: {

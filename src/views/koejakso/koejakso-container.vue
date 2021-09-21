@@ -13,8 +13,9 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import KoejaksoViewKouluttaja from '@/views/koejakso/kouluttaja/koejakso-view-kouluttaja.vue'
+
   import KoejaksoViewErikoistuva from '@/views/koejakso/erikoistuva/koejakso-view-erikoistuva.vue'
+  import KoejaksoViewKouluttaja from '@/views/koejakso/kouluttaja/koejakso-view-kouluttaja.vue'
   import KoejaksoViewVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/koejakso-view-vastuuhenkilo.vue'
 
   @Component({

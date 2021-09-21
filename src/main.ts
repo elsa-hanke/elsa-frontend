@@ -1,21 +1,22 @@
-import 'mutationobserver-shim'
-import '@/plugins/registerComponentHooks'
 import Vue from 'vue'
+import VueScreen from 'vue-screen'
 import Vuelidate from 'vuelidate'
-import '@/plugins/composition-api'
-import '@/plugins/filters'
-import '@/plugins/bootstrap-vue'
-import '@/plugins/date'
-import '@/plugins/apexcharts'
-import i18n from '@/plugins/i18n'
-import '@/plugins/fontawesome'
-import '@/plugins/roles'
+
 import App from '@/app.vue'
+import '@/plugins/apexcharts'
+import '@/plugins/bootstrap-vue'
+import '@/plugins/composition-api'
+import '@/plugins/date'
+import '@/plugins/filters'
+import '@/plugins/fontawesome'
+import i18n from '@/plugins/i18n'
+import '@/plugins/registerComponentHooks'
+import '@/plugins/roles'
 import router from '@/router'
 import store from '@/store'
-import VueScreen from 'vue-screen'
 
 import '@/styles/app.scss'
+import 'mutationobserver-shim'
 
 Vue.use(Vuelidate)
 Vue.use(VueScreen, 'bootstrap')

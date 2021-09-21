@@ -30,8 +30,9 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import ElsaButton from '@/components/button/button.vue'
+
   import { ELSA_API_LOCATION } from '@/api'
+  import ElsaButton from '@/components/button/button.vue'
 
   @Component({
     components: {

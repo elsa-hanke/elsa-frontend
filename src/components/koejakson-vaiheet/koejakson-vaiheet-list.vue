@@ -151,9 +151,10 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
-  import { LomakeTyypit, LomakeTilat, TaskStatus } from '@/utils/constants'
-  import SearchInput from '@/components/search-input/search-input.vue'
+
   import Pagination from '@/components/pagination/pagination.vue'
+  import SearchInput from '@/components/search-input/search-input.vue'
+  import { LomakeTyypit, LomakeTilat, TaskStatus } from '@/utils/constants'
 
   @Component({
     components: {

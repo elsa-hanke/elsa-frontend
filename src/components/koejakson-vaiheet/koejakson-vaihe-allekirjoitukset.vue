@@ -23,8 +23,9 @@
 </template>
 
 <script lang="ts">
-  import { KoejaksonVaiheAllekirjoitus } from '@/types'
   import { Component, Prop, Vue } from 'vue-property-decorator'
+
+  import { KoejaksonVaiheAllekirjoitus } from '@/types'
 
   @Component({})
   export default class KoejaksonVaiheAllekirjoitukset extends Vue {

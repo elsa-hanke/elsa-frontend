@@ -102,12 +102,13 @@
 
 <script lang="ts">
   import axios from 'axios'
+  import { parseISO } from 'date-fns'
   import compareDesc from 'date-fns/compareDesc'
   import { Component, Vue } from 'vue-property-decorator'
-  import { parseISO } from 'date-fns'
+
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import { luottamuksenTasot } from '@/utils/constants'
 
   @Component({

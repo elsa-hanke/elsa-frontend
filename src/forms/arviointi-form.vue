@@ -460,21 +460,21 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
-  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
+
   import ElsaBadge from '@/components/badge/badge.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
-  import { vaativuustasot, luottamuksenTasot } from '@/utils/constants'
-  import axios from 'axios'
-  import { arvioinninPerustuminen } from '@/utils/constants'
+  import { vaativuustasot, luottamuksenTasot, arvioinninPerustuminen } from '@/utils/constants'
 
   @Component({
     components: {

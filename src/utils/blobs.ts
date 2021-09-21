@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { BlobDataResult } from '@/types'
 
 async function fetchBlobData(endpointUrl: string, id: number): Promise<BlobDataResult> {

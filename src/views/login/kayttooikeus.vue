@@ -14,9 +14,10 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
+
   import * as api from '@/api/erikoistuva'
-  import { toastSuccess, toastFail } from '@/utils/toast'
   import KayttooikeusForm from '@/forms/kayttooikeus-form.vue'
+  import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
     components: {

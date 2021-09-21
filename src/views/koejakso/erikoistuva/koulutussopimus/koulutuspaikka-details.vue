@@ -43,6 +43,7 @@
   import Component from 'vue-class-component'
   import { Vue, Prop } from 'vue-property-decorator'
   import { required, requiredIf } from 'vuelidate/lib/validators'
+
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Koulutuspaikka } from '@/types'

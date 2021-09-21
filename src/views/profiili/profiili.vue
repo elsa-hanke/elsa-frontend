@@ -22,9 +22,11 @@
 
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+
   import OmatTiedot from './omat-tiedot.vue'
+
   import Katseluoikeudet from '@/components/profiili/katseluoikeudet.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
 
   @Component({
     components: {

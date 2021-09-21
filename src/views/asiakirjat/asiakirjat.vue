@@ -29,11 +29,12 @@
 <script lang="ts">
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
+
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import { Asiakirja } from '@/types'
-  import { toastSuccess, toastFail } from '@/utils/toast'
   import { confirmDelete } from '@/utils/confirm'
+  import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
     components: {

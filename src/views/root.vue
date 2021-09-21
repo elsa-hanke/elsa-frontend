@@ -16,9 +16,10 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
+
+  import MobileNav from '@/components/mobile-nav/mobile-nav.vue'
   import Navbar from '@/components/navbar/navbar.vue'
   import SidebarMenu from '@/components/sidebar-menu/sidebar-menu.vue'
-  import MobileNav from '@/components/mobile-nav/mobile-nav.vue'
 
   @Component({
     components: {

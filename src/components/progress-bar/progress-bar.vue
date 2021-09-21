@@ -12,6 +12,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
+
   import { clamp } from '@/utils/functions'
 
   @Component

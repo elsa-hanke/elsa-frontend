@@ -106,11 +106,12 @@
 </template>
 
 <script lang="ts">
+  import _get from 'lodash/get'
   import Component from 'vue-class-component'
-  import { email, required } from 'vuelidate/lib/validators'
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import _get from 'lodash/get'
+  import { email, required } from 'vuelidate/lib/validators'
+
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Kouluttaja } from '@/types'
   import { defaultKouluttaja } from '@/utils/constants'

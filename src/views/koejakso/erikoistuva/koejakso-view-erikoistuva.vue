@@ -152,33 +152,32 @@
 <script lang="ts">
   import axios from 'axios'
   import Vue from 'vue'
+  import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import Component from 'vue-class-component'
-  import store from '@/store'
+
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaKoulutussopimusCard from '@/components/koejakso-cards/koulutussopimus-card.vue'
   import ElsaAloituskeskusteluCard from '@/components/koejakso-cards/aloituskeskustelu-card.vue'
-  import ElsaValiarviointiCard from '@/components/koejakso-cards/valiarviointi-card.vue'
   import ElsaKehittamistoimenpiteetCard from '@/components/koejakso-cards/kehittamistoimenpiteet-card.vue'
+  import ElsaKoulutussopimusCard from '@/components/koejakso-cards/koulutussopimus-card.vue'
   import ElsaLoppukeskusteluCard from '@/components/koejakso-cards/loppukeskustelu-card.vue'
+  import ElsaValiarviointiCard from '@/components/koejakso-cards/valiarviointi-card.vue'
   import ElsaVastuuhenkilonArvioCard from '@/components/koejakso-cards/vastuuhenkilon-arvio-card.vue'
-  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
-  import { toastSuccess, toastFail } from '@/utils/toast'
-  import { confirmDelete } from '@/utils/confirm'
+  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
+  import store from '@/store'
   import { KoejaksonTyoskentelyjakso } from '@/types'
+  import { confirmDelete } from '@/utils/confirm'
+  import { toastSuccess, toastFail } from '@/utils/toast'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
       ElsaButton,
       ElsaPopover,
-      ElsaLuottamuksenTaso,
       ElsaFormGroup,
       ElsaFormMultiselect,
       ElsaKoulutussopimusCard,

@@ -136,16 +136,16 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
-  import { Prop } from 'vue-property-decorator'
   import Avatar from 'vue-avatar'
+  import { Component, Vue, Prop } from 'vue-property-decorator'
   import { required } from 'vuelidate/lib/validators'
+
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
+  import { OmatTiedotLomake } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { getTitleFromAuthorities } from '@/utils/functions'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { OmatTiedotLomake } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({

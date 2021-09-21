@@ -71,17 +71,18 @@
 
 <script lang="ts">
   import axios from 'axios'
+  import { parseISO } from 'date-fns'
   import compareAsc from 'date-fns/compareAsc'
   import { Component, Vue } from 'vue-property-decorator'
-  import { parseISO } from 'date-fns'
-  import store from '@/store'
-  import ArviointiForm from '@/forms/arviointi-form.vue'
-  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+
+  import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KommenttiCard from '@/components/kommentti-card/kommentti-card.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import { toastFail } from '@/utils/toast'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import ArviointiForm from '@/forms/arviointi-form.vue'
+  import store from '@/store'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {

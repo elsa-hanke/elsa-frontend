@@ -30,8 +30,9 @@
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
     components: {

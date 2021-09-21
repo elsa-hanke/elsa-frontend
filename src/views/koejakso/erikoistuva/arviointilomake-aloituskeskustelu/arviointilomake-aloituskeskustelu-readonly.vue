@@ -54,11 +54,11 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
-  import { AloituskeskusteluLomake } from '@/types'
+
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus } from '@/types'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
+  import { AloituskeskusteluLomake, KoejaksonVaiheAllekirjoitus } from '@/types'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
 
   @Component({
     components: {

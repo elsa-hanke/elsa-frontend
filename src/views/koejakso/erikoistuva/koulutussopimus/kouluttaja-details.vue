@@ -31,20 +31,21 @@
 </template>
 
 <script lang="ts">
-  import { toastFail, toastSuccess } from '@/utils/toast'
   import axios from 'axios'
-  import store from '@/store'
+  import Avatar from 'vue-avatar'
   import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import Avatar from 'vue-avatar'
+
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
+  import store from '@/store'
   import { Kouluttaja } from '@/types'
   import { defaultKouluttaja } from '@/utils/constants'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 
 import auth from './auth'
 import erikoistuva from './erikoistuva'
@@ -8,7 +8,7 @@ import vastuuhenkilo from './vastuuhenkilo'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+export default new Store({
   modules: {
     auth,
     erikoistuva,

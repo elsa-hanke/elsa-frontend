@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { gitDescribeSync } = require('git-describe')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { gitDescribeSync } = require('git-describe')
 
 try {
   process.env.VUE_APP_COMMIT_HASH = gitDescribeSync().hash

@@ -79,18 +79,19 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue'
   import axios from 'axios'
+  import Vue from 'vue'
   import { Component } from 'vue-property-decorator'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
+
   import ElsaBadge from '@/components/badge/badge.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import { vaativuustasot, luottamuksenTasot } from '@/utils/constants'
-  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import { confirmDelete } from '@/utils/confirm'
+  import { vaativuustasot, luottamuksenTasot } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {

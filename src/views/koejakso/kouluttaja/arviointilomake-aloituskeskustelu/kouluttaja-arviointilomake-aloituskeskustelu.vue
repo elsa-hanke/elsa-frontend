@@ -156,26 +156,30 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
   import { format } from 'date-fns'
   import _get from 'lodash/get'
+  import Component from 'vue-class-component'
+  import { Mixins } from 'vue-property-decorator'
+
   import * as api from '@/api/kouluttaja'
-  import store from '@/store'
   import ElsaButton from '@/components/button/button.vue'
-  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import { toastFail, toastSuccess } from '@/utils/toast'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { LomakeTilat } from '@/utils/constants'
-  import { AloituskeskusteluLomake } from '@/types'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus, KoejaksonVaiheButtonStates } from '@/types'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
-  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import store from '@/store'
+  import {
+    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheButtonStates,
+    AloituskeskusteluLomake
+  } from '@/types'
+  import { LomakeTilat } from '@/utils/constants'
+  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

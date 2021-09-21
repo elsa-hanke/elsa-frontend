@@ -24,11 +24,12 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins } from 'vue-property-decorator'
   import axios from 'axios'
-  import { toastFail, toastSuccess } from '@/utils/toast'
+  import { Component, Mixins } from 'vue-property-decorator'
+
   import ArviointiForm from '@/forms/arviointi-form.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
