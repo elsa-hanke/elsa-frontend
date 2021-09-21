@@ -20,7 +20,32 @@
               "nimi": "Oppimistavoite 3",
               "kategoriaId": 1
            }
-        ]
+        ],
+        "arviointiasteikko": {
+         "nimi": "EPA",
+         "tasot": [
+            {
+               "nimi": "OHJAAJAN_TOIMINNAN_SEURAAMINEN",
+               "taso": 1
+            },
+            {
+               "nimi": "TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 2
+            },
+            {
+               "nimi": "TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 3
+            },
+            {
+               "nimi": "TOIMINTA_ILMAN_OHJAUSTA",
+               "taso": 4
+            },
+            {
+               "nimi": "TOIMINTA_OHJAAJANA",
+               "taso": 5
+            }
+         ]
+        }
      },
      {
         "id": 2,
@@ -37,14 +62,39 @@
               "nimi": "Oppimistavoite 5",
               "kategoriaId": 2
            }
-        ]
+        ],
+        "arviointiasteikko": {
+         "nimi": "EPA",
+         "tasot": [
+            {
+               "nimi": "OHJAAJAN_TOIMINNAN_SEURAAMINEN",
+               "taso": 1
+            },
+            {
+               "nimi": "TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 2
+            },
+            {
+               "nimi": "TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 3
+            },
+            {
+               "nimi": "TOIMINTA_ILMAN_OHJAUSTA",
+               "taso": 4
+            },
+            {
+               "nimi": "TOIMINTA_OHJAAJANA",
+               "taso": 5
+            }
+         ]
+        }
      }
   ],
   "suoritemerkinnat": [
      {
         "id": 1251,
         "suorituspaiva": "2020-11-26",
-        "luottamuksenTaso": 5,
+        "arviointiasteikonTaso": 5,
         "vaativuustaso": 3,
         "lisatiedot": "lorem ipsum....",
         "lukittu": false,
@@ -71,12 +121,37 @@
               "muuTyyppi": null
            },
            "erikoistuvaLaakariId": 1101
+        },
+        "arviointiasteikko": {
+         "nimi": "EPA",
+         "tasot": [
+            {
+               "nimi": "OHJAAJAN_TOIMINNAN_SEURAAMINEN",
+               "taso": 1
+            },
+            {
+               "nimi": "TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 2
+            },
+            {
+               "nimi": "TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 3
+            },
+            {
+               "nimi": "TOIMINTA_ILMAN_OHJAUSTA",
+               "taso": 4
+            },
+            {
+               "nimi": "TOIMINTA_OHJAAJANA",
+               "taso": 5
+            }
+         ]
         }
      },
      {
         "id": 1253,
         "suorituspaiva": "2020-11-23",
-        "luottamuksenTaso": 2,
+        "arviointiasteikonTaso": 2,
         "vaativuustaso": 2,
         "lisatiedot": "",
         "lukittu": false,
@@ -103,12 +178,37 @@
               "muuTyyppi": null
            },
            "erikoistuvaLaakariId": 1101
+        },
+        "arviointiasteikko": {
+         "nimi": "EPA",
+         "tasot": [
+            {
+               "nimi": "OHJAAJAN_TOIMINNAN_SEURAAMINEN",
+               "taso": 1
+            },
+            {
+               "nimi": "TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 2
+            },
+            {
+               "nimi": "TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 3
+            },
+            {
+               "nimi": "TOIMINTA_ILMAN_OHJAUSTA",
+               "taso": 4
+            },
+            {
+               "nimi": "TOIMINTA_OHJAAJANA",
+               "taso": 5
+            }
+         ]
         }
      },
      {
         "id": 1254,
         "suorituspaiva": "2020-11-26",
-        "luottamuksenTaso": 5,
+        "arviointiasteikonTaso": 5,
         "vaativuustaso": 3,
         "lisatiedot": null,
         "lukittu": false,
@@ -135,12 +235,37 @@
               "muuTyyppi": null
            },
            "erikoistuvaLaakariId": 1101
+        },
+        "arviointiasteikko": {
+         "nimi": "EPA",
+         "tasot": [
+            {
+               "nimi": "OHJAAJAN_TOIMINNAN_SEURAAMINEN",
+               "taso": 1
+            },
+            {
+               "nimi": "TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 2
+            },
+            {
+               "nimi": "TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 3
+            },
+            {
+               "nimi": "TOIMINTA_ILMAN_OHJAUSTA",
+               "taso": 4
+            },
+            {
+               "nimi": "TOIMINTA_OHJAAJANA",
+               "taso": 5
+            }
+         ]
         }
      },
      {
         "id": 1252,
         "suorituspaiva": "2020-11-29",
-        "luottamuksenTaso": 4,
+        "arviointiasteikonTaso": 4,
         "vaativuustaso": 4,
         "lisatiedot": null,
         "lukittu": false,
@@ -167,6 +292,31 @@
               "muuTyyppi": null
            },
            "erikoistuvaLaakariId": 1101
+        },
+        "arviointiasteikko": {
+         "nimi": "EPA",
+         "tasot": [
+            {
+               "nimi": "OHJAAJAN_TOIMINNAN_SEURAAMINEN",
+               "taso": 1
+            },
+            {
+               "nimi": "TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 2
+            },
+            {
+               "nimi": "TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA",
+               "taso": 3
+            },
+            {
+               "nimi": "TOIMINTA_ILMAN_OHJAUSTA",
+               "taso": 4
+            },
+            {
+               "nimi": "TOIMINTA_OHJAAJANA",
+               "taso": 5
+            }
+         ]
         }
      }
   ]

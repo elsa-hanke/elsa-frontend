@@ -68,7 +68,6 @@ describe('Uuden suoritemerkinnän lisäys', () => {
     cy.contains('Lisää työskentelyjakso')
     cy.contains('Oppimistavoite')
     cy.contains('Vaativuustaso')
-    cy.contains('Luottamuksen taso')
     cy.contains('Suorituspäivä')
     cy.contains('Lisätiedot')
     cy.contains('a', 'Peruuta')
