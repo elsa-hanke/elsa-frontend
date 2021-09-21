@@ -89,14 +89,21 @@
       </template>
     </elsa-form-group>
     <b-form-row>
-      <elsa-form-group :label="$t('luottamuksen-taso')" :required="true" class="col-md-8">
+      <elsa-form-group
+        v-if="form.oppimistavoite"
+        :label="arviointiAsteikonNimi"
+        :required="true"
+        class="col-md-8"
+      >
         <template #label-help>
           <elsa-popover>
             <template>
-              <h3>{{ $t('luottamuksen-taso') }}</h3>
-              <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                <p>{{ $t(taso.kuvaus) }}</p>
+              <h3>{{ arviointiAsteikonNimi }}</h3>
+              <div v-for="(asteikonTaso, index) in arviointiasteikko.tasot" :key="index">
+                <h4>
+                  {{ asteikonTaso.taso }} {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
+                </h4>
+                <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
               </div>
             </template>
           </elsa-popover>
@@ -104,19 +111,19 @@
         <template v-slot="{ uid }">
           <elsa-form-multiselect
             :id="uid"
-            v-model="form.luottamuksenTaso"
-            :options="luottamuksenTasot"
-            :state="validateState('luottamuksenTaso')"
-            :custom-label="(value) => `${value.arvo} ${value.nimi}`"
-            track-by="arvo"
+            v-model="form.arviointiasteikonTaso"
+            :options="arviointiasteikko.tasot"
+            :state="validateState('arviointiasteikonTaso')"
+            :custom-label="(value) => `${value.taso} ${value.nimi}`"
+            track-by="taso"
           >
             <template slot="singleLabel" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.nimi) }}
+              <span class="font-weight-700">{{ option.taso }}</span>
+              {{ $t('arviointiasteikon-taso-' + option.nimi) }}
             </template>
             <template slot="option" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.nimi) }}
+              <span class="font-weight-700">{{ option.taso }}</span>
+              {{ $t('arviointiasteikon-taso-' + option.nimi) }}
             </template>
           </elsa-form-multiselect>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -128,8 +135,8 @@
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="form.tapahtumanAjankohta"
-            :state="validateState('tapahtumanAjankohta')"
+            v-model="form.suorituspaiva"
+            :state="validateState('suorituspaiva')"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
           ></elsa-form-datepicker>
@@ -176,7 +183,15 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
-  import { vaativuustasot, luottamuksenTasot } from '@/utils/constants'
+  import {
+    ArviointiasteikonTaso,
+    Erikoisala,
+    Kunta,
+    OppimistavoitteenKategoria,
+    Suoritemerkinta,
+    Vaativuustaso
+  } from '@/types'
+  import { vaativuustasot, ArviointiasteikkoTyyppi } from '@/utils/constants'
 
   @Component({
     components: {
@@ -198,10 +213,10 @@
         vaativuustaso: {
           required
         },
-        luottamuksenTaso: {
+        arviointiasteikonTaso: {
           required
         },
-        tapahtumanAjankohta: {
+        suorituspaiva: {
           required
         }
       }
@@ -209,38 +224,29 @@
   })
   export default class SuoritemerkintaForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
     @Prop({ required: false, default: () => [] })
-    oppimistavoitteenKategoriat!: any[]
+    oppimistavoitteenKategoriat!: OppimistavoitteenKategoria[]
 
     @Prop({ required: false, default: () => [] })
-    kunnat!: any[]
+    kunnat!: Kunta[]
 
     @Prop({ required: false, default: () => [] })
-    erikoisalat!: any[]
+    erikoisalat!: Erikoisala[]
 
     @Prop({
       required: false,
-      type: Object,
       default: () => ({
         tyoskentelyjakso: null,
         oppimistavoite: null,
         vaativuustaso: null,
-        luottamuksenTaso: null,
-        tapahtumanAjankohta: null,
+        arviointiasteikonTaso: null,
+        suorituspaiva: null,
         lisatiedot: null
       })
     })
-    value!: any
+    value!: Suoritemerkinta
 
-    form = {
-      tyoskentelyjakso: null,
-      oppimistavoite: null,
-      vaativuustaso: null,
-      luottamuksenTaso: null,
-      tapahtumanAjankohta: null,
-      lisatiedot: null
-    } as any
+    form?: Suoritemerkinta
     vaativuustasot = vaativuustasot
-    luottamuksenTasot = luottamuksenTasot
     params = {
       saving: false,
       deleting: false
@@ -251,10 +257,12 @@
         tyoskentelyjakso: this.value.tyoskentelyjakso,
         oppimistavoite: this.value.oppimistavoite,
         vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
-        luottamuksenTaso: luottamuksenTasot.find(
-          (taso) => taso.arvo === this.value.luottamuksenTaso
-        ),
-        tapahtumanAjankohta: this.value.suorituspaiva,
+        arviointiasteikonTaso: this.oppimistavoitteenKategoriat
+          .find((kategoria) => kategoria.id === this.value.oppimistavoite?.kategoriaId)
+          ?.arviointiasteikko.tasot.find(
+            (asteikonTaso) => asteikonTaso.taso === this.value.arviointiasteikonTaso
+          ),
+        suorituspaiva: this.value.suorituspaiva,
         lisatiedot: this.value.lisatiedot
       }
     }
@@ -262,6 +270,18 @@
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    get arviointiasteikko() {
+      return this.oppimistavoitteenKategoriat.find(
+        (kategoria) => kategoria.id === this.form?.oppimistavoite.kategoriaId
+      )?.arviointiasteikko
+    }
+
+    get arviointiAsteikonNimi() {
+      return this.arviointiasteikko?.nimi === ArviointiasteikkoTyyppi.EPA
+        ? this.$t('luottamuksen-taso')
+        : this.$t('etappi')
     }
 
     onSubmit() {
@@ -272,12 +292,12 @@
       this.$emit(
         'submit',
         {
-          tyoskentelyjaksoId: this.form.tyoskentelyjakso.id,
-          oppimistavoiteId: this.form.oppimistavoite.id,
-          vaativuustaso: this.form.vaativuustaso.arvo,
-          luottamuksenTaso: this.form.luottamuksenTaso.arvo,
-          suorituspaiva: this.form.tapahtumanAjankohta,
-          lisatiedot: this.form.lisatiedot
+          tyoskentelyjaksoId: this.form?.tyoskentelyjakso.id,
+          oppimistavoiteId: this.form?.oppimistavoite.id,
+          vaativuustaso: (this.form?.vaativuustaso as Vaativuustaso).arvo,
+          arviointiasteikonTaso: (this.form?.arviointiasteikonTaso as ArviointiasteikonTaso).taso,
+          suorituspaiva: this.form?.suorituspaiva,
+          lisatiedot: this.form?.lisatiedot
         },
         this.params
       )

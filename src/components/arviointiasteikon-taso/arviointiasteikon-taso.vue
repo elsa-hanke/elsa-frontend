@@ -8,23 +8,24 @@
   import { Prop } from 'vue-property-decorator'
 
   import ElsaBadge from '@/components/badge/badge.vue'
-  import { luottamuksenTasot } from '@/utils/constants'
+  import { ArviointiasteikonTaso } from '@/types'
 
   @Component({
     components: {
       ElsaBadge
     }
   })
-  export default class ElsaLuottamuksenTaso extends Vue {
+  export default class ElsaArviointiasteikonTaso extends Vue {
     @Prop({ required: true })
     value!: number
 
-    tasot = luottamuksenTasot
+    @Prop({ required: true })
+    tasot!: ArviointiasteikonTaso[]
 
     get tasonNimi() {
-      const taso = this.tasot.find((taso) => taso.arvo === this.value)
+      const taso = this.tasot.find((asteikonTaso) => asteikonTaso.taso === this.value)
       if (taso) {
-        return this.$t(taso.nimi)
+        return this.$t('arviointiasteikon-taso-' + taso.nimi)
       }
       return undefined
     }

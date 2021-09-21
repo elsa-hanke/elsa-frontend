@@ -1,6 +1,9 @@
 import { LocaleMessages } from 'vue-i18n'
 
 import {
+  ArvioinninPerustuminen,
+  ArviointiasteikkoTyyppi,
+  ArviointiasteikonTasoTyyppi,
   ErikoisalaTyyppi,
   KaytannonKoulutusTyyppi,
   KehittamistoimenpideKategoria,
@@ -43,7 +46,7 @@ export interface ArviointipyyntoLomake {
   tyoskentelyjaksot: any[]
   kunnat: any[]
   erikoisalat: any[]
-  epaOsaamisalueenKategoriat: any[]
+  arvioitavanKokonaisuudenKategoriat: any[]
   kouluttajatAndVastuuhenkilot: any[]
 }
 
@@ -73,6 +76,7 @@ export interface Tyoskentelyjakso {
   suoritusarvioinnit?: boolean
   liitettyKoejaksoon?: boolean
   asiakirjat?: Asiakirja[]
+  label?: string
 }
 
 export interface Tyoskentelypaikka {
@@ -350,6 +354,147 @@ export type OmatTiedotLomake = {
   phoneNumber: string | null
   avatar: any
   avatarUpdated: boolean
+}
+
+export type Suoritusarviointi = {
+  id?: number
+  tapahtumanAjankohta: Date | null
+  arvioitavaTapahtuma: string | null
+  pyynnonAika: Date
+  lisatiedot: string | null
+  itsearviointiVaativuustaso: number
+  itsearviointiArviointiasteikonTaso: number
+  sanallinenItsearviointi: string
+  itsearviointiAika: Date
+  vaativuustaso: number
+  arviointiasteikonTaso: number
+  sanallinenArviointi: string
+  arviointiAika: Date
+  lukittu: boolean
+  kommentit: SuoritusarvioinninKommentti[]
+  arvioinninAntajaId: number
+  arvioitavaOsaalueId: number
+  tyoskentelyjaksoId: number
+  arvioinninSaaja: Kayttaja
+  arvioinninAntaja: Kayttaja | null
+  arvioitavaOsaalue: ArvioitavaKokonaisuus | null
+  tyoskentelyjakso: Tyoskentelyjakso | null
+  arviointityokalut: Arviointityokalu[]
+  arviointiPerustuu: ArvioinninPerustuminen
+  muuPeruste: string
+}
+
+export type SuoritusarvioinninKommentti = {
+  id?: number
+  teksti: string
+  luontiaika: Date
+  muokkausaika: Date
+  kommentoija: Kayttaja
+  suoritusarviointiId: number
+}
+
+export type ArvioitavaKokonaisuus = {
+  id?: number
+  nimi: string
+  kuvaus: string
+  voimassaoloAlkaa: Date
+  voimassaoloLoppuu: Date
+  erikoisalaId: number
+  kategoria: ArvioitavanKokonaisuudenKategoria
+  arviointiasteikko: Arviointiasteikko
+}
+
+export type ArvioitavanKokonaisuudenKategoria = {
+  id?: number
+  nimi: string
+  jarjestysnumero: number
+  voimassaoloAlkaa: Date
+  voimassaoloLoppuu: Date
+}
+
+export type Arviointiasteikko = {
+  id?: number
+  nimi: ArviointiasteikkoTyyppi
+  tasot: ArviointiasteikonTaso[]
+}
+
+export type ArviointiasteikonTaso = {
+  nimi: ArviointiasteikonTasoTyyppi
+  taso: number
+}
+
+export type Arviointityokalu = {
+  id?: number
+  nimi: string
+}
+
+export type SuoritusarviointiForm = {
+  vaativuustaso: Vaativuustaso | null | undefined
+  arviointiasteikonTaso: ArviointiasteikonTaso | null | undefined
+  sanallinenArviointi: string | null
+  arviointityokalut?: Arviointityokalu[]
+  arviointiPerustuu?: ArvioinninPerustuminen | null
+  muuPeruste?: string | null
+  perustuuMuuhun?: boolean
+}
+
+export type Vaativuustaso = {
+  arvo: number
+  nimi: string
+  kuvaus: string
+}
+
+export type OppimistavoitteenKategoria = {
+  id?: number
+  nimi: string
+  voimassaolonAlkamispaiva: Date
+  voimassaolonPaattymispaiva: Date
+  erikoisalaId: number
+  oppimistavoitteet: Oppimistavoite[]
+  arviointiasteikko: Arviointiasteikko
+}
+
+export type Oppimistavoite = {
+  id: number
+  nimi: string
+  voimassaolonAlkamispaiva: Date
+  voimassaolonPaattymispaiva: Date
+  kategoriaId: number
+}
+
+export type Suoritemerkinta = {
+  id?: number
+  suorituspaiva: Date
+  arviointiasteikonTaso: number | ArviointiasteikonTaso | undefined
+  vaativuustaso: number | Vaativuustaso | undefined
+  lisatiedot: string
+  lukittu?: boolean
+  oppimistavoiteId?: number
+  tyoskentelyjaksoId?: number
+  oppimistavoite: Oppimistavoite
+  tyoskentelyjakso: Tyoskentelyjakso
+  arviointiasteikko?: Arviointiasteikko
+}
+
+export interface ToggleableSuoritemerkinta extends Suoritemerkinta {
+  showDetails: boolean
+}
+
+export type OppimistavoitteetTable = {
+  oppimistavoitteenKategoriat: OppimistavoitteenKategoria[]
+  suoritemerkinnat: ToggleableSuoritemerkinta[]
+}
+
+export type SuoritemerkintaRow = {
+  suoritemerkinta?: ToggleableSuoritemerkinta
+  details: boolean
+  oppimistavoite?: Oppimistavoite
+  hasDetails?: boolean
+}
+
+export type SuoritemerkintaWithDetails = {
+  suoritemerkinta: ToggleableSuoritemerkinta
+  details: boolean
 }
 
 export interface BarChartRow {

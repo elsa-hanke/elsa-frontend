@@ -38,7 +38,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group
-      :label="$t('epa-osaamisalue')"
+      :label="$t('arvioitava-kokonaisuus')"
       label-cols-md="4"
       label-cols-xl="3"
       label-cols="12"
@@ -51,14 +51,7 @@
           <elsa-popover>
             <template>
               <h3>{{ value.arvioitavaOsaalue.nimi }}</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.
-              </p>
-              <p>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
-              </p>
+              <p v-html="value.arvioitavaOsaalue.kuvaus" />
             </template>
           </elsa-popover>
         </div>
@@ -167,13 +160,16 @@
         <b-tbody>
           <b-tr>
             <b-th scope="row">
-              {{ $t('luottamuksen-taso') }}
+              {{ arviointiAsteikonNimi }}
               <elsa-popover>
                 <template>
-                  <h3>{{ $t('luottamuksen-taso') }}</h3>
-                  <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                    <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                    <p>{{ $t(taso.kuvaus) }}</p>
+                  <h3>{{ arviointiAsteikonNimi }}</h3>
+                  <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
+                    <h4>
+                      {{ asteikonTaso.taso }}
+                      {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
+                    </h4>
+                    <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
                   </div>
                 </template>
               </elsa-popover>
@@ -195,7 +191,11 @@
                   {{ $t('arviointia-ei-ole-viela-annettu') }}
                 </span>
               </div>
-              <elsa-luottamuksen-taso v-if="value.arviointiAika" :value="value.luottamuksenTaso" />
+              <elsa-arviointiasteikon-taso
+                v-if="value.arviointiAika"
+                :value="value.arviointiasteikonTaso"
+                :tasot="value.arvioitavaOsaalue.arviointiasteikko.tasot"
+              />
             </b-td>
             <b-td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
@@ -217,9 +217,10 @@
                   {{ $t('itsearviointia-ei-tehty') }}
                 </span>
               </div>
-              <elsa-luottamuksen-taso
+              <elsa-arviointiasteikon-taso
                 v-if="value.itsearviointiAika"
-                :value="value.itsearviointiLuottamuksenTaso"
+                :value="value.itsearviointiArviointiasteikonTaso"
+                :tasot="value.arvioitavaOsaalue.arviointiasteikko.tasot"
               />
             </b-td>
           </b-tr>
@@ -289,14 +290,16 @@
     <div v-else>
       <hr />
       <b-form-row>
-        <elsa-form-group :label="$t('luottamuksen-taso')" :required="true" class="col-lg-6">
+        <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
           <template #label-help>
             <elsa-popover>
               <template>
-                <h3>{{ $t('luottamuksen-taso') }}</h3>
-                <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                  <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                  <p>{{ $t(taso.kuvaus) }}</p>
+                <h3>{{ arviointiAsteikonNimi }}</h3>
+                <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
+                  <h4>
+                    {{ asteikonTaso.taso }} {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
+                  </h4>
+                  <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
                 </div>
               </template>
             </elsa-popover>
@@ -304,19 +307,19 @@
           <template v-slot="{ uid }">
             <elsa-form-multiselect
               :id="uid"
-              v-model="form.luottamuksenTaso"
-              :options="luottamuksenTasot"
-              :state="validateState('luottamuksenTaso')"
-              :custom-label="(value) => `${value.arvo} ${value.nimi}`"
-              track-by="arvo"
+              v-model="form.arviointiasteikonTaso"
+              :options="arviointiasteikonTasot"
+              :state="validateState('arviointiasteikonTaso')"
+              :custom-label="(value) => `${value.taso} ${value.nimi}`"
+              track-by="taso"
             >
               <template slot="singleLabel" slot-scope="{ option }">
-                <span class="font-weight-700">{{ option.arvo }}</span>
-                {{ $t(option.nimi) }}
+                <span class="font-weight-700">{{ option.taso }}</span>
+                {{ $t('arviointiasteikon-taso-' + option.nimi) }}
               </template>
               <template slot="option" slot-scope="{ option }">
-                <span class="font-weight-700">{{ option.arvo }}</span>
-                {{ $t(option.nimi) }}
+                <span class="font-weight-700">{{ option.taso }}</span>
+                {{ $t('arviointiasteikon-taso-' + option.nimi) }}
               </template>
             </elsa-form-multiselect>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -468,22 +471,27 @@
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
+  import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
-  import { vaativuustasot, luottamuksenTasot, arvioinninPerustuminen } from '@/utils/constants'
+  import { ArviointiasteikonTaso, Suoritusarviointi, SuoritusarviointiForm } from '@/types'
+  import {
+    ArvioinninPerustuminen,
+    ArviointiasteikkoTyyppi,
+    vaativuustasot
+  } from '@/utils/constants'
 
   @Component({
     components: {
       ElsaFormGroup,
       ElsaFormMultiselect,
       UserAvatar,
-      ElsaLuottamuksenTaso,
+      ElsaArviointiasteikonTaso,
       ElsaBadge,
       ElsaPopover,
       ElsaButton,
@@ -494,7 +502,7 @@
         vaativuustaso: {
           required
         },
-        luottamuksenTaso: {
+        arviointiasteikonTaso: {
           required
         },
         sanallinenArviointi: {
@@ -507,7 +515,7 @@
         },
         muuPeruste: {
           required: requiredIf((value) => {
-            return value.arviointiPerustuu === arvioinninPerustuminen.Muu
+            return value.arviointiPerustuu === ArvioinninPerustuminen.MUU
           })
         }
       }
@@ -518,15 +526,15 @@
     editing!: boolean
 
     @Prop({ required: true, type: Object })
-    value!: any
+    value!: Suoritusarviointi
 
     @Prop({ required: false, default: false })
     itsearviointi!: boolean
 
     // Joko arviointi tai itsearviointi
-    form: any = {
+    form: SuoritusarviointiForm = {
       vaativuustaso: null,
-      luottamuksenTaso: null,
+      arviointiasteikonTaso: null,
       sanallinenArviointi: null,
       arviointityokalut: [],
       arviointiPerustuu: null,
@@ -534,7 +542,8 @@
       perustuuMuuhun: false
     }
     vaativuustasot = vaativuustasot
-    luottamuksenTasot = luottamuksenTasot
+    arviointiasteikonTasot: ArviointiasteikonTaso[] =
+      this.value.arvioitavaOsaalue?.arviointiasteikko.tasot || []
     arviointityokalut = []
     params = {
       saving: false
@@ -542,15 +551,15 @@
     arviointiperusteet = [
       {
         text: this.$t('arviointi-perustuu-kirjallinen'),
-        value: arvioinninPerustuminen.KirjallinenMateriaali
+        value: ArvioinninPerustuminen.KIRJALLINEN
       },
       {
         text: this.$t('arviointi-perustuu-etayhteys'),
-        value: arvioinninPerustuminen.Etayhteys
+        value: ArvioinninPerustuminen.ETA
       },
       {
         text: this.$t('arviointi-perustuu-muu'),
-        value: arvioinninPerustuminen.Muu
+        value: ArvioinninPerustuminen.MUU
       }
     ]
 
@@ -560,34 +569,40 @@
           vaativuustaso: vaativuustasot.find(
             (taso) => taso.arvo === this.value.itsearviointiVaativuustaso
           ),
-          luottamuksenTaso: luottamuksenTasot.find(
-            (taso) => taso.arvo === this.value.itsearviointiLuottamuksenTaso
+          arviointiasteikonTaso: this.arviointiasteikonTasot.find(
+            (asteikonTaso) => asteikonTaso.taso === this.value.itsearviointiArviointiasteikonTaso
           ),
           sanallinenArviointi: this.value.sanallinenItsearviointi
         }
       } else {
         this.form = {
           vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
-          luottamuksenTaso: luottamuksenTasot.find(
-            (taso) => taso.arvo === this.value.luottamuksenTaso
+          arviointiasteikonTaso: this.arviointiasteikonTasot.find(
+            (asteikonTaso) => asteikonTaso.taso === this.value.arviointiasteikonTaso
           ),
           sanallinenArviointi: this.value.sanallinenArviointi,
           arviointityokalut: this.value.arviointityokalut,
           arviointiPerustuu:
-            this.value.arviointiPerustuu === arvioinninPerustuminen.LasnaolevaHavainnointi
+            this.value.arviointiPerustuu === ArvioinninPerustuminen.LASNA
               ? null
               : this.value.arviointiPerustuu,
           muuPeruste: this.value.muuPeruste,
           perustuuMuuhun:
             this.value.arviointiPerustuu !== null &&
-            this.value.arviointiPerustuu !== arvioinninPerustuminen.LasnaolevaHavainnointi
+            this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA
         }
         this.arviointityokalut = (await axios.get(`/arviointityokalut`)).data
       }
     }
 
     get muuValittu() {
-      return this.form.arviointiPerustuu === arvioinninPerustuminen.Muu
+      return this.form.arviointiPerustuu === ArvioinninPerustuminen.MUU
+    }
+
+    get arviointiAsteikonNimi() {
+      return this.value.arvioitavaOsaalue?.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
+        ? this.$t('luottamuksen-taso')
+        : this.$t('etappi')
     }
 
     validateState(name: string) {
@@ -605,8 +620,8 @@
           'submit',
           {
             ...this.value,
-            itsearviointiVaativuustaso: this.form.vaativuustaso.arvo,
-            itsearviointiLuottamuksenTaso: this.form.luottamuksenTaso.arvo,
+            itsearviointiVaativuustaso: this.form.vaativuustaso?.arvo,
+            itsearviointiArviointiasteikonTaso: this.form.arviointiasteikonTaso?.taso,
             sanallinenItsearviointi: this.form.sanallinenArviointi
           },
           this.params
@@ -616,13 +631,13 @@
           'submit',
           {
             ...this.value,
-            vaativuustaso: this.form.vaativuustaso.arvo,
-            luottamuksenTaso: this.form.luottamuksenTaso.arvo,
+            vaativuustaso: this.form.vaativuustaso?.arvo,
+            arviointiasteikonTaso: this.form.arviointiasteikonTaso?.taso,
             sanallinenArviointi: this.form.sanallinenArviointi,
             arviointityokalut: this.form.arviointityokalut,
             arviointiPerustuu: this.form.perustuuMuuhun
               ? this.form.arviointiPerustuu
-              : arvioinninPerustuminen.LasnaolevaHavainnointi,
+              : ArvioinninPerustuminen.LASNA,
             muuPeruste: this.muuValittu ? this.form.muuPeruste : null
           },
           this.params

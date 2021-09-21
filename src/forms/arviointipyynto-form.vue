@@ -35,14 +35,14 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('epa-osaamisalue')" :required="true">
+    <elsa-form-group :label="$t('arvioitava-kokonaisuus')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="form.epaOsaamisalue"
-          :options="epaOsaamisalueenKategoriat"
-          :state="validateState('epaOsaamisalue')"
-          group-values="epaOsaamisalueet"
+          v-model="form.arvioitavaOsaalue"
+          :options="arvioitavanKokonaisuudenKategoriat"
+          :state="validateState('arvioitavaOsaalue')"
+          group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
           :group-select="false"
           label="nimi"
@@ -86,9 +86,9 @@
         <template v-slot="{ uid }">
           <elsa-form-multiselect
             :id="uid"
-            v-model="form.kouluttajaOrVastuuhenkilo"
+            v-model="form.arvioinninAntaja"
             :options="kouluttajatAndVastuuhenkilot"
-            :state="validateState('kouluttajaOrVastuuhenkilo')"
+            :state="validateState('arvioinninAntaja')"
             :disabled="editing"
             label="nimi"
             track-by="nimi"
@@ -160,7 +160,16 @@
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import store from '@/store'
+  import {
+    ArvioitavanKokonaisuudenKategoria,
+    Erikoisala,
+    Kayttaja,
+    Kunta,
+    Suoritusarviointi,
+    Tyoskentelyjakso
+  } from '@/types'
   import { toastSuccess, toastFail } from '@/utils/toast'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -177,13 +186,13 @@
         tyoskentelyjakso: {
           required
         },
-        epaOsaamisalue: {
+        arvioitavaOsaalue: {
           required
         },
         arvioitavaTapahtuma: {
           required
         },
-        kouluttajaOrVastuuhenkilo: {
+        arvioinninAntaja: {
           required
         },
         tapahtumanAjankohta: {
@@ -194,19 +203,19 @@
   })
   export default class ArviointipyyntoForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
     @Prop({ required: false, default: () => [] })
-    tyoskentelyjaksot!: any[]
+    tyoskentelyjaksot!: Tyoskentelyjakso[]
 
     @Prop({ required: false, default: () => [] })
-    kunnat!: any[]
+    kunnat!: Kunta[]
 
     @Prop({ required: false, default: () => [] })
-    erikoisalat!: any[]
+    erikoisalat!: Erikoisala[]
 
     @Prop({ required: false, default: () => [] })
-    epaOsaamisalueenKategoriat!: any[]
+    arvioitavanKokonaisuudenKategoriat!: ArvioitavanKokonaisuudenKategoria[]
 
     @Prop({ required: false, default: () => [] })
-    kouluttajatAndVastuuhenkilot!: any[]
+    kouluttajatAndVastuuhenkilot!: Kayttaja[]
 
     @Prop({ required: false, default: false })
     editing!: boolean
@@ -216,35 +225,38 @@
       type: Object,
       default: () => ({
         tyoskentelyjakso: null,
-        epaOsaamisalue: null,
+        arvioitavaKokonaisuus: null,
         arvioitavaTapahtuma: null,
         kouluttajaOrVastuuhenkilo: null,
         tapahtumanAjankohta: null,
         lisatiedot: null
       })
     })
-    value!: any
+    value?: Suoritusarviointi
 
-    form = {
+    form: Partial<Suoritusarviointi> = {
       tyoskentelyjakso: null,
-      epaOsaamisalue: null,
+      arvioitavaOsaalue: null,
       arvioitavaTapahtuma: null,
-      kouluttajaOrVastuuhenkilo: null,
+      arvioinninAntaja: null,
       tapahtumanAjankohta: null,
       lisatiedot: null
-    } as any
+    }
     params = {
       saving: false,
       deleting: false
     }
 
     mounted() {
-      this.form.tyoskentelyjakso = this.value.tyoskentelyjakso
-      this.form.epaOsaamisalue = this.value.epaOsaamisalue
-      this.form.arvioitavaTapahtuma = this.value.arvioitavaTapahtuma
-      this.form.kouluttajaOrVastuuhenkilo = this.value.kouluttajaOrVastuuhenkilo
-      this.form.tapahtumanAjankohta = this.value.tapahtumanAjankohta
-      this.form.lisatiedot = this.value.lisatiedot
+      this.form.tyoskentelyjakso = this.value?.tyoskentelyjakso
+      if (this.form.tyoskentelyjakso) {
+        this.form.tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, this.value?.tyoskentelyjakso)
+      }
+      this.form.arvioitavaOsaalue = this.value?.arvioitavaOsaalue
+      this.form.arvioitavaTapahtuma = this.value?.arvioitavaTapahtuma
+      this.form.arvioinninAntaja = this.value?.arvioinninAntaja
+      this.form.tapahtumanAjankohta = this.value?.tapahtumanAjankohta
+      this.form.lisatiedot = this.value?.lisatiedot
     }
 
     validateState(name: string) {
@@ -261,9 +273,9 @@
         'submit',
         {
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-          arvioitavaOsaalueId: this.form.epaOsaamisalue?.id,
+          arvioitavaOsaalueId: this.form.arvioitavaOsaalue?.id,
           arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
-          arvioinninAntajaId: this.form.kouluttajaOrVastuuhenkilo?.id,
+          arvioinninAntajaId: this.form.arvioinninAntaja?.id,
           tapahtumanAjankohta: this.form.tapahtumanAjankohta,
           lisatiedot: this.form.lisatiedot
         },
@@ -275,13 +287,13 @@
       this.$emit('delete', this.params)
     }
 
-    async onKouluttajaSubmit(value: any, params: any, modal: any) {
+    async onKouluttajaSubmit(value: Kayttaja, params: any) {
       params.saving = true
       try {
         const kouluttaja = (await axios.post('/erikoistuva-laakari/lahikouluttajat', value)).data
         this.kouluttajatAndVastuuhenkilot.push(kouluttaja)
-        this.form.kouluttajaOrVastuuhenkilo = kouluttaja
-        modal.hide('confirm')
+        this.form.arvioinninAntaja = kouluttaja
+        this.$bvModal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
       } catch (err) {
         toastFail(

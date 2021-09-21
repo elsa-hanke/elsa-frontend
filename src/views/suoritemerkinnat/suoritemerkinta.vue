@@ -24,21 +24,31 @@
                 </span>
               </template>
             </elsa-form-group>
-            <elsa-form-group :label="$t('luottamuksen-taso')">
+            <elsa-form-group :label="arviointiAsteikonNimi">
               <template #label-help>
                 <elsa-popover>
                   <template>
-                    <h3>{{ $t('luottamuksen-taso') }}</h3>
-                    <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                      <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                      <p>{{ $t(taso.kuvaus) }}</p>
+                    <h3>{{ arviointiAsteikonNimi }}</h3>
+                    <div
+                      v-for="(asteikonTaso, index) in suoritemerkintaWrapper.arviointiasteikko
+                        .tasot"
+                      :key="index"
+                    >
+                      <h4>
+                        {{ asteikonTaso.taso }}
+                        {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
+                      </h4>
+                      <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
                     </div>
                   </template>
                 </elsa-popover>
               </template>
               <template v-slot="{ uid }">
                 <span :id="uid">
-                  <elsa-luottamuksen-taso :value="suoritemerkintaWrapper.luottamuksenTaso" />
+                  <elsa-arviointiasteikon-taso
+                    :value="suoritemerkintaWrapper.arviointiasteikonTaso"
+                    :tasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
+                  />
                 </span>
               </template>
             </elsa-form-group>
@@ -89,13 +99,14 @@
   import Vue from 'vue'
   import { Component } from 'vue-property-decorator'
 
+  import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import { Suoritemerkinta } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
-  import { vaativuustasot, luottamuksenTasot } from '@/utils/constants'
+  import { ArviointiasteikkoTyyppi, vaativuustasot } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
@@ -104,11 +115,11 @@
       ElsaFormGroup,
       ElsaPopover,
       ElsaBadge,
-      ElsaLuottamuksenTaso,
+      ElsaArviointiasteikonTaso,
       ElsaButton
     }
   })
-  export default class Suoritemerkinta extends Vue {
+  export default class SuoritemerkintaView extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -123,9 +134,8 @@
         active: true
       }
     ]
-    suoritemerkinta: any = null
+    suoritemerkinta: Suoritemerkinta | null = null
     vaativuustasot = vaativuustasot
-    luottamuksenTasot = luottamuksenTasot
     deleting = false
 
     async mounted() {
@@ -151,7 +161,7 @@
       ) {
         this.deleting = true
         try {
-          await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`)
+          await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta?.id}`)
           toastSuccess(this, this.$t('suoritemerkinta-poistettu-onnistuneesti'))
           this.$router.push({
             name: 'suoritemerkinnat'
@@ -175,6 +185,12 @@
       } else {
         return undefined
       }
+    }
+
+    get arviointiAsteikonNimi() {
+      return this.suoritemerkinta?.arviointiasteikko?.nimi === ArviointiasteikkoTyyppi.EPA
+        ? this.$t('luottamuksen-taso')
+        : this.$t('etappi')
     }
   }
 </script>

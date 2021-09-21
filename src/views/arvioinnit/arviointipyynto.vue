@@ -11,11 +11,11 @@
           <hr />
           <arviointipyynto-form
             v-if="!loading"
-            :value="arviointipyyntoWrapper"
+            :value="arviointipyynto"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
-            :epa-osaamisalueen-kategoriat="epaOsaamisalueenKategoriat"
+            :arvioitavan-kokonaisuuden-kategoriat="arvioitavanKokonaisuudenKategoriat"
             :kouluttajatAndVastuuhenkilot="kouluttajatAndVastuuhenkilot"
             :editing="editing"
             @submit="onSubmit"
@@ -37,7 +37,7 @@
 
   import ArviointipyyntoForm from '@/forms/arviointipyynto-form.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { ArviointipyyntoLomake } from '@/types'
+  import { ArviointipyyntoLomake, Suoritusarviointi } from '@/types'
   import { decorate } from '@/utils/arvioinninAntajaListDecorator'
   import { confirmDelete } from '@/utils/confirm'
   import { dateBetween } from '@/utils/date'
@@ -65,7 +65,7 @@
       }
     ]
     arviointipyyntoLomake: null | ArviointipyyntoLomake = null
-    arviointipyynto: any = null
+    arviointipyynto: Suoritusarviointi | null = null
     loading = true
 
     async mounted() {
@@ -150,7 +150,7 @@
       ) {
         params.deleting = true
         try {
-          await axios.delete(`erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto.id}`)
+          await axios.delete(`erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto?.id}`)
           toastSuccess(this, this.$t('arviointipyynto-poistettu-onnistuneesti'))
           this.skipRouteExitConfirm = true
           this.$router.push({
@@ -187,16 +187,16 @@
       }
     }
 
-    get epaOsaamisalueenKategoriat() {
+    get arvioitavanKokonaisuudenKategoriat() {
       if (this.arviointipyyntoLomake) {
-        return this.arviointipyyntoLomake.epaOsaamisalueenKategoriat
+        return this.arviointipyyntoLomake.arvioitavanKokonaisuudenKategoriat
           .map((kategoria) => ({
             ...kategoria,
-            epaOsaamisalueet: kategoria.epaOsaamisalueet.filter((oa: any) =>
+            arvioitavatKokonaisuudet: kategoria.arvioitavatKokonaisuudet.filter((oa: any) =>
               dateBetween(formatISO(new Date()), oa.voimassaoloAlkaa, oa.voimassaoloLoppuu)
             )
           }))
-          .filter((kategoria) => kategoria.epaOsaamisalueet.length > 0)
+          .filter((kategoria) => kategoria.arvioitavatKokonaisuudet.length > 0)
           .filter((kategoria) =>
             dateBetween(
               formatISO(new Date()),
@@ -225,7 +225,7 @@
             ...this.arviointipyynto.tyoskentelyjakso,
             label: tyoskentelyjaksoLabel(this, this.arviointipyynto.tyoskentelyjakso)
           },
-          epaOsaamisalue: this.arviointipyynto.arvioitavaOsaalue,
+          arvioitavaKokonaisuus: this.arviointipyynto.arvioitavaOsaalue,
           kouluttajaOrVastuuhenkilo: this.arviointipyynto.arvioinninAntaja
         }
       } else {
