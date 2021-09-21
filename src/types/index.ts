@@ -64,8 +64,8 @@ export interface TyoskentelyjaksoLomake {
 
 export interface Tyoskentelyjakso {
   id?: number | null
-  alkamispaiva: Date | null
-  paattymispaiva: Date | null
+  alkamispaiva: string | null
+  paattymispaiva: string | null
   osaaikaprosentti: number | null
   kaytannonKoulutus: KaytannonKoulutusTyyppi | null
   hyvaksyttyAiempaanErikoisalaan: boolean | null
@@ -104,8 +104,8 @@ export interface Kunta {
 export interface Erikoisala {
   id?: number | null
   nimi: string | null
-  voimassaoloAlkaa: Date
-  voimassaoloPaattyy: Date | null
+  voimassaoloAlkaa: string
+  voimassaoloPaattyy: string | null
   tyyppi: ErikoisalaTyyppi | null
   kaytannonKoulutuksenVahimmaispituus: number
   terveyskeskuskoulutusjaksonVahimmaispituus: number
@@ -344,8 +344,8 @@ export interface Yliopisto {
 
 export interface KouluttajaValtuutus {
   id?: number
-  alkamispaiva: Date
-  paattymispaiva: Date
+  alkamispaiva: string
+  paattymispaiva: string
   valtuutettu: Kayttaja
 }
 
@@ -358,18 +358,18 @@ export type OmatTiedotLomake = {
 
 export type Suoritusarviointi = {
   id?: number
-  tapahtumanAjankohta: Date | null
+  tapahtumanAjankohta: string | null
   arvioitavaTapahtuma: string | null
-  pyynnonAika: Date
+  pyynnonAika: string
   lisatiedot: string | null
   itsearviointiVaativuustaso: number
   itsearviointiArviointiasteikonTaso: number
   sanallinenItsearviointi: string
-  itsearviointiAika: Date
+  itsearviointiAika: string
   vaativuustaso: number
   arviointiasteikonTaso: number
   sanallinenArviointi: string
-  arviointiAika: Date
+  arviointiAika: string
   lukittu: boolean
   kommentit: SuoritusarvioinninKommentti[]
   arvioinninAntajaId: number
@@ -387,8 +387,8 @@ export type Suoritusarviointi = {
 export type SuoritusarvioinninKommentti = {
   id?: number
   teksti: string
-  luontiaika: Date
-  muokkausaika: Date
+  luontiaika: string
+  muokkausaika: string
   kommentoija: Kayttaja
   suoritusarviointiId: number
 }
@@ -397,8 +397,8 @@ export type ArvioitavaKokonaisuus = {
   id?: number
   nimi: string
   kuvaus: string
-  voimassaoloAlkaa: Date
-  voimassaoloLoppuu: Date
+  voimassaoloAlkaa: string
+  voimassaoloLoppuu: string
   erikoisalaId: number
   kategoria: ArvioitavanKokonaisuudenKategoria
   arviointiasteikko: Arviointiasteikko
@@ -408,8 +408,8 @@ export type ArvioitavanKokonaisuudenKategoria = {
   id?: number
   nimi: string
   jarjestysnumero: number
-  voimassaoloAlkaa: Date
-  voimassaoloLoppuu: Date
+  voimassaoloAlkaa: string
+  voimassaoloLoppuu: string
   arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[]
 }
 
@@ -448,8 +448,8 @@ export type Vaativuustaso = {
 export type OppimistavoitteenKategoria = {
   id?: number
   nimi: string
-  voimassaolonAlkamispaiva: Date
-  voimassaolonPaattymispaiva: Date
+  voimassaolonAlkamispaiva: string
+  voimassaolonPaattymispaiva: string
   erikoisalaId: number
   oppimistavoitteet: Oppimistavoite[]
   arviointiasteikko: Arviointiasteikko
@@ -458,14 +458,14 @@ export type OppimistavoitteenKategoria = {
 export type Oppimistavoite = {
   id: number
   nimi: string
-  voimassaolonAlkamispaiva: Date
-  voimassaolonPaattymispaiva: Date
+  voimassaolonAlkamispaiva: string
+  voimassaolonPaattymispaiva: string
   kategoriaId: number
 }
 
 export type Suoritemerkinta = {
   id?: number
-  suorituspaiva: Date
+  suorituspaiva: string
   arviointiasteikonTaso: number | ArviointiasteikonTaso | undefined
   vaativuustaso: number | Vaativuustaso | undefined
   lisatiedot: string

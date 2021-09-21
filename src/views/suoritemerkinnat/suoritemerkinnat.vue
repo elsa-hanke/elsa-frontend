@@ -116,6 +116,7 @@
 
 <script lang="ts">
   import axios from 'axios'
+  import { parseISO } from 'date-fns'
   import compareDesc from 'date-fns/compareDesc'
   import { Component, Vue } from 'vue-property-decorator'
 
@@ -212,7 +213,10 @@
                 const suoritemerkinnat = (
                   suoritemerkinnatGroupByOppimistavoite[oppimistavoite.id] || []
                 ).sort((a, b) =>
-                  compareDesc(a.suoritemerkinta.suorituspaiva, b.suoritemerkinta.suorituspaiva)
+                  compareDesc(
+                    parseISO(a.suoritemerkinta.suorituspaiva),
+                    parseISO(b.suoritemerkinta.suorituspaiva)
+                  )
                 )
 
                 // Ensimmäinen suoritemerkintä esitetään oppimistavoitteen rivillä
