@@ -73,10 +73,12 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import store from '@/store'
   import Component from 'vue-class-component'
+
   import KoejaksoCardContent from './koejakso-card-content.vue'
+
   import ElsaButton from '@/components/button/button.vue'
+  import store from '@/store'
   import { LomakeTilat } from '@/utils/constants'
 
   @Component({

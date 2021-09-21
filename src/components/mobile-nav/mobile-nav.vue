@@ -66,10 +66,11 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import Component from 'vue-class-component'
-  import store from '@/store'
   import Avatar from 'vue-avatar'
+  import Component from 'vue-class-component'
+
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import store from '@/store'
   import { getTitleFromAuthorities } from '@/utils/functions'
 
   @Component({

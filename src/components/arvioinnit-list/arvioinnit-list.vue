@@ -127,9 +127,10 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
+
   import ElsaButton from '@/components/button/button.vue'
-  import SearchInput from '@/components/search-input/search-input.vue'
   import Pagination from '@/components/pagination/pagination.vue'
+  import SearchInput from '@/components/search-input/search-input.vue'
 
   @Component({
     components: {

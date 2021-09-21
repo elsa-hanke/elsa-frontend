@@ -143,14 +143,15 @@
   import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf, integer } from 'vuelidate/lib/validators'
-  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
-  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
-  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
-  import ElsaButton from '@/components/button/button.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
+  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import { dateBetween } from '@/utils/date'
 
   @Component({

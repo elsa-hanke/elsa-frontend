@@ -201,30 +201,35 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component'
   import _get from 'lodash/get'
+  import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
+
   import { getKoulutussopimus as getKoulutussopimusKouluttaja } from '@/api/kouluttaja'
   import { getKoulutussopimus as getKoulutussopimusVastuuhenkilo } from '@/api/vastuuhenkilo'
-  import store from '@/store'
-  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import { KoulutussopimusLomake, Kouluttaja, KoejaksonVaiheButtonStates } from '@/types'
-  import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
-  import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus } from '@/types'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
-  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import store from '@/store'
+  import {
+    KoejaksonVaiheAllekirjoitus,
+    KoulutussopimusLomake,
+    Kouluttaja,
+    KoejaksonVaiheButtonStates
+  } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
+  import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
+  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { toastFail, toastSuccess } from '@/utils/toast'
+  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
+  import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
 
   @Component({
     components: {

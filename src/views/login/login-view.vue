@@ -31,8 +31,9 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import KayttooikeusForm from '@/forms/kayttooikeus-form.vue'
+
   import ElsaButton from '@/components/button/button.vue'
+  import KayttooikeusForm from '@/forms/kayttooikeus-form.vue'
 
   @Component({
     components: {

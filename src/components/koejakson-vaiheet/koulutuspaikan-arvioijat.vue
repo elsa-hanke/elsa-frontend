@@ -78,17 +78,17 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop } from 'vue-property-decorator'
+  import axios from 'axios'
+  import { Component, Prop, Mixins } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
+  import { required } from 'vuelidate/lib/validators'
+
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
-  import axios from 'axios'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import { required } from 'vuelidate/lib/validators'
-  import { Mixins } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
   import store from '@/store'
   import { KoejaksonVaiheHyvaksyja } from '@/types'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

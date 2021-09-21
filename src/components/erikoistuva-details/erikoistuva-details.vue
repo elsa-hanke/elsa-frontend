@@ -56,6 +56,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
+
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
 
   @Component({

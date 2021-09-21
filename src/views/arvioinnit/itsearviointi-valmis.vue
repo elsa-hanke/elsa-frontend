@@ -19,6 +19,7 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
+
   import ElsaButton from '@/components/button/button.vue'
 
   @Component({

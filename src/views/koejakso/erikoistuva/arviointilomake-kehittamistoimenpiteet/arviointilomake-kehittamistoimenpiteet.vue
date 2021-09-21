@@ -131,19 +131,25 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import store from '@/store'
-  import { KehittamistoimenpiteetLomake, Koejakso, KoejaksonVaiheHyvaksyja } from '@/types'
-  import { LomakeTilat } from '@/utils/constants'
+
+  import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaButton from '@/components/button/button.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
-  import { KoejaksonVaiheAllekirjoitus, KoejaksonVaiheButtonStates } from '@/types'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
-  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
+  import store from '@/store'
+  import {
+    KehittamistoimenpiteetLomake,
+    Koejakso,
+    KoejaksonVaiheHyvaksyja,
+    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheButtonStates
+  } from '@/types'
+  import { LomakeTilat } from '@/utils/constants'
+  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

@@ -27,8 +27,9 @@
 <script lang="ts">
   import axios from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { TyoskentelyjaksoLomake } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 

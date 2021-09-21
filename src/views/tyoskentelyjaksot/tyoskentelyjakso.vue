@@ -121,14 +121,15 @@
 <script lang="ts">
   import axios from 'axios'
   import { Vue, Component } from 'vue-property-decorator'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
-  import { confirmDelete } from '@/utils/confirm'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import { Tyoskentelyjakso } from '@/types'
+  import { confirmDelete } from '@/utils/confirm'
+  import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import { toastFail, toastSuccess } from '@/utils/toast'
   import {
     tyoskentelyjaksoKaytannonKoulutusLabel,
     tyoskentelypaikkaTyyppiLabel

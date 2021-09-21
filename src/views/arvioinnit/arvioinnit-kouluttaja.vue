@@ -5,8 +5,9 @@
 <script lang="ts">
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
-  import ElsaButton from '@/components/button/button.vue'
+
   import ArvioinnitList from '@/components/arvioinnit-list/arvioinnit-list.vue'
+  import ElsaButton from '@/components/button/button.vue'
 
   @Component({
     components: {

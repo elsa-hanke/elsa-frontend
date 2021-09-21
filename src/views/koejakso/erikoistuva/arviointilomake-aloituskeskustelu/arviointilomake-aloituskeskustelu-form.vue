@@ -261,18 +261,21 @@
 </template>
 
 <script lang="ts">
+  import { format } from 'date-fns'
+  import _get from 'lodash/get'
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf, email, between } from 'vuelidate/lib/validators'
-  import _get from 'lodash/get'
-  import { format } from 'date-fns'
+
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import {
     AloituskeskusteluLomake,
@@ -281,8 +284,6 @@
     KoejaksonVaiheHyvaksyja,
     KoejaksonVaiheButtonStates
   } from '@/types'
-  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
-  import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
 
   @Component({
     mixins: [validationMixin],

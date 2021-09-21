@@ -30,14 +30,14 @@
 </template>
 
 <script lang="ts">
-  import { Mixins } from 'vue-property-decorator'
+  import _get from 'lodash/get'
   import Component from 'vue-class-component'
-  import { Prop } from 'vue-property-decorator'
-  import ElsaButton from '@/components/button/button.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import _get from 'lodash/get'
+
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
     components: {

@@ -1,6 +1,7 @@
+import axios from 'axios'
+
 import { OmatTiedotLomake } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
-import axios from 'axios'
 
 export const ELSA_API_LOCATION =
   process.env.NODE_ENV === 'production'

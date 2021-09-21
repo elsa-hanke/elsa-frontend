@@ -1,7 +1,8 @@
-import Vue from 'vue'
 import { reactive } from '@vue/composition-api'
 import { parseISO, format } from 'date-fns'
 import { fi, sv, enUS } from 'date-fns/locale'
+import Vue from 'vue'
+
 import VueI18n from '@/plugins/i18n'
 
 export const durationOptions = reactive({

@@ -1,6 +1,6 @@
+import { parseISO } from 'date-fns'
 import isAfter from 'date-fns/isAfter'
 import isBefore from 'date-fns/isBefore'
-import { parseISO } from 'date-fns'
 
 export function dateBetween(
   date: string | undefined,

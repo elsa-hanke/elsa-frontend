@@ -88,13 +88,14 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import store from '@/store'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { AloituskeskusteluLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
-  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import { LomakeTilat } from '@/utils/constants'
+
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import store from '@/store'
+  import { AloituskeskusteluLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
+  import { LomakeTilat } from '@/utils/constants'
+  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
+  import { toastFail, toastSuccess } from '@/utils/toast'
   import ArviointilomakeAloituskeskusteluForm from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-form.vue'
   import ArviointilomakeAloituskeskusteluReadonly from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu-readonly.vue'
 

@@ -26,8 +26,8 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import { Prop } from 'vue-property-decorator'
   import Multiselect from 'vue-multiselect'
+  import { Prop } from 'vue-property-decorator'
 
   @Component({
     components: {

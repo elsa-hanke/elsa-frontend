@@ -6,8 +6,9 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
-  import { vaativuustasot } from '@/utils/constants'
+
   import ElsaBadge from '@/components/badge/badge.vue'
+  import { vaativuustasot } from '@/utils/constants'
 
   @Component({
     components: {

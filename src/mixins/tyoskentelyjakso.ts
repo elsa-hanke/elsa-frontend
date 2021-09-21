@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
-import { toastSuccess, toastFail } from '@/utils/toast'
+
 import { dateBetween } from '@/utils/date'
+import { toastSuccess, toastFail } from '@/utils/toast'
+import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
 @Component({})
 export default class TyoskentelyjaksoMixin extends Vue {

@@ -1,3 +1,7 @@
+import Vue from 'vue'
+import Meta from 'vue-meta'
+import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router'
+
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
 import Arvioinnit from '@/views/arvioinnit/arvioinnit.vue'
@@ -44,9 +48,6 @@ import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
 import Viestit from '@/views/viestit.vue'
-import Vue from 'vue'
-import Meta from 'vue-meta'
-import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router'
 
 Vue.use(VueRouter)
 Vue.use(Meta)

@@ -85,12 +85,13 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
+
   import ElsaButton from '@/components/button/button.vue'
-  import { Asiakirja } from '@/types'
   import Pagination from '@/components/pagination/pagination.vue'
-  import { toastFail } from '@/utils/toast'
-  import { saveBlob, fetchAndSaveBlob, openBlob, fetchAndOpenBlob } from '@/utils/blobs'
   import SearchInput from '@/components/search-input/search-input.vue'
+  import { Asiakirja } from '@/types'
+  import { saveBlob, fetchAndSaveBlob, openBlob, fetchAndOpenBlob } from '@/utils/blobs'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {

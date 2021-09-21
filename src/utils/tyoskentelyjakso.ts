@@ -1,4 +1,5 @@
 import { Vue } from 'vue-property-decorator'
+
 import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
 
 export function ajankohtaLabel(vue: Vue, value: any) {

@@ -4,14 +4,23 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:vue/essential',
     'eslint:recommended',
+    'plugin:vue/essential',
     '@vue/typescript/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     '@vue/prettier/recommended',
     '@vue/prettier/@typescript-eslint'
   ],
   parserOptions: {
     ecmaVersion: 2020
+  },
+  settings: {
+    'import/resolver': {
+      webpack: {
+        config: './node_modules/@vue/cli-service/webpack.config.js'
+      }
+    }
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -31,6 +40,14 @@ module.exports = {
       {
         singleline: 'never',
         multiline: 'always'
+      }
+    ],
+    'import/order': [
+      'error', {
+        'newlines-between': 'always',
+        'alphabetize': {
+          'order': 'asc'
+        }
       }
     ]
   },

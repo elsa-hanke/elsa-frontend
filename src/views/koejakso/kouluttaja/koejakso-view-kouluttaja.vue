@@ -9,8 +9,9 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import store from '@/store'
+
   import KoejaksonVaiheetList from '@/components/koejakson-vaiheet/koejakson-vaiheet-list.vue'
+  import store from '@/store'
   import { LomakeTyypit } from '@/utils/constants'
 
   @Component({

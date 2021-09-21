@@ -1,4 +1,5 @@
 import { Module } from 'vuex'
+
 import * as api from '@/api/vastuuhenkilo'
 
 const vastuuhenkilo: Module<any, any> = {

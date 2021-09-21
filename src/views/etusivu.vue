@@ -102,11 +102,12 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
-  import BCardSkeleton from '@/components/card/card.vue'
   import Avatar from 'vue-avatar'
-  import store from '@/store'
+  import { Component, Vue } from 'vue-property-decorator'
+
   import ElsaButton from '@/components/button/button.vue'
+  import BCardSkeleton from '@/components/card/card.vue'
+  import store from '@/store'
 
   @Component({
     components: {

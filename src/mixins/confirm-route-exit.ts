@@ -1,4 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator'
+
 import { confirmExit } from '@/utils/confirm'
 
 Component.registerHooks(['beforeRouteLeave'])

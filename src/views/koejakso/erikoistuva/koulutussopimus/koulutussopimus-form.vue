@@ -239,11 +239,18 @@
 </template>
 
 <script lang="ts">
+  import { format } from 'date-fns'
+  import _get from 'lodash/get'
   import Component from 'vue-class-component'
   import { Vue, Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
-  import { format } from 'date-fns'
+
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import {
     KoejaksonVaiheButtonStates,
     Kouluttaja,
@@ -251,15 +258,9 @@
     UserAccount,
     Vastuuhenkilo
   } from '@/types'
-  import _get from 'lodash/get'
   import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
-  import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
   import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
-  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
 
   @Component({
     components: {

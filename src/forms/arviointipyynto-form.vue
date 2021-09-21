@@ -145,21 +145,22 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component'
   import axios from 'axios'
+  import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
-  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
-  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
-  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import { toastSuccess, toastFail } from '@/utils/toast'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
+  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import store from '@/store'
+  import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
     components: {

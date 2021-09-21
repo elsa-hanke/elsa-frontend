@@ -1,6 +1,7 @@
-import * as api from '@/api'
 import axios, { AxiosError } from 'axios'
 import { Module } from 'vuex'
+
+import * as api from '@/api'
 
 const auth: Module<any, any> = {
   namespaced: true,

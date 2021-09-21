@@ -196,18 +196,18 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Vue } from 'vue-property-decorator'
   import { parseISO } from 'date-fns'
+  import { Component, Vue } from 'vue-property-decorator'
+
+  import ElsaBarChart from '@/components/bar-chart/bar-chart.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
-  import ElsaBarChart from '@/components/bar-chart/bar-chart.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
-  import { ajankohtaLabel } from '@/utils/tyoskentelyjakso'
-  import { toastFail } from '@/utils/toast'
-  import { tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import { durationOptions } from '@/plugins/date'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import { toastFail } from '@/utils/toast'
+  import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {

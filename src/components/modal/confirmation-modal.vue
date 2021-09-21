@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-  import { Mixins } from 'vue-property-decorator'
   import Component from 'vue-class-component'
-  import { Prop } from 'vue-property-decorator'
-  import ElsaButton from '@/components/button/button.vue'
+  import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
+
+  import ElsaButton from '@/components/button/button.vue'
 
   @Component({
     components: {

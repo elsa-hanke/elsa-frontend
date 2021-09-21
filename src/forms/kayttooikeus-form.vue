@@ -23,12 +23,13 @@
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import store from '@/store'
-  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+
+  import { getYliopistot } from '@/api/erikoistuva'
+  import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaButton from '@/components/button/button.vue'
-  import { getYliopistot } from '@/api/erikoistuva'
+  import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import store from '@/store'
 
   @Component({
     components: {

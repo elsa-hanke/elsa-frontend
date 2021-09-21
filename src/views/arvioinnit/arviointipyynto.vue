@@ -32,16 +32,17 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
-  import { confirmDelete } from '@/utils/confirm'
-  import { ArviointipyyntoLomake } from '@/types'
   import { formatISO } from 'date-fns'
+  import { Component, Mixins } from 'vue-property-decorator'
+
   import ArviointipyyntoForm from '@/forms/arviointipyynto-form.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import { dateBetween } from '@/utils/date'
+  import { ArviointipyyntoLomake } from '@/types'
   import { decorate } from '@/utils/arvioinninAntajaListDecorator'
+  import { confirmDelete } from '@/utils/confirm'
+  import { dateBetween } from '@/utils/date'
+  import { toastFail, toastSuccess } from '@/utils/toast'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
