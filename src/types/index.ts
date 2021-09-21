@@ -43,23 +43,23 @@ export interface UserAccount {
 }
 
 export interface ArviointipyyntoLomake {
-  tyoskentelyjaksot: any[]
-  kunnat: any[]
-  erikoisalat: any[]
-  arvioitavanKokonaisuudenKategoriat: any[]
-  kouluttajatAndVastuuhenkilot: any[]
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  kunnat: Kunta[]
+  erikoisalat: Erikoisala[]
+  arvioitavanKokonaisuudenKategoriat: ArvioitavanKokonaisuudenKategoria[]
+  kouluttajatAndVastuuhenkilot: Kayttaja[]
 }
 
 export interface SuoritemerkintaLomake {
-  tyoskentelyjaksot: any[]
-  kunnat: any[]
-  erikoisalat: any[]
-  oppimistavoitteenKategoriat: any[]
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  kunnat: Kunta[]
+  erikoisalat: Erikoisala[]
+  oppimistavoitteenKategoriat: OppimistavoitteenKategoria[]
 }
 
 export interface TyoskentelyjaksoLomake {
-  kunnat: any[]
-  erikoisalat: any[]
+  kunnat: Kunta[]
+  erikoisalat: Erikoisala[]
 }
 
 export interface Tyoskentelyjakso {
@@ -410,6 +410,7 @@ export type ArvioitavanKokonaisuudenKategoria = {
   jarjestysnumero: number
   voimassaoloAlkaa: Date
   voimassaoloLoppuu: Date
+  arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[]
 }
 
 export type Arviointiasteikko = {
