@@ -29,7 +29,7 @@
 
   import SuoritemerkintaForm from '@/forms/suoritemerkinta-form.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import { SuoritemerkintaLomake } from '@/types'
+  import { Suoritemerkinta, SuoritemerkintaLomake } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -53,7 +53,7 @@
       }
     ]
     suoritemerkintaLomake: null | SuoritemerkintaLomake = null
-    suoritemerkinta: any = null
+    suoritemerkinta: Suoritemerkinta | null = null
     loading = true
 
     async mounted() {
@@ -71,7 +71,7 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(value: Suoritemerkinta, params: any) {
       params.saving = true
       try {
         this.suoritemerkinta = (
@@ -82,7 +82,7 @@
         this.$router.push({
           name: 'suoritemerkinta',
           params: {
-            suoritemerkintaId: `${this.suoritemerkinta.id}`
+            suoritemerkintaId: `${this.suoritemerkinta?.id}`
           }
         })
       } catch (err) {

@@ -32,11 +32,11 @@
                       <template v-slot="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
-                          v-model="selected.epaOsaamisalue"
-                          :options="options.epaOsaamisalueet"
+                          v-model="selected.arvoitavaKokonaisuus"
+                          :options="options.arvioitavatKokonaisuudet"
                           label="nimi"
                           track-by="id"
-                          @select="onEpaOsaamisalueSelect"
+                          @select="onArvioitavaKokonaisuusSelect"
                         ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
@@ -62,7 +62,7 @@
                       <elsa-button
                         v-if="
                           selected.tyoskentelyjakso ||
-                          selected.epaOsaamisalue ||
+                          selected.arvoitavaKokonaisuus ||
                           selected.kouluttajaOrVastuuhenkilo
                         "
                         variant="link"
@@ -143,8 +143,8 @@
                                 </b-td>
                                 <b-td :stacked-heading="$t('arviointi')">
                                   <elsa-badge
-                                    v-if="arviointi.luottamuksenTaso"
-                                    :value="arviointi.luottamuksenTaso"
+                                    v-if="arviointi.arviointiasteikonTaso"
+                                    :value="arviointi.arviointiasteikonTaso"
                                   />
                                   <span v-else class="text-size-sm text-light-muted">
                                     {{ $t('ei-tehty-viela') }}
@@ -152,8 +152,8 @@
                                 </b-td>
                                 <b-td :stacked-heading="$t('itsearviointi')">
                                   <elsa-badge
-                                    v-if="arviointi.itsearviointiLuottamuksenTaso"
-                                    :value="arviointi.itsearviointiLuottamuksenTaso"
+                                    v-if="arviointi.itsearviointiArviointiasteikonTaso"
+                                    :value="arviointi.itsearviointiArviointiasteikonTaso"
                                   />
                                   <elsa-button
                                     v-else-if="!arviointi.lukittu"
@@ -254,12 +254,12 @@
   export default class ArvioinnitErikoistuva extends Vue {
     selected = {
       tyoskentelyjakso: null,
-      epaOsaamisalue: null,
+      arvoitavaKokonaisuus: null,
       kouluttajaOrVastuuhenkilo: null
     } as any
     options = {
       tyoskentelyjaksot: [],
-      epaOsaamisalueet: [],
+      arvioitavatKokonaisuudet: [],
       kouluttajatAndVastuuhenkilot: []
     } as any
     omat: null | any[] = null
@@ -283,7 +283,7 @@
     onTabChange(value: any) {
       this.selected = {
         tyoskentelyjakso: null,
-        epaOsaamisalue: null,
+        arvoitavaKokonaisuus: null,
         kouluttajaOrVastuuhenkilo: null
       }
       this.omat = null
@@ -302,8 +302,8 @@
       await this.fetch()
     }
 
-    async onEpaOsaamisalueSelect(selected: any) {
-      this.selected.epaOsaamisalue = selected
+    async onArvioitavaKokonaisuusSelect(selected: any) {
+      this.selected.arvioitavaKokonaisuus = selected
       await this.fetch()
     }
 
@@ -315,7 +315,7 @@
     async resetFilters() {
       this.selected = {
         tyoskentelyjakso: null,
-        epaOsaamisalue: null,
+        arvioitavaKokonaisuus: null,
         kouluttajaOrVastuuhenkilo: null
       }
       await this.fetch()
@@ -338,7 +338,7 @@
               ...options,
               sort: 'tapahtumanAjankohta,desc',
               'tyoskentelyjaksoId.equals': this.selected.tyoskentelyjakso?.id,
-              'arvioitavaOsaalueId.equals': this.selected.epaOsaamisalue?.id,
+              'arvioitavaOsaalueId.equals': this.selected.arvioitavaKokonaisuus?.id,
               'arvioinninAntajaId.equals': this.selected.kouluttajaOrVastuuhenkilo?.id
             }
           })
@@ -353,8 +353,10 @@
       // Muodostetaan osa-alueet lista
       const osaalueet = (this.selected.tyoskentelyjakso || this.selected.kouluttajaOrVastuuhenkilo
         ? this.omat?.map((oma: any) => oma.arvioitavaOsaalue)
-        : this.options.epaOsaamisalueet.filter((oa: any) =>
-            this.selected.epaOsaamisalue ? oa.id === this.selected.epaOsaamisalue?.id : true
+        : this.options.arvioitavatKokonaisuudet.filter((oa: any) =>
+            this.selected.arvioitavaKokonaisuus
+              ? oa.id === this.selected.arvioitavaKokonaisuus?.id
+              : true
           )
       ).map((oa: any) => ({
         ...oa,

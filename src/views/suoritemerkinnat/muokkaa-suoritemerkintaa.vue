@@ -97,7 +97,7 @@
             tyoskentelyjaksoId: value.tyoskentelyjaksoId,
             oppimistavoiteId: value.oppimistavoiteId,
             vaativuustaso: value.vaativuustaso,
-            luottamuksenTaso: value.luottamuksenTaso,
+            arviointiasteikonTaso: value.arviointiasteikonTaso,
             suorituspaiva: value.suorituspaiva,
             lisatiedot: value.lisatiedot
           })

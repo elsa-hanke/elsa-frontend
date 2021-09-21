@@ -25,7 +25,7 @@
               <b-table-simple borderless responsive>
                 <b-tr>
                   <b-th scope="row" class="py-0 pl-0 pr-1 font-weight-500" style="width: 33.33%">
-                    {{ $t('epa-osaamisalue') }}
+                    {{ $t('arvioitava-kokonaisuus') }}
                   </b-th>
                   <b-td class="py-0 pr-0 pl-1">
                     {{ value.arvioitavaOsaalue.nimi }}

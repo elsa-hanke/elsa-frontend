@@ -21,13 +21,19 @@
                   <b-tr>
                     <b-th>{{ `${$t('suorite')}: ${kategoria.nimi}` }}</b-th>
                     <b-th>
-                      {{ $t('luottamuksen-taso') }}
+                      {{ arviointiAsteikonNimi(kategoria.arviointiasteikko) }}
                       <elsa-popover>
                         <template>
-                          <h3>{{ $t('luottamuksen-taso') }}</h3>
-                          <div v-for="(taso, index) in luottamuksenTasot" :key="index">
-                            <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                            <p>{{ $t(taso.kuvaus) }}</p>
+                          <h3>{{ arviointiAsteikonNimi(kategoria.arviointiasteikko) }}</h3>
+                          <div
+                            v-for="(asteikonTaso, index) in kategoria.arviointiasteikko.tasot"
+                            :key="index"
+                          >
+                            <h4>
+                              {{ asteikonTaso.taso }}
+                              {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
+                            </h4>
+                            <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
                           </div>
                         </template>
                       </elsa-popover>
@@ -49,9 +55,10 @@
                     </b-td>
                     <b-td :stacked-heading="$t('luottamuksen-taso')">
                       <div class="d-flex align-items-center">
-                        <elsa-luottamuksen-taso
+                        <elsa-arviointiasteikon-taso
                           v-if="row.suoritemerkinta"
-                          :value="row.suoritemerkinta.luottamuksenTaso"
+                          :value="row.suoritemerkinta.arviointiasteikonTaso"
+                          :tasot="kategoria.arviointiasteikko.tasot"
                         />
                       </div>
                     </b-td>
@@ -109,20 +116,28 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { parseISO } from 'date-fns'
   import compareDesc from 'date-fns/compareDesc'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaLuottamuksenTaso from '@/components/luottamuksen-taso/luottamuksen-taso.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { luottamuksenTasot } from '@/utils/constants'
+  import {
+    Arviointiasteikko,
+    Oppimistavoite,
+    OppimistavoitteenKategoria,
+    OppimistavoitteetTable,
+    SuoritemerkintaRow,
+    SuoritemerkintaWithDetails,
+    ToggleableSuoritemerkinta
+  } from '@/types'
+  import { ArviointiasteikkoTyyppi } from '@/utils/constants'
 
   @Component({
     components: {
       ElsaButton,
       ElsaPopover,
-      ElsaLuottamuksenTaso
+      ElsaArviointiasteikonTaso
     }
   })
   export default class Suoritemerkinnat extends Vue {
@@ -136,29 +151,40 @@
         active: true
       }
     ]
-    osaamistavoitteet: any = null
-    luottamuksenTasot = luottamuksenTasot
+    osaamistavoitteet: OppimistavoitteetTable | null = null
 
     async mounted() {
-      const oppimistavoitteet = (await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko'))
-        .data
+      const oppimistavoitteet: OppimistavoitteetTable = (
+        await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')
+      ).data
       this.osaamistavoitteet = {
         oppimistavoitteenKategoriat: oppimistavoitteet.oppimistavoitteenKategoriat,
-        suoritemerkinnat: oppimistavoitteet.suoritemerkinnat.map((suoritemerkinta: any) => ({
+        suoritemerkinnat: oppimistavoitteet.suoritemerkinnat.map((suoritemerkinta) => ({
           ...suoritemerkinta,
           showDetails: false
         }))
       }
     }
 
-    toggleDetails(row: any) {
-      row.suoritemerkinta.showDetails = !row.suoritemerkinta.showDetails
+    toggleDetails(row: SuoritemerkintaRow) {
+      if (row.suoritemerkinta) {
+        row.suoritemerkinta.showDetails = !row.suoritemerkinta.showDetails
+      }
+    }
+
+    arviointiAsteikonNimi(arviointiasteikko: Arviointiasteikko) {
+      return arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
+        ? this.$t('luottamuksen-taso')
+        : this.$t('etappi')
     }
 
     get oppimistavoitteenKategoriat() {
       if (this.osaamistavoitteet) {
         const suoritemerkinnatGroupByOppimistavoite = this.osaamistavoitteet.suoritemerkinnat.reduce(
-          (result: any, suoritemerkinta: any) => {
+          (
+            result: Record<number, SuoritemerkintaWithDetails[]>,
+            suoritemerkinta: ToggleableSuoritemerkinta
+          ) => {
             const oppimistavoiteId = suoritemerkinta.oppimistavoite.id
             if (oppimistavoiteId in result) {
               result[oppimistavoiteId].push({
@@ -178,42 +204,45 @@
           {}
         )
 
-        return this.osaamistavoitteet.oppimistavoitteenKategoriat.map((kategoria: any) => {
-          const rows = kategoria.oppimistavoitteet.reduce((result: any, oppimistavoite: any) => {
-            // Kerätään oppimistavoitteen suoritemerkinnät ja järjestetään ne aikajärjestykseen
-            const suoritemerkinnat = (
-              suoritemerkinnatGroupByOppimistavoite[oppimistavoite.id] || []
-            ).sort((a: any, b: any) =>
-              compareDesc(
-                parseISO(a.suoritemerkinta.suorituspaiva as string),
-                parseISO(b.suoritemerkinta.suorituspaiva as string)
-              )
+        return this.osaamistavoitteet.oppimistavoitteenKategoriat.map(
+          (kategoria: OppimistavoitteenKategoria) => {
+            const rows: SuoritemerkintaRow[] = kategoria.oppimistavoitteet.reduce(
+              (result: SuoritemerkintaRow[], oppimistavoite: Oppimistavoite) => {
+                // Kerätään oppimistavoitteen suoritemerkinnät ja järjestetään ne aikajärjestykseen
+                const suoritemerkinnat = (
+                  suoritemerkinnatGroupByOppimistavoite[oppimistavoite.id] || []
+                ).sort((a, b) =>
+                  compareDesc(a.suoritemerkinta.suorituspaiva, b.suoritemerkinta.suorituspaiva)
+                )
+
+                // Ensimmäinen suoritemerkintä esitetään oppimistavoitteen rivillä
+                const suoritemerkinta =
+                  suoritemerkinnat.length > 0 ? suoritemerkinnat[0] : undefined
+                const suoritemerkinnatWithoutFirst = suoritemerkinnat.slice(1)
+
+                result.push({
+                  ...oppimistavoite,
+                  details: false,
+                  suoritemerkinta: suoritemerkinta?.suoritemerkinta,
+                  hasDetails: suoritemerkinnatWithoutFirst.length > 0
+                })
+
+                // Näytetään muut suoritemerkinnät vain jos rivi on avattu
+                if (suoritemerkinta?.suoritemerkinta?.showDetails) {
+                  return result.concat(suoritemerkinnatWithoutFirst)
+                } else {
+                  return result
+                }
+              },
+              []
             )
 
-            // Ensimmäinen suoritemerkintä esitetään oppimistavoitteen rivillä
-            const suoritemerkinta = suoritemerkinnat.length > 0 ? suoritemerkinnat[0] : undefined
-            const suoritemerkinnatWithoutFirst = suoritemerkinnat.slice(1)
-
-            result.push({
-              ...oppimistavoite,
-              details: false,
-              suoritemerkinta: suoritemerkinta?.suoritemerkinta,
-              hasDetails: suoritemerkinnatWithoutFirst.length > 0
-            })
-
-            // Näytetään muut suoritemerkinnät vain jos rivi on avattu
-            if (suoritemerkinta?.suoritemerkinta?.showDetails) {
-              return result.concat(suoritemerkinnatWithoutFirst)
-            } else {
-              return result
+            return {
+              ...kategoria,
+              rows
             }
-          }, [])
-
-          return {
-            ...kategoria,
-            rows
           }
-        })
+        )
       }
       return []
     }

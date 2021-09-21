@@ -1,6 +1,6 @@
-import { Kouluttaja, Koulutuspaikka } from '@/types'
+import { Kouluttaja, Koulutuspaikka, Vaativuustaso } from '@/types'
 
-export const vaativuustasot = [
+export const vaativuustasot: Vaativuustaso[] = [
   {
     arvo: 1,
     nimi: 'helppo',
@@ -28,40 +28,12 @@ export const vaativuustasot = [
   }
 ]
 
-export const luottamuksenTasot = [
-  {
-    arvo: 1,
-    nimi: 'ohjaajan-toiminnan-seuraaminen',
-    kuvaus: 'ohjaajan-toiminnan-seuraaminen-ohje'
-  },
-  {
-    arvo: 2,
-    nimi: 'toiminta-suoran-ohjauksen-alaisena',
-    kuvaus: 'toiminta-suoran-ohjauksen-alaisena-ohje'
-  },
-  {
-    arvo: 3,
-    nimi: 'toiminta-epasuoran-ohjauksen-alaisena',
-    kuvaus: 'toiminta-epasuoran-ohjauksen-alaisena-ohje'
-  },
-  {
-    arvo: 4,
-    nimi: 'toiminta-ilman-ohjausta',
-    kuvaus: 'toiminta-ilman-ohjausta-ohje'
-  },
-  {
-    arvo: 5,
-    nimi: 'toiminta-ohjaajana',
-    kuvaus: 'toiminta-ohjaajana-ohje'
-  }
-]
-
-export const arvioinninPerustuminen = {
-  LasnaolevaHavainnointi: 'LASNA',
-  KirjallinenMateriaali: 'KIRJALLINEN',
-  Etayhteys: 'ETA',
-  Muu: 'MUU'
-} as any
+export enum ArvioinninPerustuminen {
+  LASNA = 'LASNA',
+  KIRJALLINEN = 'KIRJALLINEN',
+  ETA = 'ETA',
+  MUU = 'MUU'
+}
 
 export enum LomakeTyypit {
   KOULUTUSSOPIMUS = 'KOULUTUSSOPIMUS',
@@ -143,4 +115,25 @@ export enum TyoskentelyjaksoTyyppi {
   YLIOPISTOLLINEN_SAIRAALA = 'YLIOPISTOLLINEN_SAIRAALA',
   YKSITYINEN = 'YKSITYINEN',
   MUU = 'MUU'
+}
+
+export enum ArviointiasteikkoTyyppi {
+  EPA = 'EPA',
+  ETAPPI = 'ETAPPI'
+}
+
+export enum ArviointiasteikonTasoTyyppi {
+  // EPA
+  OHJAAJAN_TOIMINNAN_SEURAAMINEN = 'OHJAAJAN_TOIMINNAN_SEURAAMINEN',
+  TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA = 'TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA',
+  TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA = 'TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA',
+  TOIMINTA_ILMAN_OHJAUSTA = 'TOIMINTA_ILMAN_OHJAUSTA',
+  TOIMINTA_OHJAAJANA = 'TOIMINTA_OHJAAJANA',
+
+  // ETAPPI
+  TULOKAS = 'TULOKAS',
+  ALKUVAIHEEN_ERIKOISTUJA = 'ALKUVAIHEEN_ERIKOISTUJA',
+  EDISTYNYT_ERIKOISTUJA = 'EDISTYNYT_ERIKOISTUJA',
+  ERIKOISLAAKARI = 'ERIKOISLAAKARI',
+  ERITYINEN_OSAAMINEN = 'ERITYINEN_OSAAMINEN'
 }
