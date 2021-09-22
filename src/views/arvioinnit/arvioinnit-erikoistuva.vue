@@ -99,37 +99,37 @@
                       <div v-for="(oa, index) in kategoria.osaalueet" :key="index">
                         <p class="font-weight-500 p-2 mb-0">{{ oa.nimi }}</p>
                         <div v-if="oa.arvioinnit.length > 0">
-                          <b-table-simple small fixed class="mb-0">
-                            <thead>
-                              <tr class="text-size-sm">
-                                <th scope="col">
+                          <b-table-simple small fixed class="mb-0" stacked="md" responsive>
+                            <b-thead>
+                              <b-tr class="text-size-sm">
+                                <b-th scope="col">
                                   {{ $t('tapahtuma') | uppercase }}
-                                </th>
-                                <th scope="col">
+                                </b-th>
+                                <b-th scope="col">
                                   {{ $t('arviointi') | uppercase }}
-                                </th>
-                                <th scope="col">
+                                </b-th>
+                                <b-th scope="col">
                                   {{ $t('itsearviointi') | uppercase }}
-                                </th>
-                                <th scope="col">
+                                </b-th>
+                                <b-th scope="col">
                                   {{ $t('pvm') }}
-                                </th>
-                                <th scope="col">
+                                </b-th>
+                                <b-th scope="col">
                                   {{ $t('tyoskentelypaikka') | uppercase }}
-                                </th>
-                                <th scope="col">
+                                </b-th>
+                                <b-th scope="col">
                                   {{ $t('arvioinnin-antaja') | uppercase }}
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr
+                                </b-th>
+                              </b-tr>
+                            </b-thead>
+                            <b-tbody>
+                              <b-tr
                                 v-for="(arviointi, index) in oa.visible
                                   ? oa.arvioinnit
                                   : oa.arvioinnit.slice(0, 1)"
                                 :key="`arviointi-${index}`"
                               >
-                                <td>
+                                <b-td :stacked-heading="$t('tapahtuma')">
                                   <elsa-button
                                     variant="link"
                                     :to="{
@@ -140,8 +140,8 @@
                                   >
                                     {{ arviointi.arvioitavaTapahtuma }}
                                   </elsa-button>
-                                </td>
-                                <td>
+                                </b-td>
+                                <b-td :stacked-heading="$t('arviointi')">
                                   <elsa-badge
                                     v-if="arviointi.luottamuksenTaso"
                                     :value="arviointi.luottamuksenTaso"
@@ -149,8 +149,8 @@
                                   <span v-else class="text-size-sm text-light-muted">
                                     {{ $t('ei-tehty-viela') }}
                                   </span>
-                                </td>
-                                <td>
+                                </b-td>
+                                <b-td :stacked-heading="$t('itsearviointi')">
                                   <elsa-badge
                                     v-if="arviointi.itsearviointiLuottamuksenTaso"
                                     :value="arviointi.itsearviointiLuottamuksenTaso"
@@ -158,7 +158,6 @@
                                   <elsa-button
                                     v-else-if="!arviointi.lukittu"
                                     variant="primary"
-                                    class="d-flex align-items-center text-decoration-none"
                                     :to="{
                                       name: 'itsearviointi',
                                       params: { arviointiId: arviointi.id }
@@ -169,16 +168,18 @@
                                   <span v-else class="text-size-sm text-light-muted">
                                     {{ $t('ei-tehty') }}
                                   </span>
-                                </td>
-                                <td>
+                                </b-td>
+                                <b-td :stacked-heading="$t('pvm')">
                                   {{ $date(arviointi.tapahtumanAjankohta) }}
-                                </td>
-                                <td>
+                                </b-td>
+                                <b-td :stacked-heading="$t('tyoskentelypaikka')">
                                   {{ arviointi.tyoskentelyjakso.tyoskentelypaikka.nimi }}
-                                </td>
-                                <td>{{ arviointi.arvioinninAntaja.nimi }}</td>
-                              </tr>
-                            </tbody>
+                                </b-td>
+                                <b-td :stacked-heading="$t('arvioinnin-antaja')">
+                                  {{ arviointi.arvioinninAntaja.nimi }}
+                                </b-td>
+                              </b-tr>
+                            </b-tbody>
                           </b-table-simple>
                           <div class="text-right">
                             <elsa-button
@@ -417,6 +418,9 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
   .arvioinnit {
     max-width: 1024px;
   }
@@ -446,6 +450,41 @@
     th {
       padding-left: 0.5rem;
       padding-right: 0.5rem;
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    ::v-deep table {
+      border-bottom: 0;
+
+      tr {
+        border: $table-border-width solid $table-border-color;
+        border-radius: $border-radius;
+        margin-top: 0.5rem;
+        padding-top: $table-cell-padding;
+        padding-bottom: $table-cell-padding;
+      }
+
+      td {
+        border: none;
+        padding: 0 $table-cell-padding;
+
+        & > div {
+          width: 100% !important;
+          padding: 0 0 0.5rem 0 !important;
+        }
+
+        &::before {
+          text-align: left !important;
+          font-weight: 500 !important;
+          width: 100% !important;
+          padding-right: 0 !important;
+        }
+
+        &:last-child > div {
+          padding-bottom: 0 !important;
+        }
+      }
     }
   }
 

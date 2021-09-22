@@ -155,18 +155,18 @@
         </template>
       </elsa-form-group>
       <b-table-simple responsive bordered>
-        <thead>
-          <tr>
-            <th scope="col" style="width: 24%"></th>
-            <th scope="col" style="width: 38%">{{ $t('arviointi') }}</th>
-            <th scope="col" style="width: 38%">
+        <b-thead>
+          <b-tr>
+            <b-th scope="col" style="width: 24%"></b-th>
+            <b-th scope="col" style="width: 38%">{{ $t('arviointi') }}</b-th>
+            <b-th scope="col" style="width: 38%">
               {{ $t('itsearviointi') }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">
+            </b-th>
+          </b-tr>
+        </b-thead>
+        <b-tbody>
+          <b-tr>
+            <b-th scope="row">
               {{ $t('luottamuksen-taso') }}
               <elsa-popover>
                 <template>
@@ -177,8 +177,8 @@
                   </div>
                 </template>
               </elsa-popover>
-            </th>
-            <td>
+            </b-th>
+            <b-td>
               <div v-if="!value.arviointiAika" class="d-inline-flex">
                 <elsa-button
                   v-if="$isKouluttaja() || $isVastuuhenkilo()"
@@ -196,8 +196,8 @@
                 </span>
               </div>
               <elsa-luottamuksen-taso v-if="value.arviointiAika" :value="value.luottamuksenTaso" />
-            </td>
-            <td>
+            </b-td>
+            <b-td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                 <elsa-button
                   v-if="$isErikoistuva()"
@@ -221,10 +221,10 @@
                 v-if="value.itsearviointiAika"
                 :value="value.itsearviointiLuottamuksenTaso"
               />
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
+            </b-td>
+          </b-tr>
+          <b-tr>
+            <b-th scope="row">
               {{ $t('vaativuustaso') }}
               <elsa-popover>
                 <template>
@@ -235,18 +235,18 @@
                   </div>
                 </template>
               </elsa-popover>
-            </th>
-            <td>
+            </b-th>
+            <b-td>
               <elsa-vaativuustaso v-if="value.vaativuustaso" :value="value.vaativuustaso" />
-            </td>
-            <td>
+            </b-td>
+            <b-td>
               <elsa-vaativuustaso
                 v-if="value.itsearviointiAika"
                 :value="value.itsearviointiVaativuustaso"
               />
-            </td>
-          </tr>
-        </tbody>
+            </b-td>
+          </b-tr>
+        </b-tbody>
       </b-table-simple>
       <elsa-form-group v-if="value.arviointiAika" :label="$t('sanallinen-arviointi')">
         <template v-slot="{ uid }">
