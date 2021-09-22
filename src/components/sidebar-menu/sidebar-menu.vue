@@ -7,12 +7,6 @@
             <font-awesome-icon icon="home" fixed-width size="lg" />
             {{ $t('etusivu') }}
           </b-nav-item>
-          <!--
-          <b-nav-item class="border-bottom" :to="{ name: 'koulutussuunnitelma' }">
-            <font-awesome-icon icon="file" fixed-width size="lg" />
-            {{ $t("koulutussuunnitelma") }}
-          </b-nav-item>
-          -->
           <b-nav-item
             v-if="$isErikoistuva()"
             class="border-bottom"
@@ -41,17 +35,6 @@
             <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
             {{ $t('koejakso') }}
           </b-nav-item>
-
-          <!--
-          <b-nav-item class="border-bottom" :to="{ name: 'koulutukset' }">
-            <font-awesome-icon icon="file-alt" fixed-width size="lg" />
-            {{ $t("koulutukset") }}
-          </b-nav-item>
-          <b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
-            <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
-            {{ $t("viestit") }}
-          </b-nav-item>
-          -->
           <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
             <font-awesome-icon icon="file" fixed-width size="lg" />
             {{ $t('asiakirjat') }}

@@ -14,11 +14,19 @@
           <font-awesome-icon icon="home" fixed-width size="lg" />
           {{ $t('etusivu') }}
         </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'tyoskentelyjaksot' }">
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'tyoskentelyjaksot' }"
+        >
           <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
           {{ $t('tyoskentelyjaksot') }}
         </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'suoritemerkinnat' }">
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'suoritemerkinnat' }"
+        >
           <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
           {{ $t('suoritemerkinnat') }}
         </b-nav-item>
@@ -26,17 +34,17 @@
           <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t('arvioinnit') }}
         </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'koejakso' }">
+        <b-nav-item
+          v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()"
+          class="border-bottom"
+          :to="{ name: 'koejakso' }"
+        >
           <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
           {{ $t('koejakso') }}
         </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'asiakirjat' }">
+        <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
           <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
           {{ $t('asiakirjat') }}
-        </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
-          <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
-          {{ $t('viestit') }}
         </b-nav-item>
       </b-nav>
       <b-nav class="bg-light font-weight-500" vertical>
