@@ -25,7 +25,7 @@
                 <b-th scope="col" style="width: 20%">
                   {{ value.arvioitavaOsaalue.nimi }}
                 </b-th>
-                <b-th scope="col" style="width: 40%">{{ $t('arviointi') }}</th>
+                <b-th scope="col" style="width: 40%">{{ $t('arviointi') }}</b-th>
                 <b-th scope="col" style="width: 40%">
                   {{ $t('itsearviointi') }}
                 </b-th>
