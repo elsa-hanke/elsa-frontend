@@ -28,15 +28,15 @@
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
 
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
-  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import { toastFail, toastSuccess } from '@/utils/toast'
-  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
   import {
     getTyoskentelyjakso,
     getTyoskentelyjaksoLomake,
     putTyoskentelyjakso
   } from '@/api/erikoistuva'
+  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {

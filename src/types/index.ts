@@ -1,10 +1,11 @@
+import { LocaleMessages } from 'vue-i18n'
+
 import {
   ErikoisalaTyyppi,
   KaytannonKoulutusTyyppi,
   KehittamistoimenpideKategoria,
   TyoskentelyjaksoTyyppi
 } from '@/utils/constants'
-import { LocaleMessages } from 'vue-i18n'
 
 export type ErikoistuvaLaakari = {
   id: number | null

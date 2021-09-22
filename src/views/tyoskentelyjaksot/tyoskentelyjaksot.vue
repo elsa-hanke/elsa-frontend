@@ -211,10 +211,10 @@
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import { durationOptions } from '@/plugins/date'
+  import { BarChartRow } from '@/types'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
   import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
-  import { BarChartRow } from '@/types'
 
   @Component({
     components: {
