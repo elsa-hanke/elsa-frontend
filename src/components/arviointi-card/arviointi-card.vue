@@ -20,25 +20,25 @@
       <b-row>
         <b-col lg="12">
           <b-table-simple borderless small responsive>
-            <thead>
-              <tr>
-                <th scope="col" style="width: 20%">
+            <b-thead>
+              <b-tr>
+                <b-th scope="col" style="width: 20%">
                   {{ value.arvioitavaOsaalue.nimi }}
-                </th>
-                <th scope="col" style="width: 40%">{{ $t('arviointi') }}</th>
-                <th scope="col" style="width: 40%">
+                </b-th>
+                <b-th scope="col" style="width: 40%">{{ $t('arviointi') }}</th>
+                <b-th scope="col" style="width: 40%">
                   {{ $t('itsearviointi') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row" class="font-weight-400">
+                </b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr>
+                <b-th scope="row" class="font-weight-400">
                   <div>
                     {{ $t('luottamuksen-taso') }}
                   </div>
-                </th>
-                <td>
+                </b-th>
+                <b-td>
                   <div v-if="!value.arviointiAika" class="text-size-sm text-muted">
                     {{ $t('arviointia-ei-ole-viela-annettu') }}
                   </div>
@@ -46,8 +46,8 @@
                     v-if="value.luottamuksenTaso"
                     :value="value.luottamuksenTaso"
                   />
-                </td>
-                <td>
+                </b-td>
+                <b-td>
                   <elsa-luottamuksen-taso
                     v-if="value.itsearviointiLuottamuksenTaso"
                     :value="value.itsearviointiLuottamuksenTaso"
@@ -64,9 +64,9 @@
                       {{ $t('tee-itsearviointi') }}
                     </elsa-button>
                   </div>
-                </td>
-              </tr>
-            </tbody>
+                </b-td>
+              </b-tr>
+            </b-tbody>
           </b-table-simple>
 
           <elsa-button

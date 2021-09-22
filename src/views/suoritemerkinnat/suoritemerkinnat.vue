@@ -273,6 +273,7 @@
         }
 
         & > div {
+          width: 100% !important;
           padding: 0 0 0.5rem 0 !important;
         }
 
