@@ -50,7 +50,6 @@
           {{ value.arvioitavaOsaalue.nimi }}
           <elsa-popover>
             <template>
-              <h3>{{ value.arvioitavaOsaalue.nimi }}</h3>
               <p v-html="value.arvioitavaOsaalue.kuvaus" />
             </template>
           </elsa-popover>
