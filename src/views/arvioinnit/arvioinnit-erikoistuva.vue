@@ -28,7 +28,7 @@
                     </elsa-form-group>
                   </b-col>
                   <b-col md="4">
-                    <elsa-form-group :label="$t('epa-osaamisalue')" class="mb-md-0">
+                    <elsa-form-group :label="$t('arvioitava-kokonaisuus')" class="mb-md-0">
                       <template v-slot="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
