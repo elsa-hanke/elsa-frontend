@@ -66,6 +66,7 @@ export interface Tyoskentelyjakso {
   id?: number | null
   alkamispaiva: string | null
   paattymispaiva: string | null
+  minPaattymispaiva: string | null
   osaaikaprosentti: number | null
   kaytannonKoulutus: KaytannonKoulutusTyyppi | null
   hyvaksyttyAiempaanErikoisalaan: boolean | null
@@ -73,7 +74,7 @@ export interface Tyoskentelyjakso {
   omaaErikoisalaaTukevaId?: number
   omaaErikoisalaaTukeva: Erikoisala | null
   erikoistuvaLaakariId?: number
-  suoritusarvioinnit?: boolean
+  tapahtumia?: boolean
   liitettyKoejaksoon?: boolean
   asiakirjat?: Asiakirja[]
   label?: string
