@@ -60,7 +60,7 @@
       <div class="text-size-lg font-weight-500 mb-3">
         {{ value.arvioitavaTapahtuma }}
       </div>
-      <elsa-form-group :label="$t('epa-osaamisalue')">
+      <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
         {{ value.arvioitavaOsaalue.nimi }}
       </elsa-form-group>
       <elsa-form-group :label="$t('arvioija')">
