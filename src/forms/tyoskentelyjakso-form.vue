@@ -1,8 +1,8 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('kunta')" :required="!value.suoritusarvioinnit">
+    <elsa-form-group :label="$t('kunta')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.suoritusarvioinnit">
+        <div v-if="!value.tapahtumia">
           <elsa-form-multiselect
             :id="uid"
             v-model="form.tyoskentelypaikka.kunta"
@@ -20,9 +20,9 @@
         </div>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('tyoskentelypaikka')" :required="!value.suoritusarvioinnit">
+    <elsa-form-group :label="$t('tyoskentelypaikka')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.suoritusarvioinnit">
+        <div v-if="!value.tapahtumia">
           <b-form-input
             :id="uid"
             v-model="form.tyoskentelypaikka.nimi"
@@ -37,9 +37,9 @@
         </div>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('tyyppi')" :required="!value.suoritusarvioinnit">
+    <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.suoritusarvioinnit">
+        <div v-if="!value.tapahtumia">
           <b-form-radio-group
             :id="uid"
             v-model="form.tyoskentelypaikka.tyyppi"
@@ -86,10 +86,10 @@
     </elsa-form-group>
     <elsa-form-group
       :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'"
-      :required="!value.suoritusarvioinnit"
+      :required="!value.tapahtumia"
     >
       <template v-slot="{ uid }">
-        <div v-if="!value.suoritusarvioinnit">
+        <div v-if="!value.tapahtumia">
           <div class="d-flex align-items-center">
             <b-form-input
               :id="uid"
@@ -118,10 +118,10 @@
       <elsa-form-group
         :label="$t('alkamispaiva')"
         class="col-sm-12 col-md-6 pr-md-3"
-        :required="!value.suoritusarvioinnit"
+        :required="!value.tapahtumia"
       >
         <template v-slot="{ uid }">
-          <div v-if="!value.suoritusarvioinnit">
+          <div v-if="!value.tapahtumia">
             <elsa-form-datepicker
               :id="uid"
               v-model="form.alkamispaiva"
@@ -149,9 +149,9 @@
         </template>
       </elsa-form-group>
     </b-form-row>
-    <elsa-form-group :label="$t('kaytannon-koulutus')" :required="!value.suoritusarvioinnit">
+    <elsa-form-group :label="$t('kaytannon-koulutus')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.suoritusarvioinnit">
+        <div v-if="!value.tapahtumia">
           <b-form-radio
             v-model="form.kaytannonKoulutus"
             :state="validateState('kaytannonKoulutus')"
@@ -374,6 +374,7 @@
     form: Tyoskentelyjakso = {
       alkamispaiva: null,
       paattymispaiva: null,
+      minPaattymispaiva: null,
       osaaikaprosentti: 100,
       tyoskentelypaikka: {
         nimi: null,
@@ -512,7 +513,7 @@
     }
 
     get minPaattymispaiva() {
-      return this.form.alkamispaiva
+      return this.form.minPaattymispaiva || this.form.alkamispaiva
     }
 
     get kunnatFormatted() {
