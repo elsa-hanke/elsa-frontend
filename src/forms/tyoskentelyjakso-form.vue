@@ -513,7 +513,11 @@
     }
 
     get minPaattymispaiva() {
-      return this.form.minPaattymispaiva || this.form.alkamispaiva
+      if (this.form.tapahtumia) {
+        return this.form.minPaattymispaiva
+      } else {
+        return this.form.alkamispaiva
+      }
     }
 
     get kunnatFormatted() {
