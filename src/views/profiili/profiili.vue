@@ -25,8 +25,8 @@
 
   import OmatTiedot from './omat-tiedot.vue'
 
-  import Katseluoikeudet from '@/components/profiili/katseluoikeudet.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
+  import Katseluoikeudet from '@/views/profiili/katseluoikeudet.vue'
 
   @Component({
     components: {

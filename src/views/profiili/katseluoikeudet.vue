@@ -179,7 +179,7 @@
 
     valittuKouluttaja: Kayttaja | null = null
 
-    valittuValtuutus: KouluttajaValtuutus | null = null
+    valittuValtuutus: Partial<KouluttajaValtuutus> | null = null
 
     valtuutukset: KouluttajaValtuutus[] = []
 
@@ -233,6 +233,8 @@
         await axios.put(`/erikoistuva-laakari/kouluttajavaltuutus/${this.valittuValtuutus?.id}`, {
           paattymispaiva: this.valittuValtuutus?.paattymispaiva
         })
+        const valtuutus = this.valtuutukset.find((v) => v.id === this.valittuValtuutus?.id)
+        if (valtuutus) valtuutus.paattymispaiva = this.valittuValtuutus?.paattymispaiva || ''
         this.$bvModal.hide('muokkaaKatseluoikeuttaModal')
         toastSuccess(this, this.$t('katseluoikeus-paivitetty'))
       } catch (err) {
@@ -246,7 +248,11 @@
     }
 
     muokkaaKatseluoikeutta(valtuutus: KouluttajaValtuutus) {
-      this.valittuValtuutus = valtuutus
+      this.valittuValtuutus = {
+        id: valtuutus.id,
+        paattymispaiva: valtuutus.paattymispaiva,
+        valtuutettu: valtuutus.valtuutettu
+      }
       this.$bvModal.show('muokkaaKatseluoikeuttaModal')
     }
 
