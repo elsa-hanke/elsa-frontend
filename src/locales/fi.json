@@ -578,6 +578,7 @@
   "tyoskentelyjakso-poistettu-onnistuneesti": "Työskentelyjakso poistettu onnistuneesti",
   "tyoskentelyjaksoa-ei-liitetty-koejaksoon": "Työskentelyjaksoa ei ole liitetty koejaksoon",
   "tyoskentelyjaksojen-hakeminen-epaonnistui": "Työskentelyjaksojen hakeminen epäonnistui",
+  "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
   "tyoskentelyjakson": "Työskentelyjakson",
   "tyoskentelyjakson-koejaksolta": "työskentelyjakson koejaksolta",
   "tyoskentelyjakson-liitetiedostot-kuvaus": "Voit lisätä työskentelyjaksoon esim. työ- tai koulutustodistuksen.",
