@@ -145,7 +145,10 @@
             :min="minPaattymispaiva"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
-          ></elsa-form-datepicker>
+          />
+          <small v-if="value.tapahtumia" class="form-text text-muted">
+            {{ $t('tyoskentelyjakso-paattymispaiva-help') }}
+          </small>
         </template>
       </elsa-form-group>
     </b-form-row>
