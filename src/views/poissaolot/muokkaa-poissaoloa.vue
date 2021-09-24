@@ -31,6 +31,7 @@
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { PoissaoloLomake } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
+  import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
@@ -99,7 +100,16 @@
           }
         })
       } catch (err) {
-        toastFail(this, this.$t('poissaolon-tallentaminen-epaonnistui'))
+        if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+          toastFail(
+            this,
+            `${this.$t('poissaolon-tallentaminen-epaonnistui')}: ${this.$t(
+              'tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
+            )}`
+          )
+        } else {
+          toastFail(this, this.$t('poissaolon-tallentaminen-epaonnistui'))
+        }
       }
       params.saving = false
     }
@@ -123,7 +133,16 @@
             name: 'tyoskentelyjaksot'
           })
         } catch (err) {
-          toastFail(this, this.$t('poissaolon-poistaminen-epaonnistui'))
+          if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+            toastFail(
+              this,
+              `${this.$t('poissaolon-poistaminen-epaonnistui')}: ${this.$t(
+                'tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
+              )}`
+            )
+          } else {
+            toastFail(this, this.$t('poissaolon-poistaminen-epaonnistui'))
+          }
         }
         params.deleting = false
       }

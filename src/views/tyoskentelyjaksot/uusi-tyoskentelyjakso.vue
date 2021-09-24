@@ -31,6 +31,7 @@
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { TyoskentelyjaksoLomake } from '@/types'
+  import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -97,7 +98,16 @@
           }
         })
       } catch (err) {
-        toastFail(this, this.$t('uuden-tyoskentelyjakson-lisaaminen-epaonnistui'))
+        if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+          toastFail(
+            this,
+            `${this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')}: ${this.$t(
+              'tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
+            )}`
+          )
+        } else {
+          toastFail(this, this.$t('uuden-tyoskentelyjakson-lisaaminen-epaonnistui'))
+        }
       }
       params.saving = false
     }
