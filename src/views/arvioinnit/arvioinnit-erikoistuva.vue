@@ -204,7 +204,7 @@
                     </div>
                   </div>
                 </div>
-                <div v-else class="text-center">
+                <div v-else class="text-center mt-3">
                   <b-spinner variant="primary" :label="$t('ladataan')" />
                 </div>
               </div>
@@ -219,7 +219,7 @@
                   {{ $t('kaikkiin-arviointipyyntoihisi-on-tehty-arviointi') }}
                 </b-alert>
               </div>
-              <div v-else class="text-center">
+              <div v-else class="text-center mt-3">
                 <b-spinner variant="primary" :label="$t('ladataan')" />
               </div>
             </b-tab>
