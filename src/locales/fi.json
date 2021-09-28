@@ -578,6 +578,7 @@
   "tyoskentelyjakso-poistettu-koejaksolta-onnistuneesti": "Työskentelyjakso poistettu koejaksolta onnistuneesti",
   "tyoskentelyjakso-poistettu-onnistuneesti": "Työskentelyjakso poistettu onnistuneesti",
   "tyoskentelyjaksoa-ei-liitetty-koejaksoon": "Työskentelyjaksoa ei ole liitetty koejaksoon",
+  "tyoskentelyjaksoa-ei-voi-poistaa-tooltip": "Työskentelyjaksoa ei voi poistaa, koska siihen kohdistuu yksi tai useampi poissaolo, suoritusarviointi tai suoritemerkintä.",
   "tyoskentelyjaksojen-hakeminen-epaonnistui": "Työskentelyjaksojen hakeminen epäonnistui",
   "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
   "tyoskentelyjakson": "Työskentelyjakson",

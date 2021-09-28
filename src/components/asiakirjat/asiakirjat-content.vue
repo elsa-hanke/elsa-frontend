@@ -8,7 +8,10 @@
     <div v-if="!loading">
       <b-alert v-if="showInfoIfEmpty && rows === 0" variant="dark" class="mt-3" show>
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-        <span v-if="noResultsInfoText === undefined">
+        <span v-if="asiakirjat.length === 0">
+          {{ $t('ei-asiakirjoja') }}
+        </span>
+        <span v-else-if="noResultsInfoText === undefined">
           {{ $t('ei-hakutuloksia') }}
         </span>
         <span v-else>

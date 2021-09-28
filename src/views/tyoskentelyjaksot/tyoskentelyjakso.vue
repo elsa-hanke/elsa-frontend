@@ -102,8 +102,9 @@
               <elsa-button
                 v-if="!tyoskentelyjakso.suoritusarvioinnit"
                 :loading="deleting"
-                variant="outline-danger"
+                :variant="tyoskentelyjakso.tapahtumia ? 'outline-primary' : 'outline-danger'"
                 @click="onTyoskentelyjaksoDelete"
+                :disabled="tyoskentelyjakso.tapahtumia"
                 class="mb-3"
               >
                 {{ $t('poista-jakso') }}
@@ -119,6 +120,18 @@
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
+          </div>
+        </b-col>
+      </b-row>
+      <b-row v-if="tyoskentelyjakso.tapahtumia">
+        <b-col>
+          <div class="d-flex flex-row">
+            <em class="align-middle">
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
+            </em>
+            <div>
+              <span class="text-size-sm">{{ $t('tyoskentelyjaksoa-ei-voi-poistaa-tooltip') }}</span>
+            </div>
           </div>
         </b-col>
       </b-row>
