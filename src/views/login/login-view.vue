@@ -1,30 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <b-navbar id="navbar-top" type="dark" variant="primary" sticky class="px-0 py-0">
-      <b-container>
-        <b-navbar-brand class="col text-nowrap user-select-none">
-          <div class="brand-logo d-inline-block font-weight-bold text-uppercase">
-            {{ $t('elsa') }}
-          </div>
-          <div class="brand-text d-inline-block text-size-sm align-top pt-2">
-            -{{ $t('palvelu') | lowercase }}
-          </div>
-        </b-navbar-brand>
-        <b-navbar-nav class="ml-auto pr-3 font-weight-500">
-          <b-nav-item-dropdown :text="$t(currentLocale)" class="align-self-center px-3" right>
-            <b-dropdown-item
-              v-for="locale in locales"
-              :key="locale"
-              :disabled="currentLocale === locale"
-              @click="changeLocale(locale)"
-            >
-              {{ $t(locale) }}
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
-      </b-container>
-    </b-navbar>
-
+    <navbar-not-logged-in />
     <router-view></router-view>
   </div>
 </template>
@@ -33,11 +9,13 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
+  import NavbarNotLoggedIn from '@/components/navbar/navbar-not-logged-in.vue'
   import KayttooikeusForm from '@/forms/kayttooikeus-form.vue'
 
   @Component({
     components: {
       KayttooikeusForm,
+      NavbarNotLoggedIn,
       ElsaButton
     }
   })

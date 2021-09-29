@@ -2,8 +2,11 @@ import Vue from 'vue'
 import Meta from 'vue-meta'
 import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router'
 
+import RoleSpecificRoute from '@/router/role-specific-route.vue'
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
+import { ELSA_ROLE } from '@/utils/roles'
+import PageNotFoundView from '@/views/404/page-not-found-view.vue'
 import Arvioinnit from '@/views/arvioinnit/arvioinnit.vue'
 import Arviointi from '@/views/arvioinnit/arviointi.vue'
 import ArviointipyyntoLahetetty from '@/views/arvioinnit/arviointipyynto-lahetetty.vue'
@@ -33,7 +36,6 @@ import Koulutussuunnitelma from '@/views/koulutussuunnitelma.vue'
 import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
-import PageNotFound from '@/views/page-not-found.vue'
 import MuokkaaPoissaoloa from '@/views/poissaolot/muokkaa-poissaoloa.vue'
 import Poissaolo from '@/views/poissaolot/poissaolo.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
@@ -92,107 +94,199 @@ const routes: Array<RouteConfig> = [
       {
         path: '/koulutussuunnitelma',
         name: 'koulutussuunnitelma',
-        component: Koulutussuunnitelma
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Koulutussuunnitelma,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/suoritemerkinnat',
         name: 'suoritemerkinnat',
-        component: Suoritemerkinnat
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Suoritemerkinnat,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/suoritemerkinnat/uusi',
         name: 'uusi-suoritemerkinta',
-        component: UusiSuoritemerkinta
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiSuoritemerkinta,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/suoritemerkinnat/:suoritemerkintaId/muokkaus',
         name: 'muokkaa-suoritemerkintaa',
-        component: MuokkaaSuoritemerkintaa
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaSuoritemerkintaa,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/suoritemerkinnat/:suoritemerkintaId',
         name: 'suoritemerkinta',
-        component: Suoritemerkinta
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Suoritemerkinta,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/arvioinnit',
         name: 'arvioinnit',
-        component: Arvioinnit
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Arvioinnit,
+          allowedRoles: [
+            ELSA_ROLE.ErikoistuvaLaakari,
+            ELSA_ROLE.Kouluttaja,
+            ELSA_ROLE.Vastuuhenkilo
+          ]
+        }
       },
       {
         path: '/arvioinnit/arviointipyynto',
         name: 'arviointipyynto',
-        component: Arviointipyynto
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Arviointipyynto,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/arvioinnit/arviointipyynto/:arviointiId',
         name: 'arviointipyynto-muokkaus',
-        component: Arviointipyynto
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Arviointipyynto,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/arvioinnit/arviointipyynto-lahetetty',
         name: 'arviointipyynto-lahetetty',
-        component: ArviointipyyntoLahetetty
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ArviointipyyntoLahetetty,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/arvioinnit/:arviointiId/itsearviointi',
         name: 'itsearviointi',
-        component: Itsearviointi
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Itsearviointi,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/arvioinnit/itsearviointi-valmis',
         name: 'itsearviointi-valmis',
-        component: ItsearviointiValmis
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ItsearviointiValmis,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/arvioinnit/:arviointiId',
         name: 'arviointi',
-        component: Arviointi
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Arviointi,
+          allowedRoles: [
+            ELSA_ROLE.ErikoistuvaLaakari,
+            ELSA_ROLE.Kouluttaja,
+            ELSA_ROLE.Vastuuhenkilo
+          ]
+        }
       },
       {
         path: '/arvioinnit/:arviointiId/muokkaa',
         name: 'muokkaa-arviointia',
-        component: MuokkaaArviointia
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaArviointia,
+          allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo]
+        }
       },
       {
         path: '/tyoskentelyjaksot',
         name: 'tyoskentelyjaksot',
-        component: Tyoskentelyjaksot
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Tyoskentelyjaksot,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/tyoskentelyjaksot/uusi',
         name: 'uusi-tyoskentelyjakso',
-        component: UusiTyoskentelyjakso
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/tyoskentelyjaksot/:tyoskentelyjaksoId',
         name: 'tyoskentelyjakso',
-        component: Tyoskentelyjakso
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Tyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/tyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus',
         name: 'muokkaa-tyoskentelyjaksoa',
-        component: MuokkaaTyoskentelyjaksoa
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaTyoskentelyjaksoa,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/tyoskentelyjaksot/poissaolot/uusi',
         name: 'uusi-poissaolo',
-        component: UusiPoissaolo
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiPoissaolo,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/tyoskentelyjaksot/poissaolot/:poissaoloId',
         name: 'poissaolo',
-        component: Poissaolo
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Poissaolo,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/tyoskentelyjaksot/poissaolot/:poissaoloId/muokkaus',
         name: 'muokkaa-poissaoloa',
-        component: MuokkaaPoissaoloa
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaPoissaoloa,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/koulutukset',
         name: 'koulutukset',
-        component: Koulutukset
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Koulutukset,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/viestit',
@@ -202,7 +296,11 @@ const routes: Array<RouteConfig> = [
       {
         path: '/asiakirjat',
         name: 'asiakirjat',
-        component: Asiakirjat
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Asiakirjat,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
       },
       {
         path: '/koejakso',
@@ -211,162 +309,131 @@ const routes: Array<RouteConfig> = [
           {
             path: '',
             name: 'koejakso',
-            component: KoejaksoContainer
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: KoejaksoContainer,
+              allowedRoles: [
+                ELSA_ROLE.ErikoistuvaLaakari,
+                ELSA_ROLE.Kouluttaja,
+                ELSA_ROLE.Vastuuhenkilo
+              ]
+            }
           },
           {
             path: 'koejakso-yleiset-tavoitteet',
             name: 'koejakso-yleiset-tavoitteet',
-            component: KoejaksoTavoitteet,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: KoejaksoTavoitteet,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'koulutussopimus',
             name: 'koulutussopimus-erikoistuva',
-            component: ErikoistuvaKoulutussopimus,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: ErikoistuvaKoulutussopimus,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'aloituskeskustelu',
             name: 'koejakson-aloituskeskustelu',
-            component: ErikoistuvaArviointilomakeAloituskeskustelu,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: ErikoistuvaArviointilomakeAloituskeskustelu,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'valiarviointi',
             name: 'koejakson-valiarviointi',
-            component: ErikoistuvaArviointilomakeValiarviointi,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: ErikoistuvaArviointilomakeValiarviointi,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'kehittamistoimenpiteet',
             name: 'koejakson-kehittamistoimenpiteet',
-            component: ErikoistuvaArviointilomakeKehittamistoimenpiteet,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: ErikoistuvaArviointilomakeKehittamistoimenpiteet,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'loppukeskustelu',
             name: 'koejakson-loppukeskustelu',
-            component: ErikoistuvaArviointilomakeLoppukeskustelu,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: ErikoistuvaArviointilomakeLoppukeskustelu,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'vastuuhenkilon-arvio',
             name: 'koejakson-vastuuhenkilon-arvio',
-            component: ErikoistuvaArviointilomakeVastuuhenkilonArvio,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isErikoistuva()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: ErikoistuvaArviointilomakeVastuuhenkilonArvio,
+              allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
             }
           },
           {
             path: 'koulutussopimus/:id',
             name: 'koulutussopimus',
-            component: Koulutussopimus,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isKouluttaja() || Vue.prototype.$isVastuuhenkilo()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: Koulutussopimus,
+              allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo]
             }
           },
           {
             path: 'aloituskeskustelu/:id',
             name: 'aloituskeskustelu-kouluttaja',
-            component: KouluttajaArviointilomakeAloituskeskustelu,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isKouluttaja()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: KouluttajaArviointilomakeAloituskeskustelu,
+              allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },
           {
             path: 'valiarviointi/:id',
             name: 'valiarviointi-kouluttaja',
-            component: KouluttajaArviointilomakeValiarviointi,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isKouluttaja()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: KouluttajaArviointilomakeValiarviointi,
+              allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },
           {
             path: 'kehittamistoimenpiteet/:id',
             name: 'kehittamistoimenpiteet-kouluttaja',
-            component: KouluttajaArviointilomakeKehittamistoimenpiteet,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isKouluttaja()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: KouluttajaArviointilomakeKehittamistoimenpiteet,
+              allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },
           {
             path: 'loppukeskustelu/:id',
             name: 'loppukeskustelu-kouluttaja',
-            component: KouluttajaArviointilomakeLoppukeskustelu,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isKouluttaja()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: KouluttajaArviointilomakeLoppukeskustelu,
+              allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },
           {
             path: 'vastuuhenkilon-arvio/:id',
             name: 'vastuuhenkilon-arvio-vastuuhenkilo',
-            component: VastuuhenkilonArvioVastuuhenkilo,
-            beforeEnter: (to, from, next) => {
-              if (Vue.prototype.$isVastuuhenkilo()) {
-                next()
-              } else {
-                next(from.fullPath)
-              }
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: VastuuhenkilonArvioVastuuhenkilo,
+              allowedRoles: [ELSA_ROLE.Vastuuhenkilo]
             }
           }
         ]
@@ -429,7 +496,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '*',
-    component: PageNotFound
+    component: PageNotFoundView
   }
 ]
 
