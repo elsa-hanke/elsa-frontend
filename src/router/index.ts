@@ -6,7 +6,7 @@ import RoleSpecificRoute from '@/router/role-specific-route.vue'
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
 import { ELSA_ROLE } from '@/utils/roles'
-import PageNotFoundView from '@/views/404/page-not-found-view.vue'
+import PageNotFound from '@/views/404/page-not-found.vue'
 import Arvioinnit from '@/views/arvioinnit/arvioinnit.vue'
 import Arviointi from '@/views/arvioinnit/arviointi.vue'
 import ArviointipyyntoLahetetty from '@/views/arvioinnit/arviointipyynto-lahetetty.vue'
@@ -496,7 +496,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '*',
-    component: PageNotFoundView
+    component: PageNotFound
   }
 ]
 
