@@ -495,7 +495,8 @@ const routes: Array<RouteConfig> = [
     ]
   },
   {
-    path: '*',
+    path: 'sivua-ei-loytynyt',
+    alias: '*',
     component: PageNotFound
   }
 ]

@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import router from '@/router'
+import store from '@/store'
 import { OmatTiedotLomake } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -11,6 +13,27 @@ export const ELSA_API_LOCATION =
     : ''
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`
 axios.defaults.withCredentials = true
+axios.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    switch (error.response.status) {
+      case 401:
+      case 403:
+        if (window.location.pathname !== '/kirjautuminen' && store.getters['auth/isLoggedIn']) {
+          store.dispatch('auth/logout')
+          throw new Error(error)
+        }
+        break
+      case 404:
+        router.replace({ path: '/sivua-ei-loytynyt' })
+        throw new Error(error)
+      default:
+        throw Error(error)
+    }
+  }
+)
 
 export async function getKayttaja() {
   return await axios.get('kayttaja')
