@@ -3,10 +3,6 @@
     <koejakso-view-erikoistuva v-if="$isErikoistuva()"></koejakso-view-erikoistuva>
     <koejakso-view-kouluttaja v-if="$isKouluttaja()"></koejakso-view-kouluttaja>
     <koejakso-view-vastuuhenkilo v-if="$isVastuuhenkilo()"></koejakso-view-vastuuhenkilo>
-
-    <b-container v-if="notFound">
-      <p>{{ $t('sivua-ei-loydy') }}</p>
-    </b-container>
   </div>
 </template>
 
