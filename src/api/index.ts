@@ -23,15 +23,12 @@ axios.interceptors.response.use(
       case 403:
         if (window.location.pathname !== '/kirjautuminen' && store.getters['auth/isLoggedIn']) {
           store.dispatch('auth/logout')
-          throw new Error(error)
         }
         break
       case 404:
         router.replace({ path: '/sivua-ei-loytynyt' })
-        throw new Error(error)
-      default:
-        throw Error(error)
     }
+    return Promise.reject(error)
   }
 )
 
