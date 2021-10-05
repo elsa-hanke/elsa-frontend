@@ -153,7 +153,7 @@
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="
         isCurrentUserLahiesimies
-          ? $t('vahvista-koejakson-vaihe-hyvaksytty', $t('aloituskeskustelu'))
+          ? $t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
       :submitText="$t('allekirjoita-laheta')"
