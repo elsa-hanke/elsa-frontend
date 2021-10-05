@@ -28,6 +28,7 @@ import {
   faInfo,
   faInfoCircle,
   faPaperPlane,
+  faPlus,
   faPortrait,
   faPrint,
   faQuestion,
@@ -68,6 +69,7 @@ library.add(faHome)
 library.add(faInfo)
 library.add(faInfoCircle)
 library.add(faPaperPlane)
+library.add(faPlus)
 library.add(faPortrait)
 library.add(faPrint)
 library.add(faQuestion)

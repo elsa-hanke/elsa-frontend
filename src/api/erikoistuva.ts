@@ -3,7 +3,10 @@ import axios from 'axios'
 import {
   AloituskeskusteluLomake,
   KehittamistoimenpiteetLomake,
+  Koulutusjakso,
+  KoulutusjaksoLomake,
   KoulutussopimusLomake,
+  Koulutussuunnitelma,
   LoppukeskusteluLomake,
   ValiarviointiLomake,
   VastuuhenkilonArvioLomake
@@ -125,8 +128,37 @@ export async function getVastuuhenkilonArvioLomake() {
   return await axios.get(path)
 }
 
-export async function putKoulutussuunnitelma(form: any) {
-  return await axios.put('erikoistuva-laakari/koulutussuunnitelma', wrapToFormData(form), {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  })
+export async function putKoulutussuunnitelma(form: Koulutussuunnitelma) {
+  return await axios.put<Koulutussuunnitelma>(
+    'erikoistuva-laakari/koulutussuunnitelma',
+    wrapToFormData(form),
+    {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }
+  )
+}
+
+export async function getKoulutusjaksoLomake() {
+  const path = 'erikoistuva-laakari/koulutussuunnitelma/koulutusjakso-lomake'
+  return await axios.get<KoulutusjaksoLomake>(path)
+}
+
+export async function postKoulutusjakso(form: Koulutusjakso) {
+  const path = 'erikoistuva-laakari/koulutussuunnitelma/koulutusjaksot'
+  return await axios.post<Koulutusjakso>(path, form)
+}
+
+export async function putKoulutusjakso(form: Koulutusjakso) {
+  const path = `erikoistuva-laakari/koulutussuunnitelma/koulutusjaksot/${form.id}`
+  return await axios.put<Koulutusjakso>(path, form)
+}
+
+export async function getKoulutusjakso(koulutusjaksoId: string) {
+  const path = `erikoistuva-laakari/koulutussuunnitelma/koulutusjaksot/${koulutusjaksoId}`
+  return await axios.get<Koulutusjakso>(path)
+}
+
+export async function getKoulutusjaksot() {
+  const path = 'erikoistuva-laakari/koulutussuunnitelma/koulutusjaksot'
+  return await axios.get<Koulutusjakso[]>(path)
 }

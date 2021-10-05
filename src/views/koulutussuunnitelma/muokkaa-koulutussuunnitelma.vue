@@ -4,15 +4,7 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <elsa-error-message
-            v-if="error"
-            @click="fetchKoulutussuunnitelma"
-            :loading="loading"
-            class="text-center"
-          >
-            {{ $t('koulutussuunnitelman-hakeminen-epaonnistui') }}
-          </elsa-error-message>
-          <div v-else-if="!loading" class="mb-4">
+          <div v-if="!loading" class="mb-4">
             <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
             <p>
               {{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus') }}
@@ -46,7 +38,6 @@
 
   import { putKoulutussuunnitelma } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaErrorMessage from '@/components/error-message/error-message.vue'
   import KoulutussuunnitelmaForm from '@/forms/koulutussuunnitelma-form.vue'
   import { Koulutussuunnitelma } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -54,7 +45,6 @@
   @Component({
     components: {
       ElsaButton,
-      ElsaErrorMessage,
       KoulutussuunnitelmaForm
     }
   })
@@ -75,7 +65,6 @@
     ]
     koulutussuunnitelma: null | Koulutussuunnitelma = null
     loading = true
-    error = false
 
     async mounted() {
       await this.fetchKoulutussuunnitelma()
@@ -86,16 +75,14 @@
       try {
         this.loading = true
         this.koulutussuunnitelma = (await axios.get(`erikoistuva-laakari/koulutussuunnitelma`)).data
-        this.error = false
       } catch (err) {
         toastFail(this, this.$t('koulutussuunnitelman-hakeminen-epaonnistui'))
-        this.error = true
       } finally {
         this.loading = false
       }
     }
 
-    async onSubmit(data: any, params: any) {
+    async onSubmit(data: Koulutussuunnitelma, params: { saving: boolean }) {
       params.saving = true
       try {
         await putKoulutussuunnitelma(data)

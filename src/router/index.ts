@@ -32,6 +32,9 @@ import KouluttajaArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaj
 import KouluttajaArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja/arviointilomake-valiarviointi/kouluttaja-arviointilomake-valiarviointi.vue'
 import VastuuhenkilonArvioVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/vastuuhenkilon-arvio-vastuuhenkilo.vue'
 import Koulutukset from '@/views/koulutukset.vue'
+import Koulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/koulutusjakso.vue'
+import MuokkaaKoulutusjaksoa from '@/views/koulutussuunnitelma/koulutusjakso/muokkaa-koulutusjaksoa.vue'
+import UusiKoulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/uusi-koulutusjakso.vue'
 import Koulutussuunnitelma from '@/views/koulutussuunnitelma/koulutussuunnitelma.vue'
 import MuokkaaKoulutussuunnitelma from '@/views/koulutussuunnitelma/muokkaa-koulutussuunnitelma.vue'
 import Kayttooikeus from '@/views/login/kayttooikeus.vue'
@@ -109,6 +112,33 @@ const routes: Array<RouteConfig> = [
           routeComponent: MuokkaaKoulutussuunnitelma,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
+        }
+      },
+      {
+        path: '/koulutussuunnitelma/koulutusjaksot/uusi',
+        name: 'uusi-koulutusjakso',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiKoulutusjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/koulutussuunnitelma/koulutusjaksot/:koulutusjaksoId/muokkaus',
+        name: 'muokkaa-koulutusjaksoa',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaKoulutusjaksoa,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/koulutussuunnitelma/koulutusjaksot/:koulutusjaksoId',
+        name: 'koulutusjakso',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Koulutusjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
         }
       },
       {
@@ -519,7 +549,7 @@ const routes: Array<RouteConfig> = [
     ]
   },
   {
-    path: 'sivua-ei-loytynyt',
+    path: '/sivua-ei-loytynyt',
     alias: '*',
     component: PageNotFound
   }

@@ -110,7 +110,7 @@
   @import '~@/styles/variables';
 
   ::v-deep {
-    min-height: 35px;
+    min-height: 35px !important;
 
     &.multiselect--disabled {
       background: transparent;
@@ -174,6 +174,11 @@
         margin: 0;
         padding: 0;
       }
+      .multiselect__input,
+      .multiselect__single {
+        font-size: $font-size-base;
+        line-height: $line-height-base;
+      }
       .multiselect__input {
         font-size: $font-size-base;
         line-height: $line-height-base;
@@ -181,7 +186,26 @@
         margin: 0;
       }
       .multiselect__tag {
-        background: $primary;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-500;
+        background: $primary-dark;
+        border-radius: $rounded-pill;
+        margin-right: 6px;
+
+        .multiselect__tag-icon {
+          border-radius: 0;
+          line-height: 22px;
+
+          &:focus,
+          &:hover {
+            background: $primary;
+          }
+
+          &::after {
+            color: $white;
+            font-size: $font-size-lg;
+          }
+        }
       }
     }
 
