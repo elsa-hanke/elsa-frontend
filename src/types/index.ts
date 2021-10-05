@@ -62,6 +62,28 @@ export interface TyoskentelyjaksoLomake {
   erikoisalat: Erikoisala[]
 }
 
+export interface Koulutussuunnitelma {
+  id: number | null
+  motivaatiokirje: string | null
+  motivaatiokirjeYksityinen: boolean
+  opiskeluJaTyohistoria: string | null
+  opiskeluJaTyohistoriaYksityinen: boolean
+  vahvuudet: string | null
+  vahvuudetYksityinen: boolean
+  tulevaisuudenVisiointi: string | null
+  tulevaisuudenVisiointiYksityinen: boolean
+  osaamisenKartuttaminen: string | null
+  osaamisenKartuttaminenYksityinen: boolean
+  elamankentta: string | null
+  elamankenttaYksityinen: boolean
+  koulutussuunnitelmaAsiakirja: null
+  motivaatiokirjeAsiakirja: null
+  koulutussuunnitelmaFile: File | null
+  koulutussuunnitelmaAsiakirjaUpdated: boolean
+  motivaatiokirjeFile: File | null
+  motivaatiokirjeAsiakirjaUpdated: boolean
+}
+
 export interface Tyoskentelyjakso {
   id?: number | null
   alkamispaiva: string | null

@@ -3,7 +3,7 @@
      {
         "id": 1151,
         "alkamispaiva": "2020-11-23",
-        "paattymispaiva": "2020-11-29",
+        "paattymispaiva": null,
         "osaaikaprosentti": 100,
         "kaytannonKoulutus": "OMAN_ERIKOISALAN_KOULUTUS",
         "omaaErikoisalaaTukevaId": null,

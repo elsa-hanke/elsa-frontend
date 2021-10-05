@@ -1,5 +1,5 @@
 <template>
-  <div class="omat-tiedot">
+  <div class="omat-tiedot mb-4">
     <div v-if="!editing">
       <div class="d-block d-lg-none d-xl-none">
         <avatar

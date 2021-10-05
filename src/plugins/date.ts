@@ -1,5 +1,5 @@
 import { reactive } from '@vue/composition-api'
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, formatISO } from 'date-fns'
 import { enUS, fi, sv } from 'date-fns/locale'
 import Vue from 'vue'
 
@@ -30,6 +30,9 @@ export class DatePlugin {
 
     vue.prototype.$date = function (value: string) {
       return parseAndFormat(value, 'P')
+    }
+    vue.prototype.$today = function () {
+      return parseAndFormat(formatISO(new Date()), 'P')
     }
 
     vue.prototype.$datetime = function (value: string) {

@@ -1,15 +1,11 @@
 <template>
   <div id="root" :class="{ 'gray-backdrop': hasGrayBackdrop }">
     <navbar />
-    <b-container fluid>
-      <mobile-nav v-if="!$screen.lg" />
-      <b-row class="position-relative">
-        <sidebar-menu />
-        <main role="main" class="offset-lg-2 col-lg-10 mb-5 px-0 px-lg-3">
-          <router-view />
-        </main>
-      </b-row>
-    </b-container>
+    <mobile-nav v-if="!$screen.lg" />
+    <sidebar-menu ref="sidebar" />
+    <main role="main">
+      <router-view />
+    </main>
   </div>
 </template>
 
@@ -36,9 +32,16 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~bootstrap/scss/mixins/breakpoints';
   @import '~@/styles/variables';
 
   .gray-backdrop {
     background-color: $backdrop-background-color;
+  }
+
+  @include media-breakpoint-up(lg) {
+    main {
+      padding-left: $sidebar-width;
+    }
   }
 </style>

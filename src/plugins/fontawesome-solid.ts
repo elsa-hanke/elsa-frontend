@@ -3,8 +3,10 @@ import {
   faArrowsAlt,
   faArrowUp,
   faAward,
+  faBars,
   faCaretDown,
   faCaretUp,
+  faChartLine,
   faCheckCircle,
   faChevronDown,
   faChevronLeft,
@@ -14,31 +16,37 @@ import {
   faClipboard,
   faClipboardCheck,
   faClipboardList,
+  faDumbbell,
   faEdit,
   faEnvelope,
+  faEnvelopeOpenText,
   faExclamationCircle,
   faFile,
   faFileAlt,
+  faFileDownload,
   faHome,
   faInfo,
   faInfoCircle,
   faPaperPlane,
   faPortrait,
+  faPrint,
   faQuestion,
   faQuestionCircle,
   faSearch,
   faShare,
-  faBars,
+  faTheaterMasks,
   faTimes,
-  faFileDownload,
+  faToolbox,
   faUndoAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faArrowsAlt)
 library.add(faArrowUp)
 library.add(faAward)
+library.add(faBars)
 library.add(faCaretDown)
 library.add(faCaretUp)
+library.add(faChartLine)
 library.add(faCheckCircle)
 library.add(faChevronDown)
 library.add(faChevronLeft)
@@ -48,21 +56,25 @@ library.add(faCircle)
 library.add(faClipboard)
 library.add(faClipboardCheck)
 library.add(faClipboardList)
+library.add(faDumbbell)
 library.add(faEdit)
 library.add(faEnvelope)
+library.add(faEnvelopeOpenText)
 library.add(faExclamationCircle)
 library.add(faFile)
 library.add(faFileAlt)
+library.add(faFileDownload)
 library.add(faHome)
 library.add(faInfo)
 library.add(faInfoCircle)
 library.add(faPaperPlane)
 library.add(faPortrait)
+library.add(faPrint)
 library.add(faQuestion)
 library.add(faQuestionCircle)
 library.add(faSearch)
 library.add(faShare)
-library.add(faBars)
+library.add(faTheaterMasks)
 library.add(faTimes)
-library.add(faFileDownload)
+library.add(faToolbox)
 library.add(faUndoAlt)

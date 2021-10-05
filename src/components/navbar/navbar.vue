@@ -21,45 +21,39 @@
       </template>
     </b-navbar-toggle>
 
-    <b-collapse is-nav>
-      <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto pr-3 font-weight-500">
-        <b-nav-item
-          class="border-right text-nowrap align-self-center px-3"
-          :to="{ name: 'viestit' }"
-        >
-          <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
-          {{ $t('viestit') }}
-        </b-nav-item>
+    <b-navbar-nav class="ml-auto pr-3 font-weight-500 d-none d-lg-flex">
+      <b-nav-item class="border-right text-nowrap align-self-center px-3" :to="{ name: 'viestit' }">
+        <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
+        {{ $t('viestit') }}
+      </b-nav-item>
 
-        <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
-          <template #button-content>
-            <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
-          </template>
-          <b-dropdown-item :to="{ name: 'profiili' }">
-            {{ $t('oma-profiilini') }}
-          </b-dropdown-item>
-          <b-dropdown-item @click="logout">
-            {{ $t('kirjaudu-ulos') }}
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
+      <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
+        <template #button-content>
+          <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
+        </template>
+        <b-dropdown-item :to="{ name: 'profiili' }">
+          {{ $t('oma-profiilini') }}
+        </b-dropdown-item>
+        <b-dropdown-item @click="logout">
+          {{ $t('kirjaudu-ulos') }}
+        </b-dropdown-item>
+      </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown
-          :text="$t(currentLocale)"
-          class="border-left align-self-center px-3"
-          right
+      <b-nav-item-dropdown
+        :text="$t(currentLocale)"
+        class="border-left align-self-center px-3"
+        right
+      >
+        <b-dropdown-item
+          v-for="locale in locales"
+          :key="locale"
+          :disabled="currentLocale === locale"
+          @click="changeLocale(locale)"
         >
-          <b-dropdown-item
-            v-for="locale in locales"
-            :key="locale"
-            :disabled="currentLocale === locale"
-            @click="changeLocale(locale)"
-          >
-            {{ $t(locale) }}
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-    </b-collapse>
+          {{ $t(locale) }}
+        </b-dropdown-item>
+      </b-nav-item-dropdown>
+    </b-navbar-nav>
   </b-navbar>
 </template>
 

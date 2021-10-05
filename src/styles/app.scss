@@ -24,12 +24,20 @@
   font-size: $font-size-sm;
 }
 
+.text-size-md {
+  font-size: $text-size-md;
+}
+
 .text-size-lg {
   font-size: $font-size-lg;
 }
 
 .text-lighter {
   color: lighten($black, 50%);
+}
+
+.text-black {
+  color: $black;
 }
 
 label {
@@ -164,11 +172,6 @@ textarea::placeholder {
 
 .form-control.is-valid {
   border-color: $gray-400;
-}
-
-.form-control:focus {
-  border: 0.15rem solid #c3e9fa !important;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(195, 233, 250, 0.5) !important;
 }
 
 h1 {

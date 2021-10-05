@@ -31,7 +31,7 @@ describe('Suoritemerkinnät', () => {
   it('Navigoidaan suoritusmerkinnät näkymään', () => {
     setupMocks()
     cy.visit('/')
-    cy.get('.nav > :nth-child(3) > .nav-link').contains('Suoritemerkinnät').click()
+    cy.get('.nav > :nth-child(4) > .nav-link').contains('Suoritemerkinnät').click()
   })
 
   it('Näkymästä löytyvät oleelliset elementit', () => {
@@ -54,8 +54,7 @@ describe('Suoritemerkinnät', () => {
 
   it('Navigoidaan uuden suoritemerkinnän lisäämiseen', () => {
     setupMocks()
-    cy.get('a').contains('Lisää suoritemerkintä').click()
-    cy.contains('h1', 'Lisää suoritemerkintä')
+    cy.get('a').contains('Lisää suoritemerkintä')
   })
 })
 
@@ -87,8 +86,7 @@ describe('Uuden suoritemerkinnän lisäys', () => {
     cy.get('label').contains('Vaativuustaso').click().type('{enter}')
     cy.get('span').contains('Valitse').click()
     cy.get('span').contains('5 Toiminta ohjaajana').click()
-    cy.get('label').contains('Suorituspäivä').click()
-    cy.get('.btn').contains('24').click()
+    cy.get('label').contains('Suorituspäivä').click().get('.btn').contains('16').click()
     cy.get('label').contains('Lisätiedot').click().type('Lorem ipsum...')
     cy.get('button').contains('Tallenna').click()
   })

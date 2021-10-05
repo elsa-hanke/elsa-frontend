@@ -2,7 +2,7 @@
   <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
     <router-view />
 
-    <footer class="pb-4">
+    <footer class="pb-4 bg-white">
       <div class="d-flex justify-content-center">
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('tietosuoja') }}</b-link>
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link>
@@ -80,8 +80,13 @@
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
 
   footer {
-    border-top: 5px solid #f5f5f6;
+    border-top: 1px solid $border-color;
+    @include media-breakpoint-down(sm) {
+      border-top: 5px solid #f5f5f6;
+    }
+    z-index: 1000;
   }
 </style>
