@@ -4,18 +4,72 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <elsa-error-message
-            v-if="error"
-            @click="fetchKoulutussuunnitelma"
-            :loading="loading"
-            class="text-center"
-          >
-            {{ $t('koulutussuunnitelman-hakeminen-epaonnistui') }}
-          </elsa-error-message>
-          <div v-else-if="!loading" class="mb-4">
+          <div v-if="!loading" class="mb-4">
             <h1>{{ $t('koulutussuunnitelma') }}</h1>
             <p>{{ $t('koulutussuunnitelma-kuvaus') }}</p>
             <hr />
+            <h2>{{ $t('koulutusjaksot') }}</h2>
+            <p>{{ $t('koulutusjaksot-kuvaus') }}</p>
+            <elsa-button variant="primary" :to="{ name: 'uusi-koulutusjakso' }" class="mb-3">
+              {{ $t('lisaa-koulutusjakso') }}
+            </elsa-button>
+            <b-table-simple
+              v-if="koulutusjaksot && koulutusjaksot.length > 0"
+              responsive
+              stacked="md"
+            >
+              <b-thead>
+                <b-tr>
+                  <b-th style="width: 25%">{{ $t('koulutusjakso') }}</b-th>
+                  <b-th style="width: 35%">{{ $t('tyoskentelyjaksot') }}</b-th>
+                  <b-th>{{ $t('osaamistavoitteet-omalta-erikoisalalta') }}</b-th>
+                </b-tr>
+              </b-thead>
+              <b-tbody>
+                <b-tr v-for="koulutusjakso in koulutusjaksot" :key="koulutusjakso.id">
+                  <b-td>
+                    <elsa-button
+                      :to="{
+                        name: 'koulutusjakso',
+                        params: { koulutusjaksoId: koulutusjakso.id }
+                      }"
+                      variant="link"
+                      class="shadow-none p-0 border-0"
+                    >
+                      {{ koulutusjakso.nimi }}
+                    </elsa-button>
+                  </b-td>
+                  <b-td>
+                    <div
+                      v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
+                      :key="tyoskentelyjakso.id"
+                    >
+                      {{ tyoskentelyjakso.tyoskentelypaikka.nimi }} ({{
+                        tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
+                      }}
+                      –
+                      {{
+                        tyoskentelyjakso.paattymispaiva
+                          ? $date(tyoskentelyjakso.paattymispaiva)
+                          : $t('kesken') | lowercase
+                      }})
+                    </div>
+                  </b-td>
+                  <b-td>
+                    <b-badge
+                      v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
+                      :key="osaamistavoite.id"
+                      pill
+                      variant="light"
+                      class="font-weight-400 mr-2"
+                    >
+                      {{ osaamistavoite.nimi }}
+                    </b-badge>
+                  </b-td>
+                </b-tr>
+              </b-tbody>
+            </b-table-simple>
+            <hr v-else />
             <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
             <p>
               {{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus') }}
@@ -196,18 +250,17 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { getKoulutusjaksot } from '@/api/erikoistuva'
   import ElsaAccordian from '@/components/accordian/accordian.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaErrorMessage from '@/components/error-message/error-message.vue'
-  import { Asiakirja } from '@/types'
+  import { Asiakirja, Koulutusjakso } from '@/types'
   import { fetchAndOpenBlob } from '@/utils/blobs'
   import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
-      ElsaButton,
       ElsaAccordian,
-      ElsaErrorMessage
+      ElsaButton
     }
   })
   export default class Koulutussuunnitelma extends Vue {
@@ -223,24 +276,27 @@
     ]
 
     koulutussuunnitelma: Koulutussuunnitelma | null = null
-    koulutusjaksot: any[] | null = null
+    koulutusjaksot: Koulutusjakso[] | null = null
     loading = true
-    error = false
 
     async mounted() {
-      await this.fetchKoulutussuunnitelma()
+      await Promise.all([this.fetchKoulutusjaksot(), this.fetchKoulutussuunnitelma()])
+      this.loading = false
     }
 
     async fetchKoulutussuunnitelma() {
       try {
-        this.loading = true
         this.koulutussuunnitelma = (await axios.get(`erikoistuva-laakari/koulutussuunnitelma`)).data
-        this.error = false
       } catch (err) {
         toastFail(this, this.$t('koulutussuunnitelman-hakeminen-epaonnistui'))
-        this.error = true
-      } finally {
-        this.loading = false
+      }
+    }
+
+    async fetchKoulutusjaksot() {
+      try {
+        this.koulutusjaksot = (await getKoulutusjaksot()).data
+      } catch (err) {
+        toastFail(this, this.$t('koulutusjaksojen-hakeminen-epaonnistui'))
       }
     }
 

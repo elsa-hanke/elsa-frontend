@@ -239,9 +239,7 @@
       ElsaButton
     },
     validations: {
-      form: {
-        motivaatiokirje: {}
-      }
+      form: {}
     }
   })
   export default class KoulutussuunnitelmaForm extends Mixins(validationMixin) {

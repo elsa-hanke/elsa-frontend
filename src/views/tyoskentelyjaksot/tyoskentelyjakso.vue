@@ -112,7 +112,7 @@
               <elsa-button
                 :to="{ name: 'tyoskentelyjaksot' }"
                 variant="link"
-                class="mb-3 mr-auto tyoskentelyjaksot-link"
+                class="mb-3 mr-auto font-weight-500 tyoskentelyjaksot-link"
               >
                 {{ $t('palaa-tyoskentelyjaksoihin') }}
               </elsa-button>

@@ -72,7 +72,7 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(value: any, params: { saving: boolean }) {
       params.saving = true
       try {
         const formData = new FormData()
@@ -97,7 +97,7 @@
           }
         })
       } catch (err) {
-        if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+        if (err.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
           toastFail(
             this,
             `${this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')}: ${this.$t(

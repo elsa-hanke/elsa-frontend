@@ -75,10 +75,6 @@
   @import '~bootstrap/scss/mixins/breakpoints';
   @import '~@/styles/variables';
 
-  .brand-logo {
-    font-size: 2rem;
-  }
-
   @include media-breakpoint-up(lg) {
     main {
       padding-left: $sidebar-width;

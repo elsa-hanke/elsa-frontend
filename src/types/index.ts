@@ -84,6 +84,24 @@ export interface Koulutussuunnitelma {
   motivaatiokirjeAsiakirjaUpdated: boolean
 }
 
+export interface Koulutusjakso {
+  id: number | null
+  nimi: string | null
+  muutOsaamistavoitteet: string | null
+  luotu: string | null
+  tallennettu: string | null
+  lukittu: boolean | null
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  osaamistavoitteet: ArvioitavaKokonaisuus[]
+  koulutussuunnitelma: Koulutussuunnitelma | null
+}
+
+export interface KoulutusjaksoLomake {
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  kunnat: Kunta[]
+  arvioitavanKokonaisuudenKategoriat: ArvioitavanKokonaisuudenKategoria[]
+}
+
 export interface Tyoskentelyjakso {
   id?: number | null
   alkamispaiva: string | null

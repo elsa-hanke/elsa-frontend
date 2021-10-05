@@ -97,7 +97,7 @@
     transition: transform 0.3s ease-in-out;
 
     &.closed {
-      transform: rotate(180deg);
+      transform: rotate(-180deg);
     }
   }
 </style>
