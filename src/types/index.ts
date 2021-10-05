@@ -529,3 +529,8 @@ export interface BarChartRow {
   minRequired: number
   highlight: boolean
 }
+
+export interface Palaute {
+  palautteenAihe: string | null
+  palaute: string | null
+}
