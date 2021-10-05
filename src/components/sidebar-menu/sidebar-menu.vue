@@ -1,46 +1,55 @@
 <template>
   <div>
-    <nav id="sidebar-menu" class="col-lg-2 d-none d-lg-block d-xl-block bg-white sidebar">
-      <div class="sidebar-sticky font-weight-500">
-        <b-nav vertical>
-          <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
-            <font-awesome-icon icon="home" fixed-width size="lg" />
-            {{ $t('etusivu') }}
-          </b-nav-item>
-          <b-nav-item
-            v-if="$isErikoistuva()"
-            class="border-bottom"
-            :to="{ name: 'tyoskentelyjaksot' }"
-          >
-            <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
-            {{ $t('tyoskentelyjaksot') }}
-          </b-nav-item>
-          <b-nav-item
-            v-if="$isErikoistuva()"
-            class="border-bottom"
-            :to="{ name: 'suoritemerkinnat' }"
-          >
-            <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
-            {{ $t('suoritemerkinnat') }}
-          </b-nav-item>
-          <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
-            <font-awesome-icon icon="award" fixed-width size="lg" />
-            {{ $t('arvioinnit') }}
-          </b-nav-item>
-          <b-nav-item
-            v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()"
-            class="border-bottom"
-            :to="{ name: 'koejakso' }"
-          >
-            <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
-            {{ $t('koejakso') }}
-          </b-nav-item>
-          <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
-            <font-awesome-icon icon="file" fixed-width size="lg" />
-            {{ $t('asiakirjat') }}
-          </b-nav-item>
-        </b-nav>
-      </div>
+    <nav
+      id="sidebar-menu"
+      class="border-right bg-white font-weight-500 d-none d-lg-block d-xl-block"
+    >
+      <b-nav vertical>
+        <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
+          <font-awesome-icon icon="home" fixed-width size="lg" />
+          {{ $t('etusivu') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'koulutussuunnitelma' }"
+        >
+          <font-awesome-icon :icon="['far', 'clipboard']" fixed-width size="lg" />
+          {{ $t('koulutussuunnitelma') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'tyoskentelyjaksot' }"
+        >
+          <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
+          {{ $t('tyoskentelyjaksot') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'suoritemerkinnat' }"
+        >
+          <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
+          {{ $t('suoritemerkinnat') }}
+        </b-nav-item>
+        <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
+          <font-awesome-icon icon="award" fixed-width size="lg" />
+          {{ $t('arvioinnit') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()"
+          class="border-bottom"
+          :to="{ name: 'koejakso' }"
+        >
+          <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
+          {{ $t('koejakso') }}
+        </b-nav-item>
+        <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
+          <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
+          {{ $t('asiakirjat') }}
+        </b-nav-item>
+      </b-nav>
     </nav>
     <b-toaster class="toaster" :style="{ top: paddingTop + 'px' }" name="b-toaster-top-right" />
   </div>
@@ -69,18 +78,17 @@
 
   $navbar-height: 64px;
 
-  .sidebar {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    height: 100%;
-    padding: 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  #sidebar-menu {
+    position: fixed;
+    width: $sidebar-width;
+    z-index: 1000;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
 
     .nav-link {
-      padding: 1rem;
+      padding: 1rem 0.75rem;
 
       &:hover {
         background-color: rgba($primary, 0.1);
@@ -90,14 +98,6 @@
         background-color: $primary;
         color: white;
       }
-    }
-
-    .sidebar-sticky {
-      position: sticky;
-      // top: 0;
-      height: calc(100vh - 64px);
-      overflow-x: hidden;
-      overflow-y: auto;
     }
   }
 

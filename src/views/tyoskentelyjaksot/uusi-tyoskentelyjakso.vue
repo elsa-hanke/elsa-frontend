@@ -1,6 +1,6 @@
 <template>
   <div class="lisaa-tyoskentelyjakso">
-    <b-breadcrumb :items="items" class="mb-0"></b-breadcrumb>
+    <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
         <b-col>

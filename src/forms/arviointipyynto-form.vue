@@ -50,7 +50,7 @@
         >
           <template slot="option" slot-scope="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
-            <span v-else class="ml-3">{{ props.option.nimi }}</span>
+            <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
           </template>
         </elsa-form-multiselect>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -126,7 +126,7 @@
         <b-form-textarea :id="uid" v-model="form.lisatiedot" rows="5"></b-form-textarea>
       </template>
     </elsa-form-group>
-    <div class="text-right">
+    <div class="text-right mb-2">
       <elsa-button variant="back" :to="{ name: 'arvioinnit' }">{{ $t('peruuta') }}</elsa-button>
       <elsa-button
         v-if="editing"

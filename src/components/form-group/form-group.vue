@@ -19,6 +19,9 @@
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
           <slot name="help" />
         </div>
+        <div v-if="$slots['label-right']" class="form-group-help font-weight-400">
+          <slot name="label-right" />
+        </div>
         <div v-if="addNewEnabled" class="form-group-help font-weight-400">
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
           &nbsp;

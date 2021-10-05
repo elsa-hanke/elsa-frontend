@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="mt-3 vh-100">
     <b-row class="mt-3" lg>
-      <b-col class="pl-0 pl-lg-3 pr-0" lg="2" order-lg="3" order-xl="3">
+      <b-col lg="2" order-lg="3" order-xl="3">
         <elsa-button variant="link" class="d-flex align-items-center text-decoration-none">
           <div class="fa-2x mr-2">
             <font-awesome-layers>
@@ -16,7 +16,7 @@
           <span class="text-left">{{ $t('lisaa-ja-muokkaa-osioita') }}</span>
         </elsa-button>
       </b-col>
-      <b-col class="px-0 pr-lg-2 mt-3 mt-lg-0 mt-xl-0">
+      <b-col>
         <b-card-skeleton :header="$t('henkilotiedot')" :loading="!account" class="mb-3">
           <div class="d-flex align-items-center">
             <div class="d-none d-lg-block d-xl-block mr-3">
@@ -29,7 +29,10 @@
               ></avatar>
             </div>
             <div class="flex-fill">
-              <table class="table table-borderless text-size-sm" :summary="$t('henkilotiedot')">
+              <table
+                class="table table-borderless text-size-sm border-0"
+                :summary="$t('henkilotiedot')"
+              >
                 <tr class="sr-only">
                   <th scope="col">{{ $t('kentta') }}</th>
                   <th scope="col">{{ $t('arvo') }}</th>
@@ -80,7 +83,7 @@
           class="mb-3"
         ></b-card-skeleton>
       </b-col>
-      <b-col class="pl-0 pl-lg-2 pr-0" lg>
+      <b-col lg>
         <b-card-skeleton
           :header="$t('koulutussuunnitelma')"
           :loading="true"

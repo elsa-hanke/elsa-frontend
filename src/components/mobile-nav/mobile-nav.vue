@@ -17,6 +17,14 @@
         <b-nav-item
           v-if="$isErikoistuva()"
           class="border-bottom"
+          :to="{ name: 'koulutussuunnitelma' }"
+        >
+          <font-awesome-icon :icon="['far', 'clipboard']" fixed-width size="lg" />
+          {{ $t('koulutussuunnitelma') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
           :to="{ name: 'tyoskentelyjaksot' }"
         >
           <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
@@ -45,6 +53,10 @@
         <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
           <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
           {{ $t('asiakirjat') }}
+        </b-nav-item>
+        <b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
+          <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
+          {{ $t('viestit') }}
         </b-nav-item>
       </b-nav>
       <b-nav class="bg-light font-weight-500" vertical>

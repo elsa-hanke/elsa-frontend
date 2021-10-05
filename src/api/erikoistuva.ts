@@ -8,6 +8,7 @@ import {
   ValiarviointiLomake,
   VastuuhenkilonArvioLomake
 } from '@/types'
+import { wrapToFormData } from '@/utils/functions'
 
 export async function putKayttooikeushakemus(value: any) {
   const path = 'erikoistuva-laakari/kayttooikeushakemus'
@@ -122,4 +123,10 @@ export async function getYliopistot() {
 export async function getVastuuhenkilonArvioLomake() {
   const path = '/erikoistuva-laakari/vastuuhenkilonarvio-lomake'
   return await axios.get(path)
+}
+
+export async function putKoulutussuunnitelma(form: any) {
+  return await axios.put('erikoistuva-laakari/koulutussuunnitelma', wrapToFormData(form), {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
 }
