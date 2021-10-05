@@ -1,12 +1,20 @@
 <template>
   <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
     <router-view />
-
+    <b-link @click="openPalauteFormModal">
+      <div class="feedback-link">
+        <font-awesome-icon class="feedback-icon" :icon="['far', 'envelope']" fixed-width />
+        <span class="feedback-text">{{ $t('palaute') }}</span>
+      </div>
+    </b-link>
     <footer class="pb-4 bg-white">
       <div class="d-flex justify-content-center">
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('tietosuoja') }}</b-link>
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link>
-        <b-link class="my-4 mx-3 mx-lg-4">{{ $t('palaute') }}</b-link>
+        <b-link @click="openPalauteFormModal" class="my-4 mx-3 mx-lg-4">
+          {{ $t('palaute') }}
+        </b-link>
+        <palaute-form-modal :show="showPalauteFormModal" @hide="hidePalauteFormModal" />
       </div>
       <div class="d-flex flex-wrap justify-content-center">
         <a
@@ -58,10 +66,25 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
+  import PalauteFormModal from '@/forms/palaute-form-modal.vue'
   import { Meta } from '@/utils/decorators'
 
-  @Component({})
+  @Component({
+    components: {
+      PalauteFormModal
+    }
+  })
   export default class App extends Vue {
+    showPalauteFormModal = false
+
+    openPalauteFormModal() {
+      this.showPalauteFormModal = true
+    }
+
+    hidePalauteFormModal() {
+      this.showPalauteFormModal = false
+    }
+
     @Meta
     getMetaInfo() {
       if (this.$route && this.$route.name) {
@@ -88,5 +111,27 @@
       border-top: 5px solid #f5f5f6;
     }
     z-index: 1000;
+  }
+
+  .feedback-link {
+    background-color: $primary;
+    color: $white;
+    font-weight: 500;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border-radius: 0.25rem 0 0 0;
+    padding: 0.375rem 0.625rem 0.25rem 0.5rem;
+    z-index: 9999;
+  }
+
+  .feedback-icon {
+    font-size: 1.5rem;
+    vertical-align: middle;
+  }
+
+  .feedback-text {
+    margin-left: 0.375rem;
+    vertical-align: middle;
   }
 </style>
