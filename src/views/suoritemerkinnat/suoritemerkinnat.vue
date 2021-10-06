@@ -116,8 +116,6 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { parseISO } from 'date-fns'
-  import compareDesc from 'date-fns/compareDesc'
   import { Component, Vue } from 'vue-property-decorator'
 
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
@@ -133,6 +131,7 @@
     ToggleableSuoritemerkinta
   } from '@/types'
   import { ArviointiasteikkoTyyppi } from '@/utils/constants'
+  import { sortByDateDesc } from '@/utils/date'
 
   @Component({
     components: {
@@ -213,10 +212,7 @@
                 const suoritemerkinnat = (
                   suoritemerkinnatGroupByOppimistavoite[oppimistavoite.id] || []
                 ).sort((a, b) =>
-                  compareDesc(
-                    parseISO(a.suoritemerkinta.suorituspaiva),
-                    parseISO(b.suoritemerkinta.suorituspaiva)
-                  )
+                  sortByDateDesc(a.suoritemerkinta.suorituspaiva, b.suoritemerkinta.suorituspaiva)
                 )
 
                 // Ensimmäinen suoritemerkintä esitetään oppimistavoitteen rivillä

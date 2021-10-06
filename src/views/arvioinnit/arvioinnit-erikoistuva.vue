@@ -239,7 +239,9 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import { Suoritusarviointi } from '@/types'
   import { decorate } from '@/utils/arvioinninAntajaListDecorator'
+  import { sortByDateDesc } from '@/utils/date'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
@@ -336,13 +338,14 @@
           await axios.get('erikoistuva-laakari/suoritusarvioinnit', {
             params: {
               ...options,
-              sort: 'tapahtumanAjankohta,desc',
               'tyoskentelyjaksoId.equals': this.selected.tyoskentelyjakso?.id,
               'arvioitavaOsaalueId.equals': this.selected.arvioitavaKokonaisuus?.id,
               'arvioinninAntajaId.equals': this.selected.kouluttajaOrVastuuhenkilo?.id
             }
           })
-        ).data
+        ).data?.sort((s1: Suoritusarviointi, s2: Suoritusarviointi) => {
+          return sortByDateDesc(s1?.tapahtumanAjankohta, s2?.tapahtumanAjankohta)
+        })
         this.kategoriat = this.solveKategoriat()
       } catch (err) {
         this.omat = []
@@ -375,7 +378,7 @@
       })
       kategoriat = [...new Map(kategoriat.map((item: any) => [item['id'], item])).values()]
 
-      // Laitetaan arvioinnin osa-alueihin
+      // Liitetään arvioinnit osa-alueisiin
       if (this.omat) {
         this.omat.forEach((arviointi) => {
           const oa = osaalueet.find((oa: any) => oa.id === arviointi.arvioitavaOsaalueId)
@@ -385,7 +388,7 @@
         })
       }
 
-      // Laitetaan osa-aluuet kategorioihin
+      // Liitetään osa-alueet kategorioihin
       osaalueet.forEach((oa: any) => {
         const kategoria = kategoriat.find((k: any) => k.id === oa.kategoria.id)
         if (kategoria) {

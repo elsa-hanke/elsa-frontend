@@ -71,8 +71,6 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { parseISO } from 'date-fns'
-  import compareAsc from 'date-fns/compareAsc'
   import { Component, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -82,6 +80,7 @@
   import ArviointiForm from '@/forms/arviointi-form.vue'
   import store from '@/store'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
+  import { sortByDateAsc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -155,9 +154,7 @@
     get kommentit() {
       if (this.value) {
         return this.value.kommentit
-          .sort((a: any, b: any) =>
-            compareAsc(parseISO(a.luontiaika as string), parseISO(b.luontiaika as string))
-          )
+          .sort((a: any, b: any) => sortByDateAsc(a.luontiaika, b.luontiaika))
           .map((k: any) => {
             return {
               kommentti: k,

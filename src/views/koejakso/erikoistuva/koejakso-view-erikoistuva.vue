@@ -169,8 +169,9 @@
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import store from '@/store'
-  import { KoejaksonTyoskentelyjakso } from '@/types'
+  import { KoejaksonTyoskentelyjakso, Tyoskentelyjakso } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
+  import { sortByDateDesc } from '@/utils/date'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
@@ -311,12 +312,8 @@
           ...t,
           label: tyoskentelyjaksoLabel(this, t)
         }))
-        .sort((t1, t2) => {
-          return t1.paattymispaiva < t2.paattymispaiva
-            ? 1
-            : t1.paattymispaiva > t2.paattymispaiva
-            ? -1
-            : 0
+        .sort((t1: Tyoskentelyjakso, t2: Tyoskentelyjakso) => {
+          return sortByDateDesc(t1.paattymispaiva, t2.paattymispaiva)
         })
     }
 
