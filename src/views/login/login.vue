@@ -45,7 +45,7 @@
     }
 
     loginHaka() {
-      // TODO
+      return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/haka`)
     }
   }
 </script>
