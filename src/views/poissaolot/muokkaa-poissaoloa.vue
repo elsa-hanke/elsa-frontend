@@ -25,10 +25,9 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import PoissaoloForm from '@/forms/poissaolo-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { PoissaoloLomake } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { ErrorKeys } from '@/utils/constants'
@@ -40,7 +39,7 @@
       PoissaoloForm
     }
   })
-  export default class MuokkaaPoissaoloa extends Mixins(ConfirmRouteExit) {
+  export default class MuokkaaPoissaoloa extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -92,7 +91,7 @@
           await axios.put('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)
         ).data
         toastSuccess(this, this.$t('poissaolon-tallentaminen-onnistui'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'poissaolo',
           params: {
@@ -128,7 +127,7 @@
             `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`
           )
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
-          this.skipRouteExitConfirm = true
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
             name: 'tyoskentelyjaksot'
           })

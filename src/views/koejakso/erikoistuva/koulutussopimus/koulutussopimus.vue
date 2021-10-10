@@ -95,11 +95,10 @@
 
 <script lang="ts">
   import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
+  import { Vue } from 'vue-property-decorator'
 
   import { getKoulutussopimusLomake } from '@/api/erikoistuva'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import store from '@/store'
   import { KoulutussopimusLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
@@ -115,7 +114,7 @@
       KoulutussopimusReadonly
     }
   })
-  export default class ErikoistuvaKoulutussopimus extends Mixins(ConfirmRouteExit) {
+  export default class ErikoistuvaKoulutussopimus extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -186,7 +185,7 @@
       }
 
       if (!this.editable) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
@@ -205,7 +204,7 @@
         }
 
         toastSuccess(this, this.$t('koulutussopimus-tallennettu-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
@@ -217,7 +216,7 @@
       try {
         await store.dispatch('erikoistuva/postKoulutussopimus', this.koulutussopimusLomake)
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -227,7 +226,7 @@
       try {
         await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       } catch (err) {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -251,7 +250,7 @@
 
     watch() {
       if (!this.editable) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
@@ -274,7 +273,7 @@
       this.loading = false
 
       if (!this.editable) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
   }

@@ -25,10 +25,9 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import ArviointiForm from '@/forms/arviointi-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -36,7 +35,7 @@
       ArviointiForm
     }
   })
-  export default class Itsearviointi extends Mixins(ConfirmRouteExit) {
+  export default class Itsearviointi extends Vue {
     value = null
     items = [
       {
@@ -68,7 +67,7 @@
       try {
         await axios.put('erikoistuva-laakari/suoritusarvioinnit', value)
         toastSuccess(this, this.$t('itsearvioinnin-tallentaminen-onnistui'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'arviointi',
           params: { arviointiId: this.$route.params.arviointiId }

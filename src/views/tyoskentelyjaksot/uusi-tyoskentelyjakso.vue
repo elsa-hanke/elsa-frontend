@@ -26,10 +26,9 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { TyoskentelyjaksoLomake } from '@/types'
   import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -39,7 +38,7 @@
       TyoskentelyjaksoForm
     }
   })
-  export default class UusiTyoskentelyjakso extends Mixins(ConfirmRouteExit) {
+  export default class UusiTyoskentelyjakso extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -90,7 +89,7 @@
         ).data
 
         toastSuccess(this, this.$t('uusi-tyoskentelyjakso-lisatty'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'tyoskentelyjakso',
           params: {

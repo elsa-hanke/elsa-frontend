@@ -86,11 +86,9 @@
 </template>
 
 <script lang="ts">
-  import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import store from '@/store'
   import { AloituskeskusteluLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
@@ -106,9 +104,7 @@
       ArviointilomakeAloituskeskusteluReadonly
     }
   })
-  export default class ErikoistuvaArviointilomakeAloituskeskustelu extends Mixins(
-    ConfirmRouteExit
-  ) {
+  export default class ErikoistuvaArviointilomakeAloituskeskustelu extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -174,7 +170,7 @@
         this.aloituskeskusteluLomake = this.koejaksoData.aloituskeskustelu
       }
       if (!this.editable) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
@@ -194,7 +190,7 @@
         }
 
         toastSuccess(this, this.$t('aloituskeskustelu-tallennettu-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-tallennus-epaonnistui'))
@@ -206,7 +202,7 @@
       try {
         await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
@@ -216,7 +212,7 @@
       try {
         await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       } catch (err) {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
@@ -240,7 +236,7 @@
 
     watch() {
       if (!this.editable) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
@@ -253,7 +249,7 @@
       this.setKoejaksoData()
       this.loading = false
       if (!this.editable) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
   }

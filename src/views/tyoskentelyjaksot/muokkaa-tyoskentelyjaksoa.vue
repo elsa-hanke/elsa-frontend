@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import {
     getTyoskentelyjakso,
@@ -34,7 +34,6 @@
     putTyoskentelyjakso
   } from '@/api/erikoistuva'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
   import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -44,7 +43,7 @@
       TyoskentelyjaksoForm
     }
   })
-  export default class MuokkaaTyoskentelyjaksoa extends Mixins(ConfirmRouteExit) {
+  export default class MuokkaaTyoskentelyjaksoa extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -100,7 +99,7 @@
         await putTyoskentelyjakso(formData)
 
         toastSuccess(this, this.$t('tyoskentelyjakson-tallentaminen-onnistui'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'tyoskentelyjakso',
           params: {

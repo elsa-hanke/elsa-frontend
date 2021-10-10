@@ -25,10 +25,9 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import SuoritemerkintaForm from '@/forms/suoritemerkinta-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { Suoritemerkinta, SuoritemerkintaLomake } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -37,7 +36,7 @@
       SuoritemerkintaForm
     }
   })
-  export default class UusiSuoritemerkinta extends Mixins(ConfirmRouteExit) {
+  export default class UusiSuoritemerkinta extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -78,7 +77,7 @@
           await axios.post('erikoistuva-laakari/suoritemerkinnat', value)
         ).data
         toastSuccess(this, this.$t('suoritusmerkinta-lisatty-onnistuneesti'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'suoritemerkinta',
           params: {

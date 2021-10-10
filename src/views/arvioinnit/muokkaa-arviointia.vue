@@ -25,10 +25,9 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import ArviointiForm from '@/forms/arviointi-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -37,7 +36,7 @@
       ArviointiForm
     }
   })
-  export default class MuokkaaArviointia extends Mixins(ConfirmRouteExit) {
+  export default class MuokkaaArviointia extends Vue {
     value = null
     items = [
       {
@@ -69,7 +68,7 @@
       try {
         await axios.put(`${resolveRolePath()}/suoritusarvioinnit`, value)
         toastSuccess(this, this.$t('arvioinnin-tallentaminen-onnistui'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'arviointi',
           params: { arviointiId: this.$route.params.arviointiId }
