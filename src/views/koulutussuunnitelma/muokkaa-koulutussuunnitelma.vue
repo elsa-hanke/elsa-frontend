@@ -42,13 +42,12 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import { putKoulutussuunnitelma } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaErrorMessage from '@/components/error-message/error-message.vue'
   import KoulutussuunnitelmaForm from '@/forms/koulutussuunnitelma-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { Koulutussuunnitelma } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -59,7 +58,7 @@
       KoulutussuunnitelmaForm
     }
   })
-  export default class MuokkaaKoulutussuunnitelma extends Mixins(ConfirmRouteExit) {
+  export default class MuokkaaKoulutussuunnitelma extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -101,7 +100,7 @@
       try {
         await putKoulutussuunnitelma(data)
         toastSuccess(this, this.$t('koulutussuunnitelman-tallentaminen-onnistui'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'koulutussuunnitelma'
         })

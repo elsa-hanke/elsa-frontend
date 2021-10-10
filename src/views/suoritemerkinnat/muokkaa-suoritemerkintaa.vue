@@ -27,10 +27,9 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import SuoritemerkintaForm from '@/forms/suoritemerkinta-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { SuoritemerkintaLomake } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -41,7 +40,7 @@
       SuoritemerkintaForm
     }
   })
-  export default class MuokkaaSuoritemerkintaa extends Mixins(ConfirmRouteExit) {
+  export default class MuokkaaSuoritemerkintaa extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -103,7 +102,7 @@
           })
         ).data
         toastSuccess(this, this.$t('suoritemerkinnan-tallentaminen-onnistui'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'suoritemerkinta',
           params: {
@@ -128,7 +127,7 @@
         try {
           await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`)
           toastSuccess(this, this.$t('suoritemerkinta-poistettu-onnistuneesti'))
-          this.skipRouteExitConfirm = true
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
             name: 'suoritemerkinnat'
           })

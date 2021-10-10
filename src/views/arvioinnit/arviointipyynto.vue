@@ -33,10 +33,9 @@
 <script lang="ts">
   import axios from 'axios'
   import { formatISO } from 'date-fns'
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import ArviointipyyntoForm from '@/forms/arviointipyynto-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { ArviointipyyntoLomake, Suoritusarviointi } from '@/types'
   import { decorate } from '@/utils/arvioinninAntajaListDecorator'
   import { confirmDelete } from '@/utils/confirm'
@@ -49,7 +48,7 @@
       ArviointipyyntoForm
     }
   })
-  export default class Arviointipyynto extends Mixins(ConfirmRouteExit) {
+  export default class Arviointipyynto extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -116,7 +115,7 @@
             lisatiedot: value.lisatiedot
           })
           toastSuccess(this, this.$t('arviointipyynnon-tallentaminen-onnistui'))
-          this.skipRouteExitConfirm = true
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
             name: 'arvioinnit'
           })
@@ -128,7 +127,7 @@
           const arviointipyynto = (
             await axios.post('erikoistuva-laakari/suoritusarvioinnit/arviointipyynto', value)
           ).data
-          this.skipRouteExitConfirm = true
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
             name: 'arviointipyynto-lahetetty',
             params: { arviointiId: `${arviointipyynto.id}` }
@@ -152,7 +151,7 @@
         try {
           await axios.delete(`erikoistuva-laakari/suoritusarvioinnit/${this.arviointipyynto?.id}`)
           toastSuccess(this, this.$t('arviointipyynto-poistettu-onnistuneesti'))
-          this.skipRouteExitConfirm = true
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
             name: 'arvioinnit'
           })

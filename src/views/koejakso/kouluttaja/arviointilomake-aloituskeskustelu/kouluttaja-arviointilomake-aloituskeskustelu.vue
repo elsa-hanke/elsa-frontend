@@ -171,7 +171,7 @@
   import { format } from 'date-fns'
   import _get from 'lodash/get'
   import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
+  import { Vue } from 'vue-property-decorator'
 
   import * as api from '@/api/kouluttaja'
   import ElsaButton from '@/components/button/button.vue'
@@ -181,7 +181,6 @@
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import store from '@/store'
   import {
     KoejaksonVaiheAllekirjoitus,
@@ -204,7 +203,7 @@
       KoulutuspaikanArvioijat
     }
   })
-  export default class KouluttajaArviointilomakeAloituskeskustelu extends Mixins(ConfirmRouteExit) {
+  export default class KouluttajaArviointilomakeAloituskeskustelu extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -334,7 +333,7 @@
         this.buttonStates.secondaryButtonLoading = true
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
         this.buttonStates.secondaryButtonLoading = false
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-palautettu-erikoistuvalle-muokattavaksi'))
       } catch (err) {
@@ -362,7 +361,7 @@
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch('kouluttaja/putAloituskeskustelu', form)
         this.buttonStates.primaryButtonLoading = false
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
       } catch (err) {
@@ -378,7 +377,7 @@
       this.loading = false
 
       if (!this.editable || this.returned) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
   }

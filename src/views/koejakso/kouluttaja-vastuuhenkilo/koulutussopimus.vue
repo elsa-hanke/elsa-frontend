@@ -219,7 +219,6 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import store from '@/store'
   import {
     KoejaksonVaiheAllekirjoitus,
@@ -254,7 +253,7 @@
       }
     }
   })
-  export default class Koulutussopimus extends Mixins(ConfirmRouteExit, validationMixin) {
+  export default class Koulutussopimus extends Mixins(validationMixin) {
     skipRouteExitConfirm!: boolean
     $refs!: {
       kouluttajaKoulutussopimusForm: any
@@ -401,7 +400,7 @@
         this.buttonStates.secondaryButtonLoading = true
         await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, form)
         this.buttonStates.secondaryButtonLoading = false
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
       } catch (err) {
@@ -410,7 +409,7 @@
     }
 
     async updateSentForm() {
-      this.skipRouteExitConfirm = true
+      this.$emit('skipRouteExitConfirm', true)
       try {
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch(`${resolveRolePath()}/putKoulutussopimus`, this.form)
@@ -461,7 +460,7 @@
       this.loading = false
 
       if (!this.editable || this.returned) {
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
