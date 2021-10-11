@@ -122,7 +122,7 @@
                 </b-form-invalid-feedback>
               </template>
             </elsa-form-group>
-            <div v-if="waitingForAcceptance && formData.vastuuhenkilot.length === 1">
+            <div v-if="formData.vastuuhenkilot.length === 1">
               <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
               <p>{{ formData.vastuuhenkilot[0].nimi }}, {{ formData.vastuuhenkilot[0].nimike }}</p>
             </div>
@@ -423,6 +423,11 @@
       }
       this.setKoejaksoData()
       this.formData = (await getVastuuhenkilonArvioLomake()).data
+
+      if (this.formData.vastuuhenkilot.length === 1) {
+        this.form.vastuuhenkilo = this.formData.vastuuhenkilot[0]
+      }
+
       this.loading = false
     }
   }
