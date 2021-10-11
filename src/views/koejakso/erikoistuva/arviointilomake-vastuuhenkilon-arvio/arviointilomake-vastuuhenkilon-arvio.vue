@@ -424,7 +424,7 @@
       this.setKoejaksoData()
       this.formData = (await getVastuuhenkilonArvioLomake()).data
 
-      if (this.formData.vastuuhenkilot.length === 1) {
+      if (this.editable && this.formData.vastuuhenkilot.length === 1) {
         this.form.vastuuhenkilo = this.formData.vastuuhenkilot[0]
       }
 
