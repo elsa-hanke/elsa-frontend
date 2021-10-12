@@ -123,7 +123,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="tyoskentelyjakso.tapahtumia">
+      <b-row v-if="tyoskentelyjakso && tyoskentelyjakso.tapahtumia">
         <b-col>
           <div class="d-flex flex-row">
             <em class="align-middle">

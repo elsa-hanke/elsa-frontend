@@ -1,5 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 
+import store from '@/store'
 import { confirmExit } from '@/utils/confirm'
 
 Component.registerHooks(['beforeRouteLeave'])
@@ -17,7 +18,7 @@ export default class ConfirmRouteExit extends Vue {
   }
 
   beforeWindowUnload(e: BeforeUnloadEvent) {
-    if (!this.skipRouteExitConfirm) {
+    if (store.getters['auth/isLoggedIn'] && !this.skipRouteExitConfirm) {
       e.preventDefault()
       e.returnValue = ''
     }
