@@ -68,9 +68,9 @@ const auth: Module<any, any> = {
     async logout({ commit }) {
       commit('logoutRequest')
       try {
-        await axios.post('logout', {})
+        const logoutDetails = (await axios.post('logout', {})).data
         commit('logoutSuccess')
-        window.location.href = `${window.location.origin}/`
+        window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${window.location.origin}/`
       } catch (err) {
         commit('logoutError')
         window.location.reload()
