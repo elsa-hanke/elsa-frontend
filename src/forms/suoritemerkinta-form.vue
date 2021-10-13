@@ -45,7 +45,7 @@
         >
           <template slot="option" slot-scope="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
-            <span v-else class="ml-3">{{ props.option.nimi }}</span>
+            <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
           </template>
         </elsa-form-multiselect>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
