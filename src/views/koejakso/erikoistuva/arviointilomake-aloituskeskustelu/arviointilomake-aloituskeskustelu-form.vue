@@ -252,8 +252,8 @@
     />
     <elsa-confirmation-modal
       id="confirm-save"
-      :title="$t('vahvista-tallennus-keskeneraisena.title')"
-      :text="$t('vahvista-tallennus-keskeneraisena.body')"
+      :title="$t('vahvista-tallennus-keskeneraisena-title')"
+      :text="$t('vahvista-tallennus-keskeneraisena-body')"
       :submitText="$t('tallenna-keskeneraisena')"
       @submit="saveAndExit"
     />

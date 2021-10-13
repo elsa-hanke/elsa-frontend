@@ -241,7 +241,7 @@
         toastFail(
           this,
           this.$t('omien-tietojen-paivittaminen-epaonnistui', {
-            virhe: err.response.data.title
+            virhe: this.$t(err.response.data.message)
           })
         )
       } finally {

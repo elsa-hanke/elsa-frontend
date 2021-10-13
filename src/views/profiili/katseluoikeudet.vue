@@ -199,7 +199,7 @@
         toastFail(
           this,
           this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: err.response.data.title
+            virhe: this.$t(err.response.data.message)
           })
         )
       }
@@ -222,7 +222,7 @@
         toastFail(
           this,
           this.$t('katseluoikeuden-lisaaminen-epaonnistui', {
-            virhe: err.response.data.title
+            virhe: this.$t(err.response.data.message)
           })
         )
       }
@@ -241,7 +241,7 @@
         toastFail(
           this,
           this.$t('katseluoikeuden-paivittaminen-epaonnistui', {
-            virhe: err.response.data.title
+            virhe: this.$t(err.response.data.message)
           })
         )
       }
