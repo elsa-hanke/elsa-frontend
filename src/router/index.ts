@@ -120,7 +120,8 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiKoulutusjakso,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       },
       {
@@ -129,7 +130,8 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaKoulutusjaksoa,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       },
       {
