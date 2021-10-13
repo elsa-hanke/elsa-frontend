@@ -27,11 +27,10 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins } from 'vue-property-decorator'
+  import { Vue, Component } from 'vue-property-decorator'
 
   import { getKoulutusjaksoLomake, postKoulutusjakso } from '@/api/erikoistuva'
   import KoulutusjaksoForm from '@/forms/koulutusjakso-form.vue'
-  import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import { Koulutusjakso, KoulutusjaksoLomake } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -40,7 +39,7 @@
       KoulutusjaksoForm
     }
   })
-  export default class UusiKoulutusjakso extends Mixins(ConfirmRouteExit) {
+  export default class UusiKoulutusjakso extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -76,7 +75,7 @@
       try {
         const koulutusjakso = (await postKoulutusjakso(data)).data
         toastSuccess(this, this.$t('koulutusjakso-lisatty'))
-        this.skipRouteExitConfirm = true
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'koulutusjakso',
           params: {
