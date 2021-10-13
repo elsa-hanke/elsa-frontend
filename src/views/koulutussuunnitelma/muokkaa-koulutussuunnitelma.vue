@@ -95,7 +95,7 @@
         toastFail(
           this,
           this.$t('koulutussuunnitelman-tallentaminen-epaonnistui', {
-            virhe: err.response.data.title
+            virhe: this.$t(err.response.data.message)
           })
         )
       }

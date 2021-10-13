@@ -139,5 +139,5 @@ export enum ArviointiasteikonTasoTyyppi {
 }
 
 export enum ErrorKeys {
-  TYOSKENTELYAIKA = 'TYOSKENTELYAIKA'
+  TYOSKENTELYAIKA = 'dataillegal.tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
 }
