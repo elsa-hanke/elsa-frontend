@@ -13,62 +13,60 @@
             <elsa-button variant="primary" :to="{ name: 'uusi-koulutusjakso' }" class="mb-3">
               {{ $t('lisaa-koulutusjakso') }}
             </elsa-button>
-            <b-table-simple
-              v-if="koulutusjaksot && koulutusjaksot.length > 0"
-              responsive
-              stacked="md"
-            >
-              <b-thead>
-                <b-tr>
-                  <b-th style="width: 25%">{{ $t('koulutusjakso') }}</b-th>
-                  <b-th style="width: 35%">{{ $t('tyoskentelyjaksot') }}</b-th>
-                  <b-th>{{ $t('osaamistavoitteet-omalta-erikoisalalta') }}</b-th>
-                </b-tr>
-              </b-thead>
-              <b-tbody>
-                <b-tr v-for="koulutusjakso in koulutusjaksot" :key="koulutusjakso.id">
-                  <b-td>
-                    <elsa-button
-                      :to="{
-                        name: 'koulutusjakso',
-                        params: { koulutusjaksoId: koulutusjakso.id }
-                      }"
-                      variant="link"
-                      class="shadow-none p-0 border-0"
-                    >
-                      {{ koulutusjakso.nimi }}
-                    </elsa-button>
-                  </b-td>
-                  <b-td>
-                    <div
-                      v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
-                      :key="tyoskentelyjakso.id"
-                    >
-                      {{ tyoskentelyjakso.tyoskentelypaikka.nimi }} ({{
-                        tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
-                      }}
-                      –
-                      {{
-                        tyoskentelyjakso.paattymispaiva
-                          ? $date(tyoskentelyjakso.paattymispaiva)
-                          : $t('kesken') | lowercase
-                      }})
-                    </div>
-                  </b-td>
-                  <b-td>
-                    <b-badge
-                      v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
-                      :key="osaamistavoite.id"
-                      pill
-                      variant="light"
-                      class="font-weight-400 mr-2"
-                    >
-                      {{ osaamistavoite.nimi }}
-                    </b-badge>
-                  </b-td>
-                </b-tr>
-              </b-tbody>
-            </b-table-simple>
+            <div v-if="koulutusjaksot && koulutusjaksot.length > 0" class="koulutusjaksot-table">
+              <b-table-simple responsive stacked="md">
+                <b-thead>
+                  <b-tr>
+                    <b-th style="width: 25%">{{ $t('koulutusjakso') }}</b-th>
+                    <b-th style="width: 35%">{{ $t('tyoskentelyjaksot') }}</b-th>
+                    <b-th>{{ $t('osaamistavoitteet-omalta-erikoisalalta') }}</b-th>
+                  </b-tr>
+                </b-thead>
+                <b-tbody>
+                  <b-tr v-for="koulutusjakso in koulutusjaksot" :key="koulutusjakso.id">
+                    <b-td>
+                      <elsa-button
+                        :to="{
+                          name: 'koulutusjakso',
+                          params: { koulutusjaksoId: koulutusjakso.id }
+                        }"
+                        variant="link"
+                        class="shadow-none p-0 border-0"
+                      >
+                        {{ koulutusjakso.nimi }}
+                      </elsa-button>
+                    </b-td>
+                    <b-td :stacked-heading="$t('tyoskentelyjaksot')">
+                      <div
+                        v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
+                        :key="tyoskentelyjakso.id"
+                      >
+                        {{ tyoskentelyjakso.tyoskentelypaikka.nimi }} ({{
+                          tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
+                        }}
+                        –
+                        {{
+                          tyoskentelyjakso.paattymispaiva
+                            ? $date(tyoskentelyjakso.paattymispaiva)
+                            : $t('kesken') | lowercase
+                        }})
+                      </div>
+                    </b-td>
+                    <b-td :stacked-heading="$t('osaamistavoitteet-omalta-erikoisalalta')">
+                      <b-badge
+                        v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
+                        :key="osaamistavoite.id"
+                        pill
+                        variant="light"
+                        class="font-weight-400 mr-2"
+                      >
+                        {{ osaamistavoite.nimi }}
+                      </b-badge>
+                    </b-td>
+                  </b-tr>
+                </b-tbody>
+              </b-table-simple>
+            </div>
             <hr v-else />
             <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
             <p>
@@ -327,5 +325,42 @@
 
   ::v-deep .table-responsive.mb-0 {
     margin-bottom: 0;
+  }
+
+  @include media-breakpoint-down(sm) {
+    .koulutusjaksot-table {
+      ::v-deep table {
+        border-bottom: 0;
+
+        tr {
+          border: $table-border-width solid $table-border-color;
+          border-radius: $border-radius;
+          margin-top: 0.5rem;
+          padding-top: $table-cell-padding;
+          padding-bottom: $table-cell-padding;
+        }
+
+        td {
+          border: none;
+          padding: 0 $table-cell-padding;
+
+          & > div {
+            width: 100% !important;
+            padding: 0 0 0.5rem 0 !important;
+          }
+
+          &::before {
+            text-align: left !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            padding-right: 0 !important;
+          }
+
+          &:last-child > div {
+            padding-bottom: 0 !important;
+          }
+        }
+      }
+    }
   }
 </style>
