@@ -552,3 +552,7 @@ export interface Palaute {
   palautteenAihe: string | null
   palaute: string | null
 }
+
+export interface ErrorWithKey {
+  errorKey: string
+}

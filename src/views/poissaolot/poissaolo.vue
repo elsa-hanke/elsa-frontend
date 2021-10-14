@@ -42,6 +42,7 @@
                 <span :id="uid">{{ poissaoloWrapper.osaaikaprosentti }} %</span>
               </template>
             </elsa-form-group>
+            <hr />
             <div class="text-right">
               <elsa-button :loading="deleting" variant="outline-danger" @click="onPoissaoloDelete">
                 {{ $t('poista-poissaolo') }}

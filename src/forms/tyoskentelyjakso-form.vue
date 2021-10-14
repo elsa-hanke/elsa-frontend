@@ -212,6 +212,13 @@
         </div>
       </template>
     </elsa-form-group>
+    <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
+      <template v-slot="{ uid }">
+        <b-form-checkbox :id="uid" v-model="form.hyvaksyttyAiempaanErikoisalaan">
+          {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
+        </b-form-checkbox>
+      </template>
+    </elsa-form-group>
     <elsa-form-group
       class="attachments"
       :label="$t('liitetiedostot')"
@@ -242,14 +249,11 @@
         />
       </template>
     </elsa-form-group>
-    <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
-      <template v-slot="{ uid }">
-        <b-form-checkbox :id="uid" v-model="form.hyvaksyttyAiempaanErikoisalaan">
-          {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
-        </b-form-checkbox>
-      </template>
-    </elsa-form-group>
-    <div class="d-flex flex-row-reverse flex-wrap">
+    <hr v-if="asiakirjatTableItems.length === 0" />
+    <div
+      :class="{ 'mt-4': asiakirjatTableItems.length > 0 }"
+      class="d-flex flex-row-reverse flex-wrap"
+    >
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ editing ? $t('tallenna') : $t('lisaa') }}
       </elsa-button>
