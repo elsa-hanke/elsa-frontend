@@ -556,3 +556,8 @@ export interface Palaute {
 export interface ErrorWithKey {
   errorKey: string
 }
+
+export type HakaYliopisto = {
+  nimi: string
+  hakaId: string
+}
