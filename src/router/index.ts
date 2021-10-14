@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Meta from 'vue-meta'
-import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router'
+import VueRouter, { NavigationGuardNext, RawLocation, Route, RouteConfig } from 'vue-router'
+import { ErrorHandler } from 'vue-router/types/router'
 
 import RoleSpecificRoute from '@/router/role-specific-route.vue'
 import store from '@/store'
@@ -560,5 +561,25 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+const originalPush = router.push
+router.push = function push(
+  location: RawLocation,
+  onComplete?: Function,
+  onAbort?: ErrorHandler
+): Promise<Route> {
+  if (onComplete || onAbort) {
+    return (originalPush.call(this, location, onComplete, onAbort) as any) as Promise<Route>
+  }
+
+  return ((originalPush.call(this, location) as any) as Promise<Route>).catch((err) => {
+    // Sallitaan uudelleenohjaukset
+    if (VueRouter.isNavigationFailure(err, VueRouter.NavigationFailureType.redirected)) {
+      return Promise.resolve() as any
+    }
+
+    return Promise.reject(err)
+  })
+}
 
 export default router
