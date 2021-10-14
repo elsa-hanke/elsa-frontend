@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
-    <router-view />
+    <router-view class="router-view" />
     <b-link @click="openPalauteFormModal">
       <div class="feedback-link">
         <font-awesome-icon class="feedback-icon" :icon="['far', 'envelope']" fixed-width />
@@ -133,5 +133,9 @@
   .feedback-text {
     margin-left: 0.375rem;
     vertical-align: middle;
+  }
+
+  .router-view {
+    margin-bottom: 5rem;
   }
 </style>

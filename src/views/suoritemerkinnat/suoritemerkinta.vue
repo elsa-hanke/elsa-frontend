@@ -68,6 +68,7 @@
                 <span :id="uid" class="text-prewrap">{{ suoritemerkintaWrapper.lisatiedot }}</span>
               </template>
             </elsa-form-group>
+            <hr />
             <div class="text-right">
               <elsa-button
                 :loading="deleting"

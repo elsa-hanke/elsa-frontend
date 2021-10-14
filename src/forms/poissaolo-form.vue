@@ -81,7 +81,10 @@
         </template>
       </elsa-form-group>
     </b-form-row>
-    <b-form-checkbox v-model="form.kokoTyoajanPoissaolo" class="mb-3">
+    <b-form-checkbox
+      v-model="form.kokoTyoajanPoissaolo"
+      :class="{ 'mb-3': !form.kokoTyoajanPoissaolo }"
+    >
       {{ $t('koko-tyoajan-poissaolo') }}
     </b-form-checkbox>
     <b-form-row>
@@ -119,6 +122,7 @@
         </template>
       </elsa-form-group>
     </b-form-row>
+    <hr />
     <div class="text-right">
       <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">
         {{ $t('peruuta') }}

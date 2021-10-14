@@ -90,8 +90,11 @@
                 />
               </template>
             </elsa-form-group>
-            <hr />
-            <div class="d-flex flex-row-reverse flex-wrap">
+            <hr v-if="tyoskentelyjakso.asiakirjat.length === 0" />
+            <div
+              :class="{ 'mt-4': tyoskentelyjakso.asiakirjat.length > 0 }"
+              class="d-flex flex-row-reverse flex-wrap"
+            >
               <elsa-button
                 :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
                 variant="primary"
