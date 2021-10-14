@@ -192,6 +192,25 @@
               label: tyoskentelyjaksoLabel(this, tj)
             }))
         }
+        if (this.form.tyoskentelyjaksot.length === 0) {
+          this.form.tyoskentelyjaksot = [
+            {
+              alkamispaiva: null,
+              paattymispaiva: null,
+              minPaattymispaiva: null,
+              osaaikaprosentti: 100,
+              tyoskentelypaikka: {
+                nimi: null,
+                kunta: { abbreviation: null },
+                tyyppi: null,
+                muuTyyppi: null
+              },
+              kaytannonKoulutus: null,
+              omaaErikoisalaaTukeva: null,
+              hyvaksyttyAiempaanErikoisalaan: null
+            }
+          ]
+        }
       } else {
         this.form = this.value
       }
