@@ -186,7 +186,7 @@
                 >
                   {{ $t('tee-arviointi') }}
                 </elsa-button>
-                <span class="text-size-sm text-lighter ml-2" v-else>
+                <span class="text-size-sm text-lighten-50 ml-2" v-else>
                   {{ $t('arviointia-ei-ole-viela-annettu') }}
                 </span>
               </div>
@@ -209,10 +209,10 @@
                 >
                   {{ $t('tee-itsearviointi') }}
                 </elsa-button>
-                <span class="text-size-sm text-lighter ml-2" v-else-if="!value.lukittu">
+                <span class="text-size-sm text-lighten-50 ml-2" v-else-if="!value.lukittu">
                   {{ $t('itsearviointia-ei-viela-tehty') }}
                 </span>
-                <span class="text-size-sm text-lighter ml-2" v-else>
+                <span class="text-size-sm text-lighten-50 ml-2" v-else>
                   {{ $t('itsearviointia-ei-tehty') }}
                 </span>
               </div>

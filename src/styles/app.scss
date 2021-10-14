@@ -32,8 +32,12 @@
   font-size: $font-size-lg;
 }
 
-.text-lighter {
+.text-lighten-50 {
   color: lighten($black, 50%);
+}
+
+.text-lighten-25 {
+  color: lighten($black, 25%);
 }
 
 .text-black {

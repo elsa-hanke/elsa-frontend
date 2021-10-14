@@ -16,6 +16,7 @@
         <tyoskentelyjakso-form
           :kunnat="kunnat"
           :erikoisalat="erikoisalat"
+          :isRelatedToArviointipyynto="true"
           @submit="submit"
           @cancel="cancel"
         />
@@ -30,6 +31,9 @@
           track-by="id"
           @select="onTyoskentelyjaksoSelect"
         />
+        <span v-if="hasSomeHyvaksyttyAiempaanErikoisalaan" class="text-size-sm text-lighten-25">
+          {{ $t('tyoskentelyjaksoa-ei-voi-liittaa-arviointipyyntoon') }}
+        </span>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
@@ -315,6 +319,20 @@
         return this.account.avatar
       }
       return undefined
+    }
+
+    get tyoskentelyjaksotFormatted() {
+      return this.tyoskentelyjaksot.map((tj) => ({
+        ...tj,
+        label: tyoskentelyjaksoLabel(this, tj),
+        $isDisabled: tj.hyvaksyttyAiempaanErikoisalaan
+      }))
+    }
+
+    get hasSomeHyvaksyttyAiempaanErikoisalaan() {
+      return this.tyoskentelyjaksot.some((t) => {
+        return t.hyvaksyttyAiempaanErikoisalaan
+      })
     }
   }
 </script>

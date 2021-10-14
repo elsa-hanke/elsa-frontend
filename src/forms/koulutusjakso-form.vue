@@ -185,12 +185,10 @@
       if (this.value.id) {
         this.form = {
           ...this.value,
-          tyoskentelyjaksot: this.value.tyoskentelyjaksot
-            .filter((tj) => !tj.hyvaksyttyAiempaanErikoisalaan)
-            .map((tj) => ({
-              ...tj,
-              label: tyoskentelyjaksoLabel(this, tj)
-            }))
+          tyoskentelyjaksot: this.value.tyoskentelyjaksot.map((tj) => ({
+            ...tj,
+            label: tyoskentelyjaksoLabel(this, tj)
+          }))
         }
         if (this.form.tyoskentelyjaksot.length === 0) {
           this.form.tyoskentelyjaksot = [

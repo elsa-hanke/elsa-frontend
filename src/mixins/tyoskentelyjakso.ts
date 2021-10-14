@@ -62,12 +62,10 @@ export default class TyoskentelyjaksoMixin extends Vue {
   }
 
   get tyoskentelyjaksotFormatted() {
-    return this.tyoskentelyjaksot
-      .filter((tj) => !tj.hyvaksyttyAiempaanErikoisalaan)
-      .map((tj) => ({
-        ...tj,
-        label: tyoskentelyjaksoLabel(this, tj)
-      }))
+    return this.tyoskentelyjaksot.map((tj) => ({
+      ...tj,
+      label: tyoskentelyjaksoLabel(this, tj)
+    }))
   }
 
   get tyoskentelyjaksonAlkamispaiva() {

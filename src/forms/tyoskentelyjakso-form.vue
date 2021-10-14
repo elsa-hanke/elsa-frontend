@@ -212,11 +212,25 @@
         </div>
       </template>
     </elsa-form-group>
-    <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
+    <elsa-form-group v-if="!value.tapahtumia" :label="$t('lisatiedot')">
       <template v-slot="{ uid }">
-        <b-form-checkbox :id="uid" v-model="form.hyvaksyttyAiempaanErikoisalaan">
+        <b-form-checkbox
+          :id="uid"
+          :disabled="isRelatedToArviointipyynto"
+          v-model="form.hyvaksyttyAiempaanErikoisalaan"
+        >
           {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
         </b-form-checkbox>
+        <span v-if="isRelatedToArviointipyynto" class="text-size-sm">
+          {{ $t('tyoskentelyjaksoa-ei-voi-liittaa-arviointipyyntoon') }}
+        </span>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group v-else-if="form.hyvaksyttyAiempaanErikoisalaan" :label="$t('lisatiedot')">
+      <template v-slot="{ uid }">
+        <span :id="uid">
+          {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
+        </span>
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -335,8 +349,8 @@
     }
   })
   export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
-    @Prop({ required: false, default: true })
-    modal!: boolean
+    @Prop({ required: false, default: false })
+    isRelatedToArviointipyynto!: boolean
 
     @Prop({ required: false, default: false })
     editing!: boolean

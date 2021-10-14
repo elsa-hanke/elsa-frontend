@@ -11,7 +11,6 @@
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :reservedAsiakirjaNimet="tyoskentelyjaksoLomake.reservedAsiakirjaNimet"
-            :modal="false"
             @submit="onSubmit"
             @cancel="onCancel"
           />
