@@ -12,11 +12,17 @@
       <b-col lg="5">
         <h1 class="text-primary mb-lg-3">{{ $t('palvelu-erikoistuville-laakareille') }}</h1>
         <p class="mb-lg-4">{{ $t('login-ingressi') }}</p>
-        <div class="d-flex flex-wrap mb-4">
+        <div class="mb-4">
+          <h3>{{ $t('erikoistuva-laakari-ja-kouluttaja') }}</h3>
+          <p>{{ $t('kirjaudu-sisaan-suomifi') }}</p>
           <elsa-button variant="primary" @click="loginSuomiFi" class="mr-3 mb-2">
             {{ $t('kirjaudu-sisaan') }} (Suomi.fi)
           </elsa-button>
-          <elsa-button variant="primary" @click="loginHaka" class="mb-2">
+        </div>
+        <div class="mb-4">
+          <h3>{{ $t('muut-kayttajaroolit-kuin-erikoistuva-tai-kouluttaja') }}</h3>
+          <p>{{ $t('kirjaudu-sisaan-haka') }}</p>
+          <elsa-button variant="primary" :to="{ name: 'haka-yliopisto' }" class="mr-3 mb-2">
             {{ $t('kirjaudu-sisaan') }} (HAKA)
           </elsa-button>
         </div>
@@ -42,10 +48,6 @@
   export default class Login extends Vue {
     loginSuomiFi() {
       return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`)
-    }
-
-    loginHaka() {
-      return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/haka`)
     }
   }
 </script>

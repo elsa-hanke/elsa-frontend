@@ -123,6 +123,11 @@ export async function getYliopistot() {
   return await axios.get(path)
 }
 
+export async function getHakaYliopistot() {
+  const path = '/haka-yliopistot'
+  return await axios.get(path)
+}
+
 export async function getVastuuhenkilonArvioLomake() {
   const path = '/erikoistuva-laakari/vastuuhenkilonarvio-lomake'
   return await axios.get(path)

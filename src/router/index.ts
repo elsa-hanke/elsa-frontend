@@ -38,6 +38,7 @@ import MuokkaaKoulutusjaksoa from '@/views/koulutussuunnitelma/koulutusjakso/muo
 import UusiKoulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/uusi-koulutusjakso.vue'
 import Koulutussuunnitelma from '@/views/koulutussuunnitelma/koulutussuunnitelma.vue'
 import MuokkaaKoulutussuunnitelma from '@/views/koulutussuunnitelma/muokkaa-koulutussuunnitelma.vue'
+import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
 import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
@@ -546,6 +547,24 @@ const routes: Array<RouteConfig> = [
             }
           } else {
             next('/kirjautuminen')
+          }
+        }
+      },
+      {
+        path: '/haka-yliopisto',
+        name: 'haka-yliopisto',
+        component: HakaYliopisto,
+        beforeEnter: async (to, from, next) => {
+          await store.dispatch('auth/authorize')
+
+          if (store.getters['auth/isLoggedIn']) {
+            if (store.getters['auth/account'].authorities.length > 0) {
+              next('/etusivu')
+            } else {
+              next()
+            }
+          } else {
+            next()
           }
         }
       }
