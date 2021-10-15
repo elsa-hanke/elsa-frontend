@@ -28,7 +28,7 @@
         </b-link>
       </div>
       <div v-if="!editing">
-        <span class="text-prewrap">{{ value.kommentti.teksti }}</span>
+        <span class="text-preline">{{ value.kommentti.teksti }}</span>
       </div>
       <div v-else>
         <b-form @submit.stop.prevent="onSubmit">
@@ -126,9 +126,9 @@
 
     get selfClass() {
       if (this.value.self) {
-        return 'bg-primary-dark kommentti-right px-3 py-2 mb-3 text-white ml-md-5'
+        return 'bg-primary-dark kommentti-right px-3 py-2 mb-3 text-white ml-md-6'
       } else {
-        return 'bg-light kommentti-left px-3 py-2 mb-3 mr-md-5'
+        return 'bg-light kommentti-left px-3 py-2 mb-3 mr-md-6'
       }
     }
   }

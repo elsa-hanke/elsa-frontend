@@ -132,7 +132,7 @@
                 "
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
-                class="ml-4 px-5"
+                class="ml-4 px-6"
               >
                 {{ showWaitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
               </elsa-button>

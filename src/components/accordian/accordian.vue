@@ -2,7 +2,7 @@
   <b-card no-body class="border mb-2" v-bind="$attrs">
     <b-card-header
       header-tag="header"
-      class="py-2 pl-2 pr-5 px-lg-5 text-size-md font-weight-500 text-black user-select-none bg-transparent accordian-header"
+      class="py-3 pl-2 pr-6 px-lg-6 text-size-md font-weight-500 text-black user-select-none bg-transparent accordian-header"
       :class="{ empty: !$slots.default, 'always-open': alwaysOpen }"
       role="tab"
       tabindex="0"
@@ -32,7 +32,7 @@
       />
     </b-card-header>
     <b-collapse v-if="$slots.default" :visible="visible">
-      <b-card-body class="p-2 pl-lg-5">
+      <b-card-body class="px-2 pt-0 pb-3 pl-lg-6">
         <b-card-text>
           <slot />
         </b-card-text>
@@ -92,7 +92,7 @@
 
   .accordian-chevron-icon {
     position: absolute;
-    top: 0.5rem;
+    top: 1rem;
     right: 0.75rem;
     transition: transform 0.3s ease-in-out;
 

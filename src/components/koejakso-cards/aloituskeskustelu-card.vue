@@ -23,7 +23,7 @@
             <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5">{{ $t('aloituskeskustelu-tila-tallennettu-keskeneraisena') }}</span>
+            <span class="pr-6">{{ $t('aloituskeskustelu-tila-tallennettu-keskeneraisena') }}</span>
           </div>
         </template>
         <template v-slot:button>
@@ -39,7 +39,7 @@
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
           </div>
           <div class="d-inline-flex">
-            <div class="pr-5">
+            <div class="pr-6">
               <p class="mb-0">{{ $t('aloituskeskustelu-tila-palautettu-korjattavaksi') }}</p>
               <p>
                 <span>{{ $t('syy') }}</span>
@@ -62,7 +62,7 @@
         "
       >
         <template v-slot:content>
-          <p class="pr-5">{{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}</p>
+          <p class="pr-6">{{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -77,7 +77,7 @@
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5">{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
+            <span class="pr-6">{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
           </div>
         </template>
         <template v-slot:button>

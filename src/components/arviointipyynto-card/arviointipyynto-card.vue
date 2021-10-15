@@ -44,7 +44,7 @@
                     {{ $t('lisatiedot') }}
                   </b-th>
                   <b-td class="py-0 pr-0 pl-1">
-                    <span class="text-prewrap">{{ value.lisatiedot }}</span>
+                    <span class="text-preline">{{ value.lisatiedot }}</span>
                   </b-td>
                 </b-tr>
               </b-table-simple>
@@ -71,7 +71,7 @@
         />
       </elsa-form-group>
       <elsa-form-group :label="$t('lisatiedot')" v-if="value.lisatiedot">
-        <span class="text-prewrap">{{ value.lisatiedot }}</span>
+        <span class="text-preline">{{ value.lisatiedot }}</span>
       </elsa-form-group>
     </div>
     <div class="d-flex flex-wrap mb-3 mb-lg-4">

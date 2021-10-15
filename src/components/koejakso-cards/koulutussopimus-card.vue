@@ -4,7 +4,7 @@
       <h2>{{ $t('koulutussopimus') }}</h2>
       <koejakso-card-content v-if="tila === lomaketilat.UUSI">
         <template v-slot:content>
-          <span class="pr-5" v-html="$t('koulutussopimus-tila-uusi')" />
+          <span class="pr-6" v-html="$t('koulutussopimus-tila-uusi')" />
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
@@ -19,7 +19,7 @@
             <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5" v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')" />
+            <span class="pr-6" v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')" />
           </div>
         </template>
         <template v-slot:button>
@@ -37,7 +37,7 @@
         "
       >
         <template v-slot:content>
-          <p class="pr-5" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
+          <p class="pr-6" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -52,7 +52,7 @@
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
           </div>
           <div class="d-inline-flex">
-            <div class="pr-5">
+            <div class="pr-6">
               <p class="mb-0">{{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}</p>
               <p>
                 <span>{{ $t('syy') }}</span>
@@ -74,7 +74,7 @@
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5">{{ $t('koulutussopimus-tila-hyvaksytty') }}</span>
+            <span class="pr-6">{{ $t('koulutussopimus-tila-hyvaksytty') }}</span>
           </div>
         </template>
         <template v-slot:button>

@@ -115,7 +115,7 @@
               :id="uid"
               v-model="valittuValtuutus.paattymispaiva"
               :min="minPaattymispaiva"
-              class="col-sm-5"
+              class="col-sm-6"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}

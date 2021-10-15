@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-col md="5">
-      <h1 class="text-primary mt-2 mt-md-5 mb-4">{{ $t('sivua-ei-loytynyt-otsikko') }}</h1>
+      <h1 class="text-primary mt-2 mt-md-6 mb-4">{{ $t('sivua-ei-loytynyt-otsikko') }}</h1>
       <p class="mr-4 mb-4">{{ $t('sivua-ei-loytynyt-kuvaus') }}</p>
       <div class="d-flex flex-wrap mb-4">
         <elsa-button variant="primary" class="mr-3 mb-4" :to="{ name: 'etusivu' }">

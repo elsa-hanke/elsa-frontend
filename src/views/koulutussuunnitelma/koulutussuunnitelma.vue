@@ -8,232 +8,246 @@
             <h1>{{ $t('koulutussuunnitelma') }}</h1>
             <p>{{ $t('koulutussuunnitelma-kuvaus') }}</p>
             <hr />
-            <h2>{{ $t('koulutusjaksot') }}</h2>
-            <p>{{ $t('koulutusjaksot-kuvaus') }}</p>
-            <elsa-button variant="primary" :to="{ name: 'uusi-koulutusjakso' }" class="mb-3">
-              {{ $t('lisaa-koulutusjakso') }}
-            </elsa-button>
-            <div v-if="koulutusjaksot && koulutusjaksot.length > 0" class="koulutusjaksot-table">
-              <b-table-simple responsive stacked="md">
-                <b-thead>
-                  <b-tr>
-                    <b-th style="width: 25%">{{ $t('koulutusjakso') }}</b-th>
-                    <b-th style="width: 35%">{{ $t('tyoskentelyjaksot') }}</b-th>
-                    <b-th>{{ $t('osaamistavoitteet-omalta-erikoisalalta') }}</b-th>
-                  </b-tr>
-                </b-thead>
-                <b-tbody>
-                  <b-tr v-for="koulutusjakso in koulutusjaksot" :key="koulutusjakso.id">
-                    <b-td>
-                      <elsa-button
-                        :to="{
-                          name: 'koulutusjakso',
-                          params: { koulutusjaksoId: koulutusjakso.id }
-                        }"
-                        variant="link"
-                        class="shadow-none p-0 border-0"
-                      >
-                        {{ koulutusjakso.nimi }}
-                      </elsa-button>
-                    </b-td>
-                    <b-td :stacked-heading="$t('tyoskentelyjaksot')">
-                      <div
-                        v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
-                        :key="tyoskentelyjakso.id"
-                      >
-                        {{ tyoskentelyjakso.tyoskentelypaikka.nimi }} ({{
-                          tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
-                        }}
-                        –
-                        {{
-                          tyoskentelyjakso.paattymispaiva
-                            ? $date(tyoskentelyjakso.paattymispaiva)
-                            : $t('kesken') | lowercase
-                        }})
-                      </div>
-                    </b-td>
-                    <b-td :stacked-heading="$t('osaamistavoitteet-omalta-erikoisalalta')">
-                      <b-badge
-                        v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
-                        :key="osaamistavoite.id"
-                        pill
-                        variant="light"
-                        class="font-weight-400 mr-2"
-                      >
-                        {{ osaamistavoite.nimi }}
-                      </b-badge>
-                    </b-td>
-                  </b-tr>
-                </b-tbody>
-              </b-table-simple>
-            </div>
-            <hr v-else />
-            <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-            <p>
-              {{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus') }}
-              <a
-                href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{ $t('henkilokohtainen-koulutussuunnitelma-linkki') }}
-              </a>
-            </p>
-            <div class="d-flex flex-wrap justify-content-between">
-              <elsa-button
-                variant="primary"
-                :to="{ name: 'muokkaa-koulutussuunnitelma' }"
-                class="mr-2 mb-3"
-              >
-                {{ $t('muokkaa-tietoja') }}
+            <section class="mb-5">
+              <h2>{{ $t('koulutusjaksot') }}</h2>
+              <p>{{ $t('koulutusjaksot-kuvaus') }}</p>
+              <elsa-button variant="primary" :to="{ name: 'uusi-koulutusjakso' }" class="mb-3">
+                {{ $t('lisaa-koulutusjakso') }}
               </elsa-button>
-              <elsa-button variant="link" class="text-decoration-none mb-3" :disabled="true">
-                <font-awesome-icon icon="print" fixed-width class="mr-1" />
-                {{ $t('tulosta-suunnitelma') }}
-              </elsa-button>
-            </div>
-            <b-card
-              v-if="koulutussuunnitelma.koulutussuunnitelmaAsiakirja"
-              no-body
-              class="border mb-3"
-            >
-              <b-card-text class="p-2">
-                <b-table-simple responsive class="mb-0">
+              <div v-if="koulutusjaksot && koulutusjaksot.length > 0" class="koulutusjaksot-table">
+                <b-table-simple responsive stacked="md">
                   <b-thead>
                     <b-tr>
-                      <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
-                      <b-th>{{ $t('lisatty') }}</b-th>
+                      <b-th style="width: 25%">{{ $t('koulutusjakso') }}</b-th>
+                      <b-th style="width: 35%">{{ $t('tyoskentelyjaksot') }}</b-th>
+                      <b-th>{{ $t('osaamistavoitteet-omalta-erikoisalalta') }}</b-th>
                     </b-tr>
                   </b-thead>
                   <b-tbody>
-                    <b-tr>
+                    <b-tr v-for="koulutusjakso in koulutusjaksot" :key="koulutusjakso.id">
                       <b-td>
                         <elsa-button
+                          :to="{
+                            name: 'koulutusjakso',
+                            params: { koulutusjaksoId: koulutusjakso.id }
+                          }"
                           variant="link"
-                          class="shadow-none p-0"
-                          @click="onViewAsiakirja(koulutussuunnitelma.koulutussuunnitelmaAsiakirja)"
-                          :loading="koulutussuunnitelma.koulutussuunnitelmaAsiakirja.disablePreview"
+                          class="shadow-none p-0 border-0"
                         >
-                          {{ koulutussuunnitelma.koulutussuunnitelmaAsiakirja.nimi }}
+                          {{ koulutusjakso.nimi }}
                         </elsa-button>
                       </b-td>
-                      <b-td>
-                        {{ $date(koulutussuunnitelma.koulutussuunnitelmaAsiakirja.lisattypvm) }}
+                      <b-td :stacked-heading="$t('tyoskentelyjaksot')">
+                        <div
+                          v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
+                          :key="tyoskentelyjakso.id"
+                        >
+                          {{ tyoskentelyjakso.tyoskentelypaikka.nimi }} ({{
+                            tyoskentelyjakso.alkamispaiva
+                              ? $date(tyoskentelyjakso.alkamispaiva)
+                              : ''
+                          }}
+                          –
+                          {{
+                            tyoskentelyjakso.paattymispaiva
+                              ? $date(tyoskentelyjakso.paattymispaiva)
+                              : $t('kesken') | lowercase
+                          }})
+                        </div>
+                      </b-td>
+                      <b-td :stacked-heading="$t('osaamistavoitteet-omalta-erikoisalalta')">
+                        <b-badge
+                          v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
+                          :key="osaamistavoite.id"
+                          pill
+                          variant="light"
+                          class="font-weight-400 mr-2"
+                        >
+                          {{ osaamistavoite.nimi }}
+                        </b-badge>
                       </b-td>
                     </b-tr>
                   </b-tbody>
                 </b-table-simple>
-              </b-card-text>
-            </b-card>
-            <elsa-accordian icon="envelope-open-text">
-              <template #title>
-                {{ $t('motivaatiokirje') }}
-                <span
-                  v-if="koulutussuunnitelma.motivaatiokirjeYksityinen"
-                  class="text-size-sm font-weight-400"
-                >
-                  ({{ $t('yksityinen') | lowercase }})
-                </span>
-              </template>
-              <b-table-simple responsive v-if="koulutussuunnitelma.motivaatiokirjeAsiakirja">
-                <b-thead>
-                  <b-tr>
-                    <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
-                    <b-th>{{ $t('lisatty') }}</b-th>
-                  </b-tr>
-                </b-thead>
-                <b-tbody>
-                  <b-tr>
-                    <b-td>
-                      <elsa-button
-                        variant="link"
-                        class="shadow-none p-0"
-                        @click="onViewAsiakirja(koulutussuunnitelma.motivaatiokirjeAsiakirja)"
-                        :loading="koulutussuunnitelma.motivaatiokirjeAsiakirja.disablePreview"
-                      >
-                        {{ koulutussuunnitelma.motivaatiokirjeAsiakirja.nimi }}
-                      </elsa-button>
-                    </b-td>
-                    <b-td>
-                      {{ $date(koulutussuunnitelma.motivaatiokirjeAsiakirja.lisattypvm) }}
-                    </b-td>
-                  </b-tr>
-                </b-tbody>
-              </b-table-simple>
-              <div v-if="koulutussuunnitelma.motivaatiokirje">
-                {{ koulutussuunnitelma.motivaatiokirje }}
               </div>
-            </elsa-accordian>
-            <elsa-accordian icon="toolbox">
-              <template #title>
-                {{ $t('opiskelu-ja-tyohistoria') }}
-                <span
-                  v-if="koulutussuunnitelma.opiskeluJaTyohistoriaYksityinen"
-                  class="text-size-sm font-weight-400"
+              <hr v-else />
+            </section>
+            <section>
+              <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
+              <p>
+                {{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus') }}
+                <a
+                  href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  ({{ $t('yksityinen') | lowercase }})
-                </span>
-              </template>
-              <div v-if="koulutussuunnitelma.opiskeluJaTyohistoria">
-                {{ koulutussuunnitelma.opiskeluJaTyohistoria }}
-              </div>
-            </elsa-accordian>
-            <elsa-accordian icon="dumbbell">
-              <template #title>
-                {{ $t('vahvuudet') }}
-                <span
-                  v-if="koulutussuunnitelma.vahvuudetYksityinen"
-                  class="text-size-sm font-weight-400"
+                  {{ $t('henkilokohtainen-koulutussuunnitelma-linkki') }}
+                </a>
+              </p>
+              <div class="d-flex flex-wrap justify-content-between">
+                <elsa-button
+                  variant="primary"
+                  :to="{ name: 'muokkaa-koulutussuunnitelma' }"
+                  class="mr-2 mb-3"
                 >
-                  ({{ $t('yksityinen') | lowercase }})
-                </span>
-              </template>
-              <div v-if="koulutussuunnitelma.vahvuudet">
-                {{ koulutussuunnitelma.vahvuudet }}
+                  {{ $t('muokkaa-tietoja') }}
+                </elsa-button>
+                <elsa-button variant="link" class="text-decoration-none mb-3" :disabled="true">
+                  <font-awesome-icon icon="print" fixed-width class="mr-1" />
+                  {{ $t('tulosta-suunnitelma') }}
+                </elsa-button>
               </div>
-            </elsa-accordian>
-            <elsa-accordian :icon="['far', 'eye']">
-              <template #title>
-                {{ $t('tulevaisuuden-visiointi') }}
-                <span
-                  v-if="koulutussuunnitelma.tulevaisuudenVisiointiYksityinen"
-                  class="text-size-sm font-weight-400"
-                >
-                  ({{ $t('yksityinen') | lowercase }})
-                </span>
-              </template>
-              <div v-if="koulutussuunnitelma.tulevaisuudenVisiointi">
-                {{ koulutussuunnitelma.tulevaisuudenVisiointi }}
-              </div>
-            </elsa-accordian>
-            <elsa-accordian icon="chart-line">
-              <template #title>
-                {{ $t('osaamisen-kartuttaminen') }}
-                <span
-                  v-if="koulutussuunnitelma.osaamisenKartuttaminenYksityinen"
-                  class="text-size-sm font-weight-400"
-                >
-                  ({{ $t('yksityinen') | lowercase }})
-                </span>
-              </template>
-              <div v-if="koulutussuunnitelma.osaamisenKartuttaminen">
-                {{ koulutussuunnitelma.osaamisenKartuttaminen }}
-              </div>
-            </elsa-accordian>
-            <elsa-accordian icon="theater-masks">
-              <template #title>
-                {{ $t('elamankentta') }}
-                <span
-                  v-if="koulutussuunnitelma.elamankenttaYksityinen"
-                  class="text-size-sm font-weight-400"
-                >
-                  ({{ $t('yksityinen') | lowercase }})
-                </span>
-              </template>
-              <div v-if="koulutussuunnitelma.elamankentta">
-                {{ koulutussuunnitelma.elamankentta }}
-              </div>
-            </elsa-accordian>
+              <b-card
+                v-if="koulutussuunnitelma.koulutussuunnitelmaAsiakirja"
+                no-body
+                class="border mb-3"
+              >
+                <b-card-text class="p-2">
+                  <div class="koulutussuunnitelma-table">
+                    <b-table-simple responsive class="mb-0">
+                      <b-thead>
+                        <b-tr>
+                          <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
+                          <b-th>{{ $t('lisatty') }}</b-th>
+                        </b-tr>
+                      </b-thead>
+                      <b-tbody>
+                        <b-tr>
+                          <b-td>
+                            <elsa-button
+                              variant="link"
+                              class="shadow-none p-0"
+                              @click="
+                                onViewAsiakirja(koulutussuunnitelma.koulutussuunnitelmaAsiakirja)
+                              "
+                              :loading="
+                                koulutussuunnitelma.koulutussuunnitelmaAsiakirja.disablePreview
+                              "
+                            >
+                              {{ koulutussuunnitelma.koulutussuunnitelmaAsiakirja.nimi }}
+                            </elsa-button>
+                          </b-td>
+                          <b-td>
+                            {{ $date(koulutussuunnitelma.koulutussuunnitelmaAsiakirja.lisattypvm) }}
+                          </b-td>
+                        </b-tr>
+                      </b-tbody>
+                    </b-table-simple>
+                  </div>
+                </b-card-text>
+              </b-card>
+              <elsa-accordian icon="envelope-open-text">
+                <template #title>
+                  {{ $t('motivaatiokirje') }}
+                  <span
+                    v-if="koulutussuunnitelma.motivaatiokirjeYksityinen"
+                    class="text-size-sm font-weight-400"
+                  >
+                    ({{ $t('yksityinen') | lowercase }})
+                  </span>
+                </template>
+                <div class="motivaatiokirje-table">
+                  <b-table-simple responsive v-if="koulutussuunnitelma.motivaatiokirjeAsiakirja">
+                    <b-thead>
+                      <b-tr>
+                        <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
+                        <b-th>{{ $t('lisatty') }}</b-th>
+                      </b-tr>
+                    </b-thead>
+                    <b-tbody>
+                      <b-tr>
+                        <b-td>
+                          <elsa-button
+                            variant="link"
+                            class="shadow-none p-0"
+                            @click="onViewAsiakirja(koulutussuunnitelma.motivaatiokirjeAsiakirja)"
+                            :loading="koulutussuunnitelma.motivaatiokirjeAsiakirja.disablePreview"
+                          >
+                            {{ koulutussuunnitelma.motivaatiokirjeAsiakirja.nimi }}
+                          </elsa-button>
+                        </b-td>
+                        <b-td>
+                          {{ $date(koulutussuunnitelma.motivaatiokirjeAsiakirja.lisattypvm) }}
+                        </b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </div>
+                <div v-if="koulutussuunnitelma.motivaatiokirje" class="text-preline">
+                  {{ koulutussuunnitelma.motivaatiokirje }}
+                </div>
+              </elsa-accordian>
+              <elsa-accordian icon="toolbox">
+                <template #title>
+                  {{ $t('opiskelu-ja-tyohistoria') }}
+                  <span
+                    v-if="koulutussuunnitelma.opiskeluJaTyohistoriaYksityinen"
+                    class="text-size-sm font-weight-400"
+                  >
+                    ({{ $t('yksityinen') | lowercase }})
+                  </span>
+                </template>
+                <div v-if="koulutussuunnitelma.opiskeluJaTyohistoria" class="text-preline">
+                  {{ koulutussuunnitelma.opiskeluJaTyohistoria }}
+                </div>
+              </elsa-accordian>
+              <elsa-accordian icon="dumbbell">
+                <template #title>
+                  {{ $t('vahvuudet') }}
+                  <span
+                    v-if="koulutussuunnitelma.vahvuudetYksityinen"
+                    class="text-size-sm font-weight-400"
+                  >
+                    ({{ $t('yksityinen') | lowercase }})
+                  </span>
+                </template>
+                <div v-if="koulutussuunnitelma.vahvuudet" class="text-preline">
+                  {{ koulutussuunnitelma.vahvuudet }}
+                </div>
+              </elsa-accordian>
+              <elsa-accordian :icon="['far', 'eye']">
+                <template #title>
+                  {{ $t('tulevaisuuden-visiointi') }}
+                  <span
+                    v-if="koulutussuunnitelma.tulevaisuudenVisiointiYksityinen"
+                    class="text-size-sm font-weight-400"
+                  >
+                    ({{ $t('yksityinen') | lowercase }})
+                  </span>
+                </template>
+                <div v-if="koulutussuunnitelma.tulevaisuudenVisiointi" class="text-preline">
+                  {{ koulutussuunnitelma.tulevaisuudenVisiointi }}
+                </div>
+              </elsa-accordian>
+              <elsa-accordian icon="chart-line">
+                <template #title>
+                  {{ $t('osaamisen-kartuttaminen') }}
+                  <span
+                    v-if="koulutussuunnitelma.osaamisenKartuttaminenYksityinen"
+                    class="text-size-sm font-weight-400"
+                  >
+                    ({{ $t('yksityinen') | lowercase }})
+                  </span>
+                </template>
+                <div v-if="koulutussuunnitelma.osaamisenKartuttaminen" class="text-preline">
+                  {{ koulutussuunnitelma.osaamisenKartuttaminen }}
+                </div>
+              </elsa-accordian>
+              <elsa-accordian icon="theater-masks">
+                <template #title>
+                  {{ $t('elamankentta') }}
+                  <span
+                    v-if="koulutussuunnitelma.elamankenttaYksityinen"
+                    class="text-size-sm font-weight-400"
+                  >
+                    ({{ $t('yksityinen') | lowercase }})
+                  </span>
+                </template>
+                <div v-if="koulutussuunnitelma.elamankentta" class="text-preline">
+                  {{ koulutussuunnitelma.elamankentta }}
+                </div>
+              </elsa-accordian>
+            </section>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -319,8 +333,11 @@
     max-width: 1024px;
   }
 
-  ::v-deep table {
-    border-bottom: 0;
+  .koulutussuunnitelma-table,
+  .motivaatiokirje-table {
+    ::v-deep table {
+      border-bottom: 0;
+    }
   }
 
   ::v-deep .table-responsive.mb-0 {
@@ -330,8 +347,6 @@
   @include media-breakpoint-down(sm) {
     .koulutusjaksot-table {
       ::v-deep table {
-        border-bottom: 0;
-
         tr {
           border: $table-border-width solid $table-border-color;
           border-radius: $border-radius;

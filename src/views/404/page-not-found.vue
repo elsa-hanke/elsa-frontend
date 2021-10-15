@@ -8,17 +8,17 @@
         <b-row class="position-relative">
           <sidebar-menu />
           <main role="main">
-            <b-container class="mt-4 mt-md-5 mb-6 ml-2 ml-sm-5 ml-md-4">
+            <b-container class="mt-4 mt-md-6 mb-6 ml-2 ml-sm-6 ml-md-4">
               <page-not-found-content />
             </b-container>
           </main>
         </b-row>
       </b-container>
-      <b-container v-else class="mt-4 mt-md-5 mb-5">
+      <b-container v-else class="mt-4 mt-md-6 mb-6">
         <page-not-found-content />
       </b-container>
     </div>
-    <div v-else class="text-center mt-5">
+    <div v-else class="text-center mt-6">
       <b-spinner variant="primary" :label="$t('ladataan')" />
     </div>
   </div>

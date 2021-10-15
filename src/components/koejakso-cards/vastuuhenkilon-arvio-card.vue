@@ -30,7 +30,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
         <template v-slot:content>
-          <p class="pr-5">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
+          <p class="pr-6">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -41,7 +41,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA">
         <template v-slot:content>
-          <p class="pr-5">{{ $t('vastuuhenkilon-arvio-tila-odottaa-erikoistuvan-hyvaksyntaa') }}</p>
+          <p class="pr-6">{{ $t('vastuuhenkilon-arvio-tila-odottaa-erikoistuvan-hyvaksyntaa') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -56,7 +56,7 @@
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-5">{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
+            <span class="pr-6">{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
           </div>
         </template>
         <template v-slot:button>

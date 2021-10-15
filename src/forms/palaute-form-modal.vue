@@ -8,28 +8,28 @@
     :hide-footer="true"
   >
     <div v-if="showFormSent">
-      <div class="text-center mb-5">
-        <font-awesome-icon :icon="['fas', 'check-circle']" class="mt-5 mb-3 text-success icon-xl" />
+      <div class="text-center mb-6">
+        <font-awesome-icon :icon="['fas', 'check-circle']" class="mt-6 mb-3 text-success icon-xl" />
         <p class="font-weight-500 text-center">{{ $t('palautteen-lahettaminen-onnistui') }}</p>
       </div>
       <div class="text-right mr-2">
-        <elsa-button variant="primary" class="px-5 mb-2" :loading="saving" @click="hideAndReset">
+        <elsa-button variant="primary" class="px-6 mb-2" :loading="saving" @click="hideAndReset">
           {{ $t('sulje') }}
         </elsa-button>
       </div>
     </div>
     <div v-else-if="showError">
-      <div class="text-center mb-5">
+      <div class="text-center mb-6">
         <font-awesome-icon
           :icon="['fas', 'exclamation-circle']"
-          class="mt-5 mb-3 text-danger icon-xl"
+          class="mt-6 mb-3 text-danger icon-xl"
         />
         <p class="font-weight-500 text-center">
           {{ $t('palautteen-lahettaminen-epaonnistui') }}
         </p>
       </div>
       <div class="text-right mr-2">
-        <elsa-button variant="primary" class="px-5 mb-2" :loading="saving" @click="hideAndReset">
+        <elsa-button variant="primary" class="px-6 mb-2" :loading="saving" @click="hideAndReset">
           {{ $t('sulje') }}
         </elsa-button>
       </div>
@@ -85,7 +85,7 @@
         <elsa-button variant="back" :disabled="saving" @click="hideAndReset">
           {{ $t('peruuta') }}
         </elsa-button>
-        <elsa-button variant="primary" class="ml-4 px-5" :loading="saving" @click="onSubmit">
+        <elsa-button variant="primary" class="ml-4 px-6" :loading="saving" @click="onSubmit">
           {{ $t('palaute-laheta') }}
         </elsa-button>
       </div>

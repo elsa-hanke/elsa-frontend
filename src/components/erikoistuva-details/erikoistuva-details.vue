@@ -12,7 +12,7 @@
         <th scope="row" style="width: 12rem" class="font-weight-500">
           {{ $t('erikoistuva-laakari') }}
         </th>
-        <td class="pl-5">
+        <td class="pl-6">
           <user-avatar
             :src-base64="avatar"
             src-content-type="image/jpeg"
@@ -28,25 +28,25 @@
         <th scope="row" class="font-weight-500">
           {{ $t('opiskelijanumero') }}
         </th>
-        <td class="pl-5">{{ opiskelijatunnus }}</td>
+        <td class="pl-6">{{ opiskelijatunnus }}</td>
       </tr>
       <tr v-if="showBirthdate">
         <th scope="row" class="font-weight-500">
           {{ $t('syntymaaika') }}
         </th>
-        <td class="pl-5">{{ syntymaaika ? $date(syntymaaika) : '' }}</td>
+        <td class="pl-6">{{ syntymaaika ? $date(syntymaaika) : '' }}</td>
       </tr>
       <tr>
         <th scope="row" class="font-weight-500">
           {{ $t('yliopisto-opiskeluoikeus') }}
         </th>
-        <td class="pl-5">{{ yliopisto }}</td>
+        <td class="pl-6">{{ yliopisto }}</td>
       </tr>
       <tr v-if="kehittamistoimenpiteet">
         <th scope="row" class="font-weight-500">
           {{ $t('kehittamistoimenpiteet-otsikko') }}
         </th>
-        <td class="pl-5">{{ kehittamistoimenpiteet }}</td>
+        <td class="pl-6">{{ kehittamistoimenpiteet }}</td>
       </tr>
     </table>
   </div>

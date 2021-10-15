@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mt-4 mb-5">
+  <b-container class="mt-4 mb-6">
     <b-row>
       <b-col lg>
         <b-alert variant="dark" show>

@@ -58,7 +58,7 @@
               :label="$t('muut-osaamistavoitteet')"
             >
               <template v-slot="{ uid }">
-                <span :id="uid">
+                <span :id="uid" class="text-preline">
                   {{ koulutusjakso.muutOsaamistavoitteet }}
                 </span>
               </template>

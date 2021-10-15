@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mt-4 mb-5">
+  <b-container class="mt-4 mb-6">
     <b-row>
       <b-col lg="5">
         <h1 class="text-primary">{{ $t('oletko-erikoistuva-laakari') }}</h1>

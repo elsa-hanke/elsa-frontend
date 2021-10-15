@@ -79,6 +79,29 @@ $table-border-width: $border-width;
 $table-border-color: $border-color;
 $dropdown-padding-y: 0;
 $spacer: 1rem;
+$spacers: ();
+$spacers: map-merge(
+  (
+    0: 0,
+    1: (
+      $spacer * 0.25
+    ),
+    2: (
+      $spacer * 0.5
+    ),
+    3: $spacer,
+    4: (
+      $spacer * 1.5
+    ),
+    5: (
+      $spacer * 2
+    ),
+    6: (
+      $spacer * 3
+    )
+  ),
+  $spacers
+);
 $dropdown-item-padding-y: $spacer * 0.5;
 $dropdown-item-padding-x: $spacer * 0.75;
 $dropdown-border-color: rgba($black, 0.15);
@@ -86,6 +109,8 @@ $dropdown-border-width: $border-width;
 $border-radius: 0.25rem;
 $rounded-pill: 50rem;
 $table-cell-padding: 0.5rem;
+$form-group-margin-bottom: 1.5rem;
+$paragraph-margin-bottom: 2rem;
 
 // Custom variables
 $primary-dark: #0f9bd9;
