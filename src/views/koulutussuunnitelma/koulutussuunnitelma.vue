@@ -350,6 +350,8 @@
   @include media-breakpoint-down(sm) {
     .koulutusjaksot-table {
       ::v-deep table {
+        border-bottom: 0;
+
         tr {
           border: $table-border-width solid $table-border-color;
           border-radius: $border-radius;
