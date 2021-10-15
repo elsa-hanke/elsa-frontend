@@ -212,7 +212,10 @@
         </div>
       </template>
     </elsa-form-group>
-    <elsa-form-group v-if="!modal" :label="$t('lisatiedot')">
+    <elsa-form-group
+      v-if="allowHyvaksyttyAiemminToiselleErikoisalalleOption"
+      :label="$t('lisatiedot')"
+    >
       <template v-slot="{ uid }">
         <b-form-checkbox :id="uid" v-model="form.hyvaksyttyAiempaanErikoisalaan">
           {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
@@ -335,8 +338,8 @@
     }
   })
   export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
-    @Prop({ required: false, default: true })
-    modal!: boolean
+    @Prop({ required: false, default: false })
+    allowHyvaksyttyAiemminToiselleErikoisalalleOption!: boolean
 
     @Prop({ required: false, default: false })
     editing!: boolean
