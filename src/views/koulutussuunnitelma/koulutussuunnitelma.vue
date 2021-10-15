@@ -146,8 +146,11 @@
                     ({{ $t('yksityinen') | lowercase }})
                   </span>
                 </template>
-                <div class="motivaatiokirje-table">
-                  <b-table-simple responsive v-if="koulutussuunnitelma.motivaatiokirjeAsiakirja">
+                <div
+                  v-if="koulutussuunnitelma.motivaatiokirjeAsiakirja"
+                  class="motivaatiokirje-table"
+                >
+                  <b-table-simple responsive>
                     <b-thead>
                       <b-tr>
                         <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
