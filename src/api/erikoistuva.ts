@@ -9,6 +9,8 @@ import {
   KoulutussopimusLomake,
   Koulutussuunnitelma,
   LoppukeskusteluLomake,
+  Teoriakoulutukset,
+  Teoriakoulutus,
   Tyoskentelyjakso,
   TyoskentelyjaksoLomake,
   ValiarviointiLomake,
@@ -170,4 +172,14 @@ export async function getKoulutusjakso(koulutusjaksoId: string) {
 export async function getKoulutusjaksot() {
   const path = 'erikoistuva-laakari/koulutussuunnitelma/koulutusjaksot'
   return await axios.get<Koulutusjakso[]>(path)
+}
+
+export async function getTeoriakoulutukset() {
+  const path = 'erikoistuva-laakari/teoriakoulutukset'
+  return await axios.get<Teoriakoulutukset>(path)
+}
+
+export async function getTeoriakoulutus(teoriakoulutusId: string) {
+  const path = `erikoistuva-laakari/teoriakoulutukset/${teoriakoulutusId}`
+  return await axios.get<Teoriakoulutus>(path)
 }

@@ -28,6 +28,14 @@
         <b-nav-item
           v-if="$isErikoistuva()"
           class="border-bottom"
+          :to="{ name: 'teoriakoulutukset' }"
+        >
+          <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
+          {{ $t('teoriakoulutukset') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
           :to="{ name: 'suoritemerkinnat' }"
         >
           <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />

@@ -92,7 +92,7 @@
           }
         })
       } catch {
-        toastFail(this, this.$t('uuden-koulutusjakson-lisaaminen-epaonnistui'))
+        toastFail(this, this.$t('koulutusjakson-muokkaus-epaonnistui'))
       }
       params.saving = false
     }
