@@ -152,6 +152,7 @@ export interface Erikoisala {
   terveyskeskuskoulutusjaksonVahimmaispituus: number
   yliopistosairaalajaksonVahimmaispituus: number
   yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituus: number
+  erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number
 }
 
 export type Koulutuspaikka = {
@@ -553,6 +554,20 @@ export interface BarChartRow {
 export interface Palaute {
   palautteenAihe: string | null
   palaute: string | null
+}
+
+export interface Teoriakoulutukset {
+  teoriakoulutukset: Teoriakoulutus[]
+  erikoisala: Erikoisala
+}
+
+export interface Teoriakoulutus {
+  id?: number
+  koulutuksenNimi: string | null
+  koulutuksenPaikka: string | null
+  alkamispaiva: string | null
+  paattymispaiva: string | null
+  erikoistumiseenHyvaksyttavaTuntimaara: number | null
 }
 
 export interface ElsaError {

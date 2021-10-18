@@ -38,7 +38,8 @@ import {
   faTheaterMasks,
   faTimes,
   faToolbox,
-  faUndoAlt
+  faUndoAlt,
+  faUniversity
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faArrowsAlt)
@@ -80,3 +81,4 @@ library.add(faTheaterMasks)
 library.add(faTimes)
 library.add(faToolbox)
 library.add(faUndoAlt)
+library.add(faUniversity)

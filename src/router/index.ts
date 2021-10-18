@@ -32,7 +32,6 @@ import ArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaja-vastuuhe
 import ArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja-vastuuhenkilo/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 import Koulutussopimus from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus/koulutussopimus.vue'
 import VastuuhenkilonArvioVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/vastuuhenkilon-arvio-vastuuhenkilo.vue'
-import Koulutukset from '@/views/koulutukset.vue'
 import Koulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/koulutusjakso.vue'
 import MuokkaaKoulutusjaksoa from '@/views/koulutussuunnitelma/koulutusjakso/muokkaa-koulutusjaksoa.vue'
 import UusiKoulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/uusi-koulutusjakso.vue'
@@ -51,6 +50,11 @@ import MuokkaaSuoritemerkintaa from '@/views/suoritemerkinnat/muokkaa-suoritemer
 import Suoritemerkinnat from '@/views/suoritemerkinnat/suoritemerkinnat.vue'
 import Suoritemerkinta from '@/views/suoritemerkinnat/suoritemerkinta.vue'
 import UusiSuoritemerkinta from '@/views/suoritemerkinnat/uusi-suoritemerkinta.vue'
+import MuokkaaTeoriakoulutusta from '@/views/teoriakoulutukset/muokkaa-teoriakoulutusta.vue'
+import Teoriakoulutukset from '@/views/teoriakoulutukset/teoriakoulutukset.vue'
+import TeoriakoulutusTallennettu from '@/views/teoriakoulutukset/teoriakoulutus-tallennettu.vue'
+import TeoriakoulutusView from '@/views/teoriakoulutukset/teoriakoulutus.vue'
+import UusiTeoriakoulutus from '@/views/teoriakoulutukset/uusi-teoriakoulutus.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
@@ -335,12 +339,50 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/koulutukset',
-        name: 'koulutukset',
+        path: '/teoriakoulutukset',
+        name: 'teoriakoulutukset',
         component: RoleSpecificRoute,
         props: {
-          routeComponent: Koulutukset,
+          routeComponent: Teoriakoulutukset,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/teoriakoulutukset/uusi',
+        name: 'uusi-teoriakoulutus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiTeoriakoulutus,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/teoriakoulutukset/teoriakoulutus-tallennettu',
+        name: 'teoriakoulutus-tallennettu',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TeoriakoulutusTallennettu,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/teoriakoulutukset/:teoriakoulutusId',
+        name: 'teoriakoulutus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TeoriakoulutusView,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/teoriakoulutukset/:teoriakoulutusId/muokkaus',
+        name: 'muokkaa-teoriakoulutusta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaTeoriakoulutusta,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       },
       {
