@@ -454,7 +454,7 @@ const routes: Array<RouteConfig> = [
             component: RoleSpecificRoute,
             props: {
               routeComponent: ArviointilomakeAloituskeskustelu,
-              allowedRoles: [ELSA_ROLE.Kouluttaja],
+              allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo],
               confirmRouteExit: true
             }
           },
@@ -464,7 +464,7 @@ const routes: Array<RouteConfig> = [
             component: RoleSpecificRoute,
             props: {
               routeComponent: ArviointilomakeValiarviointi,
-              allowedRoles: [ELSA_ROLE.Kouluttaja]
+              allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo]
             }
           },
           {
@@ -473,7 +473,7 @@ const routes: Array<RouteConfig> = [
             component: RoleSpecificRoute,
             props: {
               routeComponent: ArviointilomakeKehittamistoimenpiteet,
-              allowedRoles: [ELSA_ROLE.Kouluttaja]
+              allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo]
             }
           },
           {
@@ -482,7 +482,7 @@ const routes: Array<RouteConfig> = [
             component: RoleSpecificRoute,
             props: {
               routeComponent: ArviointilomakeLoppukeskustelu,
-              allowedRoles: [ELSA_ROLE.Kouluttaja]
+              allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo]
             }
           },
           {

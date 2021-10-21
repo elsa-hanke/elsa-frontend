@@ -23,6 +23,10 @@
     private loading = true
     private componentLinks = new Map([
       [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
+      [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja'],
+      [LomakeTyypit.VALIARVIOINTI, 'valiarviointi-kouluttaja'],
+      [LomakeTyypit.KEHITTAMISTOIMENPITEET, 'kehittamistoimenpiteet-kouluttaja'],
+      [LomakeTyypit.LOPPUKESKUSTELU, 'loppukeskustelu-kouluttaja'],
       [LomakeTyypit.VASTUUHENKILON_ARVIO, 'vastuuhenkilon-arvio-vastuuhenkilo']
     ])
 
