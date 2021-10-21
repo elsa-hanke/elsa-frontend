@@ -17,20 +17,20 @@ import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
 import Etusivu from '@/views/etusivu.vue'
-import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
-import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/erikoistuva/arviointilomake-kehittamistoimenpiteet/arviointilomake-kehittamistoimenpiteet.vue'
-import ErikoistuvaArviointilomakeLoppukeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-loppukeskustelu/arviointilomake-loppukeskustelu.vue'
-import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
-import ErikoistuvaArviointilomakeVastuuhenkilonArvio from '@/views/koejakso/erikoistuva/arviointilomake-vastuuhenkilon-arvio/arviointilomake-vastuuhenkilon-arvio.vue'
+import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/erikoistuva-arviointilomake-aloituskeskustelu.vue'
+import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/erikoistuva/arviointilomake-kehittamistoimenpiteet/erikoistuva-arviointilomake-kehittamistoimenpiteet.vue'
+import ErikoistuvaArviointilomakeLoppukeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-loppukeskustelu/erikoistuva-arviointilomake-loppukeskustelu.vue'
+import ErikoistuvaArviointilomakeValiarviointi from '@/views/koejakso/erikoistuva/arviointilomake-valiarviointi/erikoistuva-arviointilomake-valiarviointi.vue'
+import ErikoistuvaArviointilomakeVastuuhenkilonArvio from '@/views/koejakso/erikoistuva/arviointilomake-vastuuhenkilon-arvio/erikoistuva-arviointilomake-vastuuhenkilon-arvio.vue'
 import KoejaksoTavoitteet from '@/views/koejakso/erikoistuva/koejakso-tavoitteet.vue'
-import ErikoistuvaKoulutussopimus from '@/views/koejakso/erikoistuva/koulutussopimus/koulutussopimus.vue'
+import ErikoistuvaKoulutussopimus from '@/views/koejakso/erikoistuva/koulutussopimus/erikoistuva-koulutussopimus.vue'
 import Koejakso from '@/views/koejakso/index.vue'
 import KoejaksoContainer from '@/views/koejakso/koejakso-container.vue'
-import Koulutussopimus from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus.vue'
-import KouluttajaArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-aloituskeskustelu/kouluttaja-arviointilomake-aloituskeskustelu.vue'
-import KouluttajaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/kouluttaja/arviointilomake-kehittamistoimenpiteet/kouluttaja-arviointilomake-kehittamistoimenpiteet.vue'
-import KouluttajaArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaja/arviointilomake-loppukeskustelu/kouluttaja-arviointilomake-loppukeskustelu.vue'
-import KouluttajaArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja/arviointilomake-valiarviointi/kouluttaja-arviointilomake-valiarviointi.vue'
+import ArviointilomakeAloituskeskustelu from '@/views/koejakso/kouluttaja-vastuuhenkilo/arviointilomake-aloituskeskustelu/arviointilomake-aloituskeskustelu.vue'
+import ArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/kouluttaja-vastuuhenkilo/arviointilomake-kehittamistoimenpiteet/arviointilomake-kehittamistoimenpiteet.vue'
+import ArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaja-vastuuhenkilo/arviointilomake-loppukeskustelu/arviointilomake-loppukeskustelu.vue'
+import ArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja-vastuuhenkilo/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
+import Koulutussopimus from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus/koulutussopimus.vue'
 import VastuuhenkilonArvioVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/vastuuhenkilon-arvio-vastuuhenkilo.vue'
 import Koulutukset from '@/views/koulutukset.vue'
 import Koulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/koulutusjakso.vue'
@@ -453,7 +453,7 @@ const routes: Array<RouteConfig> = [
             name: 'aloituskeskustelu-kouluttaja',
             component: RoleSpecificRoute,
             props: {
-              routeComponent: KouluttajaArviointilomakeAloituskeskustelu,
+              routeComponent: ArviointilomakeAloituskeskustelu,
               allowedRoles: [ELSA_ROLE.Kouluttaja],
               confirmRouteExit: true
             }
@@ -463,7 +463,7 @@ const routes: Array<RouteConfig> = [
             name: 'valiarviointi-kouluttaja',
             component: RoleSpecificRoute,
             props: {
-              routeComponent: KouluttajaArviointilomakeValiarviointi,
+              routeComponent: ArviointilomakeValiarviointi,
               allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },
@@ -472,7 +472,7 @@ const routes: Array<RouteConfig> = [
             name: 'kehittamistoimenpiteet-kouluttaja',
             component: RoleSpecificRoute,
             props: {
-              routeComponent: KouluttajaArviointilomakeKehittamistoimenpiteet,
+              routeComponent: ArviointilomakeKehittamistoimenpiteet,
               allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },
@@ -481,7 +481,7 @@ const routes: Array<RouteConfig> = [
             name: 'loppukeskustelu-kouluttaja',
             component: RoleSpecificRoute,
             props: {
-              routeComponent: KouluttajaArviointilomakeLoppukeskustelu,
+              routeComponent: ArviointilomakeLoppukeskustelu,
               allowedRoles: [ELSA_ROLE.Kouluttaja]
             }
           },

@@ -54,7 +54,7 @@
   import { Kouluttaja } from '@/types'
 
   @Component({})
-  export default class KouluttajaKoulutussopimusReadonly extends Vue {
+  export default class KoulutussopimusReadonly extends Vue {
     @Prop({ required: true, default: {} })
     kouluttaja!: Kouluttaja
   }
