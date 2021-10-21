@@ -74,16 +74,7 @@
             </section>
             <section>
               <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-              <p>
-                {{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus') }}
-                <a
-                  href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {{ $t('henkilokohtainen-koulutussuunnitelma-linkki') }}
-                </a>
-              </p>
+              <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
               <div class="d-flex flex-wrap justify-content-between">
                 <elsa-button
                   variant="primary"
@@ -324,6 +315,14 @@
         toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
       }
       Vue.set(asiakirja, 'disablePreview', false)
+    }
+
+    get linkki() {
+      return `<a
+                href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >${this.$t('henkilokohtainen-koulutussuunnitelma-linkki')}</a>`
     }
   }
 </script>

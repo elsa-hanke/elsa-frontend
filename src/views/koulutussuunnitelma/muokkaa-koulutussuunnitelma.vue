@@ -6,16 +6,7 @@
         <b-col>
           <div v-if="!loading" class="mb-4">
             <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-            <p>
-              {{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus') }}
-              <a
-                href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{ $t('henkilokohtainen-koulutussuunnitelma-linkki') }}
-              </a>
-            </p>
+            <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
             <hr />
             <koulutussuunnitelma-form
               :value="koulutussuunnitelma"
@@ -108,6 +99,14 @@
       this.$router.push({
         name: 'koulutussuunnitelma'
       })
+    }
+
+    get linkki() {
+      return `<a
+                href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >${this.$t('henkilokohtainen-koulutussuunnitelma-linkki')}</a>`
     }
   }
 </script>
