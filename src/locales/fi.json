@@ -760,6 +760,8 @@
   "vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa": "Odottaa vastuuhenkilön arviointia. Saat ilmoituksen, kun koejakso on arvioitu. Et voi enää muokata lomaketta.",
   "vastuuhenkilon-arvio-tila-vastuuhenkilo-allekirjoittanut": "Olet arvioinut koejakson. Erikoistuvan tulee vielä hyväksyä arviointi.",
   "vastuuhenkilon-arvio-tila-vastuuhenkilo-hyvaksytty": "Olet arvioinut ja allekirjoittanut koejakson.",
+  "vastuuhenkilon-arvio-vastuuhenkilo": "Koejakson vastuuhenkilön arvio",
+  "vastuuhenkilon-arvion-hakeminen-epaonnistui": "Vastuuhenkilön arvion hakeminen epäonnistui",
   "viestit": "Viestit",
   "viimeistele-aloituskeskustelu": "Viimeistele aloituskeskustelu",
   "viimeistele-koulutussopimus": "Viimeistele koulutussopimus",
