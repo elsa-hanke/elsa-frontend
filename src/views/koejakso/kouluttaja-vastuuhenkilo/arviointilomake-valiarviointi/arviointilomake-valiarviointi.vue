@@ -287,7 +287,8 @@
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
-  import { getValiarviointi } from '@/api/kouluttaja'
+  import { getValiarviointi as getValiarviointiKouluttaja } from '@/api/kouluttaja'
+  import { getValiarviointi as getValiarviointiVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -301,6 +302,7 @@
     KoejaksonVaiheButtonStates,
     KoejaksonVaiheAllekirjoitus
   } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
@@ -334,7 +336,7 @@
       }
     }
   })
-  export default class KouluttajaArviointilomakeValiarviointi extends Mixins(validationMixin) {
+  export default class ArviointilomakeValiarviointi extends Mixins(validationMixin) {
     items = [
       {
         text: this.$t('etusivu'),
@@ -384,8 +386,9 @@
     }
 
     get valiarvioinninTila() {
-      return store.getters['kouluttaja/koejaksot'].find((k: any) => k.id === this.valiarviointi?.id)
-        ?.tila
+      return store.getters[`${resolveRolePath()}/koejaksot`].find(
+        (k: any) => k.id === this.valiarviointi?.id
+      )?.tila
     }
 
     get valiarviointiId() {
@@ -393,7 +396,11 @@
     }
 
     get editable() {
-      return !this.isCurrentUserLahiesimies && !this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty
+      return (
+        this.$isKouluttaja() &&
+        !this.isCurrentUserLahiesimies &&
+        !this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty
+      )
     }
 
     get editableForEsimies() {
@@ -540,8 +547,10 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await getValiarviointi(this.valiarviointiId)
+      await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
+      const { data } = await (this.$isVastuuhenkilo()
+        ? getValiarviointiVastuuhenkilo(this.valiarviointiId)
+        : getValiarviointiKouluttaja(this.valiarviointiId))
       this.valiarviointi = data
       this.loading = false
     }

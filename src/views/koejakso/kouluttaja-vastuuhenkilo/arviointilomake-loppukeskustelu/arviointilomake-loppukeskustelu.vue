@@ -223,7 +223,8 @@
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
-  import * as api from '@/api/kouluttaja'
+  import { getLoppukeskustelu as getLoppukeskusteluKouluttaja } from '@/api/kouluttaja'
+  import { getLoppukeskustelu as getLoppukeskusteluVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -237,6 +238,7 @@
     KoejaksonVaiheButtonStates,
     KoejaksonVaiheAllekirjoitus
   } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { LomakeTilat } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
@@ -265,7 +267,7 @@
       }
     }
   })
-  export default class KouluttajaArviointilomakeLoppukeskustelu extends Mixins(validationMixin) {
+  export default class ArviointilomakeLoppukeskustelu extends Mixins(validationMixin) {
     skipRouteExitConfirm!: boolean
     items = [
       {
@@ -309,7 +311,7 @@
     }
 
     get loppukeskustelunTila() {
-      return store.getters['kouluttaja/koejaksot'].find(
+      return store.getters[`${resolveRolePath()}/koejaksot`].find(
         (k: any) => k.id === this.loppukeskustelu?.id
       )?.tila
     }
@@ -320,7 +322,9 @@
 
     get editable() {
       return (
-        !this.isCurrentUserLahiesimies && !this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty
+        this.$isKouluttaja() &&
+        !this.isCurrentUserLahiesimies &&
+        !this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty
       )
     }
 
@@ -436,8 +440,10 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await api.getLoppukeskustelu(this.loppukeskusteluId)
+      await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
+      const { data } = await (this.$isVastuuhenkilo()
+        ? getLoppukeskusteluVastuuhenkilo(this.loppukeskusteluId)
+        : getLoppukeskusteluKouluttaja(this.loppukeskusteluId))
       this.loppukeskustelu = data
       this.loading = false
     }

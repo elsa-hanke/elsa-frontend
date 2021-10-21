@@ -124,10 +124,10 @@
                   @ready="onChildFormValid"
                 ></kouluttaja-koulutussopimus-form>
 
-                <kouluttaja-koulutussopimus-readonly
+                <koulutussopimus-readonly
                   v-if="!isCurrentKouluttaja(kouluttaja) || !editable"
                   :kouluttaja="kouluttaja"
-                ></kouluttaja-koulutussopimus-readonly>
+                ></koulutussopimus-readonly>
               </div>
             </b-col>
           </b-row>
@@ -235,15 +235,15 @@
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
-  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-form.vue'
-  import KouluttajaKoulutussopimusReadonly from '@/views/koejakso/kouluttaja/koulutussopimus/kouluttaja-koulutussopimus-readonly.vue'
+  import KoulutussopimusReadonly from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus/koulutussopimus-readonly.vue'
+  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
 
   @Component({
     components: {
       KouluttajaKoulutussopimusForm,
       ElsaFormGroup,
       ElsaButton,
-      KouluttajaKoulutussopimusReadonly,
+      KoulutussopimusReadonly,
       ErikoistuvaDetails,
       KoejaksonVaiheAllekirjoitukset,
       ElsaConfirmationModal,

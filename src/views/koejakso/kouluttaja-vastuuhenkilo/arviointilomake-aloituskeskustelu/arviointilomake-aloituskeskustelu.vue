@@ -1,5 +1,5 @@
 <template>
-  <div class="koulutussopimus col-lg-8 px-0">
+  <div class="col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid v-if="!loading">
       <h1 class="mb-3">{{ $t('aloituskeskustelu-kouluttaja') }}</h1>
@@ -173,7 +173,8 @@
   import Component from 'vue-class-component'
   import { Vue } from 'vue-property-decorator'
 
-  import * as api from '@/api/kouluttaja'
+  import { getAloituskeskustelu as getAloituskeskusteluKouluttaja } from '@/api/kouluttaja'
+  import { getAloituskeskustelu as getAloituskeskusteluVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -187,6 +188,7 @@
     KoejaksonVaiheButtonStates,
     AloituskeskusteluLomake
   } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { LomakeTilat } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
@@ -203,7 +205,7 @@
       KoulutuspaikanArvioijat
     }
   })
-  export default class KouluttajaArviointilomakeAloituskeskustelu extends Vue {
+  export default class ArviointilomakeAloituskeskustelu extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -241,7 +243,7 @@
     }
 
     get aloituskeskustelunTila() {
-      return store.getters['kouluttaja/koejaksot'].find(
+      return store.getters[`${resolveRolePath()}/koejaksot`].find(
         (k: any) => k.id === this.aloituskeskusteluId
       )?.tila
     }
@@ -265,6 +267,7 @@
 
     get editable() {
       return (
+        this.$isKouluttaja() &&
         this.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI &&
         ((this.isCurrentUserLahiesimies &&
           !this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty) ||
@@ -371,8 +374,10 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('kouluttaja/getKoejaksot')
-      const { data } = await api.getAloituskeskustelu(this.aloituskeskusteluId)
+      await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
+      const { data } = await (this.$isVastuuhenkilo()
+        ? getAloituskeskusteluVastuuhenkilo(this.aloituskeskusteluId)
+        : getAloituskeskusteluKouluttaja(this.aloituskeskusteluId))
       this.aloituskeskustelu = data
       this.loading = false
 
