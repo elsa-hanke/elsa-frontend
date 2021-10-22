@@ -294,7 +294,9 @@
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
       opintooikeudenPaattymispaiva: '',
-      vastuuhenkilo: undefined
+      vastuuhenkilo: undefined,
+      yliopistot: [],
+      vastuuhenkilot: []
     }
 
     loading = true

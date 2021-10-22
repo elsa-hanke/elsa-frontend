@@ -333,7 +333,9 @@
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
       opintooikeudenPaattymispaiva: '',
-      vastuuhenkilo: undefined
+      vastuuhenkilo: undefined,
+      yliopistot: [],
+      vastuuhenkilot: []
     }
     selected: any = {
       vastuuhenkilo: null
