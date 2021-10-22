@@ -185,7 +185,11 @@
     <elsa-confirmation-modal
       id="confirm-send-kouluttaja"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('vahvista-koulutussopimus-kouluttajat-hyvaksytty')"
+      :text="
+        sendToVastuuhenkilo
+          ? $t('vahvista-koulutussopimus-kouluttajat-hyvaksytty')
+          : $t('vahvista-koulutussopimus-kouluttaja-hyvaksytty')
+      "
       :submitText="$t('allekirjoita-laheta')"
       @submit="updateSentForm"
     />
@@ -379,7 +383,7 @@
       return this.form.erikoistuvanErikoisala ?? ''
     }
 
-    get isLastKouluttajaToAccept() {
+    get sendToVastuuhenkilo() {
       return (
         this.form.kouluttajat.length === 1 ||
         this.form.kouluttajat.filter((k) => k.sopimusHyvaksytty).length === 1
@@ -438,11 +442,7 @@
       }
 
       if (this.childFormValid) {
-        if (this.isLastKouluttajaToAccept) {
-          this.$bvModal.show('confirm-send-kouluttaja')
-        } else {
-          this.updateSentForm()
-        }
+        this.$bvModal.show('confirm-send-kouluttaja')
       }
     }
 

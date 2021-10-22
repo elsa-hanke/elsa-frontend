@@ -694,6 +694,7 @@
   "vahvista-koejakson-vaihe-hyvaksytty": "Allekirjoituksen jälkeen {koejaksonVaihe} on hyväksytty kaikkien osapuolten toimesta.",
   "vahvista-koejakson-vaihe-lahetys": "Lähetyksen jälkeen lomake menee lähikouluttajan ja lähiesimiehen käsiteltäväksi. Saat ilmoituksen, kun asia on käsitelty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-koulutussopimus-hyvaksytty": "Allekirjoituksen jälkeen henkilökohtainen koulutussopimus on hyväksytty kaikkien osapuolten toimesta.",
+  "vahvista-koulutussopimus-kouluttaja-hyvaksytty": "Lähetyksen jälkeen henkilökohtainen koulutussopimus menee toiselle kouluttajalle hyväksyttäväksi.",
   "vahvista-koulutussopimus-kouluttajat-hyvaksytty": "Lähetyksen jälkeen henkilökohtainen koulutussopimus menee vastuuhenkilön hyväksyttäväksi.",
   "vahvista-koulutussopimus-lahetys": "Lähetyksen jälkeen henkilökohtainen koulutussopimus menee kouluttajan ja vastuuhenkilön hyväksyttäväksi. Saat ilmoituksen, kun koulutussopimus on hyväksytty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-lomakkeen-lahetys": "Vahvista lomakkeen lähetys",
