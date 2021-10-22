@@ -61,18 +61,6 @@ module.exports = {
       '/management': {
         target: 'http://localhost:8080',
         secure: false
-      },
-      '/swagger-resources': {
-        target: 'http://localhost:8080',
-        secure: false
-      },
-      '/v2/api-docs': {
-        target: 'http://localhost:8080',
-        secure: false
-      },
-      'h2-console': {
-        target: 'http://localhost:8080',
-        secure: false
       }
     }
   },
