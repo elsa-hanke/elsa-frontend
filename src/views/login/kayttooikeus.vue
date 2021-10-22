@@ -33,7 +33,7 @@
         await api.putKayttooikeushakemus(value)
         toastSuccess(this, this.$t('kayttooikeuden-lisaaminen-onnistui'))
         this.$router.push({ name: 'etusivu' })
-      } catch (err) {
+      } catch {
         this.loading = false
         toastFail(this, this.$t('kayttooikeuden-lisaaminen-epaonnistui'))
       }

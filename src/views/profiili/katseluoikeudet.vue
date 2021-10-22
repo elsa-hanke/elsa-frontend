@@ -138,7 +138,7 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -147,7 +147,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
-  import { Kayttaja, KouluttajaValtuutus } from '@/types'
+  import { Kayttaja, KouluttajaValtuutus, ElsaError } from '@/types'
   import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
@@ -196,10 +196,11 @@
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }
@@ -219,10 +220,11 @@
         this.valittuKouluttaja = null
         toastSuccess(this, this.$t('katseluoikeus-myonnetty'))
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('katseluoikeuden-lisaaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }
@@ -238,10 +240,11 @@
         this.$bvModal.hide('muokkaaKatseluoikeuttaModal')
         toastSuccess(this, this.$t('katseluoikeus-paivitetty'))
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('katseluoikeuden-paivittaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }

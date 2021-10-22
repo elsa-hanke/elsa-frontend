@@ -364,7 +364,7 @@
         this.buttonStates.secondaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('kehittamistoimenpiteet-palautus-onnistui'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('kehittamistoimenpiteet-palautus-epaonnistui'))
       }
     }
@@ -377,7 +377,7 @@
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-ja-lahetys-onnistui'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('kehittamistoimenpiteet-allekirjoitus-ja-lahetys-epaonnistui'))
       }
     }
@@ -395,11 +395,17 @@
     async mounted() {
       this.loading = true
       await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
-      const { data } = await (this.$isVastuuhenkilo()
-        ? getKehittamistoimenpiteetVastuuhenkilo(this.kehittamistoimenpiteetId)
-        : getKehittamistoimenpiteetKouluttaja(this.kehittamistoimenpiteetId))
-      this.kehittamistoimenpiteet = data
-      this.loading = false
+
+      try {
+        const { data } = await (this.$isVastuuhenkilo()
+          ? getKehittamistoimenpiteetVastuuhenkilo(this.kehittamistoimenpiteetId)
+          : getKehittamistoimenpiteetKouluttaja(this.kehittamistoimenpiteetId))
+        this.kehittamistoimenpiteet = data
+        this.loading = false
+      } catch {
+        toastFail(this, this.$t('kehittamistoimenpiteiden-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'koejakso' })
+      }
     }
   }
 </script>

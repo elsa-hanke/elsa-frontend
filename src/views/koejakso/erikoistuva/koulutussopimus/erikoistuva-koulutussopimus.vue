@@ -206,7 +206,7 @@
         toastSuccess(this, this.$t('koulutussopimus-tallennettu-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussopimuksen-tallennus-epaonnistui'))
       }
       buttonStates.secondaryButtonLoading = false
@@ -217,7 +217,7 @@
         await store.dispatch('erikoistuva/postKoulutussopimus', this.koulutussopimusLomake)
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
     }
@@ -227,7 +227,7 @@
         await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
     }

@@ -136,6 +136,7 @@
 </template>
 
 <script lang="ts">
+  import { AxiosError } from 'axios'
   import Avatar from 'vue-avatar'
   import { Component, Vue, Prop } from 'vue-property-decorator'
   import { required } from 'vuelidate/lib/validators'
@@ -143,7 +144,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
-  import { OmatTiedotLomake } from '@/types'
+  import { OmatTiedotLomake, ElsaError } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { getTitleFromAuthorities } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -238,10 +239,11 @@
         this.form = this.initForm()
         this.$emit('change', false)
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('omien-tietojen-paivittaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       } finally {

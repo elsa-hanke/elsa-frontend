@@ -333,7 +333,7 @@
         await store.dispatch('erikoistuva/postLoppukeskustelu', this.loppukeskusteluLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-lahetetty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
       }
     }
@@ -345,7 +345,7 @@
         this.loppukeskusteluLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.loppukeskustelu.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
       }
     }

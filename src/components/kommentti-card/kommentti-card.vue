@@ -118,7 +118,7 @@
           teksti: null
         }
         this.$emit('updated', kommentti)
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('kommentin-tallentaminen-epaonnistui'))
       }
       this.saving = false

@@ -408,7 +408,7 @@
         this.buttonStates.secondaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('loppukeskustelu-palautettu-muokattavaksi'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('loppukeskustelu-palautus-epaonnistui'))
       }
     }
@@ -425,7 +425,7 @@
 
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-ja-lahetetty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('loppukeskustelun-tallennus-epaonnistui'))
       }
     }
@@ -441,11 +441,17 @@
     async mounted() {
       this.loading = true
       await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
-      const { data } = await (this.$isVastuuhenkilo()
-        ? getLoppukeskusteluVastuuhenkilo(this.loppukeskusteluId)
-        : getLoppukeskusteluKouluttaja(this.loppukeskusteluId))
-      this.loppukeskustelu = data
-      this.loading = false
+
+      try {
+        const { data } = await (this.$isVastuuhenkilo()
+          ? getLoppukeskusteluVastuuhenkilo(this.loppukeskusteluId)
+          : getLoppukeskusteluKouluttaja(this.loppukeskusteluId))
+        this.loppukeskustelu = data
+        this.loading = false
+      } catch {
+        toastFail(this, this.$t('loppukeskustelun-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'koejakso' })
+      }
     }
   }
 </script>

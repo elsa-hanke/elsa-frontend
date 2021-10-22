@@ -339,7 +339,7 @@
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-palautettu-erikoistuvalle-muokattavaksi'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('aloituskeskustelu-palautus-epaonnistui'))
       }
     }
@@ -367,7 +367,7 @@
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
     }
@@ -375,14 +375,21 @@
     async mounted() {
       this.loading = true
       await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
-      const { data } = await (this.$isVastuuhenkilo()
-        ? getAloituskeskusteluVastuuhenkilo(this.aloituskeskusteluId)
-        : getAloituskeskusteluKouluttaja(this.aloituskeskusteluId))
-      this.aloituskeskustelu = data
-      this.loading = false
 
-      if (!this.editable || this.returned) {
+      try {
+        const { data } = await (this.$isVastuuhenkilo()
+          ? getAloituskeskusteluVastuuhenkilo(this.aloituskeskusteluId)
+          : getAloituskeskusteluKouluttaja(this.aloituskeskusteluId))
+        this.aloituskeskustelu = data
+        this.loading = false
+
+        if (!this.editable || this.returned) {
+          this.$emit('skipRouteExitConfirm', true)
+        }
+      } catch {
+        toastFail(this, this.$t('aloituskeskustelun-hakeminen-epaonnistui'))
         this.$emit('skipRouteExitConfirm', true)
+        this.$router.replace({ name: 'koejakso' })
       }
     }
   }

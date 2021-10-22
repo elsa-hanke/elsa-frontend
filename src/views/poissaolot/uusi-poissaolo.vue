@@ -61,7 +61,7 @@
     async fetchLomake() {
       try {
         this.poissaoloLomake = (await axios.get(`erikoistuva-laakari/poissaolo-lomake`)).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('poissaolon-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -80,7 +80,7 @@
             poissaoloId: `${this.poissaolo.id}`
           }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('uuden-poissaolon-lisaaminen-epaonnistui'))
       }
       params.saving = false

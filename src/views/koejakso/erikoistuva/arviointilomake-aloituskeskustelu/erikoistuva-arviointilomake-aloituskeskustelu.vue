@@ -192,7 +192,7 @@
         toastSuccess(this, this.$t('aloituskeskustelu-tallennettu-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('aloituskeskustelu-tallennus-epaonnistui'))
       }
       buttonStates.secondaryButtonLoading = false
@@ -203,7 +203,7 @@
         await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
     }
@@ -213,7 +213,7 @@
         await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
         toastSuccess(this, this.$t('aloituskeskustelu-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('aloituskeskustelu-lisaaminen-epaonnistui'))
       }
     }

@@ -145,7 +145,7 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
@@ -166,7 +166,8 @@
     Kayttaja,
     Kunta,
     Suoritusarviointi,
-    Tyoskentelyjakso
+    Tyoskentelyjakso,
+    ElsaError
   } from '@/types'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -296,10 +297,11 @@
         this.$bvModal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }

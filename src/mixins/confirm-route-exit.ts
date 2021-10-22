@@ -31,7 +31,7 @@ export default class ConfirmRouteExit extends Vue {
       } else {
         next(false)
       }
-    } catch (err) {
+    } catch {
       next(false)
     }
   }

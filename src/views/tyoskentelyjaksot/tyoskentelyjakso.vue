@@ -194,7 +194,8 @@
           this.tyoskentelyjakso = (
             await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/${tyoskentelyjaksoId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('tyoskentelyjakson-hakeminen-epaonnistui'))
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
         this.loading = false
@@ -217,7 +218,7 @@
           this.$router.push({
             name: 'tyoskentelyjaksot'
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('tyoskentelyjakson-poistaminen-epaonnistui'))
         }
         this.deleting = false

@@ -321,7 +321,7 @@
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
       }
     }
@@ -329,9 +329,15 @@
     async mounted() {
       this.loading = true
       await store.dispatch('vastuuhenkilo/getKoejaksot')
-      const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
-      this.vastuuhenkilonArvio = data
-      this.loading = false
+
+      try {
+        const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
+        this.vastuuhenkilonArvio = data
+        this.loading = false
+      } catch {
+        toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'koejakso' })
+      }
     }
   }
 </script>

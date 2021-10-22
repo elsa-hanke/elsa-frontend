@@ -146,7 +146,8 @@
           this.suoritemerkinta = (
             await axios.get(`erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('suoritemerkinnan-hakeminen-epaonnistui'))
           this.$router.replace({ name: 'suoritemerkinnat' })
         }
       }
@@ -167,7 +168,7 @@
           this.$router.push({
             name: 'suoritemerkinnat'
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('suoritemerkinnan-poistaminen-epaonnistui'))
         }
         this.deleting = false

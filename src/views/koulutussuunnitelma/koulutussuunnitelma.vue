@@ -302,7 +302,7 @@
     async fetchKoulutussuunnitelma() {
       try {
         this.koulutussuunnitelma = (await axios.get(`erikoistuva-laakari/koulutussuunnitelma`)).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussuunnitelman-hakeminen-epaonnistui'))
       }
     }
@@ -310,7 +310,7 @@
     async fetchKoulutusjaksot() {
       try {
         this.koulutusjaksot = (await getKoulutusjaksot()).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutusjaksojen-hakeminen-epaonnistui'))
       }
     }

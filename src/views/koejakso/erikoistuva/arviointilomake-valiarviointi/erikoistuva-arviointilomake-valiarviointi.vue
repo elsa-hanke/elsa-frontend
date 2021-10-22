@@ -360,7 +360,7 @@
         await store.dispatch('erikoistuva/postValiarviointi', this.valiarviointiLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('valiarviointi-lahetetty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
       }
     }
@@ -372,7 +372,7 @@
         this.valiarviointiLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('valiarviointi-allekirjoitus-epaonnistui'))
       }
     }

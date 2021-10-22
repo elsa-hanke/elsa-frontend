@@ -64,7 +64,7 @@
     async fetchLomake() {
       try {
         this.koulutusjaksoLomake = (await getKoulutusjaksoLomake()).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutusjakson-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -72,8 +72,9 @@
     async fetchKoulutusjakso() {
       try {
         this.koulutusjakso = (await getKoulutusjakso(this.$route?.params?.koulutusjaksoId)).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutusjakson-hakeminen-epaonnistui'))
+        this.$emit('skipRouteExitConfirm', true)
         this.$router.replace({ name: 'koulutussuunnitelma' })
       }
     }
@@ -90,7 +91,7 @@
             koulutusjaksoId: `${koulutusjakso?.id}`
           }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('uuden-koulutusjakson-lisaaminen-epaonnistui'))
       }
       params.saving = false

@@ -407,7 +407,7 @@
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-palautettu-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussopimus-palautus-epaonnistui'))
       }
     }
@@ -420,7 +420,7 @@
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
     }
@@ -453,14 +453,21 @@
     async mounted() {
       this.loading = true
       await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
-      const { data } = await (this.$isVastuuhenkilo()
-        ? getKoulutussopimusVastuuhenkilo(this.koulutussopimusId)
-        : getKoulutussopimusKouluttaja(this.koulutussopimusId))
-      this.form = data
-      this.loading = false
 
-      if (!this.editable || this.returned) {
+      try {
+        const { data } = await (this.$isVastuuhenkilo()
+          ? getKoulutussopimusVastuuhenkilo(this.koulutussopimusId)
+          : getKoulutussopimusKouluttaja(this.koulutussopimusId))
+        this.form = data
+        this.loading = false
+
+        if (!this.editable || this.returned) {
+          this.$emit('skipRouteExitConfirm', true)
+        }
+      } catch {
+        toastFail(this, this.$t('koulutussopimuksen-hakeminen-epaonnistui'))
         this.$emit('skipRouteExitConfirm', true)
+        this.$router.replace({ name: 'koejakso' })
       }
     }
 

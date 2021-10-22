@@ -4,7 +4,7 @@ const { gitDescribeSync } = require('git-describe')
 
 try {
   process.env.VUE_APP_COMMIT_HASH = gitDescribeSync().hash
-} catch (err) {
+} catch {
   console.warn('Cannot get Git commit hash')
 }
 

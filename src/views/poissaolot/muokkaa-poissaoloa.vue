@@ -24,11 +24,11 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import PoissaoloForm from '@/forms/poissaolo-form.vue'
-  import { PoissaoloLomake } from '@/types'
+  import { ElsaError, PoissaoloLomake } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -70,7 +70,9 @@
           this.poissaolo = (
             await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('poissaolon-hakeminen-epaonnistui'))
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
       }
@@ -79,7 +81,7 @@
     async fetchLomake() {
       try {
         this.poissaoloLomake = (await axios.get(`erikoistuva-laakari/poissaolo-lomake`)).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('poissaolon-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -99,7 +101,8 @@
           }
         })
       } catch (err) {
-        if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+        const axiosError = err as AxiosError<ElsaError>
+        if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
           toastFail(
             this,
             `${this.$t('poissaolon-tallentaminen-epaonnistui')}: ${this.$t(
@@ -127,12 +130,12 @@
             `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`
           )
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
-          this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
             name: 'tyoskentelyjaksot'
           })
         } catch (err) {
-          if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+          const axiosError = err as AxiosError<ElsaError>
+          if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
             toastFail(
               this,
               `${this.$t('poissaolon-poistaminen-epaonnistui')}: ${this.$t(
