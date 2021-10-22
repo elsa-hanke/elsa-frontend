@@ -78,12 +78,20 @@
         <div :id="uid">
           <p>{{ $t('teoriakoulutus-todistus-kuvaus') }}</p>
           <asiakirjat-upload
-            :id="uid"
             :isPrimaryButton="false"
             :buttonText="$t('lisaa-liitetiedosto')"
-            :existingFileNamesForCurrentView="[]"
-            :existingFileNamesForOtherViews="[]"
+            :existing-file-names-for-current-view="existingFileNamesForCurrentView"
+            :existing-file-names-for-other-views="existingFileNamesForOtherViews"
+            :disabled="reservedAsiakirjaNimetMutable === undefined"
             @selectedFiles="onFilesAdded"
+          />
+          <asiakirjat-content
+            :asiakirjat="asiakirjatTableItems"
+            :sortingEnabled="false"
+            :paginationEnabled="false"
+            :enableSearch="false"
+            :showInfoIfEmpty="false"
+            @deleteAsiakirja="onDeleteLiitetiedosto"
           />
         </div>
       </template>
@@ -100,22 +108,26 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { Teoriakoulutus } from '@/types'
+  import { Asiakirja, Teoriakoulutus } from '@/types'
+  import { confirmDelete } from '@/utils/confirm'
 
   @Component({
     components: {
       ElsaFormGroup,
       ElsaFormDatepicker,
       ElsaButton,
+      AsiakirjatContent,
       AsiakirjatUpload
     },
     validations: {
@@ -144,18 +156,37 @@
       koulutuksenPaikka: null,
       alkamispaiva: null,
       paattymispaiva: null,
-      erikoistumiseenHyvaksyttavaTuntimaara: null
+      erikoistumiseenHyvaksyttavaTuntimaara: null,
+      todistukset: []
     }
     params = {
       saving: false
     }
 
-    mounted() {
+    addedFiles: File[] = []
+    reservedAsiakirjaNimetMutable: string[] = []
+    newAsiakirjatMapped: Asiakirja[] = []
+    deletedAsiakirjat: Asiakirja[] = []
+
+    async mounted() {
       if (this.value?.id) {
         this.form = {
           ...this.value
         }
+      } else {
+        this.form = {
+          koulutuksenNimi: null,
+          koulutuksenPaikka: null,
+          alkamispaiva: null,
+          paattymispaiva: null,
+          erikoistumiseenHyvaksyttavaTuntimaara: null,
+          todistukset: []
+        }
       }
+
+      this.reservedAsiakirjaNimetMutable = (
+        await axios.get('erikoistuva-laakari/asiakirjat/nimet')
+      ).data
     }
 
     validateState(name: string) {
@@ -172,8 +203,43 @@
     }
 
     onFilesAdded(files: File[]) {
-      // TODO
-      console.log(files)
+      const addedFilesInDeletedArray = files.filter((added) =>
+        this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(added.name)
+      )
+      const addedFilesNotInDeletedArray = files.filter(
+        (added) => !addedFilesInDeletedArray.includes(added)
+      )
+
+      this.deletedAsiakirjat = this.deletedAsiakirjat?.filter(
+        (deletedAsiakirja) =>
+          !addedFilesInDeletedArray
+            .map((addedFile) => addedFile.name)
+            .includes(deletedAsiakirja.nimi)
+      )
+      this.addedFiles = [...this.addedFiles, ...addedFilesNotInDeletedArray]
+      this.newAsiakirjatMapped = [
+        ...this.mapFiles(addedFilesNotInDeletedArray),
+        ...this.newAsiakirjatMapped
+      ]
+    }
+
+    async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-liitetiedosto') as string,
+          (this.$t('liitetiedoston') as string).toLowerCase()
+        )
+      ) {
+        if (asiakirja.id) {
+          this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
+        } else {
+          this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
+          this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
+            (a) => a.nimi !== asiakirja.nimi
+          )
+        }
+      }
     }
 
     onSubmit() {
@@ -184,7 +250,16 @@
       this.$emit(
         'submit',
         {
-          ...this.form
+          teoriakoulutus: {
+            id: this.form.id,
+            koulutuksenNimi: this.form.koulutuksenNimi,
+            koulutuksenPaikka: this.form.koulutuksenPaikka,
+            alkamispaiva: this.form.alkamispaiva,
+            paattymispaiva: this.form.paattymispaiva,
+            erikoistumiseenHyvaksyttavaTuntimaara: this.form.erikoistumiseenHyvaksyttavaTuntimaara
+          },
+          addedFiles: this.addedFiles,
+          deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         },
         this.params
       )
@@ -192,6 +267,39 @@
 
     onCancel() {
       this.$emit('cancel')
+    }
+
+    get existingFileNamesForCurrentView() {
+      return this.asiakirjatTableItems?.map((item) => item.nimi)
+    }
+
+    get existingFileNamesForOtherViews() {
+      return this.reservedAsiakirjaNimetMutable?.filter(
+        (nimi) => !this.existingFileNamesForCurrentView.includes(nimi)
+      )
+    }
+
+    get asiakirjatTableItems() {
+      return [...this.newAsiakirjatMapped, ...this.asiakirjatExcludingDeleted()]
+    }
+
+    private mapFiles(files: File[]): Asiakirja[] {
+      return files.map((file) => {
+        const asiakirja: Asiakirja = {
+          nimi: file.name,
+          data: file.arrayBuffer(),
+          lisattypvm: new Date().toString(),
+          contentType: file.type
+        }
+        return asiakirja
+      })
+    }
+
+    private asiakirjatExcludingDeleted(): Asiakirja[] {
+      return (this.value?.todistukset ?? []).filter(
+        (asiakirja) =>
+          !this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(asiakirja.nimi)
+      )
     }
   }
 </script>

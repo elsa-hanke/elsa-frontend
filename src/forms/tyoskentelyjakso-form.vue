@@ -500,7 +500,7 @@
           // tässä näkymässä, joten poista asiakirja lisättävistä tiedostoista.
           this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
           this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
-            (a) => a.nimi != asiakirja.nimi
+            (a) => a.nimi !== asiakirja.nimi
           )
         }
       }

@@ -47,9 +47,16 @@
             </elsa-form-group>
             <elsa-form-group :label="$t('todistus')">
               <template v-slot="{ uid }">
-                <span :id="uid">
-                  <pre>TODO</pre>
-                </span>
+                <asiakirjat-content
+                  :id="uid"
+                  :asiakirjat="teoriakoulutus.todistukset"
+                  :sorting-enabled="false"
+                  :pagination-enabled="false"
+                  :enable-search="false"
+                  :enable-delete="false"
+                  :no-results-info-text="$t('ei-liitetiedostoja')"
+                  :loading="loading"
+                />
               </template>
             </elsa-form-group>
             <hr />
@@ -92,6 +99,7 @@
   import { Vue, Component } from 'vue-property-decorator'
 
   import { getTeoriakoulutus } from '@/api/erikoistuva'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Teoriakoulutus } from '@/types'
@@ -101,7 +109,8 @@
   @Component({
     components: {
       ElsaFormGroup,
-      ElsaButton
+      ElsaButton,
+      AsiakirjatContent
     }
   })
   export default class TeoriakoulutusView extends Vue {
@@ -120,15 +129,18 @@
       }
     ]
     teoriakoulutus: Teoriakoulutus | null = null
+    loading = false
     deleting = false
 
     async mounted() {
       try {
+        this.loading = true
         this.teoriakoulutus = (await getTeoriakoulutus(this.$route?.params?.teoriakoulutusId)).data
       } catch (err) {
         toastFail(this, this.$t('teoriakoulutuksen-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'teoriakoulutukset' })
       }
+      this.loading = false
     }
 
     async onTeoriakoulutusDelete() {
