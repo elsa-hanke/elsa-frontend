@@ -183,3 +183,32 @@ export async function getTeoriakoulutus(teoriakoulutusId: string) {
   const path = `erikoistuva-laakari/teoriakoulutukset/${teoriakoulutusId}`
   return await axios.get<Teoriakoulutus>(path)
 }
+
+export async function postTeoriakoulutus(form: Teoriakoulutus, todistusFiles: File[]) {
+  const formData = wrapToFormData(form)
+  todistusFiles.forEach((todistusFile) => {
+    formData.append('todistusFiles', todistusFile)
+  })
+  return await axios.post<Teoriakoulutus>('erikoistuva-laakari/teoriakoulutukset', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export async function putTeoriakoulutus(
+  form: Teoriakoulutus,
+  todistusFiles: File[],
+  deletedAsiakirjaIds: number[]
+) {
+  const formData = wrapToFormData(form)
+  todistusFiles.forEach((todistusFile) => {
+    formData.append('todistusFiles', todistusFile)
+  })
+  formData.append('deletedAsiakirjaIdsJson', JSON.stringify(deletedAsiakirjaIds))
+  return await axios.put<Teoriakoulutus>(
+    `erikoistuva-laakari/teoriakoulutukset/${form.id}`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }
+  )
+}

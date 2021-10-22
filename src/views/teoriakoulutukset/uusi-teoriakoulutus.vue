@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { postTeoriakoulutus } from '@/api/erikoistuva'
   import TeoriakoulutusForm from '@/forms/teoriakoulutus-form.vue'
   import { Teoriakoulutus } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -47,11 +47,19 @@
     teoriakoulutus: Teoriakoulutus | null = null
     loading = false
 
-    async onSubmit(value: Teoriakoulutus, params: any) {
+    async onSubmit(
+      value: {
+        teoriakoulutus: Teoriakoulutus
+        addedFiles: File[]
+      },
+      params: {
+        saving: boolean
+      }
+    ) {
       params.saving = true
       try {
         this.teoriakoulutus = (
-          await axios.post('erikoistuva-laakari/teoriakoulutukset', value)
+          await postTeoriakoulutus(value.teoriakoulutus, value.addedFiles)
         ).data
         toastSuccess(this, this.$t('teoriakoulutus-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)

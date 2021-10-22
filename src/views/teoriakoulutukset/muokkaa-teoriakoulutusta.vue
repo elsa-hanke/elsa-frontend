@@ -22,10 +22,9 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import { Vue, Component } from 'vue-property-decorator'
 
-  import { getTeoriakoulutus } from '@/api/erikoistuva'
+  import { getTeoriakoulutus, putTeoriakoulutus } from '@/api/erikoistuva'
   import TeoriakoulutusForm from '@/forms/teoriakoulutus-form.vue'
   import { Teoriakoulutus } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -35,7 +34,7 @@
       TeoriakoulutusForm
     }
   })
-  export default class MuokkaaKoulutusjaksoa extends Vue {
+  export default class MuokkaaTeoriakoulutusta extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -67,11 +66,18 @@
       }
     }
 
-    async onSubmit(value: Teoriakoulutus, params: any) {
+    async onSubmit(
+      value: {
+        teoriakoulutus: Teoriakoulutus
+        addedFiles: File[]
+        deletedAsiakirjaIds: number[]
+      },
+      params: any
+    ) {
       params.saving = true
       try {
         this.teoriakoulutus = (
-          await axios.put(`erikoistuva-laakari/teoriakoulutukset/${value.id}`, value)
+          await putTeoriakoulutus(value.teoriakoulutus, value.addedFiles, value.deletedAsiakirjaIds)
         ).data
         toastSuccess(this, this.$t('teoriakoulutuksen-muokkaus-onnistui'))
         this.$emit('skipRouteExitConfirm', true)

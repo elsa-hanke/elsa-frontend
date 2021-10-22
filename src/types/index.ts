@@ -568,6 +568,7 @@ export interface Teoriakoulutus {
   alkamispaiva: string | null
   paattymispaiva: string | null
   erikoistumiseenHyvaksyttavaTuntimaara: number | null
+  todistukset: Asiakirja[]
 }
 
 export interface ElsaError {

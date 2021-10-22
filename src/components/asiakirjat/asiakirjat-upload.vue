@@ -9,6 +9,7 @@
       hidden
     />
     <label
+      class="user-select-none"
       :class="[isPrimaryButton ? 'primary mb-4' : 'outline-primary mb-4']"
       for="file-upload"
       :disabled="uploading || disabled"

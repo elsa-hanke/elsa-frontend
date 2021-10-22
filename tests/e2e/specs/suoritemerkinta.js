@@ -31,7 +31,7 @@ describe('Suoritemerkinnät', () => {
   it('Navigoidaan suoritusmerkinnät näkymään', () => {
     setupMocks()
     cy.visit('/')
-    cy.get('.nav > :nth-child(4) > .nav-link').contains('Suoritemerkinnät').click()
+    cy.get('.nav > :nth-child(5) > .nav-link').contains('Suoritemerkinnät').click()
   })
 
   it('Näkymästä löytyvät oleelliset elementit', () => {

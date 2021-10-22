@@ -30,7 +30,7 @@
             </div>
             <div v-if="teoriakoulutuksetFormatted.length > 0" class="teoriakoulutukset-table">
               <b-table :items="teoriakoulutuksetFormatted" :fields="fields" stacked="md" responsive>
-                <template #cell(nimiLabel)="row">
+                <template #cell(nimi)="row">
                   <elsa-button
                     :to="{
                       name: 'teoriakoulutus',
@@ -39,8 +39,20 @@
                     variant="link"
                     class="p-0 shadow-none"
                   >
-                    {{ row.item.nimiLabel }}
+                    {{ row.item.nimi }}
                   </elsa-button>
+                </template>
+                <template #cell(todistus)="row">
+                  <div v-for="todistus in row.item.todistukset" :key="todistus.id">
+                    <elsa-button
+                      @click="onViewAsiakirja(todistus)"
+                      variant="link"
+                      class="p-0 shadow-none"
+                      :loading="todistus.disablePreview"
+                    >
+                      {{ todistus.nimi }}
+                    </elsa-button>
+                  </div>
                 </template>
               </b-table>
             </div>
@@ -69,7 +81,8 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
-  import { Erikoisala, Teoriakoulutus } from '@/types'
+  import { Asiakirja, Erikoisala, Teoriakoulutus } from '@/types'
+  import { fetchAndOpenBlob } from '@/utils/blobs'
   import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
 
@@ -94,7 +107,7 @@
     loading = true
     fields = [
       {
-        key: 'nimiLabel',
+        key: 'nimi',
         label: this.$t('koulutuksen-nimi'),
         sortable: true
       },
@@ -142,12 +155,13 @@
         .sort((a: any, b: any) => sortByDateDesc(a.alkamispaiva, b.alkamispaiva))
         .map((teoriakoulutus) => ({
           ...teoriakoulutus,
-          nimiLabel: teoriakoulutus.koulutuksenNimi,
+          nimi: teoriakoulutus.koulutuksenNimi,
           pvm: `${(this as any).$date(teoriakoulutus.alkamispaiva)}${
             teoriakoulutus.paattymispaiva
               ? `-${(this as any).$date(teoriakoulutus.paattymispaiva)}`
               : ''
-          }`
+          }`,
+          todistus: teoriakoulutus.todistukset
         }))
     }
 
@@ -169,6 +183,22 @@
 
     get kopiLinkki() {
       return `<a href="https://www.kopi.fi/" target="_blank" rel="noopener noreferrer">www.kopi.fi</a>`
+    }
+
+    async onViewAsiakirja(asiakirja: Asiakirja) {
+      if (asiakirja.id) {
+        Vue.set(asiakirja, 'disablePreview', true)
+        const success = await fetchAndOpenBlob(
+          asiakirja.id,
+          asiakirja.nimi,
+          'erikoistuva-laakari/asiakirjat/'
+        )
+        if (!success) {
+          toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
+        }
+
+        Vue.set(asiakirja, 'disablePreview', false)
+      }
     }
   }
 </script>
