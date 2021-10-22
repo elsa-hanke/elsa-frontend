@@ -228,7 +228,7 @@
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
     VastuuhenkilonArvioLomake,
-    VastuuhenkilonArvioLomakeData
+    VastuuhenkilonArvioLomakeErikoistuva
   } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
@@ -292,7 +292,7 @@
       hylattyArviointiKaytyLapiKeskustellen: null,
       vastuuhenkilonKuittausaika: undefined
     }
-    formData: VastuuhenkilonArvioLomakeData = {
+    formData: VastuuhenkilonArvioLomakeErikoistuva = {
       vastuuhenkilot: [],
       tyoskentelyjaksoLiitetty: false,
       tyoskentelyjaksonPituusRiittava: false,
@@ -399,7 +399,7 @@
         await store.dispatch('erikoistuva/postVastuuhenkilonArvio', this.form)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-lahetetty-onnistuneesti'))
-      } catch {
+      } catch (err) {
         toastFail(this, this.$t('vastuuhenkilon-arvio-lahetys-epaonnistui'))
       }
     }
@@ -411,7 +411,7 @@
         this.form.erikoistuvanAllekirjoitusaika = this.koejaksoData.vastuuhenkilonArvio.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
-      } catch {
+      } catch (err) {
         toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
       }
     }

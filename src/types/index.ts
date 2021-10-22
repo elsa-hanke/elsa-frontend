@@ -204,6 +204,8 @@ export interface KoulutussopimusLomake {
   opintooikeudenPaattymispaiva: string
   vastuuhenkilo?: Vastuuhenkilo
   erikoistuvanAllekirjoitusaika?: string
+  yliopistot: Yliopisto[]
+  vastuuhenkilot: Vastuuhenkilo[]
 }
 
 export type KoejaksonVaiheHyvaksyja = {
@@ -314,7 +316,7 @@ export interface VastuuhenkilonArvioLomake {
   vastuuhenkilonKuittausaika?: string
 }
 
-export interface VastuuhenkilonArvioLomakeData {
+export interface VastuuhenkilonArvioLomakeErikoistuva {
   vastuuhenkilot: Vastuuhenkilo[]
   tyoskentelyjaksoLiitetty: boolean
   tyoskentelyjaksonPituusRiittava: boolean

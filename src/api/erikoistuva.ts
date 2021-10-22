@@ -3,13 +3,17 @@ import axios from 'axios'
 import {
   AloituskeskusteluLomake,
   KehittamistoimenpiteetLomake,
+  Koejakso,
   Koulutusjakso,
   KoulutusjaksoLomake,
   KoulutussopimusLomake,
   Koulutussuunnitelma,
   LoppukeskusteluLomake,
+  Tyoskentelyjakso,
+  TyoskentelyjaksoLomake,
   ValiarviointiLomake,
-  VastuuhenkilonArvioLomake
+  VastuuhenkilonArvioLomake,
+  VastuuhenkilonArvioLomakeErikoistuva
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -20,67 +24,67 @@ export async function putKayttooikeushakemus(value: any) {
 
 export async function getKoejakso() {
   const path = '/erikoistuva-laakari/koejakso'
-  return await axios.get(path)
+  return await axios.get<Koejakso>(path)
 }
 
 export async function postKoulutussopimus(form: KoulutussopimusLomake) {
   const path = 'erikoistuva-laakari/koejakso/koulutussopimus'
-  return await axios.post(path, form)
+  return await axios.post<KoulutussopimusLomake>(path, form)
 }
 
 export async function putKoulutussopimus(form: KoulutussopimusLomake) {
   const path = 'erikoistuva-laakari/koejakso/koulutussopimus'
-  return await axios.put(path, form)
+  return await axios.put<KoulutussopimusLomake>(path, form)
 }
 
 export async function postAloituskeskustelu(form: AloituskeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/aloituskeskustelu'
-  return await axios.post(path, form)
+  return await axios.post<AloituskeskusteluLomake>(path, form)
 }
 
 export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/aloituskeskustelu'
-  return await axios.put(path, form)
+  return await axios.put<AloituskeskusteluLomake>(path, form)
 }
 
 export async function postValiarviointi(form: ValiarviointiLomake) {
   const path = 'erikoistuva-laakari/koejakso/valiarviointi'
-  return await axios.post(path, form)
+  return await axios.post<ValiarviointiLomake>(path, form)
 }
 
 export async function putValiarviointi(form: ValiarviointiLomake) {
   const path = 'erikoistuva-laakari/koejakso/valiarviointi'
-  return await axios.put(path, form)
+  return await axios.put<ValiarviointiLomake>(path, form)
 }
 
 export async function postKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
   const path = 'erikoistuva-laakari/koejakso/kehittamistoimenpiteet'
-  return await axios.post(path, form)
+  return await axios.post<KehittamistoimenpiteetLomake>(path, form)
 }
 
 export async function putKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
   const path = 'erikoistuva-laakari/koejakso/kehittamistoimenpiteet'
-  return await axios.put(path, form)
+  return await axios.put<KehittamistoimenpiteetLomake>(path, form)
 }
 
 export async function postLoppukeskustelu(form: LoppukeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/loppukeskustelu'
-  return await axios.post(path, form)
+  return await axios.post<LoppukeskusteluLomake>(path, form)
 }
 
 export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/loppukeskustelu'
-  return await axios.put(path, form)
+  return await axios.put<LoppukeskusteluLomake>(path, form)
 }
 
 export async function postVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
   const path = 'erikoistuva-laakari/koejakso/vastuuhenkilonarvio'
-  return await axios.post(path, form)
+  return await axios.post<VastuuhenkilonArvioLomake>(path, form)
 }
 
 export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
   const path = 'erikoistuva-laakari/koejakso/vastuuhenkilonarvio'
-  return await axios.put(path, form)
+  return await axios.put<VastuuhenkilonArvioLomake>(path, form)
 }
 
 export async function getKouluttajat() {
@@ -90,12 +94,12 @@ export async function getKouluttajat() {
 
 export async function getTyoskentelyjakso(id: string) {
   const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
-  return await axios.get(path)
+  return await axios.get<Tyoskentelyjakso>(path)
 }
 
 export async function getTyoskentelyjaksoLomake() {
   const path = 'erikoistuva-laakari/tyoskentelyjakso-lomake'
-  return await axios.get(path)
+  return await axios.get<TyoskentelyjaksoLomake>(path)
 }
 
 export async function putTyoskentelyjakso(formData: FormData) {
@@ -115,7 +119,7 @@ export async function deleteTyoskentelyjakso(id: number) {
 
 export async function getKoulutussopimusLomake() {
   const path = 'erikoistuva-laakari/koulutussopimus-lomake'
-  return await axios.get(path)
+  return await axios.get<KoulutussopimusLomake>(path)
 }
 
 export async function getYliopistot() {
@@ -130,7 +134,7 @@ export async function getHakaYliopistot() {
 
 export async function getVastuuhenkilonArvioLomake() {
   const path = '/erikoistuva-laakari/vastuuhenkilonarvio-lomake'
-  return await axios.get(path)
+  return await axios.get<VastuuhenkilonArvioLomakeErikoistuva>(path)
 }
 
 export async function putKoulutussuunnitelma(form: Koulutussuunnitelma) {

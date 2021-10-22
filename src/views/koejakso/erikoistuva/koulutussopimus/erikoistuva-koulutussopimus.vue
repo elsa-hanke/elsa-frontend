@@ -100,7 +100,13 @@
   import { getKoulutussopimusLomake } from '@/api/erikoistuva'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import store from '@/store'
-  import { KoulutussopimusLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
+  import {
+    KoulutussopimusLomake,
+    Koejakso,
+    KoejaksonVaiheButtonStates,
+    Vastuuhenkilo,
+    Yliopisto
+  } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -131,8 +137,8 @@
     ]
     loading = true
     koulutussopimusLomake: null | KoulutussopimusLomake = null
-    vastuuhenkilot = []
-    yliopistot = []
+    vastuuhenkilot: Vastuuhenkilo[] = []
+    yliopistot: Yliopisto[] = []
 
     get account() {
       return store.getters['auth/account']
