@@ -120,7 +120,8 @@
           this.value = (
             await axios.get(`${resolveRolePath()}/suoritusarvioinnit/${arviointiId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('arvioinnin-hakeminen-epaonnistui'))
           this.$router.replace({ name: 'arvioinnit' })
         }
       }
@@ -145,7 +146,7 @@
         this.kommentti = {
           teksti: null
         }
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('uuden-kommentin-lisaaminen-epaonnistui'))
       }
       this.saving = false

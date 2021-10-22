@@ -89,7 +89,7 @@
           })
         ).data
         this.asiakirjat = [...asiakirjat, ...this.asiakirjat]
-      } catch (err) {
+      } catch {
         toastFail(
           this,
           files.length > 1
@@ -123,7 +123,7 @@
           await axios.delete(this.endpointUrl + asiakirja.id)
           toastSuccess(this, this.$t('asiakirjan-poistaminen-onnistui'))
           this.asiakirjat = this.asiakirjat.filter((a) => a.id !== asiakirja.id)
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('asiakirjan-poistaminen-epaonnistui'))
         }
         Vue.set(asiakirja, 'disableDelete', false)

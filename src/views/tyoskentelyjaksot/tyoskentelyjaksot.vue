@@ -281,7 +281,7 @@
         this.tyoskentelyjaksotTaulukko = (
           await axios.get(`erikoistuva-laakari/tyoskentelyjaksot-taulukko`)
         ).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('tyoskentelyjaksojen-hakeminen-epaonnistui'))
       }
     }

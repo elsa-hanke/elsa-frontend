@@ -54,11 +54,17 @@
 
     async mounted() {
       if (this.$route && this.$route.params && this.$route.params.arviointiId) {
-        this.value = (
-          await axios.get(
-            `erikoistuva-laakari/suoritusarvioinnit/${this.$route.params.arviointiId}`
-          )
-        ).data
+        try {
+          this.value = (
+            await axios.get(
+              `erikoistuva-laakari/suoritusarvioinnit/${this.$route.params.arviointiId}`
+            )
+          ).data
+        } catch {
+          toastFail(this, this.$t('arvioinnin-hakeminen-epaonnistui'))
+          this.$emit('skipRouteExitConfirm', true)
+          this.$router.replace({ name: 'arvioinnit' })
+        }
       }
     }
 
@@ -72,7 +78,7 @@
           name: 'arviointi',
           params: { arviointiId: this.$route.params.arviointiId }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('itsearvioinnin-tallentaminen-epaonnistui'))
       }
       params.saving = false

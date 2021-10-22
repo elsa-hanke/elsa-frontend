@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
-import { ErrorWithKey } from '@/types'
+import { ElsaError } from '@/types'
 import { ErrorKeys } from '@/utils/constants'
 import { dateBetween } from '@/utils/date'
 import { toastSuccess, toastFail } from '@/utils/toast'
@@ -46,7 +46,7 @@ export default class TyoskentelyjaksoMixin extends Vue {
       modal.hide('confirm')
       toastSuccess(this, this.$t('uusi-tyoskentelyjakso-lisatty'))
     } catch (err) {
-      const axiosError = err as AxiosError<ErrorWithKey>
+      const axiosError = err as AxiosError<ElsaError>
       if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
         toastFail(
           this,

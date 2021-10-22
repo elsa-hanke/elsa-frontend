@@ -307,7 +307,7 @@
         )
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-onnistui'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-epaonnistui'))
       }
     }
@@ -323,7 +323,7 @@
         this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.kehittamistoimenpiteet.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-onnistui'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('kehittamistoimenpiteet-allekirjoitus-epaonnistui'))
       }
     }

@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Component, Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
@@ -87,7 +87,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
-  import { KoejaksonVaiheHyvaksyja } from '@/types'
+  import { KoejaksonVaiheHyvaksyja, ElsaError } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -195,10 +195,11 @@
           this.onLahikouluttajaSelect(koejaksonVaiheHyvaksyja)
         }
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }

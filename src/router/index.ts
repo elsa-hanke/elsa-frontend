@@ -212,7 +212,8 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Arviointipyynto,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       },
       {

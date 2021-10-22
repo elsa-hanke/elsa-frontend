@@ -25,7 +25,7 @@
     async fetch() {
       try {
         this.arvioinnit = (await axios.get('vastuuhenkilo/suoritusarvioinnit')).data
-      } catch (err) {
+      } catch {
         this.arvioinnit = []
       }
     }

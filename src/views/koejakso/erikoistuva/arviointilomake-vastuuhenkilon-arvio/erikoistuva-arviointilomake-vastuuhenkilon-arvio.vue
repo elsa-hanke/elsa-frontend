@@ -399,7 +399,7 @@
         await store.dispatch('erikoistuva/postVastuuhenkilonArvio', this.form)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-lahetetty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvio-lahetys-epaonnistui'))
       }
     }
@@ -411,7 +411,7 @@
         this.form.erikoistuvanAllekirjoitusaika = this.koejaksoData.vastuuhenkilonArvio.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
       }
     }

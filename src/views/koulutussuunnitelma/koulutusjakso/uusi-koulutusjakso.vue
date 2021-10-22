@@ -65,7 +65,7 @@
     async fetchLomake() {
       try {
         this.koulutusjaksoLomake = (await getKoulutusjaksoLomake()).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutusjakson-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -82,7 +82,7 @@
             koulutusjaksoId: `${koulutusjakso?.id}`
           }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('uuden-koulutusjakson-lisaaminen-epaonnistui'))
       }
       params.saving = false

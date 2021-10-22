@@ -62,13 +62,14 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Vue, Component } from 'vue-property-decorator'
 
   import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import { ElsaError } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -107,7 +108,8 @@
           this.poissaolo = (
             await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('poissaolon-hakeminen-epaonnistui'))
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
       }
@@ -131,7 +133,8 @@
             name: 'tyoskentelyjaksot'
           })
         } catch (err) {
-          if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+          const axiosError = err as AxiosError<ElsaError>
+          if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
             toastFail(
               this,
               `${this.$t('poissaolon-poistaminen-epaonnistui')}: ${this.$t(

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import Avatar from 'vue-avatar'
   import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
@@ -43,7 +43,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
-  import { Kouluttaja } from '@/types'
+  import { Kouluttaja, ElsaError } from '@/types'
   import { defaultKouluttaja } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -82,10 +82,11 @@
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
         await store.dispatch('erikoistuva/getKouluttajat')
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }

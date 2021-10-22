@@ -507,7 +507,7 @@
         this.buttonStates.secondaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('valiarviointi-palautus-epaonnistui'))
       }
     }
@@ -530,7 +530,7 @@
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-ja-lahetetty-onnistuneesti'))
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('valiarvioinnin-tallennus-epaonnistui'))
       }
     }
@@ -548,11 +548,17 @@
     async mounted() {
       this.loading = true
       await store.dispatch(`${resolveRolePath()}/getKoejaksot`)
-      const { data } = await (this.$isVastuuhenkilo()
-        ? getValiarviointiVastuuhenkilo(this.valiarviointiId)
-        : getValiarviointiKouluttaja(this.valiarviointiId))
-      this.valiarviointi = data
-      this.loading = false
+
+      try {
+        const { data } = await (this.$isVastuuhenkilo()
+          ? getValiarviointiVastuuhenkilo(this.valiarviointiId)
+          : getValiarviointiKouluttaja(this.valiarviointiId))
+        this.valiarviointi = data
+        this.loading = false
+      } catch {
+        toastFail(this, this.$t('valiarvioinnin-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'koejakso' })
+      }
     }
   }
 </script>

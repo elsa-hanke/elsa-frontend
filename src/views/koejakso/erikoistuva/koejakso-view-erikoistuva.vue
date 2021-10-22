@@ -297,7 +297,7 @@
           )
 
           toastSuccess(this, this.$t('tyoskentelyjakson-poistaminen-koejaksolta-onnistui'))
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('tyoskentelyjakson-poistaminen-koejaksolta-epaonnistui'))
         }
         Vue.set(tyoskentelyjakso, 'disableDelete', false)

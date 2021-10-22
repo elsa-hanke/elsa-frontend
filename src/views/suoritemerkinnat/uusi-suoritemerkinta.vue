@@ -65,7 +65,7 @@
         this.suoritemerkintaLomake = (
           await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)
         ).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -84,7 +84,7 @@
             suoritemerkintaId: `${this.suoritemerkinta?.id}`
           }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('uuden-suoritemerkinnan-lisaaminen-epaonnistui'))
       }
       params.saving = false

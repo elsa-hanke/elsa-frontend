@@ -136,7 +136,7 @@
     async mounted() {
       try {
         this.koulutusjakso = (await getKoulutusjakso(this.$route?.params?.koulutusjaksoId)).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutusjakson-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'koulutussuunnitelma' })
       }
@@ -159,7 +159,7 @@
           this.$router.push({
             name: 'koulutussuunnitelma'
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('koulutusjakson-poistaminen-epaonnistui'))
         }
         this.deleting = false

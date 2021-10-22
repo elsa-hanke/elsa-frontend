@@ -553,8 +553,9 @@ export interface Palaute {
   palaute: string | null
 }
 
-export interface ErrorWithKey {
+export interface ElsaError {
   errorKey: string
+  message: string
 }
 
 export type HakaYliopisto = {

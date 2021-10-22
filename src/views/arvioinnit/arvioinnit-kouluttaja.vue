@@ -27,7 +27,7 @@
     async fetch() {
       try {
         this.arvioinnit = (await axios.get('kouluttaja/suoritusarvioinnit')).data
-      } catch (err) {
+      } catch {
         this.arvioinnit = []
       }
     }

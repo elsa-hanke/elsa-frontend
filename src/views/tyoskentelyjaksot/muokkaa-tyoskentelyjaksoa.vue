@@ -26,6 +26,7 @@
 </template>
 
 <script lang="ts">
+  import { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import {
@@ -34,7 +35,7 @@
     putTyoskentelyjakso
   } from '@/api/erikoistuva'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
+  import { Tyoskentelyjakso, TyoskentelyjaksoLomake, ElsaError } from '@/types'
   import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -71,7 +72,7 @@
     async fetchLomake() {
       try {
         this.tyoskentelyjaksoLomake = (await getTyoskentelyjaksoLomake()).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('tyoskentelyjakson-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -81,7 +82,9 @@
       if (tyoskentelyjaksoId) {
         try {
           this.tyoskentelyjakso = (await getTyoskentelyjakso(tyoskentelyjaksoId)).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('tyoskentelyjakson-hakeminen-epaonnistui'))
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
       }
@@ -107,7 +110,8 @@
           }
         })
       } catch (err) {
-        if (err.response.data.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
+        const axiosError = err as AxiosError<ElsaError>
+        if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
           toastFail(
             this,
             `${this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')}: ${this.$t(

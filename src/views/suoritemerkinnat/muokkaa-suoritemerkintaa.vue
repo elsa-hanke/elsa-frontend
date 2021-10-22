@@ -71,7 +71,9 @@
           this.suoritemerkinta = (
             await axios.get(`erikoistuva-laakari/suoritemerkinnat/${suoritemerkintaId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('suoritemerkinnan-hakeminen-epaonnistui'))
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.replace({ name: 'suoritemerkinnat' })
         }
       }
@@ -82,7 +84,7 @@
         this.suoritemerkintaLomake = (
           await axios.get(`erikoistuva-laakari/suoritemerkinta-lomake`)
         ).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('suoritemerkinnan-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -109,7 +111,7 @@
             suoritemerkintaId: `${this.suoritemerkinta.id}`
           }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('suoritemerkinnan-tallentaminen-epaonnistui'))
       }
       params.saving = false
@@ -131,7 +133,7 @@
           this.$router.push({
             name: 'suoritemerkinnat'
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('suoritemerkinnan-poistaminen-epaonnistui'))
         }
         params.deleting = false

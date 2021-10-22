@@ -83,7 +83,7 @@
             this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot
           )
         }
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('arviointipyynnon-lomakkeen-hakeminen-epaonnistui'))
       }
     }
@@ -95,7 +95,9 @@
           this.arviointipyynto = (
             await axios.get(`erikoistuva-laakari/suoritusarvioinnit/${arviointiId}`)
           ).data
-        } catch (err) {
+        } catch {
+          toastFail(this, this.$t('arviointipyynnon-hakeminen-epaonnistui'))
+          this.$emit('skipRouteExitConfirm', true)
           this.$router.replace({ name: 'arvioinnit' })
         }
       }
@@ -119,7 +121,7 @@
           this.$router.push({
             name: 'arvioinnit'
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('arviointipyynnon-tallentaminen-epaonnistui'))
         }
       } else {
@@ -132,7 +134,7 @@
             name: 'arviointipyynto-lahetetty',
             params: { arviointiId: `${arviointipyynto.id}` }
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('uuden-arviointipyynnon-lisaaminen-epaonnistui'))
         }
       }
@@ -155,7 +157,7 @@
           this.$router.push({
             name: 'arvioinnit'
           })
-        } catch (err) {
+        } catch {
           toastFail(this, this.$t('arviointipyynnon-poistaminen-epaonnistui'))
         }
         params.deleting = false

@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-import router from '@/router'
 import store from '@/store'
 import { OmatTiedotLomake } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
@@ -25,8 +24,6 @@ axios.interceptors.response.use(
           store.dispatch('auth/logout')
         }
         break
-      case 404:
-        router.replace({ path: '/sivua-ei-loytynyt' })
     }
     return Promise.reject(error)
   }

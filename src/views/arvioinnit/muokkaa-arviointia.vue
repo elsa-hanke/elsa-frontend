@@ -55,11 +55,19 @@
 
     async mounted() {
       if (this.$route && this.$route.params && this.$route.params.arviointiId) {
-        this.value = (
-          await axios.get(
-            `${resolveRolePath()}/suoritusarvioinnit/${this.$route.params.arviointiId}`
-          )
-        ).data
+        try {
+          this.value = (
+            await axios.get(
+              `${resolveRolePath()}/suoritusarvioinnit/${this.$route.params.arviointiId}`
+            )
+          ).data
+        } catch {
+          toastFail(this, this.$t('arvioinnin-hakeminen-epaonnistui'))
+          this.$emit('skipRouteExitConfirm', true)
+          this.$router.push({
+            name: 'arvioinnit'
+          })
+        }
       }
     }
 
@@ -73,7 +81,7 @@
           name: 'arviointi',
           params: { arviointiId: this.$route.params.arviointiId }
         })
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('arvioinnin-tallentaminen-epaonnistui'))
       }
       params.saving = false

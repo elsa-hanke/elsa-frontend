@@ -347,7 +347,7 @@
           return sortByDateDesc(s1?.tapahtumanAjankohta, s2?.tapahtumanAjankohta)
         })
         this.kategoriat = this.solveKategoriat()
-      } catch (err) {
+      } catch {
         this.omat = []
       }
     }

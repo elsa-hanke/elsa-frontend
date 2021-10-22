@@ -33,13 +33,13 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { putKoulutussuunnitelma } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import KoulutussuunnitelmaForm from '@/forms/koulutussuunnitelma-form.vue'
-  import { Koulutussuunnitelma } from '@/types'
+  import { Koulutussuunnitelma, ElsaError } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -75,7 +75,7 @@
       try {
         this.loading = true
         this.koulutussuunnitelma = (await axios.get(`erikoistuva-laakari/koulutussuunnitelma`)).data
-      } catch (err) {
+      } catch {
         toastFail(this, this.$t('koulutussuunnitelman-hakeminen-epaonnistui'))
       } finally {
         this.loading = false
@@ -92,10 +92,11 @@
           name: 'koulutussuunnitelma'
         })
       } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
         toastFail(
           this,
           this.$t('koulutussuunnitelman-tallentaminen-epaonnistui', {
-            virhe: this.$t(err.response.data.message)
+            virhe: this.$t(axiosError?.response?.data?.message ?? '')
           })
         )
       }
