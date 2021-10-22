@@ -240,11 +240,12 @@
         this.$emit('change', false)
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
         toastFail(
           this,
-          this.$t('omien-tietojen-paivittaminen-epaonnistui', {
-            virhe: this.$t(axiosError?.response?.data?.message ?? '')
-          })
+          message
+            ? `${this.$t('omien-tietojen-paivittaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('omien-tietojen-paivittaminen-epaonnistui')
         )
       } finally {
         this.params.saving = false

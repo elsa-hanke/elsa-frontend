@@ -27,12 +27,12 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
-  import { Asiakirja } from '@/types'
+  import { Asiakirja, ElsaError } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastSuccess, toastFail } from '@/utils/toast'
 
@@ -89,13 +89,9 @@
           })
         ).data
         this.asiakirjat = [...asiakirjat, ...this.asiakirjat]
-      } catch {
-        toastFail(
-          this,
-          files.length > 1
-            ? this.$t('asiakirjojen-tallentaminen-epaonnistui')
-            : this.$t('asiakirjan-tallentaminen-epaonnistui')
-        )
+      } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
+        toastFail(this, this.getSubmitFailedMessage(axiosError, files.length))
         this.uploading = false
         return
       }
@@ -108,6 +104,15 @@
       )
 
       this.uploading = false
+    }
+
+    private getSubmitFailedMessage(axiosError: AxiosError, filesCount: number) {
+      const errorMessage =
+        filesCount > 1
+          ? this.$t('asiakirjojen-tallentaminen-epaonnistui')
+          : this.$t('asiakirjan-tallentaminen-epaonnistui')
+      const detailedMessage = axiosError?.response?.data?.message
+      return detailedMessage ? `${errorMessage}: ${this.$t(detailedMessage)}` : errorMessage
     }
 
     async onDeleteAsiakirja(asiakirja: Asiakirja) {

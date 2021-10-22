@@ -36,7 +36,6 @@
   } from '@/api/erikoistuva'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import { Tyoskentelyjakso, TyoskentelyjaksoLomake, ElsaError } from '@/types'
-  import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -111,16 +110,13 @@
         })
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
-        if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
-          toastFail(
-            this,
-            `${this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')}: ${this.$t(
-              'tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
-            )}`
-          )
-        } else {
-          toastFail(this, this.$t('tyoskentelyjakson-tallentaminen-epaonnistui'))
-        }
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')
+        )
       }
       params.saving = false
     }

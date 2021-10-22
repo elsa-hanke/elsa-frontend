@@ -196,11 +196,12 @@
         }
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
         toastFail(
           this,
-          this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: this.$t(axiosError?.response?.data?.message ?? '')
-          })
+          message
+            ? `${this.$t('uuden-kouluttajan-lisaaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('uuden-kouluttajan-lisaaminen-epaonnistui')
         )
       }
     }
