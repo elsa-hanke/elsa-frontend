@@ -71,7 +71,6 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import { ElsaError } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
-  import { ErrorKeys } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
@@ -134,16 +133,13 @@
           })
         } catch (err) {
           const axiosError = err as AxiosError<ElsaError>
-          if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
-            toastFail(
-              this,
-              `${this.$t('poissaolon-poistaminen-epaonnistui')}: ${this.$t(
-                'tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
-              )}`
-            )
-          } else {
-            toastFail(this, this.$t('poissaolon-poistaminen-epaonnistui'))
-          }
+          const message = axiosError?.response?.data?.message
+          toastFail(
+            this,
+            message
+              ? `${this.$t('poissaolon-poistaminen-epaonnistui')}: ${this.$t(message)}`
+              : this.$t('poissaolon-poistaminen-epaonnistui')
+          )
         }
         this.deleting = false
       }

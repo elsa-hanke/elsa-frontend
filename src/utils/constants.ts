@@ -137,7 +137,3 @@ export enum ArviointiasteikonTasoTyyppi {
   ERIKOISLAAKARI = 'ERIKOISLAAKARI',
   ERITYINEN_OSAAMINEN = 'ERITYINEN_OSAAMINEN'
 }
-
-export enum ErrorKeys {
-  TYOSKENTELYAIKA = 'dataillegal.tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
-}

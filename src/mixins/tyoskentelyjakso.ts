@@ -2,7 +2,6 @@ import axios, { AxiosError } from 'axios'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
 import { ElsaError } from '@/types'
-import { ErrorKeys } from '@/utils/constants'
 import { dateBetween } from '@/utils/date'
 import { toastSuccess, toastFail } from '@/utils/toast'
 import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -47,16 +46,13 @@ export default class TyoskentelyjaksoMixin extends Vue {
       toastSuccess(this, this.$t('uusi-tyoskentelyjakso-lisatty'))
     } catch (err) {
       const axiosError = err as AxiosError<ElsaError>
-      if (axiosError?.response?.data?.errorKey === ErrorKeys.TYOSKENTELYAIKA) {
-        toastFail(
-          this,
-          `${this.$t('uuden-tyoskentelyjakson-lisaaminen-epaonnistui')}: ${this.$t(
-            'tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy'
-          )}`
-        )
-      } else {
-        toastFail(this, this.$t('uuden-tyoskentelyjakson-lisaaminen-epaonnistui'))
-      }
+      const message = axiosError?.response?.data?.message
+      toastFail(
+        this,
+        message
+          ? `${this.$t('uuden-tyoskentelyjakson-lisaaminen-epaonnistui')}: ${this.$t(message)}`
+          : this.$t('uuden-tyoskentelyjakson-lisaaminen-epaonnistui')
+      )
     }
     params.saving = false
   }

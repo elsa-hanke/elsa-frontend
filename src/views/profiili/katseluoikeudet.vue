@@ -197,11 +197,12 @@
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
         toastFail(
           this,
-          this.$t('uuden-kouluttajan-lisaaminen-epaonnistui', {
-            virhe: this.$t(axiosError?.response?.data?.message ?? '')
-          })
+          message
+            ? `${this.$t('uuden-kouluttajan-lisaaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('uuden-kouluttajan-lisaaminen-epaonnistui')
         )
       }
       params.saving = false
@@ -221,11 +222,12 @@
         toastSuccess(this, this.$t('katseluoikeus-myonnetty'))
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
         toastFail(
           this,
-          this.$t('katseluoikeuden-lisaaminen-epaonnistui', {
-            virhe: this.$t(axiosError?.response?.data?.message ?? '')
-          })
+          message
+            ? `${this.$t('katseluoikeuden-lisaaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('katseluoikeuden-lisaaminen-epaonnistui')
         )
       }
     }
@@ -241,11 +243,12 @@
         toastSuccess(this, this.$t('katseluoikeus-paivitetty'))
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
         toastFail(
           this,
-          this.$t('katseluoikeuden-paivittaminen-epaonnistui', {
-            virhe: this.$t(axiosError?.response?.data?.message ?? '')
-          })
+          message
+            ? `${this.$t('katseluoikeuden-paivittaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('katseluoikeuden-paivittaminen-epaonnistui')
         )
       }
     }

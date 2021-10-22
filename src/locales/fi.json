@@ -144,6 +144,7 @@
   "error": {
     "dataillegal": {
       "erikoistuva-on-jo-valtuuttanut-kouluttajan": "erikoistuva on jo valtuuttanut kouluttajan",
+      "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "samalla-sahkopostilla-loytyy-jo-toinen-kayttaja": "samalla sähköpostilla löytyy jo toinen käyttäjä",
       "uuden-lahikouluttajan-voi-lisata-vain-erikoistuva-laakari": "uuden lahikouluttajan voi lisätä vain erikoistuva lääkäri"
     },
@@ -361,7 +362,7 @@
   "koulutussuunnitelma": "Koulutussuunnitelma",
   "koulutussuunnitelma-kuvaus": "Suunnittele tulevaa koulutustasi ja kerro taustoistasi.",
   "koulutussuunnitelman-hakeminen-epaonnistui": "Koulutussuunnitelman hakeminen epäonnistui.",
-  "koulutussuunnitelman-tallentaminen-epaonnistui": "Koulutussuunnitelman tallentaminen epäonnistui: {virhe}",
+  "koulutussuunnitelman-tallentaminen-epaonnistui": "Koulutussuunnitelman tallentaminen epäonnistui",
   "koulutussuunnitelman-tallentaminen-onnistui": "Koulutussuunnitelman tallentaminen onnistui.",
   "koulutustyypit": "Koulutustyypit",
   "kunta": "Kunta",
@@ -483,7 +484,7 @@
   "oman-erikoisalan-koulutus": "Oman erikoisalan koulutus",
   "omat-tiedot": "Omat tiedot",
   "omat-tiedot-paivitetty": "Omat tiedot päivitetty",
-  "omien-tietojen-paivittaminen-epaonnistui": "Omien tietojen päivittäminen epäonnistui: {virhe}",
+  "omien-tietojen-paivittaminen-epaonnistui": "Omien tietojen päivittäminen epäonnistui",
   "opinto-oikeuden-alkamispäivä": "Määräaikaisen opinto-oikeuden myöntämispäivä",
   "opintooikeuden-tarkistaminen": "Opinto-oikeuden tarkistaminen",
   "opintooikeus": "Opinto-oikeus",
@@ -680,7 +681,7 @@
   "useampi-jakso": "Useampi jakso",
   "uuden-arviointipyynnon-lisaaminen-epaonnistui": "Uuden arviointipyynnön lisääminen epäonnistui",
   "uuden-kommentin-lisaaminen-epaonnistui": "Uuden kommentin lisääminen epäonnistui",
-  "uuden-kouluttajan-lisaaminen-epaonnistui": "Uuden kouluttajan lisääminen epäonnistui: {virhe}",
+  "uuden-kouluttajan-lisaaminen-epaonnistui": "Uuden kouluttajan lisääminen epäonnistui",
   "uuden-koulutusjakson-lisaaminen-epaonnistui": "Uuden koulutusjakson lisääminen epäonnistui",
   "uuden-poissaolon-lisaaminen-epaonnistui": "Uuden poissaolon lisääminen epäonnistui",
   "uuden-suoritemerkinnan-lisaaminen-epaonnistui": "Uuden suoritemerkinnän lisääminen epäonnistui",
