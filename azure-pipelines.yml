@@ -3,10 +3,10 @@ variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 stages:
-  - stage: Build
-    displayName: Build stage
+  - stage: Test
+    displayName: Test
     jobs:
-      - job: Build
+      - job: Test
         pool:
           vmImage: $(vmImageName)
         variables:
@@ -39,8 +39,34 @@ stages:
           - script: |
               yarn generate-thirdparty
             displayName: "Generate thirdparty"
+
+  - stage: Build
+    displayName: Build
+    dependsOn: Test
+    jobs:
+      - job: Build
+        pool:
+          vmImage: $(vmImageName)
+        variables:
+          YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "10.x"
+            displayName: "Install Node.js"
+          - task: Cache@2
+            inputs:
+              key: 'yarn | "$(Agent.OS)" | yarn.lock'
+              restoreKeys: |
+                yarn | "$(Agent.OS)"
+                yarn
+              path: $(YARN_CACHE_FOLDER)
+            displayName: Cache Yarn packages
           - script: |
-              yarn build
+              yarn --frozen-lockfile
+            displayName: "Install"
+          - script: |
+              yarn build --mode production-test
             displayName: "Build"
           - publish: $(System.DefaultWorkingDirectory)/dist
             artifact: ElsaFrontendApp
@@ -83,14 +109,14 @@ stages:
                     awsCommand: "cloudfront"
                     awsSubCommand: "create-invalidation"
                     awsArguments: '--distribution-id EXEO15DPST8ID --paths "/*"'
- 
-  - stage: Deploy_testi
-    displayName: Deploy testi
+
+  - stage: DeployStaging
+    displayName: Deploy staging
     dependsOn: Build
     condition: and(succeeded(), eq(variables.isMain, true))
     jobs:
       - deployment: Deploy
-        displayName: Deploy testi
+        displayName: Deploy staging
         environment: "testi"
         pool:
           vmImage: $(vmImageName)
@@ -123,9 +149,42 @@ stages:
                     awsSubCommand: "create-invalidation"
                     awsArguments: '--distribution-id E45AQGQKD12C0 --paths "/*"'
 
-  - stage: Deploy_prod
+  - stage: BuildProd
+    displayName: Build prod
+    dependsOn: Test
+    jobs:
+      - job: Build
+        pool:
+          vmImage: $(vmImageName)
+        variables:
+          YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "10.x"
+            displayName: "Install Node.js"
+          - task: Cache@2
+            inputs:
+              key: 'yarn | "$(Agent.OS)" | yarn.lock'
+              restoreKeys: |
+                yarn | "$(Agent.OS)"
+                yarn
+              path: $(YARN_CACHE_FOLDER)
+            displayName: Cache Yarn packages
+          - script: |
+              yarn --frozen-lockfile
+            displayName: "Install"
+          - script: |
+              yarn build --mode
+            displayName: "Build"
+          - publish: $(System.DefaultWorkingDirectory)/dist
+            artifact: ElsaFrontendAppProd
+
+  - stage: DeployProd
     displayName: Deploy prod
-    dependsOn: Build
+    dependsOn:
+      - BuildProd
+      - DeployStaging
     condition: and(succeeded(), eq(variables.isMain, true))
     jobs:
       - deployment: Deploy
@@ -138,7 +197,7 @@ stages:
             deploy:
               steps:
                 - download: current
-                  artifact: ElsaFrontendApp
+                  artifact: ElsaFrontendAppProd
                 - task: AWSCLI@1
                   inputs:
                     awsCredentials: "prod-elsa-ci"
