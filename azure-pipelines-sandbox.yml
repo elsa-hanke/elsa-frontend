@@ -39,7 +39,7 @@ stages:
               yarn generate-thirdparty
             displayName: "Generate thirdparty"
           - script: |
-              yarn build
+              yarn build --mode production-test
             displayName: "Build"
           - publish: $(System.DefaultWorkingDirectory)/dist
             artifact: ElsaFrontendApp
