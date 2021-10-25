@@ -10,9 +10,7 @@
     <% if(process.env.VUE_APP_COMMIT_HASH) { %>
     <meta name="commit-hash" content="<%= VUE_APP_COMMIT_HASH %>" />
     <% } %>
-    <% if(process.env.NODE_ENV !== 'production') { %>
-    <meta name="robots" content="noindex">
-    <% } %>
+    <meta name="robots" content="<%= process.env.VUE_APP_ROBOTS_META %>" />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <link
       rel="icon"
