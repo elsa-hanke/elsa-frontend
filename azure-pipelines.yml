@@ -175,7 +175,7 @@ stages:
               yarn --frozen-lockfile
             displayName: "Install"
           - script: |
-              yarn build --mode
+              yarn build
             displayName: "Build"
           - publish: $(System.DefaultWorkingDirectory)/dist
             artifact: ElsaFrontendAppProd
