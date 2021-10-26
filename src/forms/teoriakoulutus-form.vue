@@ -251,7 +251,7 @@
         'submit',
         {
           teoriakoulutus: {
-            id: this.form.id,
+            ...(this.form.id ? { id: this.form.id } : {}),
             koulutuksenNimi: this.form.koulutuksenNimi,
             koulutuksenPaikka: this.form.koulutuksenPaikka,
             alkamispaiva: this.form.alkamispaiva,
