@@ -9,8 +9,11 @@
     </b-link>
     <footer class="pb-4 bg-white">
       <div class="d-flex justify-content-center">
-        <b-link class="my-4 mx-3 mx-lg-4">{{ $t('tietosuoja') }}</b-link>
-        <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link>
+        <b-link @click="openTietosuojaselosteModal" class="my-4 mx-3 mx-lg-4">
+          {{ $t('tietosuojaseloste') }}
+        </b-link>
+        <tietosuojaseloste-modal v-model="showTietosuojaselosteFormModal" />
+        <!-- <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link> -->
         <b-link v-if="isLoggedIn" @click="openPalauteFormModal" class="my-4 mx-3 mx-lg-4">
           {{ $t('palaute') }}
         </b-link>
@@ -66,17 +69,24 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
+  import TietosuojaselosteModal from '@/components/tietosuojaseloste-modal/tietosuojaseloste-modal.vue'
   import PalauteFormModal from '@/forms/palaute-form-modal.vue'
   import store from '@/store'
   import { Meta } from '@/utils/decorators'
 
   @Component({
     components: {
-      PalauteFormModal
+      PalauteFormModal,
+      TietosuojaselosteModal
     }
   })
   export default class App extends Vue {
+    showTietosuojaselosteFormModal = false
     showPalauteFormModal = false
+
+    openTietosuojaselosteModal() {
+      this.showTietosuojaselosteFormModal = true
+    }
 
     openPalauteFormModal() {
       this.showPalauteFormModal = true
