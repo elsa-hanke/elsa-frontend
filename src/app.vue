@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
     <router-view class="router-view" />
-    <b-link @click="openPalauteFormModal">
+    <b-link v-if="isLoggedIn" @click="openPalauteFormModal">
       <div class="feedback-link">
         <font-awesome-icon class="feedback-icon" :icon="['far', 'envelope']" fixed-width />
         <span class="feedback-text">{{ $t('palaute') }}</span>
@@ -11,7 +11,7 @@
       <div class="d-flex justify-content-center">
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('tietosuoja') }}</b-link>
         <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link>
-        <b-link @click="openPalauteFormModal" class="my-4 mx-3 mx-lg-4">
+        <b-link v-if="isLoggedIn" @click="openPalauteFormModal" class="my-4 mx-3 mx-lg-4">
           {{ $t('palaute') }}
         </b-link>
         <palaute-form-modal :show="showPalauteFormModal" @hide="hidePalauteFormModal" />
@@ -67,6 +67,7 @@
   import Component from 'vue-class-component'
 
   import PalauteFormModal from '@/forms/palaute-form-modal.vue'
+  import store from '@/store'
   import { Meta } from '@/utils/decorators'
 
   @Component({
@@ -97,6 +98,10 @@
         title: this.$t('elsa-palvelu'),
         titleTemplate: null
       }
+    }
+
+    get isLoggedIn() {
+      return store.getters['auth/isLoggedIn']
     }
   }
 </script>
