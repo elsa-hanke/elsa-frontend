@@ -17,6 +17,9 @@ import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
 import Etusivu from '@/views/etusivu.vue'
+import Kayttaja from '@/views/kayttajahallinta/kayttaja.vue'
+import Kayttajahallinta from '@/views/kayttajahallinta/kayttajahallinta.vue'
+import UusiKayttaja from '@/views/kayttajahallinta/uusi-kayttaja.vue'
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/erikoistuva-arviointilomake-aloituskeskustelu.vue'
 import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/erikoistuva/arviointilomake-kehittamistoimenpiteet/erikoistuva-arviointilomake-kehittamistoimenpiteet.vue'
 import ErikoistuvaArviointilomakeLoppukeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-loppukeskustelu/erikoistuva-arviointilomake-loppukeskustelu.vue'
@@ -543,6 +546,33 @@ const routes: Array<RouteConfig> = [
         path: '/profiili',
         name: 'profiili',
         component: Profiili
+      },
+      {
+        path: '/kayttajahallinta',
+        name: 'kayttajahallinta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Kayttajahallinta,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/kayttajahallinta/kayttaja/:kayttajaId',
+        name: 'kayttaja',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Kayttaja,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/kayttajahallinta/kayttaja/uusi',
+        name: 'uusi-kayttaja',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiKayttaja,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
       }
     ]
   },

@@ -19,6 +19,8 @@ export function getTitleFromAuthorities(authorities: string[]) {
     return 'lahikouluttaja'
   } else if (authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
     return 'vastuuhenkilo'
+  } else if (authorities.includes(ELSA_ROLE.TekninenPaakayttaja)) {
+    return 'tekninen-paakayttaja'
   }
 
   return undefined

@@ -5,7 +5,11 @@
       class="border-right bg-white font-weight-500 d-none d-lg-block d-xl-block"
     >
       <b-nav vertical>
-        <b-nav-item class="border-top border-bottom" :to="{ name: 'etusivu' }">
+        <b-nav-item
+          v-if="!$isTekninenPaakayttaja()"
+          class="border-top border-bottom"
+          :to="{ name: 'etusivu' }"
+        >
           <font-awesome-icon icon="home" fixed-width size="lg" />
           {{ $t('etusivu') }}
         </b-nav-item>
@@ -41,7 +45,11 @@
           <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
           {{ $t('suoritemerkinnat') }}
         </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
+        <b-nav-item
+          v-if="!$isTekninenPaakayttaja()"
+          class="border-bottom"
+          :to="{ name: 'arvioinnit' }"
+        >
           <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t('arvioinnit') }}
         </b-nav-item>
@@ -56,6 +64,14 @@
         <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
           <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
           {{ $t('asiakirjat') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isTekninenPaakayttaja()"
+          class="border-top border-bottom"
+          :to="{ name: 'kayttajahallinta' }"
+        >
+          <font-awesome-icon icon="user-friends" fixed-width size="lg" />
+          {{ $t('kayttajahallinta') }}
         </b-nav-item>
       </b-nav>
     </nav>
