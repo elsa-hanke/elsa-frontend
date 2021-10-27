@@ -282,16 +282,16 @@
       await this.fetch()
     }
 
-    onTabChange(value: any) {
+    onTabChange(tabIndex: number) {
       this.selected = {
         tyoskentelyjakso: null,
         arvoitavaKokonaisuus: null,
         kouluttajaOrVastuuhenkilo: null
       }
       this.omat = null
-      if (value === 0) {
+      if (tabIndex === 0) {
         this.fetch()
-      } else if (value === 1) {
+      } else if (tabIndex === 1) {
         // Hetaan arviointipyynnöt pelkästään
         this.fetch({
           'arviointiAika.specified': false

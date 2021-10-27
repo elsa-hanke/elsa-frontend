@@ -39,7 +39,8 @@ import {
   faTimes,
   faToolbox,
   faUndoAlt,
-  faUniversity
+  faUniversity,
+  faUserFriends
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faArrowsAlt)
@@ -82,3 +83,4 @@ library.add(faTimes)
 library.add(faToolbox)
 library.add(faUndoAlt)
 library.add(faUniversity)
+library.add(faUserFriends)
