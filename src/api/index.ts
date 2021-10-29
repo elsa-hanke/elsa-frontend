@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import store from '@/store'
 import { OmatTiedotLomake } from '@/types'
+import { setCookie, getCookie } from '@/utils/cookies'
 import { wrapToFormData } from '@/utils/functions'
 
 export const ELSA_API_LOCATION =
@@ -12,6 +13,26 @@ export const ELSA_API_LOCATION =
     : ''
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`
 axios.defaults.withCredentials = true
+axios.interceptors.request.use((req) => {
+  if (window.location.hostname !== 'testi.elsapalvelu.fi') {
+    return req
+  }
+  let accessKey
+  const queryString = window.location.search
+  const urlParams = new URLSearchParams(queryString)
+  accessKey = urlParams.get('accessKey')
+  if (accessKey) {
+    setCookie('ACCESS-KEY', accessKey, 60 * 60 * 24 * 3650)
+  } else {
+    accessKey = getCookie('ACCESS-KEY')
+  }
+
+  if (accessKey) {
+    req.headers.common['X-Access-Key'] = accessKey
+  }
+
+  return req
+})
 axios.interceptors.response.use(
   (response) => {
     return response
