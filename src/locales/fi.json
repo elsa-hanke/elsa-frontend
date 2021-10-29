@@ -148,6 +148,8 @@
   "error": {
     "dataillegal": {
       "erikoistuva-on-jo-valtuuttanut-kouluttajan": "erikoistuva on jo valtuuttanut kouluttajan",
+      "paallekkaisten-poissaolojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten poissaolojen päiväkohtainen kertymä ei voi ylittää 100%:a",
+      "paallekkaisten-tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "samalla-sahkopostilla-loytyy-jo-toinen-kayttaja": "samalla sähköpostilla löytyy jo toinen käyttäjä",
       "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "uuden-lahikouluttajan-voi-lisata-vain-erikoistuva-laakari": "uuden lahikouluttajan voi lisätä vain erikoistuva lääkäri"
@@ -713,7 +715,6 @@
   "tyoskentelyjaksoa-ei-liitetty-koejaksoon": "Työskentelyjaksoa ei ole liitetty koejaksoon",
   "tyoskentelyjaksoa-ei-voi-poistaa-tooltip": "Työskentelyjaksoa ei voi poistaa, koska siihen kohdistuu yksi tai useampi poissaolo, arviointi tai suoritemerkintä.",
   "tyoskentelyjaksojen-hakeminen-epaonnistui": "Työskentelyjaksojen hakeminen epäonnistui",
-  "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
   "tyoskentelyjakson": "Työskentelyjakson",
   "tyoskentelyjakson-hakeminen-epaonnistui": "Työskentelyjakson hakeminen epäonnistui",
   "tyoskentelyjakson-koejaksolta": "työskentelyjakson koejaksolta",
