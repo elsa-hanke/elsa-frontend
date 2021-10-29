@@ -22,11 +22,11 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import PoissaoloForm from '@/forms/poissaolo-form.vue'
-  import { PoissaoloLomake } from '@/types'
+  import { PoissaoloLomake, ElsaError } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -80,8 +80,15 @@
             poissaoloId: `${this.poissaolo.id}`
           }
         })
-      } catch {
-        toastFail(this, this.$t('uuden-poissaolon-lisaaminen-epaonnistui'))
+      } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('uuden-poissaolon-lisaaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('uuden-poissaolon-lisaaminen-epaonnistui')
+        )
       }
       params.saving = false
     }
