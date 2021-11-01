@@ -167,7 +167,7 @@
             ...this.poissaolo.tyoskentelyjakso,
             label: tyoskentelyjaksoLabel(this, this.poissaolo.tyoskentelyjakso)
           },
-          kokoTyoajanPoissaolo: this.poissaolo.osaaikaprosentti === 0 ? true : false
+          kokoTyoajanPoissaolo: this.poissaolo.poissaoloprosentti === 100
         }
       } else {
         return undefined
