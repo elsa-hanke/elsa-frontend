@@ -86,6 +86,18 @@ const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
   }
 }
 
+const etusivuGuard = async (to: Route, from: Route, next: NavigationGuardNext) => {
+  // Tekniselle pääkäyttäjälle voisi olla myös oma etusivunsa
+  if (store.getters['auth/account'].authorities.includes(ELSA_ROLE.TekninenPaakayttaja)) {
+    next({
+      name: 'kayttajahallinta',
+      replace: true
+    })
+  } else {
+    next()
+  }
+}
+
 const routes: Array<RouteConfig> = [
   {
     path: '/',
@@ -102,7 +114,8 @@ const routes: Array<RouteConfig> = [
         meta: {
           grayBackdrop: true
         },
-        component: Etusivu
+        component: Etusivu,
+        beforeEnter: etusivuGuard
       },
       {
         path: '/koulutussuunnitelma',
@@ -562,7 +575,8 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiKayttaja,
-          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja],
+          confirmRouteExit: true
         }
       },
       {

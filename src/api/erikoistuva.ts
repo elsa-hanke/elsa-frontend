@@ -2,7 +2,6 @@ import axios from 'axios'
 
 import {
   AloituskeskusteluLomake,
-  ErikoistuvaLaakari,
   KehittamistoimenpiteetLomake,
   Koejakso,
   Koulutusjakso,
@@ -95,7 +94,7 @@ export async function getKouluttajat() {
   return await axios.get(path)
 }
 
-export async function getTyoskentelyjakso(id: string) {
+export async function getTyoskentelyjakso(id: number | string) {
   const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
   return await axios.get<Tyoskentelyjakso>(path)
 }
@@ -115,7 +114,7 @@ export async function putTyoskentelyjakso(formData: FormData) {
   })
 }
 
-export async function deleteTyoskentelyjakso(id: number) {
+export async function deleteTyoskentelyjakso(id: number | string) {
   const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
   await axios.delete(path)
 }
@@ -165,7 +164,7 @@ export async function putKoulutusjakso(form: Koulutusjakso) {
   return await axios.put<Koulutusjakso>(path, form)
 }
 
-export async function getKoulutusjakso(koulutusjaksoId: string) {
+export async function getKoulutusjakso(koulutusjaksoId: number | string) {
   const path = `erikoistuva-laakari/koulutussuunnitelma/koulutusjaksot/${koulutusjaksoId}`
   return await axios.get<Koulutusjakso>(path)
 }
@@ -180,7 +179,7 @@ export async function getTeoriakoulutukset() {
   return await axios.get<Teoriakoulutukset>(path)
 }
 
-export async function getTeoriakoulutus(teoriakoulutusId: string) {
+export async function getTeoriakoulutus(teoriakoulutusId: number | string) {
   const path = `erikoistuva-laakari/teoriakoulutukset/${teoriakoulutusId}`
   return await axios.get<Teoriakoulutus>(path)
 }
@@ -193,11 +192,6 @@ export async function postTeoriakoulutus(form: Teoriakoulutus, todistusFiles: Fi
   return await axios.post<Teoriakoulutus>('erikoistuva-laakari/teoriakoulutukset', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
-}
-
-export async function getErikoistuvatLaakarit() {
-  const path = 'tekninen-paakayttaja/erikoistuvat-laakarit'
-  return await axios.get<ErikoistuvaLaakari[]>(path)
 }
 
 export async function putTeoriakoulutus(

@@ -6,70 +6,89 @@
         <b-col>
           <h1>{{ $t('kayttaja') }}</h1>
           <hr />
-          <elsa-form-group :label="$t('rooli')">
-            <template v-slot="{ uid }">
-              <span :id="uid">{{ kayttaja.rooli }}</span>
-            </template>
-          </elsa-form-group>
-          <b-form-row>
-            <elsa-form-group :label="$t('etunimi')" class="col-sm-12 col-md-6 pr-md-3">
+          <div v-if="kayttaja">
+            <elsa-form-group v-if="rooli" :label="$t('rooli')">
               <template v-slot="{ uid }">
-                <span :id="uid">{{ kayttaja.etunimi }}</span>
+                <span :id="uid">{{ $t(rooli) }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group :label="$t('sukunimi')" class="col-sm-12 col-md-6 pl-md-3">
+            <b-form-row>
+              <elsa-form-group
+                v-if="etunimi"
+                :label="$t('etunimi')"
+                class="col-sm-12 col-md-6 pr-md-3"
+              >
+                <template v-slot="{ uid }">
+                  <span :id="uid">{{ etunimi }}</span>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group
+                v-if="sukunimi"
+                :label="$t('sukunimi')"
+                class="col-sm-12 col-md-6 pl-md-3"
+              >
+                <template v-slot="{ uid }">
+                  <span :id="uid">{{ sukunimi }}</span>
+                </template>
+              </elsa-form-group>
+            </b-form-row>
+            <elsa-form-group v-if="yliopisto" :label="$t('yliopisto')">
               <template v-slot="{ uid }">
-                <span :id="uid">{{ kayttaja.sukunimi }}</span>
+                <span :id="uid">{{ yliopisto }}</span>
               </template>
             </elsa-form-group>
-          </b-form-row>
-          <elsa-form-group :label="$t('yliopisto')">
-            <template v-slot="{ uid }">
-              <span :id="uid">{{ kayttaja.yliopisto }}</span>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('erikoisala')">
-            <template v-slot="{ uid }">
-              <span :id="uid">{{ kayttaja.erikoisala }}</span>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('opiskelijatunnus')">
-            <template v-slot="{ uid }">
-              <span :id="uid">{{ kayttaja.opiskelijatunnus }}</span>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('opiskeluoikeus')">
-            <template v-slot="{ uid }">
-              <span :id="uid">
-                {{
-                  `${$date(kayttaja.opiskeluoikeusAlkaa)}-${$date(kayttaja.opiskeluoikeusPaattyy)}`
-                }}
-              </span>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('kaytossa-olevan-opetussuunnitelman-paivamaara')">
-            <template v-slot="{ uid }">
-              <span :id="uid">
-                {{ $date(kayttaja.opintosuunnitelmaKaytossaPvm) }}
-              </span>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('sahkopostiosoite')">
-            <template v-slot="{ uid }">
-              <span :id="uid">
-                {{ kayttaja.sahkopostiosoite }}
-              </span>
-            </template>
-          </elsa-form-group>
-          <hr />
-          <div class="d-flex flex-row-reverse flex-wrap">
-            <elsa-button
-              :to="{ name: 'kayttajahallinta' }"
-              variant="link"
-              class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
+            <elsa-form-group v-if="erikoisala" :label="$t('erikoisala')">
+              <template v-slot="{ uid }">
+                <span :id="uid">{{ erikoisala }}</span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group v-if="opiskelijatunnus" :label="$t('opiskelijatunnus')">
+              <template v-slot="{ uid }">
+                <span :id="uid">{{ opiskelijatunnus }}</span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group
+              v-if="opintooikeudenMyontamispaiva && opintooikeudenPaattymispaiva"
+              :label="$t('opiskeluoikeus')"
             >
-              {{ $t('palaa-teoriakoulutuksiin') }}
-            </elsa-button>
+              <template v-slot="{ uid }">
+                <span :id="uid">
+                  {{
+                    `${$date(opintooikeudenMyontamispaiva)}-${$date(opintooikeudenPaattymispaiva)}`
+                  }}
+                </span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group
+              v-if="opintosuunnitelmaKaytossaPvm"
+              :label="$t('kaytossa-olevan-opetussuunnitelman-paivamaara')"
+            >
+              <template v-slot="{ uid }">
+                <span :id="uid">
+                  {{ $date(opintosuunnitelmaKaytossaPvm) }}
+                </span>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group v-if="sahkopostiosoite" :label="$t('sahkopostiosoite')">
+              <template v-slot="{ uid }">
+                <span :id="uid">
+                  {{ sahkopostiosoite }}
+                </span>
+              </template>
+            </elsa-form-group>
+            <hr />
+            <div class="d-flex flex-row-reverse flex-wrap">
+              <elsa-button
+                :to="{ name: 'kayttajahallinta' }"
+                variant="link"
+                class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
+              >
+                {{ $t('palaa-teoriakoulutuksiin') }}
+              </elsa-button>
+            </div>
+          </div>
+          <div v-else class="text-center">
+            <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
       </b-row>
@@ -80,8 +99,12 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { getKayttaja } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import { KayttajahallintaKayttaja } from '@/types'
+  import { getTitleFromAuthorities } from '@/utils/functions'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -89,7 +112,7 @@
       ElsaFormGroup
     }
   })
-  export default class Kayttaja extends Vue {
+  export default class KayttajaView extends Vue {
     items = [
       {
         text: this.$t('kayttajahallinta'),
@@ -101,21 +124,60 @@
       }
     ]
     loading = true
-    kayttaja = {
-      rooli: 'Erikoistuja',
-      etunimi: 'Matti',
-      sukunimi: 'Meikäläinen',
-      yliopisto: 'Tampereen yliopisto',
-      erikoisala: 'Lastentaudit',
-      opiskelijatunnus: '123456',
-      opiskeluoikeusAlkaa: '2021-10-14',
-      opiskeluoikeusPaattyy: '2023-10-14',
-      opintosuunnitelmaKaytossaPvm: '2021-10-14',
-      sahkopostiosoite: 'matti.meikalainen@localhost.local'
-    }
+    kayttaja: KayttajahallintaKayttaja | null = null
 
     async mounted() {
+      await this.fetchKayttaja()
       this.loading = false
+    }
+
+    async fetchKayttaja() {
+      try {
+        this.kayttaja = (await getKayttaja(this.$route?.params?.kayttajaId)).data
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'kayttajahallinta' })
+      }
+    }
+
+    get rooli() {
+      return getTitleFromAuthorities(this.kayttaja?.user?.authorities ?? [])
+    }
+
+    get etunimi() {
+      return this.kayttaja?.kayttaja?.etunimi
+    }
+
+    get sukunimi() {
+      return this.kayttaja?.kayttaja?.sukunimi
+    }
+
+    get yliopisto() {
+      return this.kayttaja?.kayttaja?.yliopisto?.nimi
+    }
+
+    get erikoisala() {
+      return this.kayttaja?.erikoistuvaLaakari?.erikoisalaNimi
+    }
+
+    get opiskelijatunnus() {
+      return this.kayttaja?.erikoistuvaLaakari?.opiskelijatunnus
+    }
+
+    get sahkopostiosoite() {
+      return this.kayttaja?.kayttaja?.sahkoposti
+    }
+
+    get opintooikeudenMyontamispaiva() {
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudenMyontamispaiva
+    }
+
+    get opintooikeudenPaattymispaiva() {
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudenPaattymispaiva
+    }
+
+    get opintosuunnitelmaKaytossaPvm() {
+      return this.kayttaja?.erikoistuvaLaakari?.opintosuunnitelmaKaytossaPvm
     }
   }
 </script>

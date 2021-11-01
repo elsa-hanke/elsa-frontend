@@ -17,7 +17,7 @@
                       <elsa-button
                         :to="{
                           name: 'kayttaja',
-                          params: { kayttajaId: row.item.id }
+                          params: { kayttajaId: row.item.kayttajaId }
                         }"
                         variant="link"
                         class="p-0 shadow-none"
@@ -33,6 +33,9 @@
               <!-- <b-tab :title="$t('paakayttajat')"></b-tab> -->
             </b-tabs>
           </div>
+          <div v-else class="text-center">
+            <b-spinner variant="primary" :label="$t('ladataan')" />
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -42,7 +45,7 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getErikoistuvatLaakarit } from '@/api/erikoistuva'
+  import { getErikoistuvatLaakarit } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import { ErikoistuvaLaakari } from '@/types'
   import { toastFail } from '@/utils/toast'
@@ -94,8 +97,51 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
   .kayttajahallinta {
     max-width: 1024px;
     padding-top: 0.75rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    .kayttajat-table {
+      ::v-deep table {
+        border-bottom: 0;
+
+        tr {
+          border: $table-border-width solid $table-border-color;
+          border-radius: $border-radius;
+          margin-top: 0.5rem;
+          padding-top: $table-cell-padding;
+          padding-bottom: $table-cell-padding;
+        }
+
+        td {
+          border: none;
+          padding: 0 0.5rem;
+
+          & > div {
+            width: 100% !important;
+            padding: 0 0 0.5rem 0 !important;
+          }
+
+          &::before {
+            text-align: left !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            padding-right: 0 !important;
+          }
+          &:last-child > div {
+            padding-bottom: 0 !important;
+          }
+
+          &.last > div {
+            padding-bottom: 0 !important;
+          }
+        }
+      }
+    }
   }
 </style>

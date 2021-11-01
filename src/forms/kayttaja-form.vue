@@ -7,7 +7,7 @@
           v-model="form.rooli"
           :aria-describedby="ariaDescribedby"
           :name="$t('erikoistuva-laakari')"
-          value="erikoistuva-laakari"
+          :value="ELSA_ROLE.ErikoistuvaLaakari"
         >
           {{ $t('erikoistuja') }}
         </b-form-radio>
@@ -18,8 +18,8 @@
         <template v-slot="{ uid }">
           <b-form-input
             :id="uid"
-            v-model="form.etunimi"
-            :state="validateState('etunimi')"
+            v-model="form.erikoistuvaLaakari.etunimi"
+            :state="validateErikoistuvaLaakariState('etunimi')"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -30,8 +30,8 @@
         <template v-slot="{ uid }">
           <b-form-input
             :id="uid"
-            v-model="form.sukunimi"
-            :state="validateState('sukunimi')"
+            v-model="form.erikoistuvaLaakari.sukunimi"
+            :state="validateErikoistuvaLaakariState('sukunimi')"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -41,11 +41,14 @@
     </b-form-row>
     <elsa-form-group :label="$t('yliopisto')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input
+        <elsa-form-multiselect
           :id="uid"
-          v-model="form.yliopisto"
-          :state="validateState('yliopisto')"
-        ></b-form-input>
+          v-model="form.erikoistuvaLaakari.yliopisto"
+          :options="yliopistot"
+          :state="validateErikoistuvaLaakariState('yliopisto')"
+          label="nimi"
+          track-by="id"
+        />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
@@ -53,11 +56,14 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('erikoisala')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input
+        <elsa-form-multiselect
           :id="uid"
-          v-model="form.erikoisala"
-          :state="validateState('erikoisala')"
-        ></b-form-input>
+          v-model="form.erikoistuvaLaakari.erikoisala"
+          :options="erikoisalat"
+          :state="validateErikoistuvaLaakariState('erikoisala')"
+          label="nimi"
+          track-by="id"
+        />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
@@ -67,8 +73,8 @@
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
-          v-model="form.opiskelijatunnus"
-          :state="validateState('opiskelijatunnus')"
+          v-model="form.erikoistuvaLaakari.opiskelijatunnus"
+          :state="validateErikoistuvaLaakariState('opiskelijatunnus')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -84,8 +90,8 @@
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="form.opiskeluoikeusAlkaa"
-            :state="validateState('opiskeluoikeusAlkaa')"
+            v-model="form.erikoistuvaLaakari.opiskeluoikeusAlkaa"
+            :state="validateErikoistuvaLaakariState('opiskeluoikeusAlkaa')"
             :max="maxAlkamispaiva"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -101,8 +107,8 @@
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="form.opiskeluoikeusPaattyy"
-            :state="validateState('opiskeluoikeusPaattyy')"
+            v-model="form.erikoistuvaLaakari.opiskeluoikeusPaattyy"
+            :state="validateErikoistuvaLaakariState('opiskeluoikeusPaattyy')"
             :min="minPaattymispaiva"
             class="datepicker-range"
           ></elsa-form-datepicker>
@@ -116,8 +122,8 @@
       <template v-slot="{ uid }">
         <elsa-form-datepicker
           :id="uid"
-          v-model="form.opintosuunnitelmaKaytossaPvm"
-          :state="validateState('opintosuunnitelmaKaytossaPvm')"
+          v-model="form.erikoistuvaLaakari.opintosuunnitelmaKaytossaPvm"
+          :state="validateErikoistuvaLaakariState('opintosuunnitelmaKaytossaPvm')"
         ></elsa-form-datepicker>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -128,8 +134,8 @@
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
-          v-model="form.sahkopostiosoite"
-          :state="validateState('sahkopostiosoite')"
+          v-model="form.erikoistuvaLaakari.sahkopostiosoite"
+          :state="validateErikoistuvaLaakariState('sahkopostiosoite')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -140,8 +146,8 @@
       <template v-slot="{ uid }">
         <b-form-input
           :id="uid"
-          v-model="form.sahkopostiosoiteUudelleen"
-          :state="validateState('sahkopostiosoiteUudelleen')"
+          v-model="form.erikoistuvaLaakari.sahkopostiosoiteUudelleen"
+          :state="validateErikoistuvaLaakariState('sahkopostiosoiteUudelleen')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -161,88 +167,103 @@
 
 <script lang="ts">
   import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
+  import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import { UusiKayttaja } from '@/types'
+  import { ELSA_ROLE } from '@/utils/roles'
 
   @Component({
     components: {
       ElsaFormGroup,
       ElsaButton,
-      ElsaFormDatepicker
+      ElsaFormDatepicker,
+      ElsaFormMultiselect
     },
     validations: {
       form: {
         rooli: {
           required
         },
-        etunimi: {
-          required
-        },
-        sukunimi: {
-          required
-        },
-        yliopisto: {
-          required
-        },
-        erikoisala: {
-          required
-        },
-        opiskelijatunnus: {
-          required
-        },
-        opiskeluoikeusAlkaa: {
-          required
-        },
-        opiskeluoikeusPaattyy: {
-          required
-        },
-        opintosuunnitelmaKaytossaPvm: {
-          required
-        },
-        sahkopostiosoite: {
-          required,
-          email
-        },
-        sahkopostiosoiteUudelleen: {
-          required,
-          sameAsPassword: sameAs('sahkopostiosoite')
+        erikoistuvaLaakari: {
+          etunimi: {
+            required
+          },
+          sukunimi: {
+            required
+          },
+          yliopisto: {
+            required
+          },
+          erikoisala: {
+            required
+          },
+          opiskelijatunnus: {
+            required
+          },
+          opiskeluoikeusAlkaa: {
+            required
+          },
+          opiskeluoikeusPaattyy: {
+            required
+          },
+          opintosuunnitelmaKaytossaPvm: {
+            required
+          },
+          sahkopostiosoite: {
+            required,
+            email
+          },
+          sahkopostiosoiteUudelleen: {
+            required,
+            sameAsSahkopostiosoite: sameAs('sahkopostiosoite')
+          }
         }
       }
     }
   })
   export default class KayttajaForm extends Mixins(validationMixin) {
-    form = {
-      rooli: 'erikoistuva-laakari',
-      etunimi: null,
-      sukunimi: null,
-      yliopisto: null,
-      erikoisala: null,
-      opiskelijatunnus: null,
-      opiskeluoikeusAlkaa: null,
-      opiskeluoikeusPaattyy: null,
-      opintosuunnitelmaKaytossaPvm: null,
-      sahkopostiosoite: null
+    @Prop({ required: false, default: () => [] })
+    yliopistot!: any[]
+
+    @Prop({ required: false, default: () => [] })
+    erikoisalat!: any[]
+
+    form: UusiKayttaja = {
+      rooli: ELSA_ROLE.ErikoistuvaLaakari,
+      erikoistuvaLaakari: {
+        etunimi: null,
+        sukunimi: null,
+        yliopisto: null,
+        erikoisala: null,
+        opiskelijatunnus: null,
+        opiskeluoikeusAlkaa: null,
+        opiskeluoikeusPaattyy: null,
+        opintosuunnitelmaKaytossaPvm: null,
+        sahkopostiosoite: null,
+        sahkopostiosoiteUudelleen: null
+      }
     }
     params = {
       saving: false
     }
 
-    validateState(name: string) {
-      const { $dirty, $error } = this.$v.form[name] as any
+    validateErikoistuvaLaakariState(name: string) {
+      const { $dirty, $error } = this.$v.form.erikoistuvaLaakari?.[name] as any
       return $dirty ? ($error ? false : null) : null
     }
 
     get maxAlkamispaiva() {
-      return this.form.opiskeluoikeusPaattyy
+      return this.form.erikoistuvaLaakari?.opiskeluoikeusPaattyy
     }
 
     get minPaattymispaiva() {
-      return this.form.opiskeluoikeusAlkaa
+      return this.form.erikoistuvaLaakari?.opiskeluoikeusAlkaa
     }
 
     onSubmit() {

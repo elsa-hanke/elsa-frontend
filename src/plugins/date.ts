@@ -70,4 +70,13 @@ export class DatePlugin {
   }
 }
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    $date: (value: string) => string
+    $today: () => string
+    $datetime: (value: string) => string
+    $duration: (value: number) => string
+  }
+}
+
 Vue.use(new DatePlugin())
