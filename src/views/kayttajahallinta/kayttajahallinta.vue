@@ -11,8 +11,8 @@
           <div v-if="!loading">
             <b-tabs content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('erikoistujat')" active>
-                <div v-if="kayttajatFormatted.length > 0" class="kayttajat-table">
-                  <b-table :items="kayttajatFormatted" :fields="fields" stacked="md" responsive>
+                <div v-if="erikoistuvatLaakarit.length > 0" class="kayttajat-table">
+                  <b-table :items="erikoistuvatLaakarit" :fields="fields" stacked="md" responsive>
                     <template #cell(nimi)="row">
                       <elsa-button
                         :to="{
@@ -42,7 +42,10 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { getErikoistuvatLaakarit } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
+  import { ErikoistuvaLaakari } from '@/types'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -63,7 +66,7 @@
         sortable: true
       },
       {
-        key: 'erikoisala',
+        key: 'erikoisalaNimi',
         label: this.$t('erikoisala'),
         sortable: true
       },
@@ -73,21 +76,19 @@
         sortable: true
       }
     ]
+    erikoistuvatLaakarit: ErikoistuvaLaakari[] = []
 
     async mounted() {
+      await this.getErikoistuvatLaakarit()
       this.loading = false
     }
 
-    get kayttajatFormatted() {
-      return [
-        {
-          id: 1,
-          nimi: 'Matti Meikäläinen',
-          yliopisto: 'Tampere',
-          erikoisala: 'Lastentaudit',
-          opiskelijatunnus: 123456
-        }
-      ]
+    async getErikoistuvatLaakarit() {
+      try {
+        this.erikoistuvatLaakarit = (await getErikoistuvatLaakarit()).data
+      } catch (err) {
+        toastFail(this, this.$t('kayttajien-hakeminen-epaonnistui'))
+      }
     }
   }
 </script>

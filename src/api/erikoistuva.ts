@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import {
   AloituskeskusteluLomake,
+  ErikoistuvaLaakari,
   KehittamistoimenpiteetLomake,
   Koejakso,
   Koulutusjakso,
@@ -192,6 +193,11 @@ export async function postTeoriakoulutus(form: Teoriakoulutus, todistusFiles: Fi
   return await axios.post<Teoriakoulutus>('erikoistuva-laakari/teoriakoulutukset', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
+}
+
+export async function getErikoistuvatLaakarit() {
+  const path = 'tekninen-paakayttaja/erikoistuvat-laakarit'
+  return await axios.get<ErikoistuvaLaakari[]>(path)
 }
 
 export async function putTeoriakoulutus(

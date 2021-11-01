@@ -557,20 +557,20 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/kayttajahallinta/kayttaja/:kayttajaId',
-        name: 'kayttaja',
-        component: RoleSpecificRoute,
-        props: {
-          routeComponent: Kayttaja,
-          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
-        }
-      },
-      {
         path: '/kayttajahallinta/kayttaja/uusi',
         name: 'uusi-kayttaja',
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiKayttaja,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/kayttajahallinta/kayttaja/:kayttajaId',
+        name: 'kayttaja',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Kayttaja,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       }
