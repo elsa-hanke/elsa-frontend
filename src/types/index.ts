@@ -12,6 +12,7 @@ import {
 
 export type ErikoistuvaLaakari = {
   id: number | null
+  nimi: string
   kayttajaId: number
   erikoisalaId: number
   erikoisalaNimi: string
