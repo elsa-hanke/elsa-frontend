@@ -9,6 +9,7 @@ import {
   KehittamistoimenpideKategoria,
   TyoskentelyjaksoTyyppi
 } from '@/utils/constants'
+import { ELSA_ROLE } from '@/utils/roles'
 
 export type ErikoistuvaLaakari = {
   id: number | null
@@ -373,10 +374,19 @@ export type KoejaksonVaiheButtonStates = {
   secondaryButtonLoading: boolean
 }
 
+export interface KayttajaAuthority {
+  name: string
+}
+
 export interface Kayttaja {
   id?: number
   nimi: string
+  etunimi: string
+  sukunimi: string
+  sahkoposti: string
+  avatar: string
   userId: string
+  authorities: KayttajaAuthority[]
   nimike: string
   yliopisto: Yliopisto
 }
@@ -580,4 +590,35 @@ export interface ElsaError {
 export type HakaYliopisto = {
   nimi: string
   hakaId: string
+}
+
+export interface KayttajahallintaKayttaja {
+  user?: UserAccount
+  kayttaja?: Kayttaja
+  erikoistuvaLaakari?: ErikoistuvaLaakari
+}
+
+export interface UusiKayttaja {
+  rooli: ELSA_ROLE
+  erikoistuvaLaakari: UusiErikoistuvaLaakari
+}
+
+export interface UusiErikoistuvaLaakari {
+  etunimi: string | null
+  sukunimi: string | null
+  yliopisto: Yliopisto | null
+  yliopistoId?: number
+  erikoisala: Erikoisala | null
+  erikoisalaId?: number | null
+  opiskelijatunnus: string | null
+  opiskeluoikeusAlkaa: string | null
+  opiskeluoikeusPaattyy: string | null
+  opintosuunnitelmaKaytossaPvm: string | null
+  sahkopostiosoite: string | null
+  sahkopostiosoiteUudelleen: string | null
+}
+
+export interface KayttajaLomake {
+  yliopistot: Yliopisto[]
+  erikoisalat: Erikoisala[]
 }
