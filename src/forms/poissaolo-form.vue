@@ -90,13 +90,17 @@
     <b-form-row>
       <elsa-form-group
         v-if="!form.kokoTyoajanPoissaolo"
-        :label="
-          $t('poissaolo-taydesta-tyopaivasta') +
-          ` (0-${form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100} %)`
-        "
+        :label="`${$t('poissaolo-nykyisesta-taydesta-tyoajasta')} (0-100 %)`"
         :required="true"
-        class="col-sm-3"
+        class="col-sm-5"
       >
+        <template #label-help>
+          <elsa-popover>
+            <template>
+              {{ $t('poissaoloprosentti-tooltip') }}
+            </template>
+          </elsa-popover>
+        </template>
         <template v-slot="{ uid }">
           <div class="d-flex align-items-center">
             <b-form-input
@@ -114,10 +118,7 @@
               display: validateState('osaaikaprosentti') === false ? 'block' : 'none'
             }"
           >
-            {{ $t('osaaikaprosentti-validointivirhe') }} 0–{{
-              form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100
-            }}
-            %
+            {{ `${$t('osaaikaprosentti-validointivirhe')} 0-100 %` }}
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
@@ -146,7 +147,7 @@
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { required, requiredIf, integer } from 'vuelidate/lib/validators'
+  import { required, requiredIf, integer, between } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
@@ -189,11 +190,7 @@
           required: requiredIf((value) => {
             return value.kokoTyoajanPoissaolo === false
           }),
-          between: (value, form) =>
-            value < 0 ||
-            value > (form.tyoskentelyjakso ? form.tyoskentelyjakso.osaaikaprosentti : 100)
-              ? false
-              : true,
+          between: between(0, 100),
           integer
         }
       }
@@ -232,12 +229,6 @@
 
     mounted() {
       this.form = this.value
-      if (this.value?.osaaikaprosentti) {
-        this.form.kokoTyoajanPoissaolo =
-          this.value?.osaaikaprosentti === this.value?.tyoskentelyjakso?.osaaikaprosentti
-            ? true
-            : false
-      }
     }
 
     validateState(name: string) {
@@ -256,9 +247,7 @@
           ...this.form,
           poissaolonSyyId: this.form.poissaolonSyy?.id,
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-          osaaikaprosentti: this.form.kokoTyoajanPoissaolo
-            ? this.form.tyoskentelyjakso.osaaikaprosentti
-            : this.form.osaaikaprosentti
+          osaaikaprosentti: this.form.kokoTyoajanPoissaolo ? 100 : this.form.osaaikaprosentti
         },
         this.params
       )
@@ -274,9 +263,6 @@
       }
       if (!dateBetween(this.form.paattymispaiva, value.alkamispaiva, value.paattymispaiva)) {
         this.form.paattymispaiva = null
-      }
-      if (this.form.osaaikaprosentti > value.osaaikaprosentti) {
-        this.form.osaaikaprosentti = null
       }
     }
 

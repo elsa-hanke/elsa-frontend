@@ -37,7 +37,7 @@
                 </template>
               </elsa-form-group>
             </b-form-row>
-            <elsa-form-group :label="$t('poissaolo-taydesta-tyopaivasta') + ' (%)'">
+            <elsa-form-group :label="$t('poissaolo-nykyisesta-taydesta-tyoajasta') + ' (%)'">
               <template v-slot="{ uid }">
                 <span :id="uid">{{ poissaoloWrapper.osaaikaprosentti }} %</span>
               </template>

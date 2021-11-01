@@ -137,7 +137,7 @@
                     <b-table-simple stacked="md">
                       <b-thead>
                         <b-tr>
-                          <b-th>
+                          <b-th style="width: 60%">
                             {{ $t('poissaolon-syy') }}
                             <elsa-popover>
                               <template>
@@ -145,8 +145,8 @@
                               </template>
                             </elsa-popover>
                           </b-th>
-                          <b-th>{{ $t('ajankohta') }}</b-th>
-                          <b-th>{{ $t('tyoaika') }}</b-th>
+                          <b-th style="width: 25%">{{ $t('ajankohta') }}</b-th>
+                          <b-th style="width: 15%">{{ $t('poissaolo') }}</b-th>
                         </b-tr>
                       </b-thead>
                       <b-tbody>
@@ -173,12 +173,7 @@
                             }}
                           </b-td>
                           <b-td :stacked-heading="$t('tyoaika')">
-                            <span
-                              v-if="keskeytysaika.osaaikaprosentti === row.item.osaaikaprosentti"
-                            >
-                              {{ $t('koko-tyoajan-poissaolo') }}
-                            </span>
-                            <span v-else>{{ 100 - keskeytysaika.osaaikaprosentti }} %</span>
+                            <span>{{ keskeytysaika.osaaikaprosentti }} %</span>
                           </b-td>
                         </b-tr>
                       </b-tbody>
