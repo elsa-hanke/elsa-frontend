@@ -7,7 +7,7 @@
           v-model="form.rooli"
           :aria-describedby="ariaDescribedby"
           :name="$t('erikoistuva-laakari')"
-          :value="ELSA_ROLE.ErikoistuvaLaakari"
+          :value="erikoistuvaLaakari"
         >
           {{ $t('erikoistuja') }}
         </b-form-radio>
@@ -264,6 +264,10 @@
 
     get minPaattymispaiva() {
       return this.form.erikoistuvaLaakari?.opiskeluoikeusAlkaa
+    }
+
+    get erikoistuvaLaakari() {
+      return ELSA_ROLE.ErikoistuvaLaakari
     }
 
     onSubmit() {

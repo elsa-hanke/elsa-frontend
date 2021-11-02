@@ -26,3 +26,8 @@ export async function postErikoistuvaLaakari(form: UusiErikoistuvaLaakari) {
   const path = 'tekninen-paakayttaja/erikoistuvat-laakarit'
   return await axios.post<ErikoistuvaLaakari>(path, form)
 }
+
+export async function putErikoistuvaLaakariInvitation(erikoistuvaLaakariId: number | string) {
+  const path = `tekninen-paakayttaja/erikoistuvat-laakarit/${erikoistuvaLaakariId}/invite`
+  return await axios.put(path)
+}

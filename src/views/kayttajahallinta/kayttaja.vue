@@ -78,6 +78,9 @@
             </elsa-form-group>
             <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
+              <elsa-button variant="primary" @click="onInvitationResend" class="mb-3">
+                {{ $t('laheta-kutsu-uudelleen') }}
+              </elsa-button>
               <elsa-button
                 :to="{ name: 'kayttajahallinta' }"
                 variant="link"
@@ -99,12 +102,12 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getKayttaja } from '@/api/tekninen-paakayttaja'
+  import { getKayttaja, putErikoistuvaLaakariInvitation } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { KayttajahallintaKayttaja } from '@/types'
   import { getTitleFromAuthorities } from '@/utils/functions'
-  import { toastFail } from '@/utils/toast'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
@@ -124,6 +127,7 @@
       }
     ]
     loading = true
+    resending = false
     kayttaja: KayttajahallintaKayttaja | null = null
 
     async mounted() {
@@ -137,6 +141,30 @@
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'kayttajahallinta' })
+      }
+    }
+
+    async onInvitationResend() {
+      if (
+        this.kayttaja?.erikoistuvaLaakari?.id &&
+        (await this.$bvModal.msgBoxConfirm(this.$t('laheta-kutsu-viesti') as string, {
+          title: this.$t('laheta-kutsu-uudelleen') as string,
+          okVariant: 'primary',
+          okTitle: this.$t('laheta-kutsu') as string,
+          cancelTitle: this.$t('peruuta') as string,
+          cancelVariant: 'back',
+          hideHeaderClose: false,
+          centered: true
+        }))
+      ) {
+        this.resending = true
+        try {
+          await putErikoistuvaLaakariInvitation(this.kayttaja?.erikoistuvaLaakari?.id)
+          toastSuccess(this, this.$t('kutsulinkki-lahetetty-uudestaan'))
+        } catch (err) {
+          toastFail(this, this.$t('kutsulinkin-lahettaminen-epaonnistui'))
+        }
+        this.resending = false
       }
     }
 

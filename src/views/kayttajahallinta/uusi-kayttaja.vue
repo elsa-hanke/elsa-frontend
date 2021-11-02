@@ -83,7 +83,7 @@
           ).data.kayttajaId
         }
         // TODO: muut roolit
-        toastSuccess(this, this.$t('uusi-kayttaja-lisatty-onnistuneesti'))
+        toastSuccess(this, this.$t('kayttaja-lisatty-ja-kutsulinkki-lahetetty'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'kayttaja',
