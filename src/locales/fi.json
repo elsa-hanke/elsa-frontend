@@ -574,6 +574,7 @@
   "poissaolon-tallentaminen-epaonnistui": "Poissaolon tallentaminen epäonnistui",
   "poissaolon-tallentaminen-onnistui": "Poissaolon tallentaminen onnistui",
   "poissaoloprosentti-tooltip": "Jos teet esimerkiksi puolikasta päivää nykyisestä työajastasi, kirjaa tähän 50%.",
+  "poissaoloprosentti-validointivirhe": "Tiedon oltava väliltä",
   "poissaolot": "Poissaolot",
   "poista": "Poista",
   "poista-arviointipyynto": "Poista arviointipyyntö",
