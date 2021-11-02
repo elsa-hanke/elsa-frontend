@@ -105,8 +105,8 @@
           <div class="d-flex align-items-center">
             <b-form-input
               :id="uid"
-              v-model.number="form.osaaikaprosentti"
-              :state="validateState('osaaikaprosentti')"
+              v-model.number="form.poissaoloprosentti"
+              :state="validateState('poissaoloprosentti')"
               type="number"
               step="any"
             />
@@ -115,10 +115,10 @@
           <b-form-invalid-feedback
             :id="`${uid}-feedback`"
             :style="{
-              display: validateState('osaaikaprosentti') === false ? 'block' : 'none'
+              display: validateState('poissaoloprosentti') === false ? 'block' : 'none'
             }"
           >
-            {{ `${$t('osaaikaprosentti-validointivirhe')} 0-100 %` }}
+            {{ `${$t('poissaoloprosentti-validointivirhe')} 0-100 %` }}
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
@@ -186,7 +186,7 @@
         kokoTyoajanPoissaolo: {
           required
         },
-        osaaikaprosentti: {
+        poissaoloprosentti: {
           required: requiredIf((value) => {
             return value.kokoTyoajanPoissaolo === false
           }),
@@ -209,7 +209,7 @@
         alkamispaiva: null,
         paattymispaiva: null,
         kokoTyoajanPoissaolo: true,
-        osaaikaprosentti: null
+        poissaoloprosentti: null
       })
     })
     value!: any
@@ -220,7 +220,7 @@
       alkamispaiva: null,
       paattymispaiva: null,
       kokoTyoajanPoissaolo: null,
-      osaaikaprosentti: null
+      poissaoloprosentti: null
     } as any
     params = {
       saving: false,
@@ -247,7 +247,7 @@
           ...this.form,
           poissaolonSyyId: this.form.poissaolonSyy?.id,
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-          osaaikaprosentti: this.form.kokoTyoajanPoissaolo ? 100 : this.form.osaaikaprosentti
+          poissaoloprosentti: this.form.kokoTyoajanPoissaolo ? 100 : this.form.poissaoloprosentti
         },
         this.params
       )

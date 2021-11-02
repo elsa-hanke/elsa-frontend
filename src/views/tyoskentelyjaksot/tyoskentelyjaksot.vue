@@ -173,7 +173,7 @@
                             }}
                           </b-td>
                           <b-td :stacked-heading="$t('tyoaika')">
-                            <span>{{ keskeytysaika.osaaikaprosentti }} %</span>
+                            <span>{{ keskeytysaika.poissaoloprosentti }} %</span>
                           </b-td>
                         </b-tr>
                       </b-tbody>
@@ -499,7 +499,7 @@
               id: keskeytysaika.id,
               alkamispaiva: keskeytysaika.alkamispaiva,
               paattymispaiva: keskeytysaika.paattymispaiva,
-              osaaikaprosentti: keskeytysaika.osaaikaprosentti,
+              poissaoloprosentti: keskeytysaika.poissaoloprosentti,
               poissaolonSyy: keskeytysaika.poissaolonSyy
             })
           } else {
@@ -508,7 +508,7 @@
                 id: keskeytysaika.id,
                 alkamispaiva: keskeytysaika.alkamispaiva,
                 paattymispaiva: keskeytysaika.paattymispaiva,
-                osaaikaprosentti: keskeytysaika.osaaikaprosentti,
+                poissaoloprosentti: keskeytysaika.poissaoloprosentti,
                 poissaolonSyy: keskeytysaika.poissaolonSyy
               }
             ]
