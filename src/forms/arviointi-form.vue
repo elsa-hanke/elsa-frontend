@@ -199,7 +199,7 @@
             <b-td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                 <elsa-button
-                  v-if="$isErikoistuva()"
+                  v-if="$isErikoistuva() && !value.lukittu"
                   variant="primary"
                   class="d-flex align-items-center text-decoration-none"
                   :to="{

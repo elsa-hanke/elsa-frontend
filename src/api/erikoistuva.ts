@@ -13,9 +13,12 @@ import {
   Teoriakoulutus,
   Tyoskentelyjakso,
   TyoskentelyjaksoLomake,
+  Seurantajakso,
+  SeurantajaksonTiedot,
   ValiarviointiLomake,
   VastuuhenkilonArvioLomake,
-  VastuuhenkilonArvioLomakeErikoistuva
+  VastuuhenkilonArvioLomakeErikoistuva,
+  Kayttaja
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -211,4 +214,43 @@ export async function putTeoriakoulutus(
       headers: { 'Content-Type': 'multipart/form-data' }
     }
   )
+}
+
+export async function getSeurantajaksot() {
+  const path = 'erikoistuva-laakari/seurantakeskustelut/seurantajaksot'
+  return await axios.get<Seurantajakso[]>(path)
+}
+
+export async function getSeurantajakso(seurantajaksoId: string) {
+  const path = `erikoistuva-laakari/seurantakeskustelut/seurantajakso/${seurantajaksoId}`
+  return await axios.get<Seurantajakso>(path)
+}
+
+export async function getSeurantajaksonTiedot(
+  alkupvm: string,
+  loppupvm: string,
+  koulutusjaksot: number[]
+) {
+  const path = `erikoistuva-laakari/seurantakeskustelut/seurantajaksontiedot?alkamispaiva=${alkupvm}&paattymispaiva=${loppupvm}&koulutusjaksot=${koulutusjaksot}`
+  return await axios.get<SeurantajaksonTiedot>(path)
+}
+
+export async function postSeurantajakso(form: Seurantajakso) {
+  const path = 'erikoistuva-laakari/seurantakeskustelut/seurantajakso'
+  return await axios.post<Seurantajakso>(path, form)
+}
+
+export async function putSeurantajakso(form: Seurantajakso) {
+  const path = `erikoistuva-laakari/seurantakeskustelut/seurantajakso/${form.id}`
+  return await axios.put<Seurantajakso>(path, form)
+}
+
+export async function deleteSeurantajakso(id?: number) {
+  const path = `erikoistuva-laakari/seurantakeskustelut/seurantajakso/${id}`
+  return await axios.delete(path)
+}
+
+export async function postLahikouluttaja(form: Kayttaja) {
+  const path = 'erikoistuva-laakari/lahikouluttajat'
+  return await axios.post<Kayttaja>(path, form)
 }

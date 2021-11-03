@@ -11,6 +11,7 @@
     :deselect-group-label="deselectGroupLabelText"
     :allow-empty="allowEmpty"
     :max="max"
+    :customLabel="customLabel"
     v-on="$listeners"
     :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
   >
@@ -67,6 +68,9 @@
 
     @Prop({ required: false, type: Boolean, default: false })
     allowEmpty!: boolean
+
+    @Prop({ required: false, type: Function })
+    customLabel?: Function
 
     get isValid() {
       return this.state
