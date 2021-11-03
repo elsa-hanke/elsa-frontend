@@ -141,7 +141,7 @@
                             {{ $t('poissaolon-syy') }}
                             <elsa-popover>
                               <template>
-                                <elsa-poissaolon-syyt :value="tilastotPoissaolonSyyt" />
+                                <elsa-poissaolon-syyt :poissaolonSyyt="tilastotPoissaolonSyyt" />
                               </template>
                             </elsa-popover>
                           </b-th>

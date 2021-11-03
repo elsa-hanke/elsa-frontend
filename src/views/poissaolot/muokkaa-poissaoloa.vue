@@ -8,7 +8,7 @@
           <hr />
           <poissaolo-form
             v-if="!loading"
-            :value="poissaoloWrapper"
+            :poissaolo="poissaolo"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :poissaolon-syyt="poissaolonSyyt"
             @submit="onSubmit"
@@ -28,7 +28,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import PoissaoloForm from '@/forms/poissaolo-form.vue'
-  import { ElsaError, PoissaoloLomake } from '@/types'
+  import { ElsaError, Poissaolo, PoissaoloLomake } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -53,8 +53,8 @@
         active: true
       }
     ]
-    poissaoloLomake: null | PoissaoloLomake = null
-    poissaolo: any = null
+    poissaoloLomake?: null | PoissaoloLomake = null
+    poissaolo?: null | Poissaolo = null
     loading = true
 
     async mounted() {
@@ -66,9 +66,17 @@
       const poissaoloId = this.$route?.params?.poissaoloId
       if (poissaoloId) {
         try {
-          this.poissaolo = (
+          const poissaoloData = (
             await axios.get(`erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${poissaoloId}`)
           ).data
+          this.poissaolo = {
+            ...poissaoloData,
+            kokoTyoajanPoissaolo: poissaoloData.poissaoloprosentti === 100,
+            tyoskentelyjakso: {
+              ...poissaoloData.tyoskentelyjakso,
+              label: tyoskentelyjaksoLabel(this, poissaoloData.tyoskentelyjakso)
+            }
+          }
         } catch {
           toastFail(this, this.$t('poissaolon-hakeminen-epaonnistui'))
           this.$emit('skipRouteExitConfirm', true)
@@ -85,18 +93,18 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(poissaolo: Poissaolo, params: any) {
       params.saving = true
       try {
         this.poissaolo = (
-          await axios.put('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)
+          await axios.put('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', poissaolo)
         ).data
         toastSuccess(this, this.$t('poissaolon-tallentaminen-onnistui'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'poissaolo',
           params: {
-            poissaoloId: `${this.poissaolo.id}`
+            poissaoloId: `${this.poissaolo?.id}`
           }
         })
       } catch (err) {
@@ -123,7 +131,7 @@
         params.deleting = true
         try {
           await axios.delete(
-            `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`
+            `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo?.id}`
           )
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
           this.$router.push({
@@ -156,21 +164,6 @@
         return this.poissaoloLomake.poissaolonSyyt
       } else {
         return []
-      }
-    }
-
-    get poissaoloWrapper() {
-      if (this.poissaolo) {
-        return {
-          ...this.poissaolo,
-          tyoskentelyjakso: {
-            ...this.poissaolo.tyoskentelyjakso,
-            label: tyoskentelyjaksoLabel(this, this.poissaolo.tyoskentelyjakso)
-          },
-          kokoTyoajanPoissaolo: this.poissaolo.poissaoloprosentti === 100
-        }
-      } else {
-        return undefined
       }
     }
   }

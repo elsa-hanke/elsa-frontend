@@ -258,7 +258,10 @@
         oppimistavoite: this.value.oppimistavoite,
         vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
         arviointiasteikonTaso: this.oppimistavoitteenKategoriat
-          .find((kategoria) => kategoria.id === this.value.oppimistavoite?.kategoriaId)
+          ?.find(
+            (kategoria: OppimistavoitteenKategoria) =>
+              kategoria.id === this.value.oppimistavoite?.kategoriaId
+          )
           ?.arviointiasteikko.tasot.find(
             (asteikonTaso) => asteikonTaso.taso === this.value.arviointiasteikonTaso
           ),

@@ -35,20 +35,28 @@
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
 
+  import { PoissaolonSyy } from '@/types'
+  import { PoissaolonSyyTyyppi } from '@/utils/constants'
+
   @Component({})
   export default class ElsaPoissaolonSyyt extends Vue {
     @Prop({ required: true })
-    value!: []
+    poissaolonSyyt!: PoissaolonSyy[]
 
     @Prop({ required: false, default: false })
     newInfo!: boolean
 
     get vahennetaanYlimenevaAika() {
-      return this.value.filter((syy: any) => syy.vahennystyyppi === 'VAHENNETAAN_YLIMENEVA_AIKA')
+      return this.poissaolonSyyt.filter(
+        (syy: PoissaolonSyy) =>
+          syy.vahennystyyppi === PoissaolonSyyTyyppi.VAHENNETAAN_YLIMENEVA_AIKA
+      )
     }
 
     get vahennetaanSuoraan() {
-      return this.value.filter((syy: any) => syy.vahennystyyppi === 'VAHENNETAAN_SUORAAN')
+      return this.poissaolonSyyt.filter(
+        (syy: PoissaolonSyy) => syy.vahennystyyppi === PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN
+      )
     }
   }
 </script>

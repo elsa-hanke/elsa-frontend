@@ -69,7 +69,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { ElsaError } from '@/types'
+  import { Poissaolo, ElsaError } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -82,7 +82,7 @@
       ElsaButton
     }
   })
-  export default class Poissaolo extends Vue {
+  export default class PoissaoloView extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -97,7 +97,7 @@
         active: true
       }
     ]
-    poissaolo: any = null
+    poissaolo: null | Poissaolo = null
     deleting = false
 
     async mounted() {
@@ -125,7 +125,7 @@
         this.deleting = true
         try {
           await axios.delete(
-            `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo.id}`
+            `erikoistuva-laakari/tyoskentelyjaksot/poissaolot/${this.poissaolo?.id}`
           )
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
           this.$router.push({

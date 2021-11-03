@@ -26,7 +26,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import PoissaoloForm from '@/forms/poissaolo-form.vue'
-  import { PoissaoloLomake, ElsaError } from '@/types'
+  import { Poissaolo, PoissaoloLomake, ElsaError } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -50,7 +50,7 @@
       }
     ]
     poissaoloLomake: null | PoissaoloLomake = null
-    poissaolo: any = null
+    poissaolo: null | Poissaolo = null
     loading = true
 
     async mounted() {
@@ -66,18 +66,18 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(poissaolo: Poissaolo, params: any) {
       params.saving = true
       try {
         this.poissaolo = (
-          await axios.post('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', value)
+          await axios.post('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', poissaolo)
         ).data
         toastSuccess(this, this.$t('poissaolo-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'poissaolo',
           params: {
-            poissaoloId: `${this.poissaolo.id}`
+            poissaoloId: `${this.poissaolo?.id}`
           }
         })
       } catch (err) {
