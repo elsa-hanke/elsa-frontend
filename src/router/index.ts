@@ -49,6 +49,10 @@ import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
 import Profiili from '@/views/profiili/profiili.vue'
 import Root from '@/views/root.vue'
+import UusiSeurantajakso from '@/views/seurantakeskustelut/lisaa-seurantajakso.vue'
+import MuokkaaSeurantajaksoa from '@/views/seurantakeskustelut/muokkaa-seurantajaksoa.vue'
+import Seurantajakso from '@/views/seurantakeskustelut/seurantajakso.vue'
+import Seurantakeskustelut from '@/views/seurantakeskustelut/seurantakeskustelut.vue'
 import MuokkaaSuoritemerkintaa from '@/views/suoritemerkinnat/muokkaa-suoritemerkintaa.vue'
 import Suoritemerkinnat from '@/views/suoritemerkinnat/suoritemerkinnat.vue'
 import Suoritemerkinta from '@/views/suoritemerkinnat/suoritemerkinta.vue'
@@ -586,6 +590,44 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: Kayttaja,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/seurantakeskustelut',
+        name: 'seurantakeskustelut',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Seurantakeskustelut,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/seurantakeskustelut/seurantajakso/uusi',
+        name: 'lisaa-seurantajakso',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiSeurantajakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/seurantakeskustelut/seurantajakso/:seurantajaksoId',
+        name: 'seurantajakso',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Seurantajakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/seurantakeskustelut/seurantajakso/:seurantajaksoId/muokkaa',
+        name: 'muokkaa-seurantajaksoa',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaSeurantajaksoa,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       }
     ]

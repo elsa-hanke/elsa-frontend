@@ -643,3 +643,54 @@ export interface KayttajaLomake {
   yliopistot: Yliopisto[]
   erikoisalat: Erikoisala[]
 }
+
+export type Seurantajakso = {
+  id?: number
+  alkamispaiva: string | null
+  paattymispaiva: string | null
+  koulutusjaksot: Koulutusjakso[]
+  omaArviointi?: string | null
+  lisahuomioita?: string | null
+  seuraavanJaksonTavoitteet?: string | null
+  kouluttaja?: Kayttaja | null
+  seurantakeskustelunYhteisetMerkinnat?: string | null
+  seuraavanKeskustelunAjankohta?: string | null
+  edistyminenTavoitteidenMukaista?: boolean | null
+  huolenaiheet?: string | null
+  kouluttajanArvio?: string | null
+  erikoisalanTyoskentelyvalmiudet?: string | null
+  jatkotoimetJaRaportointi?: string | null
+  hyvaksytty?: boolean | null
+  korjausehdotus?: string | null
+}
+
+export type SeurantajaksonArviointiKategoria = {
+  nimi: string
+  jarjestysnumero: number
+  arvioitavatKokonaisuudet: SeurantajaksonArviointiKokonaisuus[]
+}
+
+export type SeurantajaksonArviointiKokonaisuus = {
+  nimi: string
+  arvioinnit: Suoritusarviointi[]
+}
+
+export type SeurantajaksonTiedot = {
+  osaamistavoitteet: string[]
+  muutOsaamistavoitteet: string[]
+  arvioinnit: SeurantajaksonArviointiKategoria[]
+  arviointienMaara: number
+  suoritemerkinnat: SeurantajaksonSuoritemerkinta[]
+  suoritemerkinnatMaara: number
+  teoriakoulutukset: Teoriakoulutus[]
+}
+
+export type SeurantajaksonSuoritemerkinta = {
+  oppimistavoite: string
+  suoritemerkinnat: Suoritusarviointi[]
+}
+
+export type FormParams = {
+  saving?: boolean
+  deleting?: boolean
+}

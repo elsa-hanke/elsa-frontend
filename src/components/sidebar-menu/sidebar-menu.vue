@@ -37,19 +37,32 @@
           <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
           {{ $t('teoriakoulutukset') }}
         </b-nav-item>
-        <b-nav-item
-          v-if="$isErikoistuva()"
-          class="border-bottom"
-          :to="{ name: 'suoritemerkinnat' }"
-        >
-          <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
-          {{ $t('suoritemerkinnat') }}
+        <b-nav-item v-if="$isErikoistuva()" v-b-toggle.osaaminen-toggle class="osaaminen-nav">
+          <font-awesome-icon icon="award" fixed-width size="lg" />
+          {{ $t('osaaminen') }}
+          <span class="closed">
+            <font-awesome-icon icon="chevron-down" />
+          </span>
+          <span class="open">
+            <font-awesome-icon icon="chevron-up" />
+          </span>
         </b-nav-item>
-        <b-nav-item
-          v-if="!$isTekninenPaakayttaja()"
-          class="border-bottom"
-          :to="{ name: 'arvioinnit' }"
-        >
+        <b-collapse id="osaaminen-toggle">
+          <b-nav-item link-classes="pb-2 pt-2 ml-5" :to="{ name: 'arvioinnit' }">
+            {{ $t('arvioinnit') }}
+          </b-nav-item>
+          <b-nav-item link-classes="pb-2 pt-2 ml-5" :to="{ name: 'suoritemerkinnat' }">
+            {{ $t('suoritemerkinnat') }}
+          </b-nav-item>
+          <b-nav-item
+            class="border-bottom"
+            link-classes="pb-2 pt-2 ml-5"
+            :to="{ name: 'seurantakeskustelut' }"
+          >
+            {{ $t('seurantakeskustelut') }}
+          </b-nav-item>
+        </b-collapse>
+        <b-nav-item v-if="$isKouluttaja()" class="border-bottom" :to="{ name: 'arvioinnit' }">
           <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t('arvioinnit') }}
         </b-nav-item>
@@ -131,5 +144,24 @@
     ::v-deep .b-toast {
       z-index: 1100;
     }
+  }
+
+  .collapsed {
+    .open {
+      display: none;
+    }
+
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .not-collapsed {
+    .closed {
+      display: none;
+    }
+  }
+
+  .open,
+  .closed {
+    float: right;
   }
 </style>

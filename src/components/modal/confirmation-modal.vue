@@ -1,6 +1,6 @@
 <template>
   <b-modal :id="id" :title="title">
-    <div class="d-block">
+    <div v-if="text != null" class="d-block">
       <p>{{ text }}</p>
     </div>
 
@@ -13,6 +13,7 @@
         {{ submitText }}
       </elsa-button>
     </template>
+    <slot name="modal-content" />
   </b-modal>
 </template>
 
@@ -41,7 +42,7 @@
     @Prop({ required: true, type: String })
     title!: string
 
-    @Prop({ required: true, type: String })
+    @Prop({ required: false, type: String })
     text!: string
 
     @Prop({ required: true, type: String })
