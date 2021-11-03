@@ -7,7 +7,8 @@ import {
   ErikoisalaTyyppi,
   KaytannonKoulutusTyyppi,
   KehittamistoimenpideKategoria,
-  TyoskentelyjaksoTyyppi
+  TyoskentelyjaksoTyyppi,
+  PoissaolonSyyTyyppi
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
@@ -329,6 +330,26 @@ export interface VastuuhenkilonArvioLomakeErikoistuva {
 export interface PoissaoloLomake {
   tyoskentelyjaksot: any[]
   poissaolonSyyt: any[]
+}
+
+export interface Poissaolo {
+  id?: number
+  alkamispaiva?: string
+  paattymispaiva?: string
+  poissaoloprosentti?: number
+  poissaolonSyyId: number
+  tyoskentelyjaksoId: number
+  poissaolonSyy?: PoissaolonSyy
+  tyoskentelyjakso?: Tyoskentelyjakso
+  kokoTyoajanPoissaolo?: boolean
+}
+
+export interface PoissaolonSyy {
+  id?: number | null
+  nimi: string
+  vahennystyyppi: PoissaolonSyyTyyppi
+  voimassaolonAlkamispaiva: string
+  voimassaolonPaattymispaiva?: string | null
 }
 
 export interface Koejakso {

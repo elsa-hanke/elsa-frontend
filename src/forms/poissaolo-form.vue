@@ -4,7 +4,7 @@
       <template #label-help>
         <elsa-popover>
           <template>
-            <elsa-poissaolon-syyt :value="poissaolonSyyt" :new-info="true" />
+            <elsa-poissaolon-syyt :poissaolonSyyt="poissaolonSyyt" :new-info="true" />
           </template>
         </elsa-popover>
       </template>
@@ -129,7 +129,7 @@
         {{ $t('peruuta') }}
       </elsa-button>
       <elsa-button
-        v-if="value.id"
+        v-if="poissaolo.id"
         :loading="params.deleting"
         variant="outline-danger"
         @click="onDelete"
@@ -157,6 +157,7 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
+  import { Poissaolo, PoissaolonSyy, Tyoskentelyjakso } from '@/types'
   import { dateBetween } from '@/utils/date'
 
   @Component({
@@ -187,8 +188,8 @@
           required
         },
         poissaoloprosentti: {
-          required: requiredIf((value) => {
-            return value.kokoTyoajanPoissaolo === false
+          required: requiredIf((poissaolo) => {
+            return poissaolo.kokoTyoajanPoissaolo === false
           }),
           between: between(0, 100),
           integer
@@ -197,12 +198,11 @@
     }
   })
   export default class PoissaoloForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
-    @Prop({ required: false, default: () => [] })
-    poissaolonSyyt!: any[]
+    @Prop({ required: true, default: () => [] })
+    poissaolonSyyt!: PoissaolonSyy[]
 
     @Prop({
       required: false,
-      type: Object,
       default: () => ({
         poissaolonSyy: null,
         tyoskentelyjakso: null,
@@ -212,23 +212,16 @@
         poissaoloprosentti: null
       })
     })
-    value!: any
+    poissaolo!: Poissaolo
 
-    form = {
-      poissaolonSyy: null,
-      tyoskentelyjakso: null,
-      alkamispaiva: null,
-      paattymispaiva: null,
-      kokoTyoajanPoissaolo: null,
-      poissaoloprosentti: null
-    } as any
+    form!: Poissaolo
     params = {
       saving: false,
       deleting: false
     }
 
     mounted() {
-      this.form = this.value
+      this.form = this.poissaolo
     }
 
     validateState(name: string) {
@@ -257,12 +250,30 @@
       this.$emit('delete', this.params)
     }
 
-    onTyoskentelyjaksoSelect(value: any) {
-      if (!dateBetween(this.form.alkamispaiva, value.alkamispaiva, value.paattymispaiva)) {
-        this.form.alkamispaiva = null
+    onTyoskentelyjaksoSelect(tyoskentelyjakso: Tyoskentelyjakso) {
+      if (!tyoskentelyjakso.alkamispaiva) {
+        return
       }
-      if (!dateBetween(this.form.paattymispaiva, value.alkamispaiva, value.paattymispaiva)) {
-        this.form.paattymispaiva = null
+
+      if (
+        this.form?.alkamispaiva &&
+        !dateBetween(
+          this.form.alkamispaiva,
+          tyoskentelyjakso.alkamispaiva,
+          tyoskentelyjakso.paattymispaiva ?? undefined
+        )
+      ) {
+        this.form.alkamispaiva = undefined
+      }
+      if (
+        this.form?.paattymispaiva &&
+        !dateBetween(
+          this.form.paattymispaiva,
+          tyoskentelyjakso.alkamispaiva,
+          tyoskentelyjakso.paattymispaiva ?? undefined
+        )
+      ) {
+        this.form.paattymispaiva = undefined
       }
     }
 

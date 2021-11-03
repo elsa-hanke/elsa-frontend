@@ -45,7 +45,7 @@ import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
 import MuokkaaPoissaoloa from '@/views/poissaolot/muokkaa-poissaoloa.vue'
-import Poissaolo from '@/views/poissaolot/poissaolo.vue'
+import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
 import Profiili from '@/views/profiili/profiili.vue'
 import Root from '@/views/root.vue'
@@ -340,7 +340,7 @@ const routes: Array<RouteConfig> = [
         name: 'poissaolo',
         component: RoleSpecificRoute,
         props: {
-          routeComponent: Poissaolo,
+          routeComponent: PoissaoloView,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
         }
       },
