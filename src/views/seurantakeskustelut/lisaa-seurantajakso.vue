@@ -140,7 +140,9 @@
 
     async onHakuSubmit(value: Seurantajakso) {
       try {
-        this.seurantajakso = value
+        this.seurantajakso = {
+          ...value
+        }
         this.seurantajaksonTiedot = (
           await getSeurantajaksonTiedot(
             value.alkamispaiva || '',
