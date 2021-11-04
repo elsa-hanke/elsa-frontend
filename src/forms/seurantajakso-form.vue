@@ -58,7 +58,7 @@
         <elsa-button
           @click.stop.prevent="onUusiHaku"
           variant="outline-primary"
-          class="mt-2 float-right w-50"
+          class="mt-2 float-right uusihaku"
         >
           {{ $t('tee-uusi-haku') }}
         </elsa-button>
@@ -120,7 +120,37 @@
         <div v-for="(oa, index) in kategoria.arvioitavatKokonaisuudet" :key="index">
           <p class="font-weight-500 pt-2 mb-1">{{ oa.nimi }}</p>
 
-          <b-table-simple small fixed class="mb-4 arvioinnit-table" stacked="md" responsive>
+          <b-card-group class="mt-2" v-if="!$screen.sm" deck>
+            <b-card
+              class="mt-2 border"
+              v-for="(arviointi, index) in oa.arvioinnit"
+              :key="`arviointi-${index}`"
+            >
+              <b-card-text>
+                <h5 class="mb-3">{{ arviointi.arvioitavaTapahtuma }}</h5>
+                <dl class="mb-0">
+                  <dt class="text-uppercase text-size-sm font-weight-400">
+                    {{ $t('luottamuksen-taso') }}
+                  </dt>
+                  <dd class="mb-4">
+                    <elsa-arviointiasteikon-taso
+                      :value="arviointi.arviointiasteikonTaso"
+                      :tasot="arviointi.arvioitavaOsaalue.arviointiasteikko.tasot"
+                    />
+                  </dd>
+                  <dt class="text-uppercase text-size-sm font-weight-400">
+                    {{ $t('suorituspaiva') }}
+                  </dt>
+                  <dd class="mb-0">
+                    <elsa-button variant="link" class="pl-0" @click="showArviointi(arviointi)">
+                      {{ $date(arviointi.tapahtumanAjankohta) }}
+                    </elsa-button>
+                  </dd>
+                </dl>
+              </b-card-text>
+            </b-card>
+          </b-card-group>
+          <b-table-simple v-else small fixed class="mb-4 arvioinnit-table" stacked="md" responsive>
             <b-thead>
               <b-tr class="text-size-sm">
                 <b-th scope="col" style="width: 35%">
@@ -169,8 +199,48 @@
     </h3>
 
     <b-collapse id="suoritemerkinnat-toggle" visible class="mb-4">
+      <b-card-group
+        class="mt-2"
+        v-if="!$screen.sm && seurantajaksonTiedot.suoritemerkinnat.length > 0"
+        deck
+      >
+        <template v-for="(oppimistavoite, tavoiteIndex) in seurantajaksonTiedot.suoritemerkinnat">
+          <b-card
+            class="mt-2 border"
+            v-for="(suoritemerkinta, index) in oppimistavoite.suoritemerkinnat"
+            :key="`suoritemerkinta-${tavoiteIndex}-${index}`"
+          >
+            <b-card-text>
+              <h5 class="mb-3">{{ oppimistavoite.oppimistavoite }}</h5>
+              <dl class="mb-0">
+                <dt class="text-uppercase text-size-sm font-weight-400">
+                  {{ $t('luottamuksen-taso') }}
+                </dt>
+                <dd class="mb-4">
+                  <elsa-arviointiasteikon-taso
+                    :value="suoritemerkinta.arviointiasteikonTaso"
+                    :tasot="suoritemerkinta.arviointiasteikko.tasot"
+                  />
+                </dd>
+                <dt class="text-uppercase text-size-sm font-weight-400">
+                  {{ $t('suorituspaiva') }}
+                </dt>
+                <dd class="mb-0">
+                  <elsa-button
+                    variant="link"
+                    class="pl-0"
+                    @click="showSuoritemerkinta(suoritemerkinta)"
+                  >
+                    {{ $date(suoritemerkinta.suorituspaiva) }}
+                  </elsa-button>
+                </dd>
+              </dl>
+            </b-card-text>
+          </b-card>
+        </template>
+      </b-card-group>
       <b-table-simple
-        v-if="seurantajaksonTiedot.suoritemerkinnat.length > 0"
+        v-if="$screen.sm && seurantajaksonTiedot.suoritemerkinnat.length > 0"
         small
         fixed
         class="mb-4 suoritemerkinnat-table"
@@ -237,8 +307,48 @@
     </h3>
 
     <b-collapse id="teoriakoulutukset-toggle" visible class="mb-4">
+      <b-card-group
+        class="mt-2"
+        v-if="!$screen.sm && seurantajaksonTiedot.teoriakoulutukset.length > 0"
+        deck
+      >
+        <b-card
+          class="mt-2 border"
+          v-for="(koulutus, index) in seurantajaksonTiedot.teoriakoulutukset"
+          :key="`teoriakoulutus-${index}`"
+        >
+          <b-card-text>
+            <h5 class="mb-3">{{ koulutus.koulutuksenNimi }}</h5>
+            <dl class="mb-0">
+              <dt class="text-uppercase text-size-sm font-weight-400">
+                {{ $t('paikka') }}
+              </dt>
+              <dd class="mb-4">
+                {{ koulutus.koulutuksenPaikka }}
+              </dd>
+              <dt class="text-uppercase text-size-sm font-weight-400">
+                {{ $t('pvm') }}
+              </dt>
+              <dd class="mb-0">
+                {{ $date(koulutus.alkamispaiva) }}
+                <span v-if="koulutus.paattymispaiva != null">
+                  -{{ $date(koulutus.paattymispaiva) }}
+                </span>
+              </dd>
+              <template v-if="koulutus.erikoistumiseenHyvaksyttavaTuntimaara != null">
+                <dt class="mt-4 text-uppercase text-size-sm font-weight-400">
+                  {{ $t('tunnit') }}
+                </dt>
+                <dd class="mb-0">
+                  {{ koulutus.erikoistumiseenHyvaksyttavaTuntimaara }}
+                </dd>
+              </template>
+            </dl>
+          </b-card-text>
+        </b-card>
+      </b-card-group>
       <b-table-simple
-        v-if="seurantajaksonTiedot.teoriakoulutukset.length > 0"
+        v-if="$screen.sm && seurantajaksonTiedot.teoriakoulutukset.length > 0"
         fixed
         class="mb-4"
         stacked="md"
@@ -433,7 +543,7 @@
           <elsa-form-datepicker
             :id="uid"
             :disabled="uusiJakso"
-            class="col-2"
+            class="col-sm-4 col-md-2"
             v-model="form.seuraavanKeskustelunAjankohta"
           ></elsa-form-datepicker>
         </template>
@@ -777,6 +887,21 @@
   .seurantajakso-erikoistuva-details::v-deep {
     .table-responsive {
       margin-bottom: 0rem;
+    }
+  }
+
+  .card-body {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .uusihaku {
+    width: 50%;
+  }
+
+  @include media-breakpoint-down(xs) {
+    .uusihaku {
+      width: 100%;
     }
   }
 </style>

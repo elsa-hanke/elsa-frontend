@@ -36,15 +36,15 @@
         </b-col>
       </b-row>
       <div v-if="!loading">
-        <div class="d-flex flex-wrap mb-2 mt-2">
-          <elsa-button :to="{ name: 'seurantakeskustelut' }" variant="primary">
+        <div class="d-flex flex-wrap">
+          <elsa-button class="mb-2 mt-2" :to="{ name: 'seurantakeskustelut' }" variant="primary">
             {{ $t('palaa-seurantajaksoihin') }}
           </elsa-button>
           <elsa-button
             v-if="canEdit"
             :to="{ name: 'muokkaa-seurantajaksoa' }"
             variant="outline-primary"
-            class="ml-3"
+            class="ml-md-3 mb-2 mt-2"
           >
             {{ $t('muokkaa-tietoja') }}
           </elsa-button>
