@@ -119,19 +119,11 @@
     }
 
     get tyoskentelyjaksot() {
-      if (this.koulutusjaksoLomake) {
-        return this.koulutusjaksoLomake.tyoskentelyjaksot
-      } else {
-        return []
-      }
+      return this.koulutusjaksoLomake?.tyoskentelyjaksot ?? []
     }
 
     get kunnat() {
-      if (this.koulutusjaksoLomake) {
-        return this.koulutusjaksoLomake.kunnat
-      } else {
-        return []
-      }
+      return this.koulutusjaksoLomake?.kunnat ?? []
     }
 
     get arvioitavanKokonaisuudenKategoriat() {
