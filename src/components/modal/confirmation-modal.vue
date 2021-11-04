@@ -43,7 +43,7 @@
     title!: string
 
     @Prop({ required: false, type: String })
-    text!: string
+    text?: string
 
     @Prop({ required: true, type: String })
     submitText!: string
