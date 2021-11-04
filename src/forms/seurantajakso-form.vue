@@ -394,7 +394,7 @@
       </b-table-simple>
     </b-collapse>
 
-    <h3 class="mb-3">{{ $t('erikoistuvan-oma-arviointi') }}</h3>
+    <h3 class="mb-3">{{ $t('erikoistujan-oma-arviointi') }}</h3>
     <div v-if="editing">
       <elsa-form-group :label="$t('oma-arviointi-seurantajaksolta')" :required="true">
         <template v-slot="{ uid }">

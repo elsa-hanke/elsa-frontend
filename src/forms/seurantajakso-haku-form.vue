@@ -201,7 +201,23 @@
     mounted() {
       if (this.seurantajakso) {
         this.form = {
-          ...this.seurantajakso
+          ...this.seurantajakso,
+          koulutusjaksot:
+            this.seurantajakso.koulutusjaksot.length > 0
+              ? this.seurantajakso.koulutusjaksot
+              : [
+                  {
+                    id: null,
+                    nimi: null,
+                    muutOsaamistavoitteet: null,
+                    luotu: null,
+                    tallennettu: null,
+                    lukittu: null,
+                    tyoskentelyjaksot: [],
+                    osaamistavoitteet: [],
+                    koulutussuunnitelma: null
+                  }
+                ]
         }
       }
     }
