@@ -551,7 +551,10 @@
     </div>
     <div v-else>
       <div v-if="form.seurantakeskustelunYhteisetMerkinnat != null">
-        <elsa-form-group :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')">
+        <elsa-form-group
+          class="mt-3"
+          :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
+        >
           <template v-slot="{ uid }">
             <div :id="uid">{{ form.seurantakeskustelunYhteisetMerkinnat }}</div>
           </template>
