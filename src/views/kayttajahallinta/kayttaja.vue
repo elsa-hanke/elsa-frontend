@@ -86,7 +86,7 @@
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
               >
-                {{ $t('palaa-teoriakoulutuksiin') }}
+                {{ $t('palaa-kayttajahallintaan') }}
               </elsa-button>
             </div>
           </div>
