@@ -100,6 +100,7 @@
   import { getSeurantajaksot } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import { Seurantajakso } from '@/types'
+  import { sortByDateDesc } from '@/utils/date'
 
   @Component({
     components: {
@@ -123,7 +124,11 @@
 
     async mounted() {
       this.loading = true
-      this.seurantajaksot = (await getSeurantajaksot()).data
+      this.seurantajaksot = (await getSeurantajaksot()).data.sort(
+        (s1: Seurantajakso, s2: Seurantajakso) => {
+          return sortByDateDesc(s1.alkamispaiva, s2.alkamispaiva)
+        }
+      )
       this.loading = false
     }
 
