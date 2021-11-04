@@ -53,13 +53,7 @@
   } from '@/api/erikoistuva'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
   import SeurantajaksoHakuForm from '@/forms/seurantajakso-haku-form.vue'
-  import {
-    FormParams,
-    Koulutusjakso,
-    KoulutusjaksoLomake,
-    Seurantajakso,
-    SeurantajaksonTiedot
-  } from '@/types'
+  import { Koulutusjakso, KoulutusjaksoLomake, Seurantajakso, SeurantajaksonTiedot } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -91,7 +85,7 @@
     seurantajakso: Seurantajakso | null = null
     seurantajaksonTiedot: SeurantajaksonTiedot | null = null
 
-    params: FormParams = {
+    params = {
       saving: false
     }
 
@@ -130,7 +124,8 @@
       return this.koulutusjaksoLomake?.arvioitavanKokonaisuudenKategoriat ?? []
     }
 
-    async onHakuSubmit(value: Seurantajakso) {
+    async onHakuSubmit(value: Seurantajakso, params: { saving: boolean }) {
+      params.saving = true
       try {
         this.seurantajakso = {
           ...value
@@ -145,9 +140,11 @@
       } catch (err) {
         toastFail(this, this.$t('seurantajakson-tietojen-hakeminen-epaonnistui'))
       }
+      params.saving = false
     }
 
-    async onSubmit(value: Seurantajakso) {
+    async onSubmit(value: Seurantajakso, params: { saving: boolean }) {
+      params.saving = true
       try {
         this.seurantajakso = (await postSeurantajakso(value)).data
         toastSuccess(this, this.$t('seurantajakson-tallennus-ja-lahetys-onnistui'))
@@ -161,6 +158,7 @@
       } catch (err) {
         toastFail(this, this.$t('seurantajakson-lisaaminen-epaonnistui'))
       }
+      params.saving = false
     }
 
     onUusiHaku() {

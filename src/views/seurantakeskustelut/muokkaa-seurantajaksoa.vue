@@ -64,7 +64,7 @@
     putSeurantajakso
   } from '@/api/erikoistuva'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
-  import { FormParams, Seurantajakso, SeurantajaksonTiedot } from '@/types'
+  import { Seurantajakso, SeurantajaksonTiedot } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -93,7 +93,7 @@
     seurantajakso: Seurantajakso | null = null
     seurantajaksonTiedot: SeurantajaksonTiedot | null = null
 
-    params: FormParams = {
+    params = {
       saving: false,
       deleting: false
     }
@@ -125,7 +125,8 @@
       )
     }
 
-    async onSubmit(value: Seurantajakso) {
+    async onSubmit(value: Seurantajakso, params: { saving: boolean }) {
+      params.saving = true
       try {
         await putSeurantajakso(value)
         toastSuccess(this, this.$t('seurantajakson-tallennus-ja-lahetys-onnistui'))
@@ -139,9 +140,10 @@
       } catch (err) {
         toastFail(this, this.$t('seurantajakson-tallentaminen-epaonnistui'))
       }
+      params.saving = false
     }
 
-    async onDelete(params: FormParams) {
+    async onDelete(params: { deleting: boolean }) {
       if (
         await confirmDelete(
           this,

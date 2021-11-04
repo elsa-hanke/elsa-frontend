@@ -83,7 +83,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
   import store from '@/store'
-  import { FormParams, Seurantajakso, SeurantajaksonTiedot } from '@/types'
+  import { Seurantajakso, SeurantajaksonTiedot } from '@/types'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -112,7 +112,7 @@
     seurantajakso: Seurantajakso | null = null
     seurantajaksonTiedot: SeurantajaksonTiedot | null = null
 
-    params: FormParams = {
+    params = {
       saving: false
     }
 

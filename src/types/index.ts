@@ -689,8 +689,3 @@ export type SeurantajaksonSuoritemerkinta = {
   oppimistavoite: string
   suoritemerkinnat: Suoritusarviointi[]
 }
-
-export type FormParams = {
-  saving?: boolean
-  deleting?: boolean
-}

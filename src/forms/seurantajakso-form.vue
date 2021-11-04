@@ -523,7 +523,7 @@
       <p class="mb-3">{{ $t('seurantakeskustelun-merkinnat-kuvaus-muokkaus') }}</p>
       <elsa-form-group
         :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
-        :required="uusiJakso"
+        :required="!uusiJakso"
       >
         <template v-slot="{ uid }">
           <b-form-textarea
@@ -660,7 +660,6 @@
   import store from '@/store'
   import {
     ElsaError,
-    FormParams,
     Kayttaja,
     Seurantajakso,
     SeurantajaksonTiedot,
@@ -750,7 +749,7 @@
     selectedArviointi: Suoritusarviointi | null = null
     selectedSuoritemerkinta: Suoritemerkinta | null = null
 
-    params: FormParams = {
+    params = {
       saving: false,
       deleting: false
     }
