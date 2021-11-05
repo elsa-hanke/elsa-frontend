@@ -199,8 +199,7 @@
             <b-td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                 <elsa-button
-                  v-if="$isErikoistuva()"
-                  :disabled="value.lukittu"
+                  v-if="$isErikoistuva() && !value.lukittu"
                   variant="primary"
                   class="d-flex align-items-center text-decoration-none"
                   :to="{
@@ -212,6 +211,9 @@
                 </elsa-button>
                 <span class="text-size-sm text-lighter ml-2" v-else-if="!value.lukittu">
                   {{ $t('itsearviointia-ei-viela-tehty') }}
+                </span>
+                <span class="text-size-sm text-lighter ml-2" v-else-if="$isErikoistuva()">
+                  {{ $t('suoritusarviointi-on-lukittu-itsearviointi-luonti') }}
                 </span>
                 <span class="text-size-sm text-lighter ml-2" v-else>
                   {{ $t('itsearviointia-ei-tehty') }}
@@ -265,6 +267,18 @@
         >
           {{ $t('muokkaa-arviointia') }}
         </elsa-button>
+        <b-row v-if="value.lukittu">
+          <b-col>
+            <div class="d-flex flex-row mb-4">
+              <em class="align-middle">
+                <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
+              </em>
+              <div>
+                <span class="text-size-sm">{{ $t('suoritusarviointi-on-lukittu') }}</span>
+              </div>
+            </div>
+          </b-col>
+        </b-row>
       </div>
       <elsa-form-group v-if="value.itsearviointiAika" :label="$t('sanallinen-itsearviointi')">
         <template v-slot="{ uid }">
@@ -284,6 +298,20 @@
         >
           {{ $t('muokkaa-itsearviointia') }}
         </elsa-button>
+        <b-row v-if="value.lukittu">
+          <b-col>
+            <div class="d-flex flex-row mb-4">
+              <em class="align-middle">
+                <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
+              </em>
+              <div>
+                <span class="text-size-sm">
+                  {{ $t('suoritusarviointi-on-lukittu-itsearviointi-muokkaus') }}
+                </span>
+              </div>
+            </div>
+          </b-col>
+        </b-row>
       </div>
     </div>
     <div v-else>

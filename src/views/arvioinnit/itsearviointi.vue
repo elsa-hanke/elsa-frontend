@@ -62,7 +62,7 @@
             )
           ).data
           if (this.value != null && this.value.lukittu) {
-            toastFail(this, this.$t('suoritusarviointi-on-lukittu'))
+            toastFail(this, this.$t('suoritusarviointi-on-lukittu-itsearviointi-muokkaus'))
             this.$emit('skipRouteExitConfirm', true)
             this.$router.push({
               name: 'arviointi',
