@@ -66,6 +66,7 @@
             <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
+                :disabled="koulutusjakso.lukittu"
                 :to="{ name: 'muokkaa-koulutusjaksoa' }"
                 variant="primary"
                 class="ml-2 mb-3"
@@ -73,6 +74,7 @@
                 {{ $t('muokkaa-koulutusjaksoa') }}
               </elsa-button>
               <elsa-button
+                :disabled="koulutusjakso.lukittu"
                 :loading="deleting"
                 variant="outline-danger"
                 @click="onKoulutusjaksoDelete"

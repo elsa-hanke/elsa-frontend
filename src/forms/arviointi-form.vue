@@ -199,7 +199,8 @@
             <b-td>
               <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                 <elsa-button
-                  v-if="$isErikoistuva() && !value.lukittu"
+                  v-if="$isErikoistuva()"
+                  :disabled="value.lukittu"
                   variant="primary"
                   class="d-flex align-items-center text-decoration-none"
                   :to="{
@@ -253,12 +254,10 @@
           <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
-      <div
-        v-if="!value.lukittu && value.arviointiAika && ($isKouluttaja() || $isVastuuhenkilo())"
-        class="text-right"
-      >
+      <div v-if="value.arviointiAika && ($isKouluttaja() || $isVastuuhenkilo())" class="text-right">
         <elsa-button
           variant="primary"
+          :disabled="value.lukittu"
           :to="{
             name: 'muokkaa-arviointia',
             params: { arviointiId: value.id }
@@ -274,9 +273,10 @@
           </p>
         </template>
       </elsa-form-group>
-      <div v-if="!value.lukittu && value.itsearviointiAika && $isErikoistuva()" class="text-right">
+      <div v-if="value.itsearviointiAika && $isErikoistuva()" class="text-right">
         <elsa-button
           variant="primary"
+          :disabled="value.lukittu"
           :to="{
             name: 'itsearviointi',
             params: { arviointiId: value.id }

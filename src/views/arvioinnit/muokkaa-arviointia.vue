@@ -28,6 +28,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import ArviointiForm from '@/forms/arviointi-form.vue'
+  import { Suoritusarviointi } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -37,7 +38,7 @@
     }
   })
   export default class MuokkaaArviointia extends Vue {
-    value = null
+    value: Suoritusarviointi | null = null
     items = [
       {
         text: this.$t('etusivu'),
@@ -61,6 +62,14 @@
               `${resolveRolePath()}/suoritusarvioinnit/${this.$route.params.arviointiId}`
             )
           ).data
+          if (this.value != null && this.value.lukittu) {
+            toastFail(this, this.$t('suoritusarviointi-on-lukittu'))
+            this.$emit('skipRouteExitConfirm', true)
+            this.$router.push({
+              name: 'arviointi',
+              params: { arviointiId: this.$route.params.arviointiId }
+            })
+          }
         } catch {
           toastFail(this, this.$t('arvioinnin-hakeminen-epaonnistui'))
           this.$emit('skipRouteExitConfirm', true)

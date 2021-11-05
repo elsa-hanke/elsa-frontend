@@ -812,7 +812,6 @@
     }
 
     showArviointi(arviointi: Suoritusarviointi) {
-      arviointi.lukittu = true
       this.selectedArviointi = arviointi
       this.$bvModal.show('arviointi-modal')
     }
@@ -822,7 +821,6 @@
     }
 
     showSuoritemerkinta(suoritemerkinta: Suoritemerkinta) {
-      suoritemerkinta.lukittu = true
       this.selectedSuoritemerkinta = suoritemerkinta
       this.$bvModal.show('suoritemerkinta-modal')
     }

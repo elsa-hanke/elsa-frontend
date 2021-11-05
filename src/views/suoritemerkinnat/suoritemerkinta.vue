@@ -6,17 +6,23 @@
         <b-col>
           <h1>{{ $t('suoritemerkinta') }}</h1>
           <hr />
-          <suoritemerkinta-details v-if="suoritemerkinta" :value="suoritemerkinta" />
-          <hr />
+          <suoritemerkinta-details v-if="suoritemerkinta != null" :value="suoritemerkinta" />
           <div class="text-right">
+            <hr />
             <elsa-button
+              :disabled="suoritemerkinta.lukittu"
               :loading="deleting"
               variant="outline-danger"
               @click="onSuoritemerkintaDelete"
             >
               {{ $t('poista-merkinta') }}
             </elsa-button>
-            <elsa-button :to="{ name: 'muokkaa-suoritemerkintaa' }" variant="primary" class="ml-2">
+            <elsa-button
+              :disabled="suoritemerkinta.lukittu"
+              :to="{ name: 'muokkaa-suoritemerkintaa' }"
+              variant="primary"
+              class="ml-2"
+            >
               {{ $t('muokkaa-merkintaa') }}
             </elsa-button>
           </div>
