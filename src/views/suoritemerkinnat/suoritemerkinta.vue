@@ -6,25 +6,51 @@
         <b-col>
           <h1>{{ $t('suoritemerkinta') }}</h1>
           <hr />
-          <suoritemerkinta-details v-if="suoritemerkinta != null" :value="suoritemerkinta" />
-          <div class="text-right">
-            <hr />
-            <elsa-button
-              :disabled="suoritemerkinta.lukittu"
-              :loading="deleting"
-              variant="outline-danger"
-              @click="onSuoritemerkintaDelete"
-            >
-              {{ $t('poista-merkinta') }}
-            </elsa-button>
-            <elsa-button
-              :disabled="suoritemerkinta.lukittu"
-              :to="{ name: 'muokkaa-suoritemerkintaa' }"
-              variant="primary"
-              class="ml-2"
-            >
-              {{ $t('muokkaa-merkintaa') }}
-            </elsa-button>
+          <div v-if="suoritemerkinta != null">
+            <suoritemerkinta-details :value="suoritemerkinta" />
+            <div class="d-flex flex-row-reverse flex-wrap">
+              <hr />
+
+              <elsa-button
+                :disabled="suoritemerkinta.lukittu"
+                :to="{ name: 'muokkaa-suoritemerkintaa' }"
+                variant="primary"
+                class="ml-2 mb-3"
+              >
+                {{ $t('muokkaa-merkintaa') }}
+              </elsa-button>
+              <elsa-button
+                :disabled="suoritemerkinta.lukittu"
+                :loading="deleting"
+                variant="outline-danger"
+                @click="onSuoritemerkintaDelete"
+                class="mb-3"
+              >
+                {{ $t('poista-merkinta') }}
+              </elsa-button>
+              <elsa-button
+                :to="{ name: 'suoritemerkinnat' }"
+                variant="link"
+                class="mb-3 mr-auto font-weight-500 suoritemerkinta-link"
+              >
+                {{ $t('palaa-suoritemerkintoihin') }}
+              </elsa-button>
+            </div>
+          </div>
+          <div v-else class="text-center">
+            <b-spinner variant="primary" :label="$t('ladataan')" />
+          </div>
+        </b-col>
+      </b-row>
+      <b-row v-if="suoritemerkinta != null && suoritemerkinta.lukittu">
+        <b-col>
+          <div class="d-flex flex-row mb-4">
+            <em class="align-middle">
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
+            </em>
+            <div>
+              <span class="text-size-sm">{{ $t('suoritemerkinta-on-lukittu') }}</span>
+            </div>
           </div>
         </b-col>
       </b-row>
@@ -110,5 +136,11 @@
 <style lang="scss" scoped>
   .suoritemerkinta {
     max-width: 970px;
+  }
+
+  .suoritemerkinta-link::before {
+    content: '<';
+    position: absolute;
+    left: 1rem;
   }
 </style>

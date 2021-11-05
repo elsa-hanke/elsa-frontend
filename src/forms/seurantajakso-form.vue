@@ -77,7 +77,7 @@
             :key="osaamistavoite.id"
             pill
             variant="light"
-            class="font-weight-400 mr-2 osaamistavoitteet"
+            class="font-weight-400 mr-2 mb-1 osaamistavoitteet"
           >
             {{ osaamistavoite }}
           </b-badge>

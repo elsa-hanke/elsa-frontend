@@ -96,6 +96,18 @@
           </div>
         </b-col>
       </b-row>
+      <b-row v-if="koulutusjakso != null && koulutusjakso.lukittu">
+        <b-col>
+          <div class="d-flex flex-row mb-4">
+            <em class="align-middle">
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
+            </em>
+            <div>
+              <span class="text-size-sm">{{ $t('koulutusjakso-on-lukittu') }}</span>
+            </div>
+          </div>
+        </b-col>
+      </b-row>
     </b-container>
   </div>
 </template>
