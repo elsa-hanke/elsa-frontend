@@ -62,7 +62,11 @@
             {{ $t('seurantakeskustelut') }}
           </b-nav-item>
         </b-collapse>
-        <b-nav-item v-if="$isKouluttaja()" class="border-bottom" :to="{ name: 'arvioinnit' }">
+        <b-nav-item
+          v-if="$isKouluttaja() || $isVastuuhenkilo()"
+          class="border-bottom"
+          :to="{ name: 'arvioinnit' }"
+        >
           <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t('arvioinnit') }}
         </b-nav-item>
