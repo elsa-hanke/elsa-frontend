@@ -61,6 +61,16 @@
 
     async mounted() {
       await Promise.all([this.fetchLomake(), this.fetchSuoritemerkinta()])
+      if (this.suoritemerkinta.lukittu) {
+        toastFail(this, this.$t('suoritemerkinta-on-lukittu'))
+        this.$emit('skipRouteExitConfirm', true)
+        this.$router.push({
+          name: 'suoritemerkinta',
+          params: {
+            suoritemerkintaId: `${this.suoritemerkinta.id}`
+          }
+        })
+      }
       this.loading = false
     }
 

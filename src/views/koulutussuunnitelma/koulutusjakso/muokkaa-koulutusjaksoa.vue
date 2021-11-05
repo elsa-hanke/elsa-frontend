@@ -58,6 +58,14 @@
 
     async mounted() {
       await Promise.all([this.fetchLomake(), this.fetchKoulutusjakso()])
+      if (this.koulutusjakso != null && this.koulutusjakso.lukittu) {
+        toastFail(this, this.$t('koulutusjakso-on-lukittu'))
+        this.$emit('skipRouteExitConfirm', true)
+        this.$router.push({
+          name: 'koulutusjakso',
+          params: { koulutusjaksoId: this.$route.params.koulutusjaksoId }
+        })
+      }
       this.loading = false
     }
 
