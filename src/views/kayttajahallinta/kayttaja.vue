@@ -181,15 +181,15 @@
     }
 
     get yliopisto() {
-      return this.kayttaja?.kayttaja?.yliopisto?.nimi
+      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.yliopistoNimi
     }
 
     get erikoisala() {
-      return this.kayttaja?.erikoistuvaLaakari?.erikoisalaNimi
+      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.erikoisalaNimi
     }
 
     get opiskelijatunnus() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskelijatunnus
+      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opiskelijatunnus
     }
 
     get sahkopostiosoite() {
@@ -197,15 +197,15 @@
     }
 
     get opintooikeudenMyontamispaiva() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudenMyontamispaiva
+      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opintooikeudenMyontamispaiva
     }
 
     get opintooikeudenPaattymispaiva() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudenPaattymispaiva
+      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva
     }
 
     get opintosuunnitelmaKaytossaPvm() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintosuunnitelmaKaytossaPvm
+      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opintosuunnitelmaKaytossaPvm
     }
   }
 </script>

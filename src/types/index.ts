@@ -12,20 +12,26 @@ import {
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
+export type Opiskeluoikeus = {
+  id: number | null
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
+  opiskelijatunnus: string
+  opintosuunnitelmaKaytossaPvm: string
+  yliopistoNimi: string
+  erikoisalaId: number
+  erikoisalaNimi: string
+}
+
 export type ErikoistuvaLaakari = {
   id: number | null
   nimi: string
-  kayttajaId: number
-  erikoisalaId: number
-  erikoisalaNimi: string
-  opiskelijatunnus: string
-  puhelinnumero: string
   sahkoposti: string
+  puhelinnumero: string | null
   syntymaaika: string
-  opintosuunnitelmaKaytossaPvm: string
-  opintooikeudenMyontamispaiva: string
-  opintooikeudenPaattymispaiva: string
+  kayttajaId: number
   yliopisto: string
+  opiskeluoikeudet: Opiskeluoikeus[]
 }
 
 export interface UserAccount {

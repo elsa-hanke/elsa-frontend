@@ -393,11 +393,13 @@
 
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
-      if (!this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva) {
+      if (!this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva) {
         return null
       }
 
-      const d = new Date(this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva)
+      const d = new Date(
+        this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva
+      )
       // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
       // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
       d.setMonth(d.getMonth() - 6)
@@ -458,8 +460,8 @@
 
       // Asetetaan ei-muokattavien kenttien arvot
       this.form.erikoistuvanNimi = `${this.account.firstName} ${this.account.lastName}`
-      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
-      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.erikoisalaNimi
+      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opiskelijatunnus
+      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.erikoisalaNimi
       this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
       this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
 
@@ -467,16 +469,14 @@
       // käyttäjä on saattanut yliajaa lomakkeen välitallennuksen yhteydessä. Kuitenkaan opinto-oikeuden
       // alkamispäivää käyttäjä ei voi yliajaa, mikäli se on saatu opintotietojärjestelmästä.
       if (!this.form.opintooikeudenMyontamispaiva) {
-        this.form.opintooikeudenMyontamispaiva = this.account.erikoistuvaLaakari.opintooikeudenMyontamispaiva
+        this.form.opintooikeudenMyontamispaiva = this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenMyontamispaiva
       }
       if (!this.form.erikoistuvanPuhelinnumero) {
-        this.form.erikoistuvanPuhelinnumero = this.account.erikoistuvaLaakari.puhelinnumero
+        this.form.erikoistuvanPuhelinnumero =
+          this.account.erikoistuvaLaakari.puhelinnumero ?? this.account.phoneNumber
       }
       if (!this.form.erikoistuvanSahkoposti) {
         this.form.erikoistuvanSahkoposti = this.account.email
-      }
-      if (!this.form.erikoistuvanPuhelinnumero) {
-        this.form.erikoistuvanPuhelinnumero = this.account.phoneNumber
       }
     }
   }

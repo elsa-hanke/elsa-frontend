@@ -456,12 +456,12 @@
 
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
-      if (!this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva) {
+      if (!this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva) {
         return null
       }
 
       const opintooikeudenPaattymispaivaDate = new Date(
-        this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva
+        this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva
       )
       // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
       // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
@@ -485,7 +485,10 @@
     get maxKoejaksonPaattymispaiva() {
       const dateFormat = 'yyyy-MM-dd'
       const koejaksonAlkamispaiva = this.form.koejaksonAlkamispaiva
-      if (!this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva || !koejaksonAlkamispaiva) {
+      if (
+        !this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva ||
+        !koejaksonAlkamispaiva
+      ) {
         return null
       }
 
@@ -493,7 +496,7 @@
       // Koejakson kesto on maksimissaan 2 vuotta.
       koejaksonAlkamispaivaDate.setFullYear(koejaksonAlkamispaivaDate.getFullYear() + 2)
       const opintooikeudenPaattymispaivaDate = new Date(
-        this.account.erikoistuvaLaakari.opintooikeudenPaattymispaiva
+        this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva
       )
       // Mikäli maksimikesto 2 vuotta ylittää opinto-oikeuden päättymispäivän,
       // on maksimi päättymispäivä opinto-oikeuden päättymispäivä.
@@ -544,8 +547,8 @@
 
       // Asetetaan ei-muokattavien kenttien arvot
       this.form.erikoistuvanNimi = `${this.account.firstName} ${this.account.lastName}`
-      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
-      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.erikoisalaNimi
+      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.opiskelijatunnus
+      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.opiskeluoikeudet[0]?.erikoisalaNimi
       this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
 
       if (!this.form.koejaksonAlkamispaiva) {
