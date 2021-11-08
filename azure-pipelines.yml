@@ -210,7 +210,7 @@ stages:
                     awsCredentials: "prod-elsa-ci"
                     regionName: "eu-west-1"
                     bucketName: "elsapalvelu.fi"
-                    sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
+                    sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendAppProd"
                     globExpressions: "**"
                   displayName: "Deploy to S3"
                 - task: AWSCLI@1
