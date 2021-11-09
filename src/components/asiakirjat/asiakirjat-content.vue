@@ -94,6 +94,7 @@
   import SearchInput from '@/components/search-input/search-input.vue'
   import { Asiakirja } from '@/types'
   import { saveBlob, fetchAndSaveBlob, openBlob, fetchAndOpenBlob } from '@/utils/blobs'
+  import { confirmDelete } from '@/utils/confirm'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -108,7 +109,7 @@
     private hakutermi = ''
     private currentPage = 1
 
-    @Prop({ required: true, default: undefined })
+    @Prop({ required: true, default: () => [] })
     asiakirjat!: Asiakirja[]
 
     @Prop({ required: false, type: String, default: 'lisattypvm' })
@@ -141,6 +142,12 @@
     @Prop({ required: false, type: Boolean, default: false })
     loading!: boolean
 
+    @Prop({ required: false, type: String })
+    confirmDeleteTitle?: string
+
+    @Prop({ required: false, type: String })
+    confirmDeleteTypeText?: string
+
     private fields = [
       {
         key: 'nimi',
@@ -172,7 +179,16 @@
     ]
 
     async onDeleteAsiakirja(asiakirja: Asiakirja) {
-      this.$emit('deleteAsiakirja', asiakirja)
+      if (
+        await confirmDelete(
+          this,
+          this.confirmDeleteTitle ?? (this.$t('poista-liitetiedosto') as string),
+          this.confirmDeleteTypeText?.toLowerCase() ??
+            (this.$t('liitetiedoston') as string).toLowerCase()
+        )
+      ) {
+        this.$emit('deleteAsiakirja', asiakirja)
+      }
     }
 
     async onViewAsiakirja(asiakirja: Asiakirja) {
@@ -231,48 +247,50 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
-  @include media-breakpoint-down(xs) {
-    .asiakirjat-table {
-      border-bottom: none;
-      tr {
-        padding: 0.375rem 0 0.375rem 0;
-        border: $table-border-width solid $table-border-color;
-        border-radius: 0.25rem;
-        margin-bottom: 0.5rem;
-      }
+  ::v-deep {
+    @include media-breakpoint-down(xs) {
+      .asiakirjat-table {
+        border-bottom: none;
+        tr {
+          padding: 0.375rem 0 0.375rem 0;
+          border: $table-border-width solid $table-border-color;
+          border-radius: 0.25rem;
+          margin-bottom: 0.5rem;
+        }
 
-      td {
-        padding: 0.25rem 0 0.25rem 0.25rem;
-        &.file-name {
-          > div {
+        td {
+          padding: 0.25rem 0 0.25rem 0.25rem;
+          &.file-name {
+            > div {
+              width: 100% !important;
+              padding: 0 0.375rem 0 0.375rem !important;
+            }
+            &::before {
+              display: none;
+            }
+          }
+          &.created-date::before {
+            text-align: left !important;
+            padding-left: 0.375rem !important;
+            font-weight: 500 !important;
             width: 100% !important;
-            padding: 0 0.375rem 0 0.375rem !important;
           }
-          &::before {
-            display: none;
+          &.download-btn {
+            width: 2rem;
+            > div {
+              padding: 0 0 0 0.25rem !important;
+            }
           }
+          border: none;
         }
-        &.created-date::before {
-          text-align: left !important;
-          padding-left: 0.375rem !important;
-          font-weight: 500 !important;
-          width: 100% !important;
-        }
-        &.download-btn {
-          width: 2rem;
-          > div {
-            padding: 0 0 0 0.25rem !important;
-          }
-        }
-        border: none;
       }
-    }
-    .float-left-xs {
-      float: left;
+      .float-left-xs {
+        float: left;
+      }
     }
   }
 </style>

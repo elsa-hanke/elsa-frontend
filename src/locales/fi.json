@@ -152,6 +152,7 @@
       "paallekkaisten-poissaolojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten poissaolojen päiväkohtainen kertymä ei voi ylittää 100%:a",
       "paallekkaisten-tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "samalla-sahkopostilla-loytyy-jo-toinen-kayttaja": "samalla sähköpostilla löytyy jo toinen käyttäjä",
+      "tiedosto-ei-ole-kelvollinen-tai-samanniminen-tiedosto-on-jo-olemassa": "tiedosto ei ole kelvollinen tai samanniminen tiedosto on jo olemassa",
       "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "uuden-lahikouluttajan-voi-lisata-vain-erikoistuva-laakari": "uuden lahikouluttajan voi lisätä vain erikoistuva lääkäri"
     },
@@ -626,7 +627,8 @@
   "sahkopostiosoite-ei-kelvollinen": "Sähköpostiosoite ei ole kelvollinen",
   "sahkopostiosoite-uudelleen": "Sähköpostiosoite uudelleen",
   "salasana": "Salasana",
-  "sallitut-tiedostoformaatit": "Sallitut tiedostoformaatit: .pdf, .png, .jpeg ja .jpg.",
+  "sallitut-tiedostoformaatit-default": "Sallitut tiedostoformaatit: .pdf, .png, .jpeg ja .jpg.",
+  "sallitut-tiedostoformaatit-pdf": "Sallitut tiedostoformaatit: .pdf",
   "sanallinen-arviointi": "Sanallinen arviointi",
   "sanallinen-itsearviointi": "Sanallinen itsearviointi",
   "sanallinen-itsearviointi-ohjeteksti": "Pohdi esimerkiksi näitä asioita arvioidessasi omaa suoriutumistasi: Mikä meni hyvin? Mitä ajattelit ja tunsit? Millaisia vaihtoehtoja tilanteessa oli? Mitä kehittämisehdotuksia? Mitä opit tilanteen myötä? Osaamistavoite seuraavalle kerralle?",

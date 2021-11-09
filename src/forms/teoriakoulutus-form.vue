@@ -80,8 +80,8 @@
           <asiakirjat-upload
             :isPrimaryButton="false"
             :buttonText="$t('lisaa-liitetiedosto')"
-            :existing-file-names-for-current-view="existingFileNamesForCurrentView"
-            :existing-file-names-for-other-views="existingFileNamesForOtherViews"
+            :existing-file-names-for-current-view="existingFileNamesInCurrentView"
+            :existing-file-names-for-other-views="existingFileNamesInOtherViews"
             :disabled="reservedAsiakirjaNimetMutable === undefined"
             @selectedFiles="onFilesAdded"
           />
@@ -120,7 +120,7 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Asiakirja, Teoriakoulutus } from '@/types'
-  import { confirmDelete } from '@/utils/confirm'
+  import { mapFiles } from '@/utils/fileMapper'
 
   @Component({
     components: {
@@ -218,27 +218,19 @@
       )
       this.addedFiles = [...this.addedFiles, ...addedFilesNotInDeletedArray]
       this.newAsiakirjatMapped = [
-        ...this.mapFiles(addedFilesNotInDeletedArray),
+        ...mapFiles(addedFilesNotInDeletedArray),
         ...this.newAsiakirjatMapped
       ]
     }
 
     async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
-      if (
-        await confirmDelete(
-          this,
-          this.$t('poista-liitetiedosto') as string,
-          (this.$t('liitetiedoston') as string).toLowerCase()
+      if (asiakirja.id) {
+        this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
+      } else {
+        this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
+        this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
+          (a) => a.nimi !== asiakirja.nimi
         )
-      ) {
-        if (asiakirja.id) {
-          this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
-        } else {
-          this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
-          this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
-            (a) => a.nimi !== asiakirja.nimi
-          )
-        }
       }
     }
 
@@ -269,30 +261,18 @@
       this.$emit('cancel')
     }
 
-    get existingFileNamesForCurrentView() {
+    get existingFileNamesInCurrentView() {
       return this.asiakirjatTableItems?.map((item) => item.nimi)
     }
 
-    get existingFileNamesForOtherViews() {
+    get existingFileNamesInOtherViews() {
       return this.reservedAsiakirjaNimetMutable?.filter(
-        (nimi) => !this.existingFileNamesForCurrentView.includes(nimi)
+        (nimi) => !this.existingFileNamesInCurrentView.includes(nimi)
       )
     }
 
     get asiakirjatTableItems() {
       return [...this.newAsiakirjatMapped, ...this.asiakirjatExcludingDeleted()]
-    }
-
-    private mapFiles(files: File[]): Asiakirja[] {
-      return files.map((file) => {
-        const asiakirja: Asiakirja = {
-          nimi: file.name,
-          data: file.arrayBuffer(),
-          lisattypvm: new Date().toString(),
-          contentType: file.type
-        }
-        return asiakirja
-      })
     }
 
     private asiakirjatExcludingDeleted(): Asiakirja[] {

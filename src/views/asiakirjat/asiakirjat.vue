@@ -9,7 +9,7 @@
           <asiakirjat-upload
             :buttonText="$t('lisaa-asiakirja')"
             :uploading="uploading"
-            :existingFileNamesForCurrentView="existingFileNames"
+            :existingFileNamesInCurrentView="existingFileNames"
             @selectedFiles="onAsiakirjatAdded"
           >
             {{ $t('lisaa-asiakirja') }}
@@ -18,6 +18,8 @@
             :asiakirjat="asiakirjat"
             :loading="loading"
             :sortBy="sortBy"
+            :confirmDeleteTitle="$t('poista-asiakirja')"
+            :confirmDeleteTypeText="$t('asiakirjan')"
             @deleteAsiakirja="onDeleteAsiakirja"
           />
         </b-col>
@@ -33,7 +35,6 @@
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import { Asiakirja, ElsaError } from '@/types'
-  import { confirmDelete } from '@/utils/confirm'
   import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
@@ -116,23 +117,15 @@
     }
 
     async onDeleteAsiakirja(asiakirja: Asiakirja) {
-      if (
-        await confirmDelete(
-          this,
-          this.$t('poista-asiakirja') as string,
-          (this.$t('asiakirjan') as string).toLowerCase()
-        )
-      ) {
-        Vue.set(asiakirja, 'disableDelete', true)
-        try {
-          await axios.delete(this.endpointUrl + asiakirja.id)
-          toastSuccess(this, this.$t('asiakirjan-poistaminen-onnistui'))
-          this.asiakirjat = this.asiakirjat.filter((a) => a.id !== asiakirja.id)
-        } catch {
-          toastFail(this, this.$t('asiakirjan-poistaminen-epaonnistui'))
-        }
-        Vue.set(asiakirja, 'disableDelete', false)
+      Vue.set(asiakirja, 'disableDelete', true)
+      try {
+        await axios.delete(this.endpointUrl + asiakirja.id)
+        toastSuccess(this, this.$t('asiakirjan-poistaminen-onnistui'))
+        this.asiakirjat = this.asiakirjat.filter((a) => a.id !== asiakirja.id)
+      } catch {
+        toastFail(this, this.$t('asiakirjan-poistaminen-epaonnistui'))
       }
+      Vue.set(asiakirja, 'disableDelete', false)
     }
 
     get existingFileNames() {
