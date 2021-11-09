@@ -13,44 +13,33 @@
               </template>
             </elsa-form-group>
             <b-form-row>
-              <elsa-form-group
-                v-if="etunimi"
-                :label="$t('etunimi')"
-                class="col-sm-12 col-md-6 pr-md-3"
-              >
+              <elsa-form-group :label="$t('etunimi')" class="col-sm-12 col-md-6 pr-md-3">
                 <template v-slot="{ uid }">
                   <span :id="uid">{{ etunimi }}</span>
                 </template>
               </elsa-form-group>
-              <elsa-form-group
-                v-if="sukunimi"
-                :label="$t('sukunimi')"
-                class="col-sm-12 col-md-6 pl-md-3"
-              >
+              <elsa-form-group :label="$t('sukunimi')" class="col-sm-12 col-md-6 pl-md-3">
                 <template v-slot="{ uid }">
                   <span :id="uid">{{ sukunimi }}</span>
                 </template>
               </elsa-form-group>
             </b-form-row>
-            <elsa-form-group v-if="yliopisto" :label="$t('yliopisto')">
+            <elsa-form-group :label="$t('yliopisto')">
               <template v-slot="{ uid }">
                 <span :id="uid">{{ yliopisto }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group v-if="erikoisala" :label="$t('erikoisala')">
+            <elsa-form-group :label="$t('erikoisala')">
               <template v-slot="{ uid }">
                 <span :id="uid">{{ erikoisala }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group v-if="opiskelijatunnus" :label="$t('opiskelijatunnus')">
+            <elsa-form-group :label="$t('opiskelijatunnus')">
               <template v-slot="{ uid }">
                 <span :id="uid">{{ opiskelijatunnus }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group
-              v-if="opintooikeudenMyontamispaiva && opintooikeudenPaattymispaiva"
-              :label="$t('opiskeluoikeus')"
-            >
+            <elsa-form-group :label="$t('opiskeluoikeus')">
               <template v-slot="{ uid }">
                 <span :id="uid">
                   {{
@@ -59,17 +48,14 @@
                 </span>
               </template>
             </elsa-form-group>
-            <elsa-form-group
-              v-if="opintosuunnitelmaKaytossaPvm"
-              :label="$t('kaytossa-olevan-opetussuunnitelman-paivamaara')"
-            >
+            <elsa-form-group :label="$t('kaytossa-olevan-opetussuunnitelman-paivamaara')">
               <template v-slot="{ uid }">
                 <span :id="uid">
                   {{ $date(opintosuunnitelmaKaytossaPvm) }}
                 </span>
               </template>
             </elsa-form-group>
-            <elsa-form-group v-if="sahkopostiosoite" :label="$t('sahkopostiosoite')">
+            <elsa-form-group :label="$t('sahkopostiosoite')">
               <template v-slot="{ uid }">
                 <span :id="uid">
                   {{ sahkopostiosoite }}
