@@ -85,11 +85,11 @@ export interface Koulutussuunnitelma {
   osaamisenKartuttaminenYksityinen: boolean
   elamankentta: string | null
   elamankenttaYksityinen: boolean
-  koulutussuunnitelmaAsiakirja: null
-  motivaatiokirjeAsiakirja: null
-  koulutussuunnitelmaFile: File | null
+  koulutussuunnitelmaAsiakirja?: Asiakirja | null
+  motivaatiokirjeAsiakirja?: Asiakirja | null
+  koulutussuunnitelmaFile?: File | null
   koulutussuunnitelmaAsiakirjaUpdated: boolean
-  motivaatiokirjeFile: File | null
+  motivaatiokirjeFile?: File | null
   motivaatiokirjeAsiakirjaUpdated: boolean
 }
 

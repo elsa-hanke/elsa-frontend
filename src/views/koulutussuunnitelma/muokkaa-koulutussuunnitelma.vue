@@ -10,6 +10,7 @@
             <hr />
             <koulutussuunnitelma-form
               :value="koulutussuunnitelma"
+              :reservedAsiakirjaNimet="reservedAsiakirjaNimet"
               @submit="onSubmit"
               @cancel="onCancel"
             />
@@ -55,22 +56,24 @@
       }
     ]
     koulutussuunnitelma: null | Koulutussuunnitelma = null
+    reservedAsiakirjaNimet: string[] = []
     loading = true
 
     async mounted() {
-      await this.fetchKoulutussuunnitelma()
+      await Promise.all([this.fetchKoulutussuunnitelma(), this.fetchReservedAsiakirjaNimet()])
       this.loading = false
     }
 
     async fetchKoulutussuunnitelma() {
       try {
-        this.loading = true
         this.koulutussuunnitelma = (await axios.get(`erikoistuva-laakari/koulutussuunnitelma`)).data
       } catch {
         toastFail(this, this.$t('koulutussuunnitelman-hakeminen-epaonnistui'))
-      } finally {
-        this.loading = false
       }
+    }
+
+    async fetchReservedAsiakirjaNimet() {
+      this.reservedAsiakirjaNimet = (await axios.get('erikoistuva-laakari/asiakirjat/nimet')).data
     }
 
     async onSubmit(data: Koulutussuunnitelma, params: { saving: boolean }) {
