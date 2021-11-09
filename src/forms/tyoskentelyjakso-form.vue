@@ -222,35 +222,27 @@
         </b-form-checkbox>
       </template>
     </elsa-form-group>
-    <elsa-form-group
-      class="attachments"
-      :label="$t('liitetiedostot')"
-      :help="$t('sallitut-tiedostoformaatit')"
-    >
-      <template v-slot="{ uid }">
-        <span :id="uid">
-          {{ $t('tyoskentelyjakson-liitetiedostot-kuvaus') }}
-        </span>
-        <asiakirjat-upload
-          class="mt-3"
-          :id="uid"
-          :isPrimaryButton="false"
-          :buttonText="$t('lisaa-liitetiedosto')"
-          :existingFileNamesForCurrentView="existingFileNamesForCurrentView"
-          :existingFileNamesForOtherViews="existingFileNamesForOtherViews"
-          :disabled="reservedAsiakirjaNimetMutable === undefined"
-          @selectedFiles="onFilesAdded"
-        />
-        <asiakirjat-content
-          :id="uid"
-          :asiakirjat="asiakirjatTableItems"
-          :sortingEnabled="false"
-          :paginationEnabled="false"
-          :enableSearch="false"
-          :showInfoIfEmpty="false"
-          @deleteAsiakirja="onDeleteLiitetiedosto"
-        />
-      </template>
+    <elsa-form-group :label="$t('liitetiedostot')" :help="$t('sallitut-tiedostoformaatit-default')">
+      <span>
+        {{ $t('tyoskentelyjakson-liitetiedostot-kuvaus') }}
+      </span>
+      <asiakirjat-upload
+        class="mt-3"
+        :isPrimaryButton="false"
+        :buttonText="$t('lisaa-liitetiedosto')"
+        :existingFileNamesInCurrentView="existingFileNamesInCurrentView"
+        :existingFileNamesInOtherViews="existingFileNamesInOtherViews"
+        :disabled="reservedAsiakirjaNimetMutable === undefined"
+        @selectedFiles="onFilesAdded"
+      />
+      <asiakirjat-content
+        :asiakirjat="asiakirjatTableItems"
+        :sortingEnabled="false"
+        :paginationEnabled="false"
+        :enableSearch="false"
+        :showInfoIfEmpty="false"
+        @deleteAsiakirja="onDeleteLiitetiedosto"
+      />
     </elsa-form-group>
     <hr v-if="asiakirjatTableItems.length === 0" />
     <div
@@ -281,8 +273,8 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import { Asiakirja, Tyoskentelyjakso } from '@/types'
-  import { confirmDelete } from '@/utils/confirm'
   import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import { mapFiles } from '@/utils/fileMapper'
   import {
     tyoskentelyjaksoKaytannonKoulutusLabel,
     tyoskentelypaikkaTyyppiLabel
@@ -351,10 +343,10 @@
     erikoisalat!: any[]
 
     @Prop({ required: false, default: undefined })
-    asiakirjat!: Asiakirja[]
+    asiakirjat?: Asiakirja[]
 
     @Prop({ required: false, default: undefined })
-    reservedAsiakirjaNimet!: string[]
+    reservedAsiakirjaNimet?: string[]
 
     @Prop({
       required: false,
@@ -379,7 +371,7 @@
     addedFiles: File[] = []
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
-    reservedAsiakirjaNimetMutable: string[] = []
+    reservedAsiakirjaNimetMutable: string[] | undefined = []
 
     form: Tyoskentelyjakso = {
       alkamispaiva: null,
@@ -478,31 +470,23 @@
       )
       this.addedFiles = [...this.addedFiles, ...addedFilesNotInDeletedArray]
       this.newAsiakirjatMapped = [
-        ...this.mapFiles(addedFilesNotInDeletedArray),
+        ...mapFiles(addedFilesNotInDeletedArray),
         ...this.newAsiakirjatMapped
       ]
     }
 
     async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
-      if (
-        await confirmDelete(
-          this,
-          this.$t('poista-liitetiedosto') as string,
-          (this.$t('liitetiedoston') as string).toLowerCase()
+      // Jos asiakirjalla on id, on se tallennettu kantaan jo aiemmin, joten
+      // lisää asiakirja poistettaviin asiakirjoihin.
+      if (asiakirja.id) {
+        this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
+      } else {
+        // Jos asiakirjalla ei ole id:tä, on se lisätty ensimmäistä kertaa
+        // tässä näkymässä, joten poista asiakirja lisättävistä tiedostoista.
+        this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
+        this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
+          (a) => a.nimi !== asiakirja.nimi
         )
-      ) {
-        // Jos asiakirjalla on id, on se tallennettu kantaan jo aiemmin, joten
-        // lisää asiakirja poistettaviin asiakirjoihin.
-        if (asiakirja.id) {
-          this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
-        } else {
-          // Jos asiakirjalla ei ole id:tä, on se lisätty ensimmäistä kertaa
-          // tässä näkymässä, joten poista asiakirja lisättävistä tiedostoista.
-          this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
-          this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
-            (a) => a.nimi !== asiakirja.nimi
-          )
-        }
       }
     }
 
@@ -558,13 +542,13 @@
       return [...this.newAsiakirjatMapped, ...this.asiakirjatExcludingDeleted()]
     }
 
-    get existingFileNamesForCurrentView() {
+    get existingFileNamesInCurrentView() {
       return this.asiakirjatTableItems?.map((item) => item.nimi)
     }
 
-    get existingFileNamesForOtherViews() {
+    get existingFileNamesInOtherViews() {
       return this.reservedAsiakirjaNimetMutable?.filter(
-        (nimi) => !this.existingFileNamesForCurrentView.includes(nimi)
+        (nimi) => !this.existingFileNamesInCurrentView.includes(nimi)
       )
     }
 
@@ -596,18 +580,6 @@
         return tyoskentelypaikkaTyyppiLabel(this, this.form?.tyoskentelypaikka?.tyyppi)
       }
       return undefined
-    }
-
-    private mapFiles(files: File[]): Asiakirja[] {
-      return files.map((file) => {
-        const asiakirja: Asiakirja = {
-          nimi: file.name,
-          data: file.arrayBuffer(),
-          lisattypvm: new Date().toString(),
-          contentType: file.type
-        }
-        return asiakirja
-      })
     }
 
     private asiakirjatExcludingDeleted(): Asiakirja[] {

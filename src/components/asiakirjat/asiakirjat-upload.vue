@@ -1,17 +1,26 @@
 <template>
   <div>
     <input
-      id="file-upload"
+      v-if="allowMultiplesFiles"
+      :id="uid"
       type="file"
       @change="handleFileChange"
       :disabled="uploading || disabled"
       multiple
       hidden
     />
+    <input
+      v-else
+      :id="uid"
+      type="file"
+      @change="handleFileChange"
+      :disabled="uploading || disabled"
+      hidden
+    />
     <label
       class="user-select-none"
       :class="[isPrimaryButton ? 'primary mb-4' : 'outline-primary mb-4']"
-      for="file-upload"
+      :for="uid"
       :disabled="uploading || disabled"
       v-on="$listeners"
     >
@@ -23,19 +32,23 @@
         <em class="align-middle">
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
         </em>
-        <div v-if="this.filesToUploadCount === 1">
+        <div v-if="this.selectedFilesCount === 1">
           <h4>
             {{ $t('asiakirjan-tallentaminen-epaonnistui') }}
           </h4>
           <ul>
-            <li v-if="duplicateFilesForCurrentView.length > 0">
+            <li v-if="duplicateFilesInCurrentView.length > 0">
               {{ $t('asiakirja-samanniminen-tiedosto') }}
             </li>
-            <li v-if="duplicateFilesForOtherViews.length > 0">
+            <li v-if="duplicateFilesInOtherViews.length > 0">
               {{ $t('asiakirja-samanniminen-tiedosto-toisessa-nakymassa') }}
             </li>
             <li v-if="filesOfWrongType.length > 0">
-              {{ $t('sallitut-tiedostoformaatit') }}
+              {{
+                this.wrongFileTypeErrorMessage
+                  ? this.wrongFileTypeErrorMessage
+                  : $t('sallitut-tiedostoformaatit-default')
+              }}
             </li>
             <li v-if="filesExceedingMaxSize.length > 0">
               {{ $t('asiakirjan-maksimi-tiedostokoko-ylitetty') }}
@@ -50,24 +63,28 @@
           <div class="mb-2" v-if="maxFilesTotalSizeExceeded">
             {{ $t('asiakirjojen-yhteenlaskettu-koko-ylitetty') }}
           </div>
-          <span v-if="duplicateFilesForCurrentView.length > 0">
+          <span v-if="duplicateFilesInCurrentView.length > 0">
             {{ $t('asiakirja-samanniminen-tiedosto') }}
             <ul>
-              <li v-for="(file, index) in duplicateFilesForCurrentView" :key="index">
+              <li v-for="(file, index) in duplicateFilesInCurrentView" :key="index">
                 {{ file.name }}
               </li>
             </ul>
           </span>
-          <span v-if="duplicateFilesForOtherViews.length > 0">
+          <span v-if="duplicateFilesInOtherViews.length > 0">
             {{ $t('asiakirja-samanniminen-tiedosto-toisessa-nakymassa') }}
             <ul>
-              <li v-for="(file, index) in duplicateFilesForOtherViews" :key="index">
+              <li v-for="(file, index) in duplicateFilesInOtherViews" :key="index">
                 {{ file.name }}
               </li>
             </ul>
           </span>
           <span v-if="filesOfWrongType.length > 0">
-            {{ $t('sallitut-tiedostoformaatit') }}
+            {{
+              this.wrongFileTypeErrorMessage
+                ? this.wrongFileTypeErrorMessage
+                : $t('sallitut-tiedostoformaatit-default')
+            }}
             <ul>
               <li v-for="(file, index) in filesOfWrongType" :key="index">
                 {{ file.name }}
@@ -99,9 +116,9 @@
     private maxFilesTotalSizeExceeded = false
     private filesExceedingMaxSize: File[] = []
     private filesOfWrongType: File[] = []
-    private duplicateFilesForCurrentView: File[] = []
-    private duplicateFilesForOtherViews: File[] = []
-    private filesToUploadCount = 0
+    private duplicateFilesInCurrentView: File[] = []
+    private duplicateFilesInOtherViews: File[] = []
+    private selectedFilesCount = 0
 
     @Prop({ required: false })
     uploading?: boolean
@@ -112,11 +129,23 @@
     @Prop({ required: true, type: String })
     buttonText!: string
 
-    @Prop({ required: true })
-    existingFileNamesForCurrentView?: string[]
+    @Prop({
+      required: false,
+      default: () => ['application/pdf', 'image/jpg', 'image/jpeg', 'image/png']
+    })
+    allowedFileTypes!: string[]
 
-    @Prop({ required: false })
-    existingFileNamesForOtherViews?: string[]
+    @Prop({ required: false, type: String })
+    wrongFileTypeErrorMessage?: string
+
+    @Prop({ required: false, type: Boolean, default: true })
+    allowMultiplesFiles!: boolean
+
+    @Prop({ required: false, default: () => [] })
+    existingFileNamesInCurrentView!: string[]
+
+    @Prop({ required: false, default: () => [] })
+    existingFileNamesInOtherViews!: string[]
 
     @Prop({ required: false, type: Boolean, default: false })
     disabled!: boolean
@@ -124,17 +153,17 @@
     handleFileChange(e: Event) {
       const inputElement = e.target as HTMLInputElement
       const fileArray = [...(inputElement?.files ?? [])]
-      this.filesToUploadCount = fileArray.length
+      this.selectedFilesCount = fileArray.length
       // Chromea varten. Muutoin heti perään valittu sama tiedosto ei laukaise koko eventtiä.
       inputElement.value = ''
       this.maxFilesTotalSizeExceeded = this.getIsTotalFileSizeExceeded(fileArray)
-      this.filesExceedingMaxSize = this.getfilesExceedingMaxSize(fileArray)
-      this.filesOfWrongType = this.getfilesOfWrongType(fileArray)
-      this.duplicateFilesForCurrentView = this.getduplicateFilesForCurrentView(fileArray)
-      this.duplicateFilesForOtherViews = this.getduplicateFilesForOtherViews(fileArray)
+      this.filesExceedingMaxSize = this.getFilesExceedingMaxSize(fileArray)
+      this.filesOfWrongType = this.getFilesOfWrongType(fileArray)
+      this.duplicateFilesInCurrentView = this.getduplicateFilesInCurrentView(fileArray)
+      this.duplicateFilesInOtherViews = this.getduplicateFilesInOtherViews(fileArray)
 
       if (!this.hasErrors) {
-        this.filesToUploadCount = 0
+        this.selectedFilesCount = 0
         this.$emit('selectedFiles', fileArray)
       }
     }
@@ -143,34 +172,32 @@
       return files.reduce((sum: number, current: File) => sum + current.size, 0) > maxFilesTotalSize
     }
 
-    getfilesExceedingMaxSize(files: File[]): File[] {
+    getFilesExceedingMaxSize(files: File[]): File[] {
       return files.filter((file) => file.size > maxFileSize)
     }
 
-    getfilesOfWrongType(files: File[]): File[] {
-      return files.filter(
-        (file) =>
-          file.type !== 'application/pdf' &&
-          file.type !== 'image/jpg' &&
-          file.type !== 'image/jpeg' &&
-          file.type !== 'image/png'
-      )
+    getFilesOfWrongType(files: File[]): File[] {
+      return files.filter((file) => !this.allowedFileTypes.includes(file.type))
     }
 
-    getduplicateFilesForCurrentView(files: File[]): File[] {
-      return files.filter((file) => this.existingFileNamesForCurrentView?.includes(file.name))
+    getduplicateFilesInCurrentView(files: File[]): File[] {
+      return files.filter((file) => this.existingFileNamesInCurrentView?.includes(file.name))
     }
 
-    getduplicateFilesForOtherViews(files: File[]): File[] {
-      return files.filter((file) => this.existingFileNamesForOtherViews?.includes(file.name))
+    getduplicateFilesInOtherViews(files: File[]): File[] {
+      return files.filter((file) => this.existingFileNamesInOtherViews?.includes(file.name))
     }
 
     onDismissAlert() {
       this.maxFilesTotalSizeExceeded = false
       this.filesExceedingMaxSize = []
       this.filesOfWrongType = []
-      this.duplicateFilesForCurrentView = []
-      this.duplicateFilesForOtherViews = []
+      this.duplicateFilesInCurrentView = []
+      this.duplicateFilesInOtherViews = []
+    }
+
+    get uid() {
+      return `elsa-asiakirjat-upload-${(this as any)._uid}`
     }
 
     get hasErrors() {
@@ -178,8 +205,8 @@
         this.maxFilesTotalSizeExceeded ||
         this.filesExceedingMaxSize.length > 0 ||
         this.filesOfWrongType.length > 0 ||
-        this.duplicateFilesForCurrentView.length > 0 ||
-        this.duplicateFilesForOtherViews.length > 0
+        this.duplicateFilesInCurrentView.length > 0 ||
+        this.duplicateFilesInOtherViews.length > 0
       )
     }
   }
