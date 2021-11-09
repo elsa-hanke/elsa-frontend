@@ -94,37 +94,16 @@
                 class="border mb-3"
               >
                 <b-card-text class="p-2">
-                  <div class="koulutussuunnitelma-table">
-                    <b-table-simple responsive class="mb-0">
-                      <b-thead>
-                        <b-tr>
-                          <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
-                          <b-th>{{ $t('lisatty') }}</b-th>
-                        </b-tr>
-                      </b-thead>
-                      <b-tbody>
-                        <b-tr>
-                          <b-td>
-                            <elsa-button
-                              variant="link"
-                              class="shadow-none p-0"
-                              @click="
-                                onViewAsiakirja(koulutussuunnitelma.koulutussuunnitelmaAsiakirja)
-                              "
-                              :loading="
-                                koulutussuunnitelma.koulutussuunnitelmaAsiakirja.disablePreview
-                              "
-                            >
-                              {{ koulutussuunnitelma.koulutussuunnitelmaAsiakirja.nimi }}
-                            </elsa-button>
-                          </b-td>
-                          <b-td>
-                            {{ $date(koulutussuunnitelma.koulutussuunnitelmaAsiakirja.lisattypvm) }}
-                          </b-td>
-                        </b-tr>
-                      </b-tbody>
-                    </b-table-simple>
-                  </div>
+                  <asiakirjat-content
+                    class="asiakirjat-table asiakirjat-table--border-xs-0"
+                    v-if="koulutussuunnitelma.koulutussuunnitelmaAsiakirja"
+                    :asiakirjat="koulutussuunnitelmaAsiakirjatTableItems"
+                    :sortingEnabled="false"
+                    :paginationEnabled="false"
+                    :enableSearch="false"
+                    :enableDelete="false"
+                    :showInfoIfEmpty="false"
+                  />
                 </b-card-text>
               </b-card>
               <elsa-accordian icon="envelope-open-text">
@@ -137,36 +116,16 @@
                     ({{ $t('yksityinen') | lowercase }})
                   </span>
                 </template>
-                <div
+                <asiakirjat-content
+                  class="asiakirjat-table"
                   v-if="koulutussuunnitelma.motivaatiokirjeAsiakirja"
-                  class="motivaatiokirje-table"
-                >
-                  <b-table-simple responsive>
-                    <b-thead>
-                      <b-tr>
-                        <b-th style="width: 40%">{{ $t('tiedoston-nimi') }}</b-th>
-                        <b-th>{{ $t('lisatty') }}</b-th>
-                      </b-tr>
-                    </b-thead>
-                    <b-tbody>
-                      <b-tr>
-                        <b-td>
-                          <elsa-button
-                            variant="link"
-                            class="shadow-none p-0"
-                            @click="onViewAsiakirja(koulutussuunnitelma.motivaatiokirjeAsiakirja)"
-                            :loading="koulutussuunnitelma.motivaatiokirjeAsiakirja.disablePreview"
-                          >
-                            {{ koulutussuunnitelma.motivaatiokirjeAsiakirja.nimi }}
-                          </elsa-button>
-                        </b-td>
-                        <b-td>
-                          {{ $date(koulutussuunnitelma.motivaatiokirjeAsiakirja.lisattypvm) }}
-                        </b-td>
-                      </b-tr>
-                    </b-tbody>
-                  </b-table-simple>
-                </div>
+                  :asiakirjat="motivaatiokirjeAsiakirjatTableItems"
+                  :sortingEnabled="false"
+                  :paginationEnabled="false"
+                  :enableSearch="false"
+                  :enableDelete="false"
+                  :showInfoIfEmpty="false"
+                />
                 <div v-if="koulutussuunnitelma.motivaatiokirje" class="text-preline">
                   {{ koulutussuunnitelma.motivaatiokirje }}
                 </div>
@@ -258,18 +217,19 @@
 
   import { getKoulutusjaksot } from '@/api/erikoistuva'
   import ElsaAccordian from '@/components/accordian/accordian.vue'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import { Asiakirja, Koulutusjakso } from '@/types'
-  import { fetchAndOpenBlob } from '@/utils/blobs'
+  import { Koulutusjakso, Koulutussuunnitelma } from '@/types'
   import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
       ElsaAccordian,
-      ElsaButton
+      ElsaButton,
+      AsiakirjatContent
     }
   })
-  export default class Koulutussuunnitelma extends Vue {
+  export default class KoulutussuunnitelmaView extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -306,23 +266,24 @@
       }
     }
 
-    async onViewAsiakirja(asiakirja: Asiakirja) {
-      Vue.set(asiakirja, 'disablePreview', true)
-      if (
-        !asiakirja.id ||
-        !(await fetchAndOpenBlob(asiakirja.id, asiakirja.nimi, 'erikoistuva-laakari/asiakirjat/'))
-      ) {
-        toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
-      }
-      Vue.set(asiakirja, 'disablePreview', false)
-    }
-
     get linkki() {
       return `<a
                 href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
                 target="_blank"
                 rel="noopener noreferrer"
               >${this.$t('henkilokohtainen-koulutussuunnitelma-linkki')}</a>`
+    }
+
+    get koulutussuunnitelmaAsiakirjatTableItems() {
+      return this.koulutussuunnitelma?.koulutussuunnitelmaAsiakirja
+        ? [this.koulutussuunnitelma.koulutussuunnitelmaAsiakirja]
+        : []
+    }
+
+    get motivaatiokirjeAsiakirjatTableItems() {
+      return this.koulutussuunnitelma?.motivaatiokirjeAsiakirja
+        ? [this.koulutussuunnitelma.motivaatiokirjeAsiakirja]
+        : []
     }
   }
 </script>
@@ -336,7 +297,8 @@
   }
 
   .koulutussuunnitelma-table,
-  .motivaatiokirje-table {
+  .motivaatiokirje-table,
+  .asiakirjat-table {
     ::v-deep table {
       border-bottom: 0;
     }
@@ -379,6 +341,11 @@
             padding-bottom: 0 !important;
           }
         }
+      }
+    }
+    .asiakirjat-table--border-xs-0 {
+      ::v-deep tr {
+        border: 0;
       }
     }
   }

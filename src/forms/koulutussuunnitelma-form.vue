@@ -1,154 +1,50 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <p>
+    <p class="mb-3">
       {{ $t('henkilokohtainen-koulutussuunnitelma-liitteena-kuvaus') }}
-      <input
-        ref="koulutussuunnitelma-file-input"
-        id="koulutussuunnitelma-file-input"
-        type="file"
-        accept="application/pdf"
-        @change="koulutussuunnitelmaChange"
-        hidden
-      />
-      <elsa-button
-        @click="selectMoulutussuunnitelma"
-        variant="link"
-        class="text-decoration-none p-0"
-      >
-        {{ $t('henkilokohtainen-koulutussuunnitelma-liitteena-linkki') }}
-      </elsa-button>
     </p>
-    <b-container
-      v-if="form.koulutussuunnitelmaFile || form.koulutussuunnitelmaAsiakirja"
-      fluid
-      class="px-0"
-    >
-      <b-row>
-        <b-col xl="6" lg="8">
-          <b-table-simple responsive stacked="md" class="mb-0">
-            <b-thead>
-              <b-tr>
-                <b-th>{{ $t('tiedoston-nimi') }}</b-th>
-                <b-th>{{ $t('lisatty') }}</b-th>
-                <b-th style="width: 0"></b-th>
-              </b-tr>
-            </b-thead>
-            <b-tbody>
-              <b-tr>
-                <b-td>
-                  <elsa-button
-                    v-if="form.koulutussuunnitelmaFile"
-                    variant="link"
-                    class="shadow-none p-0"
-                  >
-                    {{ form.koulutussuunnitelmaFile.name }}
-                  </elsa-button>
-                  <elsa-button
-                    v-else
-                    variant="link"
-                    class="shadow-none p-0"
-                    @click="onViewAsiakirja(form.koulutussuunnitelmaAsiakirja)"
-                    :loading="form.koulutussuunnitelmaAsiakirja.disablePreview"
-                  >
-                    {{ form.koulutussuunnitelmaAsiakirja.nimi }}
-                  </elsa-button>
-                </b-td>
-                <b-td>
-                  <span v-if="form.koulutussuunnitelmaFile">
-                    {{ $today() }}
-                  </span>
-                  <span v-else>
-                    {{ $date(form.koulutussuunnitelmaAsiakirja.lisattypvm) }}
-                  </span>
-                </b-td>
-                <b-td>
-                  <elsa-button
-                    @click="removeKoulutussuunnitelmaAsiakirja"
-                    variant="link"
-                    class="shadow-none p-0"
-                  >
-                    <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
-                  </elsa-button>
-                </b-td>
-              </b-tr>
-            </b-tbody>
-          </b-table-simple>
-        </b-col>
-      </b-row>
-    </b-container>
-    <hr />
+    <asiakirjat-upload
+      :isPrimaryButton="false"
+      :allowMultiplesFiles="false"
+      :existingFileNamesInCurrentView="motivaatiokirjeAsiakirjatTableItems.map((k) => k.nimi)"
+      :existingFileNamesInOtherViews="reservedAsiakirjaNimet"
+      :buttonText="$t('lisaa-liitetiedosto')"
+      :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
+      @selectedFiles="onKoulutussuunnitelmaFileAdded"
+    />
+    <asiakirjat-content
+      class="px-0 col-md-6 col-lg-12 col-xl-6"
+      :asiakirjat="koulutussuunnitelmaAsiakirjatTableItems"
+      :sortingEnabled="false"
+      :paginationEnabled="false"
+      :enableSearch="false"
+      :showInfoIfEmpty="false"
+      @deleteAsiakirja="onKoulutussuunnitelmaFileDeleted"
+    />
+    <hr class="mt-0" />
     <elsa-form-group :label="$t('motivaatiokirje')">
       <template v-slot="{ uid }">
-        <p>{{ $t('motivaatiokirje-kuvas') }}</p>
-        <input
-          ref="motivaatiokirje-file-input"
-          id="motivaatiokirje-file-input"
-          type="file"
-          accept="application/pdf"
-          @change="motivaatiokirjeChange"
-          hidden
+        <p class="mb-3">{{ $t('motivaatiokirje-kuvas') }}</p>
+        <asiakirjat-upload
+          :isPrimaryButton="false"
+          :allowMultiplesFiles="false"
+          :existingFileNamesInCurrentView="
+            koulutussuunnitelmaAsiakirjatTableItems.map((k) => k.nimi)
+          "
+          :existingFileNamesInOtherViews="reservedAsiakirjaNimet"
+          :buttonText="$t('lisaa-liitetiedosto')"
+          :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
+          @selectedFiles="onMotivaatiokirjeFileAdded"
         />
-        <elsa-button @click="selectMotivaatiokirje" variant="outline-primary" class="mb-3">
-          {{ $t('lisaa-liitetiedosto') }}
-        </elsa-button>
-        <b-container
-          v-if="form.motivaatiokirjeFile || form.motivaatiokirjeAsiakirja"
-          fluid
-          class="px-0"
-        >
-          <b-row>
-            <b-col xl="6" lg="8">
-              <b-table-simple responsive stacked="md">
-                <b-thead>
-                  <b-tr>
-                    <b-th>{{ $t('tiedoston-nimi') }}</b-th>
-                    <b-th>{{ $t('lisatty') }}</b-th>
-                    <b-th style="width: 0"></b-th>
-                  </b-tr>
-                </b-thead>
-                <b-tbody>
-                  <b-tr>
-                    <b-td>
-                      <elsa-button
-                        v-if="form.motivaatiokirjeFile"
-                        variant="link"
-                        class="shadow-none p-0"
-                      >
-                        {{ form.motivaatiokirjeFile.name }}
-                      </elsa-button>
-                      <elsa-button
-                        v-else
-                        variant="link"
-                        class="shadow-none p-0"
-                        @click="onViewAsiakirja(form.motivaatiokirjeAsiakirja)"
-                        :loading="form.motivaatiokirjeAsiakirja.disablePreview"
-                      >
-                        {{ form.motivaatiokirjeAsiakirja.nimi }}
-                      </elsa-button>
-                    </b-td>
-                    <b-td>
-                      <span v-if="form.motivaatiokirjeFile">
-                        {{ $today() }}
-                      </span>
-                      <span v-else>
-                        {{ $date(form.motivaatiokirjeAsiakirja.lisattypvm) }}
-                      </span>
-                    </b-td>
-                    <b-td>
-                      <elsa-button
-                        @click="removeMotivaatiokirjeAsiakirja"
-                        variant="link"
-                        class="shadow-none p-0"
-                      >
-                        <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
-                      </elsa-button>
-                    </b-td>
-                  </b-tr>
-                </b-tbody>
-              </b-table-simple>
-            </b-col>
-          </b-row>
-        </b-container>
+        <asiakirjat-content
+          class="px-0 col-md-6 col-lg-12 col-xl-6"
+          :asiakirjat="motivaatiokirjeAsiakirjatTableItems"
+          :sortingEnabled="false"
+          :paginationEnabled="false"
+          :enableSearch="false"
+          :showInfoIfEmpty="false"
+          @deleteAsiakirja="onMotivaatiokirjeFileDeleted"
+        />
         <b-form-textarea :id="uid" v-model="form.motivaatiokirje" rows="3" />
       </template>
     </elsa-form-group>
@@ -227,16 +123,19 @@
   import { Vue, Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
 
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
+  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { Asiakirja, Koulutussuunnitelma } from '@/types'
-  import { fetchAndOpenBlob } from '@/utils/blobs'
-  import { toastFail } from '@/utils/toast'
+  import { Koulutussuunnitelma } from '@/types'
+  import { mapFile } from '@/utils/fileMapper'
 
   @Component({
     components: {
       ElsaFormGroup,
-      ElsaButton
+      ElsaButton,
+      AsiakirjatUpload,
+      AsiakirjatContent
     },
     validations: {
       form: {}
@@ -247,6 +146,10 @@
       required: true
     })
     value!: Koulutussuunnitelma
+
+    @Prop({ required: true })
+    reservedAsiakirjaNimet!: string[]
+
     form: Koulutussuunnitelma = {
       id: null,
       motivaatiokirje: null,
@@ -268,6 +171,7 @@
       motivaatiokirjeFile: null,
       motivaatiokirjeAsiakirjaUpdated: false
     }
+
     params = {
       saving: false
     }
@@ -280,60 +184,28 @@
       }
     }
 
-    selectMoulutussuunnitelma() {
-      const inputEl = this.$refs['koulutussuunnitelma-file-input'] as HTMLInputElement
-      inputEl.click()
+    onKoulutussuunnitelmaFileAdded(files: File[]) {
+      const file = files[0]
+      Vue.set(this.form, 'koulutussuunnitelmaAsiakirja', mapFile(file))
+      this.form.koulutussuunnitelmaFile = file
+      this.form.koulutussuunnitelmaAsiakirjaUpdated = true
     }
 
-    koulutussuunnitelmaChange(e: Event) {
-      const inputElement = e.target as HTMLInputElement
-      if (inputElement.files && inputElement.files?.length > 0) {
-        const file = inputElement.files[0]
-        this.form = {
-          ...this.form,
-          koulutussuunnitelmaFile: file,
-          koulutussuunnitelmaAsiakirjaUpdated: true
-        }
-      }
+    onKoulutussuunnitelmaFileDeleted() {
+      Vue.set(this.form, 'koulutussuunnitelmaAsiakirja', null)
+      this.form.koulutussuunnitelmaAsiakirjaUpdated = true
     }
 
-    removeKoulutussuunnitelmaAsiakirja() {
-      this.form = {
-        ...this.form,
-        koulutussuunnitelmaAsiakirja: null,
-        koulutussuunnitelmaFile: null,
-        koulutussuunnitelmaAsiakirjaUpdated: true
-      }
-      const inputElement = this.$refs['koulutussuunnitelma-file-input'] as HTMLInputElement
-      inputElement.value = ''
+    onMotivaatiokirjeFileAdded(files: File[]) {
+      const file = files[0]
+      Vue.set(this.form, 'motivaatiokirjeAsiakirja', mapFile(file))
+      this.form.motivaatiokirjeFile = file
+      this.form.motivaatiokirjeAsiakirjaUpdated = true
     }
 
-    selectMotivaatiokirje() {
-      const inputEl = this.$refs['motivaatiokirje-file-input'] as HTMLInputElement
-      inputEl.click()
-    }
-
-    motivaatiokirjeChange(e: Event) {
-      const inputElement = e.target as HTMLInputElement
-      if (inputElement.files && inputElement.files?.length > 0) {
-        const file = inputElement.files[0]
-        this.form = {
-          ...this.form,
-          motivaatiokirjeFile: file,
-          motivaatiokirjeAsiakirjaUpdated: true
-        }
-      }
-    }
-
-    removeMotivaatiokirjeAsiakirja() {
-      this.form = {
-        ...this.form,
-        motivaatiokirjeAsiakirja: null,
-        motivaatiokirjeFile: null,
-        motivaatiokirjeAsiakirjaUpdated: true
-      }
-      const inputElement = this.$refs['motivaatiokirje-file-input'] as HTMLInputElement
-      inputElement.value = ''
+    onMotivaatiokirjeFileDeleted() {
+      Vue.set(this.form, 'motivaatiokirjeAsiakirja', null)
+      this.form.motivaatiokirjeAsiakirjaUpdated = true
     }
 
     onSubmit() {
@@ -356,15 +228,12 @@
       this.$emit('cancel')
     }
 
-    async onViewAsiakirja(asiakirja: Asiakirja) {
-      Vue.set(asiakirja, 'disablePreview', true)
-      if (
-        !asiakirja.id ||
-        !(await fetchAndOpenBlob(asiakirja.id, asiakirja.nimi, 'erikoistuva-laakari/asiakirjat/'))
-      ) {
-        toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
-      }
-      Vue.set(asiakirja, 'disablePreview', false)
+    get koulutussuunnitelmaAsiakirjatTableItems() {
+      return this.form.koulutussuunnitelmaAsiakirja ? [this.form.koulutussuunnitelmaAsiakirja] : []
+    }
+
+    get motivaatiokirjeAsiakirjatTableItems() {
+      return this.form.motivaatiokirjeAsiakirja ? [this.form.motivaatiokirjeAsiakirja] : []
     }
   }
 </script>
@@ -375,9 +244,5 @@
 
   ::v-deep table {
     border-bottom: 0;
-  }
-
-  ::v-deep .table-responsive.mb-0 {
-    margin-bottom: 0;
   }
 </style>
