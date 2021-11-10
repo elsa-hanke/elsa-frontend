@@ -20,7 +20,7 @@
                           params: { kayttajaId: row.item.kayttajaId }
                         }"
                         variant="link"
-                        class="p-0 shadow-none"
+                        class="p-0 border-0 shadow-none"
                       >
                         {{ row.item.nimi }}
                       </elsa-button>

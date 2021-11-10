@@ -44,6 +44,10 @@ import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
 import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
+import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa-paivittaista-merkintaa.vue'
+import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
+import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
+import UusiPaivittainenMerkinta from '@/views/paivittaiset-merkinnat/uusi-paivittainen-merkinta.vue'
 import MuokkaaPoissaoloa from '@/views/poissaolot/muokkaa-poissaoloa.vue'
 import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
@@ -401,6 +405,44 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaTeoriakoulutusta,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/paivittaiset-merkinnat',
+        name: 'paivittaiset-merkinnat',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: PaivittaisetMerkinnat,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/paivittaiset-merkinnat/uusi',
+        name: 'uusi-paivittainen-merkinta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiPaivittainenMerkinta,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/paivittaiset-merkinnat/:paivakirjamerkintaId',
+        name: 'paivittainen-merkinta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: PaivittainenMerkinta,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/paivittaiset-merkinnat/:paivakirjamerkintaId/muokkaus',
+        name: 'muokkaa-paivittaista-merkintaa',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaPaivittaistaMerkintaa,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
         }

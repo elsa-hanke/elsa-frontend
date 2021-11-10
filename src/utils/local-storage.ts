@@ -17,7 +17,7 @@ export function restoreRoute(next: NavigationGuardNext) {
         window.location.href = to
       }
     } catch (err) {
-      console.warn(err)
+      console.warn(err) // eslint-disable-line no-console
       next()
     }
   } else {
@@ -45,7 +45,7 @@ export function storeRoute(to?: Route) {
         localStorage.setItem('to', window.location.href)
       }
     } catch (err) {
-      console.warn(err)
+      console.warn(err) // eslint-disable-line no-console
     }
   }
 }

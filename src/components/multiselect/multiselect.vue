@@ -146,6 +146,8 @@
       min-height: initial;
       font-size: $font-size-base;
       line-height: $line-height-base;
+      border-radius: $input-border-radius;
+
       .multiselect__spinner {
         right: 5px;
         width: 30px;
@@ -215,7 +217,7 @@
 
     .multiselect__content-wrapper {
       font-size: 0.875rem;
-      border-color: $gray-400;
+      border-color: $gray-400 !important;
 
       .multiselect__option {
         padding: 0.75rem;

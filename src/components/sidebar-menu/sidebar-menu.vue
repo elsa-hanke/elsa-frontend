@@ -48,6 +48,9 @@
           </span>
         </b-nav-item>
         <b-collapse id="osaaminen-toggle">
+          <b-nav-item link-classes="pb-2 pt-2 ml-5" :to="{ name: 'paivittaiset-merkinnat' }">
+            {{ $t('paivittaiset-merkinnat') }}
+          </b-nav-item>
           <b-nav-item link-classes="pb-2 pt-2 ml-5" :to="{ name: 'arvioinnit' }">
             {{ $t('arvioinnit') }}
           </b-nav-item>
@@ -157,5 +160,9 @@
   .open,
   .closed {
     float: right;
+  }
+
+  #osaaminen-toggle {
+    transition: none !important;
   }
 </style>

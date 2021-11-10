@@ -344,16 +344,3 @@ button.close {
   opacity: 1;
   text-shadow: 0 0 0;
 }
-
-.page-item {
-  .page-link {
-    border: none;
-  }
-
-  &.active {
-    .page-link {
-      background-color: $input-placeholder-color;
-      border-color: $input-placeholder-color;
-    }
-  }
-}

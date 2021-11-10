@@ -143,3 +143,6 @@ export enum PoissaolonSyyTyyppi {
   VAHENNETAAN_YLIMENEVA_AIKA_PER_VUOSI = 'VAHENNETAAN_YLIMENEVA_AIKA_PER_VUOSI',
   VAHENNETAAN_SUORAAN = 'VAHENNETAAN_SUORAAN'
 }
+
+export const paivakirjamerkintaKoulutuksetId = 1
+export const paivakirjamerkintaMuuAiheId = 6

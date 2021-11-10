@@ -54,10 +54,12 @@
             name="tyoskentelyjakso-tyyppi"
             value="MUU"
           >
-            {{ $t('muu') }}
             <span v-if="form.tyoskentelypaikka.tyyppi === 'MUU'">
-              , {{ $t('kerro-mika') | lowercase }}
+              {{ $t('muu') }}, {{ $t('kerro-mika') | lowercase }}
               <span class="text-primary">*</span>
+            </span>
+            <span v-else>
+              {{ $t('muu') }}
             </span>
           </b-form-radio>
           <div v-if="form.tyoskentelypaikka.tyyppi === 'MUU'" class="pl-4">

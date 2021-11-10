@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { gitDescribeSync } = require('git-describe')
 
 try {
@@ -16,20 +15,7 @@ module.exports = {
       alias: {
         vue$: 'vue/dist/vue.esm.js'
       }
-    },
-    plugins: [
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: './node_modules/swagger-ui-dist/*.{js,css,html,png}',
-            to: 'swagger-ui',
-            flatten: true,
-            globOptions: { ignore: ['**/index.html'] }
-          },
-          { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' }
-        ]
-      })
-    ]
+    }
   },
 
   chainWebpack: (config) => {

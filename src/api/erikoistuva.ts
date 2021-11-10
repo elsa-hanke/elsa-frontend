@@ -18,7 +18,11 @@ import {
   ValiarviointiLomake,
   VastuuhenkilonArvioLomake,
   VastuuhenkilonArvioLomakeErikoistuva,
-  Kayttaja
+  Kayttaja,
+  Paivakirjamerkinta,
+  PaivakirjamerkintaLomake,
+  Page,
+  PaivakirjamerkintaRajaimet
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -254,4 +258,49 @@ export async function deleteSeurantajakso(id?: number) {
 export async function postLahikouluttaja(form: Kayttaja) {
   const path = 'erikoistuva-laakari/lahikouluttajat'
   return await axios.post<Kayttaja>(path, form)
+}
+
+export async function getPaivakirjamerkinnatRajaimet() {
+  const path = 'erikoistuva-laakari/paivakirjamerkinnat-rajaimet'
+  return await axios.get<PaivakirjamerkintaRajaimet>(path)
+}
+
+export async function getPaivakirjamerkintaLomake() {
+  const path = 'erikoistuva-laakari/paivakirjamerkinta-lomake'
+  return await axios.get<PaivakirjamerkintaLomake>(path)
+}
+
+export async function postPaivakirjamerkinta(form: Paivakirjamerkinta) {
+  const path = 'erikoistuva-laakari/paivakirjamerkinnat'
+  return await axios.post<Paivakirjamerkinta>(path, form)
+}
+
+export async function putPaivakirjamerkinta(form: Paivakirjamerkinta) {
+  const path = `erikoistuva-laakari/paivakirjamerkinnat/${form.id}`
+  return await axios.put<Paivakirjamerkinta>(path, form)
+}
+
+export async function getPaivakirjamerkinta(paivakirjamerkintaId: string) {
+  const path = `erikoistuva-laakari/paivakirjamerkinnat/${paivakirjamerkintaId}`
+  return await axios.get<Paivakirjamerkinta>(path)
+}
+
+export async function deletePaivittainenMerkinta(paivakirjamerkintaId?: number) {
+  const path = `erikoistuva-laakari/paivakirjamerkinnat/${paivakirjamerkintaId}`
+  return await axios.delete(path)
+}
+
+export async function getPaivittaisetMerkinnat(params: {
+  page?: number
+  size?: number
+  sort?: string
+  'aihekategoriaId.equals'?: number
+  'paivamaara.greaterThanOrEqual'?: string
+  'paivamaara.lessThanOrEqual'?: string
+}) {
+  return await axios.get<Page<Paivakirjamerkinta>>('erikoistuva-laakari/paivakirjamerkinnat', {
+    params: {
+      ...params
+    }
+  })
 }

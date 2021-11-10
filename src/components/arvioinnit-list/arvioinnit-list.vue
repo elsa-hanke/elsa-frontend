@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('arvioinnit') }}</h1>
-          <search-input
+          <elsa-search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
             :placeholder="$t('hae-tapahtuman-nimella')"
@@ -112,11 +112,11 @@
               </elsa-button>
             </template>
           </b-table>
-          <pagination
-            :currentPage.sync="currentPage"
-            :perPage="perPage"
+          <elsa-pagination
+            v-if="loading"
+            :current-page.sync="currentPage"
+            :per-page="perPage"
             :rows="rows"
-            :loading="loading"
             :style="{ 'max-width': '1420px' }"
           />
         </b-col>
@@ -129,14 +129,14 @@
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
-  import Pagination from '@/components/pagination/pagination.vue'
-  import SearchInput from '@/components/search-input/search-input.vue'
+  import ElsaPagination from '@/components/pagination/pagination.vue'
+  import ElsaSearchInput from '@/components/search-input/search-input.vue'
 
   @Component({
     components: {
       ElsaButton,
-      SearchInput,
-      Pagination
+      ElsaSearchInput,
+      ElsaPagination
     }
   })
   export default class ArvioinnitList extends Vue {
