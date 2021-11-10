@@ -615,6 +615,36 @@ export interface Teoriakoulutus {
   todistukset: Asiakirja[]
 }
 
+export interface PaivakirjaAihekategoria {
+  id?: number
+  nimi: string
+  jarjestysnumero: number | null
+  kuvaus: string | null
+  teoriakoulutus: boolean
+  muunAiheenNimi: boolean
+}
+
+export interface Paivakirjamerkinta {
+  id?: number
+  paivamaara: string | null
+  oppimistapahtumanNimi: string | null
+  muunAiheenNimi: string | null
+  reflektio: string | null
+  yksityinen: boolean
+  aihekategoriat: PaivakirjaAihekategoria[]
+  erikoistuvaLaakariId?: number
+  teoriakoulutus: Teoriakoulutus | null
+}
+
+export interface PaivakirjamerkintaRajaimet {
+  aihekategoriat: PaivakirjaAihekategoria[]
+}
+
+export interface PaivakirjamerkintaLomake {
+  aihekategoriat: PaivakirjaAihekategoria[]
+  teoriakoulutukset: Teoriakoulutus[]
+}
+
 export interface ElsaError {
   errorKey: string
   message: string
@@ -700,4 +730,30 @@ export type SeurantajaksonTiedot = {
 export type SeurantajaksonSuoritemerkinta = {
   oppimistavoite: string
   suoritemerkinnat: Suoritusarviointi[]
+}
+
+export interface PageSort {
+  empty: boolean
+  unsorted: boolean
+  sorted: boolean
+}
+export interface Page<T> {
+  content: T[]
+  pageable: {
+    sort: PageSort
+    offset: number
+    pageSize: number
+    pageNumber: number
+    unpaged: boolean
+    paged: boolean
+  }
+  last: boolean
+  totalPages: number
+  totalElements: number
+  first: boolean
+  number: number
+  sort: PageSort
+  size: number
+  numberOfElements: number
+  empty: boolean
 }

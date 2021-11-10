@@ -20,7 +20,7 @@
   import { Component, Vue, Prop } from 'vue-property-decorator'
 
   @Component({})
-  export default class SearchInput extends Vue {
+  export default class ElsaSearchInput extends Vue {
     @Prop({ required: true, type: String, default: undefined })
     hakutermi!: string
 

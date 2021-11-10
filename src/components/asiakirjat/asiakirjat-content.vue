@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-input
+    <elsa-search-input
       :hakutermi.sync="hakutermi"
       :visible="searchVisible"
       :placeholder="$t('hae-asiakirjoja')"
@@ -74,11 +74,11 @@
         </elsa-button>
       </template>
     </b-table>
-    <pagination
-      :currentPage.sync="currentPage"
-      :perPage="perPage"
+    <elsa-pagination
+      v-if="loading"
+      :current-page.sync="currentPage"
+      :per-page="perPage"
       :rows="rows"
-      :loading="loading"
     />
   </div>
 </template>
@@ -87,8 +87,8 @@
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
-  import Pagination from '@/components/pagination/pagination.vue'
-  import SearchInput from '@/components/search-input/search-input.vue'
+  import ElsaPagination from '@/components/pagination/pagination.vue'
+  import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import { Asiakirja } from '@/types'
   import { saveBlob, fetchAndSaveBlob, openBlob, fetchAndOpenBlob } from '@/utils/blobs'
   import { confirmDelete } from '@/utils/confirm'
@@ -97,8 +97,8 @@
   @Component({
     components: {
       ElsaButton,
-      SearchInput,
-      Pagination
+      ElsaSearchInput,
+      ElsaPagination
     }
   })
   export default class AsiakirjatContent extends Vue {

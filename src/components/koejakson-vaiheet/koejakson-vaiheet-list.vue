@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('koejakso') }}</h1>
-          <search-input
+          <elsa-search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
             :placeholder="$t('hae-erikoistuvan-nimella')"
@@ -137,11 +137,11 @@
               </b-table>
             </template>
           </b-table>
-          <pagination
-            :currentPage.sync="currentPage"
-            :perPage="perPage"
+          <elsa-pagination
+            v-if="loading"
+            :current-page.sync="currentPage"
+            :per-page="perPage"
             :rows="rows"
-            :loading="loading"
           />
         </b-col>
       </b-row>
@@ -152,14 +152,14 @@
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
-  import Pagination from '@/components/pagination/pagination.vue'
-  import SearchInput from '@/components/search-input/search-input.vue'
+  import ElsaPagination from '@/components/pagination/pagination.vue'
+  import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import { LomakeTyypit, LomakeTilat, TaskStatus } from '@/utils/constants'
 
   @Component({
     components: {
-      SearchInput,
-      Pagination
+      ElsaSearchInput,
+      ElsaPagination
     }
   })
   export default class KoejaksonVaiheetList extends Vue {
