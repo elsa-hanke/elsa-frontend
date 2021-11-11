@@ -110,9 +110,7 @@ export async function getTyoskentelyjaksoLomake() {
 export async function putTyoskentelyjakso(formData: FormData) {
   const path = 'erikoistuva-laakari/tyoskentelyjaksot'
   await axios.put(path, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
+    headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000
   })
 }
@@ -147,7 +145,8 @@ export async function putKoulutussuunnitelma(form: Koulutussuunnitelma) {
     'erikoistuva-laakari/koulutussuunnitelma',
     wrapToFormData(form),
     {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000
     }
   )
 }
@@ -193,7 +192,8 @@ export async function postTeoriakoulutus(form: Teoriakoulutus, todistusFiles: Fi
     formData.append('todistusFiles', todistusFile)
   })
   return await axios.post<Teoriakoulutus>('erikoistuva-laakari/teoriakoulutukset', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
   })
 }
 
@@ -211,7 +211,8 @@ export async function putTeoriakoulutus(
     `erikoistuva-laakari/teoriakoulutukset/${form.id}`,
     formData,
     {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000
     }
   )
 }
