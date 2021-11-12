@@ -5,7 +5,8 @@ export function mapFile(file: File): Asiakirja {
     nimi: file.name,
     data: file.arrayBuffer(),
     lisattypvm: new Date().toString(),
-    contentType: file.type
+    contentType: file.type,
+    isDirty: true
   } as Asiakirja
 }
 
@@ -15,7 +16,8 @@ export function mapFiles(files: File[]): Asiakirja[] {
       nimi: file.name,
       data: file.arrayBuffer(),
       lisattypvm: new Date().toString(),
-      contentType: file.type
+      contentType: file.type,
+      isDirty: true
     }
     return asiakirja
   })

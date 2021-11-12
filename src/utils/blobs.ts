@@ -2,11 +2,13 @@ import axios from 'axios'
 
 import { BlobDataResult } from '@/types'
 
-async function fetchBlobData(endpointUrl: string, id: number): Promise<BlobDataResult> {
-  endpointUrl = endpointUrl.slice(endpointUrl.length - 1) !== '/' ? `${endpointUrl}/` : endpointUrl
-
+async function fetchBlobData(endpointUrl: string, id?: number | null): Promise<BlobDataResult> {
+  if (id) {
+    endpointUrl =
+      endpointUrl.slice(endpointUrl.length - 1) !== '/' ? `${endpointUrl}/${id}` : endpointUrl + id
+  }
   try {
-    const response = await axios.get(endpointUrl + id, {
+    const response = await axios.get(endpointUrl, {
       responseType: 'blob',
       timeout: 120000
     })
@@ -41,11 +43,7 @@ export function saveBlob(fileName: string, data: ArrayBuffer, contentType: strin
   URL.revokeObjectURL(anchorEl.href)
 }
 
-export async function fetchAndOpenBlob(
-  id: number,
-  fileName: string,
-  url: string
-): Promise<boolean> {
+export async function fetchAndOpenBlob(url: string, id?: number | null): Promise<boolean> {
   const result = await fetchBlobData(url, id)
   if (result.error) {
     return false
@@ -55,9 +53,9 @@ export async function fetchAndOpenBlob(
 }
 
 export async function fetchAndSaveBlob(
-  id: number,
+  url: string,
   fileName: string,
-  url: string
+  id?: number | null
 ): Promise<boolean> {
   const result = await fetchBlobData(url, id)
   if (result.error) {
