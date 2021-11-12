@@ -374,7 +374,7 @@ export interface Koejakso {
 }
 
 export interface Asiakirja {
-  id?: number
+  id?: number | null
   nimi: string
   lisattypvm?: string
   contentType?: string
@@ -382,6 +382,7 @@ export interface Asiakirja {
   disablePreview?: boolean
   disableDownload?: boolean
   disableDelete?: boolean
+  isDirty: boolean
 }
 
 export interface KoejaksonTyoskentelyjakso {

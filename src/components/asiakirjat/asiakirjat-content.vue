@@ -105,12 +105,14 @@
     }
   })
   export default class AsiakirjatContent extends Vue {
-    private endpointUrl = 'erikoistuva-laakari/asiakirjat/'
     private hakutermi = ''
     private currentPage = 1
 
     @Prop({ required: true, default: () => [] })
     asiakirjat!: Asiakirja[]
+
+    @Prop({ required: false, type: String, default: 'erikoistuva-laakari/asiakirjat/' })
+    asiakirjaDataEndpointUrl!: string
 
     @Prop({ required: false, type: String, default: 'lisattypvm' })
     sortBy!: string
@@ -194,8 +196,8 @@
     async onViewAsiakirja(asiakirja: Asiakirja) {
       Vue.set(asiakirja, 'disablePreview', true)
 
-      if (asiakirja.id) {
-        const success = await fetchAndOpenBlob(asiakirja.id, asiakirja.nimi, this.endpointUrl)
+      if (!asiakirja.isDirty) {
+        const success = await fetchAndOpenBlob(this.asiakirjaDataEndpointUrl, asiakirja.id)
         if (!success) {
           toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
         }
@@ -209,8 +211,12 @@
 
     async onDownloadAsiakirja(asiakirja: Asiakirja) {
       Vue.set(asiakirja, 'disableDownload', true)
-      if (asiakirja.id) {
-        const success = await fetchAndSaveBlob(asiakirja.id, asiakirja.nimi, this.endpointUrl)
+      if (!asiakirja.isDirty) {
+        const success = await fetchAndSaveBlob(
+          this.asiakirjaDataEndpointUrl,
+          asiakirja.nimi,
+          asiakirja.id
+        )
         if (!success) {
           toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
         }

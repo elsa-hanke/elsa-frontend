@@ -188,11 +188,7 @@
     async onViewAsiakirja(asiakirja: Asiakirja) {
       if (asiakirja.id) {
         Vue.set(asiakirja, 'disablePreview', true)
-        const success = await fetchAndOpenBlob(
-          asiakirja.id,
-          asiakirja.nimi,
-          'erikoistuva-laakari/asiakirjat/'
-        )
+        const success = await fetchAndOpenBlob('erikoistuva-laakari/asiakirjat/', asiakirja.id)
         if (!success) {
           toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
         }
