@@ -6,7 +6,8 @@ import {
   AloituskeskusteluLomake,
   ValiarviointiLomake,
   KehittamistoimenpiteetLomake,
-  LoppukeskusteluLomake
+  LoppukeskusteluLomake,
+  Suoritusarviointi
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -52,4 +53,12 @@ export async function getVastuuhenkilonArvio(id: number) {
 export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
   const path = 'vastuuhenkilo/koejakso/vastuuhenkilonarvio'
   return await axios.put<VastuuhenkilonArvioLomake>(path, form)
+}
+
+export async function putSuoritusarviointi(formData: FormData) {
+  const path = 'vastuuhenkilo/suoritusarvioinnit'
+  return await axios.put<Suoritusarviointi>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
