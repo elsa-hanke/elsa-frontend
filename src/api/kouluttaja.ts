@@ -5,6 +5,7 @@ import {
   KehittamistoimenpiteetLomake,
   KoulutussopimusLomake,
   LoppukeskusteluLomake,
+  Suoritusarviointi,
   ValiarviointiLomake
 } from '@/types'
 
@@ -61,4 +62,12 @@ export async function getLoppukeskustelu(id: number) {
 export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
   const path = 'kouluttaja/koejakso/loppukeskustelu'
   return await axios.put<LoppukeskusteluLomake>(path, form)
+}
+
+export async function putSuoritusarviointi(formData: FormData) {
+  const path = 'kouluttaja/suoritusarvioinnit'
+  return await axios.put<Suoritusarviointi>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
