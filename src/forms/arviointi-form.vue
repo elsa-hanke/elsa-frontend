@@ -562,6 +562,7 @@
     vaativuustasot
   } from '@/utils/constants'
   import { mapFile } from '@/utils/fileMapper'
+  import { sortByAsc } from '@/utils/sort'
 
   @Component({
     components: {
@@ -675,7 +676,8 @@
             this.value.arviointiPerustuu !== null &&
             this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA
         }
-        this.arviointityokalut = (await axios.get(`/arviointityokalut`)).data
+        this.arviointityokalut = ((await axios.get(`/arviointityokalut`))
+          .data as Arviointityokalu[])?.sort((a, b) => sortByAsc(a.nimi, b.nimi))
       }
     }
 

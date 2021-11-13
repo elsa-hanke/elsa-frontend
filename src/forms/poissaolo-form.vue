@@ -159,6 +159,7 @@
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import { Poissaolo, PoissaolonSyy, Tyoskentelyjakso } from '@/types'
   import { dateBetween } from '@/utils/date'
+  import { sortByAsc } from '@/utils/sort'
 
   @Component({
     components: {
@@ -294,13 +295,7 @@
     }
 
     get poissaolonSyytSorted() {
-      return [
-        ...this.poissaolonSyyt.sort((a, b) => {
-          if (a.nimi < b.nimi) return -1
-          if (a.nimi > b.nimi) return 1
-          return 0
-        })
-      ]
+      return [...this.poissaolonSyyt.sort((a, b) => sortByAsc(a.nimi, b.nimi))]
     }
   }
 </script>
