@@ -465,6 +465,8 @@ export type Suoritusarviointi = {
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
   muuPeruste: string
+  arviointiAsiakirja: Asiakirja
+  arviointiAsiakirjaUpdated: boolean
 }
 
 export type SuoritusarvioinninKommentti = {
@@ -520,6 +522,9 @@ export type SuoritusarviointiForm = {
   arviointiPerustuu?: ArvioinninPerustuminen | null
   muuPeruste?: string | null
   perustuuMuuhun?: boolean
+  arviointiAsiakirja?: Asiakirja | null
+  arviointiAsiakirjaUpdated: boolean
+  arviointiFile?: File | null
 }
 
 export type Vaativuustaso = {
