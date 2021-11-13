@@ -275,6 +275,7 @@
   import { Asiakirja, Tyoskentelyjakso } from '@/types'
   import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
+  import { sortByAsc } from '@/utils/sort'
   import {
     tyoskentelyjaksoKaytannonKoulutusLabel,
     tyoskentelypaikkaTyyppiLabel
@@ -518,20 +519,12 @@
       return this.kunnat
         .filter((k) => !k.korvaavaKoodi) // Rajattu pois entiset kunnat
         .filter((k) => !['000', '198', '199'].includes(k.id)) // Rajattu pois muut kuin kunnat
-        .sort((a, b) => {
-          if (a.abbreviation < b.abbreviation) return -1
-          if (a.abbreviation > b.abbreviation) return 1
-          return 0
-        })
+        .sort((a, b) => sortByAsc(a.abbreviation, b.abbreviation))
     }
 
     get erikoisalatFormatted() {
       return [
-        ...this.erikoisalat.sort((a, b) => {
-          if (a.nimi < b.nimi) return -1
-          if (a.nimi > b.nimi) return 1
-          return 0
-        }),
+        ...this.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi)),
         {
           nimi: this.$t('muu')
         }
