@@ -256,7 +256,21 @@
           <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
+      <hr v-if="value.arviointiAsiakirja.nimi" />
+      <elsa-form-group v-if="value.arviointiAsiakirja.nimi" :label="$t('liitetiedosto')">
+        <asiakirjat-content
+          class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
+          :asiakirjat="asiakirjatTableItems"
+          :sortingEnabled="false"
+          :paginationEnabled="false"
+          :enableSearch="false"
+          :showInfoIfEmpty="false"
+          :enableDelete="false"
+          :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+        />
+      </elsa-form-group>
       <div v-if="value.arviointiAika && ($isKouluttaja() || $isVastuuhenkilo())" class="text-right">
+        <hr v-if="value.arviointiAsiakirja.nimi" />
         <elsa-button
           variant="primary"
           :disabled="value.lukittu"
@@ -411,6 +425,33 @@
           </template>
         </elsa-form-group>
       </b-form-row>
+      <elsa-form-group
+        v-if="$isKouluttaja() || $isVastuuhenkilo()"
+        :label="$t('liitetiedostot')"
+        :help="$t('arviointi-liite-tooltip')"
+      >
+        <span>
+          {{ $t('arviointi-liitetiedostot-kuvaus') }}
+        </span>
+        <asiakirjat-upload
+          class="mt-3"
+          :isPrimaryButton="false"
+          :allowMultiplesFiles="false"
+          :buttonText="$t('lisaa-liitetiedosto')"
+          :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
+          @selectedFiles="onArviointiFileAdded"
+        />
+        <asiakirjat-content
+          class="px-0 col-md-8 col-lg-12 col-xl-8"
+          :asiakirjat="asiakirjatTableItems"
+          :sortingEnabled="false"
+          :paginationEnabled="false"
+          :enableSearch="false"
+          :showInfoIfEmpty="false"
+          :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+          @deleteAsiakirja="onArviointiFileDeleted"
+        />
+      </elsa-form-group>
       <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
         <template #label-help>
           <elsa-popover>
@@ -494,11 +535,13 @@
 <script lang="ts">
   import axios from 'axios'
   import Component from 'vue-class-component'
-  import { Mixins, Prop } from 'vue-property-decorator'
+  import { Mixins, Prop, Vue } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
+  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -506,12 +549,19 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
-  import { ArviointiasteikonTaso, Suoritusarviointi, SuoritusarviointiForm } from '@/types'
+  import {
+    ArviointiasteikonTaso,
+    Suoritusarviointi,
+    SuoritusarviointiForm,
+    Arviointityokalu
+  } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import {
     ArvioinninPerustuminen,
     ArviointiasteikkoTyyppi,
     vaativuustasot
   } from '@/utils/constants'
+  import { mapFile } from '@/utils/fileMapper'
 
   @Component({
     components: {
@@ -522,7 +572,9 @@
       ElsaBadge,
       ElsaPopover,
       ElsaButton,
-      ElsaVaativuustaso
+      ElsaVaativuustaso,
+      AsiakirjatUpload,
+      AsiakirjatContent
     },
     validations: {
       form: {
@@ -566,12 +618,15 @@
       arviointityokalut: [],
       arviointiPerustuu: null,
       muuPeruste: null,
-      perustuuMuuhun: false
+      perustuuMuuhun: false,
+      arviointiAsiakirja: null,
+      arviointiAsiakirjaUpdated: false,
+      arviointiFile: null
     }
     vaativuustasot = vaativuustasot
     arviointiasteikonTasot: ArviointiasteikonTaso[] =
       this.value.arvioitavaOsaalue?.arviointiasteikko.tasot || []
-    arviointityokalut = []
+    arviointityokalut: Arviointityokalu[] = []
     params = {
       saving: false
     }
@@ -599,10 +654,12 @@
           arviointiasteikonTaso: this.arviointiasteikonTasot.find(
             (asteikonTaso) => asteikonTaso.taso === this.value.itsearviointiArviointiasteikonTaso
           ),
-          sanallinenArviointi: this.value.sanallinenItsearviointi
+          sanallinenArviointi: this.value.sanallinenItsearviointi,
+          arviointiAsiakirjaUpdated: false
         }
       } else {
         this.form = {
+          ...this.value,
           vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
           arviointiasteikonTaso: this.arviointiasteikonTasot.find(
             (asteikonTaso) => asteikonTaso.taso === this.value.arviointiasteikonTaso
@@ -632,9 +689,26 @@
         : this.$t('etappi')
     }
 
+    get asiakirjatTableItems() {
+      return this.form.arviointiAsiakirja?.nimi ? [this.form.arviointiAsiakirja] : []
+    }
+
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    onArviointiFileAdded(files: File[]) {
+      const file = files[0]
+      Vue.set(this.form, 'arviointiAsiakirja', mapFile(file))
+      this.form.arviointiAsiakirjaUpdated = true
+      this.form.arviointiFile = file
+    }
+
+    onArviointiFileDeleted() {
+      Vue.set(this.form, 'arviointiFile', null)
+      this.form.arviointiAsiakirjaUpdated = true
+      this.form.arviointiAsiakirja = null
     }
 
     onSubmit() {
@@ -651,6 +725,7 @@
             itsearviointiArviointiasteikonTaso: this.form.arviointiasteikonTaso?.taso,
             sanallinenItsearviointi: this.form.sanallinenArviointi
           },
+          null,
           this.params
         )
       } else {
@@ -665,17 +740,32 @@
             arviointiPerustuu: this.form.perustuuMuuhun
               ? this.form.arviointiPerustuu
               : ArvioinninPerustuminen.LASNA,
-            muuPeruste: this.muuValittu ? this.form.muuPeruste : null
+            muuPeruste: this.muuValittu ? this.form.muuPeruste : null,
+            arviointiAsiakirja: null,
+            arviointiAsiakirjaUpdated: this.form.arviointiAsiakirjaUpdated
           },
+          this.form.arviointiFile,
           this.params
         )
       }
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return this.value.id
+        ? `${resolveRolePath()}/suoritusarvioinnit/${this.value.id}/arviointi-liite`
+        : ''
     }
   }
 </script>
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
+
+  .border-bottom-none {
+    ::v-deep table {
+      border-bottom: none;
+    }
+  }
 
   ::v-deep table {
     thead th {

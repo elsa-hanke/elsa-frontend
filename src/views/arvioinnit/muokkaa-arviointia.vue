@@ -27,6 +27,8 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { putSuoritusarviointi as putSuoritusarviointiKouluttaja } from '@/api/kouluttaja'
+  import { putSuoritusarviointi as putSuoritusarviointiVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ArviointiForm from '@/forms/arviointi-form.vue'
   import { Suoritusarviointi } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
@@ -80,10 +82,18 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(value: Suoritusarviointi, arviointiFile: File, params: { saving: boolean }) {
       params.saving = true
       try {
-        await axios.put(`${resolveRolePath()}/suoritusarvioinnit`, value)
+        const formData = new FormData()
+        formData.append('suoritusarviointiJson', JSON.stringify(value))
+        if (arviointiFile) {
+          formData.append('arviointiFile', arviointiFile, arviointiFile.name)
+        }
+        this.$isKouluttaja()
+          ? await putSuoritusarviointiKouluttaja(formData)
+          : await putSuoritusarviointiVastuuhenkilo(formData)
+
         toastSuccess(this, this.$t('arvioinnin-tallentaminen-onnistui'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
