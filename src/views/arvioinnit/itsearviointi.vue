@@ -77,7 +77,7 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(value: any, params: { saving: boolean }) {
       params.saving = true
       try {
         await axios.put('erikoistuva-laakari/suoritusarvioinnit', value)

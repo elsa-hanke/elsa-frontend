@@ -146,7 +146,7 @@
           </span>
         </template>
       </elsa-form-group>
-      <b-table-simple responsive bordered>
+      <b-table-simple class="mb-4" responsive bordered>
         <b-thead>
           <b-tr>
             <b-th scope="col" style="width: 24%"></b-th>
@@ -256,7 +256,13 @@
           <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
-      <hr v-if="value.arviointiAsiakirja.nimi" />
+      <hr
+        v-if="
+          (!$isErikoistuva() && value.arviointiAika) ||
+          (value.arviointiAika && value.itsearviointiAika) ||
+          value.arviointiAsiakirja.nimi
+        "
+      />
       <elsa-form-group v-if="value.arviointiAsiakirja.nimi" :label="$t('liitetiedosto')">
         <asiakirjat-content
           class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
@@ -293,7 +299,9 @@
             </div>
           </b-col>
         </b-row>
+        <hr v-if="value.itsearviointiAika" />
       </div>
+      <hr v-if="$isErikoistuva() && value.itsearviointiAika && value.arviointiAsiakirja.nimi" />
       <elsa-form-group v-if="value.itsearviointiAika" :label="$t('sanallinen-itsearviointi')">
         <template v-slot="{ uid }">
           <p :id="uid" class="text-preline text-break">
@@ -302,6 +310,7 @@
         </template>
       </elsa-form-group>
       <div v-if="value.itsearviointiAika && $isErikoistuva()" class="text-right">
+        <hr v-if="value.itsearviointiAika" />
         <elsa-button
           variant="primary"
           :disabled="value.lukittu"
@@ -727,7 +736,6 @@
             itsearviointiArviointiasteikonTaso: this.form.arviointiasteikonTaso?.taso,
             sanallinenItsearviointi: this.form.sanallinenArviointi
           },
-          null,
           this.params
         )
       } else {
@@ -746,8 +754,8 @@
             arviointiAsiakirja: null,
             arviointiAsiakirjaUpdated: this.form.arviointiAsiakirjaUpdated
           },
-          this.form.arviointiFile,
-          this.params
+          this.params,
+          this.form.arviointiFile
         )
       }
     }

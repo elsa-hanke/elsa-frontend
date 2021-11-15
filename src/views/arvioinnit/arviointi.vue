@@ -8,7 +8,7 @@
           <hr />
           <div v-if="value">
             <arviointi-form :value="value" :editing="false" />
-            <hr />
+            <hr v-if="value.arviointiAika || value.itsearviointiAika" />
             <h4>{{ $t('kommentit') }}</h4>
             <p v-if="!value.lukittu">{{ $t('kommentit-kuvaus') }}</p>
             <p v-else>

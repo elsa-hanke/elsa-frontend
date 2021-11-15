@@ -82,7 +82,11 @@
       }
     }
 
-    async onSubmit(value: Suoritusarviointi, arviointiFile: File, params: { saving: boolean }) {
+    async onSubmit(
+      value: Suoritusarviointi,
+      params: { saving: boolean },
+      arviointiFile: File | null = null
+    ) {
       params.saving = true
       try {
         const formData = new FormData()
