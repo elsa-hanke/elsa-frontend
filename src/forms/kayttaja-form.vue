@@ -90,8 +90,8 @@
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="form.erikoistuvaLaakari.opiskeluoikeusAlkaa"
-            :state="validateErikoistuvaLaakariState('opiskeluoikeusAlkaa')"
+            v-model="form.erikoistuvaLaakari.opintooikeusAlkaa"
+            :state="validateErikoistuvaLaakariState('opintooikeusAlkaa')"
             :max="maxAlkamispaiva"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -107,8 +107,8 @@
         <template v-slot="{ uid }">
           <elsa-form-datepicker
             :id="uid"
-            v-model="form.erikoistuvaLaakari.opiskeluoikeusPaattyy"
-            :state="validateErikoistuvaLaakariState('opiskeluoikeusPaattyy')"
+            v-model="form.erikoistuvaLaakari.opintooikeusPaattyy"
+            :state="validateErikoistuvaLaakariState('opintooikeusPaattyy')"
             :min="minPaattymispaiva"
             class="datepicker-range"
           ></elsa-form-datepicker>
@@ -206,10 +206,10 @@
           opiskelijatunnus: {
             required
           },
-          opiskeluoikeusAlkaa: {
+          opintooikeusAlkaa: {
             required
           },
-          opiskeluoikeusPaattyy: {
+          opintooikeusPaattyy: {
             required
           },
           opintosuunnitelmaKaytossaPvm: {
@@ -242,8 +242,8 @@
         yliopisto: null,
         erikoisala: null,
         opiskelijatunnus: null,
-        opiskeluoikeusAlkaa: null,
-        opiskeluoikeusPaattyy: null,
+        opintooikeusAlkaa: null,
+        opintooikeusPaattyy: null,
         opintosuunnitelmaKaytossaPvm: null,
         sahkopostiosoite: null,
         sahkopostiosoiteUudelleen: null
@@ -259,11 +259,11 @@
     }
 
     get maxAlkamispaiva() {
-      return this.form.erikoistuvaLaakari?.opiskeluoikeusPaattyy
+      return this.form.erikoistuvaLaakari?.opintooikeusPaattyy
     }
 
     get minPaattymispaiva() {
-      return this.form.erikoistuvaLaakari?.opiskeluoikeusAlkaa
+      return this.form.erikoistuvaLaakari?.opintooikeusAlkaa
     }
 
     get erikoistuvaLaakari() {
