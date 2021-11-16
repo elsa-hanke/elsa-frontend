@@ -39,7 +39,7 @@
                 <span :id="uid">{{ opiskelijatunnus }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group :label="$t('opiskeluoikeus')">
+            <elsa-form-group :label="$t('opintooikeus')">
               <template v-slot="{ uid }">
                 <span :id="uid">
                   {{
@@ -167,15 +167,15 @@
     }
 
     get yliopisto() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.yliopistoNimi
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.yliopistoNimi
     }
 
     get erikoisala() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.erikoisalaNimi
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.erikoisalaNimi
     }
 
     get opiskelijatunnus() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opiskelijatunnus
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opiskelijatunnus
     }
 
     get sahkopostiosoite() {
@@ -183,15 +183,15 @@
     }
 
     get opintooikeudenMyontamispaiva() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opintooikeudenMyontamispaiva
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opintooikeudenMyontamispaiva
     }
 
     get opintooikeudenPaattymispaiva() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opintooikeudenPaattymispaiva
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opintooikeudenPaattymispaiva
     }
 
     get opintosuunnitelmaKaytossaPvm() {
-      return this.kayttaja?.erikoistuvaLaakari?.opiskeluoikeudet[0]?.opintosuunnitelmaKaytossaPvm
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opintosuunnitelmaKaytossaPvm
     }
   }
 </script>

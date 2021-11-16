@@ -540,7 +540,6 @@
   "opiskelu-ja-tyohistoria-tooltip": "Kerro historiasi ja arvioi merkitystä erikoislääkäriksi kehittymisessä. Analysoi työssä oppimiasi asioita sekä itseäsi oppijana.",
   "opiskeluoikeuden-alkupvm": "Opiskeluoikeuden alkupvm",
   "opiskeluoikeuden-loppupvm": "Opiskeluoikeuden loppupvm",
-  "opiskeluoikeus": "Opiskeluoikeus",
   "oppimistavoite": "Oppimistavoite",
   "oppimistavoitteet": "Oppimistavoitteet",
   "osaaikaprosentti-validointivirhe": "Tiedon oltava väliltä",
@@ -921,7 +920,7 @@
   "yhteistyotaidot": "Yhteistyötaidot",
   "yksityinen": "Yksityinen",
   "yliopisto": " Yliopisto",
-  "yliopisto-opiskeluoikeus": "Yliopisto, jossa erikoistuvalla on opinto-oikeus",
+  "yliopisto-opintooikeus": "Yliopisto, jossa erikoistuvalla on opinto-oikeus",
   "yliopistollinen-sairaala": "Yliopistollinen sairaala",
   "yliopistosairaala": "Yliopistosairaala",
   "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"

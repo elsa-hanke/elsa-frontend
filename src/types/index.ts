@@ -12,7 +12,7 @@ import {
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
-export type Opiskeluoikeus = {
+export type Opintooikeus = {
   id: number | null
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
@@ -31,7 +31,7 @@ export type ErikoistuvaLaakari = {
   syntymaaika: string
   kayttajaId: number
   yliopisto: string
-  opiskeluoikeudet: Opiskeluoikeus[]
+  opintooikeudet: Opintooikeus[]
 }
 
 export interface UserAccount {
@@ -644,8 +644,8 @@ export interface UusiErikoistuvaLaakari {
   erikoisala: Erikoisala | null
   erikoisalaId?: number | null
   opiskelijatunnus: string | null
-  opiskeluoikeusAlkaa: string | null
-  opiskeluoikeusPaattyy: string | null
+  opintooikeusAlkaa: string | null
+  opintooikeusPaattyy: string | null
   opintosuunnitelmaKaytossaPvm: string | null
   sahkopostiosoite: string | null
   sahkopostiosoiteUudelleen: string | null

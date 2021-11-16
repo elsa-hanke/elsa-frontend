@@ -38,7 +38,7 @@
       </tr>
       <tr>
         <th scope="row" class="font-weight-500">
-          {{ $t('yliopisto-opiskeluoikeus') }}
+          {{ $t('yliopisto-opintooikeus') }}
         </th>
         <td class="pl-6">{{ yliopisto }}</td>
       </tr>
