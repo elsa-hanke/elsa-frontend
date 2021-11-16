@@ -9,13 +9,10 @@
       <b-alert v-if="showInfoIfEmpty && rows === 0" variant="dark" class="mt-3" show>
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
         <span v-if="asiakirjat.length === 0">
-          {{ $t('ei-asiakirjoja') }}
-        </span>
-        <span v-else-if="noResultsInfoText === undefined">
-          {{ $t('ei-hakutuloksia') }}
+          {{ noResultsInfoText ? noResultsInfoText : $t('ei-asiakirjoja') }}
         </span>
         <span v-else>
-          {{ noResultsInfoText }}
+          {{ noSearchResultsInfoText ? noSearchResultsInfoText : $t('ei-hakutuloksia') }}
         </span>
       </b-alert>
     </div>
@@ -140,6 +137,9 @@
 
     @Prop({ required: false, type: String })
     noResultsInfoText?: string
+
+    @Prop({ required: false, type: String })
+    noSearchResultsInfoText?: string
 
     @Prop({ required: false, type: Boolean, default: false })
     loading!: boolean

@@ -80,8 +80,8 @@
           <asiakirjat-upload
             :isPrimaryButton="false"
             :buttonText="$t('lisaa-liitetiedosto')"
-            :existing-file-names-for-current-view="existingFileNamesInCurrentView"
-            :existing-file-names-for-other-views="existingFileNamesInOtherViews"
+            :existingFileNamesInCurrentView="existingFileNamesInCurrentView"
+            :existingFileNamesInOtherViews="existingFileNamesInOtherViews"
             :disabled="reservedAsiakirjaNimetMutable === undefined"
             @selectedFiles="onFilesAdded"
           />
@@ -96,6 +96,7 @@
         </div>
       </template>
     </elsa-form-group>
+    <hr v-if="asiakirjatTableItems.length === 0" />
     <div class="d-flex flex-row-reverse flex-wrap">
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('tallenna-teoriakoulutus') }}

@@ -54,12 +54,12 @@
                   :pagination-enabled="false"
                   :enable-search="false"
                   :enable-delete="false"
-                  :no-results-info-text="$t('ei-liitetiedostoja')"
+                  :noResultsInfoText="$t('ei-liitetiedostoja')"
                   :loading="loading"
                 />
               </template>
             </elsa-form-group>
-            <hr />
+            <hr v-if="teoriakoulutus.todistukset.length === 0" />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 :to="{ name: 'muokkaa-teoriakoulutusta' }"
