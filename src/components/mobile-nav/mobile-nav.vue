@@ -1,13 +1,5 @@
 <template>
-  <b-sidebar
-    id="sidebar-right"
-    right
-    no-header
-    backdrop
-    bg-variant="white"
-    class="mobile-menu"
-    sidebar-class="mobile-menu"
-  >
+  <b-sidebar id="sidebar-right" right no-header backdrop bg-variant="white" class="mobile-menu">
     <template>
       <b-nav vertical class="main-mobile-nav">
         <b-nav-item class="border-bottom" :to="{ name: 'etusivu' }">
@@ -38,15 +30,36 @@
           <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
           {{ $t('teoriakoulutukset') }}
         </b-nav-item>
-        <b-nav-item
-          v-if="$isErikoistuva()"
-          class="border-bottom"
-          :to="{ name: 'suoritemerkinnat' }"
-        >
-          <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
-          {{ $t('suoritemerkinnat') }}
+        <b-nav-item v-if="$isErikoistuva()" v-b-toggle.osaaminen-toggle class="osaaminen-nav">
+          <font-awesome-icon icon="award" fixed-width size="lg" />
+          {{ $t('osaaminen') }}
+          <span class="closed">
+            <font-awesome-icon icon="chevron-down" />
+          </span>
+          <span class="open">
+            <font-awesome-icon icon="chevron-up" />
+          </span>
         </b-nav-item>
-        <b-nav-item class="border-bottom" :to="{ name: 'arvioinnit' }">
+        <b-collapse id="osaaminen-toggle">
+          <b-nav-item link-classes="pb-2 pt-2" :to="{ name: 'arvioinnit' }">
+            <span class="ml-5">{{ $t('arvioinnit') }}</span>
+          </b-nav-item>
+          <b-nav-item link-classes="pb-2 pt-2" :to="{ name: 'suoritemerkinnat' }">
+            <span class="ml-5">{{ $t('suoritemerkinnat') }}</span>
+          </b-nav-item>
+          <b-nav-item
+            class="border-bottom"
+            link-classes="pb-2 pt-2"
+            :to="{ name: 'seurantakeskustelut' }"
+          >
+            <span class="ml-5">{{ $t('seurantakeskustelut') }}</span>
+          </b-nav-item>
+        </b-collapse>
+        <b-nav-item
+          v-if="$isKouluttaja() || $isVastuuhenkilo()"
+          class="border-bottom"
+          :to="{ name: 'arvioinnit' }"
+        >
           <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t('arvioinnit') }}
         </b-nav-item>
@@ -149,36 +162,58 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~@/styles/variables';
 
   .mobile-menu {
     top: auto;
+  }
 
+  ::v-deep {
     .b-sidebar-right {
+      top: auto;
       height: auto;
-    }
-
-    .nav-link {
-      position: relative;
-      padding: 0.75rem;
-    }
-
-    .main-mobile-nav {
-      .router-link-active {
-        &:before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          height: 100%;
-          border-left: 5px solid $primary;
-        }
-      }
     }
 
     .b-sidebar-backdrop {
       top: auto;
     }
+  }
+
+  .nav-link {
+    position: relative;
+    padding: 0.75rem;
+  }
+
+  .main-mobile-nav {
+    .router-link-active {
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        border-left: 5px solid $primary;
+      }
+    }
+  }
+
+  .collapsed {
+    .open {
+      display: none;
+    }
+
+    border-bottom: 1px solid $gray-300;
+  }
+
+  .not-collapsed {
+    .closed {
+      display: none;
+    }
+  }
+
+  .open,
+  .closed {
+    float: right;
   }
 </style>
