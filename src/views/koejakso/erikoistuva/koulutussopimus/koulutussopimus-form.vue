@@ -8,7 +8,7 @@
               :id="uid"
               v-model="form.opintooikeudenMyontamispaiva"
               :state="validateState('opintooikeudenMyontamispaiva')"
-              :max="opintooikeudenPaattymispaiva"
+              :max="form.opintooikeudenPaattymispaiva"
             ></elsa-form-datepicker>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
