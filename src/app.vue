@@ -137,7 +137,7 @@
     right: 0;
     border-radius: 0.25rem 0 0 0;
     padding: 0.375rem 0.625rem 0.25rem 0.5rem;
-    z-index: 9999;
+    z-index: 1005;
   }
 
   .feedback-icon {
