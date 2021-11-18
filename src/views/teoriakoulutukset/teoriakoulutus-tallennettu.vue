@@ -16,8 +16,10 @@
             </elsa-button>
             <elsa-button
               variant="primary"
-              :to="{ name: 'uusi-paivittainen-merkinta' }"
-              :disabled="true"
+              :to="{
+                name: 'uusi-paivittainen-merkinta',
+                params: { teoriakoulutusId }
+              }"
             >
               {{ $t('lisaa-paivittainen-merkinta') }}
             </elsa-button>
@@ -53,6 +55,10 @@
         active: true
       }
     ]
+
+    get teoriakoulutusId() {
+      return this.$route.params.teoriakoulutusId
+    }
   }
 </script>
 

@@ -9,6 +9,7 @@
           <hr />
           <paivittainen-merkinta-form
             v-if="!loading"
+            :value="paivakirjamerkinta"
             @submit="onSubmit"
             @cancel="onCancel"
             :aihekategoriat="aihekategoriat"
@@ -52,10 +53,37 @@
       }
     ]
     paivakirjamerkintaLomake: PaivakirjamerkintaLomake | null = null
+    paivakirjamerkinta: Paivakirjamerkinta | null = {
+      paivamaara: null,
+      oppimistapahtumanNimi: null,
+      muunAiheenNimi: null,
+      reflektio: null,
+      yksityinen: false,
+      teoriakoulutus: null,
+      aihekategoriat: []
+    }
     loading = true
 
     async mounted() {
       await this.fetchLomake()
+      if (this.$route?.params?.teoriakoulutusId) {
+        const teoriakoulutus = this.teoriakoulutukset.find(
+          (el) => el.id === Number(this.$route.params.teoriakoulutusId)
+        )
+        const aihekategoria = this.aihekategoriat.find((el) => el.teoriakoulutus)
+
+        if (teoriakoulutus && aihekategoria) {
+          this.paivakirjamerkinta = {
+            paivamaara: null,
+            oppimistapahtumanNimi: null,
+            muunAiheenNimi: null,
+            reflektio: null,
+            yksityinen: false,
+            teoriakoulutus,
+            aihekategoriat: [aihekategoria]
+          }
+        }
+      }
       this.loading = false
     }
 

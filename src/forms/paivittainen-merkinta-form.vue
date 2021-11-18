@@ -167,20 +167,8 @@
     }
 
     async mounted() {
-      if (this.value?.id) {
-        this.form = {
-          ...this.value
-        }
-      } else {
-        this.form = {
-          paivamaara: null,
-          oppimistapahtumanNimi: null,
-          muunAiheenNimi: null,
-          reflektio: null,
-          yksityinen: false,
-          aihekategoriat: [],
-          teoriakoulutus: null
-        }
+      this.form = {
+        ...this.value
       }
     }
 

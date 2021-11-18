@@ -64,7 +64,10 @@
         toastSuccess(this, this.$t('teoriakoulutus-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
-          name: 'teoriakoulutus-tallennettu'
+          name: 'teoriakoulutus-tallennettu',
+          params: {
+            teoriakoulutusId: `${this.teoriakoulutus.id}`
+          }
         })
       } catch (err) {
         toastFail(this, this.$t('uuden-teoriakoulutuksen-lisaaminen-epaonnistui'))
