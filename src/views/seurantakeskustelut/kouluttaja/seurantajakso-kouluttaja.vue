@@ -2,35 +2,48 @@
   <div class="seurantajakso">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-row lg>
+      <b-row v-if="!loading" lg>
         <b-col>
           <h1>{{ $t('seurantajakso') }}</h1>
-          <b-alert
-            :show="showOdottaaKeskustelua || showOdottaaArviointia"
-            variant="dark"
-            class="mt-3"
-          >
+          <b-alert :show="showOdottaaKeskustelua" variant="dark" class="mt-3">
             <div class="d-flex flex-row">
               <em class="align-middle">
                 <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
               </em>
               <div>
                 <p class="mb-0">
-                  {{ $t('seurantajakso-tila-lahetetty-kouluttajalle') }}
-                  <span v-if="showOdottaaArviointia">
-                    {{ $t('seurantajakso-tila-odottaa-arviointia') }}
-                  </span>
+                  {{ $t('seurantajakso-tila-arvioitu-1') }}
                 </p>
-                <div v-if="showOdottaaKeskustelua">
-                  <p class="mt-2 mb-1">
-                    {{ $t('seurantajakso-tila-taydenna-tiedot-1') }}
-                  </p>
-                  <ul>
-                    <li>{{ $t('seurantajakso-tila-taydenna-tiedot-2') }}</li>
-                    <li>{{ $t('seurantajakso-tila-taydenna-tiedot-3') }}</li>
-                  </ul>
-                </div>
+                <p class="mt-2 mb-1">
+                  {{ $t('seurantajakso-tila-arvioitu-2') }}
+                </p>
+                <ul>
+                  <li>{{ $t('seurantajakso-tila-taydenna-tiedot-2') }}</li>
+                  <li>{{ $t('seurantajakso-tila-taydenna-tiedot-3') }}</li>
+                </ul>
               </div>
+            </div>
+          </b-alert>
+          <b-alert :show="showPalautettuKorjattavaksi" variant="dark" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+              </em>
+              <div>
+                {{ $t('seurantajakso-palautettu-korjattavaksi') }}
+                <span class="d-block">
+                  {{ $t('syy') }}&nbsp;
+                  <span class="font-weight-500">{{ seurantajakso.korjausehdotus }}</span>
+                </span>
+              </div>
+            </div>
+          </b-alert>
+          <b-alert :show="showHyvaksytty" variant="success" class="mt-3">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+              </em>
+              {{ $t('seurantajakso-tila-hyvaksytty') }}
             </div>
           </b-alert>
         </b-col>
@@ -46,7 +59,7 @@
             variant="outline-primary"
             class="ml-md-3 mb-2 mt-2"
           >
-            {{ $t('muokkaa-tietoja') }}
+            {{ $t('muokkaa-arviointia') }}
           </elsa-button>
         </div>
         <hr />
@@ -63,7 +76,7 @@
               variant="primary"
               class="ml-3"
             >
-              {{ $t('muokkaa-tietoja') }}
+              {{ $t('muokkaa-arviointia') }}
             </elsa-button>
           </div>
         </div>
@@ -79,7 +92,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
-  import { getSeurantajakso, getSeurantajaksonTiedot } from '@/api/erikoistuva'
+  import { getSeurantajakso, getSeurantajaksonTiedot } from '@/api/kouluttaja'
   import ElsaButton from '@/components/button/button.vue'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
   import store from '@/store'
@@ -92,7 +105,7 @@
       SeurantajaksoForm
     }
   })
-  export default class SeurantajaksoView extends Vue {
+  export default class SeurantajaksoViewKouluttaja extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -120,15 +133,9 @@
       this.loading = true
       try {
         this.seurantajakso = (await getSeurantajakso(this.$route?.params?.seurantajaksoId)).data
-        this.seurantajaksonTiedot = (
-          await getSeurantajaksonTiedot(
-            this.seurantajakso.alkamispaiva || '',
-            this.seurantajakso.paattymispaiva || '',
-            this.seurantajakso.koulutusjaksot
-              .map((k) => k.id)
-              .filter((k): k is number => k !== null)
-          )
-        ).data
+        if (this.seurantajakso.id != null) {
+          this.seurantajaksonTiedot = (await getSeurantajaksonTiedot(this.seurantajakso.id)).data
+        }
       } catch {
         toastFail(this, this.$t('seurantajakson-tietojen-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'seurantakeskustelut' })
@@ -141,18 +148,23 @@
     }
 
     get showOdottaaKeskustelua() {
-      return this.seurantajakso?.seurantakeskustelunYhteisetMerkinnat === null
+      return this.seurantajakso?.seurantakeskustelunYhteisetMerkinnat == null
     }
 
     get showOdottaaArviointia() {
-      return this.seurantajakso?.kouluttajanArvio === null
+      return this.seurantajakso?.kouluttajanArvio == null
+    }
+
+    get showPalautettuKorjattavaksi() {
+      return this.seurantajakso?.korjausehdotus != null
+    }
+
+    get showHyvaksytty() {
+      return this.seurantajakso?.hyvaksytty === true
     }
 
     get canEdit() {
-      return (
-        this.seurantajakso?.seurantakeskustelunYhteisetMerkinnat === null ||
-        this.seurantajakso?.korjausehdotus !== null
-      )
+      return this.seurantajakso?.hyvaksytty !== true && this.seurantajakso?.korjausehdotus == null
     }
   }
 </script>

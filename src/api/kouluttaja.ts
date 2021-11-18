@@ -6,6 +6,8 @@ import {
   KoulutussopimusLomake,
   LoppukeskusteluLomake,
   Suoritusarviointi,
+  Seurantajakso,
+  SeurantajaksonTiedot,
   ValiarviointiLomake
 } from '@/types'
 
@@ -70,4 +72,24 @@ export async function putSuoritusarviointi(formData: FormData) {
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000
   })
+}
+
+export async function getSeurantajaksot() {
+  const path = 'kouluttaja/seurantakeskustelut/seurantajaksot'
+  return await axios.get(path)
+}
+
+export async function getSeurantajakso(seurantajaksoId: string) {
+  const path = `kouluttaja/seurantakeskustelut/seurantajakso/${seurantajaksoId}`
+  return await axios.get<Seurantajakso>(path)
+}
+
+export async function getSeurantajaksonTiedot(id: number) {
+  const path = `kouluttaja/seurantakeskustelut/seurantajaksontiedot?id=${id}`
+  return await axios.get<SeurantajaksonTiedot>(path)
+}
+
+export async function putSeurantajakso(form: Seurantajakso) {
+  const path = `kouluttaja/seurantakeskustelut/seurantajakso/${form.id}`
+  return await axios.put<Seurantajakso>(path, form)
 }

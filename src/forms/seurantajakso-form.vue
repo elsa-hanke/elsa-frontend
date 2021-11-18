@@ -19,11 +19,11 @@
       <b-col>
         <div class="seurantajakso-erikoistuva-details">
           <erikoistuva-details
-            :avatar="account.avatar"
-            :name="`${account.firstName} ${account.lastName}`"
-            :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
-            :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
-            :yliopisto="account.erikoistuvaLaakari.yliopisto"
+            :avatar="seurantajakso.erikoistuvanAvatar"
+            :name="seurantajakso.erikoistuvaLaakari.nimi"
+            :erikoisala="seurantajakso.erikoistuvaLaakari.erikoisalaNimi"
+            :opiskelijatunnus="seurantajakso.erikoistuvaLaakari.opiskelijatunnus"
+            :yliopisto="seurantajakso.erikoistuvaLaakari.yliopisto"
             :show-birthdate="false"
           ></erikoistuva-details>
           <elsa-form-group
@@ -395,7 +395,7 @@
     </b-collapse>
 
     <h3 class="mb-3">{{ $t('erikoistujan-oma-arviointi') }}</h3>
-    <div v-if="editing">
+    <div v-if="editing && $isErikoistuva()">
       <elsa-form-group :label="$t('oma-arviointi-seurantajaksolta')" :required="true">
         <template v-slot="{ uid }">
           <b-form-textarea
@@ -516,81 +516,222 @@
 
     <hr />
 
-    <h3 id="seurantakeskustelun_merkinnat" class="mb-2">
-      {{ $t('seurantakeskustelun-merkinnat') }}
-    </h3>
-    <div v-if="editing">
-      <p class="mb-3">{{ $t('seurantakeskustelun-merkinnat-kuvaus-muokkaus') }}</p>
-      <elsa-form-group
-        :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
-        :required="!uusiJakso"
-      >
-        <template v-slot="{ uid }">
-          <b-form-textarea
-            :id="uid"
-            v-model="form.seurantakeskustelunYhteisetMerkinnat"
-            :state="validateState('seurantakeskustelunYhteisetMerkinnat')"
-            :disabled="uusiJakso"
-            rows="3"
-          />
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </template>
-      </elsa-form-group>
-      <elsa-form-group :label="$t('seuraavan-keskustelun-ajankohta')">
-        <template v-slot="{ uid }">
-          <elsa-form-datepicker
-            :id="uid"
-            :disabled="uusiJakso"
-            class="col-sm-4 col-md-2"
-            v-model="form.seuraavanKeskustelunAjankohta"
-          ></elsa-form-datepicker>
-        </template>
-      </elsa-form-group>
-    </div>
-    <div v-else>
-      <div v-if="form.seurantakeskustelunYhteisetMerkinnat != null">
+    <div v-if="form.kouluttajanArvio != null || (editing && $isKouluttaja())">
+      <h3 class="mb-3">{{ $t('lahikouluttajan-arviointi') }}</h3>
+      <div v-if="editing && $isKouluttaja()">
         <elsa-form-group
-          class="mt-3"
-          :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
+          :label="$t('edistyminen-osaamistavoitteiden-mukaista')"
+          :required="true"
+          class="mb-1"
         >
           <template v-slot="{ uid }">
-            <div :id="uid">{{ form.seurantakeskustelunYhteisetMerkinnat }}</div>
+            <b-form-radio-group
+              :id="uid"
+              v-model="form.edistyminenTavoitteidenMukaista"
+              :options="edistyminenVaihtoehdot"
+              :state="validateState('edistyminenTavoitteidenMukaista')"
+              stacked
+            ></b-form-radio-group>
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :state="validateState('edistyminenTavoitteidenMukaista')"
+            >
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
         <elsa-form-group
-          v-if="form.seuraavanKeskustelunAjankohta != null"
-          :label="$t('seuraavan-keskustelun-ajankohta')"
+          v-if="form.edistyminenTavoitteidenMukaista === false"
+          :label="$t('huolenaiheet')"
+          :required="true"
+          class="mb-0 ml-4"
         >
           <template v-slot="{ uid }">
-            <div :id="uid">{{ $date(form.seuraavanKeskustelunAjankohta) }}</div>
+            <b-form-textarea
+              :id="uid"
+              v-model="form.huolenaiheet"
+              :state="validateState('huolenaiheet')"
+              rows="3"
+            />
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group
+          :label="$t('lahikouluttajan-arviointi-jaksosta')"
+          :required="true"
+          class="mt-4"
+        >
+          <template v-slot="{ uid }">
+            <b-form-textarea
+              :id="uid"
+              v-model="form.kouluttajanArvio"
+              :state="validateState('kouluttajanArvio')"
+              rows="3"
+            />
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+          <template #label-help>
+            <elsa-popover>
+              <template>
+                {{ $t('lahikouluttajan-arviointi-jaksosta-ohje') }}
+              </template>
+            </elsa-popover>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group :label="$t('erikoisalan-tyoskentelyvalmiudet')" class="mt-4">
+          <template v-slot="{ uid }">
+            <b-form-textarea :id="uid" v-model="form.erikoisalanTyoskentelyvalmiudet" rows="3" />
+          </template>
+          <template #label-help>
+            <elsa-popover>
+              <template>
+                {{ $t('erikoisalan-tyoskentelyvalmiudet-ohje') }}
+              </template>
+            </elsa-popover>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group :label="$t('jatkotoimet-ja-raportointi')" class="mt-4">
+          <template v-slot="{ uid }">
+            <b-form-textarea :id="uid" v-model="form.jatkotoimetJaRaportointi" rows="3" />
+          </template>
+          <template #label-help>
+            <elsa-popover>
+              <template>
+                {{ $t('jatkotoimet-ja-raportointi-ohje') }}
+              </template>
+            </elsa-popover>
           </template>
         </elsa-form-group>
       </div>
       <div v-else>
-        <p class="mb-1">{{ $t('seurantakeskustelun-merkinnat-kuvaus-1') }}</p>
-        <ul class="pl-5">
-          <li class="font-weight-bold">{{ $t('seurantakeskustelun-merkinnat-kuvaus-2') }}</li>
-          <li class="font-weight-bold">{{ $t('seurantakeskustelun-merkinnat-kuvaus-3') }}</li>
-        </ul>
+        <elsa-form-group :label="$t('edistyminen-osaamistavoitteiden-mukaista')">
+          <template v-slot="{ uid }">
+            <div :id="uid">
+              {{ form.edistyminenTavoitteidenMukaista ? $t('kylla') : $t('ei-huolenaiheita-on') }}
+            </div>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group v-if="form.huolenaiheet != null" :label="$t('huolenaiheet')">
+          <template v-slot="{ uid }">
+            <div :id="uid">{{ form.huolenaiheet }}</div>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group :label="$t('lahikouluttajan-arviointi-jaksosta')">
+          <template v-slot="{ uid }">
+            <div :id="uid">{{ form.kouluttajanArvio }}</div>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group
+          v-if="form.tyoskentelyvalmiudet != null"
+          :label="$t('erikoisalan-tyoskentelyvalmiudet')"
+        >
+          <template v-slot="{ uid }">
+            <div :id="uid">{{ form.tyoskentelyvalmiudet }}</div>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group v-if="form.jatkotoimet != null" :label="$t('jatkotoimet-ja-raportointi')">
+          <template v-slot="{ uid }">
+            <div :id="uid">{{ form.jatkotoimet }}</div>
+          </template>
+        </elsa-form-group>
       </div>
+
+      <hr />
     </div>
 
-    <hr />
+    <div v-if="$isErikoistuva() || form.seurantakeskustelunYhteisetMerkinnat != null">
+      <h3 id="seurantakeskustelun_merkinnat" class="mb-2">
+        {{ $t('seurantakeskustelun-merkinnat') }}
+      </h3>
+      <div v-if="editing && $isErikoistuva()">
+        <p class="mb-3">{{ $t('seurantakeskustelun-merkinnat-kuvaus-muokkaus') }}</p>
+        <elsa-form-group
+          :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
+          :required="!uusiJakso"
+        >
+          <template v-slot="{ uid }">
+            <b-form-textarea
+              :id="uid"
+              v-model="form.seurantakeskustelunYhteisetMerkinnat"
+              :state="validateState('seurantakeskustelunYhteisetMerkinnat')"
+              :disabled="uusiJakso"
+              rows="3"
+            />
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group :label="$t('seuraavan-keskustelun-ajankohta')">
+          <template v-slot="{ uid }">
+            <elsa-form-datepicker
+              :id="uid"
+              :disabled="uusiJakso"
+              class="col-sm-4 col-md-2"
+              v-model="form.seuraavanKeskustelunAjankohta"
+            ></elsa-form-datepicker>
+          </template>
+        </elsa-form-group>
+      </div>
+      <div v-else>
+        <div v-if="form.seurantakeskustelunYhteisetMerkinnat != null">
+          <elsa-form-group
+            class="mt-3"
+            :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
+          >
+            <template v-slot="{ uid }">
+              <div :id="uid">{{ form.seurantakeskustelunYhteisetMerkinnat }}</div>
+            </template>
+          </elsa-form-group>
+          <elsa-form-group
+            v-if="form.seuraavanKeskustelunAjankohta != null"
+            :label="$t('seuraavan-keskustelun-ajankohta')"
+          >
+            <template v-slot="{ uid }">
+              <div :id="uid">{{ $date(form.seuraavanKeskustelunAjankohta) }}</div>
+            </template>
+          </elsa-form-group>
+        </div>
+        <div v-else>
+          <p class="mb-1">{{ $t('seurantakeskustelun-merkinnat-kuvaus-1') }}</p>
+          <ul class="pl-5">
+            <li class="font-weight-bold">{{ $t('seurantakeskustelun-merkinnat-kuvaus-2') }}</li>
+            <li class="font-weight-bold">{{ $t('seurantakeskustelun-merkinnat-kuvaus-3') }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+    </div>
 
     <div v-if="editing" class="d-flex flex-row-reverse flex-wrap">
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('tallenna-ja-laheta') }}
       </elsa-button>
       <elsa-button
-        v-if="$isErikoistuva() && !uusiJakso"
+        v-if="
+          $isErikoistuva() &&
+          seurantajakso.seurantakeskustelunYhteisetMerkinnat == null &&
+          !uusiJakso
+        "
         :loading="params.deleting"
         variant="outline-danger"
         @click="onSeurantajaksoDelete"
         class="mb-2"
       >
         {{ $t('poista-seurantajakso') }}
+      </elsa-button>
+      <elsa-button
+        v-if="$isKouluttaja() && form.seurantakeskustelunYhteisetMerkinnat != null"
+        variant="outline-primary"
+        v-b-modal.return-to-sender
+        class="mb-2"
+      >
+        {{ $t('palauta-muokattavaksi') }}
       </elsa-button>
       <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
         {{ $t('peruuta') }}
@@ -632,11 +773,22 @@
             <li>{{ $t('vahvista-seurantajakson-lahetys-4') }}</li>
           </ul>
         </div>
-        <div v-else>
+        <div v-else-if="$isErikoistuva()">
           {{ $t('vahvista-seurantajakson-yhteiset-merkinnat') }}
+        </div>
+        <div v-else-if="form.seurantakeskustelunYhteisetMerkinnat == null">
+          {{ $t('vahvista-seurantajakson-arviointi') }}
+        </div>
+        <div v-else>
+          {{ $t('vahvista-seurantajakson-hyvaksynta') }}
         </div>
       </template>
     </elsa-confirmation-modal>
+    <elsa-return-to-sender-modal
+      id="return-to-sender"
+      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+      @submit="returnToSender"
+    />
   </b-form>
 </template>
 
@@ -655,6 +807,7 @@
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import ArviointiForm from '@/forms/arviointi-form.vue'
@@ -682,6 +835,7 @@
       ElsaFormGroup,
       ElsaFormMultiselect,
       ElsaPopover,
+      ElsaReturnToSenderModal,
       ErikoistuvaDetails,
       KouluttajaForm,
       SuoritemerkintaDetails
@@ -698,10 +852,22 @@
           },
           seurantakeskustelunYhteisetMerkinnat: {
             required: requiredIf(function () {
-              if (vm.$isErikoistuva && !vm.uusiJakso) {
-                return true
-              }
-              return false
+              return vm.$isErikoistuva() && !vm.uusiJakso
+            })
+          },
+          edistyminenTavoitteidenMukaista: {
+            required: requiredIf(function () {
+              return vm.$isKouluttaja()
+            })
+          },
+          huolenaiheet: {
+            required: requiredIf(function () {
+              return vm.$isKouluttaja() && vm.form.edistyminenTavoitteidenMukaista === false
+            })
+          },
+          kouluttajanArvio: {
+            required: requiredIf(function () {
+              return vm.$isKouluttaja()
             })
           }
         }
@@ -756,6 +922,17 @@
       saving: false,
       deleting: false
     }
+
+    edistyminenVaihtoehdot = [
+      {
+        text: this.$t('kylla'),
+        value: true
+      },
+      {
+        text: this.$t('ei-huolenaiheita-on'),
+        value: false
+      }
+    ]
 
     async mounted() {
       this.form = {
@@ -851,6 +1028,11 @@
 
     onSeurantajaksoDelete() {
       this.$emit('delete', this.params)
+    }
+
+    returnToSender(korjausehdotus: string) {
+      this.form.korjausehdotus = korjausehdotus
+      this.$emit('submit', this.form, this.params)
     }
   }
 </script>
