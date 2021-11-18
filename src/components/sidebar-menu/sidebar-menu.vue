@@ -104,7 +104,17 @@
   import Component from 'vue-class-component'
 
   @Component
-  export default class SidebarMenu extends Vue {}
+  export default class SidebarMenu extends Vue {
+    paddingTop = 64
+
+    // Tarkistetaan sivunavigaation paikka
+    mounted() {
+      const el = document.getElementById('navbar-top')
+      if (el) {
+        this.paddingTop = el.offsetHeight
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
