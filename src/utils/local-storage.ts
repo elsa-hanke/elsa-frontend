@@ -49,9 +49,3 @@ export function storeRoute(to?: Route) {
     }
   }
 }
-
-// Tallentaa näkymän polun selaimen muistiin.
-export function storeRouteAndRedirectToLogin(to?: Route) {
-  storeRoute(to)
-  // window.location.href = `${process.env.BASE_URL}/oauth2/authorization/oidc`
-}
