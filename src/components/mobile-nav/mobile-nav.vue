@@ -165,18 +165,16 @@
 <style lang="scss" scoped>
   @import '~@/styles/variables';
 
+  $navbar-height: 53.5px;
+
   .mobile-menu {
-    top: auto;
+    z-index: 1010;
   }
 
   ::v-deep {
     .b-sidebar-right {
-      top: auto;
+      padding-top: $navbar-height;
       height: auto;
-    }
-
-    .b-sidebar-backdrop {
-      top: auto;
     }
   }
 
