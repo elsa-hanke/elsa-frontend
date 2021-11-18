@@ -102,22 +102,22 @@
                           <b-table-simple small fixed class="mb-0" stacked="md" responsive>
                             <b-thead>
                               <b-tr class="text-size-sm">
+                                <b-th scope="col" style="width: 12%">
+                                  {{ $t('pvm') | uppercase }}
+                                </b-th>
                                 <b-th scope="col">
                                   {{ $t('tapahtuma') | uppercase }}
                                 </b-th>
-                                <b-th scope="col">
+                                <b-th scope="col" style="width: 12%">
                                   {{ $t('arviointi') | uppercase }}
                                 </b-th>
-                                <b-th scope="col">
+                                <b-th scope="col" style="width: 15%">
                                   {{ $t('itsearviointi') | uppercase }}
                                 </b-th>
-                                <b-th scope="col">
-                                  {{ $t('pvm') }}
-                                </b-th>
-                                <b-th scope="col">
+                                <b-th scope="col" style="width: 25%">
                                   {{ $t('tyoskentelypaikka') | uppercase }}
                                 </b-th>
-                                <b-th scope="col">
+                                <b-th scope="col" style="width: 20%">
                                   {{ $t('arvioinnin-antaja') | uppercase }}
                                 </b-th>
                               </b-tr>
@@ -129,17 +129,20 @@
                                   : oa.arvioinnit.slice(0, 1)"
                                 :key="`arviointi-${index}`"
                               >
-                                <b-td :stacked-heading="$t('tapahtuma')">
+                                <b-td :stacked-heading="$t('pvm')">
                                   <elsa-button
                                     variant="link"
                                     :to="{
                                       name: 'arviointi',
                                       params: { arviointiId: arviointi.id }
                                     }"
-                                    class="shadow-none p-0 text-truncate w-100 text-left"
+                                    class="shadow-none p-0"
                                   >
-                                    {{ arviointi.arvioitavaTapahtuma }}
+                                    {{ $date(arviointi.tapahtumanAjankohta) }}
                                   </elsa-button>
+                                </b-td>
+                                <b-td :stacked-heading="$t('tapahtuma')">
+                                  {{ arviointi.arvioitavaTapahtuma }}
                                 </b-td>
                                 <b-td :stacked-heading="$t('arviointi')">
                                   <elsa-badge
@@ -168,9 +171,6 @@
                                   <span v-else class="text-size-sm text-light-muted">
                                     {{ $t('ei-tehty') }}
                                   </span>
-                                </b-td>
-                                <b-td :stacked-heading="$t('pvm')">
-                                  {{ $date(arviointi.tapahtumanAjankohta) }}
                                 </b-td>
                                 <b-td :stacked-heading="$t('tyoskentelypaikka')">
                                   {{ arviointi.tyoskentelyjakso.tyoskentelypaikka.nimi }}
