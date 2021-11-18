@@ -53,10 +53,10 @@ import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
 import Profiili from '@/views/profiili/profiili.vue'
 import Root from '@/views/root.vue'
-import UusiSeurantajakso from '@/views/seurantakeskustelut/lisaa-seurantajakso.vue'
-import MuokkaaSeurantajaksoa from '@/views/seurantakeskustelut/muokkaa-seurantajaksoa.vue'
-import Seurantajakso from '@/views/seurantakeskustelut/seurantajakso.vue'
-import Seurantakeskustelut from '@/views/seurantakeskustelut/seurantakeskustelut.vue'
+import UusiSeurantajakso from '@/views/seurantakeskustelut/erikoistuva/lisaa-seurantajakso.vue'
+import MuokkaaSeurantajaksoa from '@/views/seurantakeskustelut/muokkaa-seurantajaksoa-container.vue'
+import Seurantajakso from '@/views/seurantakeskustelut/seurantajakso-container.vue'
+import Seurantakeskustelut from '@/views/seurantakeskustelut/seurantakeskustelut-container.vue'
 import MuokkaaSuoritemerkintaa from '@/views/suoritemerkinnat/muokkaa-suoritemerkintaa.vue'
 import Suoritemerkinnat from '@/views/suoritemerkinnat/suoritemerkinnat.vue'
 import Suoritemerkinta from '@/views/suoritemerkinnat/suoritemerkinta.vue'
@@ -640,7 +640,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Seurantakeskustelut,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja]
         }
       },
       {
@@ -659,7 +659,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Seurantajakso,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja]
         }
       },
       {
@@ -668,7 +668,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaSeurantajaksoa,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja],
           confirmRouteExit: true
         }
       }

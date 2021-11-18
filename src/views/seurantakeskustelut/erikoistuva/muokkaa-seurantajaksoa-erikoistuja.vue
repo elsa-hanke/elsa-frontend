@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('muokkaa-seurantajaksoa') }}</h1>
-          <b-alert :show="showOdottaaKeskustelua" variant="dark" class="mt-3">
+          <b-alert :show="true" variant="dark" class="mt-3">
             <div class="d-flex flex-row">
               <em class="align-middle">
                 <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
@@ -73,7 +73,7 @@
       SeurantajaksoForm
     }
   })
-  export default class MuokkaaSeurantajaksoa extends Vue {
+  export default class MuokkaaSeurantajaksoaErikoistuja extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -130,7 +130,7 @@
       try {
         await putSeurantajakso(value)
         toastSuccess(this, this.$t('seurantajakson-tallennus-ja-lahetys-onnistui'))
-        this.$emit('skipRouteExitConfirm', true)
+        this.$emit('skipRouteExitConfirm')
         this.$router.push({
           name: 'seurantajakso',
           params: {

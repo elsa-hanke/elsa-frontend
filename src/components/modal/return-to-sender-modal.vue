@@ -1,5 +1,5 @@
 <template>
-  <b-modal :id="id" :title="title">
+  <b-modal :id="id" :title="title" centered>
     <div class="d-block">
       <b-form>
         <elsa-form-group :label="$t('syy-palautukseen')" :required="true">

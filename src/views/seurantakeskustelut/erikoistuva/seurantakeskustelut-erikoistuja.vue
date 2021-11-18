@@ -47,9 +47,58 @@
                     </h3>
                   </elsa-button>
                   <p class="mb-2">
-                    {{ $t('seurantajakso-tila-lahetetty-kouluttajalle') }}
-                    <span v-if="seurantajakso.seurantakeskustelunYhteisetMerkinnat != null">
-                      {{ $t('seurantajakso-tila-merkinnat-lahetetty') }}
+                    <font-awesome-icon
+                      v-if="showHyvaksytty(seurantajakso)"
+                      :icon="['fas', 'check-circle']"
+                      class="text-success"
+                    />
+                    <font-awesome-icon
+                      v-if="showKorjattavaa(seurantajakso)"
+                      :icon="['fas', 'exclamation-circle']"
+                      class="text-error"
+                    />
+                    <span v-if="showHyvaksytty(seurantajakso)">
+                      {{ $t('seurantajakso-tila-hyvaksytty') }}
+                      <span v-if="seurantajakso.huolenaiheet != null">
+                        {{ $t('seurantajakso-sisaltaa-huolia') }}
+                      </span>
+                    </span>
+                    <span v-else-if="showKorjattavaa(seurantajakso)">
+                      {{ $t('seurantajakso-tila-palautettu-korjattavaksi') }}
+                      <span class="d-block">
+                        {{ $t('syy') }}&nbsp;
+                        <span class="font-weight-500">{{ seurantajakso.korjausehdotus }}</span>
+                      </span>
+                      <elsa-button
+                        :to="{
+                          name: 'muokkaa-seurantajaksoa',
+                          params: { seurantajaksoId: seurantajakso.id }
+                        }"
+                        variant="primary"
+                        class="mb-2 mt-3"
+                      >
+                        {{ $t('muokkaa-yhteisia-merkintoja') }}
+                      </elsa-button>
+                    </span>
+                    <span
+                      v-else-if="
+                        showKouluttajaArvioinut(seurantajakso) ||
+                        showOdottaaHyvaksyntaa(seurantajakso)
+                      "
+                    >
+                      {{ $t('seurantajakso-tila-kouluttaja-arvioinut') }}
+                      <span v-if="seurantajakso.huolenaiheet != null">
+                        {{ $t('seurantajakso-sisaltaa-huolia') }}
+                      </span>
+                      <span v-if="showOdottaaHyvaksyntaa(seurantajakso)">
+                        {{ $t('seurantajakso-tila-merkinnat-lahetetty') }}
+                      </span>
+                    </span>
+                    <span v-else>
+                      {{ $t('seurantajakso-tila-lahetetty-kouluttajalle') }}
+                      <span v-if="seurantajakso.seurantakeskustelunYhteisetMerkinnat != null">
+                        {{ $t('seurantajakso-tila-merkinnat-lahetetty') }}
+                      </span>
                     </span>
                   </p>
                   <div v-if="seurantajakso.seurantakeskustelunYhteisetMerkinnat == null">
@@ -100,7 +149,9 @@
   import { getSeurantajaksot } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import { Seurantajakso } from '@/types'
+  import { SeurantajaksoTila } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -124,16 +175,37 @@
 
     async mounted() {
       this.loading = true
-      this.seurantajaksot = (await getSeurantajaksot()).data.sort(
-        (s1: Seurantajakso, s2: Seurantajakso) => {
-          return sortByDateDesc(s1.alkamispaiva, s2.alkamispaiva)
-        }
-      )
+      try {
+        this.seurantajaksot = (await getSeurantajaksot()).data.sort(
+          (s1: Seurantajakso, s2: Seurantajakso) => {
+            return sortByDateDesc(s1.alkamispaiva, s2.alkamispaiva)
+          }
+        )
+      } catch {
+        toastFail(this, this.$t('seurantakeskustelujen-hakeminen-epaonnistui'))
+        this.seurantajaksot = []
+      }
       this.loading = false
     }
 
     toggleKuvaus() {
       this.naytaKuvaus = !this.naytaKuvaus
+    }
+
+    showHyvaksytty(seurantajakso: Seurantajakso) {
+      return seurantajakso.tila === SeurantajaksoTila.HYVAKSYTTY
+    }
+
+    showKorjattavaa(seurantajakso: Seurantajakso) {
+      return seurantajakso.tila === SeurantajaksoTila.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    showKouluttajaArvioinut(seurantajakso: Seurantajakso) {
+      return seurantajakso.tila === SeurantajaksoTila.ODOTTAA_YHTEISIA_MERKINTOJA
+    }
+
+    showOdottaaHyvaksyntaa(seurantajakso: Seurantajakso) {
+      return seurantajakso.tila === SeurantajaksoTila.ODOTTAA_HYVAKSYNTAA
     }
   }
 </script>

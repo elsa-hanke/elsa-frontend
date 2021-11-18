@@ -8,7 +8,8 @@ import {
   KaytannonKoulutusTyyppi,
   KehittamistoimenpideKategoria,
   TyoskentelyjaksoTyyppi,
-  PoissaolonSyyTyyppi
+  PoissaolonSyyTyyppi,
+  SeurantajaksoTila
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
@@ -704,6 +705,11 @@ export type Seurantajakso = {
   jatkotoimetJaRaportointi?: string | null
   hyvaksytty?: boolean | null
   korjausehdotus?: string | null
+  erikoistuvaLaakari?: ErikoistuvaLaakari | null
+  erikoistuvanAvatar?: string
+  tallennettu?: string | null
+  tila?: SeurantajaksoTila | null
+  aiemmatJaksot?: Seurantajakso[]
 }
 
 export type SeurantajaksonArviointiKategoria = {
