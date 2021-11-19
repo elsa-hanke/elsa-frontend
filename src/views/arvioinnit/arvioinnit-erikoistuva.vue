@@ -5,14 +5,15 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('arvioinnit') }}</h1>
-          <p>{{ $t('arvioinnit-kuvaus') }}</p>
+          <p class="mb-3">{{ $t('arvioinnit-kuvaus') }}</p>
           <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
             {{ $t('pyyda-arviointia') }}
           </elsa-button>
           <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
-            <b-tab :title="$t('arvioinnit-ja-itsearvioinnit')" active>
+            <b-tab :title="$t('arvioinnit')" active>
+              <h6 class="mt-4 font-weight-400">RAJAA ARVIOINTEJA</h6>
               <b-container fluid class="px-0">
-                <b-row>
+                <b-row :class="{ 'mb-3': !isFiltered }">
                   <b-col md="4">
                     <elsa-form-group :label="$t('tyoskentelyjakso')" class="mb-md-0">
                       <template v-slot="{ uid }">
@@ -83,21 +84,28 @@
                       class="text-decoration-none shadow-none border-0 text-dark p-0 w-100"
                       @click="kategoria.visible = !kategoria.visible"
                     >
-                      <div class="kategoria-collapse p-2 font-weight-500 d-flex">
-                        <div>
-                          <font-awesome-icon
-                            :icon="kategoria.visible ? 'caret-up' : 'caret-down'"
-                            fixed-width
-                            size="lg"
-                            class="text-muted"
-                          />
-                          {{ kategoria.nimi }}
-                        </div>
+                      <div class="kategoria-collapse text-left p-2 mt-2 font-weight-500 d-flex">
+                        <font-awesome-icon
+                          :icon="kategoria.visible ? 'caret-up' : 'caret-down'"
+                          fixed-width
+                          size="lg"
+                          class="text-muted mr-2"
+                        />
+                        {{
+                          `${kategoria.nimi} (${arvioinnitCountByKategoria(kategoria)} ${$t(
+                            'arviointia'
+                          )})`
+                        }}
                       </div>
                     </elsa-button>
                     <div v-if="kategoria.visible">
-                      <div v-for="(a, index) in kategoria.arvioitavatKokonaisuudet" :key="index">
-                        <p class="font-weight-500 p-2 mb-0">{{ a.nimi }}</p>
+                      <div
+                        :class="{ 'mb-3': a.arvioinnit.length === 0 }"
+                        v-for="(a, index) in kategoria.arvioitavatKokonaisuudet"
+                        :key="index"
+                      >
+                        <hr v-if="index !== 0" class="mt-1 mb-2" />
+                        <p class="font-weight-500 p-2 mb-0 mt-2">{{ a.nimi }}</p>
                         <div v-if="a.arvioinnit.length > 0">
                           <b-table-simple small fixed class="mb-0" stacked="md" responsive>
                             <b-thead>
@@ -439,6 +447,20 @@
         label: tyoskentelyjaksoLabel(this, tj)
       }))
     }
+
+    get isFiltered() {
+      return (
+        this.selected.tyoskentelyjakso ||
+        this.selected.arvioitavaKokonaisuus ||
+        this.selected.kouluttajaOrVastuuhenkilo
+      )
+    }
+
+    arvioinnitCountByKategoria(kategoria: ArvioitavanKokonaisuudenKategoria) {
+      return kategoria.arvioitavatKokonaisuudet
+        .map((a: ArvioitavaKokonaisuus) => a.arvioinnit.length)
+        .reduce((a, b) => a + b)
+    }
   }
 </script>
 
@@ -461,6 +483,8 @@
   }
 
   ::v-deep table {
+    border-bottom: none;
+
     thead tr th {
       border-top: none;
       border-bottom: none;
@@ -476,12 +500,13 @@
       padding-left: 0.5rem;
       padding-right: 0.5rem;
     }
+    th {
+      font-weight: 400;
+    }
   }
 
   @include media-breakpoint-down(sm) {
     ::v-deep table {
-      border-bottom: 0;
-
       tr {
         border: $table-border-width solid $table-border-color;
         border-radius: $border-radius;
@@ -501,7 +526,7 @@
 
         &::before {
           text-align: left !important;
-          font-weight: 500 !important;
+          font-weight: 400 !important;
           width: 100% !important;
           padding-right: 0 !important;
         }
