@@ -144,7 +144,9 @@
         await confirmDelete(
           this,
           this.$t('poista-arviointipyynto') as string,
-          (this.$t('arviointipyynnon') as string).toLowerCase()
+          `${(this.$t('arviointipyynnon') as string).toLowerCase()} ${this.$t(
+            'itsearviointi-poistetaan-samalla'
+          )}`
         )
       ) {
         params.deleting = true
