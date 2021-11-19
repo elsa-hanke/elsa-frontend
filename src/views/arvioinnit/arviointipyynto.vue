@@ -110,7 +110,7 @@
           await axios.put('erikoistuva-laakari/suoritusarvioinnit', {
             id: this.arviointipyynto.id,
             tyoskentelyjaksoId: value.tyoskentelyjaksoId,
-            arvioitavaOsaalueId: value.arvioitavaOsaalueId,
+            arvioitavaKokonaisuusId: value.arvioitavaKokonaisuusId,
             arvioitavaTapahtuma: value.arvioitavaTapahtuma,
             arvioinninAntajaId: value.arvioinninAntajaId,
             tapahtumanAjankohta: value.tapahtumanAjankohta,
@@ -226,7 +226,7 @@
             ...this.arviointipyynto.tyoskentelyjakso,
             label: tyoskentelyjaksoLabel(this, this.arviointipyynto.tyoskentelyjakso)
           },
-          arvioitavaKokonaisuus: this.arviointipyynto.arvioitavaOsaalue,
+          arvioitavaKokonaisuus: this.arviointipyynto.arvioitavaKokonaisuus,
           kouluttajaOrVastuuhenkilo: this.arviointipyynto.arvioinninAntaja
         }
       } else {

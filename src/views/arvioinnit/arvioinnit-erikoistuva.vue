@@ -32,8 +32,8 @@
                       <template v-slot="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
-                          v-model="selected.arvoitavaKokonaisuus"
-                          :options="options.arvioitavatKokonaisuudet"
+                          v-model="selected.arvioitavaKokonaisuus"
+                          :options="suoritusArvioinnitOptions.arvioitavatKokonaisuudet"
                           label="nimi"
                           track-by="id"
                           @select="onArvioitavaKokonaisuusSelect"
@@ -47,7 +47,7 @@
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.kouluttajaOrVastuuhenkilo"
-                          :options="options.kouluttajatAndVastuuhenkilot"
+                          :options="suoritusArvioinnitOptions.kouluttajatAndVastuuhenkilot"
                           label="nimi"
                           track-by="id"
                           @select="onKouluttajaOrVastuuhenkiloSelect"
@@ -62,7 +62,7 @@
                       <elsa-button
                         v-if="
                           selected.tyoskentelyjakso ||
-                          selected.arvoitavaKokonaisuus ||
+                          selected.arvioitavaKokonaisuus ||
                           selected.kouluttajaOrVastuuhenkilo
                         "
                         variant="link"
@@ -96,25 +96,25 @@
                       </div>
                     </elsa-button>
                     <div v-if="kategoria.visible">
-                      <div v-for="(oa, index) in kategoria.osaalueet" :key="index">
-                        <p class="font-weight-500 p-2 mb-0">{{ oa.nimi }}</p>
-                        <div v-if="oa.arvioinnit.length > 0">
+                      <div v-for="(a, index) in kategoria.arvioitavatKokonaisuudet" :key="index">
+                        <p class="font-weight-500 p-2 mb-0">{{ a.nimi }}</p>
+                        <div v-if="a.arvioinnit.length > 0">
                           <b-table-simple small fixed class="mb-0" stacked="md" responsive>
                             <b-thead>
                               <b-tr class="text-size-sm">
                                 <b-th scope="col" style="width: 12%">
                                   {{ $t('pvm') | uppercase }}
                                 </b-th>
-                                <b-th scope="col">
+                                <b-th scope="col" style="width: 15%">
                                   {{ $t('tapahtuma') | uppercase }}
                                 </b-th>
-                                <b-th scope="col" style="width: 12%">
+                                <b-th scope="col" style="width: 13%">
                                   {{ $t('arviointi') | uppercase }}
                                 </b-th>
-                                <b-th scope="col" style="width: 15%">
+                                <b-th scope="col" style="width: 18%">
                                   {{ $t('itsearviointi') | uppercase }}
                                 </b-th>
-                                <b-th scope="col" style="width: 25%">
+                                <b-th scope="col" style="width: 22%">
                                   {{ $t('tyoskentelypaikka') | uppercase }}
                                 </b-th>
                                 <b-th scope="col" style="width: 20%">
@@ -124,9 +124,9 @@
                             </b-thead>
                             <b-tbody>
                               <b-tr
-                                v-for="(arviointi, index) in oa.visible
-                                  ? oa.arvioinnit
-                                  : oa.arvioinnit.slice(0, 1)"
+                                v-for="(arviointi, index) in a.visible
+                                  ? a.arvioinnit
+                                  : a.arvioinnit.slice(0, 1)"
                                 :key="`arviointi-${index}`"
                               >
                                 <b-td :stacked-heading="$t('pvm')">
@@ -183,14 +183,14 @@
                           </b-table-simple>
                           <div class="text-right">
                             <elsa-button
-                              v-if="oa.arvioinnit.length > 1"
+                              v-if="a.arvioinnit.length > 1"
                               variant="link"
                               class="shadow-none font-weight-500"
-                              @click="oa.visible = !oa.visible"
+                              @click="a.visible = !a.visible"
                             >
-                              {{ `${$t('kaikki-arvioinnit')} (${oa.arvioinnit.length})` }}
+                              {{ `${$t('kaikki-arvioinnit')} (${a.arvioinnit.length})` }}
                               <font-awesome-icon
-                                :icon="oa.visible ? 'chevron-up' : 'chevron-down'"
+                                :icon="a.visible ? 'chevron-up' : 'chevron-down'"
                                 fixed-width
                                 class="ml-1 text-dark"
                               />
@@ -210,11 +210,11 @@
               </div>
             </b-tab>
             <b-tab :title="$t('arviointipyynnot')">
-              <div v-if="pyynnot">
-                <div v-for="(arviointipyynto, index) in pyynnot" :key="index">
+              <div v-if="arvioinnit">
+                <div v-for="(arviointipyynto, index) in arvioinnit" :key="index">
                   <arviointipyynto-card :value="arviointipyynto" />
                 </div>
-                <b-alert v-if="pyynnot.length === 0" variant="dark" show>
+                <b-alert v-if="arvioinnit.length === 0" variant="dark" show>
                   <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
                   {{ $t('kaikkiin-arviointipyyntoihisi-on-tehty-arviointi') }}
                 </b-alert>
@@ -239,7 +239,15 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import { Suoritusarviointi } from '@/types'
+  import {
+    Suoritusarviointi,
+    SuoritusarviointiFilter,
+    SuoritusarvioinnitOptions,
+    ArvioitavaKokonaisuus,
+    ArvioitavanKokonaisuudenKategoria,
+    Tyoskentelyjakso,
+    Kayttaja
+  } from '@/types'
   import { decorate } from '@/utils/arvioinninAntajaListDecorator'
   import { sortByDateDesc } from '@/utils/date'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -256,15 +264,16 @@
   export default class ArvioinnitErikoistuva extends Vue {
     selected = {
       tyoskentelyjakso: null,
-      arvoitavaKokonaisuus: null,
+      arvioitavaKokonaisuus: null,
       kouluttajaOrVastuuhenkilo: null
-    } as any
-    options = {
+    } as SuoritusarviointiFilter
+    suoritusArvioinnitOptions = {
       tyoskentelyjaksot: [],
       arvioitavatKokonaisuudet: [],
+      tapahtumat: [],
       kouluttajatAndVastuuhenkilot: []
-    } as any
-    omat: null | any[] = null
+    } as SuoritusarvioinnitOptions
+    arvioinnit: null | Suoritusarviointi[] = null
     items = [
       {
         text: this.$t('etusivu'),
@@ -275,7 +284,7 @@
         active: true
       }
     ]
-    kategoriat: null | any[] = null
+    kategoriat: null | ArvioitavanKokonaisuudenKategoria[] = null
 
     async mounted() {
       await this.fetchOptions()
@@ -285,10 +294,10 @@
     onTabChange(tabIndex: number) {
       this.selected = {
         tyoskentelyjakso: null,
-        arvoitavaKokonaisuus: null,
+        arvioitavaKokonaisuus: null,
         kouluttajaOrVastuuhenkilo: null
       }
-      this.omat = null
+      this.arvioinnit = null
       if (tabIndex === 0) {
         this.fetch()
       } else if (tabIndex === 1) {
@@ -299,17 +308,17 @@
       }
     }
 
-    async onTyoskentelyjaksoSelect(selected: any) {
+    async onTyoskentelyjaksoSelect(selected: Tyoskentelyjakso) {
       this.selected.tyoskentelyjakso = selected
       await this.fetch()
     }
 
-    async onArvioitavaKokonaisuusSelect(selected: any) {
+    async onArvioitavaKokonaisuusSelect(selected: ArvioitavaKokonaisuus) {
       this.selected.arvioitavaKokonaisuus = selected
       await this.fetch()
     }
 
-    async onKouluttajaOrVastuuhenkiloSelect(selected: any) {
+    async onKouluttajaOrVastuuhenkiloSelect(selected: Kayttaja) {
       this.selected.kouluttajaOrVastuuhenkilo = selected
       await this.fetch()
     }
@@ -321,25 +330,29 @@
         kouluttajaOrVastuuhenkilo: null
       }
       await this.fetch()
-      this.solveKategoriat()
+      //this.solveKategoriat()
     }
 
     async fetchOptions() {
-      this.options = (await axios.get('erikoistuva-laakari/suoritusarvioinnit-rajaimet')).data
-      this.options.kouluttajatAndVastuuhenkilot = decorate(
-        this,
-        this.options.kouluttajatAndVastuuhenkilot
-      )
+      this.suoritusArvioinnitOptions = (
+        await axios.get('erikoistuva-laakari/suoritusarvioinnit-rajaimet')
+      ).data
+      if (this.suoritusArvioinnitOptions) {
+        this.suoritusArvioinnitOptions.kouluttajatAndVastuuhenkilot = decorate(
+          this,
+          this.suoritusArvioinnitOptions?.kouluttajatAndVastuuhenkilot
+        )
+      }
     }
 
     async fetch(options: any = {}) {
       try {
-        this.omat = (
+        this.arvioinnit = (
           await axios.get('erikoistuva-laakari/suoritusarvioinnit', {
             params: {
               ...options,
               'tyoskentelyjaksoId.equals': this.selected.tyoskentelyjakso?.id,
-              'arvioitavaOsaalueId.equals': this.selected.arvioitavaKokonaisuus?.id,
+              'arvioitavaKokonaisuusId.equals': this.selected.arvioitavaKokonaisuus?.id,
               'arvioinninAntajaId.equals': this.selected.kouluttajaOrVastuuhenkilo?.id
             }
           })
@@ -348,73 +361,73 @@
         })
         this.kategoriat = this.solveKategoriat()
       } catch {
-        this.omat = []
+        this.arvioinnit = []
       }
     }
 
     solveKategoriat() {
-      // Muodostetaan osa-alueet lista
-      const osaalueet = (this.selected.tyoskentelyjakso || this.selected.kouluttajaOrVastuuhenkilo
-        ? this.omat?.map((oma: any) => oma.arvioitavaOsaalue)
-        : this.options.arvioitavatKokonaisuudet.filter((oa: any) =>
-            this.selected.arvioitavaKokonaisuus
-              ? oa.id === this.selected.arvioitavaKokonaisuus?.id
-              : true
+      // Muodostetaan arvioitavat kokonaisuudet -lista
+      const arvioitavatKokonaisuudet = (this.selected.tyoskentelyjakso ||
+      this.selected.kouluttajaOrVastuuhenkilo
+        ? this.arvioinnit?.map((arviointi: Suoritusarviointi) => arviointi.arvioitavaKokonaisuus)
+        : this.suoritusArvioinnitOptions?.arvioitavatKokonaisuudet.filter(
+            (a: ArvioitavaKokonaisuus) =>
+              this.selected.arvioitavaKokonaisuus
+                ? a.id === this.selected.arvioitavaKokonaisuus?.id
+                : true
           )
-      ).map((oa: any) => ({
-        ...oa,
-        arvioinnit: [],
-        visible: false
-      }))
+      )
+        ?.filter((x) => x != null)
+        .map((a: ArvioitavaKokonaisuus | null) => ({
+          ...a,
+          arvioinnit: [],
+          visible: false
+        })) as ArvioitavaKokonaisuus[]
 
       // Muodostetaan kategoriat lista
-      let kategoriat: any[] = []
-      osaalueet.forEach((oa: any) => {
+      let kategoriat: ArvioitavanKokonaisuudenKategoria[] = []
+      arvioitavatKokonaisuudet?.forEach((a: ArvioitavaKokonaisuus) => {
         kategoriat.push({
-          ...oa.kategoria,
-          osaalueet: [],
+          ...a.kategoria,
+          arvioitavatKokonaisuudet: [],
           visible: true
         })
       })
-      kategoriat = [...new Map(kategoriat.map((item: any) => [item['id'], item])).values()]
+      kategoriat = [
+        ...new Map(
+          kategoriat.map((kategoria: ArvioitavanKokonaisuudenKategoria) => [
+            kategoria['id'],
+            kategoria
+          ])
+        ).values()
+      ]
 
-      // Liitetään arvioinnit osa-alueisiin
-      if (this.omat) {
-        this.omat.forEach((arviointi) => {
-          const oa = osaalueet.find((oa: any) => oa.id === arviointi.arvioitavaOsaalueId)
-          if (oa) {
-            oa.arvioinnit.push(arviointi)
+      // Liitetään arvioinnit arvioitaviin kokonaisuuksiin
+      if (this.arvioinnit) {
+        this.arvioinnit.forEach((arviointi) => {
+          const arvioitavaKokonaisuus = arvioitavatKokonaisuudet?.find(
+            (a: ArvioitavaKokonaisuus | null) => a?.id === arviointi.arvioitavaKokonaisuusId
+          )
+          if (arvioitavaKokonaisuus) {
+            arvioitavaKokonaisuus.arvioinnit.push(arviointi)
           }
         })
       }
 
       // Liitetään osa-alueet kategorioihin
-      osaalueet.forEach((oa: any) => {
-        const kategoria = kategoriat.find((k: any) => k.id === oa.kategoria.id)
+      arvioitavatKokonaisuudet?.forEach((a: ArvioitavaKokonaisuus) => {
+        const kategoria = kategoriat.find(
+          (k: ArvioitavanKokonaisuudenKategoria) => k.id === a.kategoria.id
+        )
         if (kategoria) {
-          kategoria.osaalueet.push(oa)
+          kategoria.arvioitavatKokonaisuudet.push(a)
         }
       })
-
       return kategoriat
     }
 
-    get arvioinnit() {
-      if (this.omat) {
-        return this.omat
-      }
-      return null
-    }
-
-    get pyynnot() {
-      if (this.omat) {
-        return this.omat
-      }
-      return null
-    }
-
     get tyoskentelyjaksotFormatted() {
-      return this.options.tyoskentelyjaksot.map((tj: any) => ({
+      return this.suoritusArvioinnitOptions?.tyoskentelyjaksot.map((tj: Tyoskentelyjakso) => ({
         ...tj,
         label: tyoskentelyjaksoLabel(this, tj)
       }))

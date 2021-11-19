@@ -87,9 +87,9 @@
               </div>
             </template>
             <!-- eslint-disable-next-line -->
-            <template #cell(arvioitavaOsaalue.nimi)="row">
+            <template #cell(arvioitavaKokonaisuus.nimi)="row">
               <div class="text-truncate w-100">
-                {{ row.item.arvioitavaOsaalue.nimi }}
+                {{ row.item.arvioitavaKokonaisuus.nimi }}
               </div>
             </template>
             <!-- eslint-disable-next-line -->
@@ -181,7 +181,7 @@
         sortable: true
       },
       {
-        key: 'arvioitavaOsaalue.nimi',
+        key: 'arvioitavaKokonaisuus.nimi',
         label: this.$t('arvioitava-kokonaisuus'),
         sortable: true
       },
