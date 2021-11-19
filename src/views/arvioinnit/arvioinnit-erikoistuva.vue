@@ -394,7 +394,7 @@
         kategoriat.push({
           ...a.kategoria,
           arvioitavatKokonaisuudet: [],
-          visible: true
+          visible: false
         })
       })
       kategoriat = [
@@ -424,6 +424,9 @@
           (k: ArvioitavanKokonaisuudenKategoria) => k.id === a.kategoria.id
         )
         if (kategoria) {
+          if (a.arvioinnit.length > 0) {
+            kategoria.visible = true
+          }
           kategoria.arvioitavatKokonaisuudet.push(a)
         }
       })
