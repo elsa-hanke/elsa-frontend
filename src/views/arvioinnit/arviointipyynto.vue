@@ -5,9 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('pyyda-arviointia') }}</h1>
-          <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
-            {{ $t('koejakso-tavoitteet-linkki') }}
-          </b-link>
+          <p class="mb-0 mt-3">{{ $t('pyyda-arviointia-ennalta-sovitusta-suorituksesta') }}</p>
           <hr />
           <arviointipyynto-form
             v-if="!loading"

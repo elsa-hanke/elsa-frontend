@@ -58,26 +58,41 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('arvioitava-tapahtuma')" :required="true">
-      <template v-slot="{ uid }">
-        <b-form-input
-          :id="uid"
-          v-model="form.arvioitavaTapahtuma"
-          :state="validateState('arvioitavaTapahtuma')"
-          :aria-describedby="`${uid}-feedback`"
-        ></b-form-input>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">
-          {{ $t('pakollinen-tieto') }}
-        </b-form-invalid-feedback>
-      </template>
-    </elsa-form-group>
+    <b-form-row>
+      <elsa-form-group :label="$t('arvioitava-tapahtuma')" class="col-md-8">
+        <template v-slot="{ uid }">
+          <b-form-input
+            :id="uid"
+            v-model="form.arvioitavaTapahtuma"
+            :aria-describedby="`${uid}-feedback`"
+          ></b-form-input>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
+        </template>
+      </elsa-form-group>
+      <elsa-form-group :label="$t('tapahtuman-ajankohta')" class="col-md-4" :required="true">
+        <template v-slot="{ uid }">
+          <elsa-form-datepicker
+            :id="uid"
+            v-model="form.tapahtumanAjankohta"
+            :state="validateState('tapahtumanAjankohta')"
+            :min="tyoskentelyjaksonAlkamispaiva"
+            :max="tyoskentelyjaksonPaattymispaiva"
+          ></elsa-form-datepicker>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
+        </template>
+      </elsa-form-group>
+    </b-form-row>
     <b-form-row>
       <elsa-form-group
         :label="$t('kouluttaja-tai-vastuuhenkilo')"
         :add-new-enabled="!editing"
         :add-new-label="$t('lisaa-kouluttaja')"
         :required="true"
-        class="col-md-8"
+        class="col-md-12"
         @submit="onKouluttajaSubmit"
       >
         <template v-slot:modal-content="{ submit, cancel }">
@@ -101,20 +116,6 @@
               />
             </template>
           </elsa-form-multiselect>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </template>
-      </elsa-form-group>
-      <elsa-form-group :label="$t('ajankohta')" class="col-md-4" :required="true">
-        <template v-slot="{ uid }">
-          <elsa-form-datepicker
-            :id="uid"
-            v-model="form.tapahtumanAjankohta"
-            :state="validateState('tapahtumanAjankohta')"
-            :min="tyoskentelyjaksonAlkamispaiva"
-            :max="tyoskentelyjaksonPaattymispaiva"
-          ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
@@ -188,9 +189,6 @@
           required
         },
         arvioitavaKokonaisuus: {
-          required
-        },
-        arvioitavaTapahtuma: {
           required
         },
         arvioinninAntaja: {
