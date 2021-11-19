@@ -1,7 +1,7 @@
 <template>
   <span>
     <span class="text-size-lg">
-      <b-badge pill variant="light">{{ value }}</b-badge>
+      <b-badge pill :variant="variant">{{ value }}</b-badge>
     </span>
     <span v-if="help">
       {{ help }}
@@ -21,5 +21,8 @@
 
     @Prop({ required: false, type: String })
     help?: string
+
+    @Prop({ required: false, type: String, default: 'light' })
+    variant!: string
   }
 </script>
