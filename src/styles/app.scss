@@ -4,7 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 
-html {
+html:not(.e2e) {
   scroll-behavior: smooth;
 }
 

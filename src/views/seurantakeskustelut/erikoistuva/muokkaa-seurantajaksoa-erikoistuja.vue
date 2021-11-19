@@ -155,7 +155,7 @@
         try {
           await deleteSeurantajakso(this.seurantajakso?.id)
           toastSuccess(this, this.$t('seurantajakso-poistettu-onnistuneesti'))
-          this.$emit('skipRouteExitConfirm', true)
+          this.$emit('skipRouteExitConfirm')
           this.$router.push({
             name: 'seurantakeskustelut'
           })
