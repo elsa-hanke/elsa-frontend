@@ -135,7 +135,7 @@
                   <dd class="mb-4">
                     <elsa-arviointiasteikon-taso
                       :value="arviointi.arviointiasteikonTaso"
-                      :tasot="arviointi.arvioitavaOsaalue.arviointiasteikko.tasot"
+                      :tasot="arviointi.arvioitavaKokonaisuus.arviointiasteikko.tasot"
                     />
                   </dd>
                   <dt class="text-uppercase text-size-sm font-weight-400">
@@ -172,7 +172,7 @@
                 <b-td :stacked-heading="$t('luottamuksen-taso')">
                   <elsa-arviointiasteikon-taso
                     :value="arviointi.arviointiasteikonTaso"
-                    :tasot="arviointi.arvioitavaOsaalue.arviointiasteikko.tasot"
+                    :tasot="arviointi.arvioitavaKokonaisuus.arviointiasteikko.tasot"
                   />
                 </b-td>
                 <b-td :stacked-heading="$t('suorituspaiva')">

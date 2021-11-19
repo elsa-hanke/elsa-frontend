@@ -46,11 +46,11 @@
     >
       <template v-slot="{ uid }">
         <div :id="uid">
-          {{ value.arvioitavaOsaalue.kategoria.nimi }}:
-          {{ value.arvioitavaOsaalue.nimi }}
+          {{ value.arvioitavaKokonaisuus.kategoria.nimi }}:
+          {{ value.arvioitavaKokonaisuus.nimi }}
           <elsa-popover>
             <template>
-              <p v-html="value.arvioitavaOsaalue.kuvaus" />
+              <p v-html="value.arvioitavaKokonaisuus.kuvaus" />
             </template>
           </elsa-popover>
         </div>
@@ -193,7 +193,7 @@
               <elsa-arviointiasteikon-taso
                 v-if="value.arviointiAika"
                 :value="value.arviointiasteikonTaso"
-                :tasot="value.arvioitavaOsaalue.arviointiasteikko.tasot"
+                :tasot="value.arvioitavaKokonaisuus.arviointiasteikko.tasot"
               />
             </b-td>
             <b-td>
@@ -222,7 +222,7 @@
               <elsa-arviointiasteikon-taso
                 v-if="value.itsearviointiAika"
                 :value="value.itsearviointiArviointiasteikonTaso"
-                :tasot="value.arvioitavaOsaalue.arviointiasteikko.tasot"
+                :tasot="value.arvioitavaKokonaisuus.arviointiasteikko.tasot"
               />
             </b-td>
           </b-tr>
@@ -635,7 +635,7 @@
     }
     vaativuustasot = vaativuustasot
     arviointiasteikonTasot: ArviointiasteikonTaso[] =
-      this.value.arvioitavaOsaalue?.arviointiasteikko.tasot || []
+      this.value.arvioitavaKokonaisuus?.arviointiasteikko.tasot || []
     arviointityokalut: Arviointityokalu[] = []
     params = {
       saving: false
@@ -695,7 +695,8 @@
     }
 
     get arviointiAsteikonNimi() {
-      return this.value.arvioitavaOsaalue?.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
+      return this.value.arvioitavaKokonaisuus?.arviointiasteikko.nimi ===
+        ArviointiasteikkoTyyppi.EPA
         ? this.$t('luottamuksen-taso')
         : this.$t('etappi')
     }

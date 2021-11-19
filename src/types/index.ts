@@ -457,11 +457,11 @@ export type Suoritusarviointi = {
   lukittu: boolean
   kommentit: SuoritusarvioinninKommentti[]
   arvioinninAntajaId: number
-  arvioitavaOsaalueId: number
+  arvioitavaKokonaisuusId: number
   tyoskentelyjaksoId: number
   arvioinninSaaja: Kayttaja
   arvioinninAntaja: Kayttaja | null
-  arvioitavaOsaalue: ArvioitavaKokonaisuus | null
+  arvioitavaKokonaisuus: ArvioitavaKokonaisuus | null
   tyoskentelyjakso: Tyoskentelyjakso | null
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
@@ -488,6 +488,8 @@ export type ArvioitavaKokonaisuus = {
   erikoisalaId: number
   kategoria: ArvioitavanKokonaisuudenKategoria
   arviointiasteikko: Arviointiasteikko
+  arvioinnit: Suoritusarviointi[]
+  visible: boolean
 }
 
 export type ArvioitavanKokonaisuudenKategoria = {
@@ -497,6 +499,7 @@ export type ArvioitavanKokonaisuudenKategoria = {
   voimassaoloAlkaa: string
   voimassaoloLoppuu: string
   arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[]
+  visible: boolean
 }
 
 export type Arviointiasteikko = {
@@ -526,6 +529,18 @@ export type SuoritusarviointiForm = {
   arviointiAsiakirja?: Asiakirja | null
   arviointiAsiakirjaUpdated: boolean
   arviointiFile?: File | null
+}
+
+export type SuoritusarviointiFilter = {
+  tyoskentelyjakso?: Tyoskentelyjakso | null
+  arvioitavaKokonaisuus?: ArvioitavaKokonaisuus | null
+  kouluttajaOrVastuuhenkilo?: Kayttaja | null
+}
+
+export type SuoritusarvioinnitOptions = {
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[]
+  kouluttajatAndVastuuhenkilot: Kayttaja[]
 }
 
 export type Vaativuustaso = {

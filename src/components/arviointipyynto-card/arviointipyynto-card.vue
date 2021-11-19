@@ -28,7 +28,7 @@
                     {{ $t('arvioitava-kokonaisuus') }}
                   </b-th>
                   <b-td class="py-0 pr-0 pl-1">
-                    {{ value.arvioitavaOsaalue.nimi }}
+                    {{ value.arvioitavaKokonaisuus.nimi }}
                   </b-td>
                 </b-tr>
                 <b-tr>
@@ -61,7 +61,7 @@
         {{ value.arvioitavaTapahtuma }}
       </div>
       <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
-        {{ value.arvioitavaOsaalue.nimi }}
+        {{ value.arvioitavaKokonaisuus.nimi }}
       </elsa-form-group>
       <elsa-form-group :label="$t('arvioija')">
         <user-avatar

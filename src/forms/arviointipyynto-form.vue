@@ -39,9 +39,9 @@
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="form.arvioitavaOsaalue"
+          v-model="form.arvioitavaKokonaisuus"
           :options="arvioitavanKokonaisuudenKategoriat"
-          :state="validateState('arvioitavaOsaalue')"
+          :state="validateState('arvioitavaKokonaisuus')"
           group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
           :group-select="false"
@@ -187,7 +187,7 @@
         tyoskentelyjakso: {
           required
         },
-        arvioitavaOsaalue: {
+        arvioitavaKokonaisuus: {
           required
         },
         arvioitavaTapahtuma: {
@@ -237,7 +237,7 @@
 
     form: Partial<Suoritusarviointi> = {
       tyoskentelyjakso: null,
-      arvioitavaOsaalue: null,
+      arvioitavaKokonaisuus: null,
       arvioitavaTapahtuma: null,
       arvioinninAntaja: null,
       tapahtumanAjankohta: null,
@@ -253,7 +253,7 @@
       if (this.form.tyoskentelyjakso) {
         this.form.tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, this.value?.tyoskentelyjakso)
       }
-      this.form.arvioitavaOsaalue = this.value?.arvioitavaOsaalue
+      this.form.arvioitavaKokonaisuus = this.value?.arvioitavaKokonaisuus
       this.form.arvioitavaTapahtuma = this.value?.arvioitavaTapahtuma
       this.form.arvioinninAntaja = this.value?.arvioinninAntaja
       this.form.tapahtumanAjankohta = this.value?.tapahtumanAjankohta
@@ -274,7 +274,7 @@
         'submit',
         {
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-          arvioitavaOsaalueId: this.form.arvioitavaOsaalue?.id,
+          arvioitavaKokonaisuusId: this.form.arvioitavaKokonaisuus?.id,
           arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
           arvioinninAntajaId: this.form.arvioinninAntaja?.id,
           tapahtumanAjankohta: this.form.tapahtumanAjankohta,
