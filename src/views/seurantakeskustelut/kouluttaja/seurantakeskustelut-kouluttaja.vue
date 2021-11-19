@@ -392,7 +392,7 @@
           }
         }
 
-        &.tyyppi,
+        &.seurantajakso,
         &.tila,
         &.pvm,
         &.actions {
