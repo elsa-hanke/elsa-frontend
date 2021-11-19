@@ -148,6 +148,9 @@
                                   <elsa-badge
                                     v-if="arviointi.arviointiasteikonTaso"
                                     :value="arviointi.arviointiasteikonTaso"
+                                    :variant="
+                                      arviointi.arviointiasteikonTaso > 3 ? 'success' : 'light'
+                                    "
                                   />
                                   <span v-else class="text-size-sm text-light-muted">
                                     {{ $t('ei-tehty-viela') }}
