@@ -197,9 +197,6 @@
                             </elsa-button>
                           </div>
                         </div>
-                        <p v-else class="text-light-muted p-2">
-                          {{ $t('arviointeja-ei-ole-viela-tehty') }}
-                        </p>
                       </div>
                     </div>
                   </div>
