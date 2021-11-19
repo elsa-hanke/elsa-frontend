@@ -18,3 +18,8 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on('window:before:load', (win) => {
+  const htmlNode = win.document.querySelector('html')
+  htmlNode.classList.add('e2e')
+})
