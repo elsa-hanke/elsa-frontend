@@ -1052,6 +1052,7 @@
 
   .osaamistavoitteet {
     font-size: $font-size-base;
+    white-space: normal;
   }
 
   .collapsed {
