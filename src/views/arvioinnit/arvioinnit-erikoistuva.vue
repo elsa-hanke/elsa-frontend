@@ -330,7 +330,6 @@
         kouluttajaOrVastuuhenkilo: null
       }
       await this.fetch()
-      //this.solveKategoriat()
     }
 
     async fetchOptions() {
@@ -367,7 +366,7 @@
 
     solveKategoriat() {
       // Muodostetaan arvioitavat kokonaisuudet -lista
-      const arvioitavatKokonaisuudet = (this.selected.tyoskentelyjakso ||
+      const arvioitavatKokonaisuudetArray = (this.selected.tyoskentelyjakso ||
       this.selected.kouluttajaOrVastuuhenkilo
         ? this.arvioinnit?.map((arviointi: Suoritusarviointi) => arviointi.arvioitavaKokonaisuus)
         : this.suoritusArvioinnitOptions?.arvioitavatKokonaisuudet.filter(
@@ -383,10 +382,15 @@
           arvioinnit: [],
           visible: false
         })) as ArvioitavaKokonaisuus[]
+      const arvioitavatKokonaisuudetMap = [
+        ...new Map(
+          arvioitavatKokonaisuudetArray.map((a: ArvioitavaKokonaisuus) => [a['id'], a])
+        ).values()
+      ]
 
       // Muodostetaan kategoriat lista
       let kategoriat: ArvioitavanKokonaisuudenKategoria[] = []
-      arvioitavatKokonaisuudet?.forEach((a: ArvioitavaKokonaisuus) => {
+      arvioitavatKokonaisuudetMap?.forEach((a: ArvioitavaKokonaisuus) => {
         kategoriat.push({
           ...a.kategoria,
           arvioitavatKokonaisuudet: [],
@@ -405,7 +409,7 @@
       // Liitetään arvioinnit arvioitaviin kokonaisuuksiin
       if (this.arvioinnit) {
         this.arvioinnit.forEach((arviointi) => {
-          const arvioitavaKokonaisuus = arvioitavatKokonaisuudet?.find(
+          const arvioitavaKokonaisuus = arvioitavatKokonaisuudetMap?.find(
             (a: ArvioitavaKokonaisuus | null) => a?.id === arviointi.arvioitavaKokonaisuusId
           )
           if (arvioitavaKokonaisuus) {
@@ -415,7 +419,7 @@
       }
 
       // Liitetään osa-alueet kategorioihin
-      arvioitavatKokonaisuudet?.forEach((a: ArvioitavaKokonaisuus) => {
+      arvioitavatKokonaisuudetMap?.forEach((a: ArvioitavaKokonaisuus) => {
         const kategoria = kategoriat.find(
           (k: ArvioitavanKokonaisuudenKategoria) => k.id === a.kategoria.id
         )
