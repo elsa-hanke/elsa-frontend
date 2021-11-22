@@ -29,7 +29,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .seurantakeskustelut-container {
     max-width: 1024px;
   }

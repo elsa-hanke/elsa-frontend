@@ -563,13 +563,15 @@
   }
 </script>
 
-<style lang="scss">
-  .textarea-min-height {
-    min-height: 100px;
-  }
+<style lang="scss" scoped>
+  ::v-deep {
+    .textarea-min-height {
+      min-height: 100px;
+    }
 
-  .custom-control.custom-checkbox {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+    .custom-control.custom-checkbox {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
   }
 </style>

@@ -25,7 +25,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .seurantajakso-container {
     max-width: 1024px;
   }

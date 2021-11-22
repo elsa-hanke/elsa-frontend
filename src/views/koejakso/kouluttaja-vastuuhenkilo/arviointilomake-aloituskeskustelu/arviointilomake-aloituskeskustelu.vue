@@ -395,7 +395,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .textarea-min-height {
     min-height: 100px;
   }
