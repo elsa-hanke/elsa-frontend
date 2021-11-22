@@ -254,8 +254,9 @@
           background: #f5f5f6;
         }
         &.multiselect__option--disabled {
-          color: $black !important;
-          background: transparent !important;
+          font-weight: $font-weight-400;
+          color: #b1b1b1 !important;
+          background-color: transparent !important;
         }
       }
     }
