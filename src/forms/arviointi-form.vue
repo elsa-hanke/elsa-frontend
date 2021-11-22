@@ -64,11 +64,24 @@
       class="align-items-center mb-md-0"
     >
       <template v-slot="{ uid }">
-        <span :id="uid">{{ value.arvioitavaTapahtuma }}</span>
+        <span :id="uid">
+          {{ value.arvioitavaTapahtuma }}
+          <span v-if="!value.arviointiAika">
+            <span>(</span>
+            <elsa-button
+              variant="link"
+              class="text-decoration-none shadow-none d-table-row border-0 m-0 p-0"
+              :to="{ name: 'arviointipyynto-muokkaus', params: { arviointiId: value.id } }"
+            >
+              {{ $t('muokkaa-arviointipyyntoa') | lowercase }}
+            </elsa-button>
+            <span>)</span>
+          </span>
+        </span>
       </template>
     </elsa-form-group>
     <elsa-form-group
-      :label="$t('ajankohta')"
+      :label="$t('tapahtuman-ajankohta')"
       label-cols-md="4"
       label-cols-xl="3"
       label-cols="12"
@@ -108,19 +121,6 @@
     </elsa-form-group>
     <div v-if="!editing">
       <elsa-form-group
-        :label="$t('arviointipaiva')"
-        label-cols-md="4"
-        label-cols-xl="3"
-        label-cols="12"
-        class="align-items-center mb-md-0"
-      >
-        <template v-slot="{ uid }">
-          <span :id="uid" class="text-preline text-break">
-            {{ value.arviointiAika ? $date(value.arviointiAika) : '' }}
-          </span>
-        </template>
-      </elsa-form-group>
-      <elsa-form-group
         :label="$t('arviointityokalu')"
         label-cols-md="4"
         label-cols-xl="3"
@@ -146,13 +146,21 @@
           </span>
         </template>
       </elsa-form-group>
-      <b-table-simple class="mb-4" responsive bordered>
+      <b-table-simple class="mt-2 mb-4" responsive bordered>
         <b-thead>
           <b-tr>
             <b-th scope="col" style="width: 24%"></b-th>
-            <b-th scope="col" style="width: 38%">{{ $t('arviointi') }}</b-th>
+            <b-th scope="col" style="width: 38%">
+              {{ $t('arviointi') }}
+              <span v-if="value.arviointiAika" class="font-weight-400">
+                {{ ` (${$date(value.arviointiAika)})` }}
+              </span>
+            </b-th>
             <b-th scope="col" style="width: 38%">
               {{ $t('itsearviointi') }}
+              <span v-if="value.itsearviointiAika" class="font-weight-400">
+                {{ ` (${$date(value.itsearviointiAika)})` }}
+              </span>
             </b-th>
           </b-tr>
         </b-thead>
@@ -251,32 +259,12 @@
           </b-tr>
         </b-tbody>
       </b-table-simple>
-      <elsa-form-group v-if="value.arviointiAika" :label="$t('sanallinen-arviointi')">
+      <elsa-form-group :label="$t('sanallinen-arviointi')">
         <template v-slot="{ uid }">
           <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
         </template>
       </elsa-form-group>
-      <hr
-        v-if="
-          (!$isErikoistuva() && value.arviointiAika) ||
-          (value.arviointiAika && value.itsearviointiAika) ||
-          value.arviointiAsiakirja.nimi
-        "
-      />
-      <elsa-form-group v-if="value.arviointiAsiakirja.nimi" :label="$t('liitetiedosto')">
-        <asiakirjat-content
-          class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
-          :asiakirjat="asiakirjatTableItems"
-          :sortingEnabled="false"
-          :paginationEnabled="false"
-          :enableSearch="false"
-          :showInfoIfEmpty="false"
-          :enableDelete="false"
-          :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
-        />
-      </elsa-form-group>
       <div v-if="value.arviointiAika && ($isKouluttaja() || $isVastuuhenkilo())" class="text-right">
-        <hr v-if="value.arviointiAsiakirja.nimi" />
         <elsa-button
           variant="primary"
           :disabled="value.lukittu"
@@ -299,10 +287,22 @@
             </div>
           </b-col>
         </b-row>
-        <hr v-if="value.itsearviointiAika" />
       </div>
-      <hr v-if="$isErikoistuva() && value.itsearviointiAika && value.arviointiAsiakirja.nimi" />
-      <elsa-form-group v-if="value.itsearviointiAika" :label="$t('sanallinen-itsearviointi')">
+      <hr />
+      <elsa-form-group v-if="value.arviointiAsiakirja.nimi" :label="$t('liitetiedosto')">
+        <asiakirjat-content
+          class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
+          :asiakirjat="asiakirjatTableItems"
+          :sortingEnabled="false"
+          :paginationEnabled="false"
+          :enableSearch="false"
+          :showInfoIfEmpty="false"
+          :enableDelete="false"
+          :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+        />
+      </elsa-form-group>
+      <hr v-if="value.arviointiAsiakirja.nimi" />
+      <elsa-form-group :label="$t('sanallinen-itsearviointi')">
         <template v-slot="{ uid }">
           <p :id="uid" class="text-preline text-break">
             {{ value.sanallinenItsearviointi }}
@@ -310,7 +310,6 @@
         </template>
       </elsa-form-group>
       <div v-if="value.itsearviointiAika && $isErikoistuva()" class="text-right">
-        <hr v-if="value.itsearviointiAika" />
         <elsa-button
           variant="primary"
           :disabled="value.lukittu"
@@ -336,6 +335,7 @@
           </b-col>
         </b-row>
       </div>
+      <hr />
     </div>
     <div v-else>
       <hr />
