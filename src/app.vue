@@ -13,7 +13,6 @@
           {{ $t('tietosuojaseloste') }}
         </b-link>
         <tietosuojaseloste-modal v-model="showTietosuojaselosteFormModal" />
-        <!-- <b-link class="my-4 mx-3 mx-lg-4">{{ $t('kayttoehdot') }}</b-link> -->
         <b-link v-if="isLoggedIn" @click="openPalauteFormModal" class="my-4 mx-3 mx-lg-4">
           {{ $t('palaute') }}
         </b-link>
@@ -125,7 +124,7 @@
     @include media-breakpoint-down(sm) {
       border-top: 5px solid #f5f5f6;
     }
-    z-index: 1000;
+    z-index: 990;
   }
 
   .feedback-link {

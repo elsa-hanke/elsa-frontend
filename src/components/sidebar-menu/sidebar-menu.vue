@@ -133,7 +133,7 @@
   #sidebar-menu {
     position: fixed;
     width: $sidebar-width;
-    z-index: 1000;
+    z-index: 980;
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
