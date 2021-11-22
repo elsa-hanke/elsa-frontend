@@ -335,39 +335,41 @@
   }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
-  .tyoskentelyjaksot-koejakso-table {
-    border: $table-border-width solid $table-border-color;
-    thead,
-    &tr {
-      display: none;
-    }
-    td {
-      vertical-align: middle;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
-    }
-  }
-
-  @include media-breakpoint-down(xs) {
+  ::v-deep {
     .tyoskentelyjaksot-koejakso-table {
-      border-bottom: none;
-      margin-bottom: 0;
-      tr {
-        padding: 0.375rem 0 0.375rem 0;
-        border: $table-border-width solid $table-border-color;
-        border-radius: 0.25rem;
-        margin-bottom: 0.375rem;
+      border: $table-border-width solid $table-border-color;
+      thead,
+      &tr {
+        display: none;
       }
       td {
-        width: 100%;
-        padding: 0.25rem 0 0.25rem 0.25rem;
-        border: none;
-        &.btn-tyoskentelyjakso > div {
-          width: 100% !important;
+        vertical-align: middle;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    @include media-breakpoint-down(xs) {
+      .tyoskentelyjaksot-koejakso-table {
+        border-bottom: none;
+        margin-bottom: 0;
+        tr {
+          padding: 0.375rem 0 0.375rem 0;
+          border: $table-border-width solid $table-border-color;
+          border-radius: 0.25rem;
+          margin-bottom: 0.375rem;
+        }
+        td {
+          width: 100%;
+          padding: 0.25rem 0 0.25rem 0.25rem;
+          border: none;
+          &.btn-tyoskentelyjakso > div {
+            width: 100% !important;
+          }
         }
       }
     }

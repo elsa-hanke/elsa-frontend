@@ -304,7 +304,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
@@ -312,7 +312,7 @@
     text-transform: capitalize;
   }
 
-  .koejakson-vaiheet-table {
+  ::v-deep .koejakson-vaiheet-table {
     .row-details {
       padding: 0;
       background-color: #f5f5f6;

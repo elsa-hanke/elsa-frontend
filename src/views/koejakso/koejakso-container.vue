@@ -28,7 +28,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .koejakso-container {
     max-width: 1024px;
   }

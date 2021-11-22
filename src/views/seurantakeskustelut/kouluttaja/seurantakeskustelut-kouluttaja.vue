@@ -299,7 +299,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
@@ -307,108 +307,110 @@
     text-transform: capitalize;
   }
 
-  .seurantakeskustelun-vaiheet-table {
-    .row-details {
-      padding: 0;
-      background-color: #f5f5f6;
-      table {
-        margin: 0.375rem 0 0.375rem 0;
+  ::v-deep {
+    .seurantakeskustelun-vaiheet-table {
+      .row-details {
+        padding: 0;
+        background-color: #f5f5f6;
+        table {
+          margin: 0.375rem 0 0.375rem 0;
 
-        border: none;
-        thead,
-        &tr {
-          display: none;
-        }
-        td {
-          word-wrap: break-all;
-          padding-top: 0.375rem;
-          padding-bottom: 0.375rem;
-          border-top: none;
-        }
-      }
-    }
-    @include media-breakpoint-up(xl) {
-      .actions {
-        text-align: right;
-      }
-    }
-
-    @include media-breakpoint-down(sm) {
-      border-bottom: none;
-
-      tr {
-        padding: 0.375rem 0 0.375rem 0;
-        border: $table-border-width solid $table-border-color;
-
-        &.outer-table {
-          margin-bottom: 0.75rem;
-          border-radius: 0.25rem;
-        }
-
-        &.b-table-has-details {
-          margin-bottom: 0;
-          border-radius: 0.25rem 0.25rem 0 0;
-        }
-
-        &.b-table-details {
           border: none;
-          padding: 0;
-          margin-bottom: 0.75rem;
-          :last-of-type {
-            border-radius: 0 0 0.25rem 0.25rem;
+          thead,
+          &tr {
+            display: none;
+          }
+          td {
+            word-wrap: break-all;
+            padding-top: 0.375rem;
+            padding-bottom: 0.375rem;
+            border-top: none;
+          }
+        }
+      }
+      @include media-breakpoint-up(xl) {
+        .actions {
+          text-align: right;
+        }
+      }
+
+      @include media-breakpoint-down(sm) {
+        border-bottom: none;
+
+        tr {
+          padding: 0.375rem 0 0.375rem 0;
+          border: $table-border-width solid $table-border-color;
+
+          &.outer-table {
+            margin-bottom: 0.75rem;
+            border-radius: 0.25rem;
           }
 
-          table {
-            margin: 0;
+          &.b-table-has-details {
+            margin-bottom: 0;
+            border-radius: 0.25rem 0.25rem 0 0;
+          }
 
-            tr {
-              border-top: none;
-              margin-top: 0;
-              padding-top: 0;
-              td {
-                padding-top: 0.75rem;
-                &.nimi,
-                &.actions {
-                  display: none;
+          &.b-table-details {
+            border: none;
+            padding: 0;
+            margin-bottom: 0.75rem;
+            :last-of-type {
+              border-radius: 0 0 0.25rem 0.25rem;
+            }
+
+            table {
+              margin: 0;
+
+              tr {
+                border-top: none;
+                margin-top: 0;
+                padding-top: 0;
+                td {
+                  padding-top: 0.75rem;
+                  &.nimi,
+                  &.actions {
+                    display: none;
+                  }
                 }
               }
             }
           }
         }
-      }
 
-      td {
-        padding: 0.25rem 0 0.25rem 0.25rem;
-        border: none;
+        td {
+          padding: 0.25rem 0 0.25rem 0.25rem;
+          border: none;
 
-        &.nimi {
-          font-size: $h4-font-size;
-          > div {
-            width: 100% !important;
-            padding: 0.25rem 0.375rem 0 0.375rem !important;
-          }
-          &::before {
-            display: none;
-          }
-        }
-
-        &.seurantajakso,
-        &.tila,
-        &.pvm,
-        &.actions {
-          > div {
-            &:empty {
-              display: none !important;
+          &.nimi {
+            font-size: $h4-font-size;
+            > div {
+              width: 100% !important;
+              padding: 0.25rem 0.375rem 0 0.375rem !important;
             }
-            padding: 0 0.375rem 0 0.375rem !important;
+            &::before {
+              display: none;
+            }
           }
-          &::before {
-            text-align: left !important;
-            padding-left: 0.375rem !important;
-            font-weight: 500 !important;
-            width: 100% !important;
+
+          &.seurantajakso,
+          &.tila,
+          &.pvm,
+          &.actions {
+            > div {
+              &:empty {
+                display: none !important;
+              }
+              padding: 0 0.375rem 0 0.375rem !important;
+            }
+            &::before {
+              text-align: left !important;
+              padding-left: 0.375rem !important;
+              font-weight: 500 !important;
+              width: 100% !important;
+            }
+            text-align: left;
           }
-          text-align: left;
         }
       }
     }

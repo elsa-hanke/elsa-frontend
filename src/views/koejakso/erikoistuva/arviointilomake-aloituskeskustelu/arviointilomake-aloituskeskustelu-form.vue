@@ -560,9 +560,11 @@
   }
 </script>
 
-<style lang="scss">
-  .textarea-min-height {
-    min-height: 200px;
+<style lang="scss" scoped>
+  ::v-deep {
+    .textarea-min-height {
+      min-height: 200px;
+    }
   }
 
   .tyotunnit-viikossa-input {
