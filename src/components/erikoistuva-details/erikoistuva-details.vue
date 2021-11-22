@@ -9,7 +9,7 @@
         <th scope="col">{{ $t('arvo') }}</th>
       </tr>
       <tr>
-        <th scope="row" style="width: 12rem" class="font-weight-500">
+        <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
           {{ $t('erikoistuva-laakari') }}
         </th>
         <td class="pl-6">
