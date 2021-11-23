@@ -37,13 +37,8 @@
               <p v-html="value.arvioitavaKokonaisuus.kuvaus" />
             </template>
           </elsa-popover>
-        </b-td>
-      </b-tr>
-      <b-tr>
-        <b-th scope="row" class="font-weight-500">{{ $t('arvioitava-tapahtuma') }}</b-th>
-        <b-td>
-          {{ value.arvioitavaTapahtuma }}
-          <span v-if="!value.arviointiAika">
+          <span v-if="$isErikoistuva() && !value.arviointiAika">
+            <br />
             <span>(</span>
             <elsa-button
               variant="link"
@@ -54,6 +49,12 @@
             </elsa-button>
             <span>)</span>
           </span>
+        </b-td>
+      </b-tr>
+      <b-tr>
+        <b-th scope="row" class="font-weight-500">{{ $t('arvioitava-tapahtuma') }}</b-th>
+        <b-td>
+          {{ value.arvioitavaTapahtuma }}
         </b-td>
       </b-tr>
       <b-tr>
