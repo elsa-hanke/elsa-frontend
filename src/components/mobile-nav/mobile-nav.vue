@@ -101,6 +101,7 @@
         <b-nav-item @click="logout()" class="ml-6" link-classes="p-0 pt-1 pb-3">
           {{ $t('kirjaudu-ulos') }}
         </b-nav-item>
+        <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
       </b-nav>
       <b-nav class="font-weight-500 justify-content-center d-flex">
         <b-nav-item
@@ -121,6 +122,7 @@
   import Avatar from 'vue-avatar'
   import Component from 'vue-class-component'
 
+  import { ELSA_API_LOCATION } from '@/api'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import store from '@/store'
   import { getTitleFromAuthorities } from '@/utils/functions'
@@ -163,8 +165,14 @@
       return Object.keys(this.$i18n.messages)
     }
 
+    get logoutUrl() {
+      return ELSA_API_LOCATION + '/api/logout'
+    }
+
     async logout() {
       await store.dispatch('auth/logout')
+      const logoutForm = this.$refs.logoutForm as HTMLFormElement
+      logoutForm.submit()
     }
 
     changeLocale(lang: string) {
