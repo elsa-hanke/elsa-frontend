@@ -28,7 +28,6 @@ const auth: Module<any, any> = {
       state.loggedIn = false
     },
     logoutRequest(state) {
-      state.status = 'loading'
       state.loggedIn = false
     },
     logoutSuccess(state) {
@@ -67,14 +66,6 @@ const auth: Module<any, any> = {
     },
     async logout({ commit }) {
       commit('logoutRequest')
-      try {
-        const logoutDetails = (await axios.post('logout', {})).data
-        commit('logoutSuccess')
-        window.location.href = `${logoutDetails.logoutUrl}?redirect_uri=${window.location.origin}/`
-      } catch {
-        commit('logoutError')
-        window.location.reload()
-      }
     },
     async putUser({ commit }, userDetails) {
       commit('formRequest')

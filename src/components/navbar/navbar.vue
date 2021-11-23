@@ -37,6 +37,7 @@
         <b-dropdown-item @click="logout">
           {{ $t('kirjaudu-ulos') }}
         </b-dropdown-item>
+        <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
       </b-nav-item-dropdown>
 
       <b-nav-item-dropdown
@@ -62,6 +63,7 @@
   import Avatar from 'vue-avatar'
   import Component from 'vue-class-component'
 
+  import { ELSA_API_LOCATION } from '@/api'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import store from '@/store'
   import { getTitleFromAuthorities } from '@/utils/functions'
@@ -104,8 +106,14 @@
       return Object.keys(this.$i18n.messages)
     }
 
+    get logoutUrl() {
+      return ELSA_API_LOCATION + '/api/logout'
+    }
+
     async logout() {
       await store.dispatch('auth/logout')
+      const logoutForm = this.$refs.logoutForm as HTMLFormElement
+      logoutForm.submit()
     }
 
     changeLocale(lang: string) {
