@@ -38,18 +38,18 @@
             :current-page="currentPage"
             fixed
             responsive
-            stacked="lg"
+            stacked="xl"
           >
             <template #table-colgroup>
-              <col span="1" style="width: 30%" />
-              <col span="1" style="width: 5rem" />
+              <col span="1" style="width: 6rem" />
+              <col span="1" style="width: 15%" />
               <col span="1" style="width: 7rem" />
-              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 15%" />
               <col span="1" style="width: 30%" />
-              <col span="1" style="width: 20%" />
+              <col span="1" style="width: 12rem" />
               <col span="1" style="width: 9rem" />
             </template>
-            <template #cell(arvioitavaTapahtuma)="row">
+            <template #cell(tapahtumanAjankohta)="row">
               <elsa-button
                 :to="{
                   name: 'arviointi',
@@ -58,13 +58,13 @@
                 variant="link"
                 class="shadow-none px-0 text-truncate text-left w-100"
               >
-                {{ row.item.arvioitavaTapahtuma }}
+                <span class="text-nowrap">
+                  {{ $date(row.item.tapahtumanAjankohta) }}
+                </span>
               </elsa-button>
             </template>
-            <template #cell(tapahtumanAjankohta)="row">
-              <span class="text-nowrap">
-                {{ $date(row.item.tapahtumanAjankohta) }}
-              </span>
+            <template #cell(arvioitavaTapahtuma)="row">
+              {{ row.item.arvioitavaTapahtuma }}
             </template>
             <template #cell(tila)="row">
               <span v-if="row.item.lukittu" class="text-nowrap">
@@ -106,7 +106,7 @@
                   name: 'muokkaa-arviointia',
                   params: { arviointiId: row.item.id }
                 }"
-                class="d-flex text-nowrap pt-1 pb-1"
+                class="d-flex pt-1 pb-1 pl-3"
               >
                 {{ $t('tee-arviointi') }}
               </elsa-button>
@@ -158,16 +158,15 @@
     ]
     fields = [
       {
-        key: 'arvioitavaTapahtuma',
-        label: this.$t('tapahtuma'),
-        sortable: true,
-        class: 'arvioitava-tapahtuma'
-      },
-      {
         key: 'tapahtumanAjankohta',
         label: this.$t('pvm'),
         sortable: true,
         thClass: 'pvm-field'
+      },
+      {
+        key: 'arvioitavaTapahtuma',
+        label: this.$t('tapahtuma'),
+        sortable: true
       },
       {
         key: 'tila',
@@ -203,8 +202,10 @@
 
     get tulokset() {
       return this.hakutermi
-        ? this.arvioinnit?.filter((item) =>
-            item.arvioitavaTapahtuma.toLowerCase().includes(this.hakutermi.toLowerCase())
+        ? this.arvioinnit?.filter(
+            (item) =>
+              item.arvioitavaTapahtuma &&
+              item.arvioitavaTapahtuma.toLowerCase().includes(this.hakutermi.toLowerCase())
           )
         : this.arvioinnit
     }
@@ -246,7 +247,7 @@
         padding-bottom: 0.25rem;
         vertical-align: middle;
       }
-      @include media-breakpoint-down(md) {
+      @include media-breakpoint-down(lg) {
         border-bottom: none;
 
         tr {
@@ -259,19 +260,6 @@
         td {
           > div {
             width: 100% !important;
-          }
-
-          &.arvioitava-tapahtuma {
-            > div {
-              padding: 0 0.375rem 0 0.375rem !important;
-              a.btn {
-                padding: 0;
-                font-weight: 500 !important;
-              }
-            }
-            &::before {
-              display: none;
-            }
           }
           &.tee-arviointi {
             > div {
