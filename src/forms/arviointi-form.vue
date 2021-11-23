@@ -329,7 +329,7 @@
           </elsa-form-group>
         </b-form-row>
         <b-form-row>
-          <elsa-form-group :label="$t('vaativuustaso')" :required="true" class="col-lg-6">
+          <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-6">
             <template #label-help>
               <elsa-popover>
                 <template>
@@ -346,7 +346,6 @@
                 :id="uid"
                 v-model="form.vaativuustaso"
                 :options="vaativuustasot"
-                :state="validateState('vaativuustaso')"
                 :custom-label="(value) => `${value.arvo} ${value.nimi}`"
                 track-by="arvo"
               >
@@ -484,7 +483,7 @@
             {{ $t('peruuta') }}
           </elsa-button>
           <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
-            {{ $t('laheta') }}
+            {{ itsearviointi ? $t('tallenna') : $t('laheta') }}
           </elsa-button>
         </div>
       </div>
@@ -539,9 +538,6 @@
     },
     validations: {
       form: {
-        vaativuustaso: {
-          required
-        },
         arviointiasteikonTaso: {
           required
         },
