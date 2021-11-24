@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="d-flex flex-column justify-content-between min-vh-100">
+  <div id="app" class="d-flex position-relative flex-column justify-content-between min-vh-100">
     <router-view class="router-view" />
     <b-link v-if="isLoggedIn" @click="openPalauteFormModal">
       <div class="feedback-link">

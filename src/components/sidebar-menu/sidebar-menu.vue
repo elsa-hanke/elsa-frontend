@@ -3,6 +3,7 @@
     <nav
       id="sidebar-menu"
       class="border-right bg-white font-weight-500 d-none d-lg-block d-xl-block"
+      :class="sidebarPosition"
     >
       <b-nav vertical>
         <b-nav-item
@@ -114,12 +115,43 @@
   @Component
   export default class SidebarMenu extends Vue {
     paddingTop = 64
+    sideNavSubItemHeight = 38
+    sidebarPosition = 'position-fixed'
 
     // Tarkistetaan sivunavigaation paikka
     mounted() {
       const el = document.getElementById('navbar-top')
       if (el) {
         this.paddingTop = el.offsetHeight
+      }
+      this.adjustSidebarPosition()
+    }
+
+    created() {
+      window.addEventListener('resize', this.adjustSidebarPosition)
+    }
+
+    destroyed() {
+      window.removeEventListener('resize', this.adjustSidebarPosition)
+    }
+
+    adjustSidebarPosition() {
+      const footer = document.querySelector('footer')
+      const sideNavItems = Array.from(document.querySelectorAll('#sidebar-menu li'))
+      const navItemsTotalHeight = sideNavItems
+        .map((el: Element) => el.clientHeight)
+        .reduce(
+          (a: number, b: number) =>
+            (a != 0 ? a : this.sideNavSubItemHeight) + (b != 0 ? b : this.sideNavSubItemHeight)
+        )
+
+      if (
+        footer &&
+        window.innerHeight <= navItemsTotalHeight + footer.clientHeight + this.paddingTop
+      ) {
+        this.sidebarPosition = 'position-absolute'
+      } else {
+        this.sidebarPosition = 'position-fixed'
       }
     }
   }
@@ -131,13 +163,12 @@
   $navbar-height: 64px;
 
   #sidebar-menu {
-    position: fixed;
     width: $sidebar-width;
     z-index: 980;
     display: block;
     overflow-x: hidden;
-    overflow-y: auto;
-    min-height: 100vh;
+    overflow-y: hidden;
+    height: calc(100% - #{$navbar-height});
 
     .nav-link {
       padding: 1rem 0.75rem;
