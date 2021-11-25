@@ -280,7 +280,7 @@
         case SeurantajaksoTila.PALAUTETTU_KORJATTAVAKSI:
           return this.$t('lomake-tila-' + TaskStatus.PALAUTETTU)
         case SeurantajaksoTila.ODOTTAA_YHTEISIA_MERKINTOJA:
-          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA)
+          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_YHTEISIA_MERKINTOJA)
         default:
           return this.$t('lomake-tila-' + TaskStatus.AVOIN)
       }
