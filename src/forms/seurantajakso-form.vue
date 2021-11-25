@@ -671,6 +671,7 @@
             <elsa-form-datepicker
               :id="uid"
               :disabled="uusiJakso"
+              :min="minAlkamispaiva"
               class="col-sm-4 col-md-2"
               v-model="form.seuraavanKeskustelunAjankohta"
             ></elsa-form-datepicker>
@@ -946,24 +947,16 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    get account() {
-      return store.getters['auth/account']
-    }
-
-    get maxAlkamispaiva() {
-      return this.form.paattymispaiva
-    }
-
-    get minPaattymispaiva() {
-      return this.form.alkamispaiva
-    }
-
     get kouluttajat(): Kayttaja[] {
       return store.getters['erikoistuva/kouluttajat'] || []
     }
 
     get uusiJakso() {
       return this.form.id == null
+    }
+
+    get minAlkamispaiva(): Date {
+      return new Date()
     }
 
     optionDisplayName(option: Kayttaja) {
