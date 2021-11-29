@@ -10,13 +10,6 @@
         <span :id="uid">{{ suoritemerkintaWrapper.oppimistavoite.nimi }}</span>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('vaativuustaso')">
-      <template v-slot="{ uid }">
-        <span :id="uid">
-          <elsa-badge :value="suoritemerkintaWrapper.vaativuustaso" />
-        </span>
-      </template>
-    </elsa-form-group>
     <elsa-form-group :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
@@ -40,6 +33,27 @@
           <elsa-arviointiasteikon-taso
             :value="suoritemerkintaWrapper.arviointiasteikonTaso"
             :tasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
+          />
+        </span>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group :label="$t('vaativuustaso')">
+      <template #label-help>
+        <elsa-popover>
+          <template>
+            <h3>{{ $t('vaativuustaso') }}</h3>
+            <div v-for="(taso, index) in vaativuustasot" :key="index">
+              <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
+              <p>{{ $t(taso.kuvaus) }}</p>
+            </div>
+          </template>
+        </elsa-popover>
+      </template>
+      <template v-slot="{ uid }">
+        <span :id="uid">
+          <elsa-vaativuustaso
+            v-if="value.vaativuustaso"
+            :value="suoritemerkintaWrapper.vaativuustaso"
           />
         </span>
       </template>
@@ -73,6 +87,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
   import { Suoritemerkinta } from '@/types'
   import { ArviointiasteikkoTyyppi, vaativuustasot } from '@/utils/constants'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -83,6 +98,7 @@
       ElsaPopover,
       ElsaBadge,
       ElsaArviointiasteikonTaso,
+      ElsaVaativuustaso,
       ElsaButton
     }
   })
