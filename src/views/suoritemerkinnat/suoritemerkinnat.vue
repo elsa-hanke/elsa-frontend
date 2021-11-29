@@ -5,21 +5,22 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('suoritemerkinnat') }}</h1>
-          <p>{{ $t('suoritemerkinnat-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'uusi-suoritemerkinta' }" class="mb-4">
+          <p class="mb-3">{{ $t('suoritemerkinnat-kuvaus') }}</p>
+          <elsa-button variant="primary" :to="{ name: 'uusi-suoritemerkinta' }" class="mb-5">
             {{ $t('lisaa-suoritemerkinta') }}
           </elsa-button>
-          <h2>{{ $t('oppimistavoitteet') }}</h2>
-          <div v-if="osaamistavoitteet">
+          <div v-if="oppimistavoitteetTable">
             <div
               v-for="(kategoria, index) in oppimistavoitteenKategoriat"
               :key="index"
               class="mb-2"
             >
-              <b-table-simple responsive stacked="md">
+              <b-table-simple fixed responsive stacked="md">
                 <b-thead>
                   <b-tr>
-                    <b-th>{{ `${$t('suorite')}: ${kategoria.nimi}` }}</b-th>
+                    <b-th>
+                      {{ `${$t('suorite')}${kategoria.nimi ? ':' : ''} ${kategoria.nimi}` }}
+                    </b-th>
                     <b-th>
                       {{ arviointiAsteikonNimi(kategoria.arviointiasteikko) }}
                       <elsa-popover>
@@ -38,69 +39,105 @@
                         </template>
                       </elsa-popover>
                     </b-th>
-                    <b-th>{{ $t('suorituspaiva') }}</b-th>
+                    <b-th>{{ $t('pvm') }}</b-th>
+                    <b-th>{{ $t('maara') }}</b-th>
                     <b-th></b-th>
                   </b-tr>
                 </b-thead>
                 <b-tbody>
-                  <b-tr
-                    v-for="(row, index) in kategoria.rows"
-                    :key="index"
-                    :class="{ 'row-details': row.details }"
-                  >
-                    <b-td :stacked-heading="`${$t('suorite')}: ${kategoria.nimi}`">
-                      <div v-if="!row.details" class="d-flex align-items-center">
-                        {{ row.nimi }}
-                      </div>
-                    </b-td>
-                    <b-td :stacked-heading="$t('luottamuksen-taso')">
-                      <div class="d-flex align-items-center">
-                        <elsa-arviointiasteikon-taso
-                          v-if="row.suoritemerkinta"
-                          :value="row.suoritemerkinta.arviointiasteikonTaso"
-                          :tasot="kategoria.arviointiasteikko.tasot"
-                        />
-                      </div>
-                    </b-td>
-                    <b-td
-                      :stacked-heading="$t('suorituspaiva')"
-                      :class="{ last: !(row.hasDetails && row.suoritemerkinta) }"
+                  <template v-for="(row, index) in kategoria.rows">
+                    <div
+                      class="text-uppercase text-size-sm"
+                      v-if="index === 0 && !$screen.md"
+                      :key="`header-${index}`"
                     >
-                      <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
-                        <elsa-button
-                          :to="{
-                            name: 'suoritemerkinta',
-                            params: {
-                              suoritemerkintaId: row.suoritemerkinta.id
-                            }
-                          }"
-                          variant="link"
-                          class="shadow-none p-0"
-                        >
-                          {{
-                            row.suoritemerkinta.suorituspaiva
-                              ? $date(row.suoritemerkinta.suorituspaiva)
-                              : ''
-                          }}
-                          <font-awesome-icon icon="edit" fixed-width class="ml-2" />
-                        </elsa-button>
-                      </div>
-                    </b-td>
-                    <b-td :class="{ empty: !(row.hasDetails && row.suoritemerkinta) }">
-                      <elsa-button
-                        v-if="row.hasDetails && row.suoritemerkinta"
-                        variant="link"
-                        class="shadow-none text-dark p-0"
-                        @click="toggleDetails(row)"
+                      {{ `${$t('suorite')}: ${kategoria.nimi}` }}
+                    </div>
+                    <b-tr
+                      :class="{
+                        'row-details': row.details,
+                        'details-showing': row.suoritemerkinta && row.suoritemerkinta.showDetails,
+                        'mt-1': index === 0,
+                        last: row.lastDetails
+                      }"
+                      :key="index"
+                    >
+                      <b-td>
+                        <div v-if="!row.details" class="d-flex align-items-center">
+                          {{ row.nimi }}
+                        </div>
+                      </b-td>
+                      <b-td
+                        :stacked-heading="$t('luottamuksen-taso')"
+                        :class="{ empty: !row.suoritemerkinta }"
                       >
-                        <font-awesome-icon
-                          :icon="row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'"
-                          fixed-width
-                          size="lg"
-                        />
-                      </elsa-button>
-                    </b-td>
-                  </b-tr>
+                        <div class="d-flex align-items-center">
+                          <elsa-arviointiasteikon-taso
+                            v-if="row.suoritemerkinta"
+                            :value="row.suoritemerkinta.arviointiasteikonTaso"
+                            :tasot="kategoria.arviointiasteikko.tasot"
+                          />
+                        </div>
+                      </b-td>
+                      <b-td :stacked-heading="$t('pvm')" :class="{ empty: !row.suoritemerkinta }">
+                        <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
+                          <elsa-button
+                            :to="{
+                              name: 'suoritemerkinta',
+                              params: {
+                                suoritemerkintaId: row.suoritemerkinta.id
+                              }
+                            }"
+                            variant="link"
+                            class="shadow-none p-0"
+                          >
+                            {{
+                              row.suoritemerkinta.suorituspaiva
+                                ? $date(row.suoritemerkinta.suorituspaiva)
+                                : ''
+                            }}
+                          </elsa-button>
+                        </div>
+                      </b-td>
+                      <b-td
+                        :stacked-heading="$t('maara')"
+                        :class="{ last: !(row.hasDetails && row.suoritemerkinta) }"
+                      >
+                        <div v-if="!row.details" class="suoritettu-text">
+                          <span
+                            class="pr-1"
+                            :class="{
+                              success: row.vaadittulkm && row.suoritettulkm >= row.vaadittulkm
+                            }"
+                          >
+                            {{ row.suoritettulkm }}
+                          </span>
+                          <span>{{ row.vaadittulkm ? `/ ${row.vaadittulkm}` : '' }}</span>
+                        </div>
+                      </b-td>
+                      <b-td
+                        class="details-icon"
+                        :class="{ 'has-details': row.hasDetails && row.suoritemerkinta }"
+                      >
+                        <div class="d-flex align-items-center">
+                          <elsa-button
+                            v-if="row.hasDetails && row.suoritemerkinta"
+                            variant="link"
+                            class="shadow-none text-dark p-0"
+                            @click="toggleDetails(row)"
+                          >
+                            <font-awesome-icon
+                              :icon="
+                                row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'
+                              "
+                              fixed-width
+                              size="lg"
+                            />
+                          </elsa-button>
+                        </div>
+                      </b-td>
+                    </b-tr>
+                  </template>
                 </b-tbody>
               </b-table-simple>
             </div>
@@ -151,15 +188,15 @@
         active: true
       }
     ]
-    osaamistavoitteet: OppimistavoitteetTable | null = null
+    oppimistavoitteetTable: OppimistavoitteetTable | null = null
 
     async mounted() {
-      const oppimistavoitteet: OppimistavoitteetTable = (
+      const oppimistavoitteetTable: OppimistavoitteetTable = (
         await axios.get('erikoistuva-laakari/oppimistavoitteet-taulukko')
       ).data
-      this.osaamistavoitteet = {
-        oppimistavoitteenKategoriat: oppimistavoitteet.oppimistavoitteenKategoriat,
-        suoritemerkinnat: oppimistavoitteet.suoritemerkinnat.map((suoritemerkinta) => ({
+      this.oppimistavoitteetTable = {
+        oppimistavoitteenKategoriat: oppimistavoitteetTable.oppimistavoitteenKategoriat,
+        suoritemerkinnat: oppimistavoitteetTable.suoritemerkinnat.map((suoritemerkinta) => ({
           ...suoritemerkinta,
           showDetails: false
         }))
@@ -179,8 +216,8 @@
     }
 
     get oppimistavoitteenKategoriat() {
-      if (this.osaamistavoitteet) {
-        const suoritemerkinnatGroupByOppimistavoite = this.osaamistavoitteet.suoritemerkinnat.reduce(
+      if (this.oppimistavoitteetTable) {
+        const suoritemerkinnatGroupByOppimistavoite = this.oppimistavoitteetTable.suoritemerkinnat.reduce(
           (
             result: Record<number, SuoritemerkintaWithDetails[]>,
             suoritemerkinta: ToggleableSuoritemerkinta
@@ -204,7 +241,7 @@
           {}
         )
 
-        return this.osaamistavoitteet.oppimistavoitteenKategoriat.map(
+        return this.oppimistavoitteetTable.oppimistavoitteenKategoriat.map(
           (kategoria: OppimistavoitteenKategoria) => {
             const rows: SuoritemerkintaRow[] = kategoria.oppimistavoitteet.reduce(
               (result: SuoritemerkintaRow[], oppimistavoite: Oppimistavoite) => {
@@ -219,6 +256,13 @@
                 const suoritemerkinta =
                   suoritemerkinnat.length > 0 ? suoritemerkinnat[0] : undefined
                 const suoritemerkinnatWithoutFirst = suoritemerkinnat.slice(1)
+                oppimistavoite.suoritettulkm = suoritemerkinnat.length
+
+                if (suoritemerkinnatWithoutFirst.length > 0) {
+                  suoritemerkinnatWithoutFirst[
+                    suoritemerkinnatWithoutFirst.length - 1
+                  ].lastDetails = true
+                }
 
                 result.push({
                   ...oppimistavoite,
@@ -257,9 +301,33 @@
     max-width: 1024px;
   }
 
+  .success {
+    color: $green;
+    font-weight: 500;
+  }
+
+  .suoritettu-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   ::v-deep table {
     thead th {
+      font-size: $font-size-sm;
+      font-weight: 400;
+      text-transform: uppercase;
       border-top: none;
+      &:nth-of-type(3) {
+        width: 5rem;
+      }
+      &:nth-of-type(4) {
+        width: 5rem;
+        text-align: center;
+      }
+      &:nth-of-type(5) {
+        width: 3rem;
+      }
     }
     td {
       padding-top: 0;
@@ -272,6 +340,9 @@
   }
 
   @include media-breakpoint-down(sm) {
+    .suoritettu-text {
+      justify-content: flex-start;
+    }
     ::v-deep table {
       border-bottom: 0;
 
@@ -282,15 +353,26 @@
         padding-top: $table-cell-padding;
         padding-bottom: $table-cell-padding;
 
+        &.details-showing {
+          border-radius: $border-radius $border-radius 0 0;
+        }
+
+        & > td.last > div {
+          padding-bottom: 0 !important;
+        }
+
         &.row-details {
-          & > td:first-child,
-          & > td:last-child {
-            display: none;
+          margin: 0;
+          padding-bottom: 0;
+          border-top: 0;
+          border-radius: unset;
+
+          &.last {
+            border-radius: 0 0 $border-radius $border-radius;
           }
-          td {
-            &:nth-last-child(2) > div {
-              padding-bottom: 0 !important;
-            }
+          & > td:first-child,
+          & > td.last {
+            display: none;
           }
         }
       }
@@ -301,6 +383,22 @@
           min-height: $font-size-base;
         }
 
+        &.empty {
+          display: none !important;
+        }
+        &:first-of-type {
+          font-size: $font-size-md;
+        }
+
+        &.details-icon {
+          &:not(.has-details) {
+            display: none !important;
+          }
+          > div {
+            padding-bottom: 0 !important;
+          }
+        }
+
         & > div {
           width: 100% !important;
           padding: 0 0 0.5rem 0 !important;
@@ -308,21 +406,11 @@
 
         &::before {
           text-align: left !important;
-          font-weight: 500 !important;
+          text-transform: uppercase;
+          font-size: $font-size-sm;
+          font-weight: 400 !important;
           width: 100% !important;
           padding-right: 0 !important;
-        }
-
-        &:last-child > div {
-          padding-bottom: 0 !important;
-        }
-
-        &.last > div {
-          padding-bottom: 0 !important;
-        }
-
-        &.empty {
-          display: none !important;
         }
       }
     }

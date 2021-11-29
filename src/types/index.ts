@@ -565,6 +565,8 @@ export type Oppimistavoite = {
   voimassaolonAlkamispaiva: string
   voimassaolonPaattymispaiva: string
   kategoriaId: number
+  vaadittulkm?: number
+  suoritettulkm?: number
 }
 
 export type Suoritemerkinta = {
@@ -600,6 +602,7 @@ export type SuoritemerkintaRow = {
 export type SuoritemerkintaWithDetails = {
   suoritemerkinta: ToggleableSuoritemerkinta
   details: boolean
+  lastDetails?: boolean
 }
 
 export interface BarChartRow {
