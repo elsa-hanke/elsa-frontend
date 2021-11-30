@@ -13,19 +13,10 @@
     <elsa-form-group class="template-placeholder" :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
-          <template>
-            <h3>{{ arviointiAsteikonNimi }}</h3>
-            <div
-              v-for="(asteikonTaso, index) in suoritemerkintaWrapper.arviointiasteikko.tasot"
-              :key="index"
-            >
-              <h4>
-                {{ asteikonTaso.taso }}
-                {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
-              </h4>
-              <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
-            </div>
-          </template>
+          <elsa-arviointiasteikon-taso-tooltip-content
+            :arviointiasteikonNimi="arviointiAsteikonNimi"
+            :arviointiasteikonTasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
+          />
         </elsa-popover>
       </template>
       <template v-slot="{ uid }">
@@ -77,6 +68,7 @@
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
 
+  import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -96,7 +88,8 @@
       ElsaArviointiasteikonTaso,
       ElsaVaativuustaso,
       ElsaButton,
-      ElsaVaativuustasoTooltipContent
+      ElsaVaativuustasoTooltipContent,
+      ElsaArviointiasteikonTasoTooltipContent
     }
   })
   export default class SuoritemerkintaDetails extends Vue {

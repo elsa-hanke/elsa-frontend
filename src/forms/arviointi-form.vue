@@ -116,16 +116,10 @@
               <b-th scope="row">
                 {{ arviointiAsteikonNimi }}
                 <elsa-popover>
-                  <template>
-                    <h3>{{ arviointiAsteikonNimi }}</h3>
-                    <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
-                      <h4>
-                        {{ asteikonTaso.taso }}
-                        {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
-                      </h4>
-                      <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
-                    </div>
-                  </template>
+                  <elsa-arviointiasteikon-taso-tooltip-content
+                    :arviointiasteikonNimi="arviointiAsteikonNimi"
+                    :arviointiasteikonTasot="arviointiasteikonTasot"
+                  />
                 </elsa-popover>
               </b-th>
               <b-td>
@@ -287,16 +281,10 @@
           <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
             <template #label-help>
               <elsa-popover>
-                <template>
-                  <h3>{{ arviointiAsteikonNimi }}</h3>
-                  <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
-                    <h4>
-                      {{ asteikonTaso.taso }}
-                      {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
-                    </h4>
-                    <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
-                  </div>
-                </template>
+                <elsa-arviointiasteikon-taso-tooltip-content
+                  :arviointiasteikonNimi="arviointiAsteikonNimi"
+                  :arviointiasteikonTasot="arviointiasteikonTasot"
+                />
               </elsa-popover>
             </template>
             <template v-slot="{ uid }">
@@ -487,6 +475,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
+  import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -525,7 +514,8 @@
       ElsaVaativuustaso,
       AsiakirjatUpload,
       AsiakirjatContent,
-      ElsaVaativuustasoTooltipContent
+      ElsaVaativuustasoTooltipContent,
+      ElsaArviointiasteikonTasoTooltipContent
     },
     validations: {
       form: {
