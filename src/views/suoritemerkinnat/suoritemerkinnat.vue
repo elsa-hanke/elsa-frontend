@@ -69,11 +69,13 @@
                       </b-td>
                       <b-td
                         :stacked-heading="$t('luottamuksen-taso')"
-                        :class="{ empty: !row.suoritemerkinta }"
+                        :class="{
+                          empty: !row.suoritemerkinta || !row.suoritemerkinta.arviointiasteikonTaso
+                        }"
                       >
                         <div class="d-flex align-items-center">
                           <elsa-arviointiasteikon-taso
-                            v-if="row.suoritemerkinta"
+                            v-if="row.suoritemerkinta && row.suoritemerkinta.arviointiasteikonTaso"
                             :value="row.suoritemerkinta.arviointiasteikonTaso"
                             :tasot="kategoria.arviointiasteikko.tasot"
                           />

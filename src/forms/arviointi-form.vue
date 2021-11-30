@@ -185,13 +185,7 @@
               <b-th scope="row">
                 {{ $t('vaativuustaso') }}
                 <elsa-popover>
-                  <template>
-                    <h3>{{ $t('vaativuustaso') }}</h3>
-                    <div v-for="(taso, index) in vaativuustasot" :key="index">
-                      <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                      <p>{{ $t(taso.kuvaus) }}</p>
-                    </div>
-                  </template>
+                  <elsa-vaativuustaso-tooltip-content />
                 </elsa-popover>
               </b-th>
               <b-td>
@@ -333,13 +327,7 @@
           <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-6">
             <template #label-help>
               <elsa-popover>
-                <template>
-                  <h3>{{ $t('vaativuustaso') }}</h3>
-                  <div v-for="(taso, index) in vaativuustasot" :key="index">
-                    <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-                    <p>{{ $t(taso.kuvaus) }}</p>
-                  </div>
-                </template>
+                <elsa-vaativuustaso-tooltip-content />
               </elsa-popover>
             </template>
             <template v-slot="{ uid }">
@@ -508,6 +496,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
   import {
     ArviointiasteikonTaso,
@@ -535,7 +524,8 @@
       ElsaButton,
       ElsaVaativuustaso,
       AsiakirjatUpload,
-      AsiakirjatContent
+      AsiakirjatContent,
+      ElsaVaativuustasoTooltipContent
     },
     validations: {
       form: {
