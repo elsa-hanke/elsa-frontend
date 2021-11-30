@@ -89,14 +89,21 @@
       }
     }
 
-    async onSubmit(data: any, params: any) {
+    async onSubmit(
+      value: {
+        tyoskentelyjakso: Tyoskentelyjakso
+        addedFiles: File[]
+        deletedAsiakirjaIds: number[]
+      },
+      params: { saving: boolean }
+    ) {
       params.saving = true
       try {
         const formData = new FormData()
 
-        formData.append('tyoskentelyjaksoJson', JSON.stringify(data.tyoskentelyjakso))
-        data.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
-        formData.append('deletedAsiakirjaIdsJson', JSON.stringify(data.deletedAsiakirjaIds))
+        formData.append('tyoskentelyjaksoJson', JSON.stringify(value.tyoskentelyjakso))
+        value.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
+        formData.append('deletedAsiakirjaIdsJson', JSON.stringify(value.deletedAsiakirjaIds))
 
         await putTyoskentelyjakso(formData)
 

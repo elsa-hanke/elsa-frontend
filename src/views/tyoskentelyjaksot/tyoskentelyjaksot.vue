@@ -206,7 +206,13 @@
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import { durationOptions } from '@/plugins/date'
-  import { BarChartRow } from '@/types'
+  import {
+    BarChartRow,
+    Keskeytysaika,
+    TyoskentelyjaksotTable,
+    TyoskentelyjaksotTilastotKaytannonKoulutus,
+    TyoskentelyjaksotTilastotTyoskentelyjaksot
+  } from '@/types'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
@@ -232,7 +238,7 @@
         active: true
       }
     ]
-    tyoskentelyjaksotTaulukko = null as any
+    tyoskentelyjaksotTaulukko: TyoskentelyjaksotTable | null = null
     fields = [
       {
         key: 'tyoskentelypaikkaLabel',
@@ -383,47 +389,45 @@
     get tilastotKaytannonKoulutusSorted() {
       return [
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS
+          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS
         ),
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) =>
-            kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
+          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
         ),
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TUTKIMUSTYO
+          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TUTKIMUSTYO
         ),
         this.tilastotKaytannonKoulutus.find(
-          (kk: any) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
+          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
         )
-      ].filter((kk: any) => kk !== null)
+      ].filter((kk) => kk !== null) as TyoskentelyjaksotTilastotKaytannonKoulutus[]
     }
 
     get donutSeries() {
-      return this.tilastotKaytannonKoulutusSorted.map((kk: any) => kk.suoritettu)
+      return this.tilastotKaytannonKoulutusSorted.map((kk) => kk.suoritettu)
     }
 
     get donutOptions() {
       this.tilastotKaytannonKoulutus.map(
-        (kk: any) =>
-          `${tyoskentelyjaksoKaytannonKoulutusLabel(
-            this,
-            kk.kaytannonKoulutus
-          )}: ${(this as any).$duration(kk.suoritettu)}`
+        (kk) =>
+          `${tyoskentelyjaksoKaytannonKoulutusLabel(this, kk.kaytannonKoulutus)}: ${this.$duration(
+            kk.suoritettu
+          )}`
       )
 
       return {
         colors: ['#41b257', '#0f9bd9', '#8a86fb', '#ffb406'],
         labels: [
-          `${this.$t('oma-erikoisala')}: ${(this as any).$duration(
+          `${this.$t('oma-erikoisala')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[0].suoritettu
           )}`,
-          `${this.$t('omaa-erikoisalaa-tukeva')}: ${(this as any).$duration(
+          `${this.$t('omaa-erikoisalaa-tukeva')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[1].suoritettu
           )}`,
-          `${this.$t('tutkimustyo')}: ${(this as any).$duration(
+          `${this.$t('tutkimustyo')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[2].suoritettu
           )}`,
-          `${this.$t('terveyskeskustyo')}: ${(this as any).$duration(
+          `${this.$t('terveyskeskustyo')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[3].suoritettu
           )}`
         ],
@@ -493,26 +497,28 @@
 
     get tyoskentelyjaksotFormatted() {
       const keskeytyksetGroupByTyoskentelyjakso = this.keskeytykset.reduce(
-        (result: any, keskeytysaika: any) => {
-          const tyoskentelyjaksoId = keskeytysaika.tyoskentelyjakso.id
-          if (tyoskentelyjaksoId in result) {
-            result[tyoskentelyjaksoId].push({
-              id: keskeytysaika.id,
-              alkamispaiva: keskeytysaika.alkamispaiva,
-              paattymispaiva: keskeytysaika.paattymispaiva,
-              poissaoloprosentti: keskeytysaika.poissaoloprosentti,
-              poissaolonSyy: keskeytysaika.poissaolonSyy
-            })
-          } else {
-            result[tyoskentelyjaksoId] = [
-              {
+        (result: { [key: number]: Keskeytysaika[] }, keskeytysaika: Keskeytysaika) => {
+          const tyoskentelyjaksoId = keskeytysaika?.tyoskentelyjakso?.id
+          if (tyoskentelyjaksoId) {
+            if (tyoskentelyjaksoId in result) {
+              result[tyoskentelyjaksoId].push({
                 id: keskeytysaika.id,
                 alkamispaiva: keskeytysaika.alkamispaiva,
                 paattymispaiva: keskeytysaika.paattymispaiva,
                 poissaoloprosentti: keskeytysaika.poissaoloprosentti,
                 poissaolonSyy: keskeytysaika.poissaolonSyy
-              }
-            ]
+              })
+            } else {
+              result[tyoskentelyjaksoId] = [
+                {
+                  id: keskeytysaika.id,
+                  alkamispaiva: keskeytysaika.alkamispaiva,
+                  paattymispaiva: keskeytysaika.paattymispaiva,
+                  poissaoloprosentti: keskeytysaika.poissaoloprosentti,
+                  poissaolonSyy: keskeytysaika.poissaolonSyy
+                }
+              ]
+            }
           }
           return result
         },
@@ -520,7 +526,10 @@
       )
 
       const tilastotTyoskentelyjaksotMap = this.tilastotTyoskentelyjaksot.reduce(
-        (result: any, tyoskentelyjakso: any) => {
+        (
+          result: { [key: number]: number },
+          tyoskentelyjakso: TyoskentelyjaksotTilastotTyoskentelyjaksot
+        ) => {
           result[tyoskentelyjakso.id] = tyoskentelyjakso.suoritettu
           return result
         },
@@ -528,22 +537,22 @@
       )
 
       return this.tyoskentelyjaksot
-        .map((tj: any) => ({
+        .map((tj) => ({
           ...tj,
           tyoskentelypaikkaLabel: tj.tyoskentelypaikka.nimi,
-          ajankohtaDate: parseISO(tj.alkamispaiva),
+          ajankohtaDate: tj.alkamispaiva ? parseISO(tj.alkamispaiva) : null,
           ajankohta: ajankohtaLabel(this, tj),
-          tyoskentelyaikaLabel: (this as any).$duration(tilastotTyoskentelyjaksotMap[tj.id]),
+          tyoskentelyaikaLabel: tj.id ? this.$duration(tilastotTyoskentelyjaksotMap[tj.id]) : null,
           osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
           hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan
             ? this.$t('kylla')
             : this.$t('ei'),
-          keskeytykset: keskeytyksetGroupByTyoskentelyjakso[tj.id] || [],
-          keskeytyksetLength: (keskeytyksetGroupByTyoskentelyjakso[tj.id] || []).length
+          keskeytykset: (tj.id ? keskeytyksetGroupByTyoskentelyjakso[tj.id] : undefined) || [],
+          keskeytyksetLength: (
+            (tj.id ? keskeytyksetGroupByTyoskentelyjakso[tj.id] : undefined) || []
+          ).length
         }))
-        .sort((a: { paattymispaiva: string }, b: { paattymispaiva: string }) =>
-          sortByDateDesc(a.paattymispaiva, b.paattymispaiva)
-        )
+        .sort((a, b) => sortByDateDesc(a.paattymispaiva, b.paattymispaiva))
     }
   }
 </script>

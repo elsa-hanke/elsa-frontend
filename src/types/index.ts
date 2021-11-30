@@ -778,3 +778,51 @@ export interface Page<T> {
   numberOfElements: number
   empty: boolean
 }
+
+export type Keskeytysaika = {
+  id?: number
+  alkamispaiva: string
+  paattymispaiva: string
+  poissaoloprosentti: number
+  poissaolonSyyId?: number
+  tyoskentelyjaksoId?: number
+  poissaolonSyy?: PoissaolonSyy | null
+  tyoskentelyjakso?: Tyoskentelyjakso | null
+}
+
+export type TyoskentelyjaksotTilastotKoulutustyypit = {
+  terveyskeskusVaadittuVahintaan: number
+  terveyskeskusSuoritettu: number
+  yliopistosairaalaVaadittuVahintaan: number
+  yliopistosairaalaSuoritettu: number
+  yliopistosairaaloidenUlkopuolinenVaadittuVahintaan: number
+  yliopistosairaaloidenUlkopuolinenSuoritettu: number
+  yhteensaVaadittuVahintaan: number
+  yhteensaSuoritettu: number
+}
+
+export interface TyoskentelyjaksotTilastotKaytannonKoulutus {
+  kaytannonKoulutus: KaytannonKoulutusTyyppi
+  suoritettu: number
+}
+
+export interface TyoskentelyjaksotTilastotTyoskentelyjaksot {
+  id: number
+  suoritettu: number
+}
+
+export interface TyoskentelyjaksotTilastot {
+  tyoskentelyaikaYhteensa: number
+  arvioErikoistumiseenHyvaksyttavista: number
+  arvioPuuttuvastaKoulutuksesta: number
+  koulutustyypit: TyoskentelyjaksotTilastotKoulutustyypit
+  kaytannonKoulutus: TyoskentelyjaksotTilastotKaytannonKoulutus[]
+  tyoskentelyjaksot: TyoskentelyjaksotTilastotTyoskentelyjaksot[]
+}
+
+export interface TyoskentelyjaksotTable {
+  poissaolonSyyt: PoissaolonSyy[]
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  keskeytykset: Keskeytysaika[]
+  tilastot: TyoskentelyjaksotTilastot
+}
