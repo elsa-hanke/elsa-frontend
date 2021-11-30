@@ -42,7 +42,7 @@
                     <h3 class="mb-0">
                       {{ $t('seurantajakso') }} {{ $date(seurantajakso.alkamispaiva) }}
                       <span v-if="seurantajakso.paattymispaiva != null">
-                        -{{ $date(seurantajakso.paattymispaiva) }}
+                        - {{ $date(seurantajakso.paattymispaiva) }}
                       </span>
                     </h3>
                   </elsa-button>
