@@ -208,6 +208,7 @@
   import { durationOptions } from '@/plugins/date'
   import { BarChartRow } from '@/types'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
   import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
 
@@ -526,19 +527,23 @@
         {}
       )
 
-      return this.tyoskentelyjaksot.map((tj: any) => ({
-        ...tj,
-        tyoskentelypaikkaLabel: tj.tyoskentelypaikka.nimi,
-        ajankohtaDate: parseISO(tj.alkamispaiva),
-        ajankohta: ajankohtaLabel(this, tj),
-        tyoskentelyaikaLabel: (this as any).$duration(tilastotTyoskentelyjaksotMap[tj.id]),
-        osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
-        hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan
-          ? this.$t('kylla')
-          : this.$t('ei'),
-        keskeytykset: keskeytyksetGroupByTyoskentelyjakso[tj.id] || [],
-        keskeytyksetLength: (keskeytyksetGroupByTyoskentelyjakso[tj.id] || []).length
-      }))
+      return this.tyoskentelyjaksot
+        .map((tj: any) => ({
+          ...tj,
+          tyoskentelypaikkaLabel: tj.tyoskentelypaikka.nimi,
+          ajankohtaDate: parseISO(tj.alkamispaiva),
+          ajankohta: ajankohtaLabel(this, tj),
+          tyoskentelyaikaLabel: (this as any).$duration(tilastotTyoskentelyjaksotMap[tj.id]),
+          osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
+          hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan
+            ? this.$t('kylla')
+            : this.$t('ei'),
+          keskeytykset: keskeytyksetGroupByTyoskentelyjakso[tj.id] || [],
+          keskeytyksetLength: (keskeytyksetGroupByTyoskentelyjakso[tj.id] || []).length
+        }))
+        .sort((a: { paattymispaiva: string }, b: { paattymispaiva: string }) =>
+          sortByDateDesc(a.paattymispaiva, b.paattymispaiva)
+        )
     }
   }
 </script>
