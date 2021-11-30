@@ -83,7 +83,7 @@ describe('Uuden suoritemerkinnän lisäys', () => {
   it('Uuden suoritemerkinnän lisääminen', () => {
     setupMocks()
     cy.get('label').contains('Työskentelyjakso').click().type('{enter}')
-    cy.get('label').contains('Oppimistavoite').click().type('{downarrow}').type('{enter}')
+    cy.get('label').contains('Suorite').click().type('{downarrow}').type('{enter}')
     cy.get('label').contains('Vaativuustaso').click().type('{enter}')
     cy.get('span').contains('Valitse').click()
     cy.get('span').contains('5 Toiminta ohjaajana').click()
