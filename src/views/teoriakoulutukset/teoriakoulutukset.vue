@@ -152,15 +152,15 @@
 
     get teoriakoulutuksetFormatted() {
       return this.teoriakoulutukset
-        .sort((a: any, b: any) => sortByDateDesc(a.alkamispaiva, b.alkamispaiva))
+        .sort((a, b) => sortByDateDesc(a.alkamispaiva, b.alkamispaiva))
         .map((teoriakoulutus) => ({
           ...teoriakoulutus,
           nimi: teoriakoulutus.koulutuksenNimi,
-          pvm: `${(this as any).$date(teoriakoulutus.alkamispaiva)}${
-            teoriakoulutus.paattymispaiva
-              ? `-${(this as any).$date(teoriakoulutus.paattymispaiva)}`
-              : ''
-          }`,
+          pvm: teoriakoulutus.alkamispaiva
+            ? `${this.$date(teoriakoulutus.alkamispaiva)}${
+                teoriakoulutus.paattymispaiva ? `-${this.$date(teoriakoulutus.paattymispaiva)}` : ''
+              }`
+            : null,
           todistus: teoriakoulutus.todistukset
         }))
     }

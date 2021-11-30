@@ -72,7 +72,9 @@
         addedFiles: File[]
         deletedAsiakirjaIds: number[]
       },
-      params: any
+      params: {
+        saving: boolean
+      }
     ) {
       params.saving = true
       try {

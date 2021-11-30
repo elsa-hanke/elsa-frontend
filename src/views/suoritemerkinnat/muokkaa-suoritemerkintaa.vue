@@ -30,7 +30,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import SuoritemerkintaForm from '@/forms/suoritemerkinta-form.vue'
-  import { SuoritemerkintaLomake } from '@/types'
+  import { Suoritemerkinta, SuoritemerkintaLomake } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -56,12 +56,12 @@
       }
     ]
     suoritemerkintaLomake: null | SuoritemerkintaLomake = null
-    suoritemerkinta: any = null
+    suoritemerkinta: Suoritemerkinta | null = null
     loading = true
 
     async mounted() {
       await Promise.all([this.fetchLomake(), this.fetchSuoritemerkinta()])
-      if (this.suoritemerkinta.lukittu) {
+      if (this.suoritemerkinta?.lukittu) {
         toastFail(this, this.$t('suoritemerkinta-on-lukittu'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
@@ -99,12 +99,25 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(
+      value: {
+        tyoskentelyjaksoId: number
+        oppimistavoiteId: number
+        vaativuustaso: number
+        arviointiasteikonTaso: number
+        suorituspaiva: string
+        lisatiedot: string
+      },
+      params: {
+        saving: boolean
+        deleting: boolean
+      }
+    ) {
       params.saving = true
       try {
         this.suoritemerkinta = (
           await axios.put('erikoistuva-laakari/suoritemerkinnat', {
-            id: this.suoritemerkinta.id,
+            id: this.suoritemerkinta?.id,
             tyoskentelyjaksoId: value.tyoskentelyjaksoId,
             oppimistavoiteId: value.oppimistavoiteId,
             vaativuustaso: value.vaativuustaso,
@@ -118,7 +131,7 @@
         this.$router.push({
           name: 'suoritemerkinta',
           params: {
-            suoritemerkintaId: `${this.suoritemerkinta.id}`
+            suoritemerkintaId: `${this.suoritemerkinta?.id}`
           }
         })
       } catch {
@@ -127,7 +140,7 @@
       params.saving = false
     }
 
-    async onDelete(params: any) {
+    async onDelete(params: { saving: boolean; deleting: boolean }) {
       if (
         await confirmDelete(
           this,
@@ -137,7 +150,7 @@
       ) {
         params.deleting = true
         try {
-          await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta.id}`)
+          await axios.delete(`erikoistuva-laakari/suoritemerkinnat/${this.suoritemerkinta?.id}`)
           toastSuccess(this, this.$t('suoritemerkinta-poistettu-onnistuneesti'))
           this.$emit('skipRouteExitConfirm', true)
           this.$router.push({

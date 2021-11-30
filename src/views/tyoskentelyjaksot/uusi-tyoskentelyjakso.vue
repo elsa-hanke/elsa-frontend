@@ -29,7 +29,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
-  import { TyoskentelyjaksoLomake, ElsaError } from '@/types'
+  import { TyoskentelyjaksoLomake, ElsaError, Tyoskentelyjakso } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -53,7 +53,7 @@
       }
     ]
     tyoskentelyjaksoLomake: null | TyoskentelyjaksoLomake = null
-    tyoskentelyjakso: any = null
+    tyoskentelyjakso: Tyoskentelyjakso | null = null
     loading = true
 
     async mounted() {
@@ -71,7 +71,14 @@
       }
     }
 
-    async onSubmit(value: any, params: { saving: boolean }) {
+    async onSubmit(
+      value: {
+        tyoskentelyjakso: Tyoskentelyjakso
+        addedFiles: File[]
+        deletedAsiakirjaIds: number[]
+      },
+      params: { saving: boolean }
+    ) {
       params.saving = true
       try {
         const formData = new FormData()

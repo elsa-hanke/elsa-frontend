@@ -71,7 +71,13 @@
       }
     }
 
-    async onSubmit(value: Suoritemerkinta, params: any) {
+    async onSubmit(
+      value: Suoritemerkinta,
+      params: {
+        saving: boolean
+        deleting: boolean
+      }
+    ) {
       params.saving = true
       try {
         this.suoritemerkinta = (
