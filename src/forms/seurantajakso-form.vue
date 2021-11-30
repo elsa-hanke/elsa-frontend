@@ -626,16 +626,19 @@
           </template>
         </elsa-form-group>
         <elsa-form-group
-          v-if="form.tyoskentelyvalmiudet != null"
+          v-if="form.erikoisalanTyoskentelyvalmiudet != null"
           :label="$t('erikoisalan-tyoskentelyvalmiudet')"
         >
           <template v-slot="{ uid }">
-            <div :id="uid">{{ form.tyoskentelyvalmiudet }}</div>
+            <div :id="uid">{{ form.erikoisalanTyoskentelyvalmiudet }}</div>
           </template>
         </elsa-form-group>
-        <elsa-form-group v-if="form.jatkotoimet != null" :label="$t('jatkotoimet-ja-raportointi')">
+        <elsa-form-group
+          v-if="form.jatkotoimetJaRaportointi != null"
+          :label="$t('jatkotoimet-ja-raportointi')"
+        >
           <template v-slot="{ uid }">
-            <div :id="uid">{{ form.jatkotoimet }}</div>
+            <div :id="uid">{{ form.jatkotoimetJaRaportointi }}</div>
           </template>
         </elsa-form-group>
       </div>
@@ -672,6 +675,7 @@
               :id="uid"
               :disabled="uusiJakso"
               :min="minAlkamispaiva"
+              :initial-date="minSeuraavaKeskustelu"
               class="col-sm-4 col-md-2"
               v-model="form.seuraavanKeskustelunAjankohta"
             ></elsa-form-datepicker>
@@ -957,6 +961,11 @@
 
     get minAlkamispaiva(): Date {
       return new Date()
+    }
+
+    get minSeuraavaKeskustelu(): Date {
+      const now = new Date()
+      return new Date(now.setMonth(now.getMonth() + 6))
     }
 
     optionDisplayName(option: Kayttaja) {
