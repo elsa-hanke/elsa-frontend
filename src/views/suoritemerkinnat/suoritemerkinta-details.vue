@@ -10,7 +10,7 @@
         <span :id="uid">{{ suoritemerkintaWrapper.oppimistavoite.nimi }}</span>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="arviointiAsteikonNimi">
+    <elsa-form-group class="template-placeholder" :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
           <template>
@@ -31,22 +31,17 @@
       <template v-slot="{ uid }">
         <span :id="uid">
           <elsa-arviointiasteikon-taso
+            v-if="suoritemerkintaWrapper.arviointiasteikonTaso"
             :value="suoritemerkintaWrapper.arviointiasteikonTaso"
             :tasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
           />
         </span>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('vaativuustaso')">
+    <elsa-form-group class="template-placeholder" :label="$t('vaativuustaso')">
       <template #label-help>
         <elsa-popover>
-          <template>
-            <h3>{{ $t('vaativuustaso') }}</h3>
-            <div v-for="(taso, index) in vaativuustasot" :key="index">
-              <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-              <p>{{ $t(taso.kuvaus) }}</p>
-            </div>
-          </template>
+          <elsa-vaativuustaso-tooltip-content />
         </elsa-popover>
       </template>
       <template v-slot="{ uid }">
@@ -87,6 +82,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
   import { Suoritemerkinta } from '@/types'
   import { ArviointiasteikkoTyyppi, vaativuustasot } from '@/utils/constants'
@@ -99,7 +95,8 @@
       ElsaBadge,
       ElsaArviointiasteikonTaso,
       ElsaVaativuustaso,
-      ElsaButton
+      ElsaButton,
+      ElsaVaativuustasoTooltipContent
     }
   })
   export default class SuoritemerkintaDetails extends Vue {
@@ -138,4 +135,10 @@
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  @import '~@/styles/variables';
+
+  .template-placeholder {
+    min-height: $font-size-base * 2.5;
+  }
+</style>

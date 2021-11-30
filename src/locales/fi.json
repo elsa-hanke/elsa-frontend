@@ -76,7 +76,7 @@
   "arviointiasteikon-tason-kuvaus-ERIKOISLAAKARI": "Osaa toimia itsenäisesti erikoisalan vaativissa tehtävissä. Täyttää valmistuvan erikoislääkärin osaamistavoitteet.",
   "arviointiasteikon-tason-kuvaus-ERITYINEN_OSAAMINEN": "Omaa syvällistä tai laajaa osaamista, joka ylittää valmistuvalta erikoislääkäriltä vaadittavan.",
   "arviointiasteikon-tason-kuvaus-OHJAAJAN_TOIMINNAN_SEURAAMINEN": "Erikoistuva seuraa ohjaajan työskentelyä, muttei aluksi osallistu siihen. Kun kokemus lisääntyy, erikoistuva saa osallistua toimintaan.",
-  "arviointiasteikon-tason-kuvaus-TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA": "Erikoistuva suorittaa tehtävän itsenäisesti. Ohjaaja pystyy tarvittaessa tulemaan apuun nopeasti.",
+  "arviointiasteikon-tason-kuvaus-TOIMINTA_EPASUORAN_OHJAUKSEN_ALAISENA": "Erikoistuva suorittaa tehtävän itsenäisesti. Ohjaaja on helposti tavoitettavissa puhelimitse tai tulemaan apuun nopeasti.",
   "arviointiasteikon-tason-kuvaus-TOIMINTA_ILMAN_OHJAUSTA": "Erikoistuva suorittaa tehtävän itsenäisesti ja raportoi ohjaajalle jälkikäteen. Tässä vaiheessa erikoistuva on jo hyvin lähellä erikoislääkärin pätevyyttä.",
   "arviointiasteikon-tason-kuvaus-TOIMINTA_OHJAAJANA": "Erikoistuva suorittaa tehtävän itsenäisesti ja pystyy tarvittaessa ohjaamaan itseään kokemattomampia kollegoita.",
   "arviointiasteikon-tason-kuvaus-TOIMINTA_SUORAN_OHJAUKSEN_ALAISENA": "Erikoistuva suorittaa toimenpiteen siten, että ohjaaja on samassa huoneessa valmiina puuttumaan tilanteeseen, jos erikoistuva näyttää tarvitsevan apua.",
@@ -756,6 +756,7 @@
   "suoritettu-osa-aikatyossa": "Suoritettu osa-aikatyössä",
   "suoritettu-osa-aikatyossa-tuntia-viikossa": "Ei, suoritettu osa-aikatyössä: {tyotunnitViikossa} t/vko",
   "suorittanut-erikoistumiseen-vaadittavista-opinnoista": "Suorittanut erikoistumiseen vaadittavista opinnoista",
+  "suoritteet-kuitataan-seurantakeskusteluissa": "Suoritteet kuitataan kouluttajan kanssa seurantakeskusteluissa.",
   "suoritusarvioinnit": "Arvioinnit",
   "suoritusarviointi-on-lukittu": "Arviointia ei voi muokata, koska arviointi on liitetty seurantajaksoon.",
   "suoritusarviointi-on-lukittu-itsearviointi-luonti": "Itsearviointia ei voi tehdä, koska arviointi on liitetty seurantajaksoon.",
@@ -896,6 +897,9 @@
   "vaatimusten-tayttaminen": "Vaatimusten täyttäminen",
   "vaativa": "Vaativa",
   "vaativuustaso": "Vaativuustaso",
+  "vaativuustaso-tooltip": {
+    "ingressi": "Arvioi tekemäsi suoritteen vaativuutta huomioiden tekninen suoritus ja/tai potilaaseen tai tapahtumaan liittyvät muuttujat."
+  },
   "vah": "Väh.",
   "vahvista-aloituskeskustelu-lahetys": "Lähetyksen jälkeen lomake menee lähikouluttajan ja lähiesimiehen käsiteltäväksi. Saat ilmoituksen, kun asia on käsitelty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-koejakson-vaihe-erikoistuvalle": "Lähetyksen jälkeen lomake menee erikoistuvalle hyväksyttäväksi.",

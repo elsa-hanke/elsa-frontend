@@ -5,6 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('lisaa-suoritemerkinta') }}</h1>
+          <p class="mb-0">{{ $t('suoritteet-kuitataan-seurantakeskusteluissa') }}</p>
           <hr />
           <suoritemerkinta-form
             v-if="!loading"

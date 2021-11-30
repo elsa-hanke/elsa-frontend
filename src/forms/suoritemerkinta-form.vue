@@ -30,7 +30,7 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('oppimistavoite')" :required="true">
+    <elsa-form-group :label="$t('suorite')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
@@ -53,14 +53,16 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('vaativuustaso')" :required="true">
+    <elsa-form-group v-if="form.oppimistavoite" :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
           <template>
-            <h3>{{ $t('vaativuustaso') }}</h3>
-            <div v-for="(taso, index) in vaativuustasot" :key="index">
-              <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>
-              <p>{{ $t(taso.kuvaus) }}</p>
+            <h3>{{ arviointiAsteikonNimi }}</h3>
+            <div v-for="(asteikonTaso, index) in arviointiasteikko.tasot" :key="index">
+              <h4>
+                {{ asteikonTaso.taso }} {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
+              </h4>
+              <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
             </div>
           </template>
         </elsa-popover>
@@ -68,19 +70,18 @@
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="form.vaativuustaso"
-          :options="vaativuustasot"
-          :state="validateState('vaativuustaso')"
-          :custom-label="(value) => `${value.arvo} ${value.nimi}`"
-          track-by="arvo"
+          v-model="form.arviointiasteikonTaso"
+          :options="arviointiasteikko.tasot"
+          :custom-label="(value) => `${value.taso} ${value.nimi}`"
+          track-by="taso"
         >
           <template slot="singleLabel" slot-scope="{ option }">
-            <span class="font-weight-700">{{ option.arvo }}</span>
-            {{ $t(option.nimi) }}
+            <span class="font-weight-700">{{ option.taso }}</span>
+            {{ $t('arviointiasteikon-taso-' + option.nimi) }}
           </template>
           <template slot="option" slot-scope="{ option }">
-            <span class="font-weight-700">{{ option.arvo }}</span>
-            {{ $t(option.nimi) }}
+            <span class="font-weight-700">{{ option.taso }}</span>
+            {{ $t('arviointiasteikon-taso-' + option.nimi) }}
           </template>
         </elsa-form-multiselect>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -89,41 +90,27 @@
       </template>
     </elsa-form-group>
     <b-form-row>
-      <elsa-form-group
-        v-if="form.oppimistavoite"
-        :label="arviointiAsteikonNimi"
-        :required="true"
-        class="col-md-8"
-      >
+      <elsa-form-group :label="$t('vaativuustaso')" class="col-md-8">
         <template #label-help>
           <elsa-popover>
-            <template>
-              <h3>{{ arviointiAsteikonNimi }}</h3>
-              <div v-for="(asteikonTaso, index) in arviointiasteikko.tasot" :key="index">
-                <h4>
-                  {{ asteikonTaso.taso }} {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
-                </h4>
-                <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
-              </div>
-            </template>
+            <elsa-vaativuustaso-tooltip-content />
           </elsa-popover>
         </template>
         <template v-slot="{ uid }">
           <elsa-form-multiselect
             :id="uid"
-            v-model="form.arviointiasteikonTaso"
-            :options="arviointiasteikko.tasot"
-            :state="validateState('arviointiasteikonTaso')"
-            :custom-label="(value) => `${value.taso} ${value.nimi}`"
-            track-by="taso"
+            v-model="form.vaativuustaso"
+            :options="vaativuustasot"
+            :custom-label="(value) => `${value.arvo} ${value.nimi}`"
+            track-by="arvo"
           >
             <template slot="singleLabel" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.taso }}</span>
-              {{ $t('arviointiasteikon-taso-' + option.nimi) }}
+              <span class="font-weight-700">{{ option.arvo }}</span>
+              {{ $t(option.nimi) }}
             </template>
             <template slot="option" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.taso }}</span>
-              {{ $t('arviointiasteikon-taso-' + option.nimi) }}
+              <span class="font-weight-700">{{ option.arvo }}</span>
+              {{ $t(option.nimi) }}
             </template>
           </elsa-form-multiselect>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -181,6 +168,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import {
@@ -200,7 +188,8 @@
       ElsaFormMultiselect,
       ElsaPopover,
       ElsaFormDatepicker,
-      ElsaButton
+      ElsaButton,
+      ElsaVaativuustasoTooltipContent
     },
     validations: {
       form: {
@@ -208,12 +197,6 @@
           required
         },
         oppimistavoite: {
-          required
-        },
-        vaativuustaso: {
-          required
-        },
-        arviointiasteikonTaso: {
           required
         },
         suorituspaiva: {
@@ -297,8 +280,8 @@
         {
           tyoskentelyjaksoId: this.form?.tyoskentelyjakso.id,
           oppimistavoiteId: this.form?.oppimistavoite.id,
-          vaativuustaso: (this.form?.vaativuustaso as Vaativuustaso).arvo,
-          arviointiasteikonTaso: (this.form?.arviointiasteikonTaso as ArviointiasteikonTaso).taso,
+          vaativuustaso: (this.form?.vaativuustaso as Vaativuustaso)?.arvo,
+          arviointiasteikonTaso: (this.form?.arviointiasteikonTaso as ArviointiasteikonTaso)?.taso,
           suorituspaiva: this.form?.suorituspaiva,
           lisatiedot: this.form?.lisatiedot
         },

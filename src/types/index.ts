@@ -572,8 +572,8 @@ export type Oppimistavoite = {
 export type Suoritemerkinta = {
   id?: number
   suorituspaiva: string
-  arviointiasteikonTaso: number | ArviointiasteikonTaso | undefined
-  vaativuustaso: number | Vaativuustaso | undefined
+  arviointiasteikonTaso?: number | ArviointiasteikonTaso
+  vaativuustaso?: number | Vaativuustaso
   lisatiedot: string
   lukittu?: boolean
   oppimistavoiteId?: number
