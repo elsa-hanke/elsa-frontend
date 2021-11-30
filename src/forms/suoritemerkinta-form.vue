@@ -56,15 +56,10 @@
     <elsa-form-group v-if="form.oppimistavoite" :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
-          <template>
-            <h3>{{ arviointiAsteikonNimi }}</h3>
-            <div v-for="(asteikonTaso, index) in arviointiasteikko.tasot" :key="index">
-              <h4>
-                {{ asteikonTaso.taso }} {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
-              </h4>
-              <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
-            </div>
-          </template>
+          <elsa-arviointiasteikon-taso-tooltip-content
+            :arviointiasteikonNimi="arviointiAsteikonNimi"
+            :arviointiasteikonTasot="arviointiasteikko.tasot"
+          />
         </elsa-popover>
       </template>
       <template v-slot="{ uid }">
@@ -163,6 +158,7 @@
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
+  import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -189,7 +185,8 @@
       ElsaPopover,
       ElsaFormDatepicker,
       ElsaButton,
-      ElsaVaativuustasoTooltipContent
+      ElsaVaativuustasoTooltipContent,
+      ElsaArviointiasteikonTasoTooltipContent
     },
     validations: {
       form: {

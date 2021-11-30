@@ -24,19 +24,12 @@
                     <b-th>
                       {{ arviointiAsteikonNimi(kategoria.arviointiasteikko) }}
                       <elsa-popover>
-                        <template>
-                          <h3>{{ arviointiAsteikonNimi(kategoria.arviointiasteikko) }}</h3>
-                          <div
-                            v-for="(asteikonTaso, index) in kategoria.arviointiasteikko.tasot"
-                            :key="index"
-                          >
-                            <h4>
-                              {{ asteikonTaso.taso }}
-                              {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
-                            </h4>
-                            <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
-                          </div>
-                        </template>
+                        <elsa-arviointiasteikon-taso-tooltip
+                          :arviointiasteikonNimi="
+                            arviointiAsteikonNimi(kategoria.arviointiasteikko)
+                          "
+                          :arviointiasteikonTasot="kategoria.arviointiasteikko.tasot"
+                        />
                       </elsa-popover>
                     </b-th>
                     <b-th>{{ $t('pvm') }}</b-th>
@@ -157,6 +150,7 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -176,7 +170,8 @@
     components: {
       ElsaButton,
       ElsaPopover,
-      ElsaArviointiasteikonTaso
+      ElsaArviointiasteikonTaso,
+      ElsaArviointiasteikonTasoTooltipContent
     }
   })
   export default class Suoritemerkinnat extends Vue {
