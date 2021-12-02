@@ -35,8 +35,9 @@ const vastuuhenkilo: Module<any, any> = {
       try {
         const { data } = await api.getKoejaksot()
         commit('koejaksotSuccess', data)
-      } catch {
+      } catch (err) {
         commit('koejaksotError')
+        throw err
       }
     },
     async putKoulutussopimus({ commit, dispatch }, koulutussopimusLomake) {
@@ -45,8 +46,9 @@ const vastuuhenkilo: Module<any, any> = {
         await api.putKoulutussopimus(koulutussopimusLomake)
         commit('formSuccess')
         dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putVastuuhenkilonArvio({ commit, dispatch }, vastuuhenkilonArvioLomake) {
@@ -55,8 +57,9 @@ const vastuuhenkilo: Module<any, any> = {
         await api.putVastuuhenkilonArvio(vastuuhenkilonArvioLomake)
         commit('formSuccess')
         dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     }
   },

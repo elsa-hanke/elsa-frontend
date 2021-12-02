@@ -35,8 +35,9 @@ const kouluttaja: Module<any, any> = {
       try {
         const { data } = await api.getKoejaksot()
         commit('koejaksotSuccess', data)
-      } catch {
+      } catch (err) {
         commit('koejaksotError')
+        throw err
       }
     },
     async putKoulutussopimus({ commit, dispatch }, koulutussopimusLomake) {
@@ -45,8 +46,9 @@ const kouluttaja: Module<any, any> = {
         await api.putKoulutussopimus(koulutussopimusLomake)
         commit('formSuccess')
         await dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putAloituskeskustelu({ commit, dispatch }, aloituskeskusteluLomake) {
@@ -55,8 +57,9 @@ const kouluttaja: Module<any, any> = {
         await api.putAloituskeskustelu(aloituskeskusteluLomake)
         commit('formSuccess')
         await dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putValiarviointi({ commit, dispatch }, valiarviointiLomake) {
@@ -65,8 +68,9 @@ const kouluttaja: Module<any, any> = {
         await api.putValiarviointi(valiarviointiLomake)
         commit('formSuccess')
         await dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
@@ -75,8 +79,9 @@ const kouluttaja: Module<any, any> = {
         await api.putKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
         commit('formSuccess')
         await dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putLoppukeskustelu({ commit, dispatch }, loppukeskusteluLomake) {
@@ -85,8 +90,9 @@ const kouluttaja: Module<any, any> = {
         await api.putLoppukeskustelu(loppukeskusteluLomake)
         commit('formSuccess')
         await dispatch('getKoejaksot')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     }
   },
