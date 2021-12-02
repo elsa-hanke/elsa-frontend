@@ -65,6 +65,10 @@
     toggle() {
       this.visible = this.alwaysOpen ? true : !this.visible
     }
+
+    open() {
+      this.visible = true
+    }
   }
 </script>
 
