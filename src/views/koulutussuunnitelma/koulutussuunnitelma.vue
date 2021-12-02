@@ -1,14 +1,14 @@
 <template>
   <div class="koulutussuunnitelma">
-    <b-breadcrumb :items="items" class="mb-0" />
+    <b-breadcrumb :items="items" class="mb-0 d-print-none" />
     <b-container fluid>
       <b-row lg>
         <b-col>
           <div v-if="!loading" class="mb-4">
-            <h1>{{ $t('koulutussuunnitelma') }}</h1>
-            <p>{{ $t('koulutussuunnitelma-kuvaus') }}</p>
-            <hr />
-            <section class="mb-5">
+            <h1 class="d-print-none">{{ $t('koulutussuunnitelma') }}</h1>
+            <p class="d-print-none">{{ $t('koulutussuunnitelma-kuvaus') }}</p>
+            <hr class="d-print-none" />
+            <section class="mb-5 d-print-none">
               <h2>{{ $t('koulutusjaksot') }}</h2>
               <p>{{ $t('koulutusjaksot-kuvaus') }}</p>
               <elsa-button variant="primary" :to="{ name: 'uusi-koulutusjakso' }" class="mb-3">
@@ -75,7 +75,7 @@
             <section>
               <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
               <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
-              <div class="d-flex flex-wrap justify-content-between">
+              <div class="d-flex flex-wrap justify-content-between d-print-none">
                 <elsa-button
                   variant="primary"
                   :to="{ name: 'muokkaa-koulutussuunnitelma' }"
@@ -83,7 +83,11 @@
                 >
                   {{ $t('muokkaa-tietoja') }}
                 </elsa-button>
-                <elsa-button variant="link" class="text-decoration-none mb-3" :disabled="true">
+                <elsa-button
+                  variant="link"
+                  class="text-decoration-none mb-3"
+                  @click="onPrintSuunnitelma"
+                >
                   <font-awesome-icon icon="print" fixed-width class="mr-1" />
                   {{ $t('tulosta-suunnitelma') }}
                 </elsa-button>
@@ -106,7 +110,7 @@
                   />
                 </b-card-text>
               </b-card>
-              <elsa-accordian icon="envelope-open-text">
+              <elsa-accordian ref="motivaatiokirjeAccordian" icon="envelope-open-text">
                 <template #title>
                   {{ $t('motivaatiokirje') }}
                   <span
@@ -130,7 +134,7 @@
                   {{ koulutussuunnitelma.motivaatiokirje }}
                 </div>
               </elsa-accordian>
-              <elsa-accordian icon="toolbox">
+              <elsa-accordian ref="opiskeluJaTyohistoriaYksityinenAccordian" icon="toolbox">
                 <template #title>
                   {{ $t('opiskelu-ja-tyohistoria') }}
                   <span
@@ -144,7 +148,7 @@
                   {{ koulutussuunnitelma.opiskeluJaTyohistoria }}
                 </div>
               </elsa-accordian>
-              <elsa-accordian icon="dumbbell">
+              <elsa-accordian ref="vahvuudetYksityinenAccordian" icon="dumbbell">
                 <template #title>
                   {{ $t('vahvuudet') }}
                   <span
@@ -158,7 +162,10 @@
                   {{ koulutussuunnitelma.vahvuudet }}
                 </div>
               </elsa-accordian>
-              <elsa-accordian :icon="['far', 'eye']">
+              <elsa-accordian
+                ref="tulevaisuudenVisiointiYksityinenAccordian"
+                :icon="['far', 'eye']"
+              >
                 <template #title>
                   {{ $t('tulevaisuuden-visiointi') }}
                   <span
@@ -172,7 +179,7 @@
                   {{ koulutussuunnitelma.tulevaisuudenVisiointi }}
                 </div>
               </elsa-accordian>
-              <elsa-accordian icon="chart-line">
+              <elsa-accordian ref="osaamisenKartuttaminenYksityinenAccordian" icon="chart-line">
                 <template #title>
                   {{ $t('osaamisen-kartuttaminen') }}
                   <span
@@ -186,7 +193,7 @@
                   {{ koulutussuunnitelma.osaamisenKartuttaminen }}
                 </div>
               </elsa-accordian>
-              <elsa-accordian icon="theater-masks">
+              <elsa-accordian ref="elamankenttaYksityinenAccordian" icon="theater-masks">
                 <template #title>
                   {{ $t('elamankentta') }}
                   <span
@@ -264,6 +271,16 @@
       } catch {
         toastFail(this, this.$t('koulutusjaksojen-hakeminen-epaonnistui'))
       }
+    }
+
+    onPrintSuunnitelma() {
+      ;(this.$refs.motivaatiokirjeAccordian as ElsaAccordian).open()
+      ;(this.$refs.opiskeluJaTyohistoriaYksityinenAccordian as ElsaAccordian).open()
+      ;(this.$refs.vahvuudetYksityinenAccordian as ElsaAccordian).open()
+      ;(this.$refs.tulevaisuudenVisiointiYksityinenAccordian as ElsaAccordian).open()
+      ;(this.$refs.osaamisenKartuttaminenYksityinenAccordian as ElsaAccordian).open()
+      ;(this.$refs.elamankenttaYksityinenAccordian as ElsaAccordian).open()
+      setTimeout(() => window.print(), 500) // Varmistetaan, että sisältöjen avaamisanimaatiot ovat suoritettu.
     }
 
     get linkki() {

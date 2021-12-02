@@ -1,13 +1,13 @@
 <template>
   <div id="app" class="d-flex position-relative flex-column justify-content-between min-vh-100">
     <router-view class="router-view" />
-    <b-link v-if="isLoggedIn" @click="openPalauteFormModal">
+    <b-link v-if="isLoggedIn" @click="openPalauteFormModal" class="d-print-none">
       <div class="feedback-link">
         <font-awesome-icon class="feedback-icon" :icon="['far', 'envelope']" fixed-width />
         <span class="feedback-text">{{ $t('palaute') }}</span>
       </div>
     </b-link>
-    <footer class="pb-4 bg-white">
+    <footer class="pb-4 bg-white d-print-none">
       <div class="d-flex justify-content-center">
         <b-link @click="openTietosuojaselosteModal" class="my-4 mx-3 mx-lg-4">
           {{ $t('tietosuojaseloste') }}
