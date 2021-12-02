@@ -9,6 +9,14 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('toimipaikalla-koulutussopimus.header')" :required="true">
+      <template #label-help>
+        <elsa-popover>
+          <template>
+            <h3>{{ $t('toimipaikan-koulutussopimukset') }}</h3>
+            <p class="mb-0" v-html="$t('toimipaikan-koulutussopimukset-tooltip', { linkki })" />
+          </template>
+        </elsa-popover>
+      </template>
       <template v-slot="{ uid }">
         <b-form-radio-group
           :id="uid"
@@ -46,13 +54,15 @@
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import { Koulutuspaikka } from '@/types'
   import { defaultKoulutuspaikka } from '@/utils/constants'
 
   @Component({
     components: {
       ElsaFormGroup,
-      ElsaButton
+      ElsaButton,
+      ElsaPopover
     },
     validations: {
       form: {
@@ -107,6 +117,14 @@
 
     get yliopistotOptions() {
       return this.yliopistot.map((y: any) => ({ text: y.nimi, value: y.nimi }))
+    }
+
+    get linkki() {
+      return `<a
+                href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/koulutuspaikat"
+                target="_blank"
+                rel="noopener noreferrer"
+              >${this.$t('tarkista')}</a>`
     }
   }
 </script>

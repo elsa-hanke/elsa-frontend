@@ -30,7 +30,7 @@
             <elsa-popover>
               <template>
                 <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
-                <p>{{ $t('koejakson-alkamis-tooltip') }}</p>
+                <p class="mb-0">{{ $t('koejakson-alkamis-tooltip') }}</p>
               </template>
             </elsa-popover>
           </template>
