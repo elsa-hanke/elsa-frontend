@@ -148,7 +148,8 @@
         await confirmDelete(
           this,
           this.$t('poista-teoriakoulutus') as string,
-          (this.$t('teoriakoulutuksen') as string).toLowerCase()
+          (this.$t('teoriakoulutuksen') as string).toLowerCase(),
+          this.$t('poista-teoriakoulutus-liitetiedostot-huomio') as string
         )
       ) {
         this.deleting = true
