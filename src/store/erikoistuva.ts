@@ -46,8 +46,9 @@ const erikoistuva: Module<any, any> = {
       try {
         const { data } = await api.getKoejakso()
         commit('koejaksoSuccess', data)
-      } catch {
+      } catch (err) {
         commit('koejaksoError')
+        throw err
       }
     },
     async postKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
@@ -56,8 +57,9 @@ const erikoistuva: Module<any, any> = {
         await api.postKoulutussopimus(koulutussopimusLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
@@ -66,8 +68,9 @@ const erikoistuva: Module<any, any> = {
         await api.putKoulutussopimus(koulutussopimusLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
@@ -76,8 +79,9 @@ const erikoistuva: Module<any, any> = {
         await api.postAloituskeskustelu(aloituskeskusteluLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
@@ -86,8 +90,9 @@ const erikoistuva: Module<any, any> = {
         await api.putAloituskeskustelu(aloituskeskusteluLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async postValiarviointi({ dispatch, commit }, valiarviointiLomake) {
@@ -96,8 +101,9 @@ const erikoistuva: Module<any, any> = {
         await api.postValiarviointi(valiarviointiLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putValiarviointi({ dispatch, commit }, valiarviointiLomake) {
@@ -106,8 +112,9 @@ const erikoistuva: Module<any, any> = {
         await api.putValiarviointi(valiarviointiLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async postKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
@@ -116,8 +123,9 @@ const erikoistuva: Module<any, any> = {
         await api.postKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
@@ -126,8 +134,9 @@ const erikoistuva: Module<any, any> = {
         await api.putKehittamistoimenpiteet(kehittamistoimenpiteetLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async postLoppukeskustelu({ dispatch, commit }, loppukeskusteluLomake) {
@@ -136,8 +145,9 @@ const erikoistuva: Module<any, any> = {
         await api.postLoppukeskustelu(loppukeskusteluLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putLoppukeskustelu({ dispatch, commit }, loppukeskusteluLomake) {
@@ -146,8 +156,9 @@ const erikoistuva: Module<any, any> = {
         await api.putLoppukeskustelu(loppukeskusteluLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async postVastuuhenkilonArvio({ dispatch, commit }, vastuuhenkilonArvioLomake) {
@@ -156,8 +167,9 @@ const erikoistuva: Module<any, any> = {
         await api.postVastuuhenkilonArvio(vastuuhenkilonArvioLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async putVastuuhenkilonArvio({ dispatch, commit }, vastuuhenkilonArvioLomake) {
@@ -166,8 +178,9 @@ const erikoistuva: Module<any, any> = {
         await api.putVastuuhenkilonArvio(vastuuhenkilonArvioLomake)
         commit('formSuccess')
         await dispatch('getKoejakso')
-      } catch {
+      } catch (err) {
         commit('formError')
+        throw err
       }
     },
     async getKouluttajat({ commit }) {
@@ -175,8 +188,9 @@ const erikoistuva: Module<any, any> = {
       try {
         const { data } = await api.getKouluttajat()
         commit('kouluttajatSuccess', data)
-      } catch {
+      } catch (err) {
         commit('kouluttajatError')
+        throw err
       }
     }
   },
