@@ -115,6 +115,9 @@
 
   ::v-deep {
     min-height: 35px !important;
+    &.multiselect--active {
+      z-index: $zindex-dropdown;
+    }
 
     &.multiselect--disabled {
       background: transparent;
@@ -218,6 +221,7 @@
     .multiselect__content-wrapper {
       font-size: 0.875rem;
       border-color: $gray-400 !important;
+      z-index: $zindex-dropdown;
 
       .multiselect__option {
         padding: 0.75rem;

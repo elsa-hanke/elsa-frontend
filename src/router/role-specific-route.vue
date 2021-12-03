@@ -35,7 +35,7 @@
     @Prop({ required: true, default: [] })
     allowedRoles!: string[]
 
-    @Prop({ required: false, type: Boolean, default: false })
+    @Prop({ required: false, type: Boolean, default: true })
     confirmRouteExit!: boolean
 
     loading = true
@@ -51,7 +51,7 @@
 
     @Watch('$route', { immediate: true, deep: true })
     async onUrlChange() {
-      this.skipRouteExitConfirm = !this.confirmRouteExit
+      this.skipRouteExitConfirm = this.confirmRouteExit
       await store.dispatch('auth/authorize')
       this.loading = false
     }

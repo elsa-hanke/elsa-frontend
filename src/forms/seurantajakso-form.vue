@@ -401,6 +401,7 @@
           <b-form-textarea
             :id="uid"
             v-model="form.omaArviointi"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('omaArviointi')"
             rows="3"
           />
@@ -418,7 +419,12 @@
       </elsa-form-group>
       <elsa-form-group :label="$t('lisahuomioita')">
         <template v-slot="{ uid }">
-          <b-form-textarea :id="uid" v-model="form.lisahuomioita" rows="3" />
+          <b-form-textarea
+            :id="uid"
+            v-model="form.lisahuomioita"
+            @input="$emit('skipRouteExitConfirm', false)"
+            rows="3"
+          />
         </template>
         <template #label-help>
           <elsa-popover>
@@ -430,7 +436,12 @@
       </elsa-form-group>
       <elsa-form-group :label="$t('seuraavan-jakson-tavoitteet')">
         <template v-slot="{ uid }">
-          <b-form-textarea :id="uid" v-model="form.seuraavanJaksonTavoitteet" rows="3" />
+          <b-form-textarea
+            :id="uid"
+            v-model="form.seuraavanJaksonTavoitteet"
+            @input="$emit('skipRouteExitConfirm', false)"
+            rows="3"
+          />
         </template>
         <template #label-help>
           <elsa-popover>
@@ -484,6 +495,7 @@
             <template v-slot="{ uid }">
               <elsa-form-multiselect
                 v-model="form.kouluttaja"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :id="uid"
                 :options="kouluttajat"
                 :state="validateState('kouluttaja')"
@@ -528,6 +540,7 @@
             <b-form-radio-group
               :id="uid"
               v-model="form.edistyminenTavoitteidenMukaista"
+              @input="$emit('skipRouteExitConfirm', false)"
               :options="edistyminenVaihtoehdot"
               :state="validateState('edistyminenTavoitteidenMukaista')"
               stacked
@@ -550,6 +563,7 @@
             <b-form-textarea
               :id="uid"
               v-model="form.huolenaiheet"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('huolenaiheet')"
               rows="3"
             />
@@ -567,6 +581,7 @@
             <b-form-textarea
               :id="uid"
               v-model="form.kouluttajanArvio"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('kouluttajanArvio')"
               rows="3"
             />
@@ -584,7 +599,12 @@
         </elsa-form-group>
         <elsa-form-group :label="$t('erikoisalan-tyoskentelyvalmiudet')" class="mt-4">
           <template v-slot="{ uid }">
-            <b-form-textarea :id="uid" v-model="form.erikoisalanTyoskentelyvalmiudet" rows="3" />
+            <b-form-textarea
+              :id="uid"
+              v-model="form.erikoisalanTyoskentelyvalmiudet"
+              @input="$emit('skipRouteExitConfirm', false)"
+              rows="3"
+            />
           </template>
           <template #label-help>
             <elsa-popover>
@@ -596,7 +616,12 @@
         </elsa-form-group>
         <elsa-form-group :label="$t('jatkotoimet-ja-raportointi')" class="mt-4">
           <template v-slot="{ uid }">
-            <b-form-textarea :id="uid" v-model="form.jatkotoimetJaRaportointi" rows="3" />
+            <b-form-textarea
+              :id="uid"
+              v-model="form.jatkotoimetJaRaportointi"
+              @input="$emit('skipRouteExitConfirm', false)"
+              rows="3"
+            />
           </template>
           <template #label-help>
             <elsa-popover>
@@ -660,6 +685,7 @@
             <b-form-textarea
               :id="uid"
               v-model="form.seurantakeskustelunYhteisetMerkinnat"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('seurantakeskustelunYhteisetMerkinnat')"
               :disabled="uusiJakso"
               rows="3"
@@ -678,6 +704,7 @@
               :initial-date="minSeuraavaKeskustelu"
               class="col-sm-4 col-md-2"
               v-model="form.seuraavanKeskustelunAjankohta"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
           </template>
         </elsa-form-group>

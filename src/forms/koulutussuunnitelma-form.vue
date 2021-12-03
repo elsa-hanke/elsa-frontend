@@ -45,7 +45,12 @@
           :showInfoIfEmpty="false"
           @deleteAsiakirja="onMotivaatiokirjeFileDeleted"
         />
-        <b-form-textarea :id="uid" v-model="form.motivaatiokirje" rows="3" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.motivaatiokirje"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="3"
+        />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -53,12 +58,21 @@
       :help="$t('opiskelu-ja-tyohistoria-tooltip')"
     >
       <template #label-right>
-        <b-form-checkbox v-model="form.opiskeluJaTyohistoriaYksityinen" class="py-0">
+        <b-form-checkbox
+          v-model="form.opiskeluJaTyohistoriaYksityinen"
+          @input="$emit('skipRouteExitConfirm', false)"
+          class="py-0"
+        >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.opiskeluJaTyohistoria" rows="3" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.opiskeluJaTyohistoria"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="3"
+        />
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('vahvuudet')" :help="$t('vahvuudet-tooltip')">
@@ -68,7 +82,12 @@
         </b-form-checkbox>
       </template>
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.vahvuudet" rows="3" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.vahvuudet"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="3"
+        />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -76,12 +95,21 @@
       :help="$t('tulevaisuuden-visiointi-tooltip')"
     >
       <template #label-right>
-        <b-form-checkbox v-model="form.tulevaisuudenVisiointiYksityinen" class="py-0">
+        <b-form-checkbox
+          v-model="form.tulevaisuudenVisiointiYksityinen"
+          @input="$emit('skipRouteExitConfirm', false)"
+          class="py-0"
+        >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.tulevaisuudenVisiointi" rows="3" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.tulevaisuudenVisiointi"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="3"
+        />
       </template>
     </elsa-form-group>
     <elsa-form-group
@@ -89,22 +117,40 @@
       :help="$t('osaamisen-kartuttaminen-tooltip')"
     >
       <template #label-right>
-        <b-form-checkbox v-model="form.osaamisenKartuttaminenYksityinen" class="py-0">
+        <b-form-checkbox
+          v-model="form.osaamisenKartuttaminenYksityinen"
+          @input="$emit('skipRouteExitConfirm', false)"
+          class="py-0"
+        >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.osaamisenKartuttaminen" rows="3" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.osaamisenKartuttaminen"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="3"
+        />
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('elamankentta')" :help="$t('elamankentta-tooltip')">
       <template #label-right>
-        <b-form-checkbox v-model="form.elamankenttaYksityinen" class="py-0">
+        <b-form-checkbox
+          v-model="form.elamankenttaYksityinen"
+          @input="$emit('skipRouteExitConfirm', false)"
+          class="py-0"
+        >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.elamankentta" rows="3" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.elamankentta"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="3"
+        />
       </template>
     </elsa-form-group>
     <div class="d-flex flex-row-reverse flex-wrap">
@@ -189,11 +235,13 @@
       Vue.set(this.form, 'koulutussuunnitelmaAsiakirja', mapFile(file))
       this.form.koulutussuunnitelmaFile = file
       this.form.koulutussuunnitelmaAsiakirjaUpdated = true
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onKoulutussuunnitelmaFileDeleted() {
       Vue.set(this.form, 'koulutussuunnitelmaAsiakirja', null)
       this.form.koulutussuunnitelmaAsiakirjaUpdated = true
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onMotivaatiokirjeFileAdded(files: File[]) {
@@ -201,11 +249,13 @@
       Vue.set(this.form, 'motivaatiokirjeAsiakirja', mapFile(file))
       this.form.motivaatiokirjeFile = file
       this.form.motivaatiokirjeAsiakirjaUpdated = true
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onMotivaatiokirjeFileDeleted() {
       Vue.set(this.form, 'motivaatiokirjeAsiakirja', null)
       this.form.motivaatiokirjeAsiakirjaUpdated = true
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onSubmit() {

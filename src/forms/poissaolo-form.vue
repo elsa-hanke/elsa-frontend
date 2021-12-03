@@ -12,6 +12,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.poissaolonSyy"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="poissaolonSyytSorted"
           :state="validateState('poissaolonSyy')"
           label="nimi"
@@ -31,6 +32,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           label="label"
@@ -52,6 +54,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.alkamispaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('alkamispaiva')"
             :min="minAlkamispaiva"
             :max="maxAlkamispaiva"
@@ -70,6 +73,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.paattymispaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('paattymispaiva')"
             :min="minPaattymispaiva"
             :max="maxPaattymispaiva"
@@ -83,6 +87,7 @@
     </b-form-row>
     <b-form-checkbox
       v-model="form.kokoTyoajanPoissaolo"
+      @change="$emit('skipRouteExitConfirm', false)"
       :class="{ 'mb-3': !form.kokoTyoajanPoissaolo }"
     >
       {{ $t('koko-tyoajan-poissaolo') }}
@@ -106,6 +111,7 @@
             <b-form-input
               :id="uid"
               v-model.number="form.poissaoloprosentti"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('poissaoloprosentti')"
               type="number"
               step="any"

@@ -12,6 +12,7 @@
             :value="paivakirjamerkinta"
             @submit="onSubmit"
             @cancel="onCancel"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
             :aihekategoriat="aihekategoriat"
             :teoriakoulutukset="teoriakoulutukset"
           />

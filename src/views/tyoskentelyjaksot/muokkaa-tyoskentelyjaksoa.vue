@@ -15,6 +15,7 @@
             :asiakirjat="tyoskentelyjakso.asiakirjat"
             @submit="onSubmit"
             @cancel="onCancel"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />

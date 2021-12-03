@@ -43,6 +43,7 @@
             @submit="onSubmit"
             @cancel="onCancel"
             @delete="onDelete"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
         </div>
       </div>

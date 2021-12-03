@@ -291,6 +291,7 @@
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.arviointiasteikonTaso"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :options="arviointiasteikonTasot"
                 :state="validateState('arviointiasteikonTaso')"
                 :custom-label="(value) => `${value.taso} ${value.nimi}`"
@@ -322,6 +323,7 @@
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.vaativuustaso"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :options="vaativuustasot"
                 :custom-label="(value) => `${value.arvo} ${value.nimi}`"
                 track-by="arvo"
@@ -347,6 +349,7 @@
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.arviointityokalut"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :options="arviointityokalut"
                 :custom-label="(value) => `${value.nimi}`"
                 :multiple="true"
@@ -410,6 +413,7 @@
             <b-form-textarea
               :id="uid"
               v-model="form.sanallinenArviointi"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sanallinenArviointi')"
               rows="5"
             ></b-form-textarea>
@@ -423,13 +427,17 @@
           :label="$t('lisatiedot')"
         >
           <template v-slot="{ uid }">
-            <b-form-checkbox v-model="form.perustuuMuuhun">
+            <b-form-checkbox
+              v-model="form.perustuuMuuhun"
+              @input="$emit('skipRouteExitConfirm', false)"
+            >
               {{ $t('arviointi-perustuu-lasna') }}
             </b-form-checkbox>
             <div v-if="form.perustuuMuuhun" class="arviointi-perustuu">
               <b-form-radio-group
                 :id="uid"
                 v-model="form.arviointiPerustuu"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :options="arviointiperusteet"
                 :state="validateState('arviointiPerustuu')"
                 stacked
@@ -443,6 +451,7 @@
               <b-form-input
                 v-if="muuValittu"
                 v-model="form.muuPeruste"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState('muuPeruste')"
               ></b-form-input>
               <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>

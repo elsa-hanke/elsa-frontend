@@ -6,6 +6,7 @@
           <elsa-form-multiselect
             :id="uid"
             v-model="form.tyoskentelypaikka.kunta"
+            @input="$emit('skipRouteExitConfirm', false)"
             :options="kunnatFormatted"
             :state="validateState('tyoskentelypaikka.kunta')"
             label="abbreviation"
@@ -26,6 +27,7 @@
           <b-form-input
             :id="uid"
             v-model="form.tyoskentelypaikka.nimi"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('tyoskentelypaikka.nimi')"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -43,6 +45,7 @@
           <b-form-radio-group
             :id="uid"
             v-model="form.tyoskentelypaikka.tyyppi"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('tyoskentelypaikka.tyyppi')"
             :options="tyypit"
             name="tyoskentelyjakso-tyyppi"
@@ -50,6 +53,7 @@
           ></b-form-radio-group>
           <b-form-radio
             v-model="form.tyoskentelypaikka.tyyppi"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('tyoskentelypaikka.tyyppi')"
             name="tyoskentelyjakso-tyyppi"
             value="MUU"
@@ -65,6 +69,7 @@
           <div v-if="form.tyoskentelypaikka.tyyppi === 'MUU'" class="pl-4">
             <b-form-input
               v-model="form.tyoskentelypaikka.muuTyyppi"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('tyoskentelypaikka.muuTyyppi')"
             ></b-form-input>
             <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
@@ -127,6 +132,7 @@
             <elsa-form-datepicker
               :id="uid"
               v-model="form.alkamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('alkamispaiva')"
               :max="maxAlkamispaiva"
             ></elsa-form-datepicker>
@@ -144,6 +150,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.paattymispaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
             :min="minPaattymispaiva"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
@@ -159,6 +166,7 @@
         <div v-if="!value.tapahtumia">
           <b-form-radio
             v-model="form.kaytannonKoulutus"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
             :value="omanErikoisalanKoulutus"
@@ -167,6 +175,7 @@
           </b-form-radio>
           <b-form-radio
             v-model="form.kaytannonKoulutus"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
             :value="omaaErikoisalaaTukeva"
@@ -181,6 +190,7 @@
           <div v-if="form.kaytannonKoulutus === omaaErikoisalaaTukeva" class="pl-4">
             <elsa-form-multiselect
               v-model="form.omaaErikoisalaaTukeva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :options="erikoisalatFormatted"
               :state="validateState('omaaErikoisalaaTukeva')"
               label="nimi"
@@ -190,6 +200,7 @@
           </div>
           <b-form-radio
             v-model="form.kaytannonKoulutus"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
             :value="tutkimustyo"
@@ -198,6 +209,7 @@
           </b-form-radio>
           <b-form-radio
             v-model="form.kaytannonKoulutus"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('kaytannonKoulutus')"
             name="kaytannon-koulutus-tyyppi"
             :value="terveyskeskustyo"
@@ -219,7 +231,11 @@
       :label="$t('lisatiedot')"
     >
       <template v-slot="{ uid }">
-        <b-form-checkbox :id="uid" v-model="form.hyvaksyttyAiempaanErikoisalaan">
+        <b-form-checkbox
+          :id="uid"
+          v-model="form.hyvaksyttyAiempaanErikoisalaan"
+          @input="$emit('skipRouteExitConfirm', false)"
+        >
           {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
         </b-form-checkbox>
       </template>
@@ -476,6 +492,7 @@
         ...mapFiles(addedFilesNotInDeletedArray),
         ...this.newAsiakirjatMapped
       ]
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
@@ -491,6 +508,7 @@
           (a) => a.nimi !== asiakirja.nimi
         )
       }
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onOsaaikaprosenttiInput(value: string) {
@@ -499,6 +517,7 @@
       } else {
         this.form.osaaikaprosentti = parseFloat(value)
       }
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onCancel() {

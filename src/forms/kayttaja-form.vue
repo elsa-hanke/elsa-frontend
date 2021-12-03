@@ -5,6 +5,7 @@
         <b-form-radio
           :id="uid"
           v-model="form.rooli"
+          @input="$emit('skipRouteExitConfirm', false)"
           :aria-describedby="ariaDescribedby"
           :name="$t('erikoistuva-laakari')"
           :value="erikoistuvaLaakari"
@@ -19,6 +20,7 @@
           <b-form-input
             :id="uid"
             v-model="form.erikoistuvaLaakari.etunimi"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateErikoistuvaLaakariState('etunimi')"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -31,6 +33,7 @@
           <b-form-input
             :id="uid"
             v-model="form.erikoistuvaLaakari.sukunimi"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateErikoistuvaLaakariState('sukunimi')"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -44,6 +47,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.erikoistuvaLaakari.yliopisto"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="yliopistot"
           :state="validateErikoistuvaLaakariState('yliopisto')"
           label="nimi"
@@ -59,6 +63,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.erikoistuvaLaakari.erikoisala"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="erikoisalat"
           :state="validateErikoistuvaLaakariState('erikoisala')"
           label="nimi"
@@ -74,6 +79,7 @@
         <b-form-input
           :id="uid"
           v-model="form.erikoistuvaLaakari.opiskelijatunnus"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateErikoistuvaLaakariState('opiskelijatunnus')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -91,6 +97,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.erikoistuvaLaakari.opintooikeusAlkaa"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateErikoistuvaLaakariState('opintooikeusAlkaa')"
             :max="maxAlkamispaiva"
           ></elsa-form-datepicker>
@@ -108,6 +115,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.erikoistuvaLaakari.opintooikeusPaattyy"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateErikoistuvaLaakariState('opintooikeusPaattyy')"
             :min="minPaattymispaiva"
             class="datepicker-range"
@@ -123,6 +131,7 @@
         <elsa-form-datepicker
           :id="uid"
           v-model="form.erikoistuvaLaakari.opintosuunnitelmaKaytossaPvm"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateErikoistuvaLaakariState('opintosuunnitelmaKaytossaPvm')"
         ></elsa-form-datepicker>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -135,6 +144,7 @@
         <b-form-input
           :id="uid"
           v-model="form.erikoistuvaLaakari.sahkopostiosoite"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateErikoistuvaLaakariState('sahkopostiosoite')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -147,6 +157,7 @@
         <b-form-input
           :id="uid"
           v-model="form.erikoistuvaLaakari.sahkopostiosoiteUudelleen"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateErikoistuvaLaakariState('sahkopostiosoiteUudelleen')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">

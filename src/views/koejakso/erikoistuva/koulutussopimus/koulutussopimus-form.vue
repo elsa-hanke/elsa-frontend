@@ -7,6 +7,7 @@
             <elsa-form-datepicker
               :id="uid"
               v-model="form.opintooikeudenMyontamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('opintooikeudenMyontamispaiva')"
               :max="form.opintooikeudenPaattymispaiva"
             ></elsa-form-datepicker>
@@ -38,6 +39,7 @@
             <elsa-form-datepicker
               :id="uid"
               v-model="form.koejaksonAlkamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonAlkamispaiva')"
               :min="form.opintooikeudenMyontamispaiva"
               :max="maxKoejaksonAlkamispaiva"
@@ -60,6 +62,7 @@
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanSahkoposti"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanSahkoposti')"
             />
             <b-form-invalid-feedback
@@ -84,6 +87,7 @@
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanPuhelinnumero"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanPuhelinnumero')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -357,22 +361,27 @@
 
     addKoulutuspaikka() {
       this.form.koulutuspaikat.push(Object.assign({}, defaultKoulutuspaikka))
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     deleteKoulutuspaikka() {
       this.form.koulutuspaikat.pop()
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     selectKouluttaja(kouluttaja: Kouluttaja, index: number) {
       Vue.set(this.form.kouluttajat, index, kouluttaja)
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     addKouluttaja() {
       this.form.kouluttajat.push(defaultKouluttaja)
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     deleteKouluttaja() {
       this.form.kouluttajat.pop()
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     get kouluttajatList() {
@@ -412,6 +421,7 @@
 
     updateVastuuhenkilo(id: number) {
       this.form.vastuuhenkilo = this.vastuuhenkilot.filter((a) => a.id === id)[0]
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     saveAndExit() {

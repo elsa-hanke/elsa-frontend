@@ -19,6 +19,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           label="label"
@@ -35,6 +36,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.oppimistavoite"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="oppimistavoitteenKategoriat"
           :state="validateState('oppimistavoite')"
           group-values="oppimistavoitteet"
@@ -66,6 +68,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.arviointiasteikonTaso"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="arviointiasteikko.tasot"
           :custom-label="(value) => `${value.taso} ${value.nimi}`"
           track-by="taso"
@@ -95,6 +98,7 @@
           <elsa-form-multiselect
             :id="uid"
             v-model="form.vaativuustaso"
+            @input="$emit('skipRouteExitConfirm', false)"
             :options="vaativuustasot"
             :custom-label="(value) => `${value.arvo} ${value.nimi}`"
             track-by="arvo"
@@ -118,6 +122,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.suorituspaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('suorituspaiva')"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
@@ -130,7 +135,12 @@
     </b-form-row>
     <elsa-form-group :label="$t('lisatiedot')">
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.lisatiedot" rows="5"></b-form-textarea>
+        <b-form-textarea
+          :id="uid"
+          v-model="form.lisatiedot"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="5"
+        ></b-form-textarea>
       </template>
     </elsa-form-group>
     <div class="text-right">
@@ -225,7 +235,7 @@
     })
     value!: Suoritemerkinta
 
-    form?: Suoritemerkinta
+    form!: Suoritemerkinta
     vaativuustasot = vaativuustasot
     params = {
       saving: false,

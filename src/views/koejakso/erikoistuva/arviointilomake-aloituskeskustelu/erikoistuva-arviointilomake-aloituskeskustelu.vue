@@ -71,6 +71,7 @@
           :henkilot="kouluttajat"
           @saveAndExit="onSaveDraftAndExit"
           @submit="onSubmit"
+          @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
         ></arviointilomake-aloituskeskustelu-form>
 
         <arviointilomake-aloituskeskustelu-readonly

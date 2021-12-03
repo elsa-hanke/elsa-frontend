@@ -20,6 +20,7 @@
             @submit="onSubmit"
             @cancel="onCancel"
             @uusiHaku="onUusiHaku"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
         </div>
         <div v-else>

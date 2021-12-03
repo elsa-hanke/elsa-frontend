@@ -15,6 +15,7 @@
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
             @submit="onSubmit"
             @delete="onDelete"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
