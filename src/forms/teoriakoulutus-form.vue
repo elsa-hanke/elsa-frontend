@@ -5,6 +5,7 @@
         <b-form-input
           :id="uid"
           v-model="form.koulutuksenNimi"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('koulutuksenNimi')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -17,6 +18,7 @@
         <b-form-input
           :id="uid"
           v-model="form.koulutuksenPaikka"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('koulutuksenPaikka')"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -35,6 +37,7 @@
             <elsa-form-datepicker
               :id="uid"
               v-model="form.alkamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('alkamispaiva')"
               :max="form.paattymispaiva"
             ></elsa-form-datepicker>
@@ -49,6 +52,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.paattymispaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
             :min="form.alkamispaiva"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
@@ -201,6 +205,7 @@
       } else {
         this.form.erikoistumiseenHyvaksyttavaTuntimaara = parseFloat(value)
       }
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onFilesAdded(files: File[]) {
@@ -222,6 +227,7 @@
         ...mapFiles(addedFilesNotInDeletedArray),
         ...this.newAsiakirjatMapped
       ]
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
@@ -233,6 +239,7 @@
           (a) => a.nimi !== asiakirja.nimi
         )
       }
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onSubmit() {

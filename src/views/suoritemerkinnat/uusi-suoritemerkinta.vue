@@ -14,6 +14,7 @@
             :erikoisalat="erikoisalat"
             :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
             @submit="onSubmit"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />

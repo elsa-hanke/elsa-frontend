@@ -2,7 +2,12 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('koulutusjakson-nimi')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input :id="uid" v-model="form.nimi" :state="validateState('nimi')"></b-form-input>
+        <b-form-input
+          :id="uid"
+          v-model="form.nimi"
+          @input="$emit('skipRouteExitConfirm', false)"
+          :state="validateState('nimi')"
+        ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
@@ -33,6 +38,7 @@
             :id="uid"
             :value="form.tyoskentelyjaksot"
             v-model="form.tyoskentelyjaksot[index]"
+            @input="$emit('skipRouteExitConfirm', false)"
             :options="tyoskentelyjaksotFiltered"
             label="label"
             track-by="id"
@@ -65,6 +71,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.osaamistavoitteet"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="arvioitavanKokonaisuudenKategoriat"
           group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
@@ -84,7 +91,12 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('muut-osaamistavoitteet')">
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.muutOsaamistavoitteet" rows="5" />
+        <b-form-textarea
+          :id="uid"
+          v-model="form.muutOsaamistavoitteet"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="5"
+        />
       </template>
     </elsa-form-group>
     <hr />
@@ -241,6 +253,7 @@
         omaaErikoisalaaTukeva: null,
         hyvaksyttyAiempaanErikoisalaan: null
       })
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     deleteTyoskentelyjakso(index: number) {
@@ -250,6 +263,7 @@
         ...this.form,
         tyoskentelyjaksot
       }
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     onSubmit() {

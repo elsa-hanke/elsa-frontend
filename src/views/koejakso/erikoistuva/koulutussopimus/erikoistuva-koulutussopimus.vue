@@ -77,6 +77,7 @@
               :yliopistot="yliopistot"
               @saveAndExit="onSaveDraftAndExit"
               @submit="onSubmit"
+              @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
             ></koulutussopimus-form>
 
             <koulutussopimus-readonly

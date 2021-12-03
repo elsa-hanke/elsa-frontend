@@ -122,6 +122,7 @@
                   :kouluttaja="kouluttaja"
                   :index="index"
                   @ready="onChildFormValid"
+                  @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
                 ></kouluttaja-koulutussopimus-form>
 
                 <koulutussopimus-readonly

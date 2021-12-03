@@ -24,6 +24,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           label="label"
@@ -40,6 +41,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.arvioitavaKokonaisuus"
+          @input="$emit('skipRouteExitConfirm', false)"
           :options="arvioitavanKokonaisuudenKategoriat"
           :state="validateState('arvioitavaKokonaisuus')"
           group-values="arvioitavatKokonaisuudet"
@@ -64,6 +66,7 @@
           <b-form-input
             :id="uid"
             v-model="form.arvioitavaTapahtuma"
+            @input="$emit('skipRouteExitConfirm', false)"
             :aria-describedby="`${uid}-feedback`"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -76,6 +79,7 @@
           <elsa-form-datepicker
             :id="uid"
             v-model="form.tapahtumanAjankohta"
+            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('tapahtumanAjankohta')"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
@@ -102,6 +106,7 @@
           <elsa-form-multiselect
             :id="uid"
             v-model="form.arvioinninAntaja"
+            @input="$emit('skipRouteExitConfirm', false)"
             :options="kouluttajatAndVastuuhenkilot"
             :state="validateState('arvioinninAntaja')"
             :disabled="editing"
@@ -124,7 +129,12 @@
     </b-form-row>
     <elsa-form-group :label="$t('lisatiedot')">
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.lisatiedot" rows="5"></b-form-textarea>
+        <b-form-textarea
+          :id="uid"
+          v-model="form.lisatiedot"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="5"
+        ></b-form-textarea>
       </template>
     </elsa-form-group>
     <div class="text-right mb-2">

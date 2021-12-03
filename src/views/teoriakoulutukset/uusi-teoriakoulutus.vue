@@ -6,7 +6,12 @@
         <b-col>
           <h1>{{ $t('lisaa-teoriakoulutus') }}</h1>
           <hr />
-          <teoriakoulutus-form v-if="!loading" @submit="onSubmit" @cancel="onCancel" />
+          <teoriakoulutus-form
+            v-if="!loading"
+            @submit="onSubmit"
+            @cancel="onCancel"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+          />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>

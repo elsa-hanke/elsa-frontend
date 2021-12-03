@@ -5,6 +5,7 @@
         <elsa-form-datepicker
           :id="uid"
           v-model="form.paivamaara"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('paivamaara')"
         ></elsa-form-datepicker>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -17,6 +18,7 @@
         <b-form-checkbox-group
           :id="uid"
           v-model="form.aihekategoriat"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('aihekategoriat')"
           :aria-describedby="ariaDescribedby"
           name="paivakirja-merkinta-aihe"
@@ -36,6 +38,7 @@
               </div>
               <elsa-form-multiselect
                 v-model="form.teoriakoulutus"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :options="teoriakoulutukset"
                 label="koulutuksenNimi"
                 track-by="id"
@@ -44,6 +47,7 @@
             <div v-if="aihekategoria.muunAiheenNimi && muuAiheSelected" class="pl-4">
               <b-form-input
                 v-model="form.muunAiheenNimi"
+                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState('muunAiheenNimi')"
                 :aria-describedby="`${uid}-feedback`"
               ></b-form-input>
@@ -63,6 +67,7 @@
         <b-form-input
           :id="uid"
           v-model="form.oppimistapahtumanNimi"
+          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('oppimistapahtumanNimi')"
           :aria-describedby="`${uid}-feedback`"
         ></b-form-input>
@@ -81,10 +86,19 @@
         </elsa-popover>
       </template>
       <template v-slot="{ uid }">
-        <b-form-textarea :id="uid" v-model="form.reflektio" rows="5"></b-form-textarea>
+        <b-form-textarea
+          :id="uid"
+          v-model="form.reflektio"
+          @input="$emit('skipRouteExitConfirm', false)"
+          rows="5"
+        ></b-form-textarea>
       </template>
     </elsa-form-group>
-    <b-form-checkbox v-model="form.yksityinen" class="py-0">
+    <b-form-checkbox
+      v-model="form.yksityinen"
+      @input="$emit('skipRouteExitConfirm', false)"
+      class="py-0"
+    >
       {{ $t('piilota-kouluttajilta-kuvaus') }}
     </b-form-checkbox>
     <hr />

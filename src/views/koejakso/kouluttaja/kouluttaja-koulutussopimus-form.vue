@@ -10,7 +10,12 @@
       <b-col lg="4">
         <elsa-form-group :label="$t('lahikouluttajan-nimike')" :required="true">
           <template v-slot="{ uid }">
-            <b-form-input :id="uid" v-model="form.nimike" :state="validateState('nimike')" />
+            <b-form-input
+              :id="uid"
+              v-model="form.nimike"
+              @input="$emit('skipRouteExitConfirm', false)"
+              :state="validateState('nimike')"
+            />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
@@ -26,6 +31,7 @@
             <b-form-input
               :id="uid"
               v-model="form.toimipaikka"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('toimipaikka')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -43,6 +49,7 @@
             <b-form-input
               :id="uid"
               v-model="form.lahiosoite"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('lahiosoite')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -58,6 +65,7 @@
             <b-form-input
               :id="uid"
               v-model="form.postitoimipaikka"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('postitoimipaikka')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -75,6 +83,7 @@
             <b-form-input
               :id="uid"
               v-model="form.sahkoposti"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sahkoposti')"
             />
             <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
@@ -94,7 +103,12 @@
       <b-col lg="4">
         <elsa-form-group :label="$t('puhelin-virka-aikaan')" :required="true">
           <template v-slot="{ uid }">
-            <b-form-input :id="uid" v-model="form.puhelin" :state="validateState('puhelin')" />
+            <b-form-input
+              :id="uid"
+              v-model="form.puhelin"
+              @input="$emit('skipRouteExitConfirm', false)"
+              :state="validateState('puhelin')"
+            />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>

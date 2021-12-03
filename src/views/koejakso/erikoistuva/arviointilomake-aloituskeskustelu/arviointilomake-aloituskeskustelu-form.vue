@@ -7,6 +7,7 @@
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanSahkoposti"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanSahkoposti')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -24,6 +25,7 @@
             <b-form-input
               :id="uid"
               v-model="form.koejaksonSuorituspaikka"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonSuorituspaikka')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -49,6 +51,7 @@
             <b-form-input
               :id="uid"
               v-model="form.koejaksonToinenSuorituspaikka"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonToinenSuorituspaikka')"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -82,6 +85,7 @@
             <elsa-form-datepicker
               :id="uid"
               v-model="form.koejaksonAlkamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonAlkamispaiva')"
               :min="account.erikoistuvaLaakari.opintooikeudenMyontamispaiva"
               :max="maxKoejaksonAlkamispaiva"
@@ -100,6 +104,7 @@
               :id="uid"
               :disabled="!form.koejaksonAlkamispaiva"
               v-model="form.koejaksonPaattymispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
               :min="minKoejaksonPaattymispaiva"
               :max="maxKoejaksonPaattymispaiva"
               :state="validateState('koejaksonPaattymispaiva')"
@@ -131,6 +136,7 @@
             <b-form-radio-group
               :id="uid"
               v-model="form.suoritettuKokoaikatyossa"
+              @input="$emit('skipRouteExitConfirm', false)"
               :options="suorittettuKokoaikatyossaOptions"
               :state="validateState('suoritettuKokoaikatyossa')"
               name="suoritettu-kokoaikatyossa"
@@ -154,6 +160,7 @@
               <b-form-input
                 :id="uid"
                 v-model="local.tyotunnitViikossa"
+                @input="$emit('skipRouteExitConfirm', false)"
                 class="tyotunnit-viikossa-input"
                 :state="validateState('tyotunnitViikossa')"
                 @change="onTyotunnitViikossaChange"
@@ -197,6 +204,7 @@
             <b-form-textarea
               :id="uid"
               v-model="form.koejaksonOsaamistavoitteet"
+              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonOsaamistavoitteet')"
               rows="7"
               class="textarea-min-height"

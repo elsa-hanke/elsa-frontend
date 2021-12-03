@@ -15,6 +15,7 @@
               :arvioitavan-kokonaisuuden-kategoriat="arvioitavanKokonaisuudenKategoriat"
               @submit="onSubmit"
               @cancel="onCancel"
+              @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
             />
           </div>
           <div v-else class="text-center">
