@@ -139,6 +139,8 @@
       const isDateObj = this.value instanceof Date
       const dateStr = isDateObj ? format(this.value as Date, defaultDateFormat) : this.value
       this.form.dateStr = dateStr ? this.$date(dateStr as string) : ''
+
+      document.querySelector(`button#datepicker-${this.id}`)?.setAttribute('tabindex', '-1')
     }
 
     isValidMinDate(value: string) {
