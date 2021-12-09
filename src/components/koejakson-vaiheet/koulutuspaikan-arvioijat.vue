@@ -215,7 +215,7 @@
       return $dirty ? !$error : null
     }
 
-    checkForm(): boolean {
+    validateForm(): boolean {
       this.$v.form.$touch()
       return !this.$v.$anyError
     }

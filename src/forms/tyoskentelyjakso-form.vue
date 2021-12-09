@@ -124,34 +124,37 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('alkamispaiva')"
-        class="col-sm-12 col-md-6 pr-md-3"
+        class="col-xs-12 col-sm-6 pr-sm-3"
         :required="!value.tapahtumia"
       >
         <template v-slot="{ uid }">
           <div v-if="!value.tapahtumia">
             <elsa-form-datepicker
+              ref="alkamispaiva"
+              v-if="childDataReceived"
               :id="uid"
-              v-model="form.alkamispaiva"
+              :value.sync="form.alkamispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
-              :state="validateState('alkamispaiva')"
               :max="maxAlkamispaiva"
+              :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
             ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
           </div>
           <div v-else>
             <span v-if="form.alkamispaiva" :id="uid">{{ $date(form.alkamispaiva) }}</span>
           </div>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('paattymispaiva')" class="col-sm-12 col-md-6 pl-md-3">
+      <elsa-form-group :label="$t('paattymispaiva')" class="col-xs-12 col-sm-6 pl-sm-3">
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="paattymispaiva"
+            v-if="childDataReceived"
             :id="uid"
-            v-model="form.paattymispaiva"
+            :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
             :min="minPaattymispaiva"
+            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+            :required="false"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
           />
@@ -332,9 +335,6 @@
           integer,
           between: between(50, 100)
         },
-        alkamispaiva: {
-          required
-        },
         kaytannonKoulutus: {
           required
         },
@@ -349,6 +349,11 @@
     }
   })
   export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
+    $refs!: {
+      alkamispaiva: ElsaFormDatepicker
+      paattymispaiva: ElsaFormDatepicker
+    }
+
     @Prop({ required: false, default: false })
     allowHyvaksyttyAiemminToiselleErikoisalalleOption!: boolean
 
@@ -420,6 +425,7 @@
       saving: false,
       deleting: false
     }
+    childDataReceived = false
 
     async mounted() {
       this.form = {
@@ -432,6 +438,8 @@
           await axios.get('erikoistuva-laakari/asiakirjat/nimet')
         ).data
       }
+
+      this.childDataReceived = true
     }
 
     validateState(name: string) {
@@ -449,9 +457,19 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    onSubmit() {
+      const validations = [
+        this.validateForm(),
+        this.$refs.alkamispaiva ? this.$refs.alkamispaiva.validateForm() : true,
+        this.$refs.paattymispaiva.validateForm()
+      ]
+
+      if (validations.includes(false)) {
         return
       }
 
@@ -612,9 +630,9 @@
   .datepicker-range::before {
     content: '–';
     position: absolute;
-    left: -2rem;
+    left: -1.5rem;
     padding: 0.375rem 0.75rem;
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(xs) {
       display: none;
     }
   }

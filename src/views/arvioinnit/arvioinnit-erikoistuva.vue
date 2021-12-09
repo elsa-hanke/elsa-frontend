@@ -11,8 +11,8 @@
           </elsa-button>
           <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
             <b-tab :title="$t('arvioinnit')" active>
-              <h6 class="mt-4 font-weight-400">RAJAA ARVIOINTEJA</h6>
-              <b-container fluid class="px-0">
+              <small>{{ $t('rajaa-arviointeja') | uppercase }}</small>
+              <b-container fluid class="px-0 mt-2">
                 <b-row :class="{ 'mb-3': !isFiltered }">
                   <b-col md="4">
                     <elsa-form-group :label="$t('tyoskentelyjakso')" class="mb-md-0">

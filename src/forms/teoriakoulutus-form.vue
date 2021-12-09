@@ -29,31 +29,34 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('alkamispaiva')"
-        class="col-sm-12 col-md-6 pr-md-3"
+        class="col-xs-12 col-sm-6 pr-sm-3"
         :required="true"
       >
         <template v-slot="{ uid }">
           <div>
             <elsa-form-datepicker
+              ref="alkamispaiva"
+              v-if="childDataReceived"
               :id="uid"
-              v-model="form.alkamispaiva"
+              :value.sync="form.alkamispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
-              :state="validateState('alkamispaiva')"
               :max="form.paattymispaiva"
+              :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
             ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
           </div>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('paattymispaiva')" class="col-sm-12 col-md-6 pl-md-3">
+      <elsa-form-group :label="$t('paattymispaiva')" class="col-xs-12 col-sm-6 pl-sm-3">
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="paattymispaiva"
             :id="uid"
-            v-model="form.paattymispaiva"
+            v-if="childDataReceived"
+            :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
             :min="form.alkamispaiva"
+            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+            :required="false"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
           />
@@ -142,14 +145,16 @@
         },
         koulutuksenPaikka: {
           required
-        },
-        alkamispaiva: {
-          required
         }
       }
     }
   })
   export default class TeoriakoulutusForm extends Mixins(validationMixin) {
+    $refs!: {
+      alkamispaiva: ElsaFormDatepicker
+      paattymispaiva: ElsaFormDatepicker
+    }
+
     @Prop({
       required: false,
       type: Object
@@ -172,6 +177,7 @@
     reservedAsiakirjaNimetMutable: string[] = []
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
+    childDataReceived = false
 
     async mounted() {
       if (this.value?.id) {
@@ -188,6 +194,7 @@
           todistukset: []
         }
       }
+      this.childDataReceived = true
 
       this.reservedAsiakirjaNimetMutable = (
         await axios.get('erikoistuva-laakari/asiakirjat/nimet')
@@ -242,11 +249,22 @@
       this.$emit('skipRouteExitConfirm', false)
     }
 
-    onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    onSubmit() {
+      const validations = [
+        this.validateForm(),
+        this.$refs.alkamispaiva.validateForm(),
+        this.$refs.paattymispaiva.validateForm()
+      ]
+
+      if (validations.includes(false)) {
         return
       }
+
       this.$emit(
         'submit',
         {
@@ -299,9 +317,9 @@
   .datepicker-range::before {
     content: '–';
     position: absolute;
-    left: -2rem;
+    left: -1.5rem;
     padding: 0.375rem 0.75rem;
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(xs) {
       display: none;
     }
   }

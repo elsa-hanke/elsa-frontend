@@ -177,7 +177,7 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    checkForm() {
+    validateForm() {
       this.$v.$touch()
       if (this.$v.$anyError) {
         return

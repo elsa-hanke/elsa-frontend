@@ -83,16 +83,20 @@
           </template>
           <template v-slot="{ uid }">
             <elsa-form-datepicker
+              ref="koejaksonAlkamispaiva"
+              v-if="childDataReceived"
               :id="uid"
-              v-model="form.koejaksonAlkamispaiva"
+              :value.sync="form.koejaksonAlkamispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
-              :state="validateState('koejaksonAlkamispaiva')"
-              :min="account.erikoistuvaLaakari.opintooikeudenMyontamispaiva"
+              :min="opintooikeudenMyontamispaiva"
+              :minErrorText="$t('koejakso-ei-voi-alkaa-ennen-opinto-oikeuden-myontamispaivaa')"
               :max="maxKoejaksonAlkamispaiva"
+              :maxErrorText="
+                $t(
+                  'koejakson-voi-aloittaa-viimeistaan-puoli-vuotta-ennen-opinto-oikeuden-paattymista'
+                )
+              "
             ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
       </b-col>
@@ -101,17 +105,17 @@
         <elsa-form-group :label="$t('koejakson-päättymispäivä')" :required="true">
           <template v-slot="{ uid }">
             <elsa-form-datepicker
+              ref="koejaksonPaattymispaiva"
+              v-if="childDataReceived"
               :id="uid"
               :disabled="!form.koejaksonAlkamispaiva"
-              v-model="form.koejaksonPaattymispaiva"
+              :value.sync="form.koejaksonPaattymispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
               :min="minKoejaksonPaattymispaiva"
+              :minErrorText="$t('koejakso-voi-paattya-aikaisintaan-6kk-alkamispaivasta')"
               :max="maxKoejaksonPaattymispaiva"
-              :state="validateState('koejaksonPaattymispaiva')"
+              :maxErrorText="$t('koejakson-maksimi-paattymispaiva-kuvaus')"
             ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
       </b-col>
@@ -245,7 +249,7 @@
           :disabled="buttonStates.secondaryButtonLoading"
           :loading="buttonStates.primaryButtonLoading"
           variant="primary"
-          @click="validateAndConfirm"
+          @click="validateAndConfirmSend"
         >
           {{ $t('allekirjoita-laheta') }}
         </elsa-button>
@@ -309,6 +313,8 @@
   export default class ArviointilomakeAloituskeskusteluForm extends Vue {
     $refs!: {
       koulutuspaikanArvioijat: KoulutuspaikanArvioijat
+      koejaksonAlkamispaiva: ElsaFormDatepicker
+      koejaksonPaattymispaiva: ElsaFormDatepicker
     }
 
     @Prop({ required: true, default: {} })
@@ -334,12 +340,6 @@
             required: requiredIf(() => {
               return this.local.toinenSuorituspaikka
             })
-          },
-          koejaksonAlkamispaiva: {
-            required
-          },
-          koejaksonPaattymispaiva: {
-            required
           },
           suoritettuKokoaikatyossa: {
             required
@@ -414,6 +414,7 @@
       primaryButtonLoading: false,
       secondaryButtonLoading: false
     }
+    childDataReceived = false
 
     get hasErrors() {
       return this.$v.$anyError
@@ -500,19 +501,23 @@
         return null
       }
 
-      const koejaksonAlkamispaivaDate = new Date(this.form.koejaksonAlkamispaiva)
+      const koejaksonAlkamispaivaMaxDate = new Date(this.form.koejaksonAlkamispaiva)
       // Koejakson kesto on maksimissaan 2 vuotta.
-      koejaksonAlkamispaivaDate.setFullYear(koejaksonAlkamispaivaDate.getFullYear() + 2)
+      koejaksonAlkamispaivaMaxDate.setFullYear(koejaksonAlkamispaivaMaxDate.getFullYear() + 2)
       const opintooikeudenPaattymispaivaDate = new Date(
         this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva
       )
       // Mikäli maksimikesto 2 vuotta ylittää opinto-oikeuden päättymispäivän,
       // on maksimi päättymispäivä opinto-oikeuden päättymispäivä.
-      if (koejaksonAlkamispaivaDate > opintooikeudenPaattymispaivaDate) {
+      if (koejaksonAlkamispaivaMaxDate > opintooikeudenPaattymispaivaDate) {
         return format(opintooikeudenPaattymispaivaDate, dateFormat)
       }
 
-      return format(koejaksonAlkamispaivaDate, dateFormat)
+      return format(koejaksonAlkamispaivaMaxDate, dateFormat)
+    }
+
+    get opintooikeudenMyontamispaiva() {
+      return this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenMyontamispaiva
     }
 
     onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
@@ -531,13 +536,33 @@
       this.$emit('submit', this.form, this.buttonStates)
     }
 
-    validateAndConfirm() {
-      this.$v.$touch()
-      const childFormValid = this.$refs.koulutuspaikanArvioijat.checkForm()
-      if (this.$v.$anyError || !childFormValid) {
+    resetValidationsAndConfirmSave() {
+      this.$v.$reset()
+      this.$refs.koulutuspaikanArvioijat.$v.$reset()
+      this.$refs.koejaksonAlkamispaiva.$v.$reset()
+      this.$refs.koejaksonPaattymispaiva.$v.$reset()
+
+      return this.$bvModal.show('confirm-send')
+    }
+
+    validateAndConfirmSend() {
+      const validations = [
+        this.validateForm(),
+        this.$refs.koulutuspaikanArvioijat.validateForm(),
+        this.$refs.koejaksonAlkamispaiva.validateForm(),
+        this.$refs.koejaksonPaattymispaiva.validateForm()
+      ]
+
+      if (validations.includes(false)) {
         return
       }
+
       return this.$bvModal.show('confirm-send')
+    }
+
+    validateForm(): boolean {
+      this.$v.form.$touch()
+      return !this.$v.$anyError
     }
 
     hideModal(id: string) {
@@ -564,6 +589,7 @@
       }
 
       this.local.tyotunnitViikossa = this.form.tyotunnitViikossa?.toString().replace('.', ',')
+      this.childDataReceived = true
     }
   }
 </script>

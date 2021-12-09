@@ -17,7 +17,7 @@
             <hr />
             <div v-if="!loading">
               <small>{{ $t('rajaa-merkintoja') | uppercase }}</small>
-              <b-container fluid class="px-0" :class="{ 'mb-md-5': !anyFilterSelected }">
+              <b-container fluid class="px-0 mt-2" :class="{ 'mb-md-5': !anyFilterSelected }">
                 <b-row>
                   <b-col md="4">
                     <elsa-form-group :label="$t('aihe')" class="mb-md-0">
@@ -33,27 +33,42 @@
                       </template>
                     </elsa-form-group>
                   </b-col>
-                  <b-col md="6">
+                  <b-col md="4">
                     <elsa-form-group
-                      :label="$t('ajankohta')"
+                      :label="$t('ajankohta-alkaa')"
                       class="mb-md-0"
                       :class="{ 'mb-0': anyFilterSelected }"
                     >
                       <template v-slot="{ uid }">
-                        <div :id="uid" class="d-flex">
-                          <elsa-form-datepicker
-                            :value="selected.ajankohtaAlkaa"
-                            @input="onAjankohtaAlkaaSelect"
-                            :max="maxAjankohtaAlkaa"
-                            class="mr-3"
-                          />
-                          <elsa-form-datepicker
-                            :value="selected.ajankohtaPaattyy"
-                            @input="onAjankohtaPaattyySelect"
-                            :min="minAjankohtaPaattyy"
-                            class="ml-3 datepicker-range"
-                          />
-                        </div>
+                        <elsa-form-datepicker
+                          ref="ajankohtaAlkaa"
+                          :id="uid"
+                          :value="selected.ajankohtaAlkaa"
+                          @input="onAjankohtaAlkaaSelect"
+                          :max="maxAjankohtaAlkaa"
+                          :maxErrorText="$t('ajankohta-ei-voi-alkaa-paattymisen-jalkeen')"
+                          :required="false"
+                        />
+                      </template>
+                    </elsa-form-group>
+                  </b-col>
+                  <b-col md="4">
+                    <elsa-form-group
+                      :label="$t('ajankohta-paattyy')"
+                      class="mb-md-0"
+                      :class="{ 'mb-0': anyFilterSelected }"
+                    >
+                      <template v-slot="{ uid }">
+                        <elsa-form-datepicker
+                          ref="ajankohtaPaattyy"
+                          :id="uid"
+                          :value="selected.ajankohtaPaattyy"
+                          @input="onAjankohtaPaattyySelect"
+                          :min="minAjankohtaPaattyy"
+                          :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+                          :required="false"
+                          class="datepicker-range"
+                        />
                       </template>
                     </elsa-form-group>
                   </b-col>
@@ -161,6 +176,11 @@
     }
   })
   export default class PaivittaisetMerkinnat extends Vue {
+    $refs!: {
+      ajankohtaAlkaa: ElsaFormDatepicker
+      ajankohtaPaattyy: ElsaFormDatepicker
+    }
+
     items = [
       {
         text: this.$t('etusivu'),
@@ -243,14 +263,22 @@
     }
 
     onAjankohtaAlkaaSelect(value: string) {
-      this.currentPage = 1
       this.selected.ajankohtaAlkaa = value
+
+      if (!this.$refs.ajankohtaAlkaa.validateForm()) {
+        return
+      }
+      this.currentPage = 1
       this.fetch()
     }
 
     onAjankohtaPaattyySelect(value: string) {
-      this.currentPage = 1
       this.selected.ajankohtaPaattyy = value
+
+      if (!this.$refs.ajankohtaPaattyy.validateForm()) {
+        return
+      }
+      this.currentPage = 1
       this.fetch()
     }
 
@@ -261,6 +289,8 @@
         ajankohtaAlkaa: null,
         ajankohtaPaattyy: null
       }
+      this.$refs.ajankohtaAlkaa.resetValue()
+      this.$refs.ajankohtaPaattyy.resetValue()
       this.fetch()
     }
 
@@ -311,7 +341,10 @@
   .datepicker-range::before {
     content: '–';
     position: absolute;
-    left: -2rem;
+    left: -1.5rem;
     padding: 0.375rem 0.75rem;
+    @include media-breakpoint-down(xs) {
+      display: none;
+    }
   }
 </style>

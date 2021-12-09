@@ -21,20 +21,21 @@
           </template>
           <template v-slot="{ uid }">
             <elsa-form-datepicker
+              ref="koejaksonAlkamispaiva"
+              v-if="childDataReceived"
               :id="uid"
-              v-model="form.koejaksonAlkamispaiva"
+              :value.sync="form.koejaksonAlkamispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
-              :state="validateState('koejaksonAlkamispaiva')"
               :min="form.opintooikeudenMyontamispaiva"
+              :minErrorText="$t('koejakso-ei-voi-alkaa-ennen-opinto-oikeuden-myontamispaivaa')"
               :max="maxKoejaksonAlkamispaiva"
-              :disabled="
-                !form.opintooikeudenMyontamispaiva &&
-                !account.erikoistuvaLaakari.opintooikeudenMyontamispaiva
+              :maxErrorText="
+                $t(
+                  'koejakson-voi-aloittaa-viimeistaan-puoli-vuotta-ennen-opinto-oikeuden-paattymista'
+                )
               "
+              :disabled="!form.opintooikeudenMyontamispaiva"
             ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
       </b-col>
@@ -193,7 +194,7 @@
           variant="outline-primary"
           :disabled="buttonStates.primaryButtonLoading"
           :loading="buttonStates.secondaryButtonLoading"
-          v-b-modal.confirm-save
+          @click="resetValidationsAndConfirm"
         >
           {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
@@ -202,7 +203,7 @@
           style="min-width: 14rem"
           :disabled="buttonStates.secondaryButtonLoading"
           :loading="buttonStates.primaryButtonLoading"
-          @click="validateAndConfirm"
+          @click="validateAndConfirmSend"
           variant="primary"
         >
           {{ $t('allekirjoita-laheta') }}
@@ -262,12 +263,6 @@
     },
     validations: {
       form: {
-        opintooikeudenMyontamispaiva: {
-          required
-        },
-        koejaksonAlkamispaiva: {
-          required
-        },
         erikoistuvanSahkoposti: {
           required,
           email
@@ -287,6 +282,7 @@
     $refs!: {
       kouluttajaDetails: any
       koulutuspaikkaDetails: any
+      koejaksonAlkamispaiva: ElsaFormDatepicker
     }
 
     @Prop({ required: true, default: {} })
@@ -332,6 +328,7 @@
       primaryButtonLoading: false,
       secondaryButtonLoading: false
     }
+    childDataReceived = false
 
     validateState(value: string) {
       const form = this.$v.form
@@ -412,20 +409,33 @@
       this.$emit('saveAndExit', this.form, this.buttonStates)
     }
 
-    validateAndConfirm() {
+    resetValidationsAndConfirm() {
+      this.$v.$reset()
+      this.$refs.koejaksonAlkamispaiva.$v.$reset()
+      this.$refs.kouluttajaDetails.forEach((k: any) => {
+        k.$v.$reset()
+      })
+      this.$refs.koulutuspaikkaDetails.forEach((k: any) => {
+        k.$v.$reset()
+      })
+      return this.$bvModal.show('confirm-save')
+    }
+
+    validateAndConfirmSend() {
       let childFormsValid = true
       this.$v.form.$touch()
       this.$refs.kouluttajaDetails.forEach((k: any) => {
-        if (!k.checkForm()) {
+        if (!k.validateForm()) {
           childFormsValid = false
         }
       })
 
       this.$refs.koulutuspaikkaDetails.forEach((k: any) => {
-        if (!k.checkForm()) {
+        if (!k.validateForm()) {
           childFormsValid = false
         }
       })
+      childFormsValid = !this.$refs.koejaksonAlkamispaiva.validateForm() ? false : childFormsValid
 
       if (this.$v.form.$anyError || !childFormsValid) {
         return
@@ -470,6 +480,8 @@
       if (!this.form.erikoistuvanSahkoposti) {
         this.form.erikoistuvanSahkoposti = this.account.email
       }
+
+      this.childDataReceived = true
     }
   }
 </script>
