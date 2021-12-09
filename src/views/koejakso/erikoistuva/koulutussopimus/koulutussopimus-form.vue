@@ -1,26 +1,10 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <b-row>
-      <b-col v-if="!account.erikoistuvaLaakari.opintooikeudenMyontamispaiva" lg="4">
-        <elsa-form-group :label="$t('opinto-oikeuden-alkamispäivä')" :required="true">
-          <template v-slot="{ uid }">
-            <elsa-form-datepicker
-              :id="uid"
-              v-model="form.opintooikeudenMyontamispaiva"
-              @input="$emit('skipRouteExitConfirm', false)"
-              :state="validateState('opintooikeudenMyontamispaiva')"
-              :max="form.opintooikeudenPaattymispaiva"
-            ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
-          </template>
-        </elsa-form-group>
-      </b-col>
-      <b-col v-else lg="8">
+      <b-col lg="8">
         <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
-        <p v-if="account.erikoistuvaLaakari.opintooikeudenMyontamispaiva">
-          {{ $date(account.erikoistuvaLaakari.opintooikeudenMyontamispaiva) }}
+        <p>
+          {{ $date(this.form.opintooikeudenMyontamispaiva) }}
         </p>
       </b-col>
     </b-row>
@@ -474,13 +458,11 @@
       this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.opintooikeudet[0]?.erikoisalaNimi
       this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
       this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
+      this.form.opintooikeudenMyontamispaiva = this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenMyontamispaiva
 
       // Asetetaan arvot kentille, jotka saatavissa erikoistuvan lääkärin tiedoista, mutta jotka
       // käyttäjä on saattanut yliajaa lomakkeen välitallennuksen yhteydessä. Kuitenkaan opinto-oikeuden
       // alkamispäivää käyttäjä ei voi yliajaa, mikäli se on saatu opintotietojärjestelmästä.
-      if (!this.form.opintooikeudenMyontamispaiva) {
-        this.form.opintooikeudenMyontamispaiva = this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenMyontamispaiva
-      }
       if (!this.form.erikoistuvanPuhelinnumero) {
         this.form.erikoistuvanPuhelinnumero =
           this.account.erikoistuvaLaakari.puhelinnumero ?? this.account.phoneNumber
