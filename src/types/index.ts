@@ -442,7 +442,7 @@ export type OmatTiedotLomake = {
 
 export type Suoritusarviointi = {
   id?: number
-  tapahtumanAjankohta: string | null
+  tapahtumanAjankohta: string | null | Date
   arvioitavaTapahtuma: string | null
   pyynnonAika: string
   lisatiedot: string | null

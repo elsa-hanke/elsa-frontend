@@ -284,7 +284,10 @@
     }
 
     onValidateAndConfirm(modalId: string) {
-      if (this.$refs.koulutuspaikanArvioijat && !this.$refs.koulutuspaikanArvioijat.checkForm()) {
+      if (
+        this.$refs.koulutuspaikanArvioijat &&
+        !this.$refs.koulutuspaikanArvioijat.validateForm()
+      ) {
         return
       }
       return this.$bvModal.show(modalId)

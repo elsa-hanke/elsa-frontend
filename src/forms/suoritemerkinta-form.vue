@@ -120,16 +120,16 @@
       <elsa-form-group :label="$t('suorituspaiva')" class="col-md-4" :required="true">
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="suorituspaiva"
+            v-if="childDataReceived"
             :id="uid"
-            v-model="form.suorituspaiva"
+            :value.sync="form.suorituspaiva"
             @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateState('suorituspaiva')"
             :min="tyoskentelyjaksonAlkamispaiva"
+            :minErrorText="$t('suorituspaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
             :max="tyoskentelyjaksonPaattymispaiva"
+            :maxErrorText="$t('suorituspaiva-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -205,14 +205,15 @@
         },
         oppimistavoite: {
           required
-        },
-        suorituspaiva: {
-          required
         }
       }
     }
   })
   export default class SuoritemerkintaForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+    $refs!: {
+      suorituspaiva: ElsaFormDatepicker
+    }
+
     @Prop({ required: false, default: () => [] })
     oppimistavoitteenKategoriat!: OppimistavoitteenKategoria[]
 
@@ -241,6 +242,7 @@
       saving: false,
       deleting: false
     }
+    childDataReceived = false
 
     mounted() {
       this.form = {
@@ -258,6 +260,12 @@
         suorituspaiva: this.value.suorituspaiva,
         lisatiedot: this.value.lisatiedot
       }
+      this.childDataReceived = true
+    }
+
+    validateForm(): boolean {
+      this.$v.form.$touch()
+      return !this.$v.$anyError
     }
 
     validateState(name: string) {
@@ -278,10 +286,11 @@
     }
 
     onSubmit() {
-      this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      const validations = [this.validateForm(), this.$refs.suorituspaiva.validateForm()]
+      if (validations.includes(false)) {
         return
       }
+
       this.$emit(
         'submit',
         {

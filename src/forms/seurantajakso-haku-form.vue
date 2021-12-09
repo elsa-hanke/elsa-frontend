@@ -62,45 +62,43 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('seurantajakso-alkaa')"
-        class="col-sm-12 col-md-6 pr-md-3 mb-md-0"
+        class="col-xs-12 col-sm-6 pr-sm-3 mb-0"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="alkamispaiva"
+            v-if="childDataReceived"
             :id="uid"
-            v-model="form.alkamispaiva"
-            :state="validateState('alkamispaiva')"
+            :value.sync="form.alkamispaiva"
             :max="maxAlkamispaiva"
+            :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group
         :label="$t('seurantajakso-paattyy')"
-        class="col-sm-12 col-md-6 pl-md-3 mb-0"
+        class="col-xs-12 col-sm-6 pl-sm-3 mb-0"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="paattymispaiva"
             :id="uid"
-            v-model="form.paattymispaiva"
-            :state="validateState('paattymispaiva')"
+            v-if="childDataReceived"
+            :value.sync="form.paattymispaiva"
             :min="minPaattymispaiva"
+            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
           />
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <small class="form-text text-muted pl-1">
         {{ $t('seurantajakso-aikajakso-help') }}
       </small>
     </b-form-row>
-    <div class="d-flex flex-row-reverse flex-wrap">
+    <div class="d-flex flex-row-reverse flex-wrap mt-4">
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('hae-tiedot') }}
       </elsa-button>
@@ -113,11 +111,8 @@
 
 <script lang="ts">
   import { BModal } from 'bootstrap-vue'
-  import Vue from 'vue'
   import Component from 'vue-class-component'
-  import { Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
-  import { required } from 'vuelidate/lib/validators'
+  import { Mixins, Prop, Vue } from 'vue-property-decorator'
 
   import { postKoulutusjakso } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
@@ -142,22 +137,14 @@
       ElsaFormGroup,
       ElsaFormMultiselect,
       KoulutusjaksoForm
-    },
-    validations: {
-      form: {
-        alkamispaiva: {
-          required
-        },
-        paattymispaiva: {
-          required
-        }
-      }
     }
   })
-  export default class SeurantajaksoHakuForm extends Mixins(
-    validationMixin,
-    TyoskentelyjaksoMixin
-  ) {
+  export default class SeurantajaksoHakuForm extends Mixins(TyoskentelyjaksoMixin) {
+    $refs!: {
+      alkamispaiva: ElsaFormDatepicker
+      paattymispaiva: ElsaFormDatepicker
+    }
+
     @Prop({ required: false, default: () => [] })
     arvioitavanKokonaisuudenKategoriat!: ArvioitavanKokonaisuudenKategoria[]
 
@@ -197,6 +184,7 @@
     params = {
       saving: false
     }
+    childDataReceived = false
 
     mounted() {
       if (this.seurantajakso) {
@@ -220,6 +208,7 @@
                 ]
         }
       }
+      this.childDataReceived = true
     }
 
     validateState(name: string) {
@@ -277,10 +266,15 @@
     }
 
     onSubmit() {
-      this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      const validations = [
+        this.$refs.alkamispaiva.validateForm(),
+        this.$refs.paattymispaiva.validateForm()
+      ]
+
+      if (validations.includes(false)) {
         return
       }
+
       this.$emit(
         'submit',
         {
@@ -300,4 +294,14 @@
 <style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
+
+  .datepicker-range::before {
+    content: '–';
+    position: absolute;
+    left: -1.5rem;
+    padding: 0.375rem 0.75rem;
+    @include media-breakpoint-down(xs) {
+      display: none;
+    }
+  }
 </style>

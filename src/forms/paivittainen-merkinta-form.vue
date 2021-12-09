@@ -3,14 +3,12 @@
     <elsa-form-group :label="$t('paivamaara')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-datepicker
+          ref="paivamaara"
+          v-if="childDateReceived"
           :id="uid"
-          v-model="form.paivamaara"
+          :value.sync="form.paivamaara"
           @input="$emit('skipRouteExitConfirm', false)"
-          :state="validateState('paivamaara')"
         ></elsa-form-datepicker>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">
-          {{ $t('pakollinen-tieto') }}
-        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('aihe')" :required="true">
@@ -137,9 +135,6 @@
     },
     validations: {
       form: {
-        paivamaara: {
-          required
-        },
         oppimistapahtumanNimi: {
           required
         },
@@ -155,6 +150,10 @@
     }
   })
   export default class PaivittainenMerkintaForm extends Mixins(validationMixin) {
+    $refs!: {
+      paivamaara: ElsaFormDatepicker
+    }
+
     @Prop({ required: false, default: () => [] })
     aihekategoriat!: PaivakirjaAihekategoria[]
 
@@ -179,11 +178,13 @@
     params = {
       saving: false
     }
+    childDateReceived = false
 
     async mounted() {
       this.form = {
         ...this.value
       }
+      this.childDateReceived = true
     }
 
     validateState(name: string) {
@@ -191,9 +192,15 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    onSubmit() {
+      const validations = [this.validateForm(), this.$refs.paivamaara.validateForm()]
+
+      if (validations.includes(false)) {
         return
       }
       this.$emit('submit', { ...this.form }, this.params)

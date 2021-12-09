@@ -90,53 +90,46 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('opiskeluoikeuden-alkupvm')"
-        class="col-sm-12 col-md-6 pr-md-3"
+        class="col-xs-12 col-sm-6 pr-sm-3"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="opiskeluoikeudenAlkamispaiva"
             :id="uid"
-            v-model="form.erikoistuvaLaakari.opintooikeusAlkaa"
+            :value.sync="form.erikoistuvaLaakari.opintooikeusAlkaa"
             @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateErikoistuvaLaakariState('opintooikeusAlkaa')"
             :max="maxAlkamispaiva"
+            :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group
         :label="$t('opiskeluoikeuden-loppupvm')"
-        class="col-sm-12 col-md-6 pl-md-3"
+        class="col-xs-12 col-sm-6 pl-sm-3"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="opiskeluoikeudenPaattymispaiva"
             :id="uid"
-            v-model="form.erikoistuvaLaakari.opintooikeusPaattyy"
+            :value.sync="form.erikoistuvaLaakari.opintooikeusPaattyy"
             @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateErikoistuvaLaakariState('opintooikeusPaattyy')"
             :min="minPaattymispaiva"
+            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
             class="datepicker-range"
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
     <elsa-form-group :label="$t('kaytossa-olevan-opetussuunnitelman-paivamaara')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-datepicker
+          ref="opetussuunnitelmaKaytossaPvm"
           :id="uid"
-          v-model="form.erikoistuvaLaakari.opintosuunnitelmaKaytossaPvm"
+          :value.sync="form.erikoistuvaLaakari.opintosuunnitelmaKaytossaPvm"
           @input="$emit('skipRouteExitConfirm', false)"
-          :state="validateErikoistuvaLaakariState('opintosuunnitelmaKaytossaPvm')"
         ></elsa-form-datepicker>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">
-          {{ $t('pakollinen-tieto') }}
-        </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
@@ -217,15 +210,6 @@
           opiskelijatunnus: {
             required
           },
-          opintooikeusAlkaa: {
-            required
-          },
-          opintooikeusPaattyy: {
-            required
-          },
-          opintosuunnitelmaKaytossaPvm: {
-            required
-          },
           sahkopostiosoite: {
             required,
             email
@@ -239,6 +223,12 @@
     }
   })
   export default class KayttajaForm extends Mixins(validationMixin) {
+    $refs!: {
+      opiskeluoikeudenAlkamispaiva: ElsaFormDatepicker
+      opiskeluoikeudenPaattymispaiva: ElsaFormDatepicker
+      opetussuunnitelmaKaytossaPvm: ElsaFormDatepicker
+    }
+
     @Prop({ required: false, default: () => [] })
     yliopistot!: any[]
 
@@ -282,11 +272,21 @@
     }
 
     onSubmit() {
-      this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      const validations = [
+        this.validateForm(),
+        this.$refs.opiskeluoikeudenAlkamispaiva.validateForm(),
+        this.$refs.opiskeluoikeudenPaattymispaiva.validateForm(),
+        this.$refs.opetussuunnitelmaKaytossaPvm.validateForm()
+      ]
+      if (validations.includes(false)) {
         return
       }
       this.$emit('submit', this.form, this.params)
+    }
+
+    validateForm(): boolean {
+      this.$v.form.$touch()
+      return !this.$v.$anyError
     }
 
     onCancel() {
@@ -302,9 +302,9 @@
   .datepicker-range::before {
     content: '–';
     position: absolute;
-    left: -2rem;
+    left: -1.5rem;
     padding: 0.375rem 0.75rem;
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(xs) {
       display: none;
     }
   }

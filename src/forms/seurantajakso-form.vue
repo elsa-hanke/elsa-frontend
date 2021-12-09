@@ -134,6 +134,7 @@
                   </dt>
                   <dd class="mb-4">
                     <elsa-arviointiasteikon-taso
+                      v-if="arviointi.arviointiasteikonTaso"
                       :value="arviointi.arviointiasteikonTaso"
                       :tasot="arviointi.arvioitavaKokonaisuus.arviointiasteikko.tasot"
                     />
@@ -171,6 +172,7 @@
                 </b-td>
                 <b-td :stacked-heading="$t('luottamuksen-taso')">
                   <elsa-arviointiasteikon-taso
+                    v-if="arviointi.arviointiasteikonTaso"
                     :value="arviointi.arviointiasteikonTaso"
                     :tasot="arviointi.arvioitavaKokonaisuus.arviointiasteikko.tasot"
                   />
@@ -218,6 +220,7 @@
                 </dt>
                 <dd class="mb-4">
                   <elsa-arviointiasteikon-taso
+                    v-if="suoritemerkinta.arviointiasteikonTaso"
                     :value="suoritemerkinta.arviointiasteikonTaso"
                     :tasot="suoritemerkinta.arviointiasteikko.tasot"
                   />
@@ -276,6 +279,7 @@
 
               <b-td :stacked-heading="$t('luottamuksen-taso')">
                 <elsa-arviointiasteikon-taso
+                  v-if="suoritemerkinta.arviointiasteikonTaso"
                   :value="suoritemerkinta.arviointiasteikonTaso"
                   :tasot="suoritemerkinta.arviointiasteikko.tasot"
                 />
@@ -695,19 +699,26 @@
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
-        <elsa-form-group :label="$t('seuraavan-keskustelun-ajankohta')">
-          <template v-slot="{ uid }">
-            <elsa-form-datepicker
-              :id="uid"
-              :disabled="uusiJakso"
-              :min="minAlkamispaiva"
-              :initial-date="minSeuraavaKeskustelu"
-              class="col-sm-4 col-md-2"
-              v-model="form.seuraavanKeskustelunAjankohta"
-              @input="$emit('skipRouteExitConfirm', false)"
-            ></elsa-form-datepicker>
-          </template>
-        </elsa-form-group>
+        <b-form-row>
+          <elsa-form-group
+            class="col-xs-12 col-sm-4 mb-2"
+            :label="$t('seuraavan-keskustelun-ajankohta')"
+          >
+            <template v-slot="{ uid }">
+              <elsa-form-datepicker
+                ref="seuraavanKeskustelunAjankohta"
+                :id="uid"
+                :value.sync="form.seuraavanKeskustelunAjankohta"
+                @input="$emit('skipRouteExitConfirm', false)"
+                :initial-date="minSeuraavaKeskustelu"
+                :disabled="uusiJakso"
+                :min="minAlkamispaiva"
+                :minErrorText="$t('paivamaara-ei-voi-olla-menneisyydessa')"
+                :required="false"
+              ></elsa-form-datepicker>
+            </template>
+          </elsa-form-group>
+        </b-form-row>
       </div>
       <div v-else>
         <div v-if="form.seurantakeskustelunYhteisetMerkinnat != null">
@@ -907,6 +918,10 @@
     }
   })
   export default class SeurantajaksoForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+    $refs!: {
+      seuraavanKeskustelunAjankohta: ElsaFormDatepicker
+    }
+
     @Prop({
       required: false,
       type: Object,
@@ -965,11 +980,13 @@
         value: false
       }
     ]
+    childDataReceived = false
 
     async mounted() {
       this.form = {
         ...this.seurantajakso
       }
+      this.childDataReceived = true
       await store.dispatch('erikoistuva/getKouluttajat')
     }
 
@@ -1035,11 +1052,21 @@
       this.$bvModal.hide('suoritemerkinta-modal')
     }
 
-    onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    onSubmit() {
+      const validations = [
+        this.validateForm(),
+        this.$refs.seuraavanKeskustelunAjankohta.validateForm()
+      ]
+
+      if (validations.includes(false)) {
         return
       }
+
       this.$bvModal.show('confirm-modal')
     }
 

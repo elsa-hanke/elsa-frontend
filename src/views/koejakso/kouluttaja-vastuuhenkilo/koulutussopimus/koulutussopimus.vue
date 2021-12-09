@@ -438,10 +438,10 @@
 
     private handleSubmitKouluttaja() {
       if (this.$refs.kouluttajaKoulutussopimusForm.length === 2) {
-        this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
-        this.$refs.kouluttajaKoulutussopimusForm[1].checkForm()
+        this.$refs.kouluttajaKoulutussopimusForm[0].validateForm()
+        this.$refs.kouluttajaKoulutussopimusForm[1].validateForm()
       } else {
-        this.$refs.kouluttajaKoulutussopimusForm[0].checkForm()
+        this.$refs.kouluttajaKoulutussopimusForm[0].validateForm()
       }
 
       if (this.childFormValid) {

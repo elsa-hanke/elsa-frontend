@@ -70,7 +70,7 @@
           </b-card-text>
         </b-card>
       </b-card-group>
-      <b-table-simple class="katseluoikeusTable" v-else responsive>
+      <b-table-simple class="katseluoikeusTable mt-4" v-else responsive>
         <b-thead>
           <b-tr>
             <b-th style="width: 33%">{{ $t('nimi') }}</b-th>
@@ -107,19 +107,22 @@
     </div>
     <b-modal id="muokkaaKatseluoikeuttaModal" :title="$t('katseluoikeuden-voimassaoloaika')">
       <div v-if="valittuValtuutus !== null" class="d-block">
-        <h5>{{ $t('kouluttajan-nimi') }}</h5>
-        <p>{{ valittuValtuutus.valtuutettu.nimi }}</p>
-        <elsa-form-group :label="$t('katseluoikeuden-viimeinen-voimassaolopaiva')" :required="true">
+        <h5 class="mt-2">{{ $t('kouluttajan-nimi') }}</h5>
+        <p class="mb-4">{{ valittuValtuutus.valtuutettu.nimi }}</p>
+        <elsa-form-group
+          class="mb-1"
+          :label="$t('katseluoikeuden-viimeinen-voimassaolopaiva')"
+          :required="true"
+        >
           <template v-slot="{ uid }">
             <elsa-form-datepicker
+              ref="paattymispaiva"
               :id="uid"
-              v-model="valittuValtuutus.paattymispaiva"
+              class="col-sm-6 pl-0"
+              :value.sync="valittuValtuutus.paattymispaiva"
               :min="minPaattymispaiva"
-              class="col-sm-6"
+              :minErrorText="$t('paivamaara-ei-voi-olla-menneisyydessa')"
             ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
       </div>
@@ -160,6 +163,10 @@
     }
   })
   export default class Kayttooikeus extends Vue {
+    $refs!: {
+      paattymispaiva: ElsaFormDatepicker
+    }
+
     get kouluttajat(): Kayttaja[] {
       return store.getters['erikoistuva/kouluttajat'] || []
     }
@@ -233,6 +240,10 @@
     }
 
     async paivitaOikeus() {
+      if (!this.$refs.paattymispaiva.validateForm()) {
+        return
+      }
+
       try {
         await axios.put(`/erikoistuva-laakari/kouluttajavaltuutus/${this.valittuValtuutus?.id}`, {
           paattymispaiva: this.valittuValtuutus?.paattymispaiva

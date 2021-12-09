@@ -47,36 +47,55 @@
     <b-form-row>
       <elsa-form-group
         :label="$t('alkamispaiva')"
-        class="col-sm-12 col-md-6 pr-md-3"
+        class="col-xs-12 col-sm-6 pr-sm-3"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="alkamispaiva"
+            v-if="childDataReceived"
             :id="uid"
-            v-model="form.alkamispaiva"
+            :value.sync="form.alkamispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateState('alkamispaiva')"
             :min="minAlkamispaiva"
+            :minErrorText="
+              form.tyoskentelyjakso
+                ? $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
+                : undefined
+            "
             :max="maxAlkamispaiva"
+            :maxErrorText="
+              form.tyoskentelyjakso || form.paattymispaiva
+                ? $t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')
+                : undefined
+            "
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
       <elsa-form-group
         :label="$t('paattymispaiva')"
-        class="col-sm-12 col-md-6 pl-md-3"
+        class="col-xs-12 col-sm-6 pl-sm-3"
         :required="true"
       >
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="paattymispaiva"
+            v-if="childDataReceived"
             :id="uid"
-            v-model="form.paattymispaiva"
+            :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateState('paattymispaiva')"
             :min="minPaattymispaiva"
+            :minErrorText="
+              form.tyoskentelyjakso || form.alkamispaiva
+                ? $t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')
+                : undefined
+            "
             :max="maxPaattymispaiva"
+            :maxErrorText="
+              form.tyoskentelyjakso
+                ? $t('poissaolon-paattymispaivan-taytyy-olla-ennen-tyoskentelyjakson-paattymista')
+                : undefined
+            "
             class="datepicker-range"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -185,12 +204,6 @@
         tyoskentelyjakso: {
           required
         },
-        alkamispaiva: {
-          required
-        },
-        paattymispaiva: {
-          required
-        },
         kokoTyoajanPoissaolo: {
           required
         },
@@ -205,6 +218,11 @@
     }
   })
   export default class PoissaoloForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+    $refs!: {
+      alkamispaiva: ElsaFormDatepicker
+      paattymispaiva: ElsaFormDatepicker
+    }
+
     @Prop({ required: true, default: () => [] })
     poissaolonSyyt!: PoissaolonSyy[]
 
@@ -226,9 +244,11 @@
       saving: false,
       deleting: false
     }
+    childDataReceived = false
 
     mounted() {
       this.form = this.poissaolo
+      this.childDataReceived = true
     }
 
     validateState(name: string) {
@@ -236,9 +256,18 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    onSubmit() {
+      const validations = [
+        this.validateForm(),
+        this.$refs.alkamispaiva.validateForm(),
+        this.$refs.paattymispaiva.validateForm()
+      ]
+      if (validations.includes(false)) {
         return
       }
       this.$emit(
@@ -313,9 +342,9 @@
   .datepicker-range::before {
     content: '–';
     position: absolute;
-    left: -2rem;
+    left: -1.5rem;
     padding: 0.375rem 0.75rem;
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(xs) {
       display: none;
     }
   }

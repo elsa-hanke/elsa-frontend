@@ -77,16 +77,18 @@
       <elsa-form-group :label="$t('tapahtuman-ajankohta')" class="col-md-4" :required="true">
         <template v-slot="{ uid }">
           <elsa-form-datepicker
+            ref="tapahtumanAjankohta"
+            v-if="childDataReceived"
             :id="uid"
-            v-model="form.tapahtumanAjankohta"
             @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateState('tapahtumanAjankohta')"
+            :value.sync="form.tapahtumanAjankohta"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
+            :minErrorText="$t('tapahtuman-ajankohta-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
+            :maxErrorText="
+              $t('tapahtuman-ajankohta-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')
+            "
           ></elsa-form-datepicker>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -203,14 +205,15 @@
         },
         arvioinninAntaja: {
           required
-        },
-        tapahtumanAjankohta: {
-          required
         }
       }
     }
   })
   export default class ArviointipyyntoForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+    $refs!: {
+      tapahtumanAjankohta: ElsaFormDatepicker
+    }
+
     @Prop({ required: false, default: () => [] })
     tyoskentelyjaksot!: Tyoskentelyjakso[]
 
@@ -255,6 +258,7 @@
       saving: false,
       deleting: false
     }
+    childDataReceived = false
 
     mounted() {
       this.form.tyoskentelyjakso = this.value?.tyoskentelyjakso
@@ -264,8 +268,9 @@
       this.form.arvioitavaKokonaisuus = this.value?.arvioitavaKokonaisuus
       this.form.arvioitavaTapahtuma = this.value?.arvioitavaTapahtuma
       this.form.arvioinninAntaja = this.value?.arvioinninAntaja
-      this.form.tapahtumanAjankohta = this.value?.tapahtumanAjankohta
       this.form.lisatiedot = this.value?.lisatiedot
+      this.form.tapahtumanAjankohta = this.value?.tapahtumanAjankohta
+      this.childDataReceived = true
     }
 
     validateState(name: string) {
@@ -273,11 +278,18 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    onSubmit() {
+      const validations = [this.validateForm(), this.$refs.tapahtumanAjankohta.validateForm()]
+
+      if (validations.includes(false)) {
         return
       }
+
       this.$emit(
         'submit',
         {
