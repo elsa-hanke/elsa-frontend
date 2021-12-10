@@ -1,27 +1,41 @@
 <template>
-  <multiselect
-    :id="id"
-    v-bind="$attrs"
-    :placeholder="placeholderText"
-    :tag-placeholder="tagPlaceholderText"
-    :select-label="selectLabelText"
-    :select-group-label="selectGroupLabelText"
-    :selected-label="selectedLabelText"
-    :deselect-label="deselectLabelText"
-    :deselect-group-label="deselectGroupLabelText"
-    :allow-empty="allowEmpty"
-    :max="max"
-    :customLabel="customLabel"
-    v-on="$listeners"
-    :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
-  >
-    <template slot="maxElements">{{ $t('valittuna-enimmäismaara', { max }) }}</template>
-    <template slot="noResult">{{ $t('ei-hakutuloksia') }}</template>
-    <template slot="noOptions">{{ $t('ei-vaihtoehtoja') }}</template>
-    <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
-      <slot :name="name" v-bind="data"></slot>
-    </template>
-  </multiselect>
+  <div>
+    <multiselect
+      :id="id"
+      v-bind="$attrs"
+      :placeholder="placeholderText"
+      :tag-placeholder="tagPlaceholderText"
+      :select-label="selectLabelText"
+      :select-group-label="selectGroupLabelText"
+      :selected-label="selectedLabelText"
+      :deselect-label="deselectLabelText"
+      :deselect-group-label="deselectGroupLabelText"
+      :allow-empty="allowEmpty"
+      :max="max"
+      :customLabel="customLabel"
+      v-on="$listeners"
+      :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
+    >
+      <template slot="maxElements">{{ $t('valittuna-enimmäismaara', { max }) }}</template>
+      <template slot="noResult">{{ $t('ei-hakutuloksia') }}</template>
+      <template slot="noOptions">{{ $t('ei-vaihtoehtoja') }}</template>
+      <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+        <slot :name="name" v-bind="data"></slot>
+      </template>
+      <template v-if="$attrs.value && !$attrs.taggable" slot="clear">
+        <b-button
+          variant="link"
+          @click="$emit('input', null)"
+          class="clear-button p-0 m-0 border-0"
+        >
+          <font-awesome-layers>
+            <font-awesome-icon icon="circle" />
+            <font-awesome-icon icon="times" class="times" transform="shrink-4" />
+          </font-awesome-layers>
+        </b-button>
+      </template>
+    </multiselect>
+  </div>
 </template>
 
 <script lang="ts">
@@ -144,7 +158,7 @@
       }
     }
     .multiselect__tags {
-      padding: 0.375rem 2.5rem 0.375rem 0.75rem;
+      padding: 0.375rem 4.25rem 0.375rem 0.75rem;
       border: 1px solid $gray-400;
       min-height: initial;
       font-size: $font-size-base;
@@ -268,6 +282,15 @@
     &.is-invalid .multiselect__content-wrapper,
     &.is-invalid .multiselect__tags {
       border-color: $form-feedback-invalid-color;
+    }
+  }
+
+  .clear-button {
+    position: absolute;
+    right: 2.5rem;
+    color: #f5f5f5;
+    .times {
+      color: #808080;
     }
   }
 </style>
