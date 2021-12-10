@@ -149,7 +149,7 @@
       }
       const parsedDate = this.parseDate(value)
       const formattedDate = format(parsedDate, defaultDateFormat)
-      const isValidMinDate = formattedDate >= this.formattedMinDate
+      const isValidMinDate = formattedDate >= this.datepickerMinDate
       if (!isValidMinDate) {
         this.form.selectedDate = null
       }
@@ -162,7 +162,7 @@
       }
       const parsedDate = this.parseDate(value)
       const formattedDate = format(parsedDate, defaultDateFormat)
-      const isValidMaxDate = formattedDate <= this.formattedMaxDate
+      const isValidMaxDate = formattedDate <= this.datepickerMaxDate
       if (!isValidMaxDate) {
         this.form.selectedDate = null
       }
@@ -286,12 +286,16 @@
 
     get datepickerMinDate() {
       const formattedMinDate = this.formattedMinDate
-      return formattedMinDate >= defaultMinDate ? formattedMinDate : defaultMinDate
+      return formattedMinDate >= defaultMinDate && formattedMinDate <= defaultMaxDate
+        ? formattedMinDate
+        : defaultMinDate
     }
 
     get datepickerMaxDate() {
       const formattedMaxDate = this.formattedMaxDate
-      return formattedMaxDate <= defaultMaxDate ? formattedMaxDate : defaultMaxDate
+      return formattedMaxDate <= defaultMaxDate && this.formattedMaxDate >= defaultMinDate
+        ? formattedMaxDate
+        : defaultMaxDate
     }
   }
 </script>
