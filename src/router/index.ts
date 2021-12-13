@@ -3,6 +3,7 @@ import Meta from 'vue-meta'
 import VueRouter, { NavigationGuardNext, RawLocation, Route, RouteConfig } from 'vue-router'
 import { ErrorHandler } from 'vue-router/types/router'
 
+import VueI18n from '@/plugins/i18n'
 import RoleSpecificRoute from '@/router/role-specific-route.vue'
 import store from '@/store'
 import { restoreRoute, storeRoute } from '@/utils/local-storage'
@@ -105,6 +106,16 @@ const etusivuGuard = async (to: Route, from: Route, next: NavigationGuardNext) =
   } else {
     next()
   }
+}
+
+const languageGuard = async (to: Route, from: Route, next: NavigationGuardNext) => {
+  if ('lang' in to.query) {
+    const lang = to.query['lang'] as string
+    if (Object.keys(VueI18n.messages).includes(lang)) {
+      VueI18n.locale = lang
+    }
+  }
+  next()
 }
 
 const routes: Array<RouteConfig> = [
@@ -749,6 +760,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/tietosuojaseloste',
+    beforeEnter: languageGuard,
     component: TietosuojaselosteView
   }
 ]
