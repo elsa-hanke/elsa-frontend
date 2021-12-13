@@ -3,7 +3,7 @@
     <b-row>
       <b-col lg="8">
         <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
-        <p>
+        <p v-if="this.form.opintooikeudenMyontamispaiva">
           {{ $date(this.form.opintooikeudenMyontamispaiva) }}
         </p>
       </b-col>

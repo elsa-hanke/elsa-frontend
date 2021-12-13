@@ -108,7 +108,6 @@
               ref="koejaksonPaattymispaiva"
               v-if="childDataReceived"
               :id="uid"
-              :disabled="!form.koejaksonAlkamispaiva"
               :value.sync="form.koejaksonPaattymispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
               :min="minKoejaksonPaattymispaiva"

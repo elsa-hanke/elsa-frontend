@@ -189,15 +189,16 @@
     }
 
     onDateStrInput(dateStr: string) {
-      const isValidLocalDate = dateStr && this.isValidLocalDate(dateStr)
-      const parsedDate = isValidLocalDate ? this.parseDate(dateStr) : null
+      const isDate = dateStr && this.isValidLocalDate(dateStr)
+      const parsedDate = isDate ? this.parseDate(dateStr) : null
       const formattedDate = parsedDate ? format(parsedDate, defaultDateFormat) : null
-      this.form.selectedDate =
-        isValidLocalDate && this.isValidMinDate(dateStr) && this.isValidMaxDate(dateStr)
-          ? formattedDate
-          : null
-      this.$emit('update:value', formattedDate)
-      this.$emit('input', formattedDate)
+      const isValid = isDate && this.isValidMinDate(dateStr) && this.isValidMaxDate(dateStr)
+      this.form.selectedDate = isValid ? formattedDate : null
+
+      if (isValid) {
+        this.$emit('update:value', formattedDate)
+        this.$emit('input', formattedDate)
+      }
     }
 
     parseDate(value: string): Date {

@@ -59,16 +59,10 @@
             @input="$emit('skipRouteExitConfirm', false)"
             :min="minAlkamispaiva"
             :minErrorText="
-              form.tyoskentelyjakso
-                ? $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
-                : undefined
+              $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
             "
             :max="maxAlkamispaiva"
-            :maxErrorText="
-              form.tyoskentelyjakso || form.paattymispaiva
-                ? $t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')
-                : undefined
-            "
+            :maxErrorText="$t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')"
           ></elsa-form-datepicker>
         </template>
       </elsa-form-group>
@@ -85,16 +79,10 @@
             :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
             :min="minPaattymispaiva"
-            :minErrorText="
-              form.tyoskentelyjakso || form.alkamispaiva
-                ? $t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')
-                : undefined
-            "
+            :minErrorText="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
             :max="maxPaattymispaiva"
             :maxErrorText="
-              form.tyoskentelyjakso
-                ? $t('poissaolon-paattymispaivan-taytyy-olla-ennen-tyoskentelyjakson-paattymista')
-                : undefined
+              $t('poissaolon-paattymispaivan-taytyy-olla-ennen-tyoskentelyjakson-paattymista')
             "
             class="datepicker-range"
           ></elsa-form-datepicker>
