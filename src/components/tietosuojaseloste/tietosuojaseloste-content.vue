@@ -1,13 +1,5 @@
 <template>
-  <b-modal
-    id="tietosuoja-modal"
-    :visible="value"
-    :title="$t('tietosuojaseloste')"
-    size="xl"
-    :scrollable="true"
-    :hide-footer="true"
-    @hidden="$emit('input', false)"
-  >
+  <div>
     <h1>Mikä on tietosuojaseloste ja miksi sellainen tarvitaan?</h1>
     <p>
       Tietosuojaseloste laaditaan informointitarkoituksessa kaikista rekistereistä, jotka sisältävät
@@ -194,36 +186,13 @@
       <br />
       Sähköposti: tietosuoja@om.fi
     </address>
-  </b-modal>
+  </div>
 </template>
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+  import { Vue, Component } from 'vue-property-decorator'
 
   @Component({
     components: {}
   })
-  export default class TietosuojaselosteModal extends Vue {
-    items = [
-      {
-        text: this.$t('etusivu'),
-        to: { name: 'etusivu' }
-      },
-      {
-        text: this.$t('tietosuojaseloste'),
-        active: true
-      }
-    ]
-
-    @Prop({ required: true, type: Boolean, default: false })
-    value!: boolean
-  }
+  export default class TietosuojaselosteContent extends Vue {}
 </script>
-
-<style lang="scss" scoped>
-  @import '~@/styles/variables';
-  @import '~bootstrap/scss/mixins/breakpoints';
-
-  .tietosuojaseloste {
-    max-width: 970px;
-  }
-</style>

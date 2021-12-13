@@ -68,7 +68,7 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
-  import TietosuojaselosteModal from '@/components/tietosuojaseloste-modal/tietosuojaseloste-modal.vue'
+  import TietosuojaselosteModal from '@/components/tietosuojaseloste/tietosuojaseloste-modal.vue'
   import PalauteFormModal from '@/forms/palaute-form-modal.vue'
   import store from '@/store'
   import { Meta } from '@/utils/decorators'

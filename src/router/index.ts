@@ -66,6 +66,7 @@ import Teoriakoulutukset from '@/views/teoriakoulutukset/teoriakoulutukset.vue'
 import TeoriakoulutusTallennettu from '@/views/teoriakoulutukset/teoriakoulutus-tallennettu.vue'
 import TeoriakoulutusView from '@/views/teoriakoulutukset/teoriakoulutus.vue'
 import UusiTeoriakoulutus from '@/views/teoriakoulutukset/uusi-teoriakoulutus.vue'
+import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
@@ -745,6 +746,10 @@ const routes: Array<RouteConfig> = [
     path: '/sivua-ei-loytynyt',
     alias: '*',
     component: PageNotFound
+  },
+  {
+    path: '/tietosuojaseloste',
+    component: TietosuojaselosteView
   }
 ]
 
