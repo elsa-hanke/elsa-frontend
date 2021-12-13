@@ -4,7 +4,7 @@
       <template v-slot="{ uid }">
         <elsa-form-datepicker
           ref="paivamaara"
-          v-if="childDateReceived"
+          v-if="childDataReceived"
           :id="uid"
           :value.sync="form.paivamaara"
           @input="$emit('skipRouteExitConfirm', false)"
@@ -178,13 +178,13 @@
     params = {
       saving: false
     }
-    childDateReceived = false
+    childDataReceived = false
 
     async mounted() {
       this.form = {
         ...this.value
       }
-      this.childDateReceived = true
+      this.childDataReceived = true
     }
 
     validateState(name: string) {
