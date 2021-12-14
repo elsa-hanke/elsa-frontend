@@ -43,12 +43,24 @@
               </template>
             </elsa-form-group>
             <hr />
-            <div class="text-right">
-              <elsa-button :loading="deleting" variant="outline-danger" @click="onPoissaoloDelete">
+            <div class="d-flex flex-row-reverse flex-wrap">
+              <elsa-button :to="{ name: 'muokkaa-poissaoloa' }" variant="primary" class="ml-2 mb-3">
+                {{ $t('muokkaa-poissaoloa') }}
+              </elsa-button>
+              <elsa-button
+                :loading="deleting"
+                variant="outline-danger"
+                class="mb-3"
+                @click="onPoissaoloDelete"
+              >
                 {{ $t('poista-poissaolo') }}
               </elsa-button>
-              <elsa-button :to="{ name: 'muokkaa-poissaoloa' }" variant="primary" class="ml-2">
-                {{ $t('muokkaa-poissaoloa') }}
+              <elsa-button
+                :to="{ name: 'tyoskentelyjaksot' }"
+                variant="link"
+                class="mb-3 mr-auto font-weight-500 tyoskentelyjaksot-link"
+              >
+                {{ $t('palaa-tyoskentelyjaksoihin') }}
               </elsa-button>
             </div>
           </div>
@@ -177,5 +189,11 @@
     @include media-breakpoint-down(sm) {
       display: none;
     }
+  }
+
+  .tyoskentelyjaksot-link::before {
+    content: '<';
+    position: absolute;
+    left: 1rem;
   }
 </style>

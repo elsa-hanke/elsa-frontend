@@ -138,7 +138,7 @@
     </b-form-row>
     <hr />
     <div class="text-right">
-      <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">
+      <elsa-button variant="back" :to="backButtonRoute">
         {{ $t('peruuta') }}
       </elsa-button>
       <elsa-button
@@ -205,7 +205,10 @@
       }
     }
   })
-  export default class PoissaoloForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+  export default class PoissaoloForm extends Mixins<TyoskentelyjaksoMixin>(
+    validationMixin,
+    TyoskentelyjaksoMixin
+  ) {
     $refs!: {
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
@@ -213,6 +216,9 @@
 
     @Prop({ required: true, default: () => [] })
     poissaolonSyyt!: PoissaolonSyy[]
+
+    @Prop({ required: false, type: Number })
+    tyoskentelyjaksoId?: number
 
     @Prop({
       required: false,
@@ -227,7 +233,7 @@
     })
     poissaolo!: Poissaolo
 
-    form!: Poissaolo
+    declare form: Poissaolo
     params = {
       saving: false,
       deleting: false
@@ -236,6 +242,11 @@
 
     mounted() {
       this.form = this.poissaolo
+
+      const selectedTyoskentelyjakso =
+        this.tyoskentelyjaksoId &&
+        this.tyoskentelyjaksotFormatted.find((t) => t.id === this.tyoskentelyjaksoId)
+      this.form.tyoskentelyjakso = selectedTyoskentelyjakso ? selectedTyoskentelyjakso : null
       this.childDataReceived = true
     }
 
@@ -319,6 +330,12 @@
 
     get poissaolonSyytSorted() {
       return [...this.poissaolonSyyt.sort((a, b) => sortByAsc(a.nimi, b.nimi))]
+    }
+
+    get backButtonRoute() {
+      return this.tyoskentelyjaksoId
+        ? { name: 'tyoskentelyjakso', id: this.tyoskentelyjaksoId }
+        : { name: 'tyoskentelyjaksot' }
     }
   }
 </script>

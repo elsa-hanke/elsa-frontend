@@ -7,10 +7,11 @@
           <h1>{{ $t('tyoskentelyjakso') }}</h1>
           <hr />
           <div v-if="tyoskentelyjakso">
-            <elsa-form-group :label="$t('kunta')">
+            <elsa-form-group :label="$t('tyyppi')">
               <template v-slot="{ uid }">
-                <span :id="uid">
-                  {{ tyoskentelyjakso.tyoskentelypaikka.kunta.abbreviation }}
+                <span :id="uid">{{ tyyppiLabel }}</span>
+                <span v-if="tyoskentelyjakso.tyoskentelypaikka.muuTyyppi">
+                  : {{ tyoskentelyjakso.tyoskentelypaikka.muuTyyppi }}
                 </span>
               </template>
             </elsa-form-group>
@@ -19,11 +20,10 @@
                 <span :id="uid">{{ tyoskentelyjakso.tyoskentelypaikka.nimi }}</span>
               </template>
             </elsa-form-group>
-            <elsa-form-group :label="$t('tyyppi')">
+            <elsa-form-group :label="$t('kunta')">
               <template v-slot="{ uid }">
-                <span :id="uid">{{ tyyppiLabel }}</span>
-                <span v-if="tyoskentelyjakso.tyoskentelypaikka.muuTyyppi">
-                  : {{ tyoskentelyjakso.tyoskentelypaikka.muuTyyppi }}
+                <span :id="uid">
+                  {{ tyoskentelyjakso.tyoskentelypaikka.kunta.abbreviation }}
                 </span>
               </template>
             </elsa-form-group>
@@ -90,7 +90,15 @@
                 />
               </template>
             </elsa-form-group>
-            <hr v-if="tyoskentelyjakso.asiakirjat.length === 0" />
+            <elsa-button
+              variant="outline-primary"
+              v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan"
+              :to="{ name: 'uusi-poissaolo', params: { tyoskentelyjaksoId: tyoskentelyjakso.id } }"
+              class="mt-3"
+            >
+              {{ $t('lisaa-poissaolo') }}
+            </elsa-button>
+            <hr v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan" />
             <div
               :class="{ 'mt-4': tyoskentelyjakso.asiakirjat.length > 0 }"
               class="d-flex flex-row-reverse flex-wrap"

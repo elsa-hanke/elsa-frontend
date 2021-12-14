@@ -10,6 +10,7 @@
             v-if="!loading"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :poissaolon-syyt="poissaolonSyyt"
+            :tyoskentelyjaksoId="tyoskentelyjaksoId"
             @submit="onSubmit"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
@@ -52,10 +53,18 @@
     ]
     poissaoloLomake: null | PoissaoloLomake = null
     poissaolo: null | Poissaolo = null
+    tyoskentelyjaksoId: number | null = null
     loading = true
 
     async mounted() {
       await this.fetchLomake()
+
+      const tyoskentelyjaksoId = this.$route?.params?.tyoskentelyjaksoId
+      const tyoskentelyjaksoIdParsed = parseInt(tyoskentelyjaksoId)
+      if (tyoskentelyjaksoIdParsed) {
+        this.tyoskentelyjaksoId = tyoskentelyjaksoIdParsed
+      }
+
       this.loading = false
     }
 
