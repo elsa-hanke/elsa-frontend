@@ -4,7 +4,7 @@
       <template #label-help>
         <elsa-popover>
           <template>
-            <elsa-poissaolon-syyt :poissaolonSyyt="poissaolonSyyt" :new-info="true" />
+            <elsa-poissaolon-syyt />
           </template>
         </elsa-popover>
       </template>
@@ -57,6 +57,7 @@
             :id="uid"
             :value.sync="form.alkamispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
+            :initial-date="alkamispaivaInitialDate"
             :min="minAlkamispaiva"
             :minErrorText="
               $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
@@ -78,6 +79,7 @@
             :id="uid"
             :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
+            :initial-date="paattymispaivaInitialDate"
             :min="minPaattymispaiva"
             :minErrorText="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
             :max="maxPaattymispaiva"
@@ -336,6 +338,14 @@
       return this.tyoskentelyjaksoId
         ? { name: 'tyoskentelyjakso', id: this.tyoskentelyjaksoId }
         : { name: 'tyoskentelyjaksot' }
+    }
+
+    get alkamispaivaInitialDate() {
+      return this.form.tyoskentelyjakso?.alkamispaiva
+    }
+
+    get paattymispaivaInitialDate() {
+      return this.form.alkamispaiva
     }
   }
 </script>

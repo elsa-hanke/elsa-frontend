@@ -5,6 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('lisaa-poissaolo') }}</h1>
+          <p class="mb-2">{{ $t('uusi-poissaolo-ohjeteksti') }}</p>
           <hr />
           <poissaolo-form
             v-if="!loading"

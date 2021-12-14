@@ -1,62 +1,66 @@
 <template>
   <div>
     <h3>{{ $t('poissaolon-syy') }}</h3>
-    <p>
-      {{ newInfo ? $t('valitse-listasta-poissaolon-syy') : '' }}
-      {{ $t('poissaolon-syy-kuvaus') }}
+    <p class="mb-3">
+      {{ $t('valitse-listasta-poissaolon-syy') }}
     </p>
-    <h4>
-      {{ $t('koulutuskertymaa-vahentavat-poissaolot') }}
+    <h4 class="mb-0">
+      {{ $t('poissaolon-syyt-enintaan-30-pv.otsikko') }}
     </h4>
-    <p>
-      {{ $t('koulutuskertymaa-vahentavat-kuvaus') }}
-    </p>
-    <ul>
-      <li v-for="(syy, index) in vahennetaanSuoraan" :key="index">
-        {{ syy.nimi }}
-      </li>
-    </ul>
-    <h4>
-      {{ $t('koulutuskertymaa-vahentavat-poissaolot-yli-30-pv-poissaoloissa') }}
+    <ol class="pt-0 pb-0">
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.sairausloma-palkallinen') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.tilapainen-hoitovapaa') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.pakottavat-perhesyyt') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.vanhempainvapaa') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.opintovapaa') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.opiskelu') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.lukuloma') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.kertausharjoitukset') }}</li>
+      <li>{{ $t('poissaolon-syyt-enintaan-30-pv.lomautukset') }}</li>
+    </ol>
+    <h4 class="mb-0">
+      {{ $t('poissaolon-syyt-vahennetaan-suoraan.otsikko') }}
     </h4>
-    <p>
-      {{ $t('koulutuskertymaa-vahentavat-yli-30-pv-kuvaus') }}
+    <ol class="pt-0 pb-0">
+      <li>{{ $t('poissaolon-syyt-vahennetaan-suoraan.yksityisasia') }}</li>
+      <li>{{ $t('poissaolon-syyt-vahennetaan-suoraan.virkavapaus') }}</li>
+      <li>{{ $t('poissaolon-syyt-vahennetaan-suoraan.sairausloma-palkaton') }}</li>
+      <li>{{ $t('poissaolon-syyt-vahennetaan-suoraan.hoitovapaa') }}</li>
+      <li>{{ $t('poissaolon-syyt-vahennetaan-suoraan.vuorotteluvapaa') }}</li>
+      <li>{{ $t('poissaolon-syyt-vahennetaan-suoraan.sopeuttamisvapaa') }}</li>
+    </ol>
+    <p class="mb-3">
+      {{ $t('koulutusjaksoista-on-laskelmia-varten-esitettava-tyotodistukset-kuvaus') }}
     </p>
-    <ul>
-      <li v-for="(syy, index) in vahennetaanYlimenevaAika" :key="index">
-        {{ syy.nimi }}
-      </li>
-    </ul>
+    <h4 class="mb-0">
+      {{ $t('keskeytyspaiviksi-ei-lasketa.otsikko') }}
+    </h4>
+    <ol class="pt-0 pb-0">
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.vuosilomapaivat') }}</li>
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.lomarahavapaat') }}</li>
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.saastovapaat-palkalliset') }}</li>
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.aktiivivapaat') }}</li>
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.paivystysvapaat') }}</li>
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.taydennyskoulutus') }}</li>
+      <li>{{ $t('keskeytyspaiviksi-ei-lasketa.ulkomainen-koulutus') }}</li>
+    </ol>
+    <p class="mb-2">{{ $t('jos-aktiivivapaiden-maara-poikkeuksellisen-suuri-kuvaus') }}</p>
+    <p class="pb-2 mb-0">
+      {{ $t('tarvittaessa-vastuuhenkilo-voi-maarata-lisaa-koulutusta-kuvaus') }}
+    </p>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import { Prop } from 'vue-property-decorator'
-
-  import { PoissaolonSyy } from '@/types'
-  import { PoissaolonSyyTyyppi } from '@/utils/constants'
 
   @Component({})
-  export default class ElsaPoissaolonSyyt extends Vue {
-    @Prop({ required: true })
-    poissaolonSyyt!: PoissaolonSyy[]
-
-    @Prop({ required: false, default: false })
-    newInfo!: boolean
-
-    get vahennetaanYlimenevaAika() {
-      return this.poissaolonSyyt.filter(
-        (syy: PoissaolonSyy) =>
-          syy.vahennystyyppi === PoissaolonSyyTyyppi.VAHENNETAAN_YLIMENEVA_AIKA
-      )
-    }
-
-    get vahennetaanSuoraan() {
-      return this.poissaolonSyyt.filter(
-        (syy: PoissaolonSyy) => syy.vahennystyyppi === PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN
-      )
-    }
-  }
+  export default class ElsaPoissaolonSyyt extends Vue {}
 </script>
+
+<style lang="scss" scoped>
+  ol {
+    padding: 1rem;
+  }
+</style>
