@@ -123,7 +123,7 @@
                             {{ $t('poissaolon-syy') }}
                             <elsa-popover>
                               <template>
-                                <elsa-poissaolon-syyt :poissaolonSyyt="tilastotPoissaolonSyyt" />
+                                <elsa-poissaolon-syyt />
                               </template>
                             </elsa-popover>
                           </b-th>
@@ -343,14 +343,6 @@
     get tilastotTyoskentelyjaksot() {
       if (this.tilastot) {
         return this.tilastot.tyoskentelyjaksot
-      } else {
-        return []
-      }
-    }
-
-    get tilastotPoissaolonSyyt() {
-      if (this.tyoskentelyjaksotTaulukko) {
-        return this.tyoskentelyjaksotTaulukko.poissaolonSyyt
       } else {
         return []
       }
