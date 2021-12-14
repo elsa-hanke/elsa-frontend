@@ -1060,7 +1060,9 @@
     onSubmit() {
       const validations = [
         this.validateForm(),
-        this.$refs.seuraavanKeskustelunAjankohta.validateForm()
+        this.$refs.seuraavanKeskustelunAjankohta
+          ? this.$refs.seuraavanKeskustelunAjankohta.validateForm()
+          : true
       ]
 
       if (validations.includes(false)) {
