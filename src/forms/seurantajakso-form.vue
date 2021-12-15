@@ -501,13 +501,13 @@
                 v-model="form.kouluttaja"
                 @input="$emit('skipRouteExitConfirm', false)"
                 :id="uid"
-                :options="kouluttajat"
+                :options="formattedKouluttajat"
                 :state="validateState('kouluttaja')"
                 label="nimi"
                 track-by="nimi"
               >
                 <template v-slot:option="{ option }">
-                  <div v-if="option.nimi != null">{{ optionDisplayName(option) }}</div>
+                  <div v-if="option.nimi != null">{{ option.nimi }}</div>
                 </template>
               </elsa-form-multiselect>
               <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -865,6 +865,7 @@
     Suoritemerkinta,
     Suoritusarviointi
   } from '@/types'
+  import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import SuoritemerkintaDetails from '@/views/suoritemerkinnat/suoritemerkinta-details.vue'
 
@@ -995,8 +996,9 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    get kouluttajat(): Kayttaja[] {
-      return store.getters['erikoistuva/kouluttajat'] || []
+    get formattedKouluttajat(): Kayttaja[] {
+      const kouluttajat = store.getters['erikoistuva/kouluttajat'] || []
+      return formatList(this, kouluttajat)
     }
 
     get uusiJakso() {
@@ -1010,10 +1012,6 @@
     get minSeuraavaKeskustelu(): Date {
       const now = new Date()
       return new Date(now.setMonth(now.getMonth() + 6))
-    }
-
-    optionDisplayName(option: Kayttaja) {
-      return option.nimike ? option.nimi + ', ' + option.nimike : option.nimi
     }
 
     async onKouluttajaSubmit(value: Kayttaja, modal: BModal) {

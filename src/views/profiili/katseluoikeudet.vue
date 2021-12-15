@@ -142,8 +142,10 @@
 
 <script lang="ts">
   import axios, { AxiosError } from 'axios'
+  import { BModal } from 'bootstrap-vue'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { postLahikouluttaja } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -192,13 +194,15 @@
 
     isLoading = false
 
-    async onKouluttajaSubmit(value: any, params: any, modal: any) {
+    async onKouluttajaSubmit(value: any, params: any, modal: BModal) {
       params.saving = true
       try {
-        const kouluttaja: Kayttaja = (
-          await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
-        ).data
-        this.kouluttajat.push(kouluttaja)
+        const kouluttaja = (await postLahikouluttaja(value)).data
+
+        if (!this.kouluttajat.some((kayttaja: Kayttaja) => kayttaja.id === kouluttaja.id)) {
+          this.kouluttajat.push(kouluttaja)
+        }
+
         this.valittuKouluttaja = kouluttaja
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))

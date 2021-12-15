@@ -36,7 +36,6 @@
 
   import ArviointipyyntoForm from '@/forms/arviointipyynto-form.vue'
   import { ArviointipyyntoLomake, Suoritusarviointi } from '@/types'
-  import { decorate } from '@/utils/arvioinninAntajaListDecorator'
   import { confirmDelete } from '@/utils/confirm'
   import { dateBetween } from '@/utils/date'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -76,12 +75,6 @@
         this.arviointipyyntoLomake = (
           await axios.get(`erikoistuva-laakari/arviointipyynto-lomake`)
         ).data
-        if (this.arviointipyyntoLomake !== null) {
-          this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot = decorate(
-            this,
-            this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot
-          )
-        }
       } catch {
         toastFail(this, this.$t('arviointipyynnon-lomakkeen-hakeminen-epaonnistui'))
       }

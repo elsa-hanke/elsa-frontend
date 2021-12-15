@@ -109,18 +109,14 @@
             :id="uid"
             v-model="form.arvioinninAntaja"
             @input="$emit('skipRouteExitConfirm', false)"
-            :options="kouluttajatAndVastuuhenkilot"
+            :options="formattedKouluttajatAndVastuuhenkilot"
             :state="validateState('arvioinninAntaja')"
             :disabled="editing"
             label="nimi"
             track-by="nimi"
           >
             <template v-slot:option="{ option }">
-              <user-avatar
-                :src-base64="option.avatar"
-                src-content-type="image/jpeg"
-                :display-name="option.nimi"
-              />
+              <div v-if="option.nimi != null">{{ option.nimi }}</div>
             </template>
           </elsa-form-multiselect>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -158,12 +154,14 @@
 </template>
 
 <script lang="ts">
-  import axios, { AxiosError } from 'axios'
+  import { AxiosError } from 'axios'
+  import { BModal } from 'bootstrap-vue'
   import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
+  import { postLahikouluttaja } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -182,6 +180,7 @@
     Tyoskentelyjakso,
     ElsaError
   } from '@/types'
+  import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
@@ -308,13 +307,20 @@
       this.$emit('delete', this.params)
     }
 
-    async onKouluttajaSubmit(value: Kayttaja, params: any) {
+    async onKouluttajaSubmit(value: Kayttaja, params: any, modal: BModal) {
       params.saving = true
       try {
-        const kouluttaja = (await axios.post('/erikoistuva-laakari/lahikouluttajat', value)).data
-        this.kouluttajatAndVastuuhenkilot.push(kouluttaja)
+        const kouluttaja = (await postLahikouluttaja(value)).data
+
+        if (
+          !this.kouluttajatAndVastuuhenkilot.some(
+            (kayttaja: Kayttaja) => kayttaja.id === kouluttaja.id
+          )
+        ) {
+          this.kouluttajatAndVastuuhenkilot.push(kouluttaja)
+        }
         this.form.arvioinninAntaja = kouluttaja
-        this.$bvModal.hide('confirm')
+        modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
@@ -338,6 +344,10 @@
         return this.account.avatar
       }
       return undefined
+    }
+
+    get formattedKouluttajatAndVastuuhenkilot() {
+      return formatList(this, this.kouluttajatAndVastuuhenkilot)
     }
   }
 </script>

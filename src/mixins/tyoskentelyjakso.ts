@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import { BModal } from 'bootstrap-vue'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
 import { ElsaError } from '@/types'
@@ -22,7 +23,7 @@ export default class TyoskentelyjaksoMixin extends Vue {
     }
   }
 
-  async onTyoskentelyjaksoSubmit(value: any, params: any, modal: any) {
+  async onTyoskentelyjaksoSubmit(value: any, params: any, modal: BModal) {
     params.saving = true
     try {
       const formData = new FormData()
