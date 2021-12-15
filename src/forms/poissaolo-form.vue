@@ -248,7 +248,11 @@
       const selectedTyoskentelyjakso =
         this.tyoskentelyjaksoId &&
         this.tyoskentelyjaksotFormatted.find((t) => t.id === this.tyoskentelyjaksoId)
-      this.form.tyoskentelyjakso = selectedTyoskentelyjakso ? selectedTyoskentelyjakso : null
+
+      if (selectedTyoskentelyjakso) {
+        this.form.tyoskentelyjakso = selectedTyoskentelyjakso
+      }
+
       this.childDataReceived = true
     }
 
