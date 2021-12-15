@@ -256,8 +256,8 @@
     Tyoskentelyjakso,
     Kayttaja
   } from '@/types'
-  import { decorate } from '@/utils/arvioinninAntajaListDecorator'
   import { sortByDateDesc } from '@/utils/date'
+  import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
@@ -345,7 +345,7 @@
         await axios.get('erikoistuva-laakari/suoritusarvioinnit-rajaimet')
       ).data
       if (this.suoritusArvioinnitOptions) {
-        this.suoritusArvioinnitOptions.kouluttajatAndVastuuhenkilot = decorate(
+        this.suoritusArvioinnitOptions.kouluttajatAndVastuuhenkilot = formatList(
           this,
           this.suoritusArvioinnitOptions?.kouluttajatAndVastuuhenkilot
         )

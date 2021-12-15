@@ -248,6 +248,7 @@
     Vastuuhenkilo
   } from '@/types'
   import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
+  import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
   import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
 
@@ -370,7 +371,7 @@
         ? this.form.kouluttajat.map((k) => k.kayttajaId)
         : null
 
-      return this.kouluttajat.map((k) => {
+      const kouluttajat = this.kouluttajat.map((k: any) => {
         if (selectedKouluttajat?.includes(k.id)) {
           return {
             ...k,
@@ -379,6 +380,7 @@
         }
         return k
       })
+      return formatList(this, kouluttajat)
     }
 
     get maxKoejaksonAlkamispaiva() {

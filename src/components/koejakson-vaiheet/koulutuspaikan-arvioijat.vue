@@ -78,16 +78,19 @@
 </template>
 
 <script lang="ts">
-  import axios, { AxiosError } from 'axios'
+  import { AxiosError } from 'axios'
+  import { BModal } from 'bootstrap-vue'
   import { Component, Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
+  import { postLahikouluttaja } from '@/api/erikoistuva'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
   import { KoejaksonVaiheHyvaksyja, ElsaError } from '@/types'
+  import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -136,7 +139,7 @@
     }
 
     get lahikouluttajatList() {
-      return this.kouluttajat?.map((k: any) => {
+      const lahikouluttajat = this.kouluttajat?.map((k: any) => {
         if (this.lahiesimies?.id === k.id) {
           return {
             ...k,
@@ -145,10 +148,11 @@
         }
         return k
       })
+      return formatList(this, lahikouluttajat)
     }
 
     get lahiesimiesList() {
-      return this.kouluttajat?.map((k: any) => {
+      const lahiesimiehet = this.kouluttajat?.map((k: any) => {
         if (this.lahikouluttaja?.id === k.id) {
           return {
             ...k,
@@ -157,6 +161,7 @@
         }
         return k
       })
+      return formatList(this, lahiesimiehet)
     }
 
     onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
@@ -169,23 +174,26 @@
       this.$emit('lahiesimiesSelect', this.form.lahiesimies)
     }
 
-    async onLahikouluttajaSubmit(value: any, params: any, modal: any) {
+    async onLahikouluttajaSubmit(value: any, params: any, modal: BModal) {
       params.saving = true
-      await this.onKoejaksonVaiheHyvaksyjaSubmit(value, modal, false)
+      await this.onKouluttajaSubmit(value, modal, false)
       params.saving = false
     }
 
-    async onLahiesimiesSubmit(value: any, params: any, modal: any) {
+    async onLahiesimiesSubmit(value: any, params: any, modal: BModal) {
       params.saving = true
-      await this.onKoejaksonVaiheHyvaksyjaSubmit(value, modal, true)
+      await this.onKouluttajaSubmit(value, modal, true)
       params.saving = false
     }
 
-    private async onKoejaksonVaiheHyvaksyjaSubmit(value: any, modal: any, isLahiesimies: boolean) {
+    private async onKouluttajaSubmit(value: any, modal: BModal, isLahiesimies: boolean) {
       try {
-        const koejaksonVaiheHyvaksyja = (
-          await axios.post('/erikoistuva-laakari/lahikouluttajat', value)
-        ).data
+        const kouluttaja = (await postLahikouluttaja(value)).data
+        const koejaksonVaiheHyvaksyja = {
+          id: kouluttaja.id,
+          kayttajaUserId: kouluttaja.userId,
+          nimi: kouluttaja.nimi
+        } as KoejaksonVaiheHyvaksyja
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
         await store.dispatch('erikoistuva/getKouluttajat')

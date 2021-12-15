@@ -438,30 +438,6 @@
       this.form.tyotunnitViikossa = parseFloat(val.replace(',', '.'))
     }
 
-    get lahikouluttajatList() {
-      return this.kouluttajat.map((k) => {
-        if (this.form.lahiesimies.id === k.id) {
-          return {
-            ...k,
-            $isDisabled: true
-          }
-        }
-        return k
-      })
-    }
-
-    get lahiesimiesList() {
-      return this.kouluttajat.map((k) => {
-        if (this.form.lahikouluttaja.id === k.id) {
-          return {
-            ...k,
-            $isDisabled: true
-          }
-        }
-        return k
-      })
-    }
-
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
       if (!this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva) {

@@ -170,6 +170,7 @@
       "paallekkaisten-poissaolojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten poissaolojen päiväkohtainen kertymä ei voi ylittää 100%:a",
       "paallekkaisten-tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "samalla-sahkopostilla-loytyy-jo-toinen-kayttaja": "samalla sähköpostilla löytyy jo toinen käyttäjä",
+      "samalla-sahkopostilla-loytyy-jo-toinen-kayttaja-saman-yliopiston-ja-erikoisalan-alta": "samalla sähköpostilla löytyy jo toinen käyttäjä saman yliopiston ja erikoisalan alta",
       "tiedosto-ei-ole-kelvollinen-tai-samanniminen-tiedosto-on-jo-olemassa": "tiedosto ei ole kelvollinen tai samanniminen tiedosto on jo olemassa",
       "tyoskentelyjaksojen-yhteenlaskettu-aika-ylittyy": "päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ylittää 100%",
       "uuden-lahikouluttajan-voi-lisata-vain-erikoistuva-laakari": "uuden lahikouluttajan voi lisätä vain erikoistuva lääkäri"
