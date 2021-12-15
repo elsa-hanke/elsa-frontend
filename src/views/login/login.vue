@@ -2,6 +2,10 @@
   <b-container class="mt-4 mb-6">
     <b-row>
       <b-col lg>
+        <b-alert variant="danger" :show="virhe != null">
+          <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
+          {{ $t('kirjautuminen.' + virhe) }}
+        </b-alert>
         <b-alert variant="dark" show>
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
           {{ $t('piloottikaytto-kuvaus') }}
@@ -48,6 +52,10 @@
   export default class Login extends Vue {
     loginSuomiFi() {
       return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`)
+    }
+
+    get virhe() {
+      return this.$route.query.virhe
     }
   }
 </script>
