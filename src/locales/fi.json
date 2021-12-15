@@ -302,6 +302,10 @@
   "kirjaudu-sisaan-haka": "Kirjaudu sisään HAKA:lla",
   "kirjaudu-sisaan-suomifi": "Kirjaudu sisään Suomi.fi:llä käyttäen pankkitunnuksia, varmennekorttia tai mobiilivarmennetta",
   "kirjaudu-ulos": "Kirjaudu ulos",
+  "kirjautuminen": {
+    "EI_OPINTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Aktiivista opinto-oikeutta ei löytynyt.",
+    "EI_KAYTTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Käyttöoikeutta palveluun ei löytynyt."
+  },
   "kirjautumaton-kayttaja": "Kirjautumaton käyttäjä",
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
   "kirjoita-kommenttisi-tahan": "Kirjoita kommenttisi tähän...",
