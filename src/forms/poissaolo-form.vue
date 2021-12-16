@@ -4,7 +4,7 @@
       <template #label-help>
         <elsa-popover>
           <template>
-            <elsa-poissaolon-syyt :poissaolonSyyt="poissaolonSyyt" :new-info="true" />
+            <elsa-poissaolon-syyt />
           </template>
         </elsa-popover>
       </template>
@@ -57,6 +57,7 @@
             :id="uid"
             :value.sync="form.alkamispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
+            :initial-date="alkamispaivaInitialDate"
             :min="minAlkamispaiva"
             :minErrorText="
               $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
@@ -78,6 +79,7 @@
             :id="uid"
             :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
+            :initial-date="paattymispaivaInitialDate"
             :min="minPaattymispaiva"
             :minErrorText="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
             :max="maxPaattymispaiva"
@@ -138,7 +140,7 @@
     </b-form-row>
     <hr />
     <div class="text-right">
-      <elsa-button variant="back" :to="{ name: 'tyoskentelyjaksot' }">
+      <elsa-button variant="back" :to="backButtonRoute">
         {{ $t('peruuta') }}
       </elsa-button>
       <elsa-button
@@ -205,7 +207,10 @@
       }
     }
   })
-  export default class PoissaoloForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+  export default class PoissaoloForm extends Mixins<TyoskentelyjaksoMixin>(
+    validationMixin,
+    TyoskentelyjaksoMixin
+  ) {
     $refs!: {
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
@@ -213,6 +218,9 @@
 
     @Prop({ required: true, default: () => [] })
     poissaolonSyyt!: PoissaolonSyy[]
+
+    @Prop({ required: false, type: Number })
+    tyoskentelyjaksoId?: number
 
     @Prop({
       required: false,
@@ -227,7 +235,7 @@
     })
     poissaolo!: Poissaolo
 
-    form!: Poissaolo
+    declare form: Poissaolo
     params = {
       saving: false,
       deleting: false
@@ -236,6 +244,15 @@
 
     mounted() {
       this.form = this.poissaolo
+
+      const selectedTyoskentelyjakso =
+        this.tyoskentelyjaksoId &&
+        this.tyoskentelyjaksotFormatted.find((t) => t.id === this.tyoskentelyjaksoId)
+
+      if (selectedTyoskentelyjakso) {
+        this.form.tyoskentelyjakso = selectedTyoskentelyjakso
+      }
+
       this.childDataReceived = true
     }
 
@@ -319,6 +336,20 @@
 
     get poissaolonSyytSorted() {
       return [...this.poissaolonSyyt.sort((a, b) => sortByAsc(a.nimi, b.nimi))]
+    }
+
+    get backButtonRoute() {
+      return this.tyoskentelyjaksoId
+        ? { name: 'tyoskentelyjakso', id: this.tyoskentelyjaksoId }
+        : { name: 'tyoskentelyjaksot' }
+    }
+
+    get alkamispaivaInitialDate() {
+      return this.form.tyoskentelyjakso?.alkamispaiva
+    }
+
+    get paattymispaivaInitialDate() {
+      return this.form.alkamispaiva
     }
   }
 </script>

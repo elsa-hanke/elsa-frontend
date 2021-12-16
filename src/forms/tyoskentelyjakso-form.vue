@@ -1,44 +1,5 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('kunta')" :required="!value.tapahtumia">
-      <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
-          <elsa-form-multiselect
-            :id="uid"
-            v-model="form.tyoskentelypaikka.kunta"
-            @input="$emit('skipRouteExitConfirm', false)"
-            :options="kunnatFormatted"
-            :state="validateState('tyoskentelypaikka.kunta')"
-            label="abbreviation"
-            track-by="id"
-          />
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </div>
-        <div v-else>
-          <span :id="uid">{{ form.tyoskentelypaikka.kunta.abbreviation }}</span>
-        </div>
-      </template>
-    </elsa-form-group>
-    <elsa-form-group :label="$t('tyoskentelypaikka')" :required="!value.tapahtumia">
-      <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
-          <b-form-input
-            :id="uid"
-            v-model="form.tyoskentelypaikka.nimi"
-            @input="$emit('skipRouteExitConfirm', false)"
-            :state="validateState('tyoskentelypaikka.nimi')"
-          ></b-form-input>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </div>
-        <div v-else>
-          <span :id="uid">{{ form.tyoskentelypaikka.nimi }}</span>
-        </div>
-      </template>
-    </elsa-form-group>
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
         <div v-if="!value.tapahtumia">
@@ -91,34 +52,43 @@
         </div>
       </template>
     </elsa-form-group>
-    <elsa-form-group
-      :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'"
-      :required="!value.tapahtumia"
-    >
+    <elsa-form-group :label="$t('tyoskentelypaikka')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
         <div v-if="!value.tapahtumia">
-          <div class="d-flex align-items-center">
-            <b-form-input
-              :id="uid"
-              :value="form.osaaikaprosentti"
-              :state="validateState('osaaikaprosentti')"
-              type="number"
-              step="any"
-              class="col-sm-3"
-              @input="onOsaaikaprosenttiInput"
-            />
-            <span class="mx-3">%</span>
-          </div>
-          <b-form-invalid-feedback
-            :id="`${uid}-feedback`"
-            :style="{
-              display: validateState('osaaikaprosentti') === false ? 'block' : 'none'
-            }"
-          >
-            {{ $t('osaaikaprosentti-validointivirhe') }} 50–100 %
+          <b-form-input
+            :id="uid"
+            v-model="form.tyoskentelypaikka.nimi"
+            @input="$emit('skipRouteExitConfirm', false)"
+            :state="validateState('tyoskentelypaikka.nimi')"
+          ></b-form-input>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
         </div>
-        <div v-else>{{ form.osaaikaprosentti }} %</div>
+        <div v-else>
+          <span :id="uid">{{ form.tyoskentelypaikka.nimi }}</span>
+        </div>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group :label="$t('kunta')" :required="!value.tapahtumia">
+      <template v-slot="{ uid }">
+        <div v-if="!value.tapahtumia">
+          <elsa-form-multiselect
+            :id="uid"
+            v-model="form.tyoskentelypaikka.kunta"
+            @input="$emit('skipRouteExitConfirm', false)"
+            :options="kunnatFormatted"
+            :state="validateState('tyoskentelypaikka.kunta')"
+            label="abbreviation"
+            track-by="id"
+          />
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
+        </div>
+        <div v-else>
+          <span :id="uid">{{ form.tyoskentelypaikka.kunta.abbreviation }}</span>
+        </div>
       </template>
     </elsa-form-group>
     <b-form-row>
@@ -161,9 +131,45 @@
           <small v-if="value.tapahtumia" class="form-text text-muted">
             {{ $t('tyoskentelyjakso-paattymispaiva-help') }}
           </small>
+          <small v-else class="form-text text-muted">
+            {{ $t('jata-tyhjaksi-jos-ei-tiedossa') }}
+          </small>
         </template>
       </elsa-form-group>
     </b-form-row>
+    <elsa-form-group
+      :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'"
+      :required="!value.tapahtumia"
+    >
+      <template v-slot="{ uid }">
+        <div v-if="!value.tapahtumia">
+          <div class="d-flex align-items-center">
+            <b-form-input
+              :id="uid"
+              :value="form.osaaikaprosentti"
+              :state="validateState('osaaikaprosentti')"
+              type="number"
+              step="any"
+              class="col-sm-3"
+              @input="onOsaaikaprosenttiInput"
+            />
+            <span class="mx-3">%</span>
+          </div>
+          <small class="d-flex form-text text-muted">
+            {{ $t('alle-50-osaaikaisuus-ei-kerryta') }}
+          </small>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display: validateState('osaaikaprosentti') === false ? 'block' : 'none'
+            }"
+          >
+            {{ $t('osaaikaprosentti-validointivirhe') }} 50–100 %
+          </b-form-invalid-feedback>
+        </div>
+        <div v-else>{{ form.osaaikaprosentti }} %</div>
+      </template>
+    </elsa-form-group>
     <elsa-form-group :label="$t('kaytannon-koulutus')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
         <div v-if="!value.tapahtumia">
@@ -414,7 +420,10 @@
     }
     tyypit = [
       { text: this.$t('terveyskeskus'), value: TyoskentelyjaksoTyyppi.TERVEYSKESKUS },
-      { text: this.$t('keskussairaala'), value: TyoskentelyjaksoTyyppi.KESKUSSAIRAALA },
+      {
+        text: this.$t('keskussairaala-tai-aluesairaala'),
+        value: TyoskentelyjaksoTyyppi.KESKUSSAIRAALA
+      },
       {
         text: this.$t('yliopistollinen-sairaala'),
         value: TyoskentelyjaksoTyyppi.YLIOPISTOLLINEN_SAIRAALA

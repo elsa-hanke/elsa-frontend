@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
-          <p>{{ $t('tyoskentelyjaksot-kuvaus') }}</p>
+          <p v-html="$t('tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki })" />
           <div class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
               variant="primary"
@@ -19,7 +19,7 @@
             </elsa-button>
           </div>
           <div v-if="!loading">
-            <div class="d-flex justify-content-center border rounded pt-3 mb-4">
+            <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
               <div class="container-fluid">
                 <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
                   <template v-slot="{ uid }">
@@ -64,24 +64,6 @@
                       </div>
                     </template>
                   </elsa-form-group>
-                </b-row>
-                <b-row>
-                  <b-col>
-                    <div class="d-flex flex-row-reverse">
-                      <elsa-button
-                        :disabled="false"
-                        variant="link"
-                        class="shadow-none"
-                        @click="toggleDays"
-                      >
-                        {{
-                          showInDays
-                            ? $t('nayta-likimaaraisina-sekayksikkoina')
-                            : $t('nayta-vuorokausina')
-                        }}
-                      </elsa-button>
-                    </div>
-                  </b-col>
                 </b-row>
               </div>
             </div>
@@ -141,7 +123,7 @@
                             {{ $t('poissaolon-syy') }}
                             <elsa-popover>
                               <template>
-                                <elsa-poissaolon-syyt :poissaolonSyyt="tilastotPoissaolonSyyt" />
+                                <elsa-poissaolon-syyt />
                               </template>
                             </elsa-popover>
                           </b-th>
@@ -182,9 +164,6 @@
                 </template>
               </b-table>
             </div>
-            <p class="text-size-sm">
-              {{ $t('tyoskentelyjaksot-taulukko-kuvaus') }}
-            </p>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -205,7 +184,6 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { durationOptions } from '@/plugins/date'
   import {
     BarChartRow,
     Keskeytysaika,
@@ -286,14 +264,6 @@
       } catch {
         toastFail(this, this.$t('tyoskentelyjaksojen-hakeminen-epaonnistui'))
       }
-    }
-
-    get showInDays() {
-      return durationOptions.showInDays
-    }
-
-    toggleDays() {
-      durationOptions.showInDays = !durationOptions.showInDays
     }
 
     get tyoskentelyjaksot() {
@@ -378,14 +348,6 @@
       }
     }
 
-    get tilastotPoissaolonSyyt() {
-      if (this.tyoskentelyjaksotTaulukko) {
-        return this.tyoskentelyjaksotTaulukko.poissaolonSyyt
-      } else {
-        return []
-      }
-    }
-
     get tilastotKaytannonKoulutusSorted() {
       return [
         this.tilastotKaytannonKoulutus.find(
@@ -416,7 +378,7 @@
       )
 
       return {
-        colors: ['#41b257', '#0f9bd9', '#8a86fb', '#ffb406'],
+        colors: ['#4EBDEF', '#FF8B06', '#808080', '#FFB406'],
         labels: [
           `${this.$t('oma-erikoisala')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[0].suoritettu
@@ -493,6 +455,12 @@
           }
         ]
       }
+    }
+
+    get opintooppaastaLinkki() {
+      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(this.$t(
+        'tarkemmat-vaatimukset-opinto-oppaasta'
+      ) as string).toLowerCase()}</a>`
     }
 
     get tyoskentelyjaksotFormatted() {
