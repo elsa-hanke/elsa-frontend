@@ -304,7 +304,8 @@
   "kirjaudu-ulos": "Kirjaudu ulos",
   "kirjautuminen": {
     "EI_OPINTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Aktiivista opinto-oikeutta ei löytynyt.",
-    "EI_KAYTTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Käyttöoikeutta palveluun ei löytynyt."
+    "EI_KAYTTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Käyttöoikeutta palveluun ei löytynyt.",
+    "TUNTEMATON": "Sisäänkirjautuminen epäonnistui."
   },
   "kirjautumaton-kayttaja": "Kirjautumaton käyttäjä",
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
