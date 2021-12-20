@@ -5,6 +5,7 @@
         <b-alert variant="danger" :show="virhe != null">
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
           {{ $t('kirjautuminen.' + virhe) }}
+          <a v-if="showMail" :href="`mailto:${contactMail}`">{{ contactMail }}</a>
         </b-alert>
         <b-alert variant="dark" show>
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
@@ -56,6 +57,14 @@
 
     get virhe() {
       return this.$route.query.virhe
+    }
+
+    get showMail() {
+      return this.$route.query.virhe === 'EI_KAYTTO_OIKEUTTA'
+    }
+
+    get contactMail() {
+      return 'matti.hiitola@oulu.fi'
     }
   }
 </script>
