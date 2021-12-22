@@ -43,6 +43,7 @@ axios.interceptors.response.use(
       case 403:
         if (window.location.pathname !== '/kirjautuminen' && store.getters['auth/isLoggedIn']) {
           store.dispatch('auth/logout')
+          window.location.href = '/kirjautuminen'
         }
         break
     }
