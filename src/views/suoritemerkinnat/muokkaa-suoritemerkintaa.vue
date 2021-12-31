@@ -12,7 +12,8 @@
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
-            :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
+            :arviointiasteikko="suoritemerkinta.arviointiasteikko"
+            :arviointiasteikonTaso="arviointiasteikonTaso"
             @submit="onSubmit"
             @delete="onDelete"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
@@ -103,7 +104,7 @@
     async onSubmit(
       value: {
         tyoskentelyjaksoId: number
-        oppimistavoiteId: number
+        suoriteId: number
         vaativuustaso: number
         arviointiasteikonTaso: number
         suorituspaiva: string
@@ -120,7 +121,7 @@
           await axios.put('erikoistuva-laakari/suoritemerkinnat', {
             id: this.suoritemerkinta?.id,
             tyoskentelyjaksoId: value.tyoskentelyjaksoId,
-            oppimistavoiteId: value.oppimistavoiteId,
+            suoriteId: value.suoriteId,
             vaativuustaso: value.vaativuustaso,
             arviointiasteikonTaso: value.arviointiasteikonTaso,
             suorituspaiva: value.suorituspaiva,
@@ -190,13 +191,19 @@
 
     get oppimistavoitteenKategoriat() {
       if (this.suoritemerkintaLomake) {
-        return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map((kategoria) => ({
+        return this.suoritemerkintaLomake.suoritteenKategoriat.map((kategoria) => ({
           ...kategoria,
           nimi: `${kategoria.nimi} / ${(this.$t('toimenpiteet') as string).toLowerCase()}`
         }))
       } else {
         return []
       }
+    }
+
+    get arviointiasteikonTaso() {
+      return this.suoritemerkinta?.arviointiasteikko?.tasot.find(
+        (taso) => taso.taso === this.suoritemerkinta?.arviointiasteikonTaso
+      )
     }
 
     get suoritemerkintaWrapper() {

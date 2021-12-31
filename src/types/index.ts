@@ -64,7 +64,7 @@ export interface SuoritemerkintaLomake {
   tyoskentelyjaksot: Tyoskentelyjakso[]
   kunnat: Kunta[]
   erikoisalat: Erikoisala[]
-  oppimistavoitteenKategoriat: OppimistavoitteenKategoria[]
+  suoritteenKategoriat: SuoritteenKategoria[]
 }
 
 export interface TyoskentelyjaksoLomake {
@@ -556,17 +556,17 @@ export type Vaativuustaso = {
   kuvaus: string
 }
 
-export type OppimistavoitteenKategoria = {
+export type SuoritteenKategoria = {
   id?: number
   nimi: string
   voimassaolonAlkamispaiva: string
   voimassaolonPaattymispaiva: string
   erikoisalaId: number
-  oppimistavoitteet: Oppimistavoite[]
-  arviointiasteikko: Arviointiasteikko
+  suoritteet: Suorite[]
+  jarjestysnumero: number
 }
 
-export type Oppimistavoite = {
+export type Suorite = {
   id: number
   nimi: string
   voimassaolonAlkamispaiva: string
@@ -583,9 +583,9 @@ export type Suoritemerkinta = {
   vaativuustaso?: number | Vaativuustaso
   lisatiedot: string
   lukittu?: boolean
-  oppimistavoiteId?: number
+  suoriteId?: number
   tyoskentelyjaksoId?: number
-  oppimistavoite: Oppimistavoite
+  suorite: Suorite
   tyoskentelyjakso: Tyoskentelyjakso
   arviointiasteikko?: Arviointiasteikko
 }
@@ -594,15 +594,16 @@ export interface ToggleableSuoritemerkinta extends Suoritemerkinta {
   showDetails: boolean
 }
 
-export type OppimistavoitteetTable = {
-  oppimistavoitteenKategoriat: OppimistavoitteenKategoria[]
+export type SuoritteetTable = {
+  suoritteenKategoriat: SuoritteenKategoria[]
   suoritemerkinnat: ToggleableSuoritemerkinta[]
+  arviointiasteikko: Arviointiasteikko
 }
 
 export type SuoritemerkintaRow = {
   suoritemerkinta?: ToggleableSuoritemerkinta
   details: boolean
-  oppimistavoite?: Oppimistavoite
+  suorite?: Suorite
   hasDetails?: boolean
 }
 
@@ -759,7 +760,7 @@ export type SeurantajaksonTiedot = {
 }
 
 export type SeurantajaksonSuoritemerkinta = {
-  oppimistavoite: string
+  suorite: string
   suoritemerkinnat: Suoritusarviointi[]
 }
 

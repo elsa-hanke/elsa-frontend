@@ -10,9 +10,10 @@
           <suoritemerkinta-form
             v-if="!loading"
             :tyoskentelyjaksot="tyoskentelyjaksot"
+            :suoritteenKategoriat="suoritemerkintaLomake.suoritteenKategoriat"
+            :arviointiasteikko="suoritemerkintaLomake.arviointiasteikko"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
-            :oppimistavoitteen-kategoriat="oppimistavoitteenKategoriat"
             @submit="onSubmit"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
@@ -124,7 +125,7 @@
 
     get oppimistavoitteenKategoriat() {
       if (this.suoritemerkintaLomake) {
-        return this.suoritemerkintaLomake.oppimistavoitteenKategoriat.map((kategoria) => ({
+        return this.suoritemerkintaLomake.suoritteenKategoriat.map((kategoria) => ({
           ...kategoria,
           nimi: `${kategoria.nimi} / ${(this.$t('toimenpiteet') as string).toLowerCase()}`
         }))

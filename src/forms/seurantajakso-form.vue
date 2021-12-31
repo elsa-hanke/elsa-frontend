@@ -206,14 +206,18 @@
         v-if="!$screen.sm && seurantajaksonTiedot.suoritemerkinnat.length > 0"
         deck
       >
-        <template v-for="(oppimistavoite, tavoiteIndex) in seurantajaksonTiedot.suoritemerkinnat">
+        <template
+          v-for="(
+            seurantajaksonSuoritemerkinta, seurantajaksonSuoritemerkintaIndex
+          ) in seurantajaksonTiedot.suoritemerkinnat"
+        >
           <b-card
             class="mt-2 border"
-            v-for="(suoritemerkinta, index) in oppimistavoite.suoritemerkinnat"
-            :key="`suoritemerkinta-${tavoiteIndex}-${index}`"
+            v-for="(suoritemerkinta, index) in seurantajaksonSuoritemerkinta.suoritemerkinnat"
+            :key="`suoritemerkinta-${seurantajaksonSuoritemerkintaIndex}-${index}`"
           >
             <b-card-text>
-              <h5 class="mb-3">{{ oppimistavoite.oppimistavoite }}</h5>
+              <h5 class="mb-3">{{ seurantajaksonSuoritemerkinta.suorite }}</h5>
               <dl class="mb-0">
                 <dt class="text-uppercase text-size-sm font-weight-400">
                   {{ $t('luottamuksen-taso') }}
@@ -264,17 +268,21 @@
           </b-tr>
         </b-thead>
         <b-tbody>
-          <template v-for="(oppimistavoite, tavoiteIndex) in seurantajaksonTiedot.suoritemerkinnat">
+          <template
+            v-for="(
+              seurantajaksonSuoritemerkinta, seurantajaksonSuoritemerkintaIndex
+            ) in seurantajaksonTiedot.suoritemerkinnat"
+          >
             <b-tr
-              v-for="(suoritemerkinta, index) in oppimistavoite.suoritemerkinnat"
-              :key="`suoritemerkinta-${tavoiteIndex}-${index}`"
+              v-for="(suoritemerkinta, index) in seurantajaksonSuoritemerkinta.suoritemerkinnat"
+              :key="`suoritemerkinta-${seurantajaksonSuoritemerkintaIndex}-${index}`"
             >
               <b-td
                 v-if="index == 0"
                 :stacked-heading="$t('suorite')"
-                :rowspan="oppimistavoite.suoritemerkinnat.length"
+                :rowspan="seurantajaksonSuoritemerkinta.suoritemerkinnat.length"
               >
-                {{ oppimistavoite.oppimistavoite }}
+                {{ seurantajaksonSuoritemerkinta.suorite }}
               </b-td>
 
               <b-td :stacked-heading="$t('luottamuksen-taso')">
