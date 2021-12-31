@@ -36,8 +36,8 @@
         </b-dropdown-item>
         <b-dropdown-item @click="logout">
           {{ $t('kirjaudu-ulos') }}
+          <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
         </b-dropdown-item>
-        <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
       </b-nav-item-dropdown>
 
       <b-nav-item-dropdown
