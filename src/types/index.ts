@@ -18,7 +18,7 @@ export type Opintooikeus = {
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
   opiskelijatunnus: string
-  opintosuunnitelmaKaytossaPvm: string
+  osaamisenArvioinninOppaanPvm: string
   yliopistoNimi: string
   erikoisalaId: number
   erikoisalaNimi: string
@@ -432,6 +432,10 @@ export interface Yliopisto {
   nimi: string
   erikoisalat: Erikoisala[]
 }
+export interface Asetus {
+  id?: number
+  nimi: string
+}
 
 export interface KouluttajaValtuutus {
   id?: number
@@ -465,7 +469,7 @@ export type Suoritusarviointi = {
   kommentit: SuoritusarvioinninKommentti[]
   arvioinninAntajaId: number
   arvioitavaKokonaisuusId: number
-  arviointiasteikko?: Arviointiasteikko
+  arviointiasteikko: Arviointiasteikko
   tyoskentelyjaksoId: number
   arvioinninSaaja: Kayttaja
   arvioinninAntaja: Kayttaja | null
@@ -696,6 +700,8 @@ export interface UusiKayttaja {
 export interface UusiErikoistuvaLaakari {
   etunimi: string | null
   sukunimi: string | null
+  sahkopostiosoite: string | null
+  sahkopostiosoiteUudelleen: string | null
   yliopisto: Yliopisto | null
   yliopistoId?: number
   erikoisala: Erikoisala | null
@@ -703,14 +709,17 @@ export interface UusiErikoistuvaLaakari {
   opiskelijatunnus: string | null
   opintooikeusAlkaa: string | null
   opintooikeusPaattyy: string | null
-  opintosuunnitelmaKaytossaPvm: string | null
-  sahkopostiosoite: string | null
-  sahkopostiosoiteUudelleen: string | null
+  asetusId: number | null
+  opintoopas: Opintoopas | null
+  opintoopasId?: number | null
+  osaamisenArvioinninOppaanPvm: string | null
 }
 
 export interface KayttajaLomake {
   yliopistot: Yliopisto[]
   erikoisalat: Erikoisala[]
+  asetukset: Asetus[]
+  opintooppaat: Opintoopas[]
 }
 
 export type Seurantajakso = {

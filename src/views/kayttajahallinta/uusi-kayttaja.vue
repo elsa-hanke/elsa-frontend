@@ -10,6 +10,8 @@
             v-if="!loading"
             :yliopistot="yliopistot"
             :erikoisalat="erikoisalat"
+            :asetukset="asetukset"
+            :opintooppaat="opintooppaat"
             @submit="onSubmit"
             @cancel="onCancel"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
@@ -79,7 +81,8 @@
             await postErikoistuvaLaakari({
               ...value.erikoistuvaLaakari,
               yliopistoId: value.erikoistuvaLaakari.yliopisto?.id,
-              erikoisalaId: value.erikoistuvaLaakari.erikoisala?.id
+              erikoisalaId: value.erikoistuvaLaakari.erikoisala?.id,
+              opintoopasId: value.erikoistuvaLaakari.opintoopas?.id
             })
           ).data.kayttajaId
         }
@@ -115,6 +118,14 @@
 
     get erikoisalat() {
       return this.kayttajaLomake?.erikoisalat ?? []
+    }
+
+    get asetukset() {
+      return this.kayttajaLomake?.asetukset ?? []
+    }
+
+    get opintooppaat() {
+      return this.kayttajaLomake?.opintooppaat ?? []
     }
   }
 </script>

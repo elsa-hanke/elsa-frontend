@@ -24,37 +24,6 @@
                 </template>
               </elsa-form-group>
             </b-form-row>
-            <elsa-form-group :label="$t('yliopisto')">
-              <template v-slot="{ uid }">
-                <span :id="uid">{{ yliopisto }}</span>
-              </template>
-            </elsa-form-group>
-            <elsa-form-group :label="$t('erikoisala')">
-              <template v-slot="{ uid }">
-                <span :id="uid">{{ erikoisala }}</span>
-              </template>
-            </elsa-form-group>
-            <elsa-form-group :label="$t('opiskelijatunnus')">
-              <template v-slot="{ uid }">
-                <span :id="uid">{{ opiskelijatunnus }}</span>
-              </template>
-            </elsa-form-group>
-            <elsa-form-group :label="$t('opintooikeus')">
-              <template v-slot="{ uid }">
-                <span :id="uid">
-                  {{
-                    `${$date(opintooikeudenMyontamispaiva)}-${$date(opintooikeudenPaattymispaiva)}`
-                  }}
-                </span>
-              </template>
-            </elsa-form-group>
-            <elsa-form-group :label="$t('kaytossa-olevan-opetussuunnitelman-paivamaara')">
-              <template v-slot="{ uid }">
-                <span :id="uid">
-                  {{ $date(opintosuunnitelmaKaytossaPvm) }}
-                </span>
-              </template>
-            </elsa-form-group>
             <elsa-form-group :label="$t('sahkopostiosoite')">
               <template v-slot="{ uid }">
                 <span :id="uid">
@@ -63,6 +32,47 @@
               </template>
             </elsa-form-group>
             <hr />
+            <h2>{{ $t('opintooikeudet') }}</h2>
+            <div
+              class="border rounded p-3 mb-4"
+              v-for="(opintooikeus, index) in opintooikeudet"
+              :key="index"
+            >
+              <h3>{{ `${opintooikeus.yliopistoNimi}, ${opintooikeus.erikoisalaNimi}` }}</h3>
+              <elsa-form-group :label="$t('opiskelijatunnus')" v-if="opintooikeus.opiskelijatunnus">
+                <template v-slot="{ uid }">
+                  <span :id="uid">{{ opintooikeus.opiskelijatunnus }}</span>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group :label="$t('opintooikeus')">
+                <template v-slot="{ uid }">
+                  <span :id="uid">
+                    {{
+                      `${$date(opintooikeus.opintooikeudenMyontamispaiva)}-${$date(
+                        opintooikeus.opintooikeudenPaattymispaiva
+                      )}`
+                    }}
+                  </span>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group :label="$t('asetus')">
+                <template v-slot="{ uid }">
+                  <span :id="uid">{{ opintooikeus.asetus.nimi }}</span>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group :label="$t('kaytossa-oleva-opintoopas')">
+                <template v-slot="{ uid }">
+                  <span :id="uid">{{ opintooikeus.opintoopasNimi }}</span>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group :label="$t('osaamisen-arvioinnin-oppaan-paivamaara')">
+                <template v-slot="{ uid }">
+                  <span :id="uid">
+                    {{ $date(opintooikeus.osaamisenArvioinninOppaanPvm) }}
+                  </span>
+                </template>
+              </elsa-form-group>
+            </div>
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button variant="primary" @click="onInvitationResend" class="mb-3">
                 {{ $t('laheta-kutsu-uudelleen') }}
@@ -166,32 +176,12 @@
       return this.kayttaja?.kayttaja?.sukunimi
     }
 
-    get yliopisto() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.yliopistoNimi
-    }
-
-    get erikoisala() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.erikoisalaNimi
-    }
-
-    get opiskelijatunnus() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opiskelijatunnus
-    }
-
     get sahkopostiosoite() {
       return this.kayttaja?.kayttaja?.sahkoposti
     }
 
-    get opintooikeudenMyontamispaiva() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opintooikeudenMyontamispaiva
-    }
-
-    get opintooikeudenPaattymispaiva() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opintooikeudenPaattymispaiva
-    }
-
-    get opintosuunnitelmaKaytossaPvm() {
-      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet[0]?.opintosuunnitelmaKaytossaPvm
+    get opintooikeudet() {
+      return this.kayttaja?.erikoistuvaLaakari?.opintooikeudet ?? []
     }
   }
 </script>

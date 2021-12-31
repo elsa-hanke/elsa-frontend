@@ -498,9 +498,9 @@
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
   import {
     ArviointiasteikonTaso,
+    Arviointityokalu,
     Suoritusarviointi,
-    SuoritusarviointiForm,
-    Arviointityokalu
+    SuoritusarviointiForm
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import {
@@ -571,7 +571,7 @@
       arviointiFile: null
     }
     vaativuustasot = vaativuustasot
-    arviointiasteikonTasot: ArviointiasteikonTaso[] = this.value.arviointiasteikko?.tasot || []
+    arviointiasteikonTasot: ArviointiasteikonTaso[] = this.value.arviointiasteikko.tasot || []
     arviointityokalut: Arviointityokalu[] = []
     params = {
       saving: false
@@ -631,7 +631,7 @@
     }
 
     get arviointiAsteikonNimi() {
-      return this.value.arviointiasteikko?.nimi === ArviointiasteikkoTyyppi.EPA
+      return this.value.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
         ? this.$t('luottamuksen-taso')
         : this.$t('etappi')
     }
