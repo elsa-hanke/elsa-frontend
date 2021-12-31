@@ -5,9 +5,9 @@
         <span :id="uid">{{ suoritemerkintaWrapper.tyoskentelyjakso.label }}</span>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('oppimistavoite')">
+    <elsa-form-group :label="$t('suorite')">
       <template v-slot="{ uid }">
-        <span :id="uid">{{ suoritemerkintaWrapper.oppimistavoite.nimi }}</span>
+        <span :id="uid">{{ suoritemerkintaWrapper.suorite.nimi }}</span>
       </template>
     </elsa-form-group>
     <elsa-form-group class="template-placeholder" :label="arviointiAsteikonNimi">
