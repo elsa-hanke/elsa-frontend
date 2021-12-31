@@ -35,11 +35,11 @@
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="form.oppimistavoite"
+          v-model="form.suorite"
           @input="$emit('skipRouteExitConfirm', false)"
-          :options="oppimistavoitteenKategoriat"
-          :state="validateState('oppimistavoite')"
-          group-values="oppimistavoitteet"
+          :options="suoritteenKategoriat"
+          :state="validateState('suorite')"
+          group-values="suoritteet"
           group-label="nimi"
           :group-select="false"
           label="nimi"
@@ -55,7 +55,7 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group v-if="form.oppimistavoite" :label="arviointiAsteikonNimi">
+    <elsa-form-group v-if="form.suorite" :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
           <elsa-arviointiasteikon-taso-tooltip-content
@@ -178,11 +178,12 @@
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
   import {
+    Arviointiasteikko,
     ArviointiasteikonTaso,
     Erikoisala,
     Kunta,
-    OppimistavoitteenKategoria,
     Suoritemerkinta,
+    SuoritteenKategoria,
     Vaativuustaso
   } from '@/types'
   import { vaativuustasot, ArviointiasteikkoTyyppi } from '@/utils/constants'
@@ -203,7 +204,7 @@
         tyoskentelyjakso: {
           required
         },
-        oppimistavoite: {
+        suorite: {
           required
         }
       }
@@ -215,7 +216,13 @@
     }
 
     @Prop({ required: false, default: () => [] })
-    oppimistavoitteenKategoriat!: OppimistavoitteenKategoria[]
+    suoritteenKategoriat!: SuoritteenKategoria[]
+
+    @Prop({ required: true })
+    arviointiasteikko!: Arviointiasteikko
+
+    @Prop({ required: false })
+    arviointiasteikonTaso?: ArviointiasteikonTaso
 
     @Prop({ required: false, default: () => [] })
     kunnat!: Kunta[]
@@ -227,7 +234,7 @@
       required: false,
       default: () => ({
         tyoskentelyjakso: null,
-        oppimistavoite: null,
+        suorite: null,
         vaativuustaso: null,
         arviointiasteikonTaso: null,
         suorituspaiva: null,
@@ -247,16 +254,9 @@
     mounted() {
       this.form = {
         tyoskentelyjakso: this.value.tyoskentelyjakso,
-        oppimistavoite: this.value.oppimistavoite,
+        suorite: this.value.suorite,
         vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
-        arviointiasteikonTaso: this.oppimistavoitteenKategoriat
-          ?.find(
-            (kategoria: OppimistavoitteenKategoria) =>
-              kategoria.id === this.value.oppimistavoite?.kategoriaId
-          )
-          ?.arviointiasteikko.tasot.find(
-            (asteikonTaso) => asteikonTaso.taso === this.value.arviointiasteikonTaso
-          ),
+        arviointiasteikonTaso: this.arviointiasteikonTaso,
         suorituspaiva: this.value.suorituspaiva,
         lisatiedot: this.value.lisatiedot
       }
@@ -271,12 +271,6 @@
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
-    }
-
-    get arviointiasteikko() {
-      return this.oppimistavoitteenKategoriat.find(
-        (kategoria) => kategoria.id === this.form?.oppimistavoite.kategoriaId
-      )?.arviointiasteikko
     }
 
     get arviointiAsteikonNimi() {
@@ -295,7 +289,7 @@
         'submit',
         {
           tyoskentelyjaksoId: this.form?.tyoskentelyjakso.id,
-          oppimistavoiteId: this.form?.oppimistavoite.id,
+          suoriteId: this.form?.suorite.id,
           vaativuustaso: (this.form?.vaativuustaso as Vaativuustaso)?.arvo,
           arviointiasteikonTaso: (this.form?.arviointiasteikonTaso as ArviointiasteikonTaso)?.taso,
           suorituspaiva: this.form?.suorituspaiva,
