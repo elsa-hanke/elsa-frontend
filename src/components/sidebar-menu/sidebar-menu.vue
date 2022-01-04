@@ -83,7 +83,9 @@
           {{ $t('seurantakeskustelut') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()"
+          v-if="
+            ($isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()) && featurePreviewModeEnabled
+          "
           class="border-bottom"
           :to="{ name: 'koejakso' }"
         >
@@ -117,6 +119,7 @@
     paddingTop = 64
     sideNavSubItemHeight = 38
     sidebarPosition = 'position-fixed'
+    featurePreviewModeEnabled = process.env.VUE_APP_FEATURE_PREVIEW_MODE_ENABLED === 'true'
 
     // Tarkistetaan sivunavigaation paikka
     mounted() {
