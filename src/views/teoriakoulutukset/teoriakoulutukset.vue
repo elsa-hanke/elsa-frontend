@@ -6,6 +6,7 @@
         <b-col>
           <h1>{{ $t('teoriakoulutukset') }}</h1>
           <p v-html="$t('teoriakoulutukset-ingressi', { opintooppaastaLinkki, kopiLinkki })" />
+          <elsa-vanha-asetus-varoitus />
           <elsa-button variant="primary" :to="{ name: 'uusi-teoriakoulutus' }" class="mb-4">
             {{ $t('lisaa-teoriakoulutus') }}
           </elsa-button>
@@ -81,6 +82,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
+  import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
   import { Asiakirja, Erikoisala, Teoriakoulutus } from '@/types'
   import { fetchAndOpenBlob } from '@/utils/blobs'
   import { sortByDateDesc } from '@/utils/date'
@@ -90,7 +92,8 @@
     components: {
       ElsaButton,
       ElsaFormGroup,
-      ElsaProgressBar
+      ElsaProgressBar,
+      ElsaVanhaAsetusVaroitus
     }
   })
   export default class Teoriakoulutukset extends Vue {
