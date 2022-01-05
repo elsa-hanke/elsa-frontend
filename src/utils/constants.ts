@@ -156,3 +156,10 @@ export enum SeurantajaksoTila {
 
 export const paivakirjamerkintaKoulutuksetId = 1
 export const paivakirjamerkintaMuuAiheId = 6
+
+export const vanhatAsetukset = [
+  '678/1998',
+  '678/1998, muutettu asetuksella 1343/2002',
+  '678/1998, muutettu asetuksella 401/2007',
+  '56/2015'
+]
