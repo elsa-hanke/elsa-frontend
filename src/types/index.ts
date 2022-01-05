@@ -458,6 +458,7 @@ export type Suoritusarviointi = {
   kommentit: SuoritusarvioinninKommentti[]
   arvioinninAntajaId: number
   arvioitavaKokonaisuusId: number
+  arviointiasteikko: Arviointiasteikko
   tyoskentelyjaksoId: number
   arvioinninSaaja: Kayttaja
   arvioinninAntaja: Kayttaja | null
@@ -487,7 +488,6 @@ export type ArvioitavaKokonaisuus = {
   voimassaoloLoppuu: string
   erikoisalaId: number
   kategoria: ArvioitavanKokonaisuudenKategoria
-  arviointiasteikko: Arviointiasteikko
   arvioinnit: Suoritusarviointi[]
   visible: boolean
 }

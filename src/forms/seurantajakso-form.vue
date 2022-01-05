@@ -136,7 +136,7 @@
                     <elsa-arviointiasteikon-taso
                       v-if="arviointi.arviointiasteikonTaso"
                       :value="arviointi.arviointiasteikonTaso"
-                      :tasot="arviointi.arvioitavaKokonaisuus.arviointiasteikko.tasot"
+                      :tasot="arviointi.arviointiasteikko.tasot"
                     />
                   </dd>
                   <dt class="text-uppercase text-size-sm font-weight-400">
@@ -174,7 +174,7 @@
                   <elsa-arviointiasteikon-taso
                     v-if="arviointi.arviointiasteikonTaso"
                     :value="arviointi.arviointiasteikonTaso"
-                    :tasot="arviointi.arvioitavaKokonaisuus.arviointiasteikko.tasot"
+                    :tasot="arviointi.arviointiasteikko.tasot"
                   />
                 </b-td>
                 <b-td :stacked-heading="$t('suorituspaiva')">

@@ -142,7 +142,7 @@
                 <elsa-arviointiasteikon-taso
                   v-if="value.arviointiAika"
                   :value="value.arviointiasteikonTaso"
-                  :tasot="value.arvioitavaKokonaisuus.arviointiasteikko.tasot"
+                  :tasot="value.arviointiasteikko.tasot"
                 />
               </b-td>
               <b-td>
@@ -171,7 +171,7 @@
                 <elsa-arviointiasteikon-taso
                   v-if="value.itsearviointiAika"
                   :value="value.itsearviointiArviointiasteikonTaso"
-                  :tasot="value.arvioitavaKokonaisuus.arviointiasteikko.tasot"
+                  :tasot="value.arviointiasteikko.tasot"
                 />
               </b-td>
             </b-tr>
@@ -571,8 +571,7 @@
       arviointiFile: null
     }
     vaativuustasot = vaativuustasot
-    arviointiasteikonTasot: ArviointiasteikonTaso[] =
-      this.value.arvioitavaKokonaisuus?.arviointiasteikko.tasot || []
+    arviointiasteikonTasot: ArviointiasteikonTaso[] = this.value.arviointiasteikko.tasot || []
     arviointityokalut: Arviointityokalu[] = []
     params = {
       saving: false
@@ -632,8 +631,7 @@
     }
 
     get arviointiAsteikonNimi() {
-      return this.value.arvioitavaKokonaisuus?.arviointiasteikko.nimi ===
-        ArviointiasteikkoTyyppi.EPA
+      return this.value.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
         ? this.$t('luottamuksen-taso')
         : this.$t('etappi')
     }
