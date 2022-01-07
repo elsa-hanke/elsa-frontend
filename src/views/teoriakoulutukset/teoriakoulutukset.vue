@@ -83,7 +83,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
-  import { Asiakirja, Erikoisala, Teoriakoulutus } from '@/types'
+  import { Asiakirja, Teoriakoulutus } from '@/types'
   import { fetchAndOpenBlob } from '@/utils/blobs'
   import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
@@ -136,7 +136,7 @@
       }
     ]
     teoriakoulutukset: Teoriakoulutus[] = []
-    erikoisala: Erikoisala | null = null
+    erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number | null = null
 
     async mounted() {
       await this.fetchTeoriakoulutukset()
@@ -145,9 +145,11 @@
 
     async fetchTeoriakoulutukset() {
       try {
-        const { teoriakoulutukset, erikoisala } = (await getTeoriakoulutukset()).data
+        const { teoriakoulutukset, erikoisalanVaatimaTeoriakoulutustenVahimmaismaara } = (
+          await getTeoriakoulutukset()
+        ).data
         this.teoriakoulutukset = teoriakoulutukset
-        this.erikoisala = erikoisala
+        this.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara = erikoisalanVaatimaTeoriakoulutustenVahimmaismaara
       } catch (err) {
         toastFail(this, this.$t('teoriakoulutuksien-hakeminen-epaonnistui'))
       }
@@ -172,10 +174,6 @@
       return this.teoriakoulutukset
         .map((teoriakoulutus) => teoriakoulutus.erikoistumiseenHyvaksyttavaTuntimaara)
         .reduce((a, b) => (a ?? 0) + (b ?? 0), 0)
-    }
-
-    get erikoisalanVaatimaTeoriakoulutustenVahimmaismaara() {
-      return this.erikoisala?.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara ?? 0
     }
 
     get opintooppaastaLinkki() {
