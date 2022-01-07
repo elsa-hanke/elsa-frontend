@@ -629,7 +629,7 @@ export interface Palaute {
 
 export interface Teoriakoulutukset {
   teoriakoulutukset: Teoriakoulutus[]
-  erikoisala: Erikoisala
+  erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number
 }
 
 export interface Teoriakoulutus {
