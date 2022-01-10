@@ -155,14 +155,21 @@ export interface Kunta {
 export interface Erikoisala {
   id?: number | null
   nimi: string | null
+  tyyppi: ErikoisalaTyyppi | null
+}
+
+export interface Opintoopas {
+  id?: number | null
+  nimi: string | null
   voimassaoloAlkaa: string
   voimassaoloPaattyy: string | null
-  tyyppi: ErikoisalaTyyppi | null
   kaytannonKoulutuksenVahimmaispituus: number
   terveyskeskuskoulutusjaksonVahimmaispituus: number
   yliopistosairaalajaksonVahimmaispituus: number
   yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituus: number
   erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number
+  erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: number
+  erikoisalanVaatimaJohtamisopintojenVahimmaismaara: number
 }
 
 export type Koulutuspaikka = {
