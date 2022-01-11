@@ -55,7 +55,7 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group v-if="form.suorite" :label="arviointiAsteikonNimi">
+    <elsa-form-group :label="arviointiAsteikonNimi">
       <template #label-help>
         <elsa-popover>
           <elsa-arviointiasteikon-taso-tooltip-content
