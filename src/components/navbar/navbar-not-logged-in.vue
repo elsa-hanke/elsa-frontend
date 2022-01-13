@@ -9,7 +9,8 @@
           -{{ $t('palvelu') | lowercase }}
         </div>
       </b-navbar-brand>
-      <b-navbar-nav class="ml-auto pr-3 font-weight-500">
+      <!-- Piilotetaan pilotista -->
+      <!-- <b-navbar-nav class="ml-auto pr-3 font-weight-500">
         <b-nav-item-dropdown :text="$t(currentLocale)" class="align-self-center px-3" right>
           <b-dropdown-item
             v-for="locale in locales"
@@ -20,7 +21,7 @@
             {{ $t(locale) }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
-      </b-navbar-nav>
+      </b-navbar-nav> -->
     </b-container>
   </b-navbar>
 </template>

@@ -105,7 +105,8 @@
         </b-nav-item>
         <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
       </b-nav>
-      <b-nav class="font-weight-500 justify-content-center d-flex">
+      <!-- Piilotetaan pilotista -->
+      <!-- <b-nav class="font-weight-500 justify-content-center d-flex">
         <b-nav-item
           v-for="locale in locales"
           :key="locale"
@@ -114,7 +115,7 @@
         >
           {{ $t(locale) }}
         </b-nav-item>
-      </b-nav>
+      </b-nav> -->
     </template>
   </b-sidebar>
 </template>
