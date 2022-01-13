@@ -39,8 +39,8 @@
         </b-dropdown-item>
         <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
       </b-nav-item-dropdown>
-
-      <b-nav-item-dropdown
+      <!-- Piilotetaan pilotista -->
+      <!-- <b-nav-item-dropdown
         :text="$t(currentLocale)"
         class="border-left align-self-center px-3"
         right
@@ -53,7 +53,7 @@
         >
           {{ $t(locale) }}
         </b-dropdown-item>
-      </b-nav-item-dropdown>
+      </b-nav-item-dropdown> -->
     </b-navbar-nav>
   </b-navbar>
 </template>
