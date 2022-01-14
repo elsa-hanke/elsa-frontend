@@ -31,7 +31,7 @@
     }
 
     get vanhanAsetuksenMukainen() {
-      return vanhatAsetukset.includes(this.asetus)
+      return vanhatAsetukset.includes(this.asetus.nimi)
     }
   }
 </script>
