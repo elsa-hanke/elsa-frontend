@@ -6,7 +6,7 @@
       :username="displayNameOrAccountName"
       background-color="gray"
       color="white"
-      :size="32"
+      :size="imageSize"
       class="d-inline-block mr-2 avatar"
       :class="{ 'my-2': title }"
     ></avatar>
@@ -47,6 +47,9 @@
 
     @Prop({ required: false, type: String })
     title?: string
+
+    @Prop({ required: false, type: String, default: '32' })
+    imageSize?: string
 
     get imageSrc() {
       if (this.srcContentType && this.srcBase64) {
