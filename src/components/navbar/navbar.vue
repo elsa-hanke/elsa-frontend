@@ -7,12 +7,16 @@
     sticky
     class="px-0 py-lg-0"
   >
-    <b-navbar-brand class="col mr-0 text-nowrap user-select-none">
-      <span class="brand-logo d-inline-block font-weight-bold text-uppercase">
-        {{ $t('elsa') }}
-      </span>
-      <span class="brand-text d-inline-block align-text-top">-{{ $t('palvelu') | lowercase }}</span>
-    </b-navbar-brand>
+    <router-link to="/etusivu">
+      <b-navbar-brand class="col mr-0 text-nowrap user-select-none">
+        <span class="brand-logo d-inline-block font-weight-bold text-uppercase">
+          {{ $t('elsa') }}
+        </span>
+        <span class="brand-text d-inline-block align-text-top">
+          -{{ $t('palvelu') | lowercase }}
+        </span>
+      </b-navbar-brand>
+    </router-link>
 
     <b-navbar-toggle v-if="!$screen.lg" target="sidebar-right" class="border-0">
       <template #default="{ expanded }">
@@ -123,8 +127,31 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
+  .navbar-brand {
+    display: inline-block;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .brand-logo {
+    font-size: 2.1875rem;
+    line-height: 2.375rem;
+    @include media-breakpoint-down(sm) {
+      font-size: 1.875rem;
+    }
+  }
+
   .brand-text {
-    font-size: 0.725rem;
+    font-size: 0.9375rem;
+    position: relative;
+    top: -10px;
+    @include media-breakpoint-down(sm) {
+      font-size: 0.8125rem;
+      top: -7px;
+    }
   }
 
   .user-dropdown {
