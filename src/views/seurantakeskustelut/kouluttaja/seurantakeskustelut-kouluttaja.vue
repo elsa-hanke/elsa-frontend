@@ -54,7 +54,7 @@
             </template>
 
             <template #cell(erikoistuvanNimi)="data">
-              {{ data.item.erikoistuvaLaakari.nimi }}
+              {{ data.item.erikoistuvanNimi }}
             </template>
 
             <template #cell(seurantajakso)="data">
@@ -290,7 +290,7 @@
       if (this.hakutermi) {
         this.currentPage = 1
         return this.seurantajaksot?.filter((item: Seurantajakso) =>
-          item.erikoistuvaLaakari?.nimi.toLowerCase().includes(this.hakutermi.toLowerCase())
+          item.erikoistuvanNimi?.toLowerCase().includes(this.hakutermi.toLowerCase())
         )
       }
 

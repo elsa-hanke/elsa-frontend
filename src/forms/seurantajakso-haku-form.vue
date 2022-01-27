@@ -163,7 +163,7 @@
     })
     seurantajakso!: Seurantajakso | null
 
-    form: Seurantajakso = {
+    form: Partial<Seurantajakso> = {
       alkamispaiva: null,
       paattymispaiva: null,
       koulutusjaksot: [
@@ -235,7 +235,7 @@
     }
 
     addKoulutusjakso() {
-      this.form.koulutusjaksot.push({
+      this.form.koulutusjaksot?.push({
         id: null,
         nimi: null,
         muutOsaamistavoitteet: null,
@@ -249,7 +249,9 @@
     }
 
     deleteKoulutusjakso(index: number) {
-      Vue.delete(this.form.koulutusjaksot, index)
+      if (this.form.koulutusjaksot) {
+        Vue.delete(this.form.koulutusjaksot, index)
+      }
     }
 
     async onKoulutusjaksoSubmit(data: Koulutusjakso, params: { saving: boolean }, modal: BModal) {
@@ -279,7 +281,7 @@
         'submit',
         {
           ...this.form,
-          koulutusjaksot: this.form.koulutusjaksot.filter((koulutusjakso) => koulutusjakso.id)
+          koulutusjaksot: this.form.koulutusjaksot?.filter((koulutusjakso) => koulutusjakso.id)
         },
         this.params
       )

@@ -123,7 +123,6 @@ export interface Tyoskentelyjakso {
   tyoskentelypaikka: Tyoskentelypaikka
   omaaErikoisalaaTukevaId?: number
   omaaErikoisalaaTukeva: Erikoisala | null
-  erikoistuvaLaakariId?: number
   tapahtumia?: boolean
   liitettyKoejaksoon?: boolean
   asiakirjat?: Asiakirja[]
@@ -663,7 +662,6 @@ export interface Paivakirjamerkinta {
   reflektio: string | null
   yksityinen: boolean
   aihekategoriat: PaivakirjaAihekategoria[]
-  erikoistuvaLaakariId?: number
   teoriakoulutus: Teoriakoulutus | null
 }
 
@@ -740,7 +738,10 @@ export type Seurantajakso = {
   jatkotoimetJaRaportointi?: string | null
   hyvaksytty?: boolean | null
   korjausehdotus?: string | null
-  erikoistuvaLaakari?: ErikoistuvaLaakari | null
+  erikoistuvanNimi: string | null
+  erikoistuvanErikoisalaNimi: string | null
+  erikoistuvanOpiskelijatunnus: string | null
+  erikoistuvanYliopistoNimi: string | null
   erikoistuvanAvatar?: string
   tallennettu?: string | null
   tila?: SeurantajaksoTila | null

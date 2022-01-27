@@ -20,10 +20,10 @@
         <div class="seurantajakso-erikoistuva-details">
           <erikoistuva-details
             :avatar="seurantajakso.erikoistuvanAvatar"
-            :name="seurantajakso.erikoistuvaLaakari.nimi"
-            :erikoisala="seurantajakso.erikoistuvaLaakari.erikoisalaNimi"
-            :opiskelijatunnus="seurantajakso.erikoistuvaLaakari.opiskelijatunnus"
-            :yliopisto="seurantajakso.erikoistuvaLaakari.yliopisto"
+            :name="seurantajakso.erikoistuvanNimi"
+            :erikoisala="seurantajakso.erikoistuvanErikoisalaNimi"
+            :opiskelijatunnus="seurantajakso.erikoistuvanOpiskelijatunnus"
+            :yliopisto="seurantajakso.erikoistuvanYliopistoNimi"
             :show-birthdate="false"
           ></erikoistuva-details>
           <elsa-form-group
@@ -959,7 +959,7 @@
     @Prop({ required: false, default: false })
     editing!: boolean
 
-    form: Seurantajakso = {
+    form: Partial<Seurantajakso> = {
       alkamispaiva: null,
       paattymispaiva: null,
       koulutusjaksot: [],
@@ -1020,6 +1020,10 @@
     get minSeuraavaKeskustelu(): Date {
       const now = new Date()
       return new Date(now.setMonth(now.getMonth() + 6))
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async onKouluttajaSubmit(value: Kayttaja, modal: BModal) {
