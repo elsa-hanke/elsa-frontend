@@ -48,8 +48,8 @@
     @Prop({ required: false, type: String })
     title?: string
 
-    @Prop({ required: false, type: String, default: '32' })
-    imageSize?: string
+    @Prop({ required: false, type: Number, default: 32 })
+    imageSize?: number
 
     get imageSrc() {
       if (this.srcContentType && this.srcBase64) {

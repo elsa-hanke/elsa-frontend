@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center">
       <div class="flex-fill">
         <user-avatar
-          :src-base64="avatar"
+          :src-base64="account.avatar"
           :imageSize="56"
           src-content-type="image/jpeg"
           :title="title"
@@ -49,13 +49,6 @@
   export default class HenkilotiedotCard extends Vue {
     get account() {
       return store.getters['auth/account']
-    }
-
-    get avatarSrc() {
-      if (this.account) {
-        return `data:image/jpeg;base64,${this.account.avatar}`
-      }
-      return undefined
     }
 
     get authorities() {
