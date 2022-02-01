@@ -72,7 +72,7 @@ import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskent
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
-import Viestit from '@/views/viestit.vue'
+// import Viestit from '@/views/viestit.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -459,11 +459,11 @@ const routes: Array<RouteConfig> = [
           confirmRouteExit: true
         }
       },
-      {
+      /*{
         path: '/viestit',
         name: 'viestit',
         component: Viestit
-      },
+      },*/
       {
         path: '/asiakirjat',
         name: 'asiakirjat',
