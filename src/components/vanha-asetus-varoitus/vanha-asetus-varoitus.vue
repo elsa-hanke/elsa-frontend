@@ -11,7 +11,9 @@
 
   import ElsaBadge from '@/components/badge/badge.vue'
   import store from '@/store'
+  import { Asetus, ErikoistuvaLaakari } from '@/types'
   import { vanhatAsetukset } from '@/utils/constants'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeusResolver'
 
   @Component({
     components: {
@@ -25,13 +27,15 @@
       ) as string).toLowerCase()}</a>`
     }
 
-    get asetus() {
-      const opintooikeudet = store.getters['auth/account']?.erikoistuvaLaakari?.opintooikeudet
-      return opintooikeudet?.length > 0 ? opintooikeudet[0].asetus : null
+    get asetus(): Asetus | undefined {
+      const erikoistuvaLaakari = store.getters['auth/account']
+        ?.erikoistuvaLaakari as ErikoistuvaLaakari
+      const opintooikeusKaytossa = resolveOpintooikeusKaytossa(erikoistuvaLaakari)
+      return opintooikeusKaytossa?.asetus
     }
 
-    get vanhanAsetuksenMukainen() {
-      return vanhatAsetukset.includes(this.asetus.nimi)
+    get vanhanAsetuksenMukainen(): boolean {
+      return this.asetus?.nimi ? vanhatAsetukset.includes(this.asetus?.nimi) : false
     }
   }
 </script>

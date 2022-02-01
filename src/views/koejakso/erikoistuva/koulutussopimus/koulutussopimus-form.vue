@@ -245,10 +245,12 @@
     Kouluttaja,
     KoulutussopimusLomake,
     UserAccount,
-    Vastuuhenkilo
+    Vastuuhenkilo,
+    Opintooikeus
   } from '@/types'
   import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeusResolver'
   import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
   import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
 
@@ -383,15 +385,17 @@
       return formatList(this, kouluttajat)
     }
 
+    get opintooikeusKaytossa(): Opintooikeus | undefined {
+      return resolveOpintooikeusKaytossa(this.account.erikoistuvaLaakari)
+    }
+
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
-      if (!this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva) {
+      if (!this.opintooikeusKaytossa?.opintooikeudenPaattymispaiva) {
         return null
       }
 
-      const d = new Date(
-        this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva
-      )
+      const d = new Date(this.opintooikeusKaytossa.opintooikeudenPaattymispaiva)
       // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
       // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
       d.setMonth(d.getMonth() - 6)
@@ -466,11 +470,11 @@
 
       // Asetetaan ei-muokattavien kenttien arvot
       this.form.erikoistuvanNimi = `${this.account.firstName} ${this.account.lastName}`
-      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opintooikeudet[0]?.opiskelijatunnus
-      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.opintooikeudet[0]?.erikoisalaNimi
+      this.form.erikoistuvanOpiskelijatunnus = this.opintooikeusKaytossa?.opiskelijatunnus
+      this.form.erikoistuvanErikoisala = this.opintooikeusKaytossa?.erikoisalaNimi
       this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
       this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
-      this.form.opintooikeudenMyontamispaiva = this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenMyontamispaiva
+      this.form.opintooikeudenMyontamispaiva = this.opintooikeusKaytossa?.opintooikeudenMyontamispaiva
 
       // Asetetaan arvot kentille, jotka saatavissa erikoistuvan lääkärin tiedoista, mutta jotka
       // käyttäjä on saattanut yliajaa lomakkeen välitallennuksen yhteydessä. Kuitenkaan opinto-oikeuden

@@ -22,6 +22,7 @@ export type Opintooikeus = {
   yliopistoNimi: string
   erikoisalaId: number
   erikoisalaNimi: string
+  asetus: Asetus
 }
 
 export type ErikoistuvaLaakari = {
@@ -33,6 +34,7 @@ export type ErikoistuvaLaakari = {
   kayttajaId: number
   yliopisto: string
   opintooikeudet: Opintooikeus[]
+  opintooikeusKaytossaId: number
 }
 
 export interface UserAccount {
@@ -203,8 +205,8 @@ export type Vastuuhenkilo = {
 
 export interface KoulutussopimusLomake {
   erikoistuvanNimi: string
-  erikoistuvanErikoisala: string
-  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanErikoisala?: string
+  erikoistuvanOpiskelijatunnus?: string
   erikoistuvanPuhelinnumero: string
   erikoistuvanSahkoposti: string
   erikoistuvanSyntymaaika: string
@@ -217,8 +219,8 @@ export interface KoulutussopimusLomake {
   koulutuspaikat: Koulutuspaikka[]
   lahetetty: boolean
   muokkauspaiva: string
-  opintooikeudenMyontamispaiva: string
-  opintooikeudenPaattymispaiva: string
+  opintooikeudenMyontamispaiva?: string
+  opintooikeudenPaattymispaiva?: string
   vastuuhenkilo?: Vastuuhenkilo
   erikoistuvanAllekirjoitusaika?: string
   yliopistot: Yliopisto[]
@@ -240,9 +242,9 @@ export type BlobDataResult = {
 }
 
 export interface AloituskeskusteluLomake {
-  erikoistuvanErikoisala: string
+  erikoistuvanErikoisala?: string
   erikoistuvanNimi: string
-  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanOpiskelijatunnus?: string
   erikoistuvanSahkoposti: string
   erikoistuvanYliopisto: string
   erikoistuvanAvatar?: string
