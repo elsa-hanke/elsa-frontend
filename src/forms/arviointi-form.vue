@@ -368,9 +368,7 @@
           :label="$t('liitetiedostot')"
           :help="$t('arviointi-liite-tooltip')"
         >
-          <span>
-            {{ $t('arviointi-liitetiedostot-kuvaus') }}
-          </span>
+          <span v-html="$t('arviointi-liitetiedostot-kuvaus', { linkki })"></span>
           <asiakirjat-upload
             class="mt-3"
             :isPrimaryButton="false"
@@ -702,6 +700,14 @@
       return this.value.id
         ? `${resolveRolePath()}/suoritusarvioinnit/${this.value.id}/arviointi-liite`
         : ''
+    }
+
+    get linkki() {
+      return `<a
+                href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/elsa"
+                target="_blank"
+                rel="noopener noreferrer"
+              >${this.$t('arviointi-liitetiedostot-kuvaus-linkki')}</a>`
     }
   }
 </script>
