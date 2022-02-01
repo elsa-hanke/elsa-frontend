@@ -26,10 +26,10 @@
     </b-navbar-toggle>
 
     <b-navbar-nav class="ml-auto pr-3 font-weight-500 d-none d-lg-flex">
-      <b-nav-item class="border-right text-nowrap align-self-center px-3" :to="{ name: 'viestit' }">
+      <!--<b-nav-item class="border-right text-nowrap align-self-center px-3" :to="{ name: 'viestit' }">
         <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
         {{ $t('viestit') }}
-      </b-nav-item>
+      </b-nav-item>-->
 
       <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
         <template #button-content>
