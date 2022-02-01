@@ -293,8 +293,10 @@
     Kouluttaja,
     UserAccount,
     KoejaksonVaiheHyvaksyja,
-    KoejaksonVaiheButtonStates
+    KoejaksonVaiheButtonStates,
+    Opintooikeus
   } from '@/types'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeusResolver'
 
   @Component({
     mixins: [validationMixin],
@@ -438,14 +440,18 @@
       this.form.tyotunnitViikossa = parseFloat(val.replace(',', '.'))
     }
 
+    get opintooikeusKaytossa(): Opintooikeus | undefined {
+      return resolveOpintooikeusKaytossa(this.account.erikoistuvaLaakari)
+    }
+
     get maxKoejaksonAlkamispaiva() {
       const dateFormat = 'yyyy-MM-dd'
-      if (!this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva) {
+      if (!this.opintooikeusKaytossa?.opintooikeudenPaattymispaiva) {
         return null
       }
 
       const opintooikeudenPaattymispaivaDate = new Date(
-        this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva
+        this.opintooikeusKaytossa.opintooikeudenPaattymispaiva
       )
       // Koejakson voi aloittaa viimeistään 6kk ennen määrä-aikaisen
       // opinto-oikeuden päättymispäivää, koska koejakson kesto on 6kk.
@@ -469,10 +475,7 @@
     get maxKoejaksonPaattymispaiva() {
       const dateFormat = 'yyyy-MM-dd'
       const koejaksonAlkamispaiva = this.form.koejaksonAlkamispaiva
-      if (
-        !this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva ||
-        !koejaksonAlkamispaiva
-      ) {
+      if (!this.opintooikeusKaytossa?.opintooikeudenPaattymispaiva || !koejaksonAlkamispaiva) {
         return null
       }
 
@@ -480,7 +483,7 @@
       // Koejakson kesto on maksimissaan 2 vuotta.
       koejaksonAlkamispaivaMaxDate.setFullYear(koejaksonAlkamispaivaMaxDate.getFullYear() + 2)
       const opintooikeudenPaattymispaivaDate = new Date(
-        this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenPaattymispaiva
+        this.opintooikeusKaytossa.opintooikeudenPaattymispaiva
       )
       // Mikäli maksimikesto 2 vuotta ylittää opinto-oikeuden päättymispäivän,
       // on maksimi päättymispäivä opinto-oikeuden päättymispäivä.
@@ -492,7 +495,7 @@
     }
 
     get opintooikeudenMyontamispaiva() {
-      return this.account.erikoistuvaLaakari.opintooikeudet[0]?.opintooikeudenMyontamispaiva
+      return this.opintooikeusKaytossa?.opintooikeudenMyontamispaiva
     }
 
     onLahikouluttajaSelect(lahikouluttaja: KoejaksonVaiheHyvaksyja) {
@@ -555,8 +558,8 @@
 
       // Asetetaan ei-muokattavien kenttien arvot
       this.form.erikoistuvanNimi = `${this.account.firstName} ${this.account.lastName}`
-      this.form.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opintooikeudet[0]?.opiskelijatunnus
-      this.form.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.opintooikeudet[0]?.erikoisalaNimi
+      this.form.erikoistuvanOpiskelijatunnus = this.opintooikeusKaytossa?.opiskelijatunnus
+      this.form.erikoistuvanErikoisala = this.opintooikeusKaytossa?.erikoisalaNimi
       this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
 
       if (!this.form.koejaksonAlkamispaiva) {
