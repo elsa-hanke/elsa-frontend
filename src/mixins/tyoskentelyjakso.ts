@@ -42,6 +42,16 @@ export default class TyoskentelyjaksoMixin extends Vue {
       this.tyoskentelyjaksot.push(tyoskentelyjakso)
       tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, tyoskentelyjakso)
       this.form.tyoskentelyjakso = tyoskentelyjakso
+
+      if (this.form.tyoskentelyjaksot) {
+        for (const [index, value] of this.form.tyoskentelyjaksot.entries()) {
+          if (!value || !value.id) {
+            this.form.tyoskentelyjaksot[index] = tyoskentelyjakso
+            break
+          }
+        }
+      }
+
       this.onTyoskentelyjaksoSelect(tyoskentelyjakso)
       modal.hide('confirm')
       toastSuccess(this, this.$t('uusi-tyoskentelyjakso-lisatty'))
