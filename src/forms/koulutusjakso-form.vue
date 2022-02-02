@@ -276,7 +276,7 @@
         {
           ...this.form,
           tyoskentelyjaksot: this.form.tyoskentelyjaksot.filter(
-            (tyoskentelyjakso) => tyoskentelyjakso.id
+            (tyoskentelyjakso) => tyoskentelyjakso && tyoskentelyjakso.id
           )
         },
         this.params
@@ -290,7 +290,7 @@
     get tyoskentelyjaksotFiltered() {
       return ((this as any).tyoskentelyjaksotFormatted as Tyoskentelyjakso[]).filter(
         (tyoskentelyjakso) =>
-          !this.form.tyoskentelyjaksot?.find((t) => t.id === tyoskentelyjakso.id)
+          !this.form.tyoskentelyjaksot?.find((t) => t?.id === tyoskentelyjakso.id)
       )
     }
   }
