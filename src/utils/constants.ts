@@ -3,28 +3,28 @@ import { Kouluttaja, Koulutuspaikka, Vaativuustaso } from '@/types'
 export const vaativuustasot: Vaativuustaso[] = [
   {
     arvo: 1,
-    nimi: 'helppo',
-    kuvaus: 'lorem-ipsum'
+    nimi: 'erittain-helppo',
+    kuvaus: 'erittain-helppo-kuvaus'
   },
   {
     arvo: 2,
-    nimi: 'tavallista-helpompi',
-    kuvaus: 'lorem-ipsum'
+    nimi: 'melko-helppo',
+    kuvaus: 'melko-helppo-kuvaus'
   },
   {
     arvo: 3,
-    nimi: 'tavallinen',
-    kuvaus: 'lorem-ipsum'
+    nimi: 'tavanomainen',
+    kuvaus: 'tavanomainen-kuvaus'
   },
   {
     arvo: 4,
-    nimi: 'kohtalaisen-vaativa',
-    kuvaus: 'lorem-ipsum'
+    nimi: 'melko-vaativa',
+    kuvaus: 'melko-vaativa-kuvaus'
   },
   {
     arvo: 5,
     nimi: 'erittain-vaativa',
-    kuvaus: 'lorem-ipsum'
+    kuvaus: 'erittain-vaativa-kuvaus'
   }
 ]
 
