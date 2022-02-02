@@ -219,7 +219,7 @@
       params.saving = false
     }
 
-    optionDisplayName(option: any) {
+    optionDisplayName(option: Kayttaja) {
       return option.nimike ? option.nimi + ', ' + option.nimike : option.nimi
     }
 

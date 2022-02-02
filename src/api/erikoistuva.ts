@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import {
   AloituskeskusteluLomake,
+  KayttooikeusLomake,
   KehittamistoimenpiteetLomake,
   Koejakso,
   Koulutusjakso,
@@ -26,7 +27,7 @@ import {
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
-export async function putKayttooikeushakemus(value: any) {
+export async function putKayttooikeushakemus(value: KayttooikeusLomake) {
   const path = 'erikoistuva-laakari/kayttooikeushakemus'
   return await axios.put(path, value)
 }

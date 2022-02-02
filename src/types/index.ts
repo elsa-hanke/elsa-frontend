@@ -13,6 +13,10 @@ import {
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
+export type KayttooikeusLomake = {
+  yliopisto: Yliopisto | null
+}
+
 export type Opintooikeus = {
   id: number | null
   opintooikeudenMyontamispaiva: string

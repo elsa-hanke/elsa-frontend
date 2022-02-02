@@ -17,6 +17,7 @@
 
   import * as api from '@/api/erikoistuva'
   import KayttooikeusForm from '@/forms/kayttooikeus-form.vue'
+  import { KayttooikeusLomake } from '@/types'
   import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
@@ -27,7 +28,7 @@
   export default class Kayttooikeus extends Vue {
     loading = false
 
-    async onSubmit(value: any) {
+    async onSubmit(value: KayttooikeusLomake) {
       this.loading = true
       try {
         await api.putKayttooikeushakemus(value)

@@ -30,6 +30,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import store from '@/store'
+  import { KayttooikeusLomake } from '@/types'
 
   @Component({
     components: {
@@ -43,7 +44,7 @@
     yliopistot = []
     value = {
       yliopisto: null
-    } as any
+    } as KayttooikeusLomake
 
     async mounted() {
       this.yliopistot = (await getYliopistot()).data
