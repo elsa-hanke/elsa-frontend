@@ -10,6 +10,7 @@
       :existingFileNamesInOtherViews="reservedAsiakirjaNimet"
       :buttonText="$t('lisaa-liitetiedosto')"
       :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
+      :allowedFileTypes="['application/pdf']"
       @selectedFiles="onKoulutussuunnitelmaFileAdded"
     />
     <asiakirjat-content
@@ -34,6 +35,7 @@
           :existingFileNamesInOtherViews="reservedAsiakirjaNimet"
           :buttonText="$t('lisaa-liitetiedosto')"
           :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
+          :allowedFileTypes="['application/pdf']"
           @selectedFiles="onMotivaatiokirjeFileAdded"
         />
         <asiakirjat-content
