@@ -1026,7 +1026,8 @@
       return store.getters['auth/account']
     }
 
-    async onKouluttajaSubmit(value: Kayttaja, modal: BModal) {
+    async onKouluttajaSubmit(value: Kayttaja, params: { saving: boolean }, modal: BModal) {
+      params.saving = true
       try {
         await postLahikouluttaja(value)
         modal.hide('confirm')
@@ -1042,6 +1043,7 @@
             : this.$t('uuden-kouluttajan-lisaaminen-epaonnistui')
         )
       }
+      params.saving = false
     }
 
     showArviointi(arviointi: Suoritusarviointi) {
