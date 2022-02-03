@@ -1,5 +1,5 @@
 <template>
-  <div id="root" :class="{ 'gray-backdrop': hasGrayBackdrop }">
+  <div id="root" class="min-height-800" :class="{ 'gray-backdrop': hasGrayBackdrop }">
     <navbar />
     <mobile-nav v-if="!$screen.lg" />
     <sidebar-menu ref="sidebar" />
@@ -37,6 +37,10 @@
 
   .gray-backdrop {
     background-color: $backdrop-background-color;
+  }
+
+  .min-height-800 {
+    min-height: 800px;
   }
 
   @include media-breakpoint-up(lg) {
