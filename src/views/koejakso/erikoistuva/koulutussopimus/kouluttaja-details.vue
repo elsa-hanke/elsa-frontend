@@ -45,7 +45,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
-  import { Kouluttaja, ElsaError } from '@/types'
+  import { Kayttaja, Kouluttaja, ElsaError } from '@/types'
   import { defaultKouluttaja } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -77,7 +77,8 @@
     @Prop({ required: true, default: null })
     index!: number
 
-    async onKouluttajaSubmit(value: any, modal: BModal) {
+    async onKouluttajaSubmit(value: Kayttaja, params: { saving: boolean }, modal: BModal) {
+      params.saving = true
       try {
         await postLahikouluttaja(value)
         modal.hide('confirm')
@@ -93,6 +94,7 @@
             : this.$t('uuden-kouluttajan-lisaaminen-epaonnistui')
         )
       }
+      params.saving = false
     }
 
     form = {
