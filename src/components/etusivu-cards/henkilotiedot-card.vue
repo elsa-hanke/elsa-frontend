@@ -20,7 +20,12 @@
             <p class="mb-3">{{ puhelinnumero }}</p>
           </b-col>
         </b-row>
-        <elsa-button size="sm" variant="primary" class="rounded-pill d-none d-lg-block d-xl-block">
+        <elsa-button
+          size="sm"
+          variant="primary"
+          class="rounded-pill d-none d-block w-50"
+          :to="{ name: 'profiili' }"
+        >
           {{ $t('muokkaa-tietoja') }}
         </elsa-button>
       </div>
