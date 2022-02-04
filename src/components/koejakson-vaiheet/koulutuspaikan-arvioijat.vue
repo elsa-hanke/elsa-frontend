@@ -89,7 +89,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
-  import { KoejaksonVaiheHyvaksyja, ElsaError } from '@/types'
+  import { Kayttaja, KoejaksonVaiheHyvaksyja, ElsaError } from '@/types'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -174,19 +174,19 @@
       this.$emit('lahiesimiesSelect', this.form.lahiesimies)
     }
 
-    async onLahikouluttajaSubmit(value: any, params: any, modal: BModal) {
+    async onLahikouluttajaSubmit(value: Kayttaja, params: { saving: boolean }, modal: BModal) {
       params.saving = true
       await this.onKouluttajaSubmit(value, modal, false)
       params.saving = false
     }
 
-    async onLahiesimiesSubmit(value: any, params: any, modal: BModal) {
+    async onLahiesimiesSubmit(value: Kayttaja, params: { saving: boolean }, modal: BModal) {
       params.saving = true
       await this.onKouluttajaSubmit(value, modal, true)
       params.saving = false
     }
 
-    private async onKouluttajaSubmit(value: any, modal: BModal, isLahiesimies: boolean) {
+    private async onKouluttajaSubmit(value: Kayttaja, modal: BModal, isLahiesimies: boolean) {
       try {
         const kouluttaja = (await postLahikouluttaja(value)).data
         const koejaksonVaiheHyvaksyja = {
