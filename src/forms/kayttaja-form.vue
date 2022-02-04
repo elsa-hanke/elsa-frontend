@@ -93,10 +93,11 @@
             :id="uid"
             v-model="form.erikoistuvaLaakari.erikoisala"
             @input="$emit('skipRouteExitConfirm', false)"
-            :options="erikoisalat"
+            :options="erikoisalatSorted"
             :state="validateErikoistuvaLaakariState('erikoisala')"
             label="nimi"
             track-by="id"
+            @select="onErikoisalaSelected"
           />
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -170,8 +171,8 @@
             :id="uid"
             v-model="form.erikoistuvaLaakari.opintoopas"
             @input="$emit('skipRouteExitConfirm', false)"
-            :options="opintooppaat"
-            :state="validateErikoistuvaLaakariState('yliopisto')"
+            :options="opintooppaatFilteredAndSorted"
+            :state="validateErikoistuvaLaakariState('opintoopas')"
             label="nimi"
             value-field="id"
             track-by="id"
@@ -216,6 +217,7 @@
   import { Asetus, Erikoisala, UusiKayttaja, Yliopisto, Opintoopas } from '@/types'
   import { dateBetween } from '@/utils/date'
   import { ELSA_ROLE } from '@/utils/roles'
+  import { sortByAsc } from '@/utils/sort'
 
   @Component({
     components: {
@@ -333,7 +335,7 @@
         this.form.erikoistuvaLaakari.osaamisenArvioinninOppaanPvm = value
       }
 
-      const opintoopas = this.opintooppaat.find((o) =>
+      const opintoopas = this.opintooppaatFilteredAndSorted.find((o) =>
         dateBetween(value, o.voimassaoloAlkaa, o.voimassaoloPaattyy ?? undefined)
       )
       if (opintoopas && !this.form.erikoistuvaLaakari.opintoopas) {
@@ -363,12 +365,32 @@
       this.$emit('cancel')
     }
 
+    onErikoisalaSelected() {
+      this.form.erikoistuvaLaakari.opintoopas = null
+    }
+
+    get opintooppaatFilteredAndSorted() {
+      let opintooppaat: Opintoopas[]
+      if (this.form.erikoistuvaLaakari.erikoisala) {
+        opintooppaat = this.opintooppaat.filter(
+          (o) => o.erikoisala.id === this.form.erikoistuvaLaakari.erikoisala?.id
+        )
+      } else {
+        opintooppaat = this.opintooppaat
+      }
+      return opintooppaat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
+    }
+
     get asetuksetSorted() {
       if (this.asetukset) {
         return this.asetukset.sort((a, b) => (a.id ?? 0) - (b.id ?? 0)).reverse()
       } else {
         return []
       }
+    }
+
+    get erikoisalatSorted() {
+      return this.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
     }
   }
 </script>

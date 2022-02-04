@@ -171,6 +171,7 @@ export interface Opintoopas {
   erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number
   erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: number
   erikoisalanVaatimaJohtamisopintojenVahimmaismaara: number
+  erikoisala: Erikoisala
 }
 
 export type Koulutuspaikka = {
