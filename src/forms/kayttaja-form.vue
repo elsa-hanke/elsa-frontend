@@ -331,14 +331,12 @@
     onOpiskeluoikeudenAlkamispaivaChange(value: string) {
       this.$emit('skipRouteExitConfirm', false)
 
-      if (!this.form.erikoistuvaLaakari.osaamisenArvioinninOppaanPvm) {
-        this.form.erikoistuvaLaakari.osaamisenArvioinninOppaanPvm = value
-      }
+      this.form.erikoistuvaLaakari.osaamisenArvioinninOppaanPvm = value
 
       const opintoopas = this.opintooppaatFilteredAndSorted.find((o) =>
         dateBetween(value, o.voimassaoloAlkaa, o.voimassaoloPaattyy ?? undefined)
       )
-      if (opintoopas && !this.form.erikoistuvaLaakari.opintoopas) {
+      if (opintoopas) {
         this.form.erikoistuvaLaakari.opintoopas = opintoopas
       }
     }
