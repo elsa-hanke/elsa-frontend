@@ -1029,7 +1029,9 @@
     async onKouluttajaSubmit(value: Kayttaja, params: { saving: boolean }, modal: BModal) {
       params.saving = true
       try {
-        await postLahikouluttaja(value)
+        const kouluttaja = (await postLahikouluttaja(value)).data
+        this.formattedKouluttajat.push(kouluttaja)
+        this.form.kouluttaja = kouluttaja
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
         await store.dispatch('erikoistuva/getKouluttajat')
