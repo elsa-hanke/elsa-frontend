@@ -1,6 +1,7 @@
 variables:
   vmImageName: "Ubuntu-latest"
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isRelease: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')]
 
 stages:
   - stage: Test
@@ -113,7 +114,7 @@ stages:
   - stage: DeployStaging
     displayName: Deploy staging
     dependsOn: Build
-    condition: and(succeeded(), eq(variables.isMain, true))
+    condition: and(succeeded(), eq(variables.isRelease, true))
     jobs:
       - deployment: Deploy
         displayName: Deploy staging
@@ -152,6 +153,7 @@ stages:
   - stage: BuildProd
     displayName: Build prod
     dependsOn: Test
+    condition: eq(variables.isRelease, true)
     jobs:
       - job: Build
         pool:
@@ -185,11 +187,11 @@ stages:
     dependsOn:
       - BuildProd
       - DeployStaging
-    condition: and(succeeded(), eq(variables.isMain, true))
+    condition: and(succeeded(), eq(variables.isRelease, true))
     jobs:
       - deployment: Deploy
         displayName: Deploy prod
-        environment: "testi"
+        environment: "production"
         pool:
           vmImage: $(vmImageName)
         strategy:
