@@ -32,7 +32,7 @@
                             params: { koulutusjaksoId: koulutusjakso.id }
                           }"
                           variant="link"
-                          class="shadow-none p-0 border-0"
+                          class="shadow-none p-0 border-0 text-left"
                         >
                           {{ koulutusjakso.nimi }}
                         </elsa-button>
