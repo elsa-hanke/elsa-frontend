@@ -3,15 +3,19 @@
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
         <div v-if="!value.tapahtumia">
-          <b-form-radio-group
-            :id="uid"
+          <b-form-radio
+            v-for="(tyyppi, index) in tyypit"
+            :key="index"
             v-model="form.tyoskentelypaikka.tyyppi"
             @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('tyoskentelypaikka.tyyppi')"
-            :options="tyypit"
             name="tyoskentelyjakso-tyyppi"
-            stacked
-          ></b-form-radio-group>
+            :value="tyyppi.value"
+          >
+            <span>
+              {{ $t(tyyppi.text) }}
+            </span>
+          </b-form-radio>
           <b-form-radio
             v-model="form.tyoskentelypaikka.tyyppi"
             @input="$emit('skipRouteExitConfirm', false)"
