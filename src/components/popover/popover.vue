@@ -3,7 +3,7 @@
     <elsa-button :id="uid" variant="link" class="shadow-none p-0 border-0 btn-normal-line-height">
       <font-awesome-icon class="text-primary" icon="info-circle" fixed-width />
     </elsa-button>
-    <b-popover :target="uid" triggers="click blur">
+    <b-popover :target="uid" triggers="click blur" placement="auto">
       <template v-for="(index, name) in $slots" v-slot:[name]><slot :name="name" /></template>
     </b-popover>
   </span>
