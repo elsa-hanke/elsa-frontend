@@ -8,7 +8,8 @@ const auth: Module<any, any> = {
   state: {
     status: '',
     account: null,
-    loggedIn: false
+    loggedIn: false,
+    sloEnabled: true
   },
   mutations: {
     authRequest(state) {
@@ -45,6 +46,9 @@ const auth: Module<any, any> = {
     },
     formError(state) {
       state.status = 'error'
+    },
+    sloStatus(state, status) {
+      state.sloEnabled = status
     }
   },
   actions: {
@@ -65,6 +69,12 @@ const auth: Module<any, any> = {
       }
     },
     async logout({ commit }) {
+      const { data } = await api.sloKaytossa()
+      commit('sloStatus', data)
+      if (data === false) {
+        await api.localLogout()
+        window.location.href = '/uloskirjaus'
+      }
       commit('logoutRequest')
     },
     async putUser({ commit }, userDetails) {
@@ -81,7 +91,8 @@ const auth: Module<any, any> = {
   getters: {
     status: (state) => state.status,
     account: (state) => state.account,
-    isLoggedIn: (state) => state.loggedIn
+    isLoggedIn: (state) => state.loggedIn,
+    sloEnabled: (state) => state.sloEnabled
   }
 }
 
