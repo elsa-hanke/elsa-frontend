@@ -116,8 +116,11 @@
 
     async logout() {
       await store.dispatch('auth/logout')
-      const logoutForm = this.$refs.logoutForm as HTMLFormElement
-      logoutForm.submit()
+
+      if (store.getters['auth/sloEnabled'] === true) {
+        const logoutForm = this.$refs.logoutForm as HTMLFormElement
+        logoutForm.submit()
+      }
     }
 
     changeLocale(lang: string) {

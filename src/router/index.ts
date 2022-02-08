@@ -45,6 +45,7 @@ import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
 import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
+import Logout from '@/views/logout.vue'
 import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa-paivittaista-merkintaa.vue'
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
 import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
@@ -752,6 +753,21 @@ const routes: Array<RouteConfig> = [
         }
       }
     ]
+  },
+  {
+    path: '/uloskirjaus',
+    name: 'logout',
+    component: Logout,
+    beforeEnter: async (to, from, next) => {
+      console.log('logout triggered')
+      await store.dispatch('auth/authorize')
+
+      if (store.getters['auth/isLoggedIn']) {
+        next('/etusivu')
+      } else {
+        next()
+      }
+    }
   },
   {
     path: '/sivua-ei-loytynyt',

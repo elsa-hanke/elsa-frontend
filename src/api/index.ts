@@ -60,3 +60,11 @@ export async function putKayttaja(form: OmatTiedotLomake) {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export async function localLogout() {
+  return await axios.get('local-logout')
+}
+
+export async function sloKaytossa() {
+  return await axios.get('slo-kaytossa')
+}
