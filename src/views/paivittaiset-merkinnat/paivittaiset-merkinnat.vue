@@ -29,6 +29,7 @@
                           label="nimi"
                           track-by="jarjestysnumero"
                           @select="onAihekategoriaSelect"
+                          @clearMultiselect="resetFilters"
                         ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>

@@ -23,11 +23,7 @@
         <slot :name="name" v-bind="data"></slot>
       </template>
       <template v-if="$attrs.value && !$attrs.taggable" slot="clear">
-        <b-button
-          variant="link"
-          @click="$emit('input', null)"
-          class="clear-button p-0 m-0 border-0"
-        >
+        <b-button variant="link" @click="clearMultiselect" class="clear-button p-0 m-0 border-0">
           <font-awesome-layers>
             <font-awesome-icon icon="circle" />
             <font-awesome-icon icon="times" class="times" transform="shrink-4" />
@@ -120,6 +116,10 @@
 
     get deselectGroupLabelText() {
       return ''
+    }
+    clearMultiselect() {
+      this.$emit('input', null)
+      this.$emit('clearMultiselect', null)
     }
   }
 </script>
