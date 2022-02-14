@@ -14,7 +14,8 @@ export const ELSA_API_LOCATION =
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`
 axios.defaults.withCredentials = true
 axios.interceptors.request.use((req) => {
-  if (window.location.hostname !== 'testi.elsapalvelu.fi') {
+  const hostname = window.location.hostname
+  if (hostname !== 'testi.elsapalvelu.fi' && hostname !== 'kehitys.elsapalvelu.fi') {
     return req
   }
   let accessKey
