@@ -7,7 +7,8 @@ import {
   ValiarviointiLomake,
   KehittamistoimenpiteetLomake,
   LoppukeskusteluLomake,
-  Suoritusarviointi
+  Suoritusarviointi,
+  ErikoistujienSeuranta
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -61,4 +62,9 @@ export async function putSuoritusarviointi(formData: FormData) {
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000
   })
+}
+
+export async function getErikoistujienSeuranta() {
+  const path = `/vastuuhenkilo/etusivu/erikoistujien-seuranta`
+  return await axios.get<ErikoistujienSeuranta>(path)
 }

@@ -158,3 +158,12 @@ export const paivakirjamerkintaKoulutuksetId = 1
 export const paivakirjamerkintaMuuAiheId = 6
 
 export const vanhatAsetukset = ['678/1998', '1343/2002', '401/2007', '56/2015']
+
+export enum ErikoistuvanSeurantaJarjestys {
+  OPINTOOIKEUS_PAATTYMASSA,
+  OPINTOOIKEUS_ALKAEN,
+  TYOSKENTELYAIKAA_VAHITEN,
+  TYOSKENTELYAIKAA_ENITEN,
+  SUKUNIMI_ASC,
+  SUKUNIMI_DESC
+}
