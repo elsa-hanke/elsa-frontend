@@ -426,7 +426,14 @@ export interface Kayttaja {
   userId: string
   authorities: KayttajaAuthority[]
   nimike: string
-  yliopisto: Yliopisto
+  yliopisto: KayttajaYliopistoErikoisala
+}
+
+export interface KayttajaYliopistoErikoisala {
+  id?: number
+  kayttajaId?: number
+  yliopistoNimi: string
+  erikoisalaNimi: string
 }
 
 export interface Yliopisto {
@@ -849,4 +856,35 @@ export interface TyoskentelyjaksotTable {
   tyoskentelyjaksot: Tyoskentelyjakso[]
   keskeytykset: Keskeytysaika[]
   tilastot: TyoskentelyjaksotTilastot
+}
+
+export interface KayttajaErikoisalaPerYliopisto {
+  yliopistoNimi: string
+  erikoisalat: string[]
+}
+
+export interface ErikoistujanEteneminen {
+  erikoistuvaLaakariId: number
+  erikoistuvaLaakariEtuNimi: string
+  erikoistuvaLaakariSukuNimi: string
+  erikoistuvaLaakariSyntymaaika: string
+  tyoskentelyjaksoTilastot: TyoskentelyjaksotTilastot
+  arviointienKa: number
+  arviointienLkm: number
+  arvioitavienKokonaisuuksienLkm: number
+  seurantajaksotLkm: number
+  seurantajaksonHuoletLkm: number
+  suoritemerkinnatLkm: number
+  vaaditutSuoritemerkinnatLkm: number
+  koejaksoTila: string
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
+  asetus: string
+  erikoisala: string
+}
+
+export interface ErikoistujienSeuranta {
+  kayttajaYliopistoErikoisalat: KayttajaErikoisalaPerYliopisto[]
+  erikoisalat: string[]
+  erikoistujienEteneminen: ErikoistujanEteneminen[]
 }

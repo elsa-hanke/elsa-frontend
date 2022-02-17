@@ -1,23 +1,415 @@
 <template>
   <div>
     <h2>{{ $t('erikoistujien-seuranta') }}</h2>
-    <b-card-skeleton
-      :header="$t('erikoistujien-seuranta')"
-      :loading="true"
-      class="mb-3"
-    ></b-card-skeleton>
+    <b-card-skeleton :header="seurantaTitle" :loading="!seuranta">
+      <b-row>
+        <b-col></b-col>
+        <b-col>
+          <div
+            v-if="seuranta.erikoisalat.length > 0"
+            class="text-uppercase font-weight-normal mb-1 text-size-sm"
+          >
+            {{ $t('erikoisala') }}
+          </div>
+        </b-col>
+        <b-col>
+          <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
+            {{ $t('jarjestys') }}
+          </div>
+        </b-col>
+      </b-row>
+      <b-row lg>
+        <b-col>
+          <elsa-search-input
+            class="mb-4 hakutermi"
+            :hakutermi.sync="hakutermi"
+            :placeholder="$t('hae-erikoistuvan-nimella')"
+          />
+        </b-col>
+        <b-col>
+          <div v-if="seuranta.erikoisalat.length > 0">
+            <elsa-form-multiselect
+              v-model="erikoisala"
+              :options="seuranta.erikoisalat"
+            ></elsa-form-multiselect>
+          </div>
+        </b-col>
+        <b-col class="mb-3">
+          <div>
+            <elsa-form-multiselect
+              v-model="sortBy"
+              :options="sortFields"
+              label="name"
+              track-by="name"
+              :taggable="true"
+            >
+              <template v-slot:option="{ option }">
+                <div v-if="option.name">{{ option.name }}</div>
+              </template>
+            </elsa-form-multiselect>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-alert v-if="rows === 0" variant="dark" show>
+            <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+            <span v-if="hakutermi.length > 0 || erikoisala.length > 0">
+              {{ $t('ei-hakutuloksia') }}
+            </span>
+            <span v-else>
+              {{ $t('ei-seurattavia-erikoistujia') }}
+            </span>
+          </b-alert>
+          <b-list-group>
+            <b-list-group-item v-for="(eteneminen, index) in tulokset" :key="index">
+              <b-row>
+                <b-col>
+                  <div>
+                    {{ eteneminen.erikoistuvaLaakariEtuNimi }}
+                    {{ eteneminen.erikoistuvaLaakariSukuNimi }} ({{
+                      $date(eteneminen.erikoistuvaLaakariSyntymaaika)
+                    }})
+                  </div>
+                  <div class="mb-2 text-size-sm">
+                    {{ eteneminen.erikoisala }}. {{ eteneminen.asetus }}
+                  </div>
+                </b-col>
+                <b-col>
+                  <div class="text-right text-size-sm">
+                    {{ $t('koejakso') }}:
+                    <span
+                      :class="
+                        koejaksoTyyli(
+                          eteneminen.koejaksoTila,
+                          eteneminen.opintooikeudenPaattymispaiva
+                        )
+                      "
+                    >
+                      {{ koejaksoTila(eteneminen.koejaksoTila) }}
+                    </span>
+                    | {{ $t('opintooikeus') }}:
+                    {{ $date(eteneminen.opintooikeudenMyontamispaiva) }} -
+                    <span :class="opintoOikeusTyyli(eteneminen.opintooikeudenPaattymispaiva)">
+                      {{ $date(eteneminen.opintooikeudenPaattymispaiva) }}
+                    </span>
+                  </div>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col cols="3" class="pr-0">
+                  <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
+                    {{ $t('tyoskentelyaika-yht') }}
+                  </div>
+                  <div v-b-toggle="`tyoskentelyaika-toggle-${index}`">
+                    <b-row>
+                      <b-col cols="11" class="pr-2">
+                        <elsa-progress-bar
+                          :value="
+                            eteneminen.tyoskentelyjaksoTilastot.koulutustyypit.yhteensaSuoritettu
+                          "
+                          :min-required="
+                            eteneminen.tyoskentelyjaksoTilastot.koulutustyypit
+                              .yhteensaVaadittuVahintaan
+                          "
+                          :color="'#41b257'"
+                          :background-color="'#b3e1bc'"
+                          :textColor="'black'"
+                          :showRequiredDuration="true"
+                        />
+                      </b-col>
+                      <b-col cols="1" class="pl-0 pr-0">
+                        <span class="closed">
+                          <font-awesome-icon icon="chevron-down" class="text-muted" />
+                        </span>
+                        <span class="open">
+                          <font-awesome-icon icon="chevron-up" class="text-muted" />
+                        </span>
+                      </b-col>
+                    </b-row>
+                  </div>
+                  <b-collapse :id="`tyoskentelyaika-toggle-${index}`">
+                    <b-row>
+                      <b-col cols="11" class="pr-2">
+                        <span
+                          v-for="(row, index) in barValues(eteneminen.tyoskentelyjaksoTilastot)"
+                          :key="index"
+                        >
+                          <div class="text-size-sm mt-1">{{ row.text }}</div>
+                          <elsa-progress-bar
+                            :value="row.value"
+                            :min-required="row.minRequired"
+                            :color="row.color"
+                            :background-color="row.backgroundColor"
+                            :showRequiredDuration="true"
+                          />
+                        </span>
+                      </b-col>
+                    </b-row>
+                  </b-collapse>
+                </b-col>
+                <b-col cols="2" class="ml-4 mr-1 pl-0 pr-0">
+                  <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
+                    {{ $t('arviointien-ka') }}
+                  </div>
+                  <div v-if="eteneminen.arviointienKa != null">
+                    <span class="font-weight-bold">
+                      {{ eteneminen.arviointienKa.toFixed(2) }}
+                    </span>
+                    / 5
+                  </div>
+                  <div v-else>- / 5</div>
+                </b-col>
+                <b-col class="pl-1 pr-0">
+                  <div class="text-uppercase font-weight-normal text-size-sm">
+                    {{ $t('arv-kokonaisuutta') }}
+                  </div>
+                  <div class="mb-1 text-size-sm">({{ $t('sis-vah-1-arvion') }})</div>
+                  <span class="font-weight-bold">
+                    {{ eteneminen.arviointienLkm }} /
+                    {{ eteneminen.arvioitavienKokonaisuuksienLkm }}
+                  </span>
+                </b-col>
+                <b-col class="pl-1 pr-0">
+                  <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
+                    {{ $t('seurantajaksot') }}
+                  </div>
+                  <span class="font-weight-bold">{{ eteneminen.seurantajaksotLkm }}</span>
+                  <span>{{ ' ' }}{{ $t('kpl') }}</span>
+                  <span v-if="eteneminen.seurantajaksonHuoletLkm > 0">
+                    <span>,</span>
+                    {{ eteneminen.seurantajaksonHuoletLkm }} {{ $t('sis-huolia') }}
+                  </span>
+                </b-col>
+                <b-col class="pl-1 pr-0">
+                  <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
+                    {{ $t('suoritemerkinnat') }}
+                  </div>
+                  <span class="font-weight-bold">{{ eteneminen.suoritemerkinnatLkm }}</span>
+                  <span v-if="eteneminen.vaaditutSuoritemerkinnatLkm > 0">
+                    / {{ eteneminen.vaaditutSuoritemerkinnatLkm }}
+                  </span>
+                  {{ $t('kpl') }}
+                </b-col>
+              </b-row>
+            </b-list-group-item>
+          </b-list-group>
+          <elsa-pagination
+            :current-page.sync="currentPage"
+            :per-page="perPage"
+            :rows="rows"
+            :style="{ 'max-width': '1420px' }"
+          />
+        </b-col>
+      </b-row>
+    </b-card-skeleton>
   </div>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
+  import { parseISO, differenceInMonths } from 'date-fns'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
 
   import BCardSkeleton from '@/components/card/card.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPagination from '@/components/pagination/pagination.vue'
+  import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
+  import ElsaSearchInput from '@/components/search-input/search-input.vue'
+  import { BarChartRow, ErikoistujienSeuranta, TyoskentelyjaksotTilastot } from '@/types'
+  import { ErikoistuvanSeurantaJarjestys, LomakeTilat } from '@/utils/constants'
+  import { sortByAsc, sortByDesc } from '@/utils/sort'
 
   @Component({
     components: {
-      BCardSkeleton
+      BCardSkeleton,
+      ElsaFormGroup,
+      ElsaFormMultiselect,
+      ElsaPagination,
+      ElsaProgressBar,
+      ElsaSearchInput
     }
   })
-  export default class ErikoistujienSeurantaCard extends Vue {}
+  export default class ErikoistujienSeurantaCard extends Vue {
+    @Prop({ required: true, default: undefined })
+    seuranta!: ErikoistujienSeuranta
+
+    hakutermi = ''
+    erikoisala = ''
+    perPage = 20
+    currentPage = 1
+
+    sortFields = [
+      {
+        name: this.$t('opintooikeus-paattymassa'),
+        value: ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA
+      },
+      {
+        name: this.$t('opintooikeus-alkaen'),
+        value: ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN
+      },
+      {
+        name: this.$t('tyoskentelyaikaa-vahiten'),
+        value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN
+      },
+      {
+        name: this.$t('tyoskentelyaikaa-eniten'),
+        value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN
+      },
+      {
+        name: this.$t('sukunimi-a-o'),
+        value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC
+      },
+      {
+        name: this.$t('sukunimi-o-a'),
+        value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC
+      }
+    ]
+    sortBy = this.sortFields[0]
+
+    get seurantaTitle() {
+      let result = ''
+      this.seuranta.kayttajaYliopistoErikoisalat.forEach((kayttajaErikoisala) => {
+        result +=
+          kayttajaErikoisala.yliopistoNimi + ': ' + kayttajaErikoisala.erikoisalat.join(', ') + '. '
+      })
+      return result
+    }
+
+    get tulokset() {
+      let result = this.seuranta.erikoistujienEteneminen
+      if (this.hakutermi) {
+        result = result.filter((item) =>
+          (item.erikoistuvaLaakariEtuNimi + ' ' + item.erikoistuvaLaakariSukuNimi)
+            .toLowerCase()
+            .includes(this.hakutermi.toLowerCase())
+        )
+      }
+      if (this.erikoisala) {
+        result = result.filter((item) => item.erikoisala === this.erikoisala)
+      }
+
+      switch (this.sortBy.value) {
+        case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA:
+          result.sort((a, b) =>
+            sortByAsc(a.opintooikeudenPaattymispaiva, b.opintooikeudenPaattymispaiva)
+          )
+          break
+        case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN:
+          result.sort((a, b) =>
+            sortByAsc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
+          )
+          break
+        case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN:
+          result.sort((a, b) =>
+            sortByAsc(
+              a.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa,
+              b.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa
+            )
+          )
+          break
+        case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN:
+          result.sort((a, b) =>
+            sortByDesc(
+              a.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa,
+              b.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa
+            )
+          )
+          break
+        case ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC:
+          result.sort((a, b) =>
+            sortByAsc(a.erikoistuvaLaakariSukuNimi, b.erikoistuvaLaakariSukuNimi)
+          )
+          break
+        case ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC:
+          result.sort((a, b) =>
+            sortByDesc(a.erikoistuvaLaakariSukuNimi, b.erikoistuvaLaakariSukuNimi)
+          )
+          break
+      }
+
+      return result
+    }
+
+    get rows() {
+      return this.tulokset.length
+    }
+
+    koejaksoTila(tila: LomakeTilat) {
+      switch (tila) {
+        case LomakeTilat.EI_AKTIIVINEN:
+          return (this.$t('aloittamatta') as string).toLowerCase()
+        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
+          return (this.$t('kesken') as string).toLowerCase()
+        case LomakeTilat.HYVAKSYTTY:
+          return (this.$t('hyvaksytty') as string).toLowerCase()
+      }
+    }
+
+    koejaksoTyyli(tila: LomakeTilat, paattymispaiva: string) {
+      switch (tila) {
+        case LomakeTilat.EI_AKTIIVINEN:
+        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
+          if (differenceInMonths(parseISO(paattymispaiva), new Date()) <= 12) {
+            return 'text-danger'
+          }
+          break
+        case LomakeTilat.HYVAKSYTTY:
+          return 'text-success'
+      }
+    }
+
+    opintoOikeusTyyli(paattymispaiva: string) {
+      if (differenceInMonths(parseISO(paattymispaiva), new Date()) <= 6) {
+        return 'text-danger'
+      }
+    }
+
+    barValues(tilastot: TyoskentelyjaksotTilastot): BarChartRow[] {
+      return [
+        {
+          text: this.$t('terveyskeskus'),
+          color: '#ffb406',
+          backgroundColor: '#ffe19b',
+          value: tilastot.koulutustyypit.terveyskeskusSuoritettu,
+          minRequired: tilastot.koulutustyypit.terveyskeskusVaadittuVahintaan,
+          highlight: false
+        },
+        {
+          text: this.$t('yliopistosairaala'),
+          color: '#0f9bd9',
+          backgroundColor: '#9fd7ef',
+          value: tilastot.koulutustyypit.yliopistosairaalaSuoritettu,
+          minRequired: tilastot.koulutustyypit.yliopistosairaalaVaadittuVahintaan,
+          highlight: false
+        },
+        {
+          text: this.$t('yo-sair-ulkopuolinen'),
+          color: '#8a86fb',
+          backgroundColor: '#cfcdfd',
+          value: tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
+          minRequired: tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
+          highlight: false
+        }
+      ]
+    }
+  }
 </script>
+
+<style lang="scss" scoped>
+  .collapsed {
+    .open {
+      display: none;
+    }
+  }
+
+  .not-collapsed {
+    .closed {
+      display: none;
+    }
+  }
+
+  .hakutermi::v-deep .search-input {
+    margin-top: 0 !important;
+  }
+</style>
