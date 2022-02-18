@@ -27,11 +27,23 @@
           &nbsp;
           <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link>
           <span>{{ $t('tai-valitse-alta') }}</span>
-          <b-modal :ref="modalRef" centered size="lg" :hide-footer="true" @hide="onHide">
+          <b-modal
+            :ref="modalRef"
+            centered
+            size="lg"
+            :hide-footer="true"
+            @hide="onHide"
+            @show="onShow"
+          >
             <template v-slot:modal-title>
               {{ addNewLabelText }}
             </template>
-            <slot name="modal-content" :submit="onSubmit" :cancel="onCancel" />
+            <slot
+              name="modal-content"
+              :submit="onSubmit"
+              :cancel="onCancel"
+              :skipRouteExitConfirm="onSkipRouteExitConfirm"
+            />
           </b-modal>
         </div>
       </div>
@@ -64,17 +76,25 @@
     @Prop({ required: false, type: String })
     help?: string
 
+    skipConfirm = true
+
+    async onShow() {
+      this.skipConfirm = true
+    }
+
     async onHide(event: any) {
       // Tarkista, onko poistuminen jo vahvistettu
-      if (event.trigger !== 'confirm') {
+      if (event.trigger !== 'confirm' && !this.skipConfirm) {
         event.preventDefault()
       } else {
         return
       }
 
       // Pyydä poistumisen vahvistus
-      if (await confirmExit(this)) {
-        ;(this.$refs[this.modalRef] as any).hide('confirm')
+      if (this.skipConfirm) {
+        if (await confirmExit(this)) {
+          ;(this.$refs[this.modalRef] as any).hide('confirm')
+        }
       }
     }
 
@@ -83,9 +103,17 @@
       this.$emit('submit', value, params, this.$refs[this.modalRef])
     }
 
+    async onSkipRouteExitConfirm(value: boolean) {
+      this.skipConfirm = value
+    }
+
     async onCancel() {
-      if (await confirmExit(this)) {
+      if (this.skipConfirm) {
         ;(this.$refs[this.modalRef] as any).hide('confirm')
+      } else {
+        if (await confirmExit(this)) {
+          ;(this.$refs[this.modalRef] as any).hide('confirm')
+        }
       }
     }
 

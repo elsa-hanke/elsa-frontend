@@ -12,12 +12,13 @@
       :required="true"
       @submit="onTyoskentelyjaksoSubmit"
     >
-      <template v-slot:modal-content="{ submit, cancel }">
+      <template v-slot:modal-content="{ submit, cancel, skipRouteExitConfirm }">
         <tyoskentelyjakso-form
           :kunnat="kunnat"
           :erikoisalat="erikoisalat"
           @submit="submit"
           @cancel="cancel"
+          @skipRouteExitConfirm="skipRouteExitConfirm"
         />
       </template>
       <template v-slot="{ uid }">
