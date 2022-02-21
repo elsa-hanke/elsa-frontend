@@ -56,7 +56,7 @@
             </span>
           </b-alert>
           <b-list-group>
-            <b-list-group-item v-for="(eteneminen, index) in tulokset" :key="index">
+            <b-list-group-item v-for="(eteneminen, index) in pagedTulokset" :key="index">
               <b-row>
                 <b-col cols="12" lg="6">
                   <div>
@@ -273,6 +273,11 @@
           kayttajaErikoisala.yliopistoNimi + ': ' + kayttajaErikoisala.erikoisalat.join(', ') + '. '
       })
       return result
+    }
+
+    get pagedTulokset() {
+      const current = (this.currentPage - 1) * this.perPage
+      return this.tulokset.slice(current, current + this.perPage)
     }
 
     get tulokset() {
