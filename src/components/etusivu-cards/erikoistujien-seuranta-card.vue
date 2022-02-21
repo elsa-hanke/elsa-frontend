@@ -2,51 +2,45 @@
   <div>
     <h2>{{ $t('erikoistujien-seuranta') }}</h2>
     <b-card-skeleton :header="seurantaTitle" :loading="!seuranta">
-      <b-row>
-        <b-col></b-col>
-        <b-col>
-          <div
-            v-if="seuranta.erikoisalat.length > 0"
-            class="text-uppercase font-weight-normal mb-1 text-size-sm"
-          >
-            {{ $t('erikoisala') }}
-          </div>
-        </b-col>
-        <b-col>
-          <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
-            {{ $t('jarjestys') }}
-          </div>
-        </b-col>
-      </b-row>
       <b-row lg>
-        <b-col>
+        <b-col cols="12" lg="4">
           <elsa-search-input
-            class="mb-4 hakutermi"
+            class="mt-lg-3 mb-4 hakutermi"
             :hakutermi.sync="hakutermi"
             :placeholder="$t('hae-erikoistuvan-nimella')"
           />
         </b-col>
-        <b-col>
-          <div v-if="seuranta.erikoisalat.length > 0">
-            <elsa-form-multiselect
-              v-model="erikoisala"
-              :options="seuranta.erikoisalat"
-            ></elsa-form-multiselect>
+        <b-col cols="12" lg="4">
+          <div class="erikoisalat" v-if="seuranta.erikoisalat.length > 0">
+            <elsa-form-group :label="$t('erikoisala')">
+              <template v-slot="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="erikoisala"
+                  :options="seuranta.erikoisalat"
+                ></elsa-form-multiselect>
+              </template>
+            </elsa-form-group>
           </div>
         </b-col>
-        <b-col class="mb-3">
-          <div>
-            <elsa-form-multiselect
-              v-model="sortBy"
-              :options="sortFields"
-              label="name"
-              track-by="name"
-              :taggable="true"
-            >
-              <template v-slot:option="{ option }">
-                <div v-if="option.name">{{ option.name }}</div>
+        <b-col cols="12" lg="4" class="mb-lg-3">
+          <div class="jarjestys">
+            <elsa-form-group :label="$t('jarjestys')">
+              <template v-slot="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="sortBy"
+                  :options="sortFields"
+                  label="name"
+                  track-by="name"
+                  :taggable="true"
+                >
+                  <template v-slot:option="{ option }">
+                    <div v-if="option.name">{{ option.name }}</div>
+                  </template>
+                </elsa-form-multiselect>
               </template>
-            </elsa-form-multiselect>
+            </elsa-form-group>
           </div>
         </b-col>
       </b-row>
@@ -64,7 +58,7 @@
           <b-list-group>
             <b-list-group-item v-for="(eteneminen, index) in tulokset" :key="index">
               <b-row>
-                <b-col>
+                <b-col cols="12" lg="6">
                   <div>
                     {{ eteneminen.erikoistuvaLaakariEtuNimi }}
                     {{ eteneminen.erikoistuvaLaakariSukuNimi }} ({{
@@ -75,29 +69,34 @@
                     {{ eteneminen.erikoisala }}. {{ eteneminen.asetus }}
                   </div>
                 </b-col>
-                <b-col>
-                  <div class="text-right text-size-sm">
-                    {{ $t('koejakso') }}:
-                    <span
-                      :class="
-                        koejaksoTyyli(
-                          eteneminen.koejaksoTila,
-                          eteneminen.opintooikeudenPaattymispaiva
-                        )
-                      "
-                    >
-                      {{ koejaksoTila(eteneminen.koejaksoTila) }}
+                <b-col cols="12" lg="6">
+                  <div class="text-lg-right text-size-sm mb-2">
+                    <span class="d-block d-lg-inline-block">
+                      {{ $t('koejakso') }}:
+                      <span
+                        :class="
+                          koejaksoTyyli(
+                            eteneminen.koejaksoTila,
+                            eteneminen.opintooikeudenPaattymispaiva
+                          )
+                        "
+                      >
+                        {{ koejaksoTila(eteneminen.koejaksoTila) }}
+                      </span>
                     </span>
-                    | {{ $t('opintooikeus') }}:
-                    {{ $date(eteneminen.opintooikeudenMyontamispaiva) }} -
-                    <span :class="opintoOikeusTyyli(eteneminen.opintooikeudenPaattymispaiva)">
-                      {{ $date(eteneminen.opintooikeudenPaattymispaiva) }}
+                    <span v-if="$screen.lg">{{ ' | ' }}</span>
+                    <span class="d-block d-lg-inline-block">
+                      {{ $t('opintooikeus') }}:
+                      {{ $date(eteneminen.opintooikeudenMyontamispaiva) }} -
+                      <span :class="opintoOikeusTyyli(eteneminen.opintooikeudenPaattymispaiva)">
+                        {{ $date(eteneminen.opintooikeudenPaattymispaiva) }}
+                      </span>
                     </span>
                   </div>
                 </b-col>
               </b-row>
               <b-row>
-                <b-col cols="3" class="pr-0">
+                <b-col cols="12" lg="3" class="pr-0 mb-4">
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('tyoskentelyaika-yht') }}
                   </div>
@@ -148,7 +147,7 @@
                     </b-row>
                   </b-collapse>
                 </b-col>
-                <b-col cols="2" class="ml-4 mr-1 pl-0 pr-0">
+                <b-col cols="6" lg="auto" class="pl-lg-6 pr-1 pr-lg-3 mb-2">
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('arviointien-ka') }}
                   </div>
@@ -160,7 +159,7 @@
                   </div>
                   <div v-else>- / 5</div>
                 </b-col>
-                <b-col class="pl-1 pr-0">
+                <b-col cols="6" lg="auto" class="mb-2 pl-1 pl-lg-3">
                   <div class="text-uppercase font-weight-normal text-size-sm">
                     {{ $t('arv-kokonaisuutta') }}
                   </div>
@@ -170,7 +169,7 @@
                     {{ eteneminen.arvioitavienKokonaisuuksienLkm }}
                   </span>
                 </b-col>
-                <b-col class="pl-1 pr-0">
+                <b-col cols="6" lg="auto" class="pr-1 pr-lg-3">
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('seurantajaksot') }}
                   </div>
@@ -181,7 +180,7 @@
                     {{ eteneminen.seurantajaksonHuoletLkm }} {{ $t('sis-huolia') }}
                   </span>
                 </b-col>
-                <b-col class="pl-1 pr-0">
+                <b-col cols="6" lg="auto" class="pr-1 pl-1 pl-lg-3">
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('suoritemerkinnat') }}
                   </div>
@@ -397,6 +396,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '~@/styles/variables';
+
   .collapsed {
     .open {
       display: none;
@@ -411,5 +412,15 @@
 
   .hakutermi::v-deep .search-input {
     margin-top: 0 !important;
+  }
+
+  .jarjestys::v-deep .form-group,
+  .erikoisalat::v-deep .form-group {
+    label {
+      font-weight: 300;
+      text-transform: uppercase;
+      font-size: $font-size-sm;
+      margin-bottom: 0;
+    }
   }
 </style>
