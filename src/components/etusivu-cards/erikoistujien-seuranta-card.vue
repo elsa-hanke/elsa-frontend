@@ -2,6 +2,9 @@
   <div>
     <h2>{{ $t('erikoistujien-seuranta') }}</h2>
     <b-card-skeleton :header="seurantaTitle" :loading="!seuranta">
+      <div v-if="showKouluttajaKuvaus" class="mb-3 mb-lg-3">
+        {{ $t('erikoistujien-seuranta-kouluttaja-kuvaus') }}
+      </div>
       <b-row lg>
         <b-col cols="12" lg="4">
           <elsa-search-input
@@ -11,8 +14,8 @@
           />
         </b-col>
         <b-col cols="12" lg="4">
-          <div class="erikoisalat" v-if="seuranta.erikoisalat.length > 0">
-            <elsa-form-group :label="$t('erikoisala')">
+          <div class="erikoisalat" v-if="seuranta.erikoisalat.length > 1">
+            <elsa-form-group :label="$t('erikoisala')" class="mb-4">
               <template v-slot="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
@@ -23,9 +26,9 @@
             </elsa-form-group>
           </div>
         </b-col>
-        <b-col cols="12" lg="4" class="mb-lg-3">
+        <b-col cols="12" lg="4" class="">
           <div class="jarjestys">
-            <elsa-form-group :label="$t('jarjestys')">
+            <elsa-form-group :label="$t('jarjestys')" class="mb-4">
               <template v-slot="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
@@ -232,6 +235,9 @@
   export default class ErikoistujienSeurantaCard extends Vue {
     @Prop({ required: true, default: undefined })
     seuranta!: ErikoistujienSeuranta
+
+    @Prop({ required: false, default: false })
+    showKouluttajaKuvaus!: boolean
 
     hakutermi = ''
     erikoisala = ''

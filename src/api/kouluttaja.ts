@@ -8,7 +8,8 @@ import {
   Suoritusarviointi,
   Seurantajakso,
   SeurantajaksonTiedot,
-  ValiarviointiLomake
+  ValiarviointiLomake,
+  ErikoistujienSeuranta
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -92,4 +93,9 @@ export async function getSeurantajaksonTiedot(id: number) {
 export async function putSeurantajakso(form: Seurantajakso) {
   const path = `kouluttaja/seurantakeskustelut/seurantajakso/${form.id}`
   return await axios.put<Seurantajakso>(path, form)
+}
+
+export async function getErikoistujienSeuranta() {
+  const path = `/kouluttaja/etusivu/erikoistujien-seuranta`
+  return await axios.get<ErikoistujienSeuranta>(path)
 }
