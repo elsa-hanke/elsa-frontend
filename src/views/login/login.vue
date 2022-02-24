@@ -7,6 +7,13 @@
           {{ $t('kirjautuminen.' + virhe) }}
           <a v-if="showMail" :href="`mailto:${contactMail}`">{{ contactMail }}</a>
         </b-alert>
+        <b-alert variant="danger" :show="huoltokatkoNotification">
+          <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
+          {{ $t('kirjautuminen-huoltokatkoilmoitus') }}
+          {{ $t('paivana-' + HuoltokatkoDay) }} {{ HuoltokatkoDate }} {{ $t('klo') }}
+          {{ HuoltokatkoTime }}
+          <a v-if="showMail" :href="`mailto:${contactMail}`">{{ contactMail }}</a>
+        </b-alert>
         <b-alert variant="dark" show>
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
           {{ $t('piloottikaytto-kuvaus') }}
@@ -40,6 +47,8 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
+  import { parseISO, format } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { ELSA_API_LOCATION } from '@/api'
@@ -51,8 +60,26 @@
     }
   })
   export default class Login extends Vue {
+    huoltokatkoNotification = false
+    HuoltokatkoDay = ''
+    HuoltokatkoDate = ''
+    HuoltokatkoTime = ''
+    async mounted() {
+      this.handleHuoltokatkoDates((await axios.get('/julkinen/seuraava-paivitys')).data)
+    }
+
     loginSuomiFi() {
       return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`)
+    }
+
+    handleHuoltokatkoDates(dateStr: string) {
+      if (dateStr !== '') {
+        const date = parseISO(dateStr)
+        this.huoltokatkoNotification = true
+        this.HuoltokatkoDay = format(date, 'ccc')
+        this.HuoltokatkoDate = format(date, 'dd.MM.')
+        this.HuoltokatkoTime = format(date, 'HH.mm')
+      }
     }
 
     get virhe() {
