@@ -64,9 +64,10 @@
                 <b-col cols="12" lg="6">
                   <div>
                     {{ eteneminen.erikoistuvaLaakariEtuNimi }}
-                    {{ eteneminen.erikoistuvaLaakariSukuNimi }} ({{
-                      $date(eteneminen.erikoistuvaLaakariSyntymaaika)
-                    }})
+                    {{ eteneminen.erikoistuvaLaakariSukuNimi }}
+                    <span v-if="eteneminen.erikoistuvaLaakariSyntymaaika != null">
+                      ({{ $date(eteneminen.erikoistuvaLaakariSyntymaaika) }})
+                    </span>
                   </div>
                   <div class="mb-2 text-size-sm">
                     {{ eteneminen.erikoisala }}. {{ eteneminen.asetus }}
