@@ -102,8 +102,12 @@
         class="col-md-12"
         @submit="onKouluttajaSubmit"
       >
-        <template v-slot:modal-content="{ submit, cancel }">
-          <kouluttaja-form @submit="submit" @cancel="cancel" />
+        <template v-slot:modal-content="{ submit, cancel, skipRouteExitConfirm }">
+          <kouluttaja-form
+            @submit="submit"
+            @cancel="cancel"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
+          />
         </template>
         <template v-slot="{ uid }">
           <elsa-form-multiselect

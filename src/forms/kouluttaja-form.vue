@@ -2,7 +2,12 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('kouluttajan-nimi')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input :id="uid" v-model="value.nimi" :state="validateState('nimi')"></b-form-input>
+        <b-form-input
+          :id="uid"
+          v-model="value.nimi"
+          :state="validateState('nimi')"
+          @input="$emit('skipRouteExitConfirm', false)"
+        ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
@@ -10,7 +15,12 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('kouluttajan-sahkoposti')" :required="true">
       <template v-slot="{ uid }">
-        <b-form-input :id="uid" v-model="value.sahkoposti" :state="validateState('sahkoposti')" />
+        <b-form-input
+          :id="uid"
+          v-model="value.sahkoposti"
+          :state="validateState('sahkoposti')"
+          @input="$emit('skipRouteExitConfirm', false)"
+        />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
