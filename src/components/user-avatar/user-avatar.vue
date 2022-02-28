@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex text-nowrap align-items-center">
+  <div class="d-flex align-items-center">
     <avatar
       v-bind="$attrs"
       :src="imageSrc"
@@ -79,6 +79,7 @@
 <style lang="scss" scoped>
   .avatar {
     min-width: 32px;
+    flex-shrink: 0;
   }
 
   .avatar-line-height {
