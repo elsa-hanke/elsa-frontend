@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('koejaksot')" :loading="true" class="mb-3"></b-card-skeleton>
+  <b-card-skeleton :header="$t('koejaksot')" :loading="true" class="mb-3 d-none"></b-card-skeleton>
 </template>
 
 <script lang="ts">

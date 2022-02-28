@@ -5,33 +5,33 @@
         <b-card-skeleton
           :header="$t('avoimet-asiat')"
           :loading="true"
-          class="mb-3"
+          class="mb-3 d-none"
         ></b-card-skeleton>
         <b-card-skeleton
           :header="$t('erikoistumisen-edistyminen')"
           :loading="true"
-          class="mb-3"
+          class="mb-3 d-none"
         ></b-card-skeleton>
         <b-row>
           <b-col xl="6">
             <b-card-skeleton
               :header="$t('koulutussuunnitelma')"
               :loading="true"
-              class="mb-3"
+              class="mb-3 d-none"
             ></b-card-skeleton>
           </b-col>
           <b-col xl="6">
             <b-card-skeleton
               :header="$t('seurantakeskustelut')"
               :loading="true"
-              class="mb-3"
+              class="mb-3 d-none"
             ></b-card-skeleton>
           </b-col>
         </b-row>
         <b-card-skeleton
           :header="$t('paivittaiset-merkinnat')"
           :loading="true"
-          class="mb-3"
+          class="mb-3 d-none"
         ></b-card-skeleton>
       </b-col>
       <b-col xxl="4">
@@ -43,7 +43,7 @@
             <b-card-skeleton
               :header="$t('arvioitavat-kokonaisuudet')"
               :loading="true"
-              class="mb-3"
+              class="mb-3 d-none"
             ></b-card-skeleton>
           </b-col>
         </b-row>

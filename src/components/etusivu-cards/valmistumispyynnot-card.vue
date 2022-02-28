@@ -2,7 +2,7 @@
   <b-card-skeleton
     :header="$t('valmistumispyynnot')"
     :loading="true"
-    class="mb-3"
+    class="mb-3 d-none"
   ></b-card-skeleton>
 </template>
 
