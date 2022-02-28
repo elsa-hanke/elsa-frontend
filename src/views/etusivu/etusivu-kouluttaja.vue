@@ -8,13 +8,13 @@
           <b-card-skeleton
             :header="$t('seurantajaksot')"
             :loading="true"
-            class="mb-3"
+            class="mb-3 d-none"
           ></b-card-skeleton>
           <koejaksot-card />
           <b-card-skeleton
             :header="$t('vanhenevat-katseluoikeudet')"
             :loading="true"
-            class="mb-3"
+            class="mb-3 d-none"
           ></b-card-skeleton>
           <erikoistujien-seuranta-card :seuranta="seuranta" :showKouluttajaKuvaus="true" />
         </b-col>
