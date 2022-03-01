@@ -38,7 +38,13 @@
               v-for="(opintooikeus, index) in opintooikeudet"
               :key="index"
             >
-              <h3>{{ `${opintooikeus.yliopistoNimi}, ${opintooikeus.erikoisalaNimi}` }}</h3>
+              <h3>
+                {{
+                  `${$t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`)}, ${
+                    opintooikeus.erikoisalaNimi
+                  }`
+                }}
+              </h3>
               <elsa-form-group :label="$t('opiskelijatunnus')" v-if="opintooikeus.opiskelijatunnus">
                 <template v-slot="{ uid }">
                   <span :id="uid">{{ opintooikeus.opiskelijatunnus }}</span>

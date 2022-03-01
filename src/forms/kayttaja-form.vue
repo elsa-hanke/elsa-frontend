@@ -79,7 +79,7 @@
             @input="$emit('skipRouteExitConfirm', false)"
             :options="yliopistot"
             :state="validateErikoistuvaLaakariState('yliopisto')"
-            label="nimi"
+            :custom-label="(value) => $t(`yliopisto-nimi.${value.nimi}`)"
             track-by="id"
           />
           <b-form-invalid-feedback :id="`${uid}-feedback`">

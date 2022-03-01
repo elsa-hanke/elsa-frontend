@@ -116,7 +116,10 @@
     }
 
     get yliopistotOptions() {
-      return this.yliopistot.map((y: any) => ({ text: y.nimi, value: y.nimi }))
+      return this.yliopistot.map((y: any) => ({
+        text: this.$t(`yliopisto-nimi.${y.nimi}`),
+        value: y.nimi
+      }))
     }
 
     get linkki() {
