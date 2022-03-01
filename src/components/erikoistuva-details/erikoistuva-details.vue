@@ -40,7 +40,7 @@
         <th scope="row" class="font-weight-500">
           {{ $t('yliopisto-opintooikeus') }}
         </th>
-        <td class="pl-6">{{ yliopisto }}</td>
+        <td class="pl-6">{{ $t(`yliopisto-nimi.${yliopisto}`) }}</td>
       </tr>
       <tr v-if="kehittamistoimenpiteet">
         <th scope="row" class="font-weight-500">
