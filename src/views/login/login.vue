@@ -87,7 +87,10 @@
     }
 
     get showMail() {
-      return this.$route.query.virhe === 'EI_KAYTTO_OIKEUTTA'
+      return (
+        this.$route.query.virhe === 'EI_KAYTTO_OIKEUTTA' ||
+        this.$route.query.virhe === 'VIRHEELLINEN_NIMI'
+      )
     }
 
     get contactMail() {
