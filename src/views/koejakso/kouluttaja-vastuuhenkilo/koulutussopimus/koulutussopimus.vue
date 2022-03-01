@@ -99,7 +99,7 @@
                 <p v-if="!koulutuspaikka.yliopisto">{{ $t('kylla') }}</p>
                 <p v-else>
                   {{ $t('toimipaikalla-koulutussopimus.ei-sopimusta') }}:
-                  {{ koulutuspaikka.yliopisto }}
+                  {{ $t(`yliopisto-nimi.${koulutuspaikka.yliopisto}`) }}
                 </p>
               </div>
             </b-col>

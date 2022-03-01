@@ -286,7 +286,10 @@
       let result = ''
       this.seuranta.kayttajaYliopistoErikoisalat.forEach((kayttajaErikoisala) => {
         result +=
-          kayttajaErikoisala.yliopistoNimi + ': ' + kayttajaErikoisala.erikoisalat.join(', ') + '. '
+          this.$t(`yliopisto-nimi.${kayttajaErikoisala.yliopistoNimi}`) +
+          ': ' +
+          kayttajaErikoisala.erikoisalat.join(', ') +
+          '. '
       })
       return result
     }

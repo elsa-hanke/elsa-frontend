@@ -6,7 +6,7 @@
           :id="uid"
           v-model="value.yliopisto"
           :options="yliopistot"
-          label="nimi"
+          :custom-label="(value) => $t(`yliopisto-nimi.${value.nimi}`)"
           track-by="nimi"
         ></elsa-form-multiselect>
       </template>

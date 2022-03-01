@@ -1114,6 +1114,13 @@
   "yhteistyotaidot": "Yhteistyötaidot",
   "yksityinen": "Yksityinen",
   "yliopisto": " Yliopisto",
+  "yliopisto-nimi": {
+    "OULUN_YLIOPISTO": "Oulun yliopisto",
+    "HELSINGIN_YLIOPISTO": "Helsingin yliopisto",
+    "TAMPEREEN_YLIOPISTO": "Tampereen yliopisto",
+    "TURUN_YLIOPISTO": "Turun yliopisto",
+    "ITA_SUOMEN_YLIOPISTO": "Itä-Suomen yliopisto"
+  },
   "yliopisto-opintooikeus": "Yliopisto, jossa erikoistuvalla on opinto-oikeus",
   "yliopistollinen-sairaala": "Yliopistollinen sairaala",
   "yliopistosairaala": "Yliopistosairaala",
