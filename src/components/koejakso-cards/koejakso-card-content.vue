@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex-column sopimus-card-container">
     <b-row class="mb-3">
-      <b-col>
+      <b-col class="d-flex">
         <slot name="content"></slot>
       </b-col>
     </b-row>

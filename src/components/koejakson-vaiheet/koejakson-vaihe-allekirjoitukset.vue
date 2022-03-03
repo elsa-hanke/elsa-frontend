@@ -2,7 +2,7 @@
   <div v-if="showAllekirjoitukset">
     <b-row class="mb-3">
       <b-col>
-        <h3>{{ $t('allekirjoitukset') }}</h3>
+        <h3>{{ $t('muokkauspaivamaarat') }}</h3>
       </b-col>
     </b-row>
     <b-row v-for="(allekirjoitus, index) in allekirjoitukset" :key="index">

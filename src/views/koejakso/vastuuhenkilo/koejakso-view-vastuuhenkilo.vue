@@ -3,6 +3,7 @@
     :loading="loading"
     :koejaksot="koejaksot"
     :componentLinks="componentLinks"
+    :vastuuhenkilo="true"
   />
 </template>
 

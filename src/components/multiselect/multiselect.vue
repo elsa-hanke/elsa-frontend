@@ -117,7 +117,9 @@
     get deselectGroupLabelText() {
       return ''
     }
+
     clearMultiselect() {
+      this.$emit('valueToBeCleared', this.$attrs.value)
       this.$emit('input', null)
       this.$emit('clearMultiselect', null)
     }
