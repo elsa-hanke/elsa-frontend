@@ -24,13 +24,13 @@
           </user-avatar>
         </td>
       </tr>
-      <tr>
+      <tr v-if="opiskelijatunnus">
         <th scope="row" class="font-weight-500">
           {{ $t('opiskelijanumero') }}
         </th>
         <td class="pl-6">{{ opiskelijatunnus }}</td>
       </tr>
-      <tr v-if="showBirthdate">
+      <tr v-if="showBirthdate && syntymaaika">
         <th scope="row" class="font-weight-500">
           {{ $t('syntymaaika') }}
         </th>
@@ -38,7 +38,7 @@
       </tr>
       <tr>
         <th scope="row" class="font-weight-500">
-          {{ $t('yliopisto-opintooikeus') }}
+          {{ $t('yliopisto') }}
         </th>
         <td class="pl-6">{{ $t(`yliopisto-nimi.${yliopisto}`) }}</td>
       </tr>
@@ -94,7 +94,7 @@
     }
 
     get displayNameAndErikoisala() {
-      return this.erikoisala ? `${this.displayName}, ${this.erikoisala}` : this.displayName
+      return this.erikoisala !== '' ? `${this.displayName}, ${this.erikoisala}` : this.displayName
     }
   }
 </script>

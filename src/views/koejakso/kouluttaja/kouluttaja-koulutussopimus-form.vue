@@ -85,6 +85,7 @@
               v-model="form.sahkoposti"
               @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sahkoposti')"
+              :value="account.email"
             />
             <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -101,13 +102,14 @@
       </b-col>
 
       <b-col lg="4">
-        <elsa-form-group :label="$t('puhelin-virka-aikaan')" :required="true">
+        <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.puhelin"
               @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('puhelin')"
+              :value="account.phoneNumber"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -127,6 +129,7 @@
   import { email, required } from 'vuelidate/lib/validators'
 
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import store from '@/store'
   import { Kouluttaja } from '@/types'
   import { defaultKouluttaja } from '@/utils/constants'
 
@@ -169,6 +172,10 @@
 
     get kouluttajaIndex() {
       return this.index
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     validateState(value: string) {
