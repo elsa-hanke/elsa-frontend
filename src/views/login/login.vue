@@ -69,7 +69,10 @@
     }
 
     loginSuomiFi() {
-      return (window.location.href = `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`)
+      const token = this.$route.query.token
+      return (window.location.href = token
+        ? `${ELSA_API_LOCATION}/saml2/authenticate/suomifi?RelayState=${this.$route.query.token}`
+        : `${ELSA_API_LOCATION}/saml2/authenticate/suomifi`)
     }
 
     handleHuoltokatkoDates(dateStr: string) {
