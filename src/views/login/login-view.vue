@@ -10,11 +10,9 @@
 
   import ElsaButton from '@/components/button/button.vue'
   import NavbarNotLoggedIn from '@/components/navbar/navbar-not-logged-in.vue'
-  import KayttooikeusForm from '@/forms/kayttooikeus-form.vue'
 
   @Component({
     components: {
-      KayttooikeusForm,
       NavbarNotLoggedIn,
       ElsaButton
     }
