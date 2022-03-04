@@ -26,11 +26,6 @@ import {
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
-export async function putKayttooikeushakemus(value: any) {
-  const path = 'erikoistuva-laakari/kayttooikeushakemus'
-  return await axios.put(path, value)
-}
-
 export async function getKoejakso() {
   const path = '/erikoistuva-laakari/koejakso'
   return await axios.get<Koejakso>(path)

@@ -42,7 +42,6 @@ import UusiKoulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/uusi-ko
 import Koulutussuunnitelma from '@/views/koulutussuunnitelma/koulutussuunnitelma.vue'
 import MuokkaaKoulutussuunnitelma from '@/views/koulutussuunnitelma/muokkaa-koulutussuunnitelma.vue'
 import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
-import Kayttooikeus from '@/views/login/kayttooikeus.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
 import Logout from '@/views/logout.vue'
@@ -82,15 +81,7 @@ const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
   await store.dispatch('auth/authorize')
 
   if (store.getters['auth/isLoggedIn']) {
-    // Ohjataan rooliton käyttäjä roolien lisäämisen näkymään kirjautumisen jälkeen
-    if (store.getters['auth/account'].authorities.length === 0 && to.name !== 'kayttooikeus') {
-      next({
-        name: 'kayttooikeus',
-        replace: true
-      })
-    } else {
-      restoreRoute(next)
-    }
+    restoreRoute(next)
   } else {
     storeRoute(to)
     next('/kirjautuminen')
@@ -699,38 +690,9 @@ const routes: Array<RouteConfig> = [
           await store.dispatch('auth/authorize')
 
           if (store.getters['auth/isLoggedIn']) {
-            // Ohjataan rooliton käyttäjä roolien lisäämisen näkymään kirjautumisen jälkeen
-            if (
-              store.getters['auth/account'].authorities.length === 0 &&
-              to.name !== 'kayttooikeus'
-            ) {
-              next({
-                name: 'kayttooikeus',
-                replace: true
-              })
-            } else {
-              next('/etusivu')
-            }
+            next('/etusivu')
           } else {
             next()
-          }
-        }
-      },
-      {
-        path: '/kayttooikeus',
-        name: 'kayttooikeus',
-        component: Kayttooikeus,
-        beforeEnter: async (to, from, next) => {
-          await store.dispatch('auth/authorize')
-
-          if (store.getters['auth/isLoggedIn']) {
-            if (store.getters['auth/account'].authorities.length > 0) {
-              next('/etusivu')
-            } else {
-              next()
-            }
-          } else {
-            next('/kirjautuminen')
           }
         }
       },
