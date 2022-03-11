@@ -62,13 +62,19 @@
             <b-list-group-item v-for="(eteneminen, index) in pagedTulokset" :key="index">
               <b-row>
                 <b-col cols="12" lg="6">
-                  <div>
-                    {{ eteneminen.erikoistuvaLaakariEtuNimi }}
-                    {{ eteneminen.erikoistuvaLaakariSukuNimi }}
-                    <span v-if="eteneminen.erikoistuvaLaakariSyntymaaika != null">
-                      ({{ $date(eteneminen.erikoistuvaLaakariSyntymaaika) }})
-                    </span>
-                  </div>
+                  <elsa-button
+                    variant="link"
+                    class="p-0"
+                    @click="vaihdaRooli(eteneminen.erikoistuvaLaakariId)"
+                  >
+                    <div>
+                      {{ eteneminen.erikoistuvaLaakariEtuNimi }}
+                      {{ eteneminen.erikoistuvaLaakariSukuNimi }}
+                      <span v-if="eteneminen.erikoistuvaLaakariSyntymaaika != null">
+                        ({{ $date(eteneminen.erikoistuvaLaakariSyntymaaika) }})
+                      </span>
+                    </div>
+                  </elsa-button>
                   <div class="mb-2 text-size-sm">
                     {{ eteneminen.erikoisala }}. {{ eteneminen.asetus }}
                   </div>
@@ -100,7 +106,7 @@
                 </b-col>
               </b-row>
               <b-row>
-                <b-col cols="12" lg="3" class="pr-0 mb-4">
+                <b-col cols="12" lg="3" class="pr-3 mb-4">
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('tyoskentelyaika-yht') }}
                   </div>
@@ -151,7 +157,7 @@
                     </b-row>
                   </b-collapse>
                 </b-col>
-                <b-col cols="6" lg="auto" class="pl-lg-6 pr-1 pr-lg-3 mb-2">
+                <b-col cols="6" lg="auto" class="pl-lg-3 pr-1 pr-lg-3 mb-2">
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('arviointien-ka') }}
                   </div>
@@ -213,6 +219,7 @@
   import { parseISO, differenceInMonths } from 'date-fns'
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
+  import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -226,6 +233,7 @@
   @Component({
     components: {
       BCardSkeleton,
+      ElsaButton,
       ElsaFormGroup,
       ElsaFormMultiselect,
       ElsaPagination,
@@ -344,6 +352,10 @@
 
     get rows() {
       return this.tulokset.length
+    }
+
+    vaihdaRooli(id: number) {
+      window.location.href = `/api/login/impersonate?erikoistuvaLaakariId=${id}`
     }
 
     koejaksoTila(tila: LomakeTilat) {

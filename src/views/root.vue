@@ -1,6 +1,7 @@
 <template>
   <div id="root" class="min-height-800" :class="{ 'gray-backdrop': hasGrayBackdrop }">
     <navbar />
+    <navbar-impersonated />
     <mobile-nav v-if="!$screen.lg" />
     <sidebar-menu ref="sidebar" />
     <main role="main">
@@ -14,12 +15,14 @@
   import Component from 'vue-class-component'
 
   import MobileNav from '@/components/mobile-nav/mobile-nav.vue'
+  import NavbarImpersonated from '@/components/navbar/navbar-impersonate.vue'
   import Navbar from '@/components/navbar/navbar.vue'
   import SidebarMenu from '@/components/sidebar-menu/sidebar-menu.vue'
 
   @Component({
     components: {
       Navbar,
+      NavbarImpersonated,
       SidebarMenu,
       MobileNav
     }

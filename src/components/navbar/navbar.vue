@@ -33,9 +33,14 @@
 
       <b-nav-item-dropdown class="user-dropdown align-self-center px-3" right>
         <template #button-content>
-          <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
+          <user-avatar
+            :src-base64="avatar"
+            src-content-type="image/jpeg"
+            :title="title"
+            :displayName="displayName"
+          />
         </template>
-        <b-dropdown-item :to="{ name: 'profiili' }">
+        <b-dropdown-item v-if="!account.impersonated" :to="{ name: 'profiili' }">
           {{ $t('oma-profiilini') }}
         </b-dropdown-item>
         <b-dropdown-item @click="logout">
@@ -85,6 +90,9 @@
 
     get authorities() {
       if (this.account) {
+        if (this.account.impersonated) {
+          return this.account.originalUser.authorities
+        }
         return this.account.authorities
       }
       return []
@@ -97,9 +105,22 @@
 
     get avatar() {
       if (this.account) {
+        if (this.account.impersonated) {
+          return this.account.originalUser.avatar
+        }
         return this.account.avatar
       }
       return undefined
+    }
+
+    get displayName() {
+      if (this.account) {
+        if (this.account.impersonated) {
+          return `${this.account.originalUser.firstName} ${this.account.originalUser.lastName}`
+        }
+        return `${this.account.firstName} ${this.account.lastName}`
+      }
+      return ''
     }
 
     get currentLocale() {
