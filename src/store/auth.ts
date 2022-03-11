@@ -59,6 +59,9 @@ const auth: Module<any, any> = {
         if (data.authorities.includes('ROLE_ERIKOISTUVA_LAAKARI')) {
           data.erikoistuvaLaakari = (await axios.get('erikoistuva-laakari')).data
         }
+        if (data.impersonated) {
+          data.originalUser = (await axios.get('kayttaja-impersonated')).data
+        }
         commit('authSuccess', data)
       } catch (err) {
         if ((err as AxiosError<unknown>).response?.status === 401) {
