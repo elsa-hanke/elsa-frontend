@@ -95,9 +95,19 @@
       </b-nav>
       <b-nav class="bg-light font-weight-500" vertical>
         <b-nav-item class="text-nowrap px-3" link-classes="text-dark px-0 py-1" disabled>
-          <user-avatar :src-base64="avatar" src-content-type="image/jpeg" :title="title" />
+          <user-avatar
+            :src-base64="avatar"
+            src-content-type="image/jpeg"
+            :title="title"
+            :displayName="displayName"
+          />
         </b-nav-item>
-        <b-nav-item class="ml-6" link-classes="p-0 pt-1 pb-2 pb-2" :to="{ name: 'profiili' }">
+        <b-nav-item
+          v-if="!account.impersonated"
+          class="ml-6"
+          link-classes="p-0 pt-1 pb-2 pb-2"
+          :to="{ name: 'profiili' }"
+        >
           {{ $t('oma-profiilini') }}
         </b-nav-item>
         <b-nav-item @click="logout()" class="ml-6" link-classes="p-0 pt-1 pb-3">
@@ -152,6 +162,9 @@
 
     get authorities() {
       if (this.account) {
+        if (this.account.impersonated) {
+          return this.account.originalUser.authorities
+        }
         return this.account.authorities
       }
       return []
@@ -160,6 +173,16 @@
     get title() {
       const value = getTitleFromAuthorities(this.authorities)
       return value ? this.$t(value) : undefined
+    }
+
+    get displayName() {
+      if (this.account) {
+        if (this.account.impersonated) {
+          return `${this.account.originalUser.firstName} ${this.account.originalUser.lastName}`
+        }
+        return `${this.account.firstName} ${this.account.lastName}`
+      }
+      return ''
     }
 
     get currentLocale() {
