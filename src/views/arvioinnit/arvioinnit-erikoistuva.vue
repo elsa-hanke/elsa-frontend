@@ -6,7 +6,12 @@
         <b-col>
           <h1>{{ $t('arvioinnit') }}</h1>
           <p class="mb-3">{{ $t('arvioinnit-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'arviointipyynto' }" class="mb-4">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            :to="{ name: 'arviointipyynto' }"
+            class="mb-4"
+          >
             {{ $t('pyyda-arviointia') }}
           </elsa-button>
           <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
@@ -170,7 +175,7 @@
                                     :value="arviointi.itsearviointiArviointiasteikonTaso"
                                   />
                                   <elsa-button
-                                    v-else-if="!arviointi.lukittu"
+                                    v-else-if="!arviointi.lukittu && !account.impersonated"
                                     variant="primary"
                                     :to="{
                                       name: 'itsearviointi',
@@ -247,6 +252,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import store from '@/store'
   import {
     Suoritusarviointi,
     SuoritusarviointiFilter,
@@ -297,6 +303,10 @@
     async mounted() {
       await this.fetchOptions()
       await this.fetch()
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     onTabChange(tabIndex: number) {

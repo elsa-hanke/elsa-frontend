@@ -11,7 +11,12 @@
             <section class="mb-5 d-print-none">
               <h2>{{ $t('koulutusjaksot') }}</h2>
               <p>{{ $t('koulutusjaksot-kuvaus') }}</p>
-              <elsa-button variant="primary" :to="{ name: 'uusi-koulutusjakso' }" class="mb-3">
+              <elsa-button
+                v-if="!account.impersonated"
+                variant="primary"
+                :to="{ name: 'uusi-koulutusjakso' }"
+                class="mb-3"
+              >
                 {{ $t('lisaa-koulutusjakso') }}
               </elsa-button>
               <div v-if="koulutusjaksot && koulutusjaksot.length > 0" class="koulutusjaksot-table">
@@ -77,6 +82,7 @@
               <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
               <div class="d-flex flex-wrap justify-content-between d-print-none">
                 <elsa-button
+                  v-if="!account.impersonated"
                   variant="primary"
                   :to="{ name: 'muokkaa-koulutussuunnitelma' }"
                   class="mr-2 mb-3"
@@ -226,6 +232,7 @@
   import ElsaAccordian from '@/components/accordian/accordian.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import store from '@/store'
   import { Koulutusjakso, Koulutussuunnitelma } from '@/types'
   import { toastFail } from '@/utils/toast'
 
@@ -255,6 +262,10 @@
     async mounted() {
       await Promise.all([this.fetchKoulutusjaksot(), this.fetchKoulutussuunnitelma()])
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async fetchKoulutussuunnitelma() {

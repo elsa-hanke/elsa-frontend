@@ -146,6 +146,9 @@
     }
 
     get editable() {
+      if (this.account.impersonated) {
+        return false
+      }
       switch (this.koejaksoData.koulutusSopimuksenTila) {
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return true

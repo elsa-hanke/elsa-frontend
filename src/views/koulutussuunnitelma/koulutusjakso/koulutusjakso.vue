@@ -66,6 +66,7 @@
             <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
+                v-if="!account.impersonated"
                 :disabled="koulutusjakso.lukittu"
                 :to="{ name: 'muokkaa-koulutusjaksoa' }"
                 variant="primary"
@@ -74,6 +75,7 @@
                 {{ $t('muokkaa-koulutusjaksoa') }}
               </elsa-button>
               <elsa-button
+                v-if="!account.impersonated"
                 :disabled="koulutusjakso.lukittu"
                 :loading="deleting"
                 variant="outline-danger"
@@ -96,7 +98,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="koulutusjakso != null && koulutusjakso.lukittu">
+      <b-row v-if="koulutusjakso != null && koulutusjakso.lukittu && !account.impersonated">
         <b-col>
           <div class="d-flex flex-row mb-4">
             <em class="align-middle">
@@ -119,6 +121,7 @@
   import { getKoulutusjakso } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import store from '@/store'
   import { Koulutusjakso } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -154,6 +157,10 @@
         toastFail(this, this.$t('koulutusjakson-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'koulutussuunnitelma' })
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async onKoulutusjaksoDelete() {

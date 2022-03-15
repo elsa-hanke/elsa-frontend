@@ -21,6 +21,7 @@
           </b-col>
         </b-row>
         <elsa-button
+          v-if="!account.impersonated"
           size="sm"
           variant="primary"
           class="rounded-pill d-none d-block w-50"

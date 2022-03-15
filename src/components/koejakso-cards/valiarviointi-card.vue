@@ -11,7 +11,13 @@
           <p>{{ $t('arviointi-ei-viela-pyydetty') }}</p>
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :disabled="true" :to="{ name: url }">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            class="mb-4"
+            :disabled="true"
+            :to="{ name: url }"
+          >
             {{ $t('pyyda-arviointia') }}
           </elsa-button>
         </template>
@@ -22,7 +28,12 @@
           <p>{{ $t('arviointi-ei-viela-pyydetty') }}</p>
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            class="mb-4"
+            :to="{ name: url }"
+          >
             {{ $t('pyyda-arviointia') }}
           </elsa-button>
         </template>
@@ -45,7 +56,7 @@
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('hyvaksy-arviointi') }}
+            {{ account.impersonated ? $t('nayta-arviointipyynto') : $t('hyvaksy-arviointi') }}
           </elsa-button>
         </template>
       </koejakso-card-content>
@@ -86,6 +97,10 @@
     }
   })
   export default class ValiarviointiCard extends Vue {
+    get account() {
+      return store.getters['auth/account']
+    }
+
     get koejakso() {
       return store.getters['erikoistuva/koejakso']
     }

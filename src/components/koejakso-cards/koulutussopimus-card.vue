@@ -7,7 +7,12 @@
           <span class="pr-6" v-html="$t('koulutussopimus-tila-uusi')" />
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            class="mb-4"
+            :to="{ name: url }"
+          >
             {{ $t('tayta-koulutussopimus') }}
           </elsa-button>
         </template>
@@ -24,7 +29,9 @@
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('viimeistele-koulutussopimus') }}
+            {{
+              account.impersonated ? $t('nayta-koulutussopimus') : $t('viimeistele-koulutussopimus')
+            }}
           </elsa-button>
         </template>
       </koejakso-card-content>
@@ -63,7 +70,9 @@
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('viimeistele-koulutussopimus') }}
+            {{
+              account.impersonated ? $t('nayta-koulutussopimus') : $t('viimeistele-koulutussopimus')
+            }}
           </elsa-button>
         </template>
       </koejakso-card-content>
@@ -104,6 +113,10 @@
     }
   })
   export default class KoulutussopimusCard extends Vue {
+    get account() {
+      return store.getters['auth/account']
+    }
+
     get koejakso() {
       return store.getters['erikoistuva/koejakso']
     }

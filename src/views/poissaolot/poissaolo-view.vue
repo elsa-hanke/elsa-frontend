@@ -44,10 +44,16 @@
             </elsa-form-group>
             <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
-              <elsa-button :to="{ name: 'muokkaa-poissaoloa' }" variant="primary" class="ml-2 mb-3">
+              <elsa-button
+                v-if="!account.impersonated"
+                :to="{ name: 'muokkaa-poissaoloa' }"
+                variant="primary"
+                class="ml-2 mb-3"
+              >
                 {{ $t('muokkaa-poissaoloa') }}
               </elsa-button>
               <elsa-button
+                v-if="!account.impersonated"
                 :loading="deleting"
                 variant="outline-danger"
                 class="mb-3"
@@ -81,6 +87,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import store from '@/store'
   import { Poissaolo, ElsaError } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -124,6 +131,10 @@
           this.$router.replace({ name: 'tyoskentelyjaksot' })
         }
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async onPoissaoloDelete() {

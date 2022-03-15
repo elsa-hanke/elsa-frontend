@@ -37,7 +37,7 @@
               <p v-html="value.arvioitavaKokonaisuus.kuvaus" />
             </template>
           </elsa-popover>
-          <span v-if="$isErikoistuva() && !value.arviointiAika">
+          <span v-if="$isErikoistuva() && !value.arviointiAika && !account.impersonated">
             <br />
             <span>(</span>
             <elsa-button
@@ -148,7 +148,7 @@
               <b-td>
                 <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                   <elsa-button
-                    v-if="$isErikoistuva() && !value.lukittu"
+                    v-if="$isErikoistuva() && !value.lukittu && !account.impersonated"
                     variant="primary"
                     class="d-flex align-items-center text-decoration-none"
                     :to="{
@@ -494,6 +494,7 @@
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
+  import store from '@/store'
   import {
     ArviointiasteikonTaso,
     Arviointityokalu,
@@ -628,6 +629,10 @@
           }
         })
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     get muuValittu() {

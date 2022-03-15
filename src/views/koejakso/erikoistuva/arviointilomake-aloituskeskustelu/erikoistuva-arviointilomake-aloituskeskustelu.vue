@@ -128,6 +128,9 @@
     }
 
     get editable() {
+      if (this.account.impersonated) {
+        return false
+      }
       switch (this.koejaksoData.aloituskeskustelunTila) {
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return true

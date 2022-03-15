@@ -7,7 +7,7 @@
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
           <p v-html="$t('tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki })" />
           <elsa-vanha-asetus-varoitus />
-          <div class="d-flex flex-wrap mb-3 mb-lg-4">
+          <div v-if="!account.impersonated" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
               variant="primary"
               :to="{ name: 'uusi-tyoskentelyjakso' }"
@@ -186,6 +186,7 @@
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
+  import store from '@/store'
   import {
     BarChartRow,
     Keskeytysaika,
@@ -257,6 +258,10 @@
     async mounted() {
       await this.fetchTyoskentelyjaksot()
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async fetchTyoskentelyjaksot() {

@@ -12,6 +12,7 @@
               <hr />
 
               <elsa-button
+                v-if="!account.impersonated"
                 :disabled="suoritemerkinta.lukittu"
                 :to="{ name: 'muokkaa-suoritemerkintaa' }"
                 variant="primary"
@@ -20,6 +21,7 @@
                 {{ $t('muokkaa-merkintaa') }}
               </elsa-button>
               <elsa-button
+                v-if="!account.impersonated"
                 :disabled="suoritemerkinta.lukittu"
                 :loading="deleting"
                 variant="outline-danger"
@@ -64,6 +66,7 @@
   import { Component } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
+  import store from '@/store'
   import { Suoritemerkinta } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { vaativuustasot } from '@/utils/constants'
@@ -107,6 +110,10 @@
           this.$router.replace({ name: 'suoritemerkinnat' })
         }
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async onSuoritemerkintaDelete() {
