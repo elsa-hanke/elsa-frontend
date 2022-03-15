@@ -22,7 +22,12 @@
         </b-button>
       </b-row>
       <hr />
-      <elsa-button :to="{ name: 'lisaa-seurantajakso' }" variant="primary" class="mb-4">
+      <elsa-button
+        v-if="!account.impersonated"
+        :to="{ name: 'lisaa-seurantajakso' }"
+        variant="primary"
+        class="mb-4"
+      >
         {{ $t('lisaa-seurantajakso') }}
       </elsa-button>
       <div v-if="!loading">
@@ -110,6 +115,7 @@
                       <li>{{ $t('seurantajakso-tila-taydenna-tiedot-3') }}</li>
                     </ul>
                     <elsa-button
+                      v-if="!account.impersonated"
                       :to="{
                         name: 'muokkaa-seurantajaksoa',
                         params: { seurantajaksoId: seurantajakso.id }
@@ -148,6 +154,7 @@
 
   import { getSeurantajaksot } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
+  import store from '@/store'
   import { Seurantajakso } from '@/types'
   import { SeurantajaksoTila } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
@@ -186,6 +193,10 @@
         this.seurantajaksot = []
       }
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     toggleKuvaus() {

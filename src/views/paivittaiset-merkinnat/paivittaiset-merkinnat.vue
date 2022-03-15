@@ -8,6 +8,7 @@
             <h1>{{ $t('paivittaiset-merkinnat') }}</h1>
             <p>{{ $t('paivittaiset-merkinnat-ingressi') }}</p>
             <elsa-button
+              v-if="!account.impersonated"
               variant="primary"
               :to="{ name: 'uusi-paivittainen-merkinta' }"
               class="mb-2"
@@ -159,6 +160,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
+  import store from '@/store'
   import {
     Page,
     PaivakirjaAihekategoria,
@@ -210,6 +212,10 @@
     async mounted() {
       await Promise.all([this.fetchRajaimet(), this.fetch()])
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async fetchRajaimet() {

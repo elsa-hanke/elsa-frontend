@@ -97,7 +97,7 @@
             {{ $t('palaa-seurantajaksoihin') }}
           </elsa-button>
           <elsa-button
-            v-if="canEdit"
+            v-if="canEdit && !account.impersonated"
             :to="{ name: 'muokkaa-seurantajaksoa' }"
             variant="outline-primary"
             class="ml-md-3 mb-2 mt-2"
@@ -114,7 +114,7 @@
           />
           <div class="d-flex flex-row-reverse flex-wrap">
             <elsa-button
-              v-if="canEdit"
+              v-if="canEdit && !account.impersonated"
               :to="{ name: 'muokkaa-seurantajaksoa' }"
               variant="primary"
               class="ml-3"

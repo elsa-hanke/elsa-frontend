@@ -114,6 +114,8 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
+  import store from '@/store'
+
   @Component
   export default class SidebarMenu extends Vue {
     paddingTop = 64
@@ -128,6 +130,10 @@
         this.paddingTop = el.offsetHeight
       }
       this.adjustSidebarPosition()
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     created() {

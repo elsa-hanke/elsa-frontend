@@ -62,6 +62,7 @@
             <hr v-if="teoriakoulutus.todistukset.length === 0" />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
+                v-if="!account.impersonated"
                 :to="{ name: 'muokkaa-teoriakoulutusta' }"
                 variant="primary"
                 class="ml-2 mb-3"
@@ -69,6 +70,7 @@
                 {{ $t('muokkaa-teoriakoulutusta') }}
               </elsa-button>
               <elsa-button
+                v-if="!account.impersonated"
                 :loading="deleting"
                 variant="outline-danger"
                 @click="onTeoriakoulutusDelete"
@@ -102,6 +104,7 @@
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import store from '@/store'
   import { Teoriakoulutus } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -141,6 +144,10 @@
         this.$router.replace({ name: 'teoriakoulutukset' })
       }
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async onTeoriakoulutusDelete() {

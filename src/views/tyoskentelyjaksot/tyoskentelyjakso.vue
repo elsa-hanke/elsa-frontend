@@ -92,7 +92,7 @@
             </elsa-form-group>
             <elsa-button
               variant="outline-primary"
-              v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan"
+              v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan && !account.impersonated"
               :to="{ name: 'uusi-poissaolo', params: { tyoskentelyjaksoId: tyoskentelyjakso.id } }"
               class="mt-3"
             >
@@ -104,6 +104,7 @@
               class="d-flex flex-row-reverse flex-wrap"
             >
               <elsa-button
+                v-if="!account.impersonated"
                 :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
                 variant="primary"
                 class="ml-2 mb-3"
@@ -111,7 +112,7 @@
                 {{ $t('muokkaa-jaksoa') }}
               </elsa-button>
               <elsa-button
-                v-if="!tyoskentelyjakso.suoritusarvioinnit"
+                v-if="!tyoskentelyjakso.suoritusarvioinnit && !account.impersonated"
                 :loading="deleting"
                 :variant="tyoskentelyjakso.tapahtumia ? 'outline-primary' : 'outline-danger'"
                 @click="onTyoskentelyjaksoDelete"
@@ -134,7 +135,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="tyoskentelyjakso && tyoskentelyjakso.tapahtumia">
+      <b-row v-if="tyoskentelyjakso && tyoskentelyjakso.tapahtumia && !account.impersonated">
         <b-col>
           <div class="d-flex flex-row">
             <em class="align-middle">
@@ -158,6 +159,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import store from '@/store'
   import { Tyoskentelyjakso } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
@@ -208,6 +210,10 @@
         }
         this.loading = false
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async onTyoskentelyjaksoDelete() {

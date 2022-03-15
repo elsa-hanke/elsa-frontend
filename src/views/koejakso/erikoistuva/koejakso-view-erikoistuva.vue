@@ -22,7 +22,7 @@
                 <p>{{ $t('koejakson-suorituspaikka-kuvaus') }}</p>
                 <b-row>
                   <b-col>
-                    <b-row>
+                    <b-row v-if="!account.impersonated">
                       <b-col class="mt-2" cols="12" md="9">
                         <elsa-form-group
                           :label="$t('tyoskentelyjakso')"
@@ -101,6 +101,7 @@
                     </template>
                     <template #cell(delete)="row">
                       <elsa-button
+                        v-if="!account.impersonated"
                         @click="onTyoskentelyjaksoDetached(row.item)"
                         variant="outline-primary"
                         class="border-0 p-0"
@@ -241,6 +242,10 @@
         this.tyoskentelyjaksotMutable?.filter((t: any) => t.liitettyKoejaksoon) ?? []
       )
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     mapTyoskentelyjaksotKoejakso(tyoskentelyjaksot: any[]): KoejaksonTyoskentelyjakso[] {

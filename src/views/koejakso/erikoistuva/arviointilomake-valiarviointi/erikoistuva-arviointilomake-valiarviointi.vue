@@ -118,7 +118,7 @@
           <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
         </div>
 
-        <div v-if="editable || showWaitingForErikoistuva">
+        <div v-if="!account.impersonated && (editable || showWaitingForErikoistuva)">
           <hr v-if="allekirjoitukset.length > 0" />
           <b-row>
             <b-col class="text-right">
@@ -272,6 +272,9 @@
     }
 
     get editable() {
+      if (this.account.impersonated) {
+        return false
+      }
       return this.koejaksoData.valiarvioinninTila === LomakeTilat.UUSI
     }
 

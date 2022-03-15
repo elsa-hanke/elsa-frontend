@@ -6,7 +6,12 @@
         <b-col>
           <h1>{{ $t('suoritemerkinnat') }}</h1>
           <p class="mb-3">{{ $t('suoritemerkinnat-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'uusi-suoritemerkinta' }" class="mb-5">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            :to="{ name: 'uusi-suoritemerkinta' }"
+            class="mb-5"
+          >
             {{ $t('lisaa-suoritemerkinta') }}
           </elsa-button>
           <div v-if="suoritteetTable">
@@ -150,6 +155,7 @@
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import store from '@/store'
   import {
     Arviointiasteikko,
     Suorite,
@@ -194,6 +200,10 @@
           showDetails: false
         }))
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     toggleDetails(row: SuoritemerkintaRow) {

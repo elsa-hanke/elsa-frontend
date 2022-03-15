@@ -7,6 +7,7 @@
           <h1>{{ $t('asiakirjat') }}</h1>
           <p>{{ $t('asiakirjat-kuvaus') }}</p>
           <asiakirjat-upload
+            v-if="!account.impersonated"
             :buttonText="$t('lisaa-asiakirja')"
             :uploading="uploading"
             :existingFileNamesInCurrentView="existingFileNames"
@@ -34,6 +35,7 @@
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
+  import store from '@/store'
   import { Asiakirja, ElsaError } from '@/types'
   import { toastSuccess, toastFail } from '@/utils/toast'
 
@@ -62,6 +64,10 @@
 
     async mounted() {
       await this.fetch()
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async fetch() {

@@ -11,7 +11,12 @@
           <p>{{ $t('lomake-ei-taytetty') }}</p>
         </template>
         <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            class="mb-4"
+            :to="{ name: url }"
+          >
             {{ $t('tayta-aloituskeskustelu') }}
           </elsa-button>
         </template>
@@ -28,7 +33,11 @@
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('viimeistele-aloituskeskustelu') }}
+            {{
+              account.impersonated
+                ? $t('nayta-aloituskeskustelu')
+                : $t('viimeistele-aloituskeskustelu')
+            }}
           </elsa-button>
         </template>
       </koejakso-card-content>
@@ -50,7 +59,11 @@
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('viimeistele-aloituskeskustelu') }}
+            {{
+              account.impersonated
+                ? $t('nayta-aloituskeskustelu')
+                : $t('viimeistele-aloituskeskustelu')
+            }}
           </elsa-button>
         </template>
       </koejakso-card-content>
@@ -107,6 +120,10 @@
     }
   })
   export default class AloituskeskusteluCard extends Vue {
+    get account() {
+      return store.getters['auth/account']
+    }
+
     get koejakso() {
       return store.getters['erikoistuva/koejakso']
     }

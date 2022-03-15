@@ -7,7 +7,12 @@
           <h1>{{ $t('teoriakoulutukset') }}</h1>
           <p v-html="$t('teoriakoulutukset-ingressi', { opintooppaastaLinkki, kopiLinkki })" />
           <elsa-vanha-asetus-varoitus />
-          <elsa-button variant="primary" :to="{ name: 'uusi-teoriakoulutus' }" class="mb-4">
+          <elsa-button
+            v-if="!account.impersonated"
+            variant="primary"
+            :to="{ name: 'uusi-teoriakoulutus' }"
+            class="mb-4"
+          >
             {{ $t('lisaa-teoriakoulutus') }}
           </elsa-button>
           <div v-if="!loading">
@@ -83,6 +88,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
+  import store from '@/store'
   import { Asiakirja, Teoriakoulutus } from '@/types'
   import { fetchAndOpenBlob } from '@/utils/blobs'
   import { sortByDateDesc } from '@/utils/date'
@@ -141,6 +147,10 @@
     async mounted() {
       await this.fetchTeoriakoulutukset()
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     async fetchTeoriakoulutukset() {

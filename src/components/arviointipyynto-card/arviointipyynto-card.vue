@@ -76,7 +76,7 @@
     </div>
     <div class="d-flex flex-wrap mb-3 mb-lg-4">
       <elsa-button
-        v-if="!value.itsearviointiAika"
+        v-if="!value.itsearviointiAika && !account.impersonated"
         variant="outline-primary"
         class="mb-2 mr-2"
         :to="{
@@ -87,7 +87,7 @@
         {{ $t('tee-itsearviointi') }}
       </elsa-button>
       <elsa-button
-        v-if="!value.arviointiAika"
+        v-if="!value.arviointiAika && !account.impersonated"
         variant="primary"
         class="mb-2"
         :to="{
@@ -110,6 +110,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import store from '@/store'
 
   @Component({
     components: {
@@ -121,6 +122,10 @@
   export default class ArviointipyyntoCard extends Vue {
     @Prop({})
     value!: any
+
+    get account() {
+      return store.getters['auth/account']
+    }
   }
 </script>
 

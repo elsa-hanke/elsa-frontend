@@ -31,7 +31,7 @@
               </div>
             </div>
             <hr v-if="!value.lukittu" />
-            <div v-if="!value.lukittu">
+            <div v-if="!value.lukittu && !account.impersonated">
               <b-form @submit.stop.prevent="onKommenttiSubmit">
                 <div class="uusi-kommentti mb-3">
                   <elsa-form-group :label="$t('uusi-kommentti')">
