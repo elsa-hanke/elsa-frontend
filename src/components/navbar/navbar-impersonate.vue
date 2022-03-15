@@ -4,15 +4,20 @@
     id="navbar-top"
     toggleable="lg"
     type="dark"
-    variant="primary"
+    variant="secondary"
     class="px-0 py-lg-0 navbar-impersonated"
   >
-    <b-col cols="12" class="p-3 bg-secondary">
+    <b-col cols="12" class="p-sm-2 p-lg-3 bg-secondary">
       <div class="text-white">
         {{ $t('katselet-erikoistujaa') }}: {{ account.firstName }} {{ account.lastName }},
         {{ account.erikoistuvaLaakari.erikoisalaNimi }},
         {{ account.erikoistuvaLaakari.yliopisto }}
-        <elsa-button size="sm" variant="primary" class="rounded-pill ml-3" @click="vaihdaRooli()">
+        <elsa-button
+          size="sm"
+          variant="primary"
+          class="rounded-pill ml-md-3 mt-2 mt-md-0 d-block d-md-inline-block"
+          @click="vaihdaRooli()"
+        >
           {{ $t('palaa-omaan-profiiliisi') }}
         </elsa-button>
       </div>
@@ -47,9 +52,15 @@
   }
 </script>
 <style lang="scss" scoped>
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
   .navbar-impersonated {
     position: sticky;
     top: 64px;
     z-index: 1000;
+    @include media-breakpoint-down(md) {
+      top: 54px;
+    }
   }
 </style>
