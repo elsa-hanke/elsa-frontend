@@ -30,6 +30,7 @@
   import Avatar from 'vue-avatar'
   import Component from 'vue-class-component'
 
+  import { ELSA_API_LOCATION } from '@/api'
   import ElsaButton from '@/components/button/button.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import store from '@/store'
@@ -47,7 +48,7 @@
     }
 
     vaihdaRooli() {
-      window.location.href = `/api/logout/impersonate`
+      window.location.href = `${ELSA_API_LOCATION}/api/logout/impersonate`
     }
   }
 </script>

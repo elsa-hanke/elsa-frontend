@@ -219,6 +219,7 @@
   import { parseISO, differenceInMonths } from 'date-fns'
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
+  import { ELSA_API_LOCATION } from '@/api'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -355,7 +356,7 @@
     }
 
     vaihdaRooli(id: number) {
-      window.location.href = `/api/login/impersonate?erikoistuvaLaakariId=${id}`
+      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?erikoistuvaLaakariId=${id}`
     }
 
     koejaksoTila(tila: LomakeTilat) {
