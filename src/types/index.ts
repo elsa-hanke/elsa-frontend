@@ -9,7 +9,8 @@ import {
   KehittamistoimenpideKategoria,
   TyoskentelyjaksoTyyppi,
   PoissaolonSyyTyyppi,
-  SeurantajaksoTila
+  SeurantajaksoTila,
+  OpintooikeusTila
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
@@ -23,6 +24,7 @@ export type Opintooikeus = {
   erikoisalaId: number
   erikoisalaNimi: string
   asetus: Asetus
+  tila: OpintooikeusTila
 }
 
 export type ErikoistuvaLaakari = {
@@ -887,4 +889,10 @@ export interface ErikoistujienSeuranta {
   kayttajaYliopistoErikoisalat: KayttajaErikoisalaPerYliopisto[]
   erikoisalat: string[]
   erikoistujienEteneminen: ErikoistujanEteneminen[]
+}
+
+export interface KaytonAloitusModel {
+  sahkoposti: string | null
+  sahkopostiUudelleen: string | null
+  opintooikeusId?: number | null
 }

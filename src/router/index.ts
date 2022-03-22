@@ -18,6 +18,7 @@ import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
 import Etusivu from '@/views/etusivu/etusivu.vue'
+import KaytonAloitus from '@/views/kayton-aloitus/kayton-aloitus.vue'
 import Kayttaja from '@/views/kayttajahallinta/kayttaja.vue'
 import Kayttajahallinta from '@/views/kayttajahallinta/kayttajahallinta.vue'
 import UusiKayttaja from '@/views/kayttajahallinta/uusi-kayttaja.vue'
@@ -81,7 +82,14 @@ const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
   await store.dispatch('auth/authorize')
 
   if (store.getters['auth/isLoggedIn']) {
-    restoreRoute(next)
+    if (!store.getters['auth/account'].email && to.name !== 'kaytonaloitus') {
+      next({
+        name: 'kaytonaloitus',
+        replace: true
+      })
+    } else {
+      restoreRoute(next)
+    }
   } else {
     storeRoute(to)
     next('/kirjautuminen')
@@ -690,9 +698,34 @@ const routes: Array<RouteConfig> = [
           await store.dispatch('auth/authorize')
 
           if (store.getters['auth/isLoggedIn']) {
-            next('/etusivu')
+            if (!store.getters['auth/account'].email && to.name !== 'kaytonaloitus') {
+              next({
+                name: 'kaytonaloitus',
+                replace: true
+              })
+            } else {
+              next('/etusivu')
+            }
           } else {
             next()
+          }
+        }
+      },
+      {
+        path: '/kayton-aloitus',
+        name: 'kaytonaloitus',
+        component: KaytonAloitus,
+        beforeEnter: async (to, from, next) => {
+          await store.dispatch('auth/authorize')
+
+          if (store.getters['auth/isLoggedIn']) {
+            if (store.getters['auth/account'].email) {
+              next('/etusivu')
+            } else {
+              next()
+            }
+          } else {
+            next('/kirjautuminen')
           }
         }
       },

@@ -296,7 +296,7 @@
     KoejaksonVaiheButtonStates,
     Opintooikeus
   } from '@/types'
-  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeusResolver'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeus'
 
   @Component({
     mixins: [validationMixin],
