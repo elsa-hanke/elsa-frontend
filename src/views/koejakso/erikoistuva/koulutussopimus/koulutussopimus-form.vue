@@ -250,7 +250,7 @@
   } from '@/types'
   import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
-  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeusResolver'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeus'
   import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
   import KoulutuspaikkaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/koulutuspaikka-details.vue'
 

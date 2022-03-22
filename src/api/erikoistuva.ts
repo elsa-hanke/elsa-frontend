@@ -22,9 +22,16 @@ import {
   Paivakirjamerkinta,
   PaivakirjamerkintaLomake,
   Page,
-  PaivakirjamerkintaRajaimet
+  PaivakirjamerkintaRajaimet,
+  KaytonAloitusModel,
+  ErikoistuvaLaakari
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
+
+export async function getErikoistuvaLaakari() {
+  const path = 'erikoistuva-laakari'
+  return await axios.get<ErikoistuvaLaakari>(path)
+}
 
 export async function getKoejakso() {
   const path = '/erikoistuva-laakari/koejakso'
@@ -298,4 +305,9 @@ export async function getPaivittaisetMerkinnat(params: {
       ...params
     }
   })
+}
+
+export async function putKaytonAloitusLomake(form: KaytonAloitusModel) {
+  const path = `erikoistuva-laakari/kaytonaloitus`
+  return await axios.put<KaytonAloitusModel>(path, form)
 }

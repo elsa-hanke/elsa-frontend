@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { Module } from 'vuex'
 
 import * as api from '@/api'
+import { getErikoistuvaLaakari } from '@/api/erikoistuva'
 
 const auth: Module<any, any> = {
   namespaced: true,
@@ -57,7 +58,7 @@ const auth: Module<any, any> = {
       try {
         const { data } = await api.getKayttaja()
         if (data.authorities.includes('ROLE_ERIKOISTUVA_LAAKARI')) {
-          data.erikoistuvaLaakari = (await axios.get('erikoistuva-laakari')).data
+          data.erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
         }
         if (data.impersonated) {
           data.originalUser = (await axios.get('kayttaja-impersonated')).data

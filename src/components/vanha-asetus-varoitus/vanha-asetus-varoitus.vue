@@ -13,7 +13,7 @@
   import store from '@/store'
   import { Asetus, ErikoistuvaLaakari } from '@/types'
   import { vanhatAsetukset } from '@/utils/constants'
-  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeusResolver'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeus'
 
   @Component({
     components: {
