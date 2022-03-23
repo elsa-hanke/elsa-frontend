@@ -20,6 +20,7 @@ export function filterOpintooikeudetByAllowedStates(
     (o) =>
       parseISO(o.opintooikeudenMyontamispaiva) <= now &&
       parseISO(o.opintooikeudenPaattymispaiva) >= now &&
+      o.erikoisalaLiittynytElsaan === true &&
       (o.tila === OpintooikeusTila.AKTIIVINEN ||
         o.tila === OpintooikeusTila.AKTIIVINEN_EI_LASNA ||
         o.tila === OpintooikeusTila.PASSIIVINEN ||

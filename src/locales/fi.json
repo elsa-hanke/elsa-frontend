@@ -322,7 +322,7 @@
   "kirjautumaton-kayttaja": "Kirjautumaton käyttäjä",
   "kirjautuminen": {
     "EI_KAYTTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Käyttöoikeutta palveluun ei löytynyt. Jos sinulla pitäisi olla käyttöoikeus, ota yhteys tekniseen pääkäyttäjään osoitteeseen ",
-    "EI_OPINTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Aktiivista opinto-oikeutta ei löytynyt.",
+    "EI_OPINTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Kirjautumisen sallivaa opinto-oikeutta ei löytynyt.",
     "TUNTEMATON": "Sisäänkirjautuminen epäonnistui.",
     "VIRHEELLINEN_NIMI": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Ota yhteys tekniseen pääkäyttäjään osoitteeseen "
   },
