@@ -25,6 +25,9 @@
                         {{ row.item.nimi }}
                       </elsa-button>
                     </template>
+                    <template #cell(yliopisto)="row">
+                      {{ $t(`yliopisto-nimi.${row.item.yliopisto}`) }}
+                    </template>
                   </b-table>
                 </div>
               </b-tab>
