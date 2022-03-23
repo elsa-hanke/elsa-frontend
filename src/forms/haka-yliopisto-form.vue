@@ -5,9 +5,9 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="valittuYliopisto"
-          :options="yliopistot"
-          label="nimi"
-          track-by="nimi"
+          :options="yliopistotOptions"
+          label="text"
+          track-by="value"
         ></elsa-form-multiselect>
       </template>
     </elsa-form-group>
@@ -47,6 +47,13 @@
 
     async mounted() {
       this.yliopistot = (await getHakaYliopistot()).data
+    }
+
+    get yliopistotOptions() {
+      return this.yliopistot.map((y: any) => ({
+        text: this.$t(`yliopisto-nimi.${y.nimi}`),
+        value: y.nimi
+      }))
     }
 
     onSubmit() {
