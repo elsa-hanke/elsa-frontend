@@ -6,8 +6,8 @@
           :id="uid"
           v-model="valittuYliopisto"
           :options="yliopistotOptions"
-          label="text"
-          track-by="value"
+          label="nimi"
+          track-by="hakaId"
         ></elsa-form-multiselect>
       </template>
     </elsa-form-group>
@@ -50,10 +50,13 @@
     }
 
     get yliopistotOptions() {
-      return this.yliopistot.map((y: any) => ({
-        text: this.$t(`yliopisto-nimi.${y.nimi}`),
-        value: y.nimi
-      }))
+      return this.yliopistot.map(
+        (y: HakaYliopisto) =>
+          ({
+            nimi: this.$t(`yliopisto-nimi.${y.nimi}`),
+            hakaId: y.hakaId
+          } as HakaYliopisto)
+      )
     }
 
     onSubmit() {
