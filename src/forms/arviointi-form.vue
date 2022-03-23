@@ -376,6 +376,7 @@
             :buttonText="$t('lisaa-liitetiedosto')"
             :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
             @selectedFiles="onArviointiFileAdded"
+            :allowedFileTypes="['application/pdf']"
           />
           <asiakirjat-content
             class="px-0 col-md-8 col-lg-12 col-xl-8"
