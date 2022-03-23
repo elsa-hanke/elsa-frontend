@@ -82,7 +82,12 @@ const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
   await store.dispatch('auth/authorize')
 
   if (store.getters['auth/isLoggedIn']) {
-    if (!store.getters['auth/account'].email && to.name !== 'kaytonaloitus') {
+    const account = store.getters['auth/account']
+    if (
+      account.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari) &&
+      !account.email &&
+      to.name !== 'kaytonaloitus'
+    ) {
       next({
         name: 'kaytonaloitus',
         replace: true
@@ -698,7 +703,12 @@ const routes: Array<RouteConfig> = [
           await store.dispatch('auth/authorize')
 
           if (store.getters['auth/isLoggedIn']) {
-            if (!store.getters['auth/account'].email && to.name !== 'kaytonaloitus') {
+            const account = store.getters['auth/account']
+            if (
+              account.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari) &&
+              !account.email &&
+              to.name !== 'kaytonaloitus'
+            ) {
               next({
                 name: 'kaytonaloitus',
                 replace: true
