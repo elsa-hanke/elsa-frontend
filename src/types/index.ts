@@ -23,6 +23,7 @@ export type Opintooikeus = {
   yliopistoNimi: string
   erikoisalaId: number
   erikoisalaNimi: string
+  erikoisalaLiittynytElsaan: boolean | null
   asetus: Asetus
   tila: OpintooikeusTila
 }
