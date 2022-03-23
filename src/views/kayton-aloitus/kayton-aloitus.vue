@@ -12,11 +12,12 @@
   </b-container>
 </template>
 <script lang="ts">
+  import { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { getErikoistuvaLaakari, putKaytonAloitusLomake } from '@/api/erikoistuva'
   import KaytonAloitusForm from '@/forms/kayton-aloitus-form.vue'
-  import { KaytonAloitusModel, Opintooikeus } from '@/types/index'
+  import { KaytonAloitusModel, Opintooikeus, ElsaError } from '@/types/index'
   import { filterOpintooikeudetByAllowedStates } from '@/utils/opintooikeus'
   import { toastFail } from '@/utils/toast'
 
@@ -40,9 +41,16 @@
       try {
         await putKaytonAloitusLomake(form)
         this.$router.push({ name: 'etusivu' })
-      } catch {
+      } catch (err) {
         this.loading = false
-        toastFail(this, this.$t('tietojen-tallennus-epaonnistui'))
+        const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('tietojen-tallennus-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('tietojen-tallennus-epaonnistui')
+        )
       }
     }
   }
