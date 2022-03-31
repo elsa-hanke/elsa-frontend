@@ -20,10 +20,10 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.TALLENNETTU_KESKENERAISENA">
         <template v-slot:content>
-          <div class="d-inline-flex">
+          <div>
             <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
           </div>
-          <div class="d-inline-flex">
+          <div>
             <span class="pr-6" v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')" />
           </div>
         </template>
@@ -55,13 +55,13 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.PALAUTETTU_KORJATTAVAKSI">
         <template v-slot:content>
-          <div class="d-inline-flex">
+          <div>
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
           </div>
-          <div class="d-inline-flex">
+          <div>
             <div class="pr-6">
-              <p class="mb-0">{{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}</p>
-              <p>
+              <p class="mb-3">{{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}</p>
+              <p class="mb-3">
                 <span>{{ $t('syy') }}</span>
                 <span>&nbsp;{{ korjausehdotus }}</span>
               </p>
@@ -79,11 +79,38 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template v-slot:content>
-          <div class="d-inline-flex">
+          <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
           </div>
-          <div class="d-inline-flex">
+          <div>
             <span class="pr-6">{{ $t('koulutussopimus-tila-hyvaksytty') }}</span>
+          </div>
+        </template>
+        <template v-slot:button>
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+            {{ $t('nayta-koulutussopimus') }}
+          </elsa-button>
+        </template>
+      </koejakso-card-content>
+
+      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA">
+        <template v-slot:content>
+          <p class="pr-6">{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }} /></p>
+        </template>
+        <template v-slot:button>
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+            {{ $t('nayta-koulutussopimus') }}
+          </elsa-button>
+        </template>
+      </koejakso-card-content>
+
+      <koejakso-card-content v-if="tila === lomaketilat.ALLEKIRJOITETTU">
+        <template v-slot:content>
+          <div>
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
+          </div>
+          <div>
+            <span class="pr-6">{{ $t('koulutussopimus-tila-allekirjoitettu') }}</span>
           </div>
         </template>
         <template v-slot:button>

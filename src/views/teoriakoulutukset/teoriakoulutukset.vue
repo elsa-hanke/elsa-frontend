@@ -159,7 +159,8 @@
           await getTeoriakoulutukset()
         ).data
         this.teoriakoulutukset = teoriakoulutukset
-        this.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara = erikoisalanVaatimaTeoriakoulutustenVahimmaismaara
+        this.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara =
+          erikoisalanVaatimaTeoriakoulutustenVahimmaismaara
       } catch (err) {
         toastFail(this, this.$t('teoriakoulutuksien-hakeminen-epaonnistui'))
       }
@@ -187,9 +188,9 @@
     }
 
     get opintooppaastaLinkki() {
-      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(this.$t(
-        'opinto-oppaasta'
-      ) as string).toLowerCase()}</a>`
+      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(
+        this.$t('opinto-oppaasta') as string
+      ).toLowerCase()}</a>`
     }
 
     get kopiLinkki() {

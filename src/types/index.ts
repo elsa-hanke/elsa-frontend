@@ -36,6 +36,7 @@ export type ErikoistuvaLaakari = {
   syntymaaika: string
   kayttajaId: number
   yliopisto: string
+  yliopistoId: number
   opintooikeudet: Opintooikeus[]
   opintooikeusKaytossaId: number
 }
@@ -181,7 +182,7 @@ export type Koulutuspaikka = {
   erikoisala: string
   nimi: string
   id: number | null
-  toimipaikallaKoulutussopimus: boolean | null
+  koulutussopimusOmanYliopistonKanssa: boolean | null
   yliopisto: string
 }
 
@@ -205,6 +206,8 @@ export type Vastuuhenkilo = {
   nimi: string
   nimike: string
   sopimusHyvaksytty: boolean
+  puhelin?: string
+  sahkoposti?: string
 }
 
 export interface KoulutussopimusLomake {
@@ -214,7 +217,8 @@ export interface KoulutussopimusLomake {
   erikoistuvanPuhelinnumero: string
   erikoistuvanSahkoposti: string
   erikoistuvanSyntymaaika: string
-  erikoistuvanYliopisto: string
+  erikoistuvanYliopisto?: string
+  erikoistuvanYliopistoId?: number | null
   erikoistuvanAvatar?: string
   id: number | null
   koejaksonAlkamispaiva: string

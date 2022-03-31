@@ -1,4 +1,5 @@
-import { Kouluttaja, Koulutuspaikka, Vaativuustaso } from '@/types'
+/* eslint-disable no-unused-vars */
+import { Kouluttaja, Koulutuspaikka, Vaativuustaso, Vastuuhenkilo } from '@/types'
 
 export const vaativuustasot: Vaativuustaso[] = [
   {
@@ -54,7 +55,9 @@ export enum LomakeTilat {
   ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA = 'ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA',
   ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA = 'ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA',
   PALAUTETTU_KORJATTAVAKSI = 'PALAUTETTU_KORJATTAVAKSI',
-  HYVAKSYTTY = 'HYVAKSYTTY'
+  HYVAKSYTTY = 'HYVAKSYTTY',
+  ALLEKIRJOITETTU = 'ALLEKIRJOITETTU',
+  ODOTTAA_ALLEKIRJOITUKSIA = 'ODOTTAA_ALLEKIRJOITUKSIA'
 }
 
 export enum TaskStatus {
@@ -62,6 +65,8 @@ export enum TaskStatus {
   AVOIN_PALAUTUNUT = 'AVOIN_PALAUTUNUT',
   PALAUTETTU = 'PALAUTETTU',
   HYVAKSYTTY = 'HYVAKSYTTY',
+  ALLEKIRJOITETTU = 'ALLEKIRJOITETTU',
+  ODOTTAA_ALLEKIRJOITUKSIA = 'ODOTTAA_ALLEKIRJOITUKSIA',
   ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA = 'ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA',
   ODOTTAA_ESIMIEHEN_HYVAKSYNTAA = 'ODOTTAA_ESIMIEHEN_HYVAKSYNTAA',
   ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA = 'ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA',
@@ -71,7 +76,7 @@ export enum TaskStatus {
 
 export const defaultKoulutuspaikka: Koulutuspaikka = {
   id: null,
-  toimipaikallaKoulutussopimus: null,
+  koulutussopimusOmanYliopistonKanssa: null,
   erikoisala: '',
   nimi: '',
   yliopisto: ''
@@ -89,6 +94,16 @@ export const defaultKouluttaja: Kouluttaja = {
   sahkoposti: '',
   sopimusHyvaksytty: false,
   toimipaikka: ''
+}
+
+export const defaultVastuuhenkilo: Vastuuhenkilo = {
+  id: null,
+  kuittausaika: '',
+  nimi: '',
+  nimike: '',
+  sopimusHyvaksytty: false,
+  puhelin: '',
+  sahkoposti: ''
 }
 
 export enum KehittamistoimenpideKategoria {

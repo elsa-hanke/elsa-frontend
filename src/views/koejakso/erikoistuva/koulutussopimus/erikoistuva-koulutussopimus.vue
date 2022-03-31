@@ -208,8 +208,10 @@
       try {
         if (this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.UUSI) {
           await store.dispatch('erikoistuva/postKoulutussopimus', this.koulutussopimusLomake)
-        }
-        if (this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
+        } else if (
+          this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.TALLENNETTU_KESKENERAISENA ||
+          this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+        ) {
           await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
         }
 

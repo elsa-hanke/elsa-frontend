@@ -795,14 +795,15 @@ const router = new VueRouter({
 const originalPush = router.push
 router.push = function push(
   location: RawLocation,
+  // eslint-disable-next-line @typescript-eslint/ban-types
   onComplete?: Function,
   onAbort?: ErrorHandler
 ): Promise<Route> {
   if (onComplete || onAbort) {
-    return (originalPush.call(this, location, onComplete, onAbort) as any) as Promise<Route>
+    return originalPush.call(this, location, onComplete, onAbort) as any as Promise<Route>
   }
 
-  return ((originalPush.call(this, location) as any) as Promise<Route>).catch((err) => {
+  return (originalPush.call(this, location) as any as Promise<Route>).catch((err) => {
     // Sallitaan uudelleenohjaukset
     if (VueRouter.isNavigationFailure(err, VueRouter.NavigationFailureType.redirected)) {
       return Promise.resolve() as any

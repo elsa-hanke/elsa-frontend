@@ -20,8 +20,8 @@
       <template v-slot="{ uid }">
         <b-form-radio-group
           :id="uid"
-          v-model="form.toimipaikallaKoulutussopimus"
-          :state="validateState('toimipaikallaKoulutussopimus')"
+          v-model="form.koulutussopimusOmanYliopistonKanssa"
+          :state="validateState('koulutussopimusOmanYliopistonKanssa')"
           stacked
         >
           <b-form-radio :value="true">
@@ -31,15 +31,21 @@
             {{ $t('toimipaikalla-koulutussopimus.ei-sopimusta') }}
           </b-form-radio>
         </b-form-radio-group>
+        <b-form-invalid-feedback
+          :id="`${uid}-feedback`"
+          :state="validateState('koulutussopimusOmanYliopistonKanssa')"
+        >
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
         <b-form-radio-group
-          v-if="form.toimipaikallaKoulutussopimus === false"
-          v-model="form.yliopisto"
-          :state="validateState('yliopisto')"
+          v-if="form.koulutussopimusOmanYliopistonKanssa === false"
+          v-model="form.yliopistoId"
+          :state="validateState('yliopistoId')"
           :options="yliopistotOptions"
           stacked
           class="pl-4"
         ></b-form-radio-group>
-        <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateState('yliopisto')">
+        <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateState('yliopistoId')">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
       </template>
@@ -69,12 +75,12 @@
         nimi: {
           required
         },
-        toimipaikallaKoulutussopimus: {
+        koulutussopimusOmanYliopistonKanssa: {
           required
         },
-        yliopisto: {
+        yliopistoId: {
           required: requiredIf((value) => {
-            return value.toimipaikallaKoulutussopimus === false
+            return value.koulutussopimusOmanYliopistonKanssa === false
           })
         }
       }
@@ -86,9 +92,6 @@
 
     @Prop({ required: true, default: null })
     koulutuspaikka!: Koulutuspaikka
-
-    @Prop({ required: true, type: String })
-    erikoistuvanYliopisto!: string
 
     form: Koulutuspaikka = defaultKoulutuspaikka
 
@@ -107,18 +110,12 @@
 
     mounted(): void {
       this.form = this.koulutuspaikka
-      this.form.toimipaikallaKoulutussopimus =
-        this.koulutuspaikka.yliopisto === this.erikoistuvanYliopisto
-
-      if (this.koulutuspaikka.yliopisto === '') {
-        this.form.toimipaikallaKoulutussopimus = true
-      }
     }
 
     get yliopistotOptions() {
       return this.yliopistot.map((y: any) => ({
         text: this.$t(`yliopisto-nimi.${y.nimi}`),
-        value: y.nimi
+        value: y.id
       }))
     }
 

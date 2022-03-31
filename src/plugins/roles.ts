@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import Vue from 'vue'
 
 import store from '@/store'

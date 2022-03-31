@@ -13,7 +13,8 @@ module.exports = {
     '@vue/prettier/@typescript-eslint'
   ],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 2020,
+    parser: '@typescript-eslint/parser'
   },
   settings: {
     'import/resolver': {
@@ -26,15 +27,6 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    'vue/script-indent': [
-      'error',
-      2,
-      {
-        baseIndent: 1,
-        switchCase: 1,
-        ignores: []
-      }
-    ],
     'vue/html-closing-bracket-newline': [
       'error',
       {
@@ -43,10 +35,11 @@ module.exports = {
       }
     ],
     'import/order': [
-      'error', {
+      'error',
+      {
         'newlines-between': 'always',
-        'alphabetize': {
-          'order': 'asc'
+        alphabetize: {
+          order: 'asc'
         }
       }
     ]

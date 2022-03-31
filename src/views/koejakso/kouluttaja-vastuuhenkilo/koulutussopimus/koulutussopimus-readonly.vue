@@ -39,7 +39,7 @@
       </b-col>
 
       <b-col lg="4">
-        <h5>{{ $t('puhelin-virka-aikaan') }}</h5>
+        <h5>{{ $t('matkapuhelinnumero') }}</h5>
         <p>{{ kouluttaja.puhelin }}</p>
       </b-col>
     </b-row>

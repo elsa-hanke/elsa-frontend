@@ -375,7 +375,8 @@
       try {
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/putValiarviointi', this.valiarviointiLomake)
-        this.valiarviointiLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
+        this.valiarviointiLomake.erikoistuvanAllekirjoitusaika =
+          this.koejaksoData.valiarviointi.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-onnistuneesti'))
       } catch {

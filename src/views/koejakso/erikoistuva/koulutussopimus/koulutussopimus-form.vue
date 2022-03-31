@@ -41,7 +41,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col lg="5">
+      <b-col lg="4">
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
@@ -49,6 +49,7 @@
               v-model="form.erikoistuvanSahkoposti"
               @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanSahkoposti')"
+              :value="account.email"
             />
             <b-form-invalid-feedback
               v-if="!$v.form.erikoistuvanSahkoposti.required"
@@ -66,14 +67,15 @@
           </template>
         </elsa-form-group>
       </b-col>
-      <b-col lg="3">
-        <elsa-form-group :label="$t('puhelin-virka-aikaan')" :required="true">
+      <b-col lg="4">
+        <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanPuhelinnumero"
               @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanPuhelinnumero')"
+              :value="account.phoneNumber"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -95,7 +97,6 @@
           ref="koulutuspaikkaDetails"
           :key="index"
           :koulutuspaikka="koulutuspaikka"
-          :erikoistuvanYliopisto="form.erikoistuvanYliopisto"
           :yliopistot="yliopistot"
         ></koulutuspaikka-details>
         <elsa-button
@@ -129,6 +130,7 @@
           :kouluttaja="k"
           :kouluttajat="kouluttajatList"
           @kouluttajaSelected="selectKouluttaja"
+          @clearKouluttaja="clearKouluttaja"
         ></kouluttaja-details>
         <elsa-button
           v-if="form.kouluttajat.length >= 2"
@@ -173,7 +175,10 @@
         </elsa-form-group>
         <div v-if="vastuuhenkilot.length === 1">
           <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-          <p>{{ vastuuhenkilot[0].nimi }}, {{ vastuuhenkilot[0].nimike }}</p>
+          <p>
+            {{ vastuuhenkilot[0].nimi }}
+            {{ vastuuhenkilot[0].nimike ? ', ' + vastuuhenkilot[0].nimike : '' }}
+          </p>
         </div>
       </b-col>
     </b-row>
@@ -206,7 +211,7 @@
           @click="validateAndConfirmSend"
           variant="primary"
         >
-          {{ $t('allekirjoita-laheta') }}
+          {{ $t('laheta') }}
         </elsa-button>
       </b-col>
     </b-row>
@@ -214,7 +219,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koulutussopimus-lahetys')"
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal
@@ -311,7 +316,6 @@
       erikoistuvanPuhelinnumero: '',
       erikoistuvanSahkoposti: '',
       erikoistuvanSyntymaaika: '',
-      erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
       kouluttajat: [],
@@ -368,10 +372,25 @@
       this.$emit('skipRouteExitConfirm', false)
     }
 
+    clearKouluttaja(value: Kouluttaja) {
+      const kouluttajat = this.form.kouluttajat.map((k: any) => {
+        if (k.kayttajaId && k.kayttajaId !== value.id) {
+          return {
+            ...k,
+            $isDisabled: false
+          }
+        }
+      })
+      this.form.kouluttajat = kouluttajat
+    }
+
     get kouluttajatList() {
-      const selectedKouluttajat = this.form.kouluttajat[0]?.kayttajaId
-        ? this.form.kouluttajat.map((k) => k.kayttajaId)
-        : null
+      const selectedKouluttajat =
+        this.form.kouluttajat[0]?.kayttajaId || this.form.kouluttajat[1]?.kayttajaId
+          ? this.form.kouluttajat.map((k) => {
+              return k ? k.kayttajaId : null
+            })
+          : null
 
       const kouluttajat = this.kouluttajat.map((k: any) => {
         if (selectedKouluttajat?.includes(k.id)) {
@@ -379,8 +398,12 @@
             ...k,
             $isDisabled: true
           }
+        } else {
+          return {
+            ...k,
+            $isDisabled: false
+          }
         }
-        return k
       })
       return formatList(this, kouluttajat)
     }
@@ -403,7 +426,17 @@
     }
 
     get vastuuhenkilotOptions() {
-      return this.vastuuhenkilot.map((v: any) => ({ text: `${v.nimi}, ${v.nimike}`, value: v.id }))
+      return this.vastuuhenkilot.map((v: any) => ({
+        text: `${v.nimi}${this.nimikeLabel(v.nimike)}`,
+        value: v.id
+      }))
+    }
+
+    nimikeLabel(nimike: string) {
+      if (nimike) {
+        return ', ' + nimike
+      }
+      return ''
     }
 
     updateVastuuhenkilo(id: number) {
@@ -473,8 +506,8 @@
       this.form.erikoistuvanOpiskelijatunnus = this.opintooikeusKaytossa?.opiskelijatunnus
       this.form.erikoistuvanErikoisala = this.opintooikeusKaytossa?.erikoisalaNimi
       this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
-      this.form.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
-      this.form.opintooikeudenMyontamispaiva = this.opintooikeusKaytossa?.opintooikeudenMyontamispaiva
+      this.form.opintooikeudenMyontamispaiva =
+        this.opintooikeusKaytossa?.opintooikeudenMyontamispaiva
 
       // Asetetaan arvot kentille, jotka saatavissa erikoistuvan lääkärin tiedoista, mutta jotka
       // käyttäjä on saattanut yliajaa lomakkeen välitallennuksen yhteydessä. Kuitenkaan opinto-oikeuden

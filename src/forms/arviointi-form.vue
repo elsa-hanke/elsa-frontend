@@ -621,8 +621,9 @@
             this.value.arviointiPerustuu !== null &&
             this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA
         }
-        this.arviointityokalut = ((await axios.get(`/arviointityokalut`))
-          .data as Arviointityokalu[])?.sort((a, b) => {
+        this.arviointityokalut = (
+          (await axios.get(`/arviointityokalut`)).data as Arviointityokalu[]
+        )?.sort((a, b) => {
           if (a.nimi === 'Muu') {
             return 1
           } else {

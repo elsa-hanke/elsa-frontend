@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export enum ELSA_ROLE {
   ErikoistuvaLaakari = 'ROLE_ERIKOISTUVA_LAAKARI',
   ErikoistuvaLaakariImpersonated = 'ROLE_ERIKOISTUVA_LAAKARI_IMPERSONATED',

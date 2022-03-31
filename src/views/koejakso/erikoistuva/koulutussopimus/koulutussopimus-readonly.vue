@@ -20,7 +20,7 @@
         <p>{{ data.erikoistuvanSahkoposti }}</p>
       </b-col>
       <b-col lg="4">
-        <h5>{{ $t('puhelin-virka-aikaan') }}</h5>
+        <h5>{{ $t('matkapuhelinnumero') }}</h5>
         <p>{{ data.erikoistuvanPuhelinnumero }}</p>
       </b-col>
     </b-row>
@@ -55,7 +55,10 @@
       <b-col lg="8">
         <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
         <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-        <p>{{ data.vastuuhenkilo.nimi }}, {{ data.vastuuhenkilo.nimike }}</p>
+        <p>
+          {{ data.vastuuhenkilo.nimi }}
+          {{ data.vastuuhenkilo.nimike ? ', ' + data.vastuuhenkilo.nimike : '' }}
+        </p>
       </b-col>
     </b-row>
     <hr />
@@ -100,9 +103,10 @@
         this.data.erikoistuvanNimi,
         this.data.erikoistuvanAllekirjoitusaika
       ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
-        this.data.kouluttajat
-      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoituksetKouluttajat =
+        allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+          this.data.kouluttajat
+        ) as KoejaksonVaiheAllekirjoitus[]
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
         this.data.vastuuhenkilo
       ) as KoejaksonVaiheAllekirjoitus

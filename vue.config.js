@@ -26,9 +26,11 @@ module.exports = {
   },
 
   devServer: {
-    overlay: {
-      warnings: true,
-      errors: true
+    client: {
+      overlay: {
+        errors: true,
+        warnings: true
+      }
     },
     port: 9060,
     proxy: {

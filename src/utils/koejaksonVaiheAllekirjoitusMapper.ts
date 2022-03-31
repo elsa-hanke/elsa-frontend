@@ -14,9 +14,9 @@ export function mapAllekirjoitusErikoistuva(
 ): KoejaksonVaiheAllekirjoitus | null {
   return allekirjoitusPvm
     ? {
-        nimiAndNimike: `${erikoistuvanNimi}, ${(vue.$t(
-          'erikoistuva-laakari'
-        ) as string).toLowerCase()}`,
+        nimiAndNimike: `${erikoistuvanNimi}, ${(
+          vue.$t('erikoistuva-laakari') as string
+        ).toLowerCase()}`,
         pvm: allekirjoitusPvm
       }
     : null
@@ -28,7 +28,7 @@ export function mapAllekirjoituksetSopimuksenKouluttajat(
   return kouluttajat
     .filter((k) => k.sopimusHyvaksytty)
     .map((k) => ({
-      nimiAndNimike: `${k.nimi}, ${k.nimike}`,
+      nimiAndNimike: `${k.nimi}${k.nimike ? ', ' + k.nimike : ''}`,
       pvm: k.kuittausaika
     }))
 }
@@ -62,7 +62,9 @@ export function mapAllekirjoitusVastuuhenkilo(
 ): KoejaksonVaiheAllekirjoitus | null {
   return vastuuhenkilo && vastuuhenkilo.sopimusHyvaksytty
     ? {
-        nimiAndNimike: `${vastuuhenkilo.nimi}, ${vastuuhenkilo.nimike}`,
+        nimiAndNimike: `${vastuuhenkilo.nimi}${
+          vastuuhenkilo.nimike ? ', ' + vastuuhenkilo.nimike : ''
+        }`,
         pvm: vastuuhenkilo.kuittausaika
       }
     : null

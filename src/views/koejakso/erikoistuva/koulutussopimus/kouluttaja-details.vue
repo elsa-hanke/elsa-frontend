@@ -18,6 +18,7 @@
         label="nimi"
         track-by="id"
         @select="onKouluttajaSelect"
+        @valueToBeCleared="clearKouluttaja"
       >
         <template v-slot:option="{ option }">
           <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
@@ -105,6 +106,10 @@
       if (this.kouluttaja.kayttajaId) {
         this.form.kouluttaja = this.kouluttaja
       }
+    }
+
+    clearKouluttaja(value: Kouluttaja): void {
+      this.$emit('clearKouluttaja', value)
     }
 
     onKouluttajaSelect(kouluttaja: any) {

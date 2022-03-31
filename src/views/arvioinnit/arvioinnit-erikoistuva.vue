@@ -384,15 +384,15 @@
 
     solveKategoriat() {
       // Muodostetaan arvioitavat kokonaisuudet -lista
-      const arvioitavatKokonaisuudetArray = (this.selected.tyoskentelyjakso ||
-      this.selected.kouluttajaOrVastuuhenkilo
-        ? this.arvioinnit?.map((arviointi: Suoritusarviointi) => arviointi.arvioitavaKokonaisuus)
-        : this.suoritusArvioinnitOptions?.arvioitavatKokonaisuudet.filter(
-            (a: ArvioitavaKokonaisuus) =>
-              this.selected.arvioitavaKokonaisuus
-                ? a.id === this.selected.arvioitavaKokonaisuus?.id
-                : true
-          )
+      const arvioitavatKokonaisuudetArray = (
+        this.selected.tyoskentelyjakso || this.selected.kouluttajaOrVastuuhenkilo
+          ? this.arvioinnit?.map((arviointi: Suoritusarviointi) => arviointi.arvioitavaKokonaisuus)
+          : this.suoritusArvioinnitOptions?.arvioitavatKokonaisuudet.filter(
+              (a: ArvioitavaKokonaisuus) =>
+                this.selected.arvioitavaKokonaisuus
+                  ? a.id === this.selected.arvioitavaKokonaisuus?.id
+                  : true
+            )
       )
         ?.filter((x) => x != null)
         .map((a: ArvioitavaKokonaisuus | null) => ({

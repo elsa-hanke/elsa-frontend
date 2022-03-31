@@ -5,7 +5,8 @@
       <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
       <div v-if="!loading">
         <div v-if="!signed && !returned">
-          <p>{{ $t('koulutussopimus-kouluttaja-ingressi') }}</p>
+          <p v-if="!$isVastuuhenkilo()">{{ $t('koulutussopimus-kouluttaja-ingressi') }}</p>
+          <p v-if="$isVastuuhenkilo()">{{ $t('koulutussopimus-vastuuhenkilo-ingressi') }}</p>
         </div>
         <b-alert :show="showWaitingForVastuuhenkilo" variant="dark" class="mt-3">
           <div class="d-flex flex-row">
@@ -21,6 +22,22 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
             <div>{{ $t('koulutussopimus-tila-odottaa-toisen-kouluttajan-hyvaksyntaa') }}</div>
+          </div>
+        </b-alert>
+        <b-alert :show="showWaitingForSignature" variant="dark" class="mt-3">
+          <div class="d-flex flex-row">
+            <em class="align-middle">
+              <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+            </em>
+            <div>{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }}</div>
+          </div>
+        </b-alert>
+        <b-alert :show="showSigned" variant="success" class="mt-3">
+          <div class="d-flex flex-row">
+            <em class="align-middle">
+              <font-awesome-icon :icon="['fas', 'info-circle']" class="mr-2" />
+            </em>
+            <div>{{ $t('koulutussopimus-tila-allekirjoitettu') }}</div>
           </div>
         </b-alert>
         <b-alert :show="returned" variant="dark" class="mt-3">
@@ -82,7 +99,7 @@
               <p>{{ form.erikoistuvanSahkoposti }}</p>
             </b-col>
             <b-col lg="4">
-              <h5>{{ $t('puhelin-virka-aikaan') }}</h5>
+              <h5>{{ $t('matkapuhelinnumero') }}</h5>
               <p>{{ form.erikoistuvanPuhelinnumero }}</p>
             </b-col>
           </b-row>
@@ -121,7 +138,7 @@
                   v-model="form.kouluttajat[index]"
                   :kouluttaja="kouluttaja"
                   :index="index"
-                  @ready="onChildFormValid"
+                  @ready="onChildKouluttajaFormValid"
                   @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
                 ></kouluttaja-koulutussopimus-form>
 
@@ -138,9 +155,31 @@
             <b-col lg="8">
               <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
               <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-              <p>{{ form.vastuuhenkilo.nimi }}, {{ form.vastuuhenkilo.nimike }}</p>
+              <p>
+                {{ form.vastuuhenkilo.nimi }}
+                {{ form.vastuuhenkilo.nimike ? ', ' + form.vastuuhenkilo.nimike : '' }}
+              </p>
             </b-col>
           </b-row>
+          <b-row v-if="form.vastuuhenkilo && !editable">
+            <b-col lg="4">
+              <h5>{{ $t('sahkopostiosoite') }}</h5>
+              <p>{{ form.vastuuhenkilo.sahkoposti }}</p>
+            </b-col>
+
+            <b-col lg="4">
+              <h5>{{ $t('matkapuhelinnumero') }}</h5>
+              <p>{{ form.vastuuhenkilo.puhelin }}</p>
+            </b-col>
+          </b-row>
+          <vastuuhenkilo-koulutussopimus-form
+            v-if="$isVastuuhenkilo() && editable"
+            ref="vastuuhenkiloKoulutussopimusForm"
+            v-model="form.vastuuhenkilo"
+            :vastuuhenkilo="form.vastuuhenkilo"
+            @ready="onChildVastuuhenkiloFormValid"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+          ></vastuuhenkilo-koulutussopimus-form>
           <hr />
           <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
           <hr v-if="allekirjoitukset.length > 0" />
@@ -167,12 +206,24 @@
               <elsa-button
                 class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
+                v-if="!$isVastuuhenkilo()"
                 :disabled="buttonStates.secondaryButtonLoading"
                 :loading="buttonStates.primaryButtonLoading"
                 type="submit"
                 variant="primary"
               >
-                {{ $t('allekirjoita-laheta') }}
+                {{ $t('hyvaksy-laheta') }}
+              </elsa-button>
+              <elsa-button
+                class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+                style="min-width: 14rem"
+                v-if="$isVastuuhenkilo()"
+                :disabled="buttonStates.secondaryButtonLoading"
+                :loading="buttonStates.primaryButtonLoading"
+                type="submit"
+                variant="primary"
+              >
+                {{ $t('laheta-allekirjoitettavaksi') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -180,6 +231,12 @@
       </div>
       <div v-else class="text-center">
         <b-spinner variant="primary" :label="$t('ladataan')" />
+      </div>
+      <div v-if="$isVastuuhenkilo()" class="text-left mt-2">
+        <p>
+          <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+          {{ $t('koejakso-vastuuhenkilo-submit-tooltip') }}
+        </p>
       </div>
     </b-container>
 
@@ -191,14 +248,14 @@
           ? $t('vahvista-koulutussopimus-kouluttajat-hyvaksytty')
           : $t('vahvista-koulutussopimus-kouluttaja-hyvaksytty')
       "
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('hyvaksy-laheta')"
       @submit="updateSentForm"
     />
     <elsa-confirmation-modal
       id="confirm-send-vastuuhenkilo"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koulutussopimus-hyvaksytty')"
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('laheta-allekirjoitettavaksi')"
       @submit="updateSentForm"
     />
     <elsa-return-to-sender-modal
@@ -210,11 +267,9 @@
 </template>
 
 <script lang="ts">
-  import _get from 'lodash/get'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { required } from 'vuelidate/lib/validators'
 
   import { getKoulutussopimus as getKoulutussopimusKouluttaja } from '@/api/kouluttaja'
   import { getKoulutussopimus as getKoulutussopimusVastuuhenkilo } from '@/api/vastuuhenkilo'
@@ -229,7 +284,8 @@
     KoejaksonVaiheAllekirjoitus,
     KoulutussopimusLomake,
     Kouluttaja,
-    KoejaksonVaiheButtonStates
+    KoejaksonVaiheButtonStates,
+    Vastuuhenkilo
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
@@ -238,10 +294,12 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import KoulutussopimusReadonly from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus/koulutussopimus-readonly.vue'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
+  import VastuuhenkiloKoulutussopimusForm from '@/views/koejakso/vastuuhenkilo/vastuuhenkilo-koulutussopimus-form.vue'
 
   @Component({
     components: {
       KouluttajaKoulutussopimusForm,
+      VastuuhenkiloKoulutussopimusForm,
       ElsaFormGroup,
       ElsaButton,
       KoulutussopimusReadonly,
@@ -249,19 +307,13 @@
       KoejaksonVaiheAllekirjoitukset,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal
-    },
-    validations: {
-      form: {
-        korjausehdotus: {
-          required
-        }
-      }
     }
   })
   export default class Koulutussopimus extends Mixins(validationMixin) {
     skipRouteExitConfirm!: boolean
     $refs!: {
-      kouluttajaKoulutussopimusForm: any
+      kouluttajaKoulutussopimusForm: Array<KouluttajaKoulutussopimusForm>
+      vastuuhenkiloKoulutussopimusForm: VastuuhenkiloKoulutussopimusForm
     }
     items = [
       {
@@ -301,29 +353,22 @@
     }
 
     loading = true
-    childFormValid = false
+    childKouluttajaFormValid = false
+    childVastuuhenkiloFormValid = false
+    showVastuuhenkiloSubmitButton = false
     buttonStates: KoejaksonVaiheButtonStates = {
       primaryButtonLoading: false,
       secondaryButtonLoading: false
     }
 
-    validateState(value: string) {
-      const form = this.$v.form
-      const { $dirty, $error } = _get(form, value) as any
-      return $dirty ? ($error ? false : null) : null
-    }
-
-    isFormValid(): boolean {
-      this.$v.$touch()
-      if (this.$v.$anyError) {
-        return false
-      }
-      return true
-    }
-
-    onChildFormValid(index: number, form: Kouluttaja) {
+    onChildKouluttajaFormValid(index: number, form: Kouluttaja) {
       this.form.kouluttajat[index] = form
-      this.childFormValid = true
+      this.childKouluttajaFormValid = true
+    }
+
+    onChildVastuuhenkiloFormValid(form: Vastuuhenkilo) {
+      this.form.vastuuhenkilo = form
+      this.childVastuuhenkiloFormValid = true
     }
 
     get koulutussopimusData() {
@@ -372,6 +417,14 @@
 
     get showWaitingForAnotherKouluttaja() {
       return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA
+    }
+
+    get showWaitingForSignature() {
+      return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+    }
+
+    get showSigned() {
+      return this.koulutussopimusData.tila === LomakeTilat.ALLEKIRJOITETTU
     }
 
     get erikoistuvanAvatar() {
@@ -444,13 +497,17 @@
         this.$refs.kouluttajaKoulutussopimusForm[0].validateForm()
       }
 
-      if (this.childFormValid) {
+      if (this.childKouluttajaFormValid) {
         this.$bvModal.show('confirm-send-kouluttaja')
       }
     }
 
     private handleSubmitVastuuhenkilo() {
-      this.$bvModal.show('confirm-send-vastuuhenkilo')
+      this.$refs.vastuuhenkiloKoulutussopimusForm.validateForm()
+
+      if (this.childVastuuhenkiloFormValid) {
+        this.$bvModal.show('confirm-send-vastuuhenkilo')
+      }
     }
 
     async mounted() {
@@ -462,6 +519,10 @@
           ? getKoulutussopimusVastuuhenkilo(this.koulutussopimusId)
           : getKoulutussopimusKouluttaja(this.koulutussopimusId))
         this.form = data
+        if (this.form.vastuuhenkilo) {
+          this.form.vastuuhenkilo.puhelin = this.account.phoneNumber
+          this.form.vastuuhenkilo.sahkoposti = this.account.email
+        }
         this.loading = false
 
         if (!this.editable || this.returned) {
@@ -480,9 +541,10 @@
         this.form.erikoistuvanNimi,
         this.form.erikoistuvanAllekirjoitusaika
       ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
-        this.form.kouluttajat
-      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoituksetKouluttajat =
+        allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+          this.form.kouluttajat
+        ) as KoejaksonVaiheAllekirjoitus[]
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
         this.form.vastuuhenkilo
       ) as KoejaksonVaiheAllekirjoitus

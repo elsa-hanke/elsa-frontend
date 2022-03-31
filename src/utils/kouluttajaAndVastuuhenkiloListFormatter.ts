@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 import { Kayttaja } from '@/types'
 
 export function formatList(vue: Vue, kouluttajatAndVastuuhenkilot?: Kayttaja[]): Kayttaja[] {

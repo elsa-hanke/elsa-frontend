@@ -5,6 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('koejakso') }}</h1>
+          <p v-if="!vastuuhenkilo">{{ $t('koejakso-ingressi-kouluttaja') }}</p>
           <elsa-search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
@@ -169,6 +170,9 @@
     @Prop({ required: false, type: Boolean, default: false })
     loading!: boolean
 
+    @Prop({ required: false, type: Boolean, default: false })
+    vastuuhenkilo!: boolean
+
     @Prop({ required: true, type: Map, default: undefined })
     componentLinks!: Map<string, string>
 
@@ -186,7 +190,7 @@
     fields = [
       {
         key: 'erikoistuvanNimi',
-        label: this.$t('nimi'),
+        label: this.$t('erikoistuja'),
         class: 'nimi',
         sortable: true
       },
@@ -235,6 +239,10 @@
           return ['fas', 'undo-alt']
         case LomakeTilat.HYVAKSYTTY:
           return ['fas', 'check-circle']
+        case LomakeTilat.ALLEKIRJOITETTU:
+          return ['fas', 'check-circle']
+        case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
+          return ['fas', 'check-circle']
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return ['far', 'check-circle']
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
@@ -253,6 +261,10 @@
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return ''
         case LomakeTilat.HYVAKSYTTY:
+          return 'text-success'
+        case LomakeTilat.ALLEKIRJOITETTU:
+          return 'text-success'
+        case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
           return 'text-success'
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return 'text-success'
@@ -273,6 +285,10 @@
           return this.$t('lomake-tila-' + TaskStatus.PALAUTETTU)
         case LomakeTilat.HYVAKSYTTY:
           return this.$t('lomake-tila-' + TaskStatus.HYVAKSYTTY)
+        case LomakeTilat.ALLEKIRJOITETTU:
+          return this.$t('lomake-tila-' + TaskStatus.ALLEKIRJOITETTU)
+        case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
+          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ALLEKIRJOITUKSIA)
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA)
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:

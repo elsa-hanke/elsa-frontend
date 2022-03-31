@@ -255,9 +255,12 @@
         this.kehittamistoimenpiteetLomake = this.koejaksoData.kehittamistoimenpiteet
       }
       this.kehittamistoimenpiteetLomake.erikoistuvanNimi = `${this.account.firstName} ${this.account.lastName}`
-      this.kehittamistoimenpiteetLomake.erikoistuvanOpiskelijatunnus = this.account.erikoistuvaLaakari.opiskelijatunnus
-      this.kehittamistoimenpiteetLomake.erikoistuvanErikoisala = this.account.erikoistuvaLaakari.erikoisalaNimi
-      this.kehittamistoimenpiteetLomake.erikoistuvanYliopisto = this.account.erikoistuvaLaakari.yliopisto
+      this.kehittamistoimenpiteetLomake.erikoistuvanOpiskelijatunnus =
+        this.account.erikoistuvaLaakari.opiskelijatunnus
+      this.kehittamistoimenpiteetLomake.erikoistuvanErikoisala =
+        this.account.erikoistuvaLaakari.erikoisalaNimi
+      this.kehittamistoimenpiteetLomake.erikoistuvanYliopisto =
+        this.account.erikoistuvaLaakari.yliopisto
     }
 
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
@@ -326,7 +329,8 @@
           'erikoistuva/putKehittamistoimenpiteet',
           this.kehittamistoimenpiteetLomake
         )
-        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.kehittamistoimenpiteet.erikoistuvanAllekirjoitusaika
+        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika =
+          this.koejaksoData.kehittamistoimenpiteet.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-onnistui'))
       } catch {

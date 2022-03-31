@@ -80,6 +80,7 @@
     allowEmpty!: boolean
 
     @Prop({ required: false, type: Function })
+    // eslint-disable-next-line @typescript-eslint/ban-types
     customLabel?: Function
 
     get isValid() {
@@ -117,7 +118,9 @@
     get deselectGroupLabelText() {
       return ''
     }
+
     clearMultiselect() {
+      this.$emit('valueToBeCleared', this.$attrs.value)
       this.$emit('input', null)
       this.$emit('clearMultiselect', null)
     }
