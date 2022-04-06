@@ -80,6 +80,7 @@
     allowEmpty!: boolean
 
     @Prop({ required: false, type: Function })
+    // eslint-disable-next-line @typescript-eslint/ban-types
     customLabel?: Function
 
     get isValid() {

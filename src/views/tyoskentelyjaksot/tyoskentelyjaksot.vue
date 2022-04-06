@@ -322,8 +322,8 @@
             color: '#8a86fb',
             backgroundColor: '#cfcdfd',
             value: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
-            minRequired: this.tilastot.koulutustyypit
-              .yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
+            minRequired:
+              this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
             highlight: false
           },
           {
@@ -466,9 +466,9 @@
     }
 
     get opintooppaastaLinkki() {
-      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(this.$t(
-        'tarkemmat-vaatimukset-opinto-oppaasta'
-      ) as string).toLowerCase()}</a>`
+      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(
+        this.$t('tarkemmat-vaatimukset-opinto-oppaasta') as string
+      ).toLowerCase()}</a>`
     }
 
     get tyoskentelyjaksotFormatted() {

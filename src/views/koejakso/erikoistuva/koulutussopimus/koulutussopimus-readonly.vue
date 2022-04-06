@@ -103,9 +103,10 @@
         this.data.erikoistuvanNimi,
         this.data.erikoistuvanAllekirjoitusaika
       ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
-        this.data.kouluttajat
-      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoituksetKouluttajat =
+        allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+          this.data.kouluttajat
+        ) as KoejaksonVaiheAllekirjoitus[]
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
         this.data.vastuuhenkilo
       ) as KoejaksonVaiheAllekirjoitus

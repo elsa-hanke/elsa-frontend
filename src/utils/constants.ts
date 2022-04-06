@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Kouluttaja, Koulutuspaikka, Vaativuustaso, Vastuuhenkilo } from '@/types'
 
 export const vaativuustasot: Vaativuustaso[] = [

@@ -506,7 +506,8 @@
       this.form.erikoistuvanOpiskelijatunnus = this.opintooikeusKaytossa?.opiskelijatunnus
       this.form.erikoistuvanErikoisala = this.opintooikeusKaytossa?.erikoisalaNimi
       this.form.erikoistuvanSyntymaaika = this.account.erikoistuvaLaakari.syntymaaika
-      this.form.opintooikeudenMyontamispaiva = this.opintooikeusKaytossa?.opintooikeudenMyontamispaiva
+      this.form.opintooikeudenMyontamispaiva =
+        this.opintooikeusKaytossa?.opintooikeudenMyontamispaiva
 
       // Asetetaan arvot kentille, jotka saatavissa erikoistuvan lääkärin tiedoista, mutta jotka
       // käyttäjä on saattanut yliajaa lomakkeen välitallennuksen yhteydessä. Kuitenkaan opinto-oikeuden

@@ -248,10 +248,9 @@
           const rows: SuoritemerkintaRow[] = kategoria.suoritteet.reduce(
             (result: SuoritemerkintaRow[], suorite: Suorite) => {
               // Kerätään suoritteen suoritemerkinnät ja järjestetään ne aikajärjestykseen
-              const suoritemerkinnat = (
-                suoritemerkinnatGroupBySuorite[suorite.id] || []
-              ).sort((a: any, b: any) =>
-                sortByDateDesc(a.suoritemerkinta.suorituspaiva, b.suoritemerkinta.suorituspaiva)
+              const suoritemerkinnat = (suoritemerkinnatGroupBySuorite[suorite.id] || []).sort(
+                (a: any, b: any) =>
+                  sortByDateDesc(a.suoritemerkinta.suorituspaiva, b.suoritemerkinta.suorituspaiva)
               )
 
               // Ensimmäinen suoritemerkintä esitetään suoritteen rivillä
@@ -260,9 +259,8 @@
               suorite.suoritettulkm = suoritemerkinnat.length
 
               if (suoritemerkinnatWithoutFirst.length > 0) {
-                suoritemerkinnatWithoutFirst[
-                  suoritemerkinnatWithoutFirst.length - 1
-                ].lastDetails = true
+                suoritemerkinnatWithoutFirst[suoritemerkinnatWithoutFirst.length - 1].lastDetails =
+                  true
               }
 
               result.push({

@@ -348,7 +348,8 @@
       try {
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/putLoppukeskustelu', this.loppukeskusteluLomake)
-        this.loppukeskusteluLomake.erikoistuvanAllekirjoitusaika = this.koejaksoData.loppukeskustelu.erikoistuvanAllekirjoitusaika
+        this.loppukeskusteluLomake.erikoistuvanAllekirjoitusaika =
+          this.koejaksoData.loppukeskustelu.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-onnistuneesti'))
       } catch {

@@ -541,9 +541,10 @@
         this.form.erikoistuvanNimi,
         this.form.erikoistuvanAllekirjoitusaika
       ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoituksetKouluttajat = allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
-        this.form.kouluttajat
-      ) as KoejaksonVaiheAllekirjoitus[]
+      const allekirjoituksetKouluttajat =
+        allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
+          this.form.kouluttajat
+        ) as KoejaksonVaiheAllekirjoitus[]
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
         this.form.vastuuhenkilo
       ) as KoejaksonVaiheAllekirjoitus

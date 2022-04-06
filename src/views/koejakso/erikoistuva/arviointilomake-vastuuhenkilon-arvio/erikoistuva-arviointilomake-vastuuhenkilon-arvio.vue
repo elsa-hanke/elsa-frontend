@@ -411,7 +411,8 @@
       try {
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch('erikoistuva/putVastuuhenkilonArvio', this.form)
-        this.form.erikoistuvanAllekirjoitusaika = this.koejaksoData.vastuuhenkilonArvio.erikoistuvanAllekirjoitusaika
+        this.form.erikoistuvanAllekirjoitusaika =
+          this.koejaksoData.vastuuhenkilonArvio.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
       } catch (err) {

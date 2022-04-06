@@ -22,9 +22,9 @@
   })
   export default class ElsaVanhaAsetusVaroitus extends Vue {
     get opintooppaastasiLinkki() {
-      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(this.$t(
-        'opintooppaastasi'
-      ) as string).toLowerCase()}</a>`
+      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(
+        this.$t('opintooppaastasi') as string
+      ).toLowerCase()}</a>`
     }
 
     get asetus(): Asetus | undefined {
