@@ -571,7 +571,7 @@
       arviointiFile: null
     }
     vaativuustasot = vaativuustasot
-    arviointiasteikonTasot: ArviointiasteikonTaso[] = this.value.arviointiasteikko.tasot || []
+    arviointiasteikonTasot: ArviointiasteikonTaso[] = []
     arviointityokalut: Arviointityokalu[] = []
     params = {
       saving: false
@@ -592,6 +592,7 @@
     ]
 
     async mounted() {
+      this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
       if (this.itsearviointi) {
         this.form = {
           vaativuustaso: vaativuustasot.find(
