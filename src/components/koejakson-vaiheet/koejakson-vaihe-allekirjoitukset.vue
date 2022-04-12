@@ -2,7 +2,7 @@
   <div v-if="showAllekirjoitukset">
     <b-row class="mb-3">
       <b-col>
-        <h3>{{ $t('muokkauspaivamaarat') }}</h3>
+        <h3>{{ $t(title) }}</h3>
       </b-col>
     </b-row>
     <b-row v-for="(allekirjoitus, index) in allekirjoitukset" :key="index">
@@ -31,6 +31,9 @@
   export default class KoejaksonVaiheAllekirjoitukset extends Vue {
     @Prop({ required: true, default: [] })
     allekirjoitukset!: KoejaksonVaiheAllekirjoitus[] | null
+
+    @Prop({ required: false, default: 'muokkauspaivamaarat' })
+    title?: string
 
     get showAllekirjoitukset() {
       return this.allekirjoitukset ? this.allekirjoitukset.length > 0 : false

@@ -10,7 +10,7 @@
       </tr>
       <tr>
         <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
-          {{ $t('erikoistuva-laakari') }}
+          {{ $t('erikoistuva') }}
         </th>
         <td class="pl-6">
           <user-avatar

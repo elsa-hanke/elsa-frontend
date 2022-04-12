@@ -250,7 +250,7 @@
           variant="primary"
           @click="validateAndConfirmSend"
         >
-          {{ $t('allekirjoita-laheta') }}
+          {{ $t('laheta') }}
         </elsa-button>
       </b-col>
     </b-row>
@@ -258,7 +258,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal

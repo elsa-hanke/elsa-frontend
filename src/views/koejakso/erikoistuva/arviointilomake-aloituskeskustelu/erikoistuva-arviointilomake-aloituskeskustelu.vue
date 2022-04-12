@@ -187,9 +187,9 @@
       try {
         if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.UUSI) {
           await store.dispatch('erikoistuva/postAloituskeskustelu', this.aloituskeskusteluLomake)
-        }
-
-        if (this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA) {
+        } else if (
+          this.koejaksoData.aloituskeskustelunTila === LomakeTilat.TALLENNETTU_KESKENERAISENA
+        ) {
           await store.dispatch('erikoistuva/putAloituskeskustelu', this.aloituskeskusteluLomake)
         }
 
