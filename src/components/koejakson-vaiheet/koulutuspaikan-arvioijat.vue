@@ -70,9 +70,17 @@
     <b-col v-else lg="10">
       <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
       <h5>{{ $t('lahikouluttaja') }}</h5>
-      <p>{{ lahikouluttaja.nimi }}</p>
+      <p>
+        {{
+          lahikouluttaja.nimike
+            ? lahikouluttaja.nimi + ', ' + lahikouluttaja.nimike
+            : lahikouluttaja.nimi
+        }}
+      </p>
       <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
-      <p>{{ lahiesimies.nimi }}</p>
+      <p>
+        {{ lahiesimies.nimike ? lahiesimies.nimi + ', ' + lahiesimies.nimike : lahiesimies.nimi }}
+      </p>
     </b-col>
   </b-row>
 </template>

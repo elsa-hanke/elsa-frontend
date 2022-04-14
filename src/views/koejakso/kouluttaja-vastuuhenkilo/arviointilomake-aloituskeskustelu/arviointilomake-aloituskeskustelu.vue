@@ -92,7 +92,7 @@
             <h5>{{ $t('koejakso-suoritettu-kokoaikatyössä') }}</h5>
             <p v-if="aloituskeskustelu.suoritettuKokoaikatyossa">{{ $t('kylla') }}</p>
             <p v-else>
-              {{ $t('suoritettu-osa-aikatyossa-tuntia-viikossa', { tyotunnitViikossa }) }}
+              {{ $t('suoritetaan-osa-aikatyossa-tuntia-viikossa', { tyotunnitViikossa }) }}
             </p>
           </b-col>
         </b-row>
@@ -111,7 +111,10 @@
           </b-col>
         </b-row>
         <hr />
-        <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+        <koejakson-vaihe-allekirjoitukset
+          :allekirjoitukset="allekirjoitukset"
+          title="hyvaksymispaivamaarat"
+        />
       </div>
       <hr v-if="showAllekirjoitukset && editable" />
       <b-row v-if="editable">
@@ -142,7 +145,7 @@
             v-b-modal.confirm-send
             variant="primary"
           >
-            {{ $t('allekirjoita-laheta') }}
+            {{ $t('hyvaksy-laheta') }}
           </elsa-button>
         </b-col>
       </b-row>
@@ -156,7 +159,7 @@
           ? $t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('hyvaksy-laheta')"
       @submit="onSubmit"
     />
     <elsa-return-to-sender-modal
