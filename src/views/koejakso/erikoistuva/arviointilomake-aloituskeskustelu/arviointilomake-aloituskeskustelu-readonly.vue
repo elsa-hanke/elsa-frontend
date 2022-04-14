@@ -27,7 +27,7 @@
         <h5>{{ $t('koejakso-suoritettu-kokoaikatyössä') }}</h5>
         <p v-if="data.suoritettuKokoaikatyossa">{{ $t('kylla') }}</p>
         <p v-else>
-          {{ $t('suoritettu-osa-aikatyossa-tuntia-viikossa', { tyotunnitViikossa }) }}
+          {{ $t('suoritetaan-osa-aikatyossa-tuntia-viikossa', { tyotunnitViikossa }) }}
         </p>
       </b-col>
     </b-row>

@@ -157,7 +157,7 @@
     </b-row>
     <b-row v-if="form.suoritettuKokoaikatyossa === false" class="mb-3">
       <b-col lg="3">
-        <elsa-form-group :label="$t('suoritettu-osa-aikatyossa')" :required="true" class="ml-4">
+        <elsa-form-group :label="$t('suoritetaan-osa-aikatyossa')" :required="true" class="ml-4">
           <template v-slot="{ uid }">
             <div class="d-inline-flex align-items-center">
               <b-form-input
