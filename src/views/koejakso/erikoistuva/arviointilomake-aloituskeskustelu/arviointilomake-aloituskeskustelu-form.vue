@@ -157,7 +157,7 @@
     </b-row>
     <b-row v-if="form.suoritettuKokoaikatyossa === false" class="mb-3">
       <b-col lg="3">
-        <elsa-form-group :label="$t('suoritettu-osa-aikatyossa')" :required="true" class="ml-4">
+        <elsa-form-group :label="$t('suoritetaan-osa-aikatyossa')" :required="true" class="ml-4">
           <template v-slot="{ uid }">
             <div class="d-inline-flex align-items-center">
               <b-form-input
@@ -250,7 +250,7 @@
           variant="primary"
           @click="validateAndConfirmSend"
         >
-          {{ $t('allekirjoita-laheta') }}
+          {{ $t('laheta') }}
         </elsa-button>
       </b-col>
     </b-row>
@@ -258,7 +258,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal

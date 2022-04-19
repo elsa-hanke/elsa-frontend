@@ -95,7 +95,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA">
         <template v-slot:content>
-          <p class="pr-6">{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }} /></p>
+          <p class="pr-6">{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
