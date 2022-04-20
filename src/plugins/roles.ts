@@ -21,6 +21,10 @@ export class RolesPlugin {
     vue.prototype.$isTekninenPaakayttaja = (): boolean => {
       return store.getters['auth/account'].authorities.includes(ELSA_ROLE.TekninenPaakayttaja)
     }
+
+    vue.prototype.$isVirkailija = (): boolean => {
+      return store.getters['auth/account'].authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
+    }
   }
 }
 

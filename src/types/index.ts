@@ -901,3 +901,33 @@ export interface KaytonAloitusModel {
   sahkopostiUudelleen: string | null
   opintooikeusId?: number | null
 }
+
+export interface ErikoistujienSeurantaVirkailijaRajaimet {
+  erikoisalat: Erikoisala[]
+  asetukset: Asetus[]
+}
+
+export interface ErikoistujanEteneminenVirkailija {
+  erikoistuvaLaakariId: number
+  etunimi: string
+  sukunimi: string
+  syntymaaika: string
+  erikoisala: string
+  asetus: string
+  koejaksoTila: string
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
+  tyoskentelyjaksoTilastot: TyoskentelyjaksotTilastot
+  teoriakoulutuksetSuoritettu: number
+  teoriakoulutuksetVaadittu: number
+  johtamisopinnotSuoritettu: number
+  johtamisopinnotVaadittu: number
+  sateilysuojakoulutuksetSuoritettu: number
+  sateilysuojakoulutuksetVaadittu: number
+  valtakunnallisetKuulustelutSuoritettuLkm: number
+}
+
+export type SortByEnum = {
+  name: string
+  value: number
+}
