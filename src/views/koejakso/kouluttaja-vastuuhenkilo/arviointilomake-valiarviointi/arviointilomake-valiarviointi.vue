@@ -83,6 +83,12 @@
 
         <div>
           <h3 class="mb-3">{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
+          <b-row v-if="valiarviointi.koejaksonOsaamistavoitteet">
+            <b-col>
+              <h5>{{ $t('koejakso-osaamistavoitteet') }}</h5>
+              <p>{{ valiarviointi.koejaksonOsaamistavoitteet }}</p>
+            </b-col>
+          </b-row>
           <b-row>
             <b-col lg="8">
               <div v-if="!editable">
@@ -104,6 +110,7 @@
                   <b-form-radio-group
                     :id="uid"
                     v-model="valiarviointi.edistyminenTavoitteidenMukaista"
+                    @input="$emit('skipRouteExitConfirm', false)"
                     :options="edistyminenVaihtoehdot"
                     :state="validateState('edistyminenTavoitteidenMukaista')"
                     stacked
@@ -137,6 +144,7 @@
                     :id="uid"
                     v-model="valiarviointi.kehittamistoimenpideKategoriat"
                     :options="kehittamistoimenpideKategoriat"
+                    @input="$emit('skipRouteExitConfirm', false)"
                     :required="true"
                     :state="validateState('kehittamistoimenpideKategoriat')"
                     stacked
@@ -150,6 +158,7 @@
                   <div class="ml-4">
                     <b-form-input
                       v-if="muuValittu"
+                      @input="$emit('skipRouteExitConfirm', false)"
                       v-model="valiarviointi.muuKategoria"
                       :state="validateState('muuKategoria')"
                     ></b-form-input>
@@ -172,6 +181,7 @@
                   <b-form-textarea
                     :id="uid"
                     v-model="valiarviointi.vahvuudet"
+                    @input="$emit('skipRouteExitConfirm', false)"
                     rows="7"
                     class="textarea-min-height"
                   ></b-form-textarea>
@@ -195,6 +205,7 @@
                   <b-form-textarea
                     :id="uid"
                     v-model="valiarviointi.kehittamistoimenpiteet"
+                    @input="$emit('skipRouteExitConfirm', false)"
                     rows="7"
                     class="textarea-min-height"
                   ></b-form-textarea>
@@ -215,7 +226,10 @@
         <hr />
 
         <div v-if="allekirjoitukset.length > 0">
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
         </div>
 
         <div v-if="editable || editableForEsimies">
@@ -224,6 +238,7 @@
             <b-col class="text-right">
               <elsa-button
                 class="ml-1 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block text-left"
+                @input="$emit('skipRouteExitConfirm', false)"
                 style="max-width: 14rem"
                 variant="back"
                 :to="{ name: 'koejakso' }"
@@ -233,6 +248,7 @@
               <elsa-button
                 v-if="isCurrentUserLahiesimies"
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+                @input="$emit('skipRouteExitConfirm', false)"
                 style="min-width: 14rem"
                 variant="outline-primary"
                 :disabled="buttonStates.primaryButtonLoading"
@@ -243,13 +259,14 @@
               </elsa-button>
               <elsa-button
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+                @input="$emit('skipRouteExitConfirm', false)"
                 style="min-width: 14rem"
                 variant="primary"
                 :disabled="buttonStates.secondaryButtonLoading"
                 :loading="buttonStates.primaryButtonLoading"
                 @click="onValidateAndConfirm"
               >
-                {{ $t('allekirjoita-laheta') }}
+                {{ $t('hyvaksy-laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -268,7 +285,7 @@
           ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('hyvaksy-laheta')"
       @submit="onSign"
     />
 
@@ -506,6 +523,7 @@
         await store.dispatch('kouluttaja/putValiarviointi', form)
         this.buttonStates.secondaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+        this.$emit('skipRouteExitConfirm', true)
         toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))
       } catch {
         toastFail(this, this.$t('valiarviointi-palautus-epaonnistui'))
@@ -529,6 +547,7 @@
         await store.dispatch('kouluttaja/putValiarviointi', this.valiarviointi)
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+        this.$emit('skipRouteExitConfirm', true)
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-ja-lahetetty-onnistuneesti'))
       } catch {
         toastFail(this, this.$t('valiarvioinnin-tallennus-epaonnistui'))
