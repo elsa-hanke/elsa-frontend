@@ -216,10 +216,8 @@
 </template>
 
 <script lang="ts">
-  import { parseISO, differenceInMonths } from 'date-fns'
-  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { Component, Mixins, Prop } from 'vue-property-decorator'
 
-  import { ELSA_API_LOCATION } from '@/api'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -227,8 +225,9 @@
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
-  import { BarChartRow, ErikoistujienSeuranta, TyoskentelyjaksotTilastot } from '@/types'
-  import { ErikoistuvanSeurantaJarjestys, LomakeTilat } from '@/utils/constants'
+  import ErikoistujienSeurantaMixin from '@/mixins/erikoistujien-seuranta'
+  import { ErikoistujienSeuranta, SortByEnum } from '@/types'
+  import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
   import { sortByAsc, sortByDesc } from '@/utils/sort'
 
   @Component({
@@ -242,45 +241,43 @@
       ElsaSearchInput
     }
   })
-  export default class ErikoistujienSeurantaCard extends Vue {
+  export default class ErikoistujienSeurantaCard extends Mixins(ErikoistujienSeurantaMixin) {
     @Prop({ required: true, default: undefined })
     seuranta!: ErikoistujienSeuranta
 
     @Prop({ required: false, default: false })
     showKouluttajaKuvaus!: boolean
 
-    hakutermi = ''
-    erikoisala = ''
-    perPage = 20
-    currentPage = 1
-
-    sortFields = [
+    sortFields: SortByEnum[] = [
       {
         name: this.$t('opintooikeus-paattymassa'),
         value: ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA
-      },
+      } as SortByEnum,
       {
         name: this.$t('opintooikeus-alkaen'),
         value: ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN
-      },
+      } as SortByEnum,
       {
         name: this.$t('tyoskentelyaikaa-vahiten'),
         value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN
-      },
+      } as SortByEnum,
       {
         name: this.$t('tyoskentelyaikaa-eniten'),
         value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN
-      },
+      } as SortByEnum,
       {
         name: this.$t('sukunimi-a-o'),
         value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC
-      },
+      } as SortByEnum,
       {
         name: this.$t('sukunimi-o-a'),
         value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC
-      }
+      } as SortByEnum
     ]
     sortBy = this.sortFields[0]
+
+    hakutermi = ''
+    erikoisala = ''
 
     get seurantaTitle() {
       let result = ''
@@ -356,69 +353,6 @@
 
     get rows() {
       return this.tulokset.length
-    }
-
-    vaihdaRooli(id: number) {
-      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?erikoistuvaLaakariId=${id}`
-    }
-
-    koejaksoTila(tila: LomakeTilat) {
-      switch (tila) {
-        case LomakeTilat.EI_AKTIIVINEN:
-          return (this.$t('aloittamatta') as string).toLowerCase()
-        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
-          return (this.$t('kesken') as string).toLowerCase()
-        case LomakeTilat.HYVAKSYTTY:
-          return (this.$t('hyvaksytty') as string).toLowerCase()
-      }
-    }
-
-    koejaksoTyyli(tila: LomakeTilat, paattymispaiva: string) {
-      switch (tila) {
-        case LomakeTilat.EI_AKTIIVINEN:
-        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
-          if (differenceInMonths(parseISO(paattymispaiva), new Date()) <= 12) {
-            return 'text-danger'
-          }
-          break
-        case LomakeTilat.HYVAKSYTTY:
-          return 'text-success'
-      }
-    }
-
-    opintoOikeusTyyli(paattymispaiva: string) {
-      if (differenceInMonths(parseISO(paattymispaiva), new Date()) <= 6) {
-        return 'text-danger'
-      }
-    }
-
-    barValues(tilastot: TyoskentelyjaksotTilastot): BarChartRow[] {
-      return [
-        {
-          text: this.$t('terveyskeskus'),
-          color: '#ffb406',
-          backgroundColor: '#ffe19b',
-          value: tilastot.koulutustyypit.terveyskeskusSuoritettu,
-          minRequired: tilastot.koulutustyypit.terveyskeskusVaadittuVahintaan,
-          highlight: false
-        },
-        {
-          text: this.$t('yliopistosairaala'),
-          color: '#0f9bd9',
-          backgroundColor: '#9fd7ef',
-          value: tilastot.koulutustyypit.yliopistosairaalaSuoritettu,
-          minRequired: tilastot.koulutustyypit.yliopistosairaalaVaadittuVahintaan,
-          highlight: false
-        },
-        {
-          text: this.$t('yo-sair-ulkopuolinen'),
-          color: '#8a86fb',
-          backgroundColor: '#cfcdfd',
-          value: tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
-          minRequired: tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
-          highlight: false
-        }
-      ]
     }
   }
 </script>

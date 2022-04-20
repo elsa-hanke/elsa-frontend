@@ -21,6 +21,8 @@ export function getTitleFromAuthorities(authorities: string[]) {
     return 'vastuuhenkilo'
   } else if (authorities.includes(ELSA_ROLE.TekninenPaakayttaja)) {
     return 'tekninen-paakayttaja'
+  } else if (authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)) {
+    return 'virkailija'
   }
 
   return undefined

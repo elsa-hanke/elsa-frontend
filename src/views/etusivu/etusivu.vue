@@ -6,8 +6,8 @@
     </b-alert>
     <EtusivuErikoistuja v-if="$isErikoistuva()" />
     <EtusivuKouluttaja v-else-if="$isKouluttaja()" />
-    <EtusivuVastuuhenkilo v-else />
-    <!-- Virkailijan etusivu -->
+    <EtusivuVastuuhenkilo v-else-if="$isVastuuhenkilo()" />
+    <EtusivuVirkailija v-else-if="$isVirkailija()" />
   </div>
 </template>
 
@@ -17,12 +17,14 @@
   import EtusivuErikoistuja from '@/views/etusivu/etusivu-erikoistuja.vue'
   import EtusivuKouluttaja from '@/views/etusivu/etusivu-kouluttaja.vue'
   import EtusivuVastuuhenkilo from '@/views/etusivu/etusivu-vastuuhenkilo.vue'
+  import EtusivuVirkailija from '@/views/etusivu/etusivu-virkailija.vue'
 
   @Component({
     components: {
       EtusivuErikoistuja,
       EtusivuKouluttaja,
-      EtusivuVastuuhenkilo
+      EtusivuVastuuhenkilo,
+      EtusivuVirkailija
     }
   })
   export default class Etusivu extends Vue {}
