@@ -72,11 +72,31 @@
           :erikoisala="kehittamistoimenpiteet.erikoistuvanErikoisala"
           :opiskelijatunnus="kehittamistoimenpiteet.erikoistuvanOpiskelijatunnus"
           :yliopisto="kehittamistoimenpiteet.erikoistuvanYliopisto"
-          :kehittamistoimenpiteet="kehittamistoimenpiteet.kehittamistoimenpiteetKuvaus"
           :show-birthdate="false"
         />
         <hr />
-
+        <b-row v-if="kehittamistoimenpiteet.kehittamistoimenpideKategoriat.length > 0">
+          <b-col lg="8">
+            <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
+            <ul class="pl-4">
+              <li
+                v-for="kategoria in kehittamistoimenpiteet.kehittamistoimenpideKategoriat"
+                :key="kategoria"
+              >
+                {{
+                  naytaKehittamistoimenpideKategoria(kategoria, kehittamistoimenpiteet.muuKategoria)
+                }}
+              </li>
+            </ul>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col v-if="kehittamistoimenpiteet.kehittamistoimenpiteetKuvaus">
+            <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
+            <p>{{ kehittamistoimenpiteet.kehittamistoimenpiteetKuvaus }}</p>
+          </b-col>
+        </b-row>
+        <hr />
         <h3 class="mb-3">{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
         <b-row>
           <b-col lg="8">
@@ -115,7 +135,10 @@
         />
         <hr />
         <div v-if="allekirjoitukset.length > 0">
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
         </div>
         <div v-if="editable || editableForEsimies">
           <hr v-if="allekirjoitukset.length > 0" />
@@ -148,7 +171,7 @@
                 :loading="buttonStates.primaryButtonLoading"
                 @click="onValidateAndConfirm"
               >
-                {{ $t('allekirjoita-laheta') }}
+                {{ $t('hyvaksy-laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -167,7 +190,7 @@
           ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('hyvaksy-laheta')"
       @submit="onSign"
     />
     <elsa-return-to-sender-modal
@@ -376,10 +399,15 @@
         await store.dispatch('kouluttaja/putKehittamistoimenpiteet', this.kehittamistoimenpiteet)
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('kehittamistoimenpiteet-allekirjoitus-ja-lahetys-onnistui'))
+        toastSuccess(this, this.$t('kehittamistoimenpiteet-lahetys-onnistui'))
       } catch {
-        toastFail(this, this.$t('kehittamistoimenpiteet-allekirjoitus-ja-lahetys-epaonnistui'))
+        toastFail(this, this.$t('kehittamistoimenpiteet-lahetys-epaonnistui'))
       }
+    }
+
+    naytaKehittamistoimenpideKategoria(kategoria: string, muuKategoria: string) {
+      if (kategoria === 'MUU') return muuKategoria
+      return this.$t('kehittamistoimenpidekategoria-' + kategoria)
     }
 
     onValidateAndConfirm() {
