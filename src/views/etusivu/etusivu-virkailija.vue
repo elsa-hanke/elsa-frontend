@@ -3,12 +3,12 @@
     <div v-if="!loading">
       <h2>{{ $t('avoimet-asiat') }}</h2>
       <b-row class="mt-3">
-        <b-col xxl="8">
+        <b-col xxl="9">
           <koejaksot-card />
           <valmistumispyynnot-card />
           <erikoistujien-seuranta-virkailija-card :yliopisto="yliopisto" />
         </b-col>
-        <b-col xxl="4">
+        <b-col xxl="3">
           <henkilotiedot-card />
         </b-col>
       </b-row>

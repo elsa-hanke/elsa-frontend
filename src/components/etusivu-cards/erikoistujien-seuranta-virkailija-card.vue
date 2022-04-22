@@ -11,7 +11,7 @@
               :placeholder="$t('hae-erikoistuvan-nimella')"
             />
           </b-col>
-          <b-col cols="12" lg="4">
+          <b-col cols="12" lg="3">
             <div class="filter" v-if="rajaimet.erikoisalat.length > 1">
               <elsa-form-group :label="$t('erikoisala')" class="mb-4">
                 <template v-slot="{ uid }">
@@ -27,7 +27,7 @@
               </elsa-form-group>
             </div>
           </b-col>
-          <b-col cols="12" lg="4">
+          <b-col cols="12" lg="2">
             <div class="filter" v-if="rajaimet.asetukset.length > 1">
               <elsa-form-group :label="$t('asetus')" class="mb-4">
                 <template v-slot="{ uid }">
@@ -43,7 +43,7 @@
               </elsa-form-group>
             </div>
           </b-col>
-          <b-col cols="12" lg="4" class="">
+          <b-col cols="12" lg="3" class="">
             <div class="filter">
               <elsa-form-group :label="$t('jarjestys')" class="mb-4">
                 <template v-slot="{ uid }">
