@@ -82,7 +82,10 @@
         <hr />
 
         <div v-if="waitingForErikoistuva || acceptedByEveryone">
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
         </div>
 
         <div v-if="!account.impersonated && (editable || waitingForErikoistuva)">
@@ -101,7 +104,7 @@
                 variant="primary"
                 class="ml-4 px-6"
               >
-                {{ waitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
+                {{ waitingForErikoistuva ? $t('hyvaksy') : $t('laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -121,9 +124,9 @@
     />
     <elsa-confirmation-modal
       id="confirm-sign"
-      :title="$t('allekirjoita-kehittamistoimenpiteet')"
+      :title="$t('hyvaksy-kehittamistoimenpiteet')"
       :text="$t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })"
-      :submitText="$t('allekirjoita')"
+      :submitText="$t('hyvaksy')"
       @submit="onSign"
     />
   </div>
