@@ -402,6 +402,15 @@ export interface Asiakirja {
   isDirty: boolean
 }
 
+export type AsiakirjatTableField = {
+  key: string
+  label: string
+  class?: string
+  sortable?: boolean
+  width?: number
+  disabled?: boolean
+}
+
 export interface KoejaksonTyoskentelyjakso {
   id: number
   formattedNimi: string

@@ -89,7 +89,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
-  import { Asiakirja } from '@/types'
+  import { Asiakirja, AsiakirjatTableField } from '@/types'
   import { saveBlob, fetchAndSaveBlob, openBlob, fetchAndOpenBlob } from '@/utils/blobs'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail } from '@/utils/toast'
@@ -150,35 +150,39 @@
     @Prop({ required: false, type: String })
     confirmDeleteTypeText?: string
 
-    private fields = [
-      {
-        key: 'nimi',
-        label: this.$t('tiedoston-nimi'),
-        class: 'file-name'
-      },
-      {
-        key: 'lisattypvm',
-        label: this.$t('lisatty'),
-        class: 'created-date',
-        sortable: this.sortingEnabled,
-        width: 10,
-        formatter: (val: string) => {
-          return new Date(val).toLocaleDateString(this.$i18n.locale)
+    fields: AsiakirjatTableField[] = []
+
+    mounted() {
+      this.fields = [
+        {
+          key: 'nimi',
+          label: this.$t('tiedoston-nimi'),
+          class: 'file-name'
+        },
+        {
+          key: 'lisattypvm',
+          label: this.$t('lisatty'),
+          class: 'created-date',
+          sortable: this.sortingEnabled,
+          width: 10,
+          formatter: (val: string) => {
+            return new Date(val).toLocaleDateString(this.$i18n.locale)
+          }
+        },
+        {
+          key: 'download',
+          label: '',
+          width: 5,
+          class: this.enableDelete ? 'download-btn float-left-xs' : 'download-btn'
+        },
+        {
+          key: 'delete',
+          label: '',
+          width: 5,
+          disabled: !this.enableDelete
         }
-      },
-      {
-        key: 'download',
-        label: '',
-        width: 5,
-        class: this.enableDelete ? 'download-btn float-left-xs ' : 'download-btn'
-      },
-      {
-        key: 'delete',
-        label: '',
-        width: 5,
-        disabled: !this.enableDelete
-      }
-    ]
+      ] as AsiakirjatTableField[]
+    }
 
     async onDeleteAsiakirja(asiakirja: Asiakirja) {
       if (
