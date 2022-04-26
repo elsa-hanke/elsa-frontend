@@ -885,7 +885,7 @@ export interface ErikoistujanEteneminen {
   erikoistuvaLaakariSukuNimi: string
   erikoistuvaLaakariSyntymaaika: string
   tyoskentelyjaksoTilastot: TyoskentelyjaksotTilastot
-  arviointienKa: number
+  arviointienKeskiarvo: number
   arviointienLkm: number
   arvioitavienKokonaisuuksienLkm: number
   seurantajaksotLkm: number
@@ -939,4 +939,26 @@ export interface ErikoistujanEteneminenVirkailija {
 export type SortByEnum = {
   name: string
   value: number
+}
+
+export interface ErikoistumisenEdistyminen {
+  arviointienKeskiarvo: number
+  arvioitavatKokonaisuudetVahintaanYksiArvioLkm: number
+  arvioitavienKokonaisuuksienLkm: number
+  arviointiasteikko: Arviointiasteikko
+  suoritemerkinnatLkm: number
+  vaaditutSuoritemerkinnatLkm: number
+  osaalueetSuoritettuLkm: number
+  osaalueetVaadittuLkm: number
+  tyoskentelyjaksoTilastot: TyoskentelyjaksotTilastot
+  teoriakoulutuksetSuoritettu: number
+  teoriakoulutuksetVaadittu: number
+  johtamisopinnotSuoritettu: number
+  johtamisopinnotVaadittu: number
+  sateilysuojakoulutuksetSuoritettu: number
+  sateilysuojakoulutuksetVaadittu: number
+  koejaksoTila: string
+  valtakunnallisetKuulustelutSuoritettuLkm: number
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
 }

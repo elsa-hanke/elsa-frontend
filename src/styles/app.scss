@@ -44,6 +44,10 @@ html:not(.e2e) {
   color: $black;
 }
 
+.text-primary {
+  color: $primary
+}
+
 label {
   font-weight: $font-weight-500;
 }
