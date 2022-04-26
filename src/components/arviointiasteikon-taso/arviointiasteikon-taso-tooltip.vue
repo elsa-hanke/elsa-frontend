@@ -1,12 +1,15 @@
 <template>
   <div>
-    <h3>{{ arviointiasteikonNimi }}</h3>
+    <h3 class="mb-3">{{ arviointiasteikonNimi }}</h3>
+    <p class="mb-3" v-if="selite">{{ selite }}</p>
     <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
-      <h4>
+      <h4 class="mb-1">
         {{ asteikonTaso.taso }}
         {{ $t('arviointiasteikon-taso-' + asteikonTaso.nimi) }}
       </h4>
-      <p>{{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}</p>
+      <p class="text-size-sm mb-3">
+        {{ $t('arviointiasteikon-tason-kuvaus-' + asteikonTaso.nimi) }}
+      </p>
     </div>
   </div>
 </template>
@@ -21,6 +24,9 @@
   export default class ElsaArviointiasteikonTasoTooltipContent extends Vue {
     @Prop({ required: true })
     arviointiasteikonNimi!: string
+
+    @Prop({ required: false, type: String, default: undefined })
+    selite?: string
 
     @Prop({ required: true })
     arviointiasteikonTasot!: ArviointiasteikonTaso[]

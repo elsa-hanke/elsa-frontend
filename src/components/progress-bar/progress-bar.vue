@@ -1,7 +1,7 @@
 <template>
   <div
     class="position-relative progress user-select-none"
-    :style="`height: 1.5rem; background-color: ${backgroundColor}`"
+    :style="`height: 1.7rem; background-color: ${backgroundColor}`"
   >
     <div
       class="progress-bar"

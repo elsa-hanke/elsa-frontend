@@ -161,9 +161,9 @@
                   <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                     {{ $t('arviointien-ka') }}
                   </div>
-                  <div v-if="eteneminen.arviointienKa != null">
+                  <div v-if="eteneminen.arviointienKeskiarvo != null">
                     <span class="font-weight-bold">
-                      {{ eteneminen.arviointienKa.toFixed(2) }}
+                      {{ eteneminen.arviointienKeskiarvo.toFixed(2) }}
                     </span>
                     / 5
                   </div>
