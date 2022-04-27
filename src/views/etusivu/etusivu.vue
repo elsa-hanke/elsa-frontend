@@ -1,9 +1,5 @@
 <template>
   <div class="etusivu">
-    <b-alert variant="dark" class="mt-2 ml-2" show>
-      <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-      {{ $t('etusivun-toiminnallisuudet-tulossa-myohemmin') }}
-    </b-alert>
     <EtusivuErikoistuja v-if="$isErikoistuva()" />
     <EtusivuKouluttaja v-else-if="$isKouluttaja()" />
     <EtusivuVastuuhenkilo v-else-if="$isVastuuhenkilo()" />
