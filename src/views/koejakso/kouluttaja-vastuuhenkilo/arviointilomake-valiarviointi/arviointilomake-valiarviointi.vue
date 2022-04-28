@@ -522,8 +522,8 @@
         this.buttonStates.secondaryButtonLoading = true
         await store.dispatch('kouluttaja/putValiarviointi', form)
         this.buttonStates.secondaryButtonLoading = false
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         this.$emit('skipRouteExitConfirm', true)
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-palautettu-muokattavaksi'))
       } catch {
         toastFail(this, this.$t('valiarviointi-palautus-epaonnistui'))
@@ -546,8 +546,8 @@
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch('kouluttaja/putValiarviointi', this.valiarviointi)
         this.buttonStates.primaryButtonLoading = false
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         this.$emit('skipRouteExitConfirm', true)
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-ja-lahetetty-onnistuneesti'))
       } catch {
         toastFail(this, this.$t('valiarvioinnin-tallennus-epaonnistui'))
