@@ -27,7 +27,7 @@
                     <elsa-popover>
                       <elsa-arviointiasteikon-taso-tooltip-content
                         :arviointiasteikonNimi="arviointiAsteikonNimi"
-                        :selite="arviointiasteikonSelite"
+                        :selite="arviointiAsteikonSelite"
                         :arviointiasteikonTasot="edistyminen.arviointiasteikko.tasot"
                       />
                     </elsa-popover>
