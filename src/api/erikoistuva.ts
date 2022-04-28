@@ -24,7 +24,8 @@ import {
   Page,
   PaivakirjamerkintaRajaimet,
   KaytonAloitusModel,
-  ErikoistuvaLaakari
+  ErikoistuvaLaakari,
+  ErikoistumisenEdistyminen
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -310,4 +311,9 @@ export async function getPaivittaisetMerkinnat(params: {
 export async function putKaytonAloitusLomake(form: KaytonAloitusModel) {
   const path = `erikoistuva-laakari/kaytonaloitus`
   return await axios.put<KaytonAloitusModel>(path, form)
+}
+
+export async function getErikoistumisenEdistyminen() {
+  const path = 'erikoistuva-laakari/etusivu/erikoistumisen-edistyminen'
+  return await axios.get<ErikoistumisenEdistyminen>(path)
 }

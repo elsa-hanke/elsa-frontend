@@ -52,11 +52,7 @@
                 </elsa-form-group>
                 <b-row>
                   <elsa-form-group :label="$t('koulutustyypit')" class="col-xl-6 mb-0">
-                    <template v-slot="{ uid }">
-                      <div :id="uid" class="bar-chart">
-                        <elsa-bar-chart :value="barValues" />
-                      </div>
-                    </template>
+                    <tyoskentelyjaksot-bar-chart :tilastot="tilastot" />
                   </elsa-form-group>
                   <elsa-form-group :label="$t('kaytannon-koulutus')" class="col-xl-6 mb-0">
                     <template v-slot="{ uid }">
@@ -180,15 +176,14 @@
   import { parseISO } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import ElsaBarChart from '@/components/bar-chart/bar-chart.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import TyoskentelyjaksotBarChart from '@/components/tyoskentelyjaksot-bar-chart.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
   import store from '@/store'
   import {
-    BarChartRow,
     Keskeytysaika,
     TyoskentelyjaksotTable,
     TyoskentelyjaksotTilastotKaytannonKoulutus,
@@ -204,7 +199,7 @@
       ElsaButton,
       ElsaFormGroup,
       ElsaPopover,
-      ElsaBarChart,
+      TyoskentelyjaksotBarChart,
       ElsaPoissaolonSyyt,
       ElsaVanhaAsetusVaroitus
     }
@@ -295,48 +290,6 @@
         return this.tyoskentelyjaksotTaulukko.tilastot
       } else {
         return undefined
-      }
-    }
-
-    get barValues(): BarChartRow[] {
-      if (this.tilastot) {
-        return [
-          {
-            text: this.$t('terveyskeskus'),
-            color: '#ffb406',
-            backgroundColor: '#ffe19b',
-            value: this.tilastot.koulutustyypit.terveyskeskusSuoritettu,
-            minRequired: this.tilastot.koulutustyypit.terveyskeskusVaadittuVahintaan,
-            highlight: false
-          },
-          {
-            text: this.$t('yliopistosairaala'),
-            color: '#0f9bd9',
-            backgroundColor: '#9fd7ef',
-            value: this.tilastot.koulutustyypit.yliopistosairaalaSuoritettu,
-            minRequired: this.tilastot.koulutustyypit.yliopistosairaalaVaadittuVahintaan,
-            highlight: false
-          },
-          {
-            text: this.$t('yo-sair-ulkopuolinen'),
-            color: '#8a86fb',
-            backgroundColor: '#cfcdfd',
-            value: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
-            minRequired:
-              this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
-            highlight: false
-          },
-          {
-            text: this.$t('yhteensa'),
-            color: '#41b257',
-            backgroundColor: '#b3e1bc',
-            value: this.tilastot.koulutustyypit.yhteensaSuoritettu,
-            minRequired: this.tilastot.koulutustyypit.yhteensaVaadittuVahintaan,
-            highlight: true
-          }
-        ]
-      } else {
-        return []
       }
     }
 

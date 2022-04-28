@@ -26,7 +26,7 @@
                         :min-required="erikoisalanVaatimaTeoriakoulutustenVahimmaismaara"
                         :show-required-text="true"
                         color="#41b257"
-                        background-color="#b3e1bc"
+                        backgroundColor="#b3e1bc"
                         :customUnit="$t('t')"
                       />
                     </div>
