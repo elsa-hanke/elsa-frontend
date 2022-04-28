@@ -163,7 +163,7 @@
                   </div>
                   <div v-if="eteneminen.arviointienKeskiarvo != null">
                     <span class="font-weight-bold">
-                      {{ eteneminen.arviointienKeskiarvo.toFixed(2) }}
+                      {{ keskiarvoFormatted(eteneminen.arviointienKeskiarvo) }}
                     </span>
                     / 5
                   </div>
@@ -228,6 +228,7 @@
   import ErikoistujienSeurantaMixin from '@/mixins/erikoistujien-seuranta'
   import { ErikoistujienSeuranta, SortByEnum } from '@/types'
   import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
+  import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
   import { sortByAsc, sortByDesc } from '@/utils/sort'
 
   @Component({
@@ -353,6 +354,10 @@
 
     get rows() {
       return this.tulokset.length
+    }
+
+    keskiarvoFormatted(keskiarvo: number) {
+      return getKeskiarvoFormatted(keskiarvo)
     }
   }
 </script>

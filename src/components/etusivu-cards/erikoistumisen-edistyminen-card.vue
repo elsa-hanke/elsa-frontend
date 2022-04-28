@@ -19,7 +19,7 @@
               <div class="d-flex flex-wrap">
                 <div class="d-flex flex-column mb-2 col-min-width">
                   <span v-if="edistyminen.arviointienKeskiarvo" class="text-size-lg">
-                    {{ edistyminen.arviointienKeskiarvo.toFixed(2) }} / 5
+                    {{ keskiarvoFormatted(edistyminen.arviointienKeskiarvo) }} / 5
                   </span>
                   <span v-else class="text-size-lg">- / 5</span>
                   <span class="text-size-sm">
@@ -281,6 +281,7 @@
   import TyoskentelyjaksotBarChart from '@/components/tyoskentelyjaksot-bar-chart.vue'
   import { ErikoistumisenEdistyminen } from '@/types'
   import { LomakeTilat, ArviointiasteikkoTyyppi } from '@/utils/constants'
+  import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
 
   @Component({
     components: {
@@ -363,6 +364,10 @@
       return this.edistyminen?.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
         ? this.$t('arviointien-ka-selite-epa')
         : this.$t('arviointien-ka-selite-etappi')
+    }
+
+    keskiarvoFormatted(keskiarvo: number) {
+      return getKeskiarvoFormatted(keskiarvo)
     }
   }
 </script>
