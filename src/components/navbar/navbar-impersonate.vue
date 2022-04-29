@@ -11,7 +11,7 @@
       <div class="text-white">
         {{ $t('katselet-erikoistujaa') }}: {{ account.firstName }} {{ account.lastName }},
         {{ account.erikoistuvaLaakari.erikoisalaNimi }},
-        {{ account.erikoistuvaLaakari.yliopisto }}
+        {{ $t(`yliopisto-nimi.${account.erikoistuvaLaakari.yliopisto}`) }}
         <elsa-button
           size="sm"
           variant="primary"
