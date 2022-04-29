@@ -169,21 +169,23 @@
                 class="mb-3"
                 :customUnit="$t('opintopistetta-lyhenne')"
               />
-              <elsa-button :to="{}" variant="link" class="pl-0 border-0 pt-0 pb-1">
-                <h3 class="mb-0">
-                  {{ $t('sateilysuojelukoulutus') }}
-                </h3>
-              </elsa-button>
-              <elsa-progress-bar
-                :value="edistyminen.sateilysuojakoulutuksetSuoritettu"
-                :min-required="edistyminen.sateilysuojakoulutuksetVaadittu"
-                :show-required-text="true"
-                color="#41b257"
-                backgroundColor="#b3e1bc"
-                textColor="#000"
-                class="mb-3"
-                :customUnit="$t('opintopistetta-lyhenne')"
-              />
+              <div v-if="edistyminen.sateilysuojakoulutuksetVaadittu > 0">
+                <elsa-button :to="{}" variant="link" class="pl-0 border-0 pt-0 pb-1">
+                  <h3 class="mb-0">
+                    {{ $t('sateilysuojelukoulutus') }}
+                  </h3>
+                </elsa-button>
+                <elsa-progress-bar
+                  :value="edistyminen.sateilysuojakoulutuksetSuoritettu"
+                  :min-required="edistyminen.sateilysuojakoulutuksetVaadittu"
+                  :show-required-text="true"
+                  color="#41b257"
+                  backgroundColor="#b3e1bc"
+                  textColor="#000"
+                  class="mb-3"
+                  :customUnit="$t('opintopistetta-lyhenne')"
+                />
+              </div>
             </div>
           </div>
           <div class="border rounded pt-3 pb-2 mb-4">
