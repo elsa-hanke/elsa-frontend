@@ -48,8 +48,8 @@
               :name="`${account.firstName} ${account.lastName}`"
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
               :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+              :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
               :yliopisto="account.erikoistuvaLaakari.yliopisto"
-              :show-birthdate="false"
             ></erikoistuva-details>
           </b-col>
         </b-row>

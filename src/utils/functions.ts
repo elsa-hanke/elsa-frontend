@@ -15,8 +15,6 @@ export function getTitleFromAuthorities(authorities: string[]) {
     return 'erikoistuva-laakari'
   } else if (authorities.includes(ELSA_ROLE.Kouluttaja)) {
     return 'kouluttaja'
-  } else if (authorities.includes(ELSA_ROLE.Lahikouluttaja)) {
-    return 'lahikouluttaja'
   } else if (authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
     return 'vastuuhenkilo'
   } else if (authorities.includes(ELSA_ROLE.TekninenPaakayttaja)) {
