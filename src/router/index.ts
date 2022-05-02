@@ -113,6 +113,37 @@ const etusivuGuard = async (to: Route, from: Route, next: NavigationGuardNext) =
   }
 }
 
+const impersonatedErikoistuvaGuard = async (to: Route, from: Route, next: NavigationGuardNext) => {
+  const account = store.getters['auth/account']
+  if (account.impersonated) {
+    next({
+      name: 'page-not-found',
+      replace: true
+    })
+  } else {
+    next()
+  }
+}
+
+const impersonatedErikoistuvaVirkailijaGuard = async (
+  to: Route,
+  from: Route,
+  next: NavigationGuardNext
+) => {
+  const account = store.getters['auth/account']
+  if (
+    account.impersonated &&
+    account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
+  ) {
+    next({
+      name: 'page-not-found',
+      replace: true
+    })
+  } else {
+    next()
+  }
+}
+
 const languageGuard = async (to: Route, from: Route, next: NavigationGuardNext) => {
   if ('lang' in to.query) {
     const lang = to.query['lang'] as string
@@ -146,6 +177,7 @@ const routes: Array<RouteConfig> = [
         path: '/koulutussuunnitelma',
         name: 'koulutussuunnitelma',
         component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         props: {
           routeComponent: Koulutussuunnitelma,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
@@ -155,6 +187,7 @@ const routes: Array<RouteConfig> = [
         path: '/koulutussuunnitelma/muokkaus',
         name: 'muokkaa-koulutussuunnitelma',
         component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaGuard,
         props: {
           routeComponent: MuokkaaKoulutussuunnitelma,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
@@ -164,6 +197,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/koulutussuunnitelma/koulutusjaksot/uusi',
         name: 'uusi-koulutusjakso',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiKoulutusjakso,
@@ -175,6 +209,7 @@ const routes: Array<RouteConfig> = [
         path: '/koulutussuunnitelma/koulutusjaksot/:koulutusjaksoId/muokkaus',
         name: 'muokkaa-koulutusjaksoa',
         component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaGuard,
         props: {
           routeComponent: MuokkaaKoulutusjaksoa,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
@@ -185,6 +220,7 @@ const routes: Array<RouteConfig> = [
         path: '/koulutussuunnitelma/koulutusjaksot/:koulutusjaksoId',
         name: 'koulutusjakso',
         component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         props: {
           routeComponent: Koulutusjakso,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
@@ -194,6 +230,7 @@ const routes: Array<RouteConfig> = [
         path: '/suoritemerkinnat',
         name: 'suoritemerkinnat',
         component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         props: {
           routeComponent: Suoritemerkinnat,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
@@ -202,6 +239,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/suoritemerkinnat/uusi',
         name: 'uusi-suoritemerkinta',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiSuoritemerkinta,
@@ -212,6 +250,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/suoritemerkinnat/:suoritemerkintaId/muokkaus',
         name: 'muokkaa-suoritemerkintaa',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaSuoritemerkintaa,
@@ -222,6 +261,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/suoritemerkinnat/:suoritemerkintaId',
         name: 'suoritemerkinta',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Suoritemerkinta,
@@ -231,6 +271,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit',
         name: 'arvioinnit',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Arvioinnit,
@@ -244,6 +285,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/arviointipyynto',
         name: 'arviointipyynto',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Arviointipyynto,
@@ -254,6 +296,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/arviointipyynto/:arviointiId',
         name: 'arviointipyynto-muokkaus',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Arviointipyynto,
@@ -264,6 +307,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/arviointipyynto-lahetetty',
         name: 'arviointipyynto-lahetetty',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: ArviointipyyntoLahetetty,
@@ -273,6 +317,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/:arviointiId/itsearviointi',
         name: 'itsearviointi',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Itsearviointi,
@@ -283,6 +328,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/itsearviointi-valmis',
         name: 'itsearviointi-valmis',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: ItsearviointiValmis,
@@ -292,6 +338,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/:arviointiId',
         name: 'arviointi',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Arviointi,
@@ -305,6 +352,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/arvioinnit/:arviointiId/muokkaa',
         name: 'muokkaa-arviointia',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaArviointia,
@@ -325,6 +373,7 @@ const routes: Array<RouteConfig> = [
         path: '/tyoskentelyjaksot/uusi',
         name: 'uusi-tyoskentelyjakso',
         component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaGuard,
         props: {
           routeComponent: UusiTyoskentelyjakso,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
@@ -343,6 +392,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/tyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus',
         name: 'muokkaa-tyoskentelyjaksoa',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaTyoskentelyjaksoa,
@@ -353,6 +403,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/tyoskentelyjaksot/poissaolot/uusi',
         name: 'uusi-poissaolo',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiPoissaolo,
@@ -372,6 +423,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/tyoskentelyjaksot/poissaolot/:poissaoloId/muokkaus',
         name: 'muokkaa-poissaoloa',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaPoissaoloa,
@@ -391,6 +443,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/teoriakoulutukset/uusi',
         name: 'uusi-teoriakoulutus',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiTeoriakoulutus,
@@ -401,6 +454,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/teoriakoulutukset/teoriakoulutus-tallennettu',
         name: 'teoriakoulutus-tallennettu',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: TeoriakoulutusTallennettu,
@@ -419,6 +473,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/teoriakoulutukset/:teoriakoulutusId/muokkaus',
         name: 'muokkaa-teoriakoulutusta',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaTeoriakoulutusta,
@@ -429,6 +484,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/paivittaiset-merkinnat',
         name: 'paivittaiset-merkinnat',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: PaivittaisetMerkinnat,
@@ -438,6 +494,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/paivittaiset-merkinnat/uusi',
         name: 'uusi-paivittainen-merkinta',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiPaivittainenMerkinta,
@@ -448,6 +505,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/paivittaiset-merkinnat/:paivakirjamerkintaId',
         name: 'paivittainen-merkinta',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: PaivittainenMerkinta,
@@ -457,6 +515,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/paivittaiset-merkinnat/:paivakirjamerkintaId/muokkaus',
         name: 'muokkaa-paivittaista-merkintaa',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaPaivittaistaMerkintaa,
@@ -621,6 +680,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/profiili',
         name: 'profiili',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: Profiili
       },
       {
@@ -654,6 +714,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/seurantakeskustelut',
         name: 'seurantakeskustelut',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Seurantakeskustelut,
@@ -663,6 +724,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/seurantakeskustelut/seurantajakso/uusi',
         name: 'lisaa-seurantajakso',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiSeurantajakso,
@@ -673,6 +735,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/seurantakeskustelut/seurantajakso/:seurantajaksoId',
         name: 'seurantajakso',
+        beforeEnter: impersonatedErikoistuvaVirkailijaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Seurantajakso,
@@ -682,6 +745,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/seurantakeskustelut/seurantajakso/:seurantajaksoId/muokkaa',
         name: 'muokkaa-seurantajaksoa',
+        beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaSeurantajaksoa,
@@ -776,6 +840,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/sivua-ei-loytynyt',
+    name: 'page-not-found',
     alias: '*',
     component: PageNotFound
   },
