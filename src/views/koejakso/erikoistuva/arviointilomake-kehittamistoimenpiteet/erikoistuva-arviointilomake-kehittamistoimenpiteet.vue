@@ -51,8 +51,8 @@
               :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
               :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
               :yliopisto="account.erikoistuvaLaakari.yliopisto"
+              :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
               :kehittamistoimenpiteet="koejaksoData.valiarviointi.kehittamistoimenpiteet"
-              :show-birthdate="false"
               :showKehittamistoimenpiteet="true"
             ></erikoistuva-details>
           </b-col>
