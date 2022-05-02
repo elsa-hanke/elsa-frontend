@@ -15,7 +15,7 @@
           {{ $t('etusivu') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva()"
+          v-if="$isErikoistuva() && !isImpersonatedErikoistujaVirkailija"
           class="border-bottom"
           :to="{ name: 'koulutussuunnitelma' }"
         >
@@ -38,7 +38,11 @@
           <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
           {{ $t('teoriakoulutukset') }}
         </b-nav-item>
-        <b-nav-item v-if="$isErikoistuva()" v-b-toggle.osaaminen-toggle class="osaaminen-nav">
+        <b-nav-item
+          v-if="$isErikoistuva() && !isImpersonatedErikoistujaVirkailija"
+          v-b-toggle.osaaminen-toggle
+          class="osaaminen-nav"
+        >
           <font-awesome-icon icon="award" fixed-width size="lg" />
           {{ $t('osaaminen') }}
           <span class="closed">
@@ -115,6 +119,7 @@
   import Component from 'vue-class-component'
 
   import store from '@/store'
+  import { ELSA_ROLE } from '@/utils/roles'
 
   @Component
   export default class SidebarMenu extends Vue {
@@ -162,6 +167,14 @@
       } else {
         this.sidebarPosition = 'position-fixed'
       }
+    }
+
+    get isImpersonatedErikoistujaVirkailija() {
+      return (
+        (this.account?.impersonated &&
+          this.account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)) ??
+        false
+      )
     }
   }
 </script>
