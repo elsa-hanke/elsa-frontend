@@ -18,7 +18,7 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
             <div>
-              {{ $t('loppukeskustelu-kouluttaja-allekirjoitettu') }}
+              {{ $t('loppukeskustelu-kouluttaja-hyvaksytty') }}
             </div>
           </div>
         </b-alert>
@@ -29,7 +29,7 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
             <div>
-              {{ $t('loppukeskustelu-esimies-allekirjoitettu') }}
+              {{ $t('loppukeskustelu-esimies-hyvaksytty') }}
             </div>
           </div>
         </b-alert>
@@ -81,6 +81,64 @@
         />
 
         <hr />
+
+        <div>
+          <h3 class="mb-3">{{ $t('aloituskeskustelu-tavoitteet') }}</h3>
+          <h5>{{ $t('koejakso-osaamistavoitteet') }}</h5>
+          <p>{{ loppukeskustelu.koejaksonOsaamistavoitteet }}</p>
+          <hr />
+        </div>
+
+        <div>
+          <h3 class="mb-3">{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
+          <b-row>
+            <b-col lg="8">
+              <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
+              <p>
+                {{
+                  loppukeskustelu.edistyminenTavoitteidenMukaista
+                    ? $t('kylla')
+                    : $t('ei-huolenaiheita-on')
+                }}
+              </p>
+            </b-col>
+          </b-row>
+          <b-row v-if="loppukeskustelu.edistyminenTavoitteidenMukaista === false">
+            <b-col lg="8">
+              <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
+              <ul class="pl-4">
+                <li
+                  v-for="kategoria in loppukeskustelu.kehittamistoimenpideKategoriat"
+                  :key="kategoria"
+                >
+                  {{ naytaKehittamistoimenpideKategoria(kategoria, loppukeskustelu.muuKategoria) }}
+                </li>
+              </ul>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col v-if="loppukeskustelu.vahvuudet">
+              <h5>{{ $t('vahvuudet') }}</h5>
+              <p>{{ loppukeskustelu.vahvuudet }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col v-if="loppukeskustelu.kehittamistoimenpiteet">
+              <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
+              <p>{{ loppukeskustelu.kehittamistoimenpiteet }}</p>
+            </b-col>
+          </b-row>
+          <hr />
+        </div>
+
+        <div>
+          <h3 class="mb-3">{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
+          <p v-if="loppukeskustelu.kehittamistoimenpiteetRiittavat">
+            {{ $t('kehittamistoimenpiteet-riittavat') }}
+          </p>
+          <p v-else>{{ $t('kehittamistoimenpiteet-ei-riittavat') }}</p>
+          <hr />
+        </div>
 
         <div>
           <b-row>
@@ -151,7 +209,10 @@
         <hr />
 
         <div v-if="allekirjoitukset.length > 0">
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
         </div>
 
         <div v-if="editable || editableForEsimies">
@@ -185,7 +246,7 @@
                 :loading="buttonStates.primaryButtonLoading"
                 @click="onValidateAndConfirm"
               >
-                {{ $t('allekirjoita-laheta') }}
+                {{ $t('hyvaksy-laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -204,7 +265,7 @@
           ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('hyvaksy-laheta')"
       @submit="onSign"
     />
 
@@ -424,10 +485,15 @@
         this.buttonStates.primaryButtonLoading = false
 
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-ja-lahetetty-onnistuneesti'))
+        toastSuccess(this, this.$t('loppukeskustelu-lahetys-onnistui'))
       } catch {
         toastFail(this, this.$t('loppukeskustelun-tallennus-epaonnistui'))
       }
+    }
+
+    naytaKehittamistoimenpideKategoria(kategoria: string, muuKategoria: string) {
+      if (kategoria === 'MUU') return muuKategoria
+      return this.$t('kehittamistoimenpidekategoria-' + kategoria)
     }
 
     onValidateAndConfirm() {
