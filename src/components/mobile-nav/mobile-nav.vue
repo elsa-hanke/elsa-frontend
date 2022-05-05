@@ -113,6 +113,40 @@
         <b-nav-item @click="logout()" class="ml-6" link-classes="p-0 pt-1 pb-3">
           {{ $t('kirjaudu-ulos') }}
         </b-nav-item>
+        <div class="pb-2" v-if="opintooikeudet && opintooikeudet.length > 1">
+          <hr class="p-0 m-0" />
+          <div class="pl-2">
+            <div class="dropdown-item dropdown-item__header mt-1 pb-1">
+              <span class="font-weight-500">{{ $t('valitse-opinto-oikeus') }}</span>
+            </div>
+            <template v-for="opintooikeus in opintooikeudet">
+              <b-nav-item :key="opintooikeus.id" @click="changeOpintooikeus(opintooikeus)">
+                <div
+                  class="d-flex"
+                  :class="{
+                    'dropdown-item__disabled': opintooikeus.id === opintooikeusKaytossa.id
+                  }"
+                >
+                  <div class="flex-column icon-col-min-width">
+                    <font-awesome-icon
+                      v-if="opintooikeus.id === opintooikeusKaytossa.id"
+                      :icon="['far', 'check-circle']"
+                      fixed-width
+                      size="lg"
+                      class="text-success"
+                    />
+                  </div>
+                  <div class="flex-column">
+                    {{ opintooikeus.erikoisalaNimi }}
+                    <div class="text-size-sm">
+                      {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
+                    </div>
+                  </div>
+                </div>
+              </b-nav-item>
+            </template>
+          </div>
+        </div>
         <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
       </b-nav>
       <!-- Piilotetaan pilotista -->
@@ -131,14 +165,11 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue'
   import Avatar from 'vue-avatar'
-  import Component from 'vue-class-component'
+  import { Component, Mixins } from 'vue-property-decorator'
 
-  import { ELSA_API_LOCATION } from '@/api'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
-  import store from '@/store'
-  import { getTitleFromAuthorities } from '@/utils/functions'
+  import NavbarMixin from '@/mixins/navbar'
 
   @Component({
     components: {
@@ -146,69 +177,8 @@
       UserAvatar
     }
   })
-  export default class MobileNav extends Vue {
+  export default class MobileNav extends Mixins(NavbarMixin) {
     featurePreviewModeEnabled = process.env.VUE_APP_FEATURE_PREVIEW_MODE_ENABLED === 'true'
-
-    get account() {
-      return store.getters['auth/account']
-    }
-
-    get avatar() {
-      if (this.account) {
-        return this.account.avatar
-      }
-      return undefined
-    }
-
-    get authorities() {
-      if (this.account) {
-        if (this.account.impersonated) {
-          return this.account.originalUser.authorities
-        }
-        return this.account.authorities
-      }
-      return []
-    }
-
-    get title() {
-      const value = getTitleFromAuthorities(this.authorities)
-      return value ? this.$t(value) : undefined
-    }
-
-    get displayName() {
-      if (this.account) {
-        if (this.account.impersonated) {
-          return `${this.account.originalUser.firstName} ${this.account.originalUser.lastName}`
-        }
-        return `${this.account.firstName} ${this.account.lastName}`
-      }
-      return ''
-    }
-
-    get currentLocale() {
-      return this.$i18n.locale
-    }
-
-    get locales() {
-      return Object.keys(this.$i18n.messages)
-    }
-
-    get logoutUrl() {
-      return ELSA_API_LOCATION + '/api/logout'
-    }
-
-    async logout() {
-      await store.dispatch('auth/logout')
-
-      if (store.getters['auth/sloEnabled'] === true) {
-        const logoutForm = this.$refs.logoutForm as HTMLFormElement
-        logoutForm.submit()
-      }
-    }
-
-    changeLocale(lang: string) {
-      this.$i18n.locale = lang
-    }
   }
 </script>
 
@@ -267,5 +237,18 @@
 
   #osaaminen-toggle {
     transition: none !important;
+  }
+
+  .dropdown-item__header {
+    color: $black;
+    pointer-events: none;
+  }
+
+  .user-dropdown-content {
+    min-width: 15rem;
+  }
+
+  .icon-col-min-width {
+    min-width: 1.875rem;
   }
 </style>
