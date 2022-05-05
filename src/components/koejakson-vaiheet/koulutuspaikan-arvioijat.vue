@@ -2,6 +2,10 @@
   <b-row>
     <b-col v-if="!isReadonly" lg="10">
       <h3>{{ $t('koulutuspaikan-arvioijat') }}</h3>
+      <p>
+        {{ $t('valitse-arvioijat-help') }}
+        <b-link :to="{ name: 'profiili' }">{{ $t('profiilissasi') }}</b-link>
+      </p>
       <div v-if="!loading">
         <elsa-form-group
           :label="$t('lahikouluttaja')"

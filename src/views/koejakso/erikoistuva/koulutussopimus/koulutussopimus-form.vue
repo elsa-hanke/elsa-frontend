@@ -122,6 +122,10 @@
     <b-row>
       <b-col lg="8">
         <h3>{{ $t('koulutuspaikan-lahikouluttaja') }}</h3>
+        <p>
+          {{ $t('valitse-kouluttaja-help') }}
+          <b-link :to="{ name: 'profiili' }">{{ $t('profiilissasi') }}</b-link>
+        </p>
         <kouluttaja-details
           v-for="(k, index) in form.kouluttajat"
           ref="kouluttajaDetails"

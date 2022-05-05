@@ -494,6 +494,10 @@
       <b-col lg="10">
         <h3 class="mb-3">{{ $t('seurantakeskustelun-osapuoli') }}</h3>
         <div v-if="uusiJakso">
+          <p>
+            {{ $t('valitse-arvioija-help') }}
+            <b-link :to="{ name: 'profiili' }">{{ $t('profiilissasi') }}</b-link>
+          </p>
           <elsa-form-group
             :label="$t('lahikouluttaja')"
             :add-new-enabled="true"
