@@ -317,3 +317,8 @@ export async function getErikoistumisenEdistyminen() {
   const path = 'erikoistuva-laakari/etusivu/erikoistumisen-edistyminen'
   return await axios.get<ErikoistumisenEdistyminen>(path)
 }
+
+export async function patchOpintooikeusKaytossa(opintooikeusId: number) {
+  const path = `erikoistuva-laakari/opinto-oikeus/${opintooikeusId}`
+  return await axios.patch(path)
+}

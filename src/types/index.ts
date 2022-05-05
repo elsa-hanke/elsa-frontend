@@ -15,7 +15,7 @@ import {
 import { ELSA_ROLE } from '@/utils/roles'
 
 export type Opintooikeus = {
-  id: number | null
+  id: number
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
   opiskelijatunnus: string

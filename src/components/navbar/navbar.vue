@@ -40,13 +40,48 @@
             :displayName="displayName"
           />
         </template>
-        <b-dropdown-item v-if="!account.impersonated" :to="{ name: 'profiili' }">
-          {{ $t('oma-profiilini') }}
-        </b-dropdown-item>
-        <b-dropdown-item @click="logout">
-          {{ $t('kirjaudu-ulos') }}
-          <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
-        </b-dropdown-item>
+        <div class="user-dropdown-content">
+          <b-dropdown-item v-if="!account.impersonated" :to="{ name: 'profiili' }">
+            {{ $t('oma-profiilini') }}
+          </b-dropdown-item>
+          <hr class="p-0 m-0" />
+          <b-dropdown-item @click="logout">
+            {{ $t('kirjaudu-ulos') }}
+            <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
+          </b-dropdown-item>
+          <div v-if="opintooikeudet && opintooikeudet.length > 1">
+            <hr class="p-0 m-0" />
+            <div class="dropdown-item dropdown-item__header mt-1 pb-1">
+              <span class="font-weight-500">{{ $t('valitse-opinto-oikeus') }}</span>
+            </div>
+            <template v-for="opintooikeus in opintooikeudet">
+              <b-dropdown-item :key="opintooikeus.id" @click="changeOpintooikeus(opintooikeus)">
+                <div
+                  class="d-flex"
+                  :class="{
+                    'dropdown-item__disabled': opintooikeus.id === opintooikeusKaytossa.id
+                  }"
+                >
+                  <div class="flex-column icon-col-min-width">
+                    <font-awesome-icon
+                      v-if="opintooikeus.id === opintooikeusKaytossa.id"
+                      :icon="['far', 'check-circle']"
+                      fixed-width
+                      size="lg"
+                      class="text-success"
+                    />
+                  </div>
+                  <div class="flex-column">
+                    {{ opintooikeus.erikoisalaNimi }}
+                    <div class="text-size-sm">
+                      {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
+                    </div>
+                  </div>
+                </div>
+              </b-dropdown-item>
+            </template>
+          </div>
+        </div>
       </b-nav-item-dropdown>
       <!-- Piilotetaan pilotista -->
       <!-- <b-nav-item-dropdown
@@ -68,14 +103,11 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue'
   import Avatar from 'vue-avatar'
-  import Component from 'vue-class-component'
+  import { Component, Mixins } from 'vue-property-decorator'
 
-  import { ELSA_API_LOCATION } from '@/api'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
-  import store from '@/store'
-  import { getTitleFromAuthorities } from '@/utils/functions'
+  import NavbarMixin from '@/mixins/navbar'
 
   @Component({
     components: {
@@ -83,76 +115,16 @@
       UserAvatar
     }
   })
-  export default class Navbar extends Vue {
-    get account() {
-      return store.getters['auth/account']
-    }
-
-    get authorities() {
-      if (this.account) {
-        if (this.account.impersonated) {
-          return this.account.originalUser.authorities
-        }
-        return this.account.authorities
-      }
-      return []
-    }
-
-    get title() {
-      const value = getTitleFromAuthorities(this.authorities)
-      return value ? this.$t(value) : undefined
-    }
-
-    get avatar() {
-      if (this.account) {
-        if (this.account.impersonated) {
-          return this.account.originalUser.avatar
-        }
-        return this.account.avatar
-      }
-      return undefined
-    }
-
-    get displayName() {
-      if (this.account) {
-        if (this.account.impersonated) {
-          return `${this.account.originalUser.firstName} ${this.account.originalUser.lastName}`
-        }
-        return `${this.account.firstName} ${this.account.lastName}`
-      }
-      return ''
-    }
-
-    get currentLocale() {
-      return this.$i18n.locale
-    }
-
-    get locales() {
-      return Object.keys(this.$i18n.messages)
-    }
-
-    get logoutUrl() {
-      return ELSA_API_LOCATION + '/api/logout'
-    }
-
-    async logout() {
-      await store.dispatch('auth/logout')
-
-      if (store.getters['auth/sloEnabled'] === true) {
-        const logoutForm = this.$refs.logoutForm as HTMLFormElement
-        logoutForm.submit()
-      }
-    }
-
-    changeLocale(lang: string) {
-      this.$i18n.locale = lang
-    }
-  }
+  export default class Navbar extends Mixins(NavbarMixin) {}
 </script>
 
 <style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
+
+  a:hover {
+    text-decoration: none;
+  }
 
   .navbar-brand {
     display: inline-block;
@@ -178,6 +150,22 @@
     }
   }
 
+  ::v-deep {
+    .dropdown-item {
+      padding-top: 0.625rem;
+      padding-bottom: 0.625rem;
+      color: $primary;
+      &:focus {
+        color: $primary;
+        background-color: $white;
+      }
+    }
+
+    .dropdown-item__disabled {
+      color: $black;
+    }
+  }
+
   .user-dropdown {
     ::v-deep {
       .dropdown-toggle {
@@ -185,5 +173,18 @@
         align-items: center;
       }
     }
+  }
+
+  .dropdown-item__header {
+    color: $black;
+    pointer-events: none;
+  }
+
+  .user-dropdown-content {
+    min-width: 15rem;
+  }
+
+  .icon-col-min-width {
+    min-width: 1.875rem;
   }
 </style>
