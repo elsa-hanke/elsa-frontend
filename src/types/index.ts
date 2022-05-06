@@ -336,9 +336,13 @@ export interface VastuuhenkilonArvioLomake {
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
   erikoistuvanAvatar?: string
+  erikoistuvanSahkoposti?: string
+  erikoistuvanPuhelinnumero?: string
   koejaksoHyvaksytty: boolean | null
   id: number | null
   muokkauspaiva: string
+  muutOpintooikeudet: Opintooikeus[]
+  paataOpintooikeudet: boolean
   vastuuhenkilo: Vastuuhenkilo | null
   vastuuhenkiloAllekirjoittanut: boolean | null
   perusteluHylkaamiselle: string | null
@@ -347,7 +351,10 @@ export interface VastuuhenkilonArvioLomake {
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
+  muutOpintooikeudet: Opintooikeus[]
   vastuuhenkilo: Vastuuhenkilo | null
+  koulutussopimusHyvaksytty: boolean
+  paataOpintooikeudet: boolean
   tyoskentelyjaksoLiitetty: boolean
   tyoskentelyjaksonPituusRiittava: boolean
   tyotodistusLiitetty: boolean

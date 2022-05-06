@@ -1034,6 +1034,9 @@
   "useampi-koulutusjakso": "Useampi koulutusjakso",
   "useampi-opinto-oikeus": "Useampi opinto-oikeus",
   "useampi-opinto-oikeus-ingressi": "Sinulla on useampi opinto-oikeus. Valitse minkä erikoisalan tietoja haluat muokata. Voit muuttaa valintaa vapaasati myöhemmin. Teethän myöhemmin opinto-oikeuden luopumisilmoituksen yliopistolle niistä opinnoista, joita et aio suorittaa loppuun.",
+  "useampi-opinto-oikeus-suostumus-erikoistuja-ingressi": "Jos sinulla on samanaikaisesti useampi opinto-oikeus, on aiemmat opinto-oikeudet päätettävä ennen koejakson hyväksymistä.",
+  "useampi-opinto-oikeus-suostumus-erikoistuja": "Suostun siihen, että seuraavat opinto-oikeuteni päätetään:",
+  "useampi-opinto-oikeus-suostumus-vastuuhenkilo": "Erikoistuja suostuu, että seuraavat opinto-oikeudet päätetään:",
   "uuden-arviointipyynnon-lisaaminen-epaonnistui": "Uuden arviointipyynnön lisääminen epäonnistui",
   "uuden-kayttajan-lisaaminen-epaonnistui": "Uuden käyttäjän lisääminen epäonnistui",
   "uuden-kommentin-lisaaminen-epaonnistui": "Uuden kommentin lisääminen epäonnistui",
@@ -1073,7 +1076,7 @@
   "vahvista-koulutussopimus-lahetys": "Lähetyksen jälkeen koejakson koulutussopimus menee kouluttajan ja vastuuhenkilön hyväksyttäväksi. Saat ilmoituksen sähköpostiisi, kun koulutussopimus on valmis allekirjoitettavaksi. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-lomakkeen-lahetys": "Vahvista lomakkeen lähetys",
   "vahvista-poistuminen-tallentamatta": "Vahvista poistuminen tallentamatta",
-  "vahvista-pyyda-vastuuhenkilon-arvio": "Lähetyksen jälkeen lomake menee vastuuhenkilön käsiteltäväksi. Saat ilmoituksen, kun asia on käsitelty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
+  "vahvista-pyyda-vastuuhenkilon-arvio": "Lähetyksen jälkeen lomake menee vastuuhenkilön käsiteltäväksi. Saat ilmoituksen sähköpostiisi, kun koejakson arvio on valmis allekirjoitettavaksi. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-sahkopostiosoite": "Vahvista sähköpostiosoite",
   "vahvista-seurantajakson-arviointi": "Lähetyksen jälkeen seurantajakso on arvioitu ja tieto tästä lähetetään erikoistujalle.",
   "vahvista-seurantajakson-hyvaksynta": "Lähetyksen jälkeen seurantajakso on arvioitu sekä hyväksytty ja tieto tästä lähetetään erikoistujalle.",
@@ -1133,7 +1136,7 @@
   "vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti": "Koejakson arvioinnin allekirjoitus onnistui",
   "vastuuhenkilon-arvio-allekirjoitus-epaonnistui": "Koejakson arvioinnin allekirjoitus epäonnistui",
   "vastuuhenkilon-arvio-ingressi-sisalto": {
-    "kuvaus": "Pyydä vastuuhenkilöä antamaan arvio koejaksosta. Tarkista ennen lähetystä, että",
+    "kuvaus": "Pyydä vastuuhenkilöä antamaan arvio koejaksosta. Saat ilmoituksen sähköpostiisi, kun koejakson arvio on valmis allekirjoitettavaksi. Tarkista ennen lähetystä, että",
     "lista": {
       "item1": {
         "linkki": "koejakson päänäkymässä.",
@@ -1144,6 +1147,8 @@
     }
   },
   "vastuuhenkilon-arvio-ingressi-vastuuhenkilo": "Anna arvio koejaksosta.",
+  "vastuuhenkilon-arvio-koulutussopimus-varmistus": "Vakuutan, että koejakson koulutussopimus on tehty aiemmin ja toimitettu tiedekuntaan.",
+  "vastuuhenkilon-arvio-koulutussuunnitelma-varmistus": "Henkilökohtainen koulutussuunnitelma on laadittu yhteistyössä erikoisalan vastuuhenkilön kanssa.",
   "vastuuhenkilon-arvio-lahetetty-onnistuneesti": "Koejakson arviointipyynnön lähetys onnistui",
   "vastuuhenkilon-arvio-lahetys-epaonnistui": "Koejakson arviointipyynnön lähetys epäonnistui",
   "vastuuhenkilon-arvio-otsikko": "Erikoisalan vastuuhenkilön arvio koejaksosta",
