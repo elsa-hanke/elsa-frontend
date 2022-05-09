@@ -151,39 +151,14 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row v-if="vastuuhenkilot !== null">
+    <b-row>
       <b-col lg="8">
         <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
-        <elsa-form-group
-          v-if="vastuuhenkilot.length > 1"
-          :label="$t('erikoisala-vastuuhenkilö-label')"
-          :required="true"
-        >
-          <template v-slot="{ uid }">
-            <b-form-radio-group
-              :id="uid"
-              v-model="selected.vastuuhenkilo"
-              :options="vastuuhenkilotOptions"
-              :state="validateState('vastuuhenkilo')"
-              name="erikoisalan-vastuuhenkilo"
-              @change="updateVastuuhenkilo"
-              stacked
-            ></b-form-radio-group>
-            <b-form-invalid-feedback
-              :id="`${uid}-feedback`"
-              :state="validateState('vastuuhenkilo')"
-            >
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
-          </template>
-        </elsa-form-group>
-        <div v-if="vastuuhenkilot.length === 1">
-          <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-          <p>
-            {{ vastuuhenkilot[0].nimi }}
-            {{ vastuuhenkilot[0].nimike ? ', ' + vastuuhenkilot[0].nimike : '' }}
-          </p>
-        </div>
+        <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
+        <p>
+          {{ vastuuhenkilo.nimi }}
+          {{ vastuuhenkilo.nimike ? ', ' + vastuuhenkilo.nimike : '' }}
+        </p>
       </b-col>
     </b-row>
     <hr />
@@ -254,8 +229,8 @@
     Kouluttaja,
     KoulutussopimusLomake,
     UserAccount,
-    Vastuuhenkilo,
-    Opintooikeus
+    Opintooikeus,
+    Vastuuhenkilo
   } from '@/types'
   import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
@@ -281,11 +256,6 @@
         },
         erikoistuvanPuhelinnumero: {
           required
-        },
-        vastuuhenkilo: {
-          id: {
-            required
-          }
         }
       }
     }
@@ -307,10 +277,10 @@
     kouluttajat!: Kouluttaja[]
 
     @Prop({ required: true, default: () => [] })
-    vastuuhenkilot!: Vastuuhenkilo[]
+    yliopistot!: []
 
     @Prop({ required: true, default: () => [] })
-    yliopistot!: []
+    vastuuhenkilo!: Vastuuhenkilo
 
     form: KoulutussopimusLomake = {
       id: null,
@@ -328,12 +298,8 @@
       muokkauspaiva: '',
       opintooikeudenMyontamispaiva: '',
       opintooikeudenPaattymispaiva: '',
-      vastuuhenkilo: undefined,
-      yliopistot: [],
-      vastuuhenkilot: []
-    }
-    selected: any = {
-      vastuuhenkilo: null
+      vastuuhenkilo: null,
+      yliopistot: []
     }
     buttonStates: KoejaksonVaiheButtonStates = {
       primaryButtonLoading: false,
@@ -429,23 +395,11 @@
       return format(d, dateFormat)
     }
 
-    get vastuuhenkilotOptions() {
-      return this.vastuuhenkilot.map((v: any) => ({
-        text: `${v.nimi}${this.nimikeLabel(v.nimike)}`,
-        value: v.id
-      }))
-    }
-
     nimikeLabel(nimike: string) {
       if (nimike) {
         return ', ' + nimike
       }
       return ''
-    }
-
-    updateVastuuhenkilo(id: number) {
-      this.form.vastuuhenkilo = this.vastuuhenkilot.filter((a) => a.id === id)[0]
-      this.$emit('skipRouteExitConfirm', false)
     }
 
     saveAndExit() {
@@ -494,15 +448,10 @@
     mounted(): void {
       if (this.data !== null) {
         this.form = this.data
-        this.selected.vastuuhenkilo = this.data.vastuuhenkilo?.id
       } else {
         this.form.kouluttajat.push(defaultKouluttaja)
         // Luo kopio defaultKoulutuspaikasta, koska muutoin mahdollinen toinen koulutuspaikka mäppäytyy samaan objektiin.
         this.form.koulutuspaikat.push(Object.assign({}, defaultKoulutuspaikka))
-      }
-
-      if (this.vastuuhenkilot.length === 1) {
-        this.form.vastuuhenkilo = this.vastuuhenkilot[0]
       }
 
       // Asetetaan ei-muokattavien kenttien arvot
@@ -523,7 +472,7 @@
       if (!this.form.erikoistuvanSahkoposti) {
         this.form.erikoistuvanSahkoposti = this.account.email
       }
-
+      this.form.vastuuhenkilo = this.vastuuhenkilo
       this.childDataReceived = true
     }
   }

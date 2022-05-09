@@ -293,7 +293,7 @@
         this.vastuuhenkilonArvio?.erikoistuvanAllekirjoitusaika
       )
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
-        this.vastuuhenkilonArvio?.vastuuhenkilo
+        this.vastuuhenkilonArvio?.vastuuhenkilo ?? null
       ) as KoejaksonVaiheAllekirjoitus
 
       return [allekirjoitusVastuuhenkilo, allekirjoitusErikoistuva].filter(
@@ -313,7 +313,6 @@
 
       return this.$bvModal.show(modalId)
     }
-
     async onSign() {
       try {
         this.buttonStates.primaryButtonLoading = true

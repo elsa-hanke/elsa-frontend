@@ -58,7 +58,7 @@ export function mapAllekirjoitusLahiesimies(
 }
 
 export function mapAllekirjoitusVastuuhenkilo(
-  vastuuhenkilo?: Vastuuhenkilo
+  vastuuhenkilo: Vastuuhenkilo | null
 ): KoejaksonVaiheAllekirjoitus | null {
   return vastuuhenkilo && vastuuhenkilo.sopimusHyvaksytty
     ? {
