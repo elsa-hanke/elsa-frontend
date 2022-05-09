@@ -229,10 +229,9 @@ export interface KoulutussopimusLomake {
   muokkauspaiva: string
   opintooikeudenMyontamispaiva?: string
   opintooikeudenPaattymispaiva?: string
-  vastuuhenkilo?: Vastuuhenkilo
   erikoistuvanAllekirjoitusaika?: string
   yliopistot: Yliopisto[]
-  vastuuhenkilot: Vastuuhenkilo[]
+  vastuuhenkilo: Vastuuhenkilo | null
 }
 
 export type KoejaksonVaiheHyvaksyja = {
@@ -336,7 +335,7 @@ export interface VastuuhenkilonArvioLomake {
   koejaksoHyvaksytty: boolean | null
   id: number | null
   muokkauspaiva: string
-  vastuuhenkilo?: Vastuuhenkilo
+  vastuuhenkilo: Vastuuhenkilo | null
   vastuuhenkiloAllekirjoittanut: boolean | null
   perusteluHylkaamiselle: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
@@ -344,7 +343,7 @@ export interface VastuuhenkilonArvioLomake {
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
-  vastuuhenkilot: Vastuuhenkilo[]
+  vastuuhenkilo: Vastuuhenkilo | null
   tyoskentelyjaksoLiitetty: boolean
   tyoskentelyjaksonPituusRiittava: boolean
   tyotodistusLiitetty: boolean

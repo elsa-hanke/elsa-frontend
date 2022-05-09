@@ -828,7 +828,6 @@ const routes: Array<RouteConfig> = [
     name: 'logout',
     component: Logout,
     beforeEnter: async (to, from, next) => {
-      console.log('logout triggered')
       await store.dispatch('auth/authorize')
 
       if (store.getters['auth/isLoggedIn']) {

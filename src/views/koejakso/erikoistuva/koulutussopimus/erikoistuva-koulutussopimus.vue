@@ -73,7 +73,7 @@
               :data="koejaksoData.koulutussopimus"
               :account="account"
               :kouluttajat="kouluttajat"
-              :vastuuhenkilot="vastuuhenkilot"
+              :vastuuhenkilo="vastuuhenkilo"
               :yliopistot="yliopistot"
               @saveAndExit="onSaveDraftAndExit"
               @submit="onSubmit"
@@ -137,8 +137,8 @@
       }
     ]
     loading = true
-    koulutussopimusLomake: null | KoulutussopimusLomake = null
-    vastuuhenkilot: Vastuuhenkilo[] = []
+    koulutussopimusLomake: KoulutussopimusLomake | null = null
+    vastuuhenkilo: Vastuuhenkilo | null = null
     yliopistot: Yliopisto[] = []
 
     get account() {
@@ -277,10 +277,10 @@
       this.setKoejaksoData()
 
       const koulutussopimusLomake = (await getKoulutussopimusLomake()).data
-      this.vastuuhenkilot = koulutussopimusLomake.vastuuhenkilot
       this.yliopistot = koulutussopimusLomake.yliopistot.filter(
         (y: any) => y.nimi !== this.account.erikoistuvaLaakari.yliopisto
       )
+      this.vastuuhenkilo = koulutussopimusLomake.vastuuhenkilo
 
       this.loading = false
 

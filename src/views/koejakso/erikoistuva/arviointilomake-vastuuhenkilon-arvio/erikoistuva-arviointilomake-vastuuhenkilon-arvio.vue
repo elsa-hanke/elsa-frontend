@@ -96,38 +96,7 @@
         </b-row>
         <hr />
         <b-row>
-          <b-col v-if="editable" lg="8">
-            <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
-            <elsa-form-group
-              v-if="formData.vastuuhenkilot.length > 1"
-              :label="$t('erikoisala-vastuuhenkilö-label')"
-              :required="true"
-            >
-              <template v-slot="{ uid }">
-                <b-form-radio-group
-                  :id="uid"
-                  v-model="selected.vastuuhenkilo"
-                  :options="vastuuhenkilotOptions"
-                  :state="validateState('vastuuhenkilo')"
-                  name="erikoisalan-vastuuhenkilo"
-                  @change="updateVastuuhenkilo"
-                  stacked
-                ></b-form-radio-group>
-                <b-form-invalid-feedback
-                  class="mt-3"
-                  :id="`${uid}-feedback`"
-                  :state="validateState('vastuuhenkilo')"
-                >
-                  {{ $t('pakollinen-tieto') }}
-                </b-form-invalid-feedback>
-              </template>
-            </elsa-form-group>
-            <div v-if="formData.vastuuhenkilot.length === 1">
-              <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-              <p>{{ formData.vastuuhenkilot[0].nimi }}, {{ formData.vastuuhenkilot[0].nimike }}</p>
-            </div>
-          </b-col>
-          <b-col v-else-if="waitingForErikoistuva || acceptedByEveryone">
+          <b-col v-if="waitingForErikoistuva || acceptedByEveryone">
             <elsa-form-group
               class="mt-2"
               :class="{ 'mb-4': form.koejaksoHyvaksytty === false }"
@@ -153,8 +122,8 @@
             <h3 class="mb-3">{{ $t('erikoisala-vastuuhenkilö') }}</h3>
             <elsa-form-group :label="$t('erikoisala-vastuuhenkilö-label')">
               <p>
-                {{ form.vastuuhenkilo.nimi }},
-                {{ form.vastuuhenkilo.nimike }}
+                {{ formData.vastuuhenkilo.nimi }}
+                {{ formData.vastuuhenkilo.nimike ? ', ' + formData.vastuuhenkilo.nimike : '' }}
               </p>
             </elsa-form-group>
           </b-col>
@@ -172,9 +141,7 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="
-                  onValidateAndConfirm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')
-                "
+                @click="onConfirm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
                 :disabled="hasTyoskentelyjaksoErrors"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
@@ -209,11 +176,7 @@
 </template>
 
 <script lang="ts">
-  import _get from 'lodash/get'
-  import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
-  import { required } from 'vuelidate/lib/validators'
+  import { Vue, Component } from 'vue-property-decorator'
 
   import { getVastuuhenkilonArvioLomake } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
@@ -242,20 +205,9 @@
       ElsaButton,
       ElsaConfirmationModal,
       KoejaksonVaiheAllekirjoitukset
-    },
-    validations: {
-      form: {
-        vastuuhenkilo: {
-          id: {
-            required
-          }
-        }
-      }
     }
   })
-  export default class ErikoistuvaArviointilomakeVastuuhenkilonArvio extends Mixins(
-    validationMixin
-  ) {
+  export default class ErikoistuvaArviointilomakeVastuuhenkilonArvio extends Vue {
     items = [
       {
         text: this.$t('etusivu'),
@@ -286,29 +238,19 @@
       id: null,
       muokkauspaiva: '',
       koejaksoHyvaksytty: null,
-      vastuuhenkilo: undefined,
+      vastuuhenkilo: null,
       vastuuhenkiloAllekirjoittanut: null,
       perusteluHylkaamiselle: null,
       hylattyArviointiKaytyLapiKeskustellen: null,
       vastuuhenkilonKuittausaika: undefined
     }
     formData: VastuuhenkilonArvioLomakeErikoistuva = {
-      vastuuhenkilot: [],
+      vastuuhenkilo: null,
       tyoskentelyjaksoLiitetty: false,
       tyoskentelyjaksonPituusRiittava: false,
       tyotodistusLiitetty: false
     }
-
-    selected: any = {
-      vastuuhenkilo: null
-    }
     loading = true
-
-    validateState(value: string) {
-      const form = this.$v.form
-      const { $dirty, $error } = _get(form, value) as any
-      return $dirty ? ($error ? false : null) : null
-    }
 
     get account() {
       return store.getters['auth/account']
@@ -368,17 +310,6 @@
       )
     }
 
-    get vastuuhenkilotOptions() {
-      return this.formData.vastuuhenkilot.map((v: any) => ({
-        text: `${v.nimi}, ${v.nimike}`,
-        value: v.id
-      }))
-    }
-
-    updateVastuuhenkilo(id: number) {
-      this.form.vastuuhenkilo = this.formData.vastuuhenkilot.filter((v) => v.id === id)[0]
-    }
-
     optionDisplayName(option: any) {
       return option.nimike ? option.nimi + ', ' + option.nimike : option.nimi
     }
@@ -387,12 +318,7 @@
       return this.$bvModal.hide(id)
     }
 
-    onValidateAndConfirm(modalId: string) {
-      this.$v.form.$touch()
-      if (this.$v.$anyError) {
-        return
-      }
-
+    onConfirm(modalId: string) {
       return this.$bvModal.show(modalId)
     }
 
@@ -428,8 +354,8 @@
       this.setKoejaksoData()
       this.formData = (await getVastuuhenkilonArvioLomake()).data
 
-      if (this.editable && this.formData.vastuuhenkilot.length === 1) {
-        this.form.vastuuhenkilo = this.formData.vastuuhenkilot[0]
+      if (this.editable) {
+        this.form.vastuuhenkilo = this.formData.vastuuhenkilo
       }
 
       this.loading = false
