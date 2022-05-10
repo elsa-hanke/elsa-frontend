@@ -242,7 +242,7 @@
         case LomakeTilat.ALLEKIRJOITETTU:
           return ['fas', 'check-circle']
         case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
-          return ['fas', 'check-circle']
+          return ['far', 'clock']
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return ['far', 'check-circle']
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
@@ -265,7 +265,7 @@
         case LomakeTilat.ALLEKIRJOITETTU:
           return 'text-success'
         case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
-          return 'text-success'
+          return 'text-warning'
         case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
           return 'text-success'
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:

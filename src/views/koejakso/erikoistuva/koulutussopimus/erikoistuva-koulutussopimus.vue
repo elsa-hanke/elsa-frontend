@@ -21,8 +21,8 @@
               </div>
             </b-alert>
             <div v-if="editable">
-              <p>{{ $t('koulutussopimus-ingressi-1') }}</p>
-              <p>
+              <p class="mb-4">{{ $t('koulutussopimus-ingressi-1') }}</p>
+              <p class="mb-0">
                 {{ $t('koulutussopimus-ingressi-2') }}
                 <b-link :to="{ name: 'koejakso-yleiset-tavoitteet' }">
                   {{ $t('koejakso-tavoitteet-linkki') }}
@@ -37,15 +37,15 @@
                 <div>{{ $t('koulutussopimus-tila-odottaa-hyvaksyntaa') }}</div>
               </div>
             </b-alert>
-            <b-alert variant="success" :show="showAcceptedByEveryone">
+            <b-alert variant="success" :show="showSignedByEveryone">
               <div class="d-flex flex-row">
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                 </em>
                 <div>
-                  {{ $t('koulutussopimus-tila-hyvaksytty') }}
+                  {{ $t('koulutussopimus-tila-allekirjoitettu') }}
                   <span class="d-block">
-                    {{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}
+                    {{ $t('koulutussopimus-tila-allekirjoitettu-lisatiedot') }}
                   </span>
                 </div>
               </div>
@@ -165,7 +165,9 @@
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
         this.koejaksoData.koulutusSopimuksenTila ===
           LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
-        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+        this.koejaksoData.koulutusSopimuksenTila ===
+          LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
+        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
       )
     }
 
@@ -173,8 +175,8 @@
       return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
-    get showAcceptedByEveryone() {
-      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.HYVAKSYTTY
+    get showSignedByEveryone() {
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ALLEKIRJOITETTU
     }
 
     get kouluttajat() {

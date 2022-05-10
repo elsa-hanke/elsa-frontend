@@ -4,7 +4,7 @@
     <b-container fluid>
       <h1 class="mb-3">{{ $t('koulutussopimus') }}</h1>
       <div v-if="!loading">
-        <div v-if="!signed && !returned">
+        <div v-if="editable">
           <p v-if="!$isVastuuhenkilo()">{{ $t('koulutussopimus-kouluttaja-ingressi') }}</p>
           <p v-if="$isVastuuhenkilo()">{{ $t('koulutussopimus-vastuuhenkilo-ingressi') }}</p>
         </div>
@@ -29,7 +29,10 @@
             <em class="align-middle">
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
-            <div>{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }}</div>
+            <div v-if="$isKouluttaja()">
+              {{ $t('koulutussopimus-tila-odottaa-vastuuhenkilon-hyvaksyntaa') }}
+            </div>
+            <div v-else>{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }}</div>
           </div>
         </b-alert>
         <b-alert :show="showSigned" variant="success" class="mt-3">
@@ -37,7 +40,12 @@
             <em class="align-middle">
               <font-awesome-icon :icon="['fas', 'info-circle']" class="mr-2" />
             </em>
-            <div>{{ $t('koulutussopimus-tila-allekirjoitettu') }}</div>
+            <div>
+              {{ $t('koulutussopimus-tila-allekirjoitettu') }}
+              <span class="d-block">
+                {{ $t('koulutussopimus-tila-allekirjoitettu-lisatiedot') }}
+              </span>
+            </div>
           </div>
         </b-alert>
         <b-alert :show="returned" variant="dark" class="mt-3">
@@ -48,17 +56,6 @@
             <div>
               {{ $t('koulutussopimus-kouluttaja-palautettu') }}
               <span class="d-block">{{ $t('syy') }}&nbsp;{{ form.korjausehdotus }}</span>
-            </div>
-          </div>
-        </b-alert>
-        <b-alert variant="success" :show="showAcceptedByEveryone">
-          <div class="d-flex flex-row">
-            <em class="align-middle">
-              <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-            </em>
-            <div>
-              {{ $t('koulutussopimus-tila-hyvaksytty') }}
-              <span class="d-block">{{ $t('koulutussopimus-tila-hyvaksytty-lisatiedot') }}</span>
             </div>
           </div>
         </b-alert>
@@ -404,10 +401,6 @@
 
     get returned() {
       return !this.loading && this.koulutussopimusData.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
-    }
-
-    get showAcceptedByEveryone() {
-      return this.koulutussopimusData.tila === LomakeTilat.HYVAKSYTTY
     }
 
     get showWaitingForVastuuhenkilo() {
