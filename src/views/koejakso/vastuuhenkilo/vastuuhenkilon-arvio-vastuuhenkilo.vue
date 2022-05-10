@@ -174,9 +174,10 @@
     Koejakso,
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
-    VastuuhenkilonArvioLomake
+    VastuuhenkilonArvioLomake,
+    KoejaksonVaihe
   } from '@/types'
-  import { LomakeTilat } from '@/utils/constants'
+  import { LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -270,7 +271,8 @@
 
     get vastuuhenkilonArvioTila() {
       return store.getters['vastuuhenkilo/koejaksot'].find(
-        (k: any) => k.id === this.vastuuhenkilonArvio?.id
+        (k: KoejaksonVaihe) =>
+          k.id === this.vastuuhenkilonArvio?.id && k.tyyppi == LomakeTyypit.VASTUUHENKILON_ARVIO
       )?.tila
     }
 
