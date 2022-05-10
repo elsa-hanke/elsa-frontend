@@ -21,10 +21,13 @@
       <koejakso-card-content v-if="tila === lomaketilat.TALLENNETTU_KESKENERAISENA">
         <template v-slot:content>
           <div>
-            <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
+            <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-2" />
           </div>
           <div>
-            <span class="pr-6" v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')" />
+            <span
+              class="pr-6 mb-2"
+              v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')"
+            />
           </div>
         </template>
         <template v-slot:button>
@@ -40,11 +43,12 @@
         v-if="
           tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
           tila === lomaketilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
-          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
+          tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA
         "
       >
         <template v-slot:content>
-          <p class="pr-6" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
+          <p class="pr-6 mb-2" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -56,12 +60,12 @@
       <koejakso-card-content v-if="tila === lomaketilat.PALAUTETTU_KORJATTAVAKSI">
         <template v-slot:content>
           <div>
-            <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
+            <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-2" />
           </div>
           <div>
             <div class="pr-6">
-              <p class="mb-3">{{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}</p>
-              <p class="mb-3">
+              <p class="mb-1">{{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}</p>
+              <p class="mb-2">
                 <span>{{ $t('syy') }}</span>
                 <span>&nbsp;{{ korjausehdotus }}</span>
               </p>
@@ -77,40 +81,16 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
-        <template v-slot:content>
-          <div>
-            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
-          </div>
-          <div>
-            <span class="pr-6">{{ $t('koulutussopimus-tila-hyvaksytty') }}</span>
-          </div>
-        </template>
-        <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('nayta-koulutussopimus') }}
-          </elsa-button>
-        </template>
-      </koejakso-card-content>
-
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA">
-        <template v-slot:content>
-          <p class="pr-6">{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }}</p>
-        </template>
-        <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ $t('nayta-koulutussopimus') }}
-          </elsa-button>
-        </template>
-      </koejakso-card-content>
-
       <koejakso-card-content v-if="tila === lomaketilat.ALLEKIRJOITETTU">
         <template v-slot:content>
           <div>
-            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <div>
-            <span class="pr-6">{{ $t('koulutussopimus-tila-allekirjoitettu') }}</span>
+            <span class="pr-6">
+              {{ $t('koulutussopimus-tila-allekirjoitettu') }}
+              {{ $t('koulutussopimus-tila-allekirjoitettu-lisatiedot') }}
+            </span>
           </div>
         </template>
         <template v-slot:button>

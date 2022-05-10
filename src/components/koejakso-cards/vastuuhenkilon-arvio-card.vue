@@ -8,7 +8,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.EI_AKTIIVINEN">
         <template v-slot:content>
-          <p>{{ $t('arviointi-ei-viela-pyydetty') }}</p>
+          <p class="mb-2">{{ $t('arviointi-ei-viela-pyydetty') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button
@@ -25,7 +25,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.UUSI">
         <template v-slot:content>
-          <p>{{ $t('arviointi-ei-viela-pyydetty') }}</p>
+          <p class="mb-2">{{ $t('arviointi-ei-viela-pyydetty') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button
@@ -41,7 +41,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
         <template v-slot:content>
-          <p class="pr-6">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
+          <p class="pr-6 mb-2">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -52,7 +52,9 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA">
         <template v-slot:content>
-          <p class="pr-6">{{ $t('vastuuhenkilon-arvio-tila-odottaa-erikoistuvan-hyvaksyntaa') }}</p>
+          <p class="pr-6 mb-2">
+            {{ $t('vastuuhenkilon-arvio-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
+          </p>
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -63,11 +65,11 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template v-slot:content>
-          <div class="d-inline-flex">
-            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
+          <div>
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-6">{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
+            <span class="pr-6 mb-2">{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
           </div>
         </template>
         <template v-slot:button>

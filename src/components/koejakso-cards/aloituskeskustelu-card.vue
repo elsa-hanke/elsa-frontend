@@ -8,7 +8,7 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.UUSI">
         <template v-slot:content>
-          <p>{{ $t('lomake-ei-taytetty') }}</p>
+          <p class="mb-2">{{ $t('lomake-ei-taytetty') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button
@@ -24,11 +24,13 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.TALLENNETTU_KESKENERAISENA">
         <template v-slot:content>
-          <div class="d-inline-flex">
-            <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-1" />
+          <div>
+            <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-2" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-6">{{ $t('aloituskeskustelu-tila-tallennettu-keskeneraisena') }}</span>
+            <span class="pr-6 mb-2">
+              {{ $t('aloituskeskustelu-tila-tallennettu-keskeneraisena') }}
+            </span>
           </div>
         </template>
         <template v-slot:button>
@@ -44,13 +46,13 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.PALAUTETTU_KORJATTAVAKSI">
         <template v-slot:content>
-          <div class="d-inline-flex">
-            <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-1" />
+          <div>
+            <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-2" />
           </div>
           <div class="d-inline-flex">
             <div class="pr-6">
-              <p class="mb-0">{{ $t('aloituskeskustelu-tila-palautettu-korjattavaksi') }}</p>
-              <p>
+              <p class="mb-1">{{ $t('aloituskeskustelu-tila-palautettu-korjattavaksi') }}</p>
+              <p class="mb-2">
                 <span>{{ $t('syy') }}</span>
                 <span>&nbsp;{{ korjausehdotus }}</span>
               </p>
@@ -75,7 +77,7 @@
         "
       >
         <template v-slot:content>
-          <p class="pr-6">{{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}</p>
+          <p class="pr-6 mb-2">{{ $t('aloituskeskustelu-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
         <template v-slot:button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -86,11 +88,11 @@
 
       <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template v-slot:content>
-          <div class="d-inline-flex">
-            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
+          <div>
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-6">{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
+            <span class="pr-6 mb-2">{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
           </div>
         </template>
         <template v-slot:button>
