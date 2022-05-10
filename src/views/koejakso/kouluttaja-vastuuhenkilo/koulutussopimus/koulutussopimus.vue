@@ -282,10 +282,11 @@
     KoulutussopimusLomake,
     Kouluttaja,
     KoejaksonVaiheButtonStates,
-    Vastuuhenkilo
+    Vastuuhenkilo,
+    KoejaksonVaihe
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
-  import { defaultKoulutuspaikka, LomakeTilat } from '@/utils/constants'
+  import { defaultKoulutuspaikka, LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -369,7 +370,8 @@
 
     get koulutussopimusData() {
       return store.getters[`${resolveRolePath()}/koejaksot`].find(
-        (a: any) => a.id === this.koulutussopimusId
+        (k: KoejaksonVaihe) =>
+          k.id === this.koulutussopimusId && k.tyyppi === LomakeTyypit.KOULUTUSSOPIMUS
       )
     }
 
@@ -538,7 +540,7 @@
           this.form.kouluttajat
         ) as KoejaksonVaiheAllekirjoitus[]
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
-        this.form.vastuuhenkilo
+        this.form.vastuuhenkilo ?? null
       ) as KoejaksonVaiheAllekirjoitus
 
       return [

@@ -317,10 +317,11 @@
   import {
     ValiarviointiLomake,
     KoejaksonVaiheButtonStates,
-    KoejaksonVaiheAllekirjoitus
+    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaihe
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
-  import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
+  import { KehittamistoimenpideKategoria, LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -404,7 +405,8 @@
 
     get valiarvioinninTila() {
       return store.getters[`${resolveRolePath()}/koejaksot`].find(
-        (k: any) => k.id === this.valiarviointi?.id
+        (k: KoejaksonVaihe) =>
+          k.id === this.valiarviointi?.id && k.tyyppi === LomakeTyypit.VALIARVIOINTI
       )?.tila
     }
 

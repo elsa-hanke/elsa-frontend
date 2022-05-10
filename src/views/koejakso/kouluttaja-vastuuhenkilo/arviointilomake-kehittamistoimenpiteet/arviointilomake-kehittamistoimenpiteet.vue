@@ -221,10 +221,11 @@
   import {
     KehittamistoimenpiteetLomake,
     KoejaksonVaiheButtonStates,
-    KoejaksonVaiheAllekirjoitus
+    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaihe
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
-  import { LomakeTilat } from '@/utils/constants'
+  import { LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -291,7 +292,9 @@
 
     get kehittamistoimenpiteetTila() {
       return store.getters[`${resolveRolePath()}/koejaksot`].find(
-        (k: any) => k.id === this.kehittamistoimenpiteet?.id
+        (k: KoejaksonVaihe) =>
+          k.id === this.kehittamistoimenpiteet?.id &&
+          k.tyyppi === LomakeTyypit.KEHITTAMISTOIMENPITEET
       )?.tila
     }
 

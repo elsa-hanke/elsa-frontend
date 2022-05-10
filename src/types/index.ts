@@ -10,7 +10,9 @@ import {
   TyoskentelyjaksoTyyppi,
   PoissaolonSyyTyyppi,
   SeurantajaksoTila,
-  OpintooikeusTila
+  OpintooikeusTila,
+  LomakeTyypit,
+  LomakeTilat
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
@@ -960,4 +962,20 @@ export interface ErikoistumisenEdistyminen {
   valtakunnallisetKuulustelutSuoritettuLkm: number
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
+}
+
+export interface HyvaksyttyKoejaksonVaihe {
+  id: number
+  tyyppi: LomakeTyypit
+  pvm: string
+}
+
+export interface KoejaksonVaihe {
+  id: number
+  tyyppi: LomakeTyypit
+  tila: LomakeTilat
+  erikoistuvanNimi: string
+  erikoistuvanAvatar?: string
+  pvm: string
+  hyvaksytytVaiheet: HyvaksyttyKoejaksonVaihe[]
 }

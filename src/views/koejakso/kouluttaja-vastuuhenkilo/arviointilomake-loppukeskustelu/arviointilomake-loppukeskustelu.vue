@@ -297,10 +297,11 @@
   import {
     LoppukeskusteluLomake,
     KoejaksonVaiheButtonStates,
-    KoejaksonVaiheAllekirjoitus
+    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaihe
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
-  import { LomakeTilat } from '@/utils/constants'
+  import { LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -373,7 +374,8 @@
 
     get loppukeskustelunTila() {
       return store.getters[`${resolveRolePath()}/koejaksot`].find(
-        (k: any) => k.id === this.loppukeskustelu?.id
+        (k: KoejaksonVaihe) =>
+          k.id === this.loppukeskustelu?.id && k.tyyppi === LomakeTyypit.LOPPUKESKUSTELU
       )?.tila
     }
 
