@@ -73,8 +73,7 @@
     }
 
     get title() {
-      const value = getTitleFromAuthorities(this.authorities)
-      return value ? this.$t(value) : undefined
+      return getTitleFromAuthorities(this, this.authorities)
     }
   }
 </script>

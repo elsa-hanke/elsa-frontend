@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 import { ELSA_ROLE } from './roles'
 
 export const clamp = (num: number, clamp: number, higher: number) =>
@@ -10,17 +12,17 @@ export function checkCurrentRouteAndRedirect(router: any, path: any) {
   if (curPath !== path) router.push({ path })
 }
 
-export function getTitleFromAuthorities(authorities: string[]) {
+export function getTitleFromAuthorities(vue: Vue, authorities: string[]) {
   if (authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
-    return 'erikoistuva-laakari'
+    return vue.$t('erikoistuva-laakari')
   } else if (authorities.includes(ELSA_ROLE.Kouluttaja)) {
-    return 'kouluttaja'
+    return vue.$t('kouluttaja')
   } else if (authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
-    return 'vastuuhenkilo'
+    return vue.$t('vastuuhenkilo')
   } else if (authorities.includes(ELSA_ROLE.TekninenPaakayttaja)) {
-    return 'tekninen-paakayttaja'
+    return vue.$t('tekninen-paakayttaja')
   } else if (authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)) {
-    return 'virkailija'
+    return vue.$t('virkailija')
   }
 
   return undefined

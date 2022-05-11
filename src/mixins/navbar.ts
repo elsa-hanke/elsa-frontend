@@ -85,8 +85,7 @@ export default class NavbarMixin extends Vue {
     if (this.isErikoistuvaLaakari) {
       return this.erikoisalaNimi
     }
-    const value = getTitleFromAuthorities(this.authorities)
-    return value ? this.$t(value) : undefined
+    return getTitleFromAuthorities(this, this.authorities)
   }
 
   getOpintooikeusKaytossa(id: number) {

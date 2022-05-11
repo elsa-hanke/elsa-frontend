@@ -29,7 +29,7 @@
   import { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getKayttajaLomake, postErikoistuvaLaakari } from '@/api/tekninen-paakayttaja'
+  import { getKayttajaLomake, postErikoistuvaLaakari } from '@/api/kayttajahallinta'
   import KayttajaForm from '@/forms/kayttaja-form.vue'
   import { ElsaError, KayttajaLomake, UusiKayttaja } from '@/types'
   import { ELSA_ROLE } from '@/utils/roles'
@@ -63,7 +63,7 @@
       try {
         this.kayttajaLomake = (await getKayttajaLomake()).data
       } catch {
-        toastFail(this, this.$t('tyoskentelyjakson-lomakkeen-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('kayttajalomakkeen-hakeminen-epaonnistui'))
       }
     }
 

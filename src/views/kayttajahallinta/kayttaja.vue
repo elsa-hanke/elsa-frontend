@@ -7,9 +7,14 @@
           <h1>{{ $t('kayttaja') }}</h1>
           <hr />
           <div v-if="kayttaja">
+            <elsa-form-group :label="$t('tilin-tila')">
+              <template v-slot="{ uid }">
+                <span :id="uid" :class="tilaColor">{{ $t(tilinTila) }}</span>
+              </template>
+            </elsa-form-group>
             <elsa-form-group v-if="rooli" :label="$t('rooli')">
               <template v-slot="{ uid }">
-                <span :id="uid">{{ $t(rooli) }}</span>
+                <span :id="uid">{{ rooli }}</span>
               </template>
             </elsa-form-group>
             <b-form-row>
@@ -31,6 +36,13 @@
                 </span>
               </template>
             </elsa-form-group>
+            <elsa-form-group :label="$t('syntymaaika')">
+              <template v-slot="{ uid }">
+                <span :id="uid">
+                  {{ syntymaaika }}
+                </span>
+              </template>
+            </elsa-form-group>
             <hr />
             <h2>{{ $t('opintooikeudet') }}</h2>
             <div
@@ -38,7 +50,7 @@
               v-for="(opintooikeus, index) in opintooikeudet"
               :key="index"
             >
-              <h3>
+              <h3 class="mb-3">
                 {{
                   `${$t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`)}, ${
                     opintooikeus.erikoisalaNimi
@@ -104,11 +116,14 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getKayttaja, putErikoistuvaLaakariInvitation } from '@/api/tekninen-paakayttaja'
+  import { getKayttaja, putErikoistuvaLaakariInvitation } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import store from '@/store'
   import { KayttajahallintaKayttaja } from '@/types'
+  import { KayttajatiliTila } from '@/utils/constants'
   import { getTitleFromAuthorities } from '@/utils/functions'
+  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -170,8 +185,31 @@
       }
     }
 
+    get account() {
+      return store.getters['auth/account']
+    }
+
+    get isVirkailija() {
+      return this.account.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
+    }
+
+    get tilinTila() {
+      return this.$t(`tilin-tila-${this.kayttaja?.kayttaja?.tila}`)
+    }
+
+    get tilaColor() {
+      switch (this.kayttaja?.kayttaja?.tila) {
+        case KayttajatiliTila.AKTIIVINEN:
+          return 'text-success'
+        case KayttajatiliTila.PASSIIVINEN:
+          return 'text-danger'
+        default:
+          return ''
+      }
+    }
+
     get rooli() {
-      return getTitleFromAuthorities(this.kayttaja?.user?.authorities ?? [])
+      return getTitleFromAuthorities(this, this.kayttaja?.user?.authorities ?? [])
     }
 
     get etunimi() {
@@ -184,6 +222,12 @@
 
     get sahkopostiosoite() {
       return this.kayttaja?.kayttaja?.sahkoposti
+    }
+
+    get syntymaaika() {
+      return this.kayttaja?.erikoistuvaLaakari?.syntymaaika
+        ? this.$date(this.kayttaja?.erikoistuvaLaakari?.syntymaaika)
+        : ''
     }
 
     get opintooikeudet() {
