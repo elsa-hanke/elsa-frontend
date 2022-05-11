@@ -31,13 +31,17 @@
 
 <script lang="ts">
   import axios from 'axios'
-  import { formatISO } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
   import ArviointipyyntoForm from '@/forms/arviointipyynto-form.vue'
-  import { ArviointipyyntoLomake, Suoritusarviointi } from '@/types'
+  import {
+    ArviointipyyntoLomake,
+    ArvioitavaKokonaisuus,
+    ArvioitavanKokonaisuudenKategoria,
+    Suoritusarviointi
+  } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
-  import { dateBetween } from '@/utils/date'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
@@ -186,17 +190,14 @@
         return this.arviointipyyntoLomake.arvioitavanKokonaisuudenKategoriat
           .map((kategoria) => ({
             ...kategoria,
-            arvioitavatKokonaisuudet: kategoria.arvioitavatKokonaisuudet.filter((oa: any) =>
-              dateBetween(formatISO(new Date()), oa.voimassaoloAlkaa, oa.voimassaoloLoppuu)
+            arvioitavatKokonaisuudet: kategoria.arvioitavatKokonaisuudet.sort(
+              (a: ArvioitavaKokonaisuus, b: ArvioitavaKokonaisuus) => sortByAsc(a.nimi, b.nimi)
             )
           }))
           .filter((kategoria) => kategoria.arvioitavatKokonaisuudet.length > 0)
-          .filter((kategoria) =>
-            dateBetween(
-              formatISO(new Date()),
-              kategoria.voimassaoloAlkaa,
-              kategoria.voimassaoloLoppuu
-            )
+          .sort(
+            (a: ArvioitavanKokonaisuudenKategoria, b: ArvioitavanKokonaisuudenKategoria) =>
+              sortByAsc(a.jarjestysnumero, b.jarjestysnumero) || sortByAsc(a.nimi, b.nimi)
           )
       } else {
         return []

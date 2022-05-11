@@ -72,7 +72,7 @@
           :id="uid"
           v-model="form.osaamistavoitteet"
           @input="$emit('skipRouteExitConfirm', false)"
-          :options="arvioitavanKokonaisuudenKategoriat"
+          :options="arvioitavanKokonaisuudenKategoriatSorted"
           group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
           :group-select="false"
@@ -129,6 +129,7 @@
     Kunta,
     Tyoskentelyjakso
   } from '@/types'
+  import { sortByAsc } from '@/utils/sort'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
@@ -291,6 +292,15 @@
       return ((this as any).tyoskentelyjaksotFormatted as Tyoskentelyjakso[]).filter(
         (tyoskentelyjakso) =>
           !this.form.tyoskentelyjaksot?.find((t) => t?.id === tyoskentelyjakso.id)
+      )
+    }
+
+    get arvioitavanKokonaisuudenKategoriatSorted() {
+      return (
+        this.arvioitavanKokonaisuudenKategoriat.sort(
+          (a: ArvioitavanKokonaisuudenKategoria, b: ArvioitavanKokonaisuudenKategoria) =>
+            sortByAsc(a.jarjestysnumero, b.jarjestysnumero) || sortByAsc(a.nimi, b.nimi)
+        ) ?? []
       )
     }
   }

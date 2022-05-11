@@ -39,7 +39,7 @@
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.arvioitavaKokonaisuus"
-                          :options="suoritusArvioinnitOptions.arvioitavatKokonaisuudet"
+                          :options="arvioitavatKokonaisuudetSorted"
                           label="nimi"
                           track-by="id"
                           @select="onArvioitavaKokonaisuusSelect"
@@ -264,6 +264,7 @@
   } from '@/types'
   import { sortByDateDesc } from '@/utils/date'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
+  import { sortByAsc } from '@/utils/sort'
   import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
@@ -436,7 +437,7 @@
         })
       }
 
-      // Liitetään osa-alueet kategorioihin
+      // Liitetään arvioitavat kokonaisuudet kategorioihin
       arvioitavatKokonaisuudetMap?.forEach((a: ArvioitavaKokonaisuus) => {
         const kategoria = kategoriat.find(
           (k: ArvioitavanKokonaisuudenKategoria) => k.id === a.kategoria.id
@@ -449,6 +450,16 @@
         }
       })
       return kategoriat
+        .map((kategoria) => ({
+          ...kategoria,
+          arvioitavatKokonaisuudet: kategoria.arvioitavatKokonaisuudet.sort(
+            (a: ArvioitavaKokonaisuus, b: ArvioitavaKokonaisuus) => sortByAsc(a.nimi, b.nimi)
+          )
+        }))
+        .sort(
+          (a: ArvioitavanKokonaisuudenKategoria, b: ArvioitavanKokonaisuudenKategoria) =>
+            sortByAsc(a.jarjestysnumero, b.jarjestysnumero) || sortByAsc(a.nimi, b.nimi)
+        )
     }
 
     get tyoskentelyjaksotFormatted() {
@@ -463,6 +474,12 @@
         this.selected.tyoskentelyjakso ||
         this.selected.arvioitavaKokonaisuus ||
         this.selected.kouluttajaOrVastuuhenkilo
+      )
+    }
+
+    get arvioitavatKokonaisuudetSorted() {
+      return this.suoritusArvioinnitOptions.arvioitavatKokonaisuudet.sort(
+        (a: ArvioitavaKokonaisuus, b: ArvioitavaKokonaisuus) => sortByAsc(a.nimi, b.nimi)
       )
     }
 
