@@ -25,15 +25,15 @@
         <h1 class="text-primary mb-lg-3">{{ $t('palvelu-erikoistuville-laakareille') }}</h1>
         <p class="mb-lg-4">{{ $t('login-ingressi') }}</p>
         <div class="mb-4">
-          <h3>{{ $t('erikoistuva-laakari-ja-kouluttaja') }}</h3>
-          <p>{{ $t('kirjaudu-sisaan-suomifi') }}</p>
+          <h4 class="mb-1">{{ $t('erikoistuva-laakari-ja-kouluttaja') }}</h4>
+          <p class="mb-3">{{ $t('kirjaudu-sisaan-suomifi') }}</p>
           <elsa-button variant="primary" @click="loginSuomiFi" class="mr-3 mb-2">
             {{ $t('kirjaudu-sisaan') }} (Suomi.fi)
           </elsa-button>
         </div>
         <div class="mb-4">
-          <h3>{{ $t('muut-kayttajaroolit-kuin-erikoistuva-tai-kouluttaja') }}</h3>
-          <p>{{ $t('kirjaudu-sisaan-haka') }}</p>
+          <h4 class="mb-1">{{ $t('muut-kayttajaroolit-kuin-erikoistuva-tai-kouluttaja') }}</h4>
+          <p class="mb-3">{{ $t('kirjaudu-sisaan-haka') }}</p>
           <elsa-button variant="primary" :to="{ name: 'haka-yliopisto' }" class="mr-3 mb-2">
             {{ $t('kirjaudu-sisaan') }} (HAKA)
           </elsa-button>
