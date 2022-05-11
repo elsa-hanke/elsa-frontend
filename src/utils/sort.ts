@@ -2,7 +2,9 @@ export function sortByAsc(
   a: string | number | null | undefined,
   b: string | number | null | undefined
 ) {
-  if (!a) {
+  if (!a && !b) {
+    return 0
+  } else if (!a) {
     return -1
   } else if (!b) {
     return 1
@@ -14,7 +16,9 @@ export function sortByDesc(
   a: string | number | null | undefined,
   b: string | number | null | undefined
 ) {
-  if (!a) {
+  if (!a && !b) {
+    return 0
+  } else if (!a) {
     return 1
   } else if (!b) {
     return -1
