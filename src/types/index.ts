@@ -12,7 +12,9 @@ import {
   SeurantajaksoTila,
   OpintooikeusTila,
   LomakeTyypit,
-  LomakeTilat
+  LomakeTilat,
+  KayttajatiliTila,
+  VastuuhenkilonTehtavatyyppi
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
@@ -444,6 +446,7 @@ export interface Kayttaja {
   authorities: KayttajaAuthority[]
   nimike: string
   yliopisto: KayttajaYliopistoErikoisala
+  tila: KayttajatiliTila
 }
 
 export interface KayttajaYliopistoErikoisala {
@@ -715,6 +718,21 @@ export interface KayttajahallintaKayttaja {
   user?: UserAccount
   kayttaja?: Kayttaja
   erikoistuvaLaakari?: ErikoistuvaLaakari
+}
+
+export interface KayttajahallintaKayttajaListItem {
+  kayttajaId: number
+  etunimi: string
+  sukunimi: string
+  syntymaaika: string
+  yliopistotAndErikoisalat: YliopistoErikoisalaPair[]
+  vastuuhenkilonVastuualueet: VastuuhenkilonTehtavatyyppi[]
+  kayttajatilinTila: string
+}
+
+export interface YliopistoErikoisalaPair {
+  yliopisto: string
+  erikoisala: string
 }
 
 export interface UusiKayttaja {

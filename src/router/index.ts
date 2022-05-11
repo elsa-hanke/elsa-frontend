@@ -689,7 +689,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Kayttajahallinta,
-          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
       {
@@ -698,7 +698,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiKayttaja,
-          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja],
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija],
           confirmRouteExit: true
         }
       },
@@ -708,7 +708,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Kayttaja,
-          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
       {

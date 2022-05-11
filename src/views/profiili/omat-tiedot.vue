@@ -22,7 +22,7 @@
         </div>
         <div class="flex-fill">
           <elsa-form-group
-            :label="title ? $t(title) : $t('nimi')"
+            :label="title ? title : $t('nimi')"
             label-cols-md="4"
             label-cols-xl="4"
             label-cols="12"
@@ -295,7 +295,7 @@
     }
 
     get title() {
-      return getTitleFromAuthorities(this.authorities)
+      return getTitleFromAuthorities(this, this.authorities)
     }
 
     get avatar() {

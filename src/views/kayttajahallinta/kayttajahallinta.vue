@@ -11,8 +11,13 @@
           <div v-if="!loading">
             <b-tabs content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('erikoistujat')" active>
-                <div v-if="erikoistuvatLaakarit.length > 0" class="kayttajat-table">
-                  <b-table :items="erikoistuvatLaakarit" :fields="fields" stacked="md" responsive>
+                <div v-if="rows > 0" class="kayttajat-table">
+                  <b-table
+                    :items="erikoistuvatLaakarit.content"
+                    :fields="fields"
+                    stacked="md"
+                    responsive
+                  >
                     <template #cell(nimi)="row">
                       <elsa-button
                         :to="{
@@ -22,14 +27,32 @@
                         variant="link"
                         class="p-0 border-0 shadow-none"
                       >
-                        {{ row.item.nimi }}
+                        <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
+                        <span v-if="row.item.syntymaaika">
+                          &nbsp;({{ $date(row.item.syntymaaika) }})
+                        </span>
                       </elsa-button>
                     </template>
-                    <template #cell(yliopisto)="row">
-                      {{ $t(`yliopisto-nimi.${row.item.yliopisto}`) }}
+                    <template #cell(opintooikeus)="row">
+                      <template v-for="(item, index) in row.item.yliopistotAndErikoisalat">
+                        <div :key="index">
+                          {{ `${$t(`yliopisto-nimi.${item.yliopisto}`)}: ${item.erikoisala}` }}
+                        </div>
+                      </template>
+                    </template>
+                    <template #cell(tila)="row">
+                      <span :class="getTilaColor(row.item.kayttajatilinTila)">
+                        {{ $t(`tilin-tila-${row.item.kayttajatilinTila}`) }}
+                      </span>
                     </template>
                   </b-table>
                 </div>
+                <elsa-pagination
+                  @update:currentPage="onPageInput"
+                  :current-page="currentPage"
+                  :per-page="perPage"
+                  :rows="rows"
+                />
               </b-tab>
               <!-- <b-tab :title="$t('vastuuhenkilot')"></b-tab> -->
               <!-- <b-tab :title="$t('virkailijat')"></b-tab> -->
@@ -48,14 +71,19 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getErikoistuvatLaakarit } from '@/api/tekninen-paakayttaja'
+  import { getErikoistuvatLaakarit } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
-  import { ErikoistuvaLaakari } from '@/types'
+  import ElsaPagination from '@/components/pagination/pagination.vue'
+  import store from '@/store'
+  import { KayttajahallintaKayttajaListItem, Page } from '@/types'
+  import { KayttajatiliTila } from '@/utils/constants'
+  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
-      ElsaButton
+      ElsaButton,
+      ElsaPagination
     }
   })
   export default class Kayttajahallinta extends Vue {
@@ -67,33 +95,68 @@
         sortable: true
       },
       {
-        key: 'yliopisto',
-        label: this.$t('yliopisto'),
-        sortable: true
+        key: 'opintooikeus',
+        label: this.$t('opintooikeus'),
+        sortable: false
       },
       {
-        key: 'erikoisalaNimi',
-        label: this.$t('erikoisala'),
-        sortable: true
-      },
-      {
-        key: 'opiskelijatunnus',
-        label: this.$t('opiskelijatunnus'),
-        sortable: true
+        key: 'tila',
+        label: this.$t('tilin-tila'),
+        sortable: false
       }
     ]
-    erikoistuvatLaakarit: ErikoistuvaLaakari[] = []
+    currentPage = 1
+    perPage = 20
+    erikoistuvatLaakarit: Page<KayttajahallintaKayttajaListItem> | null = null
 
     async mounted() {
-      await this.getErikoistuvatLaakarit()
+      await this.fetch()
       this.loading = false
+    }
+
+    async fetch() {
+      this.getErikoistuvatLaakarit()
     }
 
     async getErikoistuvatLaakarit() {
       try {
-        this.erikoistuvatLaakarit = (await getErikoistuvatLaakarit()).data
+        this.erikoistuvatLaakarit = (
+          await getErikoistuvatLaakarit({
+            page: this.currentPage - 1,
+            size: this.perPage,
+            sort: null
+          })
+        ).data
       } catch (err) {
-        toastFail(this, this.$t('kayttajien-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('erikoistujien-hakeminen-epaonnistui'))
+      }
+    }
+
+    onPageInput(value: number) {
+      this.currentPage = value
+      this.fetch()
+    }
+
+    get rows() {
+      return this.erikoistuvatLaakarit?.totalElements ?? 0
+    }
+
+    get account() {
+      return store.getters['auth/account']
+    }
+
+    get isVirkailija() {
+      return this.account.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
+    }
+
+    getTilaColor(tila: KayttajatiliTila) {
+      switch (tila) {
+        case KayttajatiliTila.AKTIIVINEN:
+          return 'text-success'
+        case KayttajatiliTila.PASSIIVINEN:
+          return 'text-danger'
+        default:
+          return ''
       }
     }
   }

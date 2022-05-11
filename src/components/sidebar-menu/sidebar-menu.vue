@@ -101,7 +101,7 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isTekninenPaakayttaja()"
+          v-if="$isTekninenPaakayttaja() || $isVirkailija()"
           class="border-top border-bottom"
           :to="{ name: 'kayttajahallinta' }"
         >
