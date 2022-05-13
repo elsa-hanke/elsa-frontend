@@ -42,3 +42,13 @@ export async function putErikoistuvaLaakariInvitation(erikoistuvaLaakariId: numb
   const path = `${resolveRolePath()}/erikoistuvat-laakarit/${erikoistuvaLaakariId}/kutsu`
   return await axios.put(path)
 }
+
+export async function activateKayttaja(kayttajaId: number) {
+  const path = `${resolveRolePath()}/kayttajat/${kayttajaId}/aktivoi`
+  return await axios.patch(path)
+}
+
+export async function passivateKayttaja(kayttajaId: number) {
+  const path = `${resolveRolePath()}/kayttajat/${kayttajaId}/passivoi`
+  return await axios.patch(path)
+}

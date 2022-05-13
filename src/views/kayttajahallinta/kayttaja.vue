@@ -9,7 +9,7 @@
           <div v-if="kayttaja">
             <elsa-form-group :label="$t('tilin-tila')">
               <template v-slot="{ uid }">
-                <span :id="uid" :class="tilaColor">{{ $t(tilinTila) }}</span>
+                <span :id="uid" :class="tilaColor">{{ $t(tilinTilaText) }}</span>
               </template>
             </elsa-form-group>
             <elsa-form-group v-if="rooli" :label="$t('rooli')">
@@ -92,7 +92,30 @@
               </elsa-form-group>
             </div>
             <div class="d-flex flex-row-reverse flex-wrap">
-              <elsa-button variant="primary" @click="onInvitationResend" class="mb-3">
+              <elsa-button
+                v-if="isPassiivinen"
+                variant="outline-success"
+                :loading="kayttajaTilaUpdating"
+                @click="onActivateKayttaja"
+                class="mb-3"
+              >
+                {{ $t('aktivoi-kayttaja') }}
+              </elsa-button>
+              <elsa-button
+                v-else-if="isAktiivinen"
+                variant="outline-danger"
+                :loading="kayttajaTilaUpdating"
+                @click="onPassivateKayttaja"
+                class="mb-3"
+              >
+                {{ $t('passivoi-kayttaja') }}
+              </elsa-button>
+              <elsa-button
+                v-else-if="isKutsuttu"
+                variant="primary"
+                @click="onInvitationResend"
+                class="mb-3"
+              >
                 {{ $t('laheta-kutsu-uudelleen') }}
               </elsa-button>
               <elsa-button
@@ -116,7 +139,12 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getKayttaja, putErikoistuvaLaakariInvitation } from '@/api/kayttajahallinta'
+  import {
+    getKayttaja,
+    putErikoistuvaLaakariInvitation,
+    activateKayttaja,
+    passivateKayttaja
+  } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
@@ -146,6 +174,7 @@
     loading = true
     resending = false
     kayttaja: KayttajahallintaKayttaja | null = null
+    kayttajaTilaUpdating = false
 
     async mounted() {
       await this.fetchKayttaja()
@@ -185,6 +214,22 @@
       }
     }
 
+    async onActivateKayttaja() {
+      if (!this.kayttaja?.kayttaja?.id) return
+      this.kayttajaTilaUpdating = true
+      await activateKayttaja(this.kayttaja.kayttaja.id)
+      this.kayttaja.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
+      this.kayttajaTilaUpdating = false
+    }
+
+    async onPassivateKayttaja() {
+      if (!this.kayttaja?.kayttaja?.id) return
+      this.kayttajaTilaUpdating = true
+      await passivateKayttaja(this.kayttaja.kayttaja.id)
+      this.kayttaja.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
+      this.kayttajaTilaUpdating = false
+    }
+
     get account() {
       return store.getters['auth/account']
     }
@@ -193,7 +238,7 @@
       return this.account.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
     }
 
-    get tilinTila() {
+    get tilinTilaText() {
       return this.$t(`tilin-tila-${this.kayttaja?.kayttaja?.tila}`)
     }
 
@@ -206,6 +251,18 @@
         default:
           return ''
       }
+    }
+
+    get isAktiivinen() {
+      return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.AKTIIVINEN
+    }
+
+    get isPassiivinen() {
+      return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.PASSIIVINEN
+    }
+
+    get isKutsuttu() {
+      return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.KUTSUTTU
     }
 
     get rooli() {
