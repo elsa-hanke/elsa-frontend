@@ -335,7 +335,7 @@
   "kirjautuminen": {
     "EI_KAYTTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Käyttöoikeutta palveluun ei löytynyt. Jos sinulla pitäisi olla käyttöoikeus, ota yhteys tekniseen pääkäyttäjään osoitteeseen ",
     "EI_OPINTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Kirjautumisen sallivaa opinto-oikeutta ei löytynyt.",
-    "TILI_PASSIVOITU": "Sisäänkirjautuminen epäonnistui. Käyttäjätilisi on passivoitu. Ota yhteyttä omaan yliopistoosi tili aktivoimiseksi.",
+    "TILI_PASSIVOITU": "Sisäänkirjautuminen epäonnistui. Käyttäjätilisi on passivoitu. Ota yhteyttä omaan yliopistoosi tilin aktivoimiseksi.",
     "TUNTEMATON": "Sisäänkirjautuminen epäonnistui.",
     "VIRHEELLINEN_NIMI": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Ota yhteys tekniseen pääkäyttäjään osoitteeseen "
   },
@@ -1171,5 +1171,6 @@
   "yliopisto-opintooikeus": "Yliopisto, jossa erikoistuvalla on opinto-oikeus",
   "yliopistollinen-sairaala": "Yliopistollinen sairaala",
   "yliopistosairaala": "Yliopistosairaala",
-  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"
+  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
+  "aktivoi-kayttaja": "Aktivoi käyttäjä"
 }
