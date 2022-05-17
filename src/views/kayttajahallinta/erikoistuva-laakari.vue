@@ -35,7 +35,7 @@
                   <b-form-input
                     :id="uid"
                     v-model="form.sahkoposti"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="skipRouteExitConfirm = false"
                     :state="validateState('sahkoposti')"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -54,7 +54,7 @@
                   <b-form-input
                     :id="uid"
                     v-model="form.sahkopostiUudelleen"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="skipRouteExitConfirm = false"
                     :state="validateState('sahkopostiUudelleen')"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -86,7 +86,7 @@
               <elsa-form-group :label="$t('sahkopostiosoite')">
                 <template v-slot="{ uid }">
                   <span :id="uid">
-                    {{ sahkoposti }}
+                    {{ form.sahkoposti }}
                   </span>
                 </template>
               </elsa-form-group>
@@ -199,7 +199,7 @@
                 variant="back"
                 :disabled="updatingKayttaja"
                 @click.stop.prevent="onCancel"
-                class="mb-3 ml-3 mr-3"
+                class="mb-3 mr-3"
               >
                 {{ $t('peruuta') }}
               </elsa-button>
@@ -226,24 +226,18 @@
 <script lang="ts">
   import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
   import {
     getKayttaja,
     putErikoistuvaLaakariInvitation,
-    activateKayttaja,
-    passivateKayttaja,
     patchSahkopostiosoite
   } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import store from '@/store'
-  import { KayttajahallintaKayttaja, ElsaError } from '@/types'
+  import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
+  import { ElsaError } from '@/types/index'
   import { confirmExit } from '@/utils/confirm'
-  import { KayttajatiliTila } from '@/utils/constants'
-  import { getTitleFromAuthorities } from '@/utils/functions'
-  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -265,7 +259,7 @@
       }
     }
   })
-  export default class ErikoistuvaLaakariView extends Mixins(validationMixin) {
+  export default class ErikoistuvaLaakariView extends Mixins(KayttajahallintaKayttajaMixin) {
     items = [
       {
         text: this.$t('kayttajahallinta'),
@@ -276,12 +270,7 @@
         active: true
       }
     ]
-    loading = true
     resending = false
-    kayttaja: KayttajahallintaKayttaja | null = null
-    updatingTila = false
-    updatingKayttaja = false
-    editing = false
 
     form = {
       sahkoposti: null,
@@ -301,6 +290,12 @@
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'kayttajahallinta' })
       }
+    }
+
+    initForm() {
+      const sahkoposti = this.kayttaja?.kayttaja?.sahkoposti
+      this.form.sahkoposti = sahkoposti
+      this.form.sahkopostiUudelleen = sahkoposti
     }
 
     async onInvitationResend() {
@@ -327,24 +322,20 @@
       }
     }
 
-    async onActivateKayttaja() {
-      if (!this.kayttaja?.kayttaja?.id) return
-      this.updatingTila = true
-      await activateKayttaja(this.kayttaja.kayttaja.id)
-      this.kayttaja.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
-      this.updatingTila = false
-    }
-
-    async onPassivateKayttaja() {
-      if (!this.kayttaja?.kayttaja?.id) return
-      this.updatingTila = true
-      await passivateKayttaja(this.kayttaja.kayttaja.id)
-      this.kayttaja.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
-      this.updatingTila = false
+    async onCancel() {
+      if (this.skipRouteExitConfirm || (await confirmExit(this))) {
+        this.initForm()
+        this.$v.form.$reset()
+        this.skipRouteExitConfirm = true
+        this.editing = false
+      }
     }
 
     async onSave() {
-      if (!this.kayttaja?.user?.id || !this.validateForm()) return
+      if (!this.kayttaja?.user?.id || !this.validateForm()) {
+        window.scrollTo(0, 0)
+        return
+      }
       this.updatingKayttaja = true
 
       try {
@@ -364,35 +355,8 @@
         )
       }
 
+      this.skipRouteExitConfirm = true
       this.updatingKayttaja = false
-    }
-
-    validateForm(): boolean {
-      this.$v.form.$touch()
-      return !this.$v.$anyError
-    }
-
-    onEditUser() {
-      this.editing = true
-    }
-
-    async onCancel() {
-      if (await confirmExit(this)) {
-        this.initForm()
-        this.$v.form.$reset()
-        this.editing = false
-      }
-    }
-
-    initForm() {
-      const sahkoposti = this.kayttaja?.kayttaja?.sahkoposti
-      this.form.sahkoposti = sahkoposti
-      this.form.sahkopostiUudelleen = sahkoposti
-    }
-
-    validateState(name: string) {
-      const { $dirty, $error } = this.$v.form[name] as any
-      return $dirty ? ($error ? false : null) : null
     }
 
     get updateAllowed() {
@@ -400,61 +364,10 @@
       return this.form.sahkoposti !== userEmail || this.form.sahkopostiUudelleen !== userEmail
     }
 
-    get account() {
-      return store.getters['auth/account']
-    }
-
-    get isVirkailija() {
-      return this.account.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
-    }
-
-    get tilinTilaText() {
-      return this.$t(`tilin-tila-${this.kayttaja?.kayttaja?.tila}`)
-    }
-
-    get tilaColor() {
-      switch (this.kayttaja?.kayttaja?.tila) {
-        case KayttajatiliTila.AKTIIVINEN:
-          return 'text-success'
-        case KayttajatiliTila.PASSIIVINEN:
-          return 'text-danger'
-        default:
-          return ''
-      }
-    }
-
-    get isAktiivinen() {
-      return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.AKTIIVINEN
-    }
-
-    get isPassiivinen() {
-      return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.PASSIIVINEN
-    }
-
-    get isKutsuttu() {
-      return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.KUTSUTTU
-    }
-
-    get rooli() {
-      return getTitleFromAuthorities(this, this.kayttaja?.user?.authorities ?? [])
-    }
-
-    get etunimi() {
-      return this.kayttaja?.kayttaja?.etunimi
-    }
-
-    get sukunimi() {
-      return this.kayttaja?.kayttaja?.sukunimi
-    }
-
     get syntymaaika() {
       return this.kayttaja?.erikoistuvaLaakari?.syntymaaika
         ? this.$date(this.kayttaja?.erikoistuvaLaakari?.syntymaaika)
         : ''
-    }
-
-    get sahkoposti() {
-      return this.kayttaja?.user?.email
     }
 
     get opintooikeudet() {

@@ -2,7 +2,11 @@
   <b-sidebar id="sidebar-right" right no-header backdrop bg-variant="white" class="mobile-menu">
     <template>
       <b-nav vertical class="main-mobile-nav">
-        <b-nav-item class="border-bottom" :to="{ name: 'etusivu' }">
+        <b-nav-item
+          v-if="!$isTekninenPaakayttaja()"
+          class="border-bottom"
+          :to="{ name: 'etusivu' }"
+        >
           <font-awesome-icon icon="home" fixed-width size="lg" />
           {{ $t('etusivu') }}
         </b-nav-item>
@@ -87,6 +91,14 @@
         <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
           <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
           {{ $t('asiakirjat') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isTekninenPaakayttaja() || $isVirkailija()"
+          class="border-bottom"
+          :to="{ name: 'kayttajahallinta' }"
+        >
+          <font-awesome-icon icon="user-friends" fixed-width size="lg" />
+          {{ $t('kayttajahallinta') }}
         </b-nav-item>
         <!--<b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
           <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />

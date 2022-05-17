@@ -145,6 +145,7 @@
   "ei-asiakirjoja": "Ei asiakirjoja",
   "ei-hakutuloksia": "Ei hakutuloksia",
   "ei-huolenaiheita-on": "Ei, huolenaiheita on",
+  "ei-kayttajia": "Ei käyttäjiä",
   "ei-koejaksoja": "Ei koejaksoja",
   "ei-liitetiedostoja": "Ei liitetiedostoja",
   "ei-paivittaisia-merkintoja": "Päivittäisiä merkintöjä ei löytynyt.",
@@ -275,7 +276,9 @@
   "kayttajahallinta-ingressi": "Hallinnoi palvelun käyttäjiä.",
   "kayttajalomakkeen-hakeminen-epaonnistui": "Käyttäjälomakkeen hakeminen epäonnistui",
   "kayttajan-hakeminen-epaonnistui": "Käyttäjän hakeminen epäonnistui",
+  "kayttajan-tiedot-paivitetty": "Käyttäjän tiedot päivitetty",
   "kayttajatunnus": "Käyttäjätunnus",
+  "kayttajien-hakeminen-epaonnistui": "Käyttäjien hakeminen epäonnistui",
   "kayttoehdot": "Käyttöehdot",
   "kehittamistoimenpidekategoria-MUU": "muuhun, kerro mihin:",
   "kehittamistoimenpidekategoria-POTILASPALAUTE": "potilaspalautteisiin",
@@ -1174,7 +1177,5 @@
   "yliopisto-opintooikeus": "Yliopisto, jossa erikoistuvalla on opinto-oikeus",
   "yliopistollinen-sairaala": "Yliopistollinen sairaala",
   "yliopistosairaala": "Yliopistosairaala",
-  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
-  "kayttajien-hakeminen-epaonnistui": "Käyttäjien hakeminen epäonnistui",
-  "kayttajan-tiedot-paivitetty": "Käyttäjän tiedot päivitetty"
+  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"
 }
