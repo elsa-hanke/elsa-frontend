@@ -997,3 +997,13 @@ export interface KoejaksonVaihe {
   pvm: string
   hyvaksytytVaiheet: HyvaksyttyKoejaksonVaihe[]
 }
+
+export interface VastuuhenkiloTehtavatyyppi {
+  id?: number
+  nimi: string
+}
+
+export interface KayttajahallintaRajaimet {
+  erikoisalat: Erikoisala[]
+  vastuuhenkilonVastuualueet: VastuuhenkiloTehtavatyyppi[]
+}

@@ -10,6 +10,7 @@
   "ajatuksia-opitusta-ja-sen-soveltamisesta": "Ajatuksia opitusta ja sen soveltamisesta",
   "ajatuksia-opitusta-ja-sen-soveltamisesta-ohje1": "Päiväkirjamerkinnöistä on hyvä käydä ilmi oppimistapahtuman sisältö ja lyhyt kuvaus opitusta tai sen merkityksestä osaamisen kehittymiselle. Päiväkirjamerkinnät kannattaa tehdä nopeasti tapahtumien yhteydessä. Voit muokata merkintöjä myöhemmin. Tuolloin voit reflektoida oppimistapahtumaa esimerkiksi kysymällä: mikä oli uutta, mikä tuntui tärkeältä, herättikö jokin ristiriitaisia ajatuksia, jäikö jokin asia epäselväksi, miltä asia vaikuttaa omien kokemusten valossa ja syntyikö asiasta jotain erityisiä oivalluksia?",
   "ajatuksia-opitusta-ja-sen-soveltamisesta-ohje2": "Päiväkirjamerkinnät näkyvät kouluttajille, joilla on katseluoikeus profiiliisi. Voit halutessasi muuttaa merkinnät yksityisiksi, jolloin vain itse näet tekstin. Potilastietoja tai muita salassa pidettäviä tietoja sinne ei kuitenkaan saa merkitä. Päiväkirjamerkinnät auttavat kouluttajaa havainnoimaan ja arvioimaan oppimisesi etenemistä. Päiväkirjamerkintöjen kirjaaminen on osa koulutuksen laatua ja oikeusturvaasi. Käytäntö varmistaa osaltaan, että saat ohjausta tavoitteiden ja sovitun mukaisesti. Ohjaustilanteissa on hyvä varata lopuksi hetki päiväkirjamerkinnöille.",
+  "aktivoi-kayttaja": "Aktivoi käyttäjä",
   "alkamispaiva": "Alkamispäivä",
   "alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen": "Alkamispäivä ei voi olla päättymispäivän jälkeen",
   "alle-50-osaaikaisuus-ei-kerryta": "Alle 50% osa-aikaisuus ei kerrytä koulutukseen hyväksyttävää työkokemusta",
@@ -606,10 +607,12 @@
   "muut-kayttajaroolit-kuin-erikoistuva-tai-kouluttaja": "Muut käyttäjäroolit kuin erikoistuja tai kouluttaja",
   "muut-osaamistavoitteet": "Muut osaamistavoitteet",
   "myonna-oikeus": "Myönnä oikeus",
+  "naet-oman-yliopistosi-kayttajat": "Näet oman yliopistosi käyttäjät",
   "nayta": "Näytä",
   "nayta-aloituskeskustelu": "Näytä aloituskeskustelu",
   "nayta-arviointi": "Näytä arviointi",
   "nayta-arviointipyynto": "Näytä arviointipyyntö",
+  "nayta-erikoistujat-useampi-opintooikeus": "Näytä erikoistujat, joilla useampi opinto-oikeus",
   "nayta-koulutussopimus": "Näytä koulutussopimus",
   "nayta-likimaaraisina-sekayksikkoina": "Näytä likimääräisinä sekayksikköinä",
   "nayta-lisaa": "Näytä lisää",
@@ -1172,5 +1175,5 @@
   "yliopistollinen-sairaala": "Yliopistollinen sairaala",
   "yliopistosairaala": "Yliopistosairaala",
   "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
-  "aktivoi-kayttaja": "Aktivoi käyttäjä"
+  "kayttajien-hakeminen-epaonnistui": "Käyttäjien hakeminen epäonnistui"
 }
