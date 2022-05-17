@@ -19,7 +19,7 @@ import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
 import Etusivu from '@/views/etusivu/etusivu.vue'
 import KaytonAloitus from '@/views/kayton-aloitus/kayton-aloitus.vue'
-import Kayttaja from '@/views/kayttajahallinta/kayttaja.vue'
+import ErikoistuvaLaakari from '@/views/kayttajahallinta/erikoistuva-laakari.vue'
 import Kayttajahallinta from '@/views/kayttajahallinta/kayttajahallinta.vue'
 import UusiKayttaja from '@/views/kayttajahallinta/uusi-kayttaja.vue'
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/erikoistuva-arviointilomake-aloituskeskustelu.vue'
@@ -704,10 +704,10 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: '/kayttajahallinta/kayttaja/:kayttajaId',
-        name: 'kayttaja',
+        name: 'erikoistuva-laakari',
         component: RoleSpecificRoute,
         props: {
-          routeComponent: Kayttaja,
+          routeComponent: ErikoistuvaLaakari,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
