@@ -720,6 +720,10 @@ export interface KayttajahallintaKayttaja {
   erikoistuvaLaakari?: ErikoistuvaLaakari
 }
 
+export interface KayttajahallintaUpdateKayttaja {
+  sahkoposti: string
+}
+
 export interface KayttajahallintaKayttajaListItem {
   kayttajaId: number
   etunimi: string

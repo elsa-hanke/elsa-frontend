@@ -7,7 +7,8 @@ import {
   KayttajaLomake,
   UusiErikoistuvaLaakari,
   KayttajahallintaKayttajaListItem,
-  KayttajahallintaRajaimet
+  KayttajahallintaRajaimet,
+  KayttajahallintaUpdateKayttaja
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -60,4 +61,9 @@ export async function passivateKayttaja(kayttajaId: number) {
 export async function getKayttajahallintaRajaimet() {
   const path = `${resolveRolePath()}/kayttajat/rajaimet`
   return await axios.get<KayttajahallintaRajaimet>(path)
+}
+
+export async function patchSahkopostiosoite(userId: string, form: KayttajahallintaUpdateKayttaja) {
+  const path = `${resolveRolePath()}/kayttajat/${userId}`
+  return await axios.patch(path, form)
 }

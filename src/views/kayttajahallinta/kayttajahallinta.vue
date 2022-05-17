@@ -31,7 +31,7 @@
                             v-model="filtered.erikoisala"
                             :options="erikoisalatSorted"
                             label="nimi"
-                            @select="onResultsFiltered"
+                            @select="onErikoisalaSelect"
                             @clearMultiselect="onErikoisalaReset"
                           ></elsa-form-multiselect>
                         </template>
@@ -44,7 +44,7 @@
                     <b-form-checkbox
                       class="mb-4"
                       v-model="filtered.useaOpintooikeus"
-                      @input="onResultsFiltered"
+                      @input="onUseaOpintooikeusInput"
                     >
                       {{ $t('nayta-erikoistujat-useampi-opintooikeus') }}
                     </b-form-checkbox>
@@ -60,7 +60,7 @@
                     <template #cell(nimi)="row">
                       <elsa-button
                         :to="{
-                          name: 'kayttaja',
+                          name: 'erikoistuva-laakari',
                           params: { kayttajaId: row.item.kayttajaId }
                         }"
                         variant="link"
@@ -214,7 +214,22 @@
       this.debounceSearch(value)
     }
 
-    private async onResultsFiltered() {
+    onErikoisalaSelect(erikoisala: Erikoisala) {
+      this.filtered.erikoisala = erikoisala
+      this.onResultsFiltered()
+    }
+
+    onErikoisalaReset() {
+      this.filtered.erikoisala = null
+      this.onResultsFiltered()
+    }
+
+    onUseaOpintooikeusInput(checked: boolean) {
+      this.filtered.useaOpintooikeus = checked
+      this.onResultsFiltered()
+    }
+
+    async onResultsFiltered() {
       this.loadingResults = true
       this.currentPage = 1
       await this.fetch()
@@ -232,11 +247,6 @@
         this.filtered.nimi = value
         this.onResultsFiltered()
       }, 400)
-    }
-
-    onErikoisalaReset() {
-      this.filtered.erikoisala = null
-      this.onResultsFiltered()
     }
 
     get rows() {

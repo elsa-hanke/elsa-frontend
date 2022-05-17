@@ -29,13 +29,68 @@
                 </template>
               </elsa-form-group>
             </b-form-row>
-            <elsa-form-group :label="$t('sahkopostiosoite')">
-              <template v-slot="{ uid }">
-                <span :id="uid">
-                  {{ sahkopostiosoite }}
-                </span>
-              </template>
-            </elsa-form-group>
+            <div v-if="editing">
+              <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-input
+                    :id="uid"
+                    v-model="form.sahkoposti"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('sahkoposti')"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-if="!$v.form.sahkoposti.required"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                  <b-form-invalid-feedback v-if="!$v.form.sahkoposti.email" :id="`${uid}-feedback`">
+                    {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group :label="$t('sahkopostiosoite-uudelleen')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-input
+                    :id="uid"
+                    v-model="form.sahkopostiUudelleen"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('sahkopostiUudelleen')"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-if="!$v.form.sahkopostiUudelleen.required"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                  <b-form-invalid-feedback
+                    v-if="!$v.form.sahkopostiUudelleen.email"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                  </b-form-invalid-feedback>
+                  <b-form-invalid-feedback
+                    v-if="
+                      $v.form.sahkopostiUudelleen.required &&
+                      $v.form.sahkopostiUudelleen.email &&
+                      !$v.form.sahkopostiUudelleen.sameAsSahkoposti
+                    "
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('sahkopostiosoitteet-eivat-tasmaa') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </div>
+            <div v-else>
+              <elsa-form-group :label="$t('sahkopostiosoite')">
+                <template v-slot="{ uid }">
+                  <span :id="uid">
+                    {{ sahkoposti }}
+                  </span>
+                </template>
+              </elsa-form-group>
+            </div>
             <elsa-form-group :label="$t('syntymaaika')">
               <template v-slot="{ uid }">
                 <span :id="uid">
@@ -93,9 +148,29 @@
             </div>
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
+                v-if="editing"
+                variant="primary"
+                @click="onSave"
+                :loading="updatingKayttaja"
+                :disabled="!updateAllowed"
+                class="mb-3 ml-3"
+              >
+                {{ $t('tallenna') }}
+              </elsa-button>
+              <elsa-button
+                v-else
+                variant="primary"
+                @click="onEditUser"
+                :disabled="updatingTila"
+                class="mb-3 ml-3"
+              >
+                {{ $t('muokkaa-kayttajaa') }}
+              </elsa-button>
+              <elsa-button
                 v-if="isPassiivinen"
                 variant="outline-success"
-                :loading="kayttajaTilaUpdating"
+                :loading="updatingTila"
+                :disabled="updatingKayttaja"
                 @click="onActivateKayttaja"
                 class="mb-3"
               >
@@ -104,7 +179,8 @@
               <elsa-button
                 v-else-if="isAktiivinen"
                 variant="outline-danger"
-                :loading="kayttajaTilaUpdating"
+                :loading="updatingTila"
+                :disabled="updatingKayttaja"
                 @click="onPassivateKayttaja"
                 class="mb-3"
               >
@@ -119,6 +195,17 @@
                 {{ $t('laheta-kutsu-uudelleen') }}
               </elsa-button>
               <elsa-button
+                v-if="editing"
+                variant="back"
+                :disabled="updatingKayttaja"
+                @click.stop.prevent="onCancel"
+                class="mb-3 ml-3 mr-3"
+              >
+                {{ $t('peruuta') }}
+              </elsa-button>
+              <elsa-button
+                v-if="!editing"
+                :disabled="updatingTila"
                 :to="{ name: 'kayttajahallinta' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
@@ -137,18 +224,23 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
+  import { AxiosError } from 'axios'
+  import { Component, Mixins } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
+  import { required, email, sameAs } from 'vuelidate/lib/validators'
 
   import {
     getKayttaja,
     putErikoistuvaLaakariInvitation,
     activateKayttaja,
-    passivateKayttaja
+    passivateKayttaja,
+    patchSahkopostiosoite
   } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
-  import { KayttajahallintaKayttaja } from '@/types'
+  import { KayttajahallintaKayttaja, ElsaError } from '@/types'
+  import { confirmExit } from '@/utils/confirm'
   import { KayttajatiliTila } from '@/utils/constants'
   import { getTitleFromAuthorities } from '@/utils/functions'
   import { ELSA_ROLE } from '@/utils/roles'
@@ -158,9 +250,22 @@
     components: {
       ElsaButton,
       ElsaFormGroup
+    },
+    validations: {
+      form: {
+        sahkoposti: {
+          required,
+          email
+        },
+        sahkopostiUudelleen: {
+          required,
+          email,
+          sameAsSahkoposti: sameAs('sahkoposti')
+        }
+      }
     }
   })
-  export default class KayttajaView extends Vue {
+  export default class ErikoistuvaLaakariView extends Mixins(validationMixin) {
     items = [
       {
         text: this.$t('kayttajahallinta'),
@@ -174,7 +279,14 @@
     loading = true
     resending = false
     kayttaja: KayttajahallintaKayttaja | null = null
-    kayttajaTilaUpdating = false
+    updatingTila = false
+    updatingKayttaja = false
+    editing = false
+
+    form = {
+      sahkoposti: null,
+      sahkopostiUudelleen: null
+    } as any
 
     async mounted() {
       await this.fetchKayttaja()
@@ -184,6 +296,7 @@
     async fetchKayttaja() {
       try {
         this.kayttaja = (await getKayttaja(this.$route?.params?.kayttajaId)).data
+        this.initForm()
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'kayttajahallinta' })
@@ -216,18 +329,75 @@
 
     async onActivateKayttaja() {
       if (!this.kayttaja?.kayttaja?.id) return
-      this.kayttajaTilaUpdating = true
+      this.updatingTila = true
       await activateKayttaja(this.kayttaja.kayttaja.id)
       this.kayttaja.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
-      this.kayttajaTilaUpdating = false
+      this.updatingTila = false
     }
 
     async onPassivateKayttaja() {
       if (!this.kayttaja?.kayttaja?.id) return
-      this.kayttajaTilaUpdating = true
+      this.updatingTila = true
       await passivateKayttaja(this.kayttaja.kayttaja.id)
       this.kayttaja.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
-      this.kayttajaTilaUpdating = false
+      this.updatingTila = false
+    }
+
+    async onSave() {
+      if (!this.kayttaja?.user?.id || !this.validateForm()) return
+      this.updatingKayttaja = true
+
+      try {
+        await patchSahkopostiosoite(this.kayttaja.user.id, {
+          sahkoposti: this.form.sahkoposti
+        })
+        toastSuccess(this, this.$t('kayttajan-tiedot-paivitetty'))
+        this.editing = false
+      } catch (err) {
+        const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('tietojen-tallennus-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('tietojen-tallennus-epaonnistui')
+        )
+      }
+
+      this.updatingKayttaja = false
+    }
+
+    validateForm(): boolean {
+      this.$v.form.$touch()
+      return !this.$v.$anyError
+    }
+
+    onEditUser() {
+      this.editing = true
+    }
+
+    async onCancel() {
+      if (await confirmExit(this)) {
+        this.initForm()
+        this.$v.form.$reset()
+        this.editing = false
+      }
+    }
+
+    initForm() {
+      const sahkoposti = this.kayttaja?.kayttaja?.sahkoposti
+      this.form.sahkoposti = sahkoposti
+      this.form.sahkopostiUudelleen = sahkoposti
+    }
+
+    validateState(name: string) {
+      const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    get updateAllowed() {
+      const userEmail = this.kayttaja?.kayttaja?.sahkoposti
+      return this.form.sahkoposti !== userEmail || this.form.sahkopostiUudelleen !== userEmail
     }
 
     get account() {
@@ -277,14 +447,14 @@
       return this.kayttaja?.kayttaja?.sukunimi
     }
 
-    get sahkopostiosoite() {
-      return this.kayttaja?.kayttaja?.sahkoposti
-    }
-
     get syntymaaika() {
       return this.kayttaja?.erikoistuvaLaakari?.syntymaaika
         ? this.$date(this.kayttaja?.erikoistuvaLaakari?.syntymaaika)
         : ''
+    }
+
+    get sahkoposti() {
+      return this.kayttaja?.user?.email
     }
 
     get opintooikeudet() {
