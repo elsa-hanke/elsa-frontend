@@ -6,7 +6,8 @@ import {
   KayttajahallintaKayttaja,
   KayttajaLomake,
   UusiErikoistuvaLaakari,
-  KayttajahallintaKayttajaListItem
+  KayttajahallintaKayttajaListItem,
+  KayttajahallintaRajaimet
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -14,6 +15,9 @@ export async function getErikoistuvatLaakarit(params: {
   page?: number
   size?: number
   sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  'useaOpintooikeus.equals'?: boolean
 }) {
   const path = `${resolveRolePath()}/erikoistuvat-laakarit`
   return await axios.get<Page<KayttajahallintaKayttajaListItem>>(path, {
@@ -51,4 +55,9 @@ export async function activateKayttaja(kayttajaId: number) {
 export async function passivateKayttaja(kayttajaId: number) {
   const path = `${resolveRolePath()}/kayttajat/${kayttajaId}/passivoi`
   return await axios.patch(path)
+}
+
+export async function getKayttajahallintaRajaimet() {
+  const path = `${resolveRolePath()}/kayttajat/rajaimet`
+  return await axios.get<KayttajahallintaRajaimet>(path)
 }
