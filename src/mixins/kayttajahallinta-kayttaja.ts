@@ -21,19 +21,43 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
   skipRouteExitConfirm = true
 
   async onActivateKayttaja() {
-    if (!this.kayttaja?.kayttaja?.id) return
-    this.updatingTila = true
-    await activateKayttaja(this.kayttaja.kayttaja.id)
-    this.kayttaja.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
-    this.updatingTila = false
+    if (
+      this.kayttaja?.kayttaja?.id &&
+      (await this.$bvModal.msgBoxConfirm(this.$t('aktivoi-kayttaja-varmistus') as string, {
+        title: this.$t('aktivoi-kayttaja') as string,
+        okVariant: 'primary',
+        okTitle: this.$t('aktivoi-kayttaja') as string,
+        cancelTitle: this.$t('peruuta') as string,
+        cancelVariant: 'back',
+        hideHeaderClose: false,
+        centered: true
+      }))
+    ) {
+      this.updatingTila = true
+      await activateKayttaja(this.kayttaja.kayttaja.id)
+      this.kayttaja.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
+      this.updatingTila = false
+    }
   }
 
   async onPassivateKayttaja() {
-    if (!this.kayttaja?.kayttaja?.id) return
-    this.updatingTila = true
-    await passivateKayttaja(this.kayttaja.kayttaja.id)
-    this.kayttaja.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
-    this.updatingTila = false
+    if (
+      this.kayttaja?.kayttaja?.id &&
+      (await this.$bvModal.msgBoxConfirm(this.$t('passivoi-kayttaja-varmistus') as string, {
+        title: this.$t('passivoi-kayttaja') as string,
+        okVariant: 'primary',
+        okTitle: this.$t('passivoi-kayttaja') as string,
+        cancelTitle: this.$t('peruuta') as string,
+        cancelVariant: 'back',
+        hideHeaderClose: false,
+        centered: true
+      }))
+    ) {
+      this.updatingTila = true
+      await passivateKayttaja(this.kayttaja.kayttaja.id)
+      this.kayttaja.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
+      this.updatingTila = false
+    }
   }
 
   validateForm(): boolean {
