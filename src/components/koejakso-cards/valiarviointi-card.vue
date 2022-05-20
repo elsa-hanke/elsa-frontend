@@ -15,7 +15,7 @@
             v-if="!account.impersonated"
             variant="primary"
             class="mb-4"
-            :disabled="true"
+            :disabled="tila === lomaketilat.EI_AKTIIVINEN"
             :to="{ name: url }"
           >
             {{ $t('pyyda-arviointia') }}
