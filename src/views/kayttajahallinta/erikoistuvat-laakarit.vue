@@ -106,6 +106,7 @@
       </template>
     </b-table>
     <elsa-pagination
+      v-if="!loading"
       @update:currentPage="onPageInput"
       :current-page="currentPage"
       :per-page="perPage"
@@ -155,11 +156,6 @@
         sortable: false
       }
     ]
-
-    loading = false
-    currentPage = 1
-    perPage = 20
-    hakutermi = ''
 
     async mounted() {
       this.loading = true

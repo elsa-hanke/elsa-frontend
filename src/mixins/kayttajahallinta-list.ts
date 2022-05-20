@@ -30,7 +30,7 @@ export default class KayttajahallintaListMixin extends Mixins(KayttajahallintaMi
   ]
   sortBy = this.sortFields[0]
 
-  loadingResults = false
+  loading = false
   currentPage = 1
   perPage = 20
   debounce?: number
