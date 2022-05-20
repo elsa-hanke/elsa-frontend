@@ -90,7 +90,7 @@
         toastSuccess(this, this.$t('kayttaja-lisatty-ja-kutsulinkki-lahetetty'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
-          name: 'kayttaja',
+          name: 'erikoistuva-laakari',
           params: { kayttajaId: `${kayttajaId}` }
         })
       } catch (err) {

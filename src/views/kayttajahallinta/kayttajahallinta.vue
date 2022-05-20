@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
+  import { Component, Mixins } from 'vue-property-decorator'
 
   import { getKayttajahallintaRajaimet } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
@@ -39,6 +39,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
+  import KayttajahallintaMixin from '@/mixins/kayttajahallinta'
   import { KayttajahallintaRajaimet } from '@/types'
   import { toastFail } from '@/utils/toast'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
@@ -53,7 +54,7 @@
       ElsaSearchInput
     }
   })
-  export default class Kayttajahallinta extends Vue {
+  export default class Kayttajahallinta extends Mixins(KayttajahallintaMixin) {
     initializing = true
     rajaimet: KayttajahallintaRajaimet | null = null
 
