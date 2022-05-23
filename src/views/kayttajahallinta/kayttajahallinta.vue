@@ -16,7 +16,9 @@
               <b-tab :title="$t('erikoistujat')" active>
                 <erikoistuvat-laakarit :rajaimet="rajaimet" />
               </b-tab>
-              <!-- <b-tab :title="$t('vastuuhenkilot')"></b-tab> -->
+              <b-tab :title="$t('vastuuhenkilot')" lazy>
+                <vastuuhenkilot :rajaimet="rajaimet" />
+              </b-tab>
               <!-- <b-tab :title="$t('virkailijat')"></b-tab> -->
               <!-- <b-tab :title="$t('paakayttajat')"></b-tab> -->
             </b-tabs>
@@ -41,12 +43,15 @@
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import KayttajahallintaMixin from '@/mixins/kayttajahallinta'
   import { KayttajahallintaRajaimet } from '@/types'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
+  import Vastuuhenkilot from '@/views/kayttajahallinta/vastuuhenkilot.vue'
 
   @Component({
     components: {
       ErikoistuvatLaakarit,
+      Vastuuhenkilot,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormMultiselect,
@@ -68,7 +73,11 @@
     }
 
     async fetchRajaimet() {
-      this.rajaimet = (await getKayttajahallintaRajaimet()).data
+      const rajaimet = (await getKayttajahallintaRajaimet()).data
+      this.rajaimet = {
+        ...rajaimet,
+        erikoisalat: rajaimet?.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
+      }
     }
   }
 </script>

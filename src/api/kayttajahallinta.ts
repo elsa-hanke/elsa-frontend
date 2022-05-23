@@ -28,6 +28,21 @@ export async function getErikoistuvatLaakarit(params: {
   })
 }
 
+export async function getVastuuhenkilot(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+}) {
+  const path = `${resolveRolePath()}/vastuuhenkilot`
+  return await axios.get<Page<KayttajahallintaKayttajaListItem>>(path, {
+    params: {
+      ...params
+    }
+  })
+}
+
 export async function getKayttaja(kayttajaId: number | string) {
   const path = `${resolveRolePath()}/kayttajat/${kayttajaId}`
   return await axios.get<KayttajahallintaKayttaja>(path)

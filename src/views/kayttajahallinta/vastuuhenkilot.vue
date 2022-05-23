@@ -5,7 +5,7 @@
         <elsa-search-input
           class="mb-3"
           :hakutermi.sync="hakutermi"
-          :placeholder="$t('hae-erikoistujan-nimella')"
+          :placeholder="$t('hae-vastuuhenkilon-nimella')"
         />
       </b-col>
       <b-col cols="12" lg="4">
@@ -45,17 +45,6 @@
         </div>
       </b-col>
     </b-row>
-    <b-row lg>
-      <b-col cols="12">
-        <b-form-checkbox
-          class="mb-4"
-          v-model="filtered.useaOpintooikeus"
-          @input="onUseaOpintooikeusInput"
-        >
-          {{ $t('nayta-erikoistujat-useampi-opintooikeus') }}
-        </b-form-checkbox>
-      </b-col>
-    </b-row>
     <div v-if="!loading">
       <b-alert v-if="rows === 0" variant="dark" show>
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
@@ -82,7 +71,7 @@
       <template #cell(nimi)="row">
         <elsa-button
           :to="{
-            name: 'erikoistuva-laakari',
+            name: 'vastuuhenkilo',
             params: { kayttajaId: row.item.kayttajaId }
           }"
           variant="link"
@@ -92,7 +81,7 @@
           <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
         </elsa-button>
       </template>
-      <template #cell(opintooikeus)="row">
+      <template #cell(yliopistotAndErikoisalat)="row">
         <template v-for="(item, index) in row.item.yliopistotAndErikoisalat">
           <div :key="index">
             {{ `${$t(`yliopisto-nimi.${item.yliopisto}`)}: ${item.erikoisala}` }}
@@ -118,7 +107,7 @@
 <script lang="ts">
   import { Component, Mixins, Watch } from 'vue-property-decorator'
 
-  import { getErikoistuvatLaakarit } from '@/api/kayttajahallinta'
+  import { getVastuuhenkilot } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -138,7 +127,7 @@
       ElsaSearchInput
     }
   })
-  export default class ErikoistuvatLaakarit extends Mixins(KayttajahallintaListMixin) {
+  export default class Vastuuhenkilot extends Mixins(KayttajahallintaListMixin) {
     fields = [
       {
         key: 'nimi',
@@ -146,8 +135,8 @@
         sortable: false
       },
       {
-        key: 'opintooikeus',
-        label: this.$t('opintooikeus'),
+        key: 'yliopistotAndErikoisalat',
+        label: this.$t('yliopisto-ja-erikoisala'),
         sortable: false
       },
       {
@@ -169,15 +158,14 @@
 
     async fetch() {
       this.kayttajat = (
-        await getErikoistuvatLaakarit({
+        await getVastuuhenkilot({
           page: this.currentPage - 1,
           size: this.perPage,
-          sort: this.filtered.sortBy ?? 'kayttaja.user.lastName,asc',
+          sort: this.filtered.sortBy ?? 'user.lastName,asc',
           ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
           ...(this.filtered.erikoisala?.id
             ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-            : {}),
-          ...{ 'useaOpintooikeus.equals': this.filtered.useaOpintooikeus }
+            : {})
         })
       ).data
     }
@@ -197,11 +185,6 @@
       this.filterResults()
     }
 
-    onUseaOpintooikeusInput(checked: boolean) {
-      this.filtered.useaOpintooikeus = checked
-      this.filterResults()
-    }
-
     onPageInput(value: number) {
       this.currentPage = value
       this.fetch()
@@ -210,10 +193,10 @@
     onSortBySelect(sortByEnum: SortByEnum) {
       switch (sortByEnum.value) {
         case KayttajaJarjestys.SUKUNIMI_ASC:
-          this.filtered.sortBy = 'kayttaja.user.lastName,asc'
+          this.filtered.sortBy = 'user.lastName,asc'
           break
         case KayttajaJarjestys.SUKUNIMI_DESC:
-          this.filtered.sortBy = 'kayttaja.user.lastName,desc'
+          this.filtered.sortBy = 'user.lastName,desc'
           break
       }
       this.filterResults()

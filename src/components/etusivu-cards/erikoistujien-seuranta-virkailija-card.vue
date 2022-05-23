@@ -8,7 +8,7 @@
             <elsa-search-input
               class="mt-lg-3 mb-4 hakutermi"
               :hakutermi.sync="hakutermi"
-              :placeholder="$t('hae-erikoistuvan-nimella')"
+              :placeholder="$t('hae-erikoistujan-nimella')"
             />
           </b-col>
           <b-col cols="12" lg="3">

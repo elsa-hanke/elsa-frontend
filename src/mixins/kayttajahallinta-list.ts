@@ -5,13 +5,11 @@ import KayttajahallintaMixin from './kayttajahallinta'
 import {
   SortByEnum,
   Erikoisala,
-  VastuuhenkiloTehtavatyyppi,
   KayttajahallintaRajaimet,
   KayttajahallintaKayttajaListItem,
   Page
 } from '@/types'
-import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
-import { sortByAsc } from '@/utils/sort'
+import { KayttajaJarjestys } from '@/utils/constants'
 
 @Component({})
 export default class KayttajahallintaListMixin extends Mixins(KayttajahallintaMixin) {
@@ -21,11 +19,11 @@ export default class KayttajahallintaListMixin extends Mixins(KayttajahallintaMi
   sortFields: SortByEnum[] = [
     {
       name: this.$t('sukunimi-a-o'),
-      value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC
+      value: KayttajaJarjestys.SUKUNIMI_ASC
     } as SortByEnum,
     {
       name: this.$t('sukunimi-o-a'),
-      value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC
+      value: KayttajaJarjestys.SUKUNIMI_DESC
     } as SortByEnum
   ]
   sortBy = this.sortFields[0]
@@ -39,19 +37,13 @@ export default class KayttajahallintaListMixin extends Mixins(KayttajahallintaMi
     nimi: string | null
     erikoisala: Erikoisala | null
     useaOpintooikeus: boolean
-    vastuuhenkilonTehtavatyyppi: VastuuhenkiloTehtavatyyppi | null
     sortBy: string | null
   } = {
     nimi: null,
     erikoisala: null,
     useaOpintooikeus: false,
-    vastuuhenkilonTehtavatyyppi: null,
     sortBy: null
   }
 
   kayttajat: Page<KayttajahallintaKayttajaListItem> | null = null
-
-  get erikoisalatSorted() {
-    return this.rajaimet?.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
-  }
 }
