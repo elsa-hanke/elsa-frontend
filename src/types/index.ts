@@ -13,8 +13,7 @@ import {
   OpintooikeusTila,
   LomakeTyypit,
   LomakeTilat,
-  KayttajatiliTila,
-  VastuuhenkilonTehtavatyyppi
+  KayttajatiliTila
 } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
@@ -750,7 +749,6 @@ export interface KayttajahallintaKayttajaListItem {
   sukunimi: string
   syntymaaika: string
   yliopistotAndErikoisalat: YliopistoErikoisalaPair[]
-  vastuuhenkilonVastuualueet: VastuuhenkilonTehtavatyyppi[]
   kayttajatilinTila: string
 }
 
@@ -1029,5 +1027,4 @@ export interface VastuuhenkiloTehtavatyyppi {
 
 export interface KayttajahallintaRajaimet {
   erikoisalat: Erikoisala[]
-  vastuuhenkilonVastuualueet: VastuuhenkiloTehtavatyyppi[]
 }

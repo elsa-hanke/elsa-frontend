@@ -9,7 +9,7 @@
           <search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
-            :placeholder="$t('hae-erikoistuvan-nimella')"
+            :placeholder="$t('hae-erikoistujan-nimella')"
           />
         </b-col>
       </b-row>
