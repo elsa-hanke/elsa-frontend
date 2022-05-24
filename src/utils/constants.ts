@@ -210,3 +210,8 @@ export enum KayttajaJarjestys {
   SUKUNIMI_ASC,
   SUKUNIMI_DESC
 }
+
+export enum ReassignedVastuuhenkilonTehtavaTyyppi {
+  ADD = 'ADD',
+  REMOVE = 'REMOVE'
+}

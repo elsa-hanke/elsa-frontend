@@ -6,38 +6,48 @@
         <b-col>
           <h1>{{ $t('lisaa-uusi-kayttaja') }}</h1>
           <hr />
-          <kayttaja-form
-            v-if="!loading"
-            :yliopistot="yliopistot"
-            :erikoisalat="erikoisalat"
-            :asetukset="asetukset"
-            :opintooppaat="opintooppaat"
-            @submit="onSubmit"
-            @cancel="onCancel"
+          <elsa-form-group :label="$t('rooli')" :required="true">
+            <template v-slot="{ uid }">
+              <b-form-radio-group :id="uid" v-model="form.rooli" :options="roolit" stacked />
+            </template>
+          </elsa-form-group>
+          <erikoistuva-laakari-form
+            v-if="form.rooli === erikoistuvaLaakariRole"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
-          <div v-else class="text-center">
-            <b-spinner variant="primary" :label="$t('ladataan')" />
-          </div>
+          <vastuuhenkilo-form
+            v-if="form.rooli === vastuuhenkiloRole"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+          />
         </b-col>
       </b-row>
+      <div v-if="!form.rooli" class="d-flex flex-row-reverse flex-wrap">
+        <elsa-button :disabled="true" variant="primary" class="ml-2 mb-2">
+          {{ $t('tallenna') }}
+        </elsa-button>
+        <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+          {{ $t('peruuta') }}
+        </elsa-button>
+      </div>
     </b-container>
   </div>
 </template>
 
 <script lang="ts">
-  import { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getKayttajaLomake, postErikoistuvaLaakari } from '@/api/kayttajahallinta'
-  import KayttajaForm from '@/forms/kayttaja-form.vue'
-  import { ElsaError, KayttajaLomake, UusiKayttaja } from '@/types'
+  import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { ELSA_ROLE } from '@/utils/roles'
-  import { toastFail, toastSuccess } from '@/utils/toast'
+  import ErikoistuvaLaakariForm from '@/views/kayttajahallinta/uusi-erikoistuva-laakari.vue'
+  import VastuuhenkiloForm from '@/views/kayttajahallinta/uusi-vastuuhenkilo.vue'
 
   @Component({
     components: {
-      KayttajaForm
+      ElsaFormGroup,
+      ErikoistuvaLaakariForm,
+      VastuuhenkiloForm,
+      ElsaButton
     }
   })
   export default class UusiKayttajaView extends Vue {
@@ -51,60 +61,20 @@
         active: true
       }
     ]
-    kayttajaLomake: null | KayttajaLomake = null
-    loading = true
-
-    async mounted() {
-      await this.fetchLomake()
-      this.loading = false
+    form = {
+      rooli: null
     }
 
-    async fetchLomake() {
-      try {
-        this.kayttajaLomake = (await getKayttajaLomake()).data
-      } catch {
-        toastFail(this, this.$t('kayttajalomakkeen-hakeminen-epaonnistui'))
+    roolit = [
+      {
+        text: this.$t('erikoistuva-laakari'),
+        value: ELSA_ROLE.ErikoistuvaLaakari
+      },
+      {
+        text: this.$t('vastuuhenkilo'),
+        value: ELSA_ROLE.Vastuuhenkilo
       }
-    }
-
-    async onSubmit(
-      value: UusiKayttaja,
-      params: {
-        saving: boolean
-      }
-    ) {
-      params.saving = true
-      try {
-        let kayttajaId: number | null = null
-        if (value.rooli === ELSA_ROLE.ErikoistuvaLaakari) {
-          kayttajaId = (
-            await postErikoistuvaLaakari({
-              ...value.erikoistuvaLaakari,
-              yliopistoId: value.erikoistuvaLaakari.yliopisto?.id,
-              erikoisalaId: value.erikoistuvaLaakari.erikoisala?.id,
-              opintoopasId: value.erikoistuvaLaakari.opintoopas?.id
-            })
-          ).data.kayttajaId
-        }
-        // TODO: muut roolit
-        toastSuccess(this, this.$t('kayttaja-lisatty-ja-kutsulinkki-lahetetty'))
-        this.$emit('skipRouteExitConfirm', true)
-        this.$router.push({
-          name: 'erikoistuva-laakari',
-          params: { kayttajaId: `${kayttajaId}` }
-        })
-      } catch (err) {
-        const axiosError = err as AxiosError<ElsaError>
-        const message = axiosError?.response?.data?.message
-        toastFail(
-          this,
-          message
-            ? `${this.$t('uuden-kayttajan-lisaaminen-epaonnistui')}: ${this.$t(message)}`
-            : this.$t('uuden-kayttajan-lisaaminen-epaonnistui')
-        )
-      }
-      params.saving = false
-    }
+    ]
 
     onCancel() {
       this.$router.push({
@@ -112,20 +82,12 @@
       })
     }
 
-    get yliopistot() {
-      return this.kayttajaLomake?.yliopistot ?? []
+    get erikoistuvaLaakariRole() {
+      return ELSA_ROLE.ErikoistuvaLaakari
     }
 
-    get erikoisalat() {
-      return this.kayttajaLomake?.erikoisalat ?? []
-    }
-
-    get asetukset() {
-      return this.kayttajaLomake?.asetukset ?? []
-    }
-
-    get opintooppaat() {
-      return this.kayttajaLomake?.opintooppaat ?? []
+    get vastuuhenkiloRole() {
+      return ELSA_ROLE.Vastuuhenkilo
     }
   }
 </script>

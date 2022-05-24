@@ -3,12 +3,15 @@ import axios from 'axios'
 import {
   ErikoistuvaLaakari,
   Page,
-  KayttajahallintaKayttaja,
-  KayttajaLomake,
+  KayttajahallintaKayttajaWrapper,
+  ErikoistuvaLaakariLomake,
   UusiErikoistuvaLaakari,
   KayttajahallintaKayttajaListItem,
   KayttajahallintaRajaimet,
-  KayttajahallintaUpdateKayttaja
+  KayttajahallintaUpdateKayttaja,
+  KayttajahallintaVastuuhenkilonTehtavatLomake,
+  KayttajahallintaNewKayttaja,
+  VastuuhenkiloLomake
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -43,14 +46,24 @@ export async function getVastuuhenkilot(params: {
   })
 }
 
-export async function getKayttaja(kayttajaId: number | string) {
-  const path = `${resolveRolePath()}/kayttajat/${kayttajaId}`
-  return await axios.get<KayttajahallintaKayttaja>(path)
+export async function getErikoistuvaLaakari(kayttajaId: number | string) {
+  const path = `${resolveRolePath()}/erikoistuvat-laakarit/${kayttajaId}`
+  return await axios.get<KayttajahallintaKayttajaWrapper>(path)
 }
 
-export async function getKayttajaLomake() {
-  const path = `${resolveRolePath()}/kayttaja-lomake`
-  return await axios.get<KayttajaLomake>(path)
+export async function getVastuuhenkilo(kayttajaId: number | string) {
+  const path = `${resolveRolePath()}/vastuuhenkilot/${kayttajaId}`
+  return await axios.get<KayttajahallintaKayttajaWrapper>(path)
+}
+
+export async function getErikoistuvaLaakariLomake() {
+  const path = `${resolveRolePath()}/erikoistuva-laakari-lomake`
+  return await axios.get<ErikoistuvaLaakariLomake>(path)
+}
+
+export async function getVastuuhenkiloLomake() {
+  const path = `${resolveRolePath()}/vastuuhenkilo-lomake`
+  return await axios.get<VastuuhenkiloLomake>(path)
 }
 
 export async function postErikoistuvaLaakari(form: UusiErikoistuvaLaakari) {
@@ -78,7 +91,25 @@ export async function getKayttajahallintaRajaimet() {
   return await axios.get<KayttajahallintaRajaimet>(path)
 }
 
-export async function patchSahkopostiosoite(userId: string, form: KayttajahallintaUpdateKayttaja) {
-  const path = `${resolveRolePath()}/kayttajat/${userId}`
+export async function patchErikoistuvaLaakari(
+  userId: string,
+  form: KayttajahallintaUpdateKayttaja
+) {
+  const path = `${resolveRolePath()}/erikoistuvat-laakarit/${userId}`
   return await axios.patch(path, form)
+}
+
+export async function getVastuuhenkilonTehtavatForm(yliopistoId: number) {
+  const path = `${resolveRolePath()}/vastuuhenkilon-tehtavat-lomake/${yliopistoId}`
+  return await axios.get<KayttajahallintaVastuuhenkilonTehtavatLomake>(path)
+}
+
+export async function putVastuuhenkilo(kayttajaId: number, form: KayttajahallintaUpdateKayttaja) {
+  const path = `${resolveRolePath()}/vastuuhenkilot/${kayttajaId}`
+  return await axios.put<KayttajahallintaKayttajaWrapper>(path, form)
+}
+
+export async function postVastuuhenkilo(form: KayttajahallintaNewKayttaja) {
+  const path = `${resolveRolePath()}/vastuuhenkilot`
+  return await axios.post<KayttajahallintaKayttajaWrapper>(path, form)
 }
