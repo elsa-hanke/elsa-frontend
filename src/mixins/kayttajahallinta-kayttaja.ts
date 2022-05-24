@@ -4,9 +4,10 @@ import { validationMixin } from 'vuelidate'
 import KayttajahallintaMixin from './kayttajahallinta'
 
 import { activateKayttaja, passivateKayttaja } from '@/api/kayttajahallinta'
-import { KayttajahallintaKayttaja } from '@/types'
+import { KayttajahallintaKayttajaWrapper } from '@/types'
 import { KayttajatiliTila } from '@/utils/constants'
 import { getTitleFromAuthorities } from '@/utils/functions'
+import { toastFail, toastSuccess } from '@/utils/toast'
 
 @Component({})
 export default class KayttajahallintaKayttajaMixin extends Mixins(
@@ -14,7 +15,7 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
   KayttajahallintaMixin
 ) {
   loading = true
-  kayttaja: KayttajahallintaKayttaja | null = null
+  kayttajaWrapper: KayttajahallintaKayttajaWrapper | null = null
   updatingTila = false
   updatingKayttaja = false
   editing = false
@@ -22,7 +23,7 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
 
   async onActivateKayttaja() {
     if (
-      this.kayttaja?.kayttaja?.id &&
+      this.kayttajaWrapper?.kayttaja?.id &&
       (await this.$bvModal.msgBoxConfirm(this.$t('aktivoi-kayttaja-varmistus') as string, {
         title: this.$t('aktivoi-kayttaja') as string,
         okVariant: 'primary',
@@ -34,15 +35,21 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
       }))
     ) {
       this.updatingTila = true
-      await activateKayttaja(this.kayttaja.kayttaja.id)
-      this.kayttaja.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
+      try {
+        await activateKayttaja(this.kayttajaWrapper.kayttaja.id)
+        this.kayttajaWrapper.kayttaja.tila = KayttajatiliTila.AKTIIVINEN
+        toastSuccess(this, this.$t('kayttajan-aktivointi-onnistui'))
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-aktivointi-epaonnistui'))
+      }
+
       this.updatingTila = false
     }
   }
 
   async onPassivateKayttaja() {
     if (
-      this.kayttaja?.kayttaja?.id &&
+      this.kayttajaWrapper?.kayttaja?.id &&
       (await this.$bvModal.msgBoxConfirm(this.$t('passivoi-kayttaja-varmistus') as string, {
         title: this.$t('passivoi-kayttaja') as string,
         okVariant: 'primary',
@@ -54,8 +61,13 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
       }))
     ) {
       this.updatingTila = true
-      await passivateKayttaja(this.kayttaja.kayttaja.id)
-      this.kayttaja.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
+      try {
+        await passivateKayttaja(this.kayttajaWrapper.kayttaja.id)
+        this.kayttajaWrapper.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
+        toastSuccess(this, this.$t('kayttajan-passivointi-onnistui'))
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-passivointi-epaonnistui'))
+      }
       this.updatingTila = false
     }
   }
@@ -76,11 +88,11 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
   }
 
   get tilinTilaText() {
-    return this.$t(`tilin-tila-${this.kayttaja?.kayttaja?.tila}`)
+    return this.$t(`tilin-tila-${this.kayttajaWrapper?.kayttaja?.tila}`)
   }
 
   get tilaColor() {
-    switch (this.kayttaja?.kayttaja?.tila) {
+    switch (this.kayttajaWrapper?.kayttaja?.tila) {
       case KayttajatiliTila.AKTIIVINEN:
         return 'text-success'
       case KayttajatiliTila.PASSIIVINEN:
@@ -91,30 +103,37 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
   }
 
   get isAktiivinen() {
-    return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.AKTIIVINEN
+    return this.kayttajaWrapper?.kayttaja?.tila === KayttajatiliTila.AKTIIVINEN
   }
 
   get isPassiivinen() {
-    return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.PASSIIVINEN
+    return this.kayttajaWrapper?.kayttaja?.tila === KayttajatiliTila.PASSIIVINEN
   }
 
   get isKutsuttu() {
-    return this.kayttaja?.kayttaja?.tila === KayttajatiliTila.KUTSUTTU
+    return this.kayttajaWrapper?.kayttaja?.tila === KayttajatiliTila.KUTSUTTU
   }
 
   get rooli() {
-    return getTitleFromAuthorities(this, this.kayttaja?.user?.authorities ?? [])
+    return getTitleFromAuthorities(
+      this,
+      this.kayttajaWrapper?.kayttaja?.authorities?.map((a) => a.name) ?? []
+    )
   }
 
   get etunimi() {
-    return this.kayttaja?.kayttaja?.etunimi
+    return this.kayttajaWrapper?.kayttaja?.etunimi
   }
 
   get sukunimi() {
-    return this.kayttaja?.kayttaja?.sukunimi
+    return this.kayttajaWrapper?.kayttaja?.sukunimi
   }
 
   get sahkoposti() {
-    return this.kayttaja?.user?.email
+    return this.kayttajaWrapper?.kayttaja?.sahkoposti
+  }
+
+  get eppn() {
+    return this.kayttajaWrapper?.kayttaja?.eppn
   }
 }

@@ -13,9 +13,9 @@ import {
   OpintooikeusTila,
   LomakeTyypit,
   LomakeTilat,
-  KayttajatiliTila
+  KayttajatiliTila,
+  ReassignedVastuuhenkilonTehtavaTyyppi
 } from '@/utils/constants'
-import { ELSA_ROLE } from '@/utils/roles'
 
 export type Opintooikeus = {
   id: number
@@ -55,6 +55,7 @@ export interface UserAccount {
   id: string
   login: string
   langKey: string
+  eppn: string
   createdBy: string
   createdDate: string
   lastModifiedBy: string
@@ -165,6 +166,7 @@ export interface Erikoisala {
   id?: number | null
   nimi: string | null
   tyyppi: ErikoisalaTyyppi | null
+  vastuuhenkilonTehtavatyypit: VastuuhenkilonTehtava[]
 }
 
 export interface Opintoopas {
@@ -460,19 +462,21 @@ export interface Kayttaja {
   etunimi: string
   sukunimi: string
   sahkoposti: string
+  eppn: string
   avatar: string
   userId: string
   authorities: KayttajaAuthority[]
   nimike: string
-  yliopisto: KayttajaYliopistoErikoisala
+  yliopistotAndErikoisalat: KayttajaYliopistoErikoisala[]
   tila: KayttajatiliTila
 }
 
 export interface KayttajaYliopistoErikoisala {
   id?: number
   kayttajaId?: number
-  yliopistoNimi: string
-  erikoisalaNimi: string
+  yliopisto: Yliopisto
+  erikoisala?: Erikoisala
+  vastuuhenkilonTehtavat: VastuuhenkilonTehtava[]
 }
 
 export interface Yliopisto {
@@ -733,14 +737,28 @@ export type HakaYliopisto = {
   hakaId: string
 }
 
-export interface KayttajahallintaKayttaja {
-  user?: UserAccount
+export interface KayttajahallintaKayttajaWrapper {
   kayttaja?: Kayttaja
   erikoistuvaLaakari?: ErikoistuvaLaakari
 }
 
 export interface KayttajahallintaUpdateKayttaja {
-  sahkoposti: string
+  sahkoposti?: string | null
+  sahkopostiUudelleen?: string | null
+  eppn?: string | null
+  yliopistotAndErikoisalat?: KayttajaYliopistoErikoisala[]
+  reassignedTehtavat?: ReassignedVastuuhenkilonTehtava[]
+}
+
+export interface KayttajahallintaNewKayttaja {
+  etunimi: string | null
+  sukunimi: string | null
+  sahkoposti: string | null
+  sahkopostiUudelleen: string | null
+  eppn: string | null
+  yliopisto: Yliopisto | null
+  yliopistotAndErikoisalat?: KayttajaYliopistoErikoisala[]
+  reassignedTehtavat?: ReassignedVastuuhenkilonTehtava[]
 }
 
 export interface KayttajahallintaKayttajaListItem {
@@ -755,11 +773,6 @@ export interface KayttajahallintaKayttajaListItem {
 export interface YliopistoErikoisalaPair {
   yliopisto: string
   erikoisala: string
-}
-
-export interface UusiKayttaja {
-  rooli: ELSA_ROLE
-  erikoistuvaLaakari: UusiErikoistuvaLaakari
 }
 
 export interface UusiErikoistuvaLaakari {
@@ -780,11 +793,15 @@ export interface UusiErikoistuvaLaakari {
   osaamisenArvioinninOppaanPvm: string | null
 }
 
-export interface KayttajaLomake {
+export interface ErikoistuvaLaakariLomake {
   yliopistot: Yliopisto[]
   erikoisalat: Erikoisala[]
   asetukset: Asetus[]
   opintooppaat: Opintoopas[]
+}
+
+export interface VastuuhenkiloLomake {
+  yliopistot: Yliopisto[]
 }
 
 export type Seurantajakso = {
@@ -1020,11 +1037,38 @@ export interface KoejaksonVaihe {
   hyvaksytytVaiheet: HyvaksyttyKoejaksonVaihe[]
 }
 
-export interface VastuuhenkiloTehtavatyyppi {
+export interface VastuuhenkilonTehtava {
   id?: number
   nimi: string
 }
 
 export interface KayttajahallintaRajaimet {
   erikoisalat: Erikoisala[]
+}
+
+export interface VastuuhenkilonErikoisalaAndTehtavat {
+  erikoisala: Erikoisala
+  tehtavat: VastuuhenkilonTehtava[]
+}
+
+export interface ReassignedVastuuhenkilonTehtava {
+  label?: string
+  kayttajaYliopistoErikoisala?: KayttajaYliopistoErikoisala | null
+  tehtavaId: number | null
+  tyyppi: ReassignedVastuuhenkilonTehtavaTyyppi
+}
+
+export interface ErikoisalaForVastuuhenkilonTehtavat {
+  erikoisalaId: number
+  reassignedTehtavat: ReassignedVastuuhenkilonTehtava[]
+}
+
+export interface VastuuhenkilonTehtavatLomake {
+  yliopistotAndErikoisalat: KayttajaYliopistoErikoisala[]
+  erikoisalatForTehtavat: ErikoisalaForVastuuhenkilonTehtavat[]
+}
+
+export interface KayttajahallintaVastuuhenkilonTehtavatLomake {
+  erikoisalat: Erikoisala[]
+  vastuuhenkilot: Kayttaja[]
 }

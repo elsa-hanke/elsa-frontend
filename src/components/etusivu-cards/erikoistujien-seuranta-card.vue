@@ -26,7 +26,7 @@
             </elsa-form-group>
           </div>
         </b-col>
-        <b-col cols="12" lg="4" class="">
+        <b-col cols="12" lg="4">
           <div class="jarjestys">
             <elsa-form-group :label="$t('jarjestys')" class="mb-4">
               <template v-slot="{ uid }">
