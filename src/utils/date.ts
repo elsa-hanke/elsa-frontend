@@ -57,3 +57,7 @@ export function sortByDateAsc(
   }
   return compareAsc(parseISO(d1 as string), parseISO(d2 as string))
 }
+
+export function isInPast(date: string | Date | null | undefined) {
+  return isBefore(isDate(date) ? (date as Date) : parseISO(date as string), new Date())
+}

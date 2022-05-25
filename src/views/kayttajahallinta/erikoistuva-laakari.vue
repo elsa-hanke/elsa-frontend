@@ -120,11 +120,12 @@
               <elsa-form-group :label="$t('opintooikeus')">
                 <template v-slot="{ uid }">
                   <span :id="uid">
-                    {{
-                      `${$date(opintooikeus.opintooikeudenMyontamispaiva)}-${$date(
-                        opintooikeus.opintooikeudenPaattymispaiva
-                      )}`
-                    }}
+                    {{ `${$date(opintooikeus.opintooikeudenMyontamispaiva)} -` }}
+                  </span>
+                  <span
+                    :class="{ 'text-danger': isInPast(opintooikeus.opintooikeudenPaattymispaiva) }"
+                  >
+                    {{ `${$date(opintooikeus.opintooikeudenPaattymispaiva)}` }}
                   </span>
                 </template>
               </elsa-form-group>
@@ -238,6 +239,7 @@
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
   import { ElsaError } from '@/types/index'
   import { confirmExit } from '@/utils/confirm'
+  import { isInPast } from '@/utils/date'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -359,9 +361,8 @@
       this.updatingKayttaja = false
     }
 
-    get updateAllowed() {
-      const userEmail = this.kayttaja?.kayttaja?.sahkoposti
-      return this.form.sahkoposti !== userEmail || this.form.sahkopostiUudelleen !== userEmail
+    isInPast(date: string) {
+      return isInPast(date)
     }
 
     get syntymaaika() {
