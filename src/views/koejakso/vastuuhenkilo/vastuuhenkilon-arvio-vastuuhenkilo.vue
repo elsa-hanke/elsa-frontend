@@ -47,6 +47,141 @@
           :show-birthdate="false"
         />
         <hr />
+        <div v-for="(sp, index) in vastuuhenkilonArvio.koejaksonSuorituspaikat" :key="index">
+          <b-row>
+            <b-col>
+              <h3>{{ $t('koejakson-suorituspaikka') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('tyyppi') }}</h5>
+              <p>
+                {{
+                  displayTyoskentelypaikkaTyyppiLabel(
+                    sp.tyoskentelypaikka.muuTyyppi,
+                    sp.tyoskentelypaikka.tyyppi
+                  )
+                }}
+              </p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('tyoskentelypaikka') }}</h5>
+              <p>{{ sp.tyoskentelypaikka.nimi }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('kunta') }}</h5>
+              <p>{{ sp.tyoskentelypaikka.kunta.abbreviation }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('tyoaika-taydesta-tyopaivasta-prosentti') }}</h5>
+              <p>{{ sp.osaaikaprosentti }}%</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
+              <p>{{ $date(sp.alkamispaiva) }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
+              <p>{{ $date(sp.alkamispaiva) }}</p>
+            </b-col>
+          </b-row>
+          LIITETIEDOSTOT TODO
+          <b-row>
+            <b-col>
+              <h5>{{ $t('kaytannon-koulutus') }}</h5>
+              <p>{{ sp.kaytannonKoulutus }}</p>
+            </b-col>
+          </b-row>
+          KÄYTÄNNÖN KOULUTUS TODO
+          <b-row v-if="sp.hyvaksyttyAiempaanErikoisalaan">
+            <b-col>
+              <h5>{{ $t('lisatiedot') }}</h5>
+              <p>{{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}%</p>
+            </b-col>
+          </b-row>
+          POISSAOLOT TODO
+        </div>
+        <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('aloituskeskustelu-kouluttaja') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-alert variant="dark" show>
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  </em>
+                  <span>{{ $t('aloituskeskustelu-tila-hyvaksytty') }}</span>
+                </div>
+              </b-alert>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('koejakson-suorituspaikka') }}</h5>
+              <p>{{ vastuuhenkilonArvio.aloituskeskustelu.koejaksonSuorituspaikka }}</p>
+            </b-col>
+          </b-row>
+          <b-row v-if="vastuuhenkilonArvio.aloituskeskustelu.koejaksonToinenSuorituspaikka">
+            <b-col>
+              <h5>{{ $t('koejakson-toinen-suorituspaikka') }}</h5>
+              <p>{{ vastuuhenkilonArvio.aloituskeskustelu.koejaksonToinenSuorituspaikka }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
+              <p>{{ $date(vastuuhenkilonArvio.aloituskeskustelu.koejaksonAlkamispaiva) }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
+              <p>{{ $date(vastuuhenkilonArvio.aloituskeskustelu.koejaksonPaattymispaiva) }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('koejakso-suoritettu-kokoaikatyössä') }}</h5>
+              <p v-if="vastuuhenkilonArvio.aloituskeskustelu.suoritettuKokoaikatyossa">
+                {{ $t('kyllä') }}
+              </p>
+              <p v-else>
+                {{ $t('koejakso-suoritettu-osaaikatyossa') }}:
+                {{ vastuuhenkilonArvio.aloituskeskustelu.tyotunnitViikossa
+                }}{{ $t('tuntia-viikossa') }}
+              </p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('koejakso-osaamistavoitteet') }}</h5>
+              <p>{{ vastuuhenkilonArvio.aloituskeskustelu.koejaksonOsaamistavoitteet }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('lahikouluttaja') }}</h5>
+              <p>{{ vastuuhenkilonArvio.aloituskeskustelu.lahikouluttaja.nimi }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
+              <p>{{ vastuuhenkilonArvio.aloituskeskustelu.lahiesimies.nimi }}</p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
         <elsa-form-group :label="$t('koejakso-on')" :required="editable">
           <template v-slot="{ uid }">
             <div v-if="editable">
@@ -177,10 +312,11 @@
     VastuuhenkilonArvioLomake,
     KoejaksonVaihe
   } from '@/types'
-  import { LomakeTilat, LomakeTyypit } from '@/utils/constants'
+  import { LomakeTilat, LomakeTyypit, TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
+  import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -315,6 +451,11 @@
 
       return this.$bvModal.show(modalId)
     }
+
+    displayTyoskentelypaikkaTyyppiLabel(muu: string, tyyppi: TyoskentelyjaksoTyyppi) {
+      return muu ? muu : tyoskentelypaikkaTyyppiLabel(this, tyyppi)
+    }
+
     async onSign() {
       try {
         this.buttonStates.primaryButtonLoading = true

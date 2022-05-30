@@ -360,6 +360,7 @@
   "koejakso-suoritettu-kokoaikatyössä-tooltip-content": "Koejakson aikana työ erikoisalalla suoritetaan ensisijaisesti kokopäivätyössä. Mikäli työlle asetetut tavoitteet saavutetaan, se on mahdollista suorittaa myös osapäiväisenä. Osa-aikainen työ on kuitenkin oltava vähintään 50 % kokoaikaisesta työstä, eli vähintään 19,125h/vko kokoaikaisesta työstä. Vastaavasti koejakson suoritusaika pitenee.",
   "koejakso-suoritettu-kokoaikatyössä-tooltip-header": "Kokoaikaisuus / osa-aikaisuus",
   "koejakso-suoritettu-osaaikatyossa.invalid": "Arvon tulee olla väliltä 19,125 ja 38,25",
+  "koejakso-suoritettu-osaaikatyossa": "Ei, suoritettu osa-aikatyössä:",
   "koejakso-tavoitteet": "Koejakson tavoitteet",
   "koejakso-tavoitteet-linkki": "Tutustu koejakson yleisiin tavoitteisiin.",
   "koejakso-tavoitteet-sisalto": {
@@ -994,6 +995,7 @@
   "tyhjenna-valinnat": "Tyhjennä valinnat",
   "tyoaika": "Työaika",
   "tyoaika-taydesta-tyopaivasta": "Työaika",
+  "tyoaika-taydesta-tyopaivasta-prosentti": "Työaika täydestä työpäivästä (50-100%)",
   "tyoskentelyaika": "Työskentelyaika",
   "tyoskentelyaika-erikoisalalla": "Työskentelyaika erikoisalalla",
   "tyoskentelyaika-yht": "Työskentelyaika yht.",

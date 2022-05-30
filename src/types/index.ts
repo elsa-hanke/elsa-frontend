@@ -348,6 +348,18 @@ export interface VastuuhenkilonArvioLomake {
   perusteluHylkaamiselle: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
   vastuuhenkilonKuittausaika?: string
+  koulutussopimusHyvaksytty?: boolean
+  vastuuhenkilonPuhelinnumero?: string
+  vastuuhenkilonSahkoposti?: string
+  erikoistuvankuittausaika?: string | null
+  virkailija?: KoejaksonVaiheHyvaksyja
+  lisatiedotVirkailijalta?: string | null
+  allekirjoitettu?: boolean
+  koejaksonSuorituspaikat?: Tyoskentelyjakso[] | null
+  aloituskeskustelu?: AloituskeskusteluLomake
+  valiarviointi?: ValiarviointiLomake
+  kehittamistoimenpiteet?: VastuuhenkilonArvioKehittamistoimenpiteet
+  loppukeskustelu?: VastuuhenkilonArvioLoppukeskustelu
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
@@ -358,6 +370,47 @@ export interface VastuuhenkilonArvioLomakeErikoistuva {
   tyoskentelyjaksoLiitetty: boolean
   tyoskentelyjaksonPituusRiittava: boolean
   tyotodistusLiitetty: boolean
+}
+
+export interface VastuuhenkilonArvioKehittamistoimenpiteet {
+  id: number | null
+  erikoistuvanNimi: string
+  erikoistuvanErikoisala: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanYliopisto: string
+  erikoistuvanAvatar: string | null
+  kehittamistoimenpiteetKuvaus: string | null
+  kehittamistoimenpiteetRiittavat: boolean
+  lahikouluttaja: KoejaksonVaiheHyvaksyja
+  lahiesimies: KoejaksonVaiheHyvaksyja
+  muokkauspaiva: string
+  korjausehdotus: string | null
+  erikoistuvanKuittausaika: string | null
+  kehittamistoimenpideKategoriat: KehittamistoimenpideKategoria[] | null
+  muuKategoria: string
+}
+
+export interface VastuuhenkilonArvioLoppukeskustelu {
+  id: number | null
+  erikoistuvanNimi: string
+  erikoistuvanErikoisala: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanYliopisto: string
+  erikoistuvanAvatar: string | null
+  esitetaanKoejaksonHyvaksymista: boolean
+  jatkotoimenpiteet: string
+  lahikouluttaja: KoejaksonVaiheHyvaksyja
+  lahiesimies: KoejaksonVaiheHyvaksyja
+  muokkauspaiva: string
+  korjausehdotus: string | null
+  erikoistuvanKuittausaika: string | null
+  koejaksonOsaamistavoitteet: string
+  edistyminenTavoitteidenMukaista: boolean
+  kehittamistoimenpideKategoriat: KehittamistoimenpideKategoria[] | null
+  muuKategoria: string
+  vahvuudet: string
+  kehittamistoimenpiteet: string
+  kehittamistoimenpiteetRiittavat: boolean
 }
 
 export interface PoissaoloLomake {
