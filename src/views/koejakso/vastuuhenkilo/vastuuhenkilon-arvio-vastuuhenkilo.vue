@@ -182,6 +182,69 @@
           </b-row>
         </div>
         <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-alert variant="dark" show>
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  </em>
+                  <span>{{ $t('valiarviointi-tila-hyvaksytty') }}</span>
+                </div>
+              </b-alert>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
+              <p v-if="vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
+                {{ $t('kyllä') }}
+              </p>
+              <p v-else>{{ $t('ei-huolenaiheita-on') }}</p>
+            </b-col>
+          </b-row>
+          <b-row v-if="vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
+            <b-col>
+              <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
+              <ul
+                v-for="(k, index) in vastuuhenkilonArvio.valiarviointi
+                  .kehittamistoimenpideKategoriat"
+                :key="index"
+              >
+                <li>{{ naytaKehittamistoimenpideKategoria(kategoria) }}</li>
+              </ul>
+            </b-col>
+          </b-row>
+          <b-row v-if="vastuuhenkilonArvio.valiarviointi.vahvuudet">
+            <b-col>
+              <h5>{{ $t('vahvuudet') }}</h5>
+              <p>{{ vastuuhenkilonArvio.valiarviointi.vahvuudet }}</p>
+            </b-col>
+          </b-row>
+          <b-row v-if="vastuuhenkilonArvio.valiarviointi.kehittamistoimenpiteet">
+            <b-col>
+              <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
+              <p>{{ vastuuhenkilonArvio.valiarviointi.kehittamistoimenpiteet }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('lahikouluttaja') }}</h5>
+              <p>{{ vastuuhenkilonArvio.valiarvionti.lahikouluttaja.nimi }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
+              <p>{{ vastuuhenkilonArvio.valiarvionti.lahiesimies.nimi }}</p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
         <elsa-form-group :label="$t('koejakso-on')" :required="editable">
           <template v-slot="{ uid }">
             <div v-if="editable">
@@ -454,6 +517,11 @@
 
     displayTyoskentelypaikkaTyyppiLabel(muu: string, tyyppi: TyoskentelyjaksoTyyppi) {
       return muu ? muu : tyoskentelypaikkaTyyppiLabel(this, tyyppi)
+    }
+
+    naytaKehittamistoimenpideKategoria(kategoria: string) {
+      if (kategoria === 'MUU') return this.vastuuhenkilonArvio?.valiarviointi?.muuKategoria
+      return this.$t('kehittamistoimenpidekategoria-' + kategoria)
     }
 
     async onSign() {
