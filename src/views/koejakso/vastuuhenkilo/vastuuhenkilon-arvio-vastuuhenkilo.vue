@@ -209,15 +209,17 @@
               <p v-else>{{ $t('ei-huolenaiheita-on') }}</p>
             </b-col>
           </b-row>
-          <b-row v-if="vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
+          <b-row v-if="!vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
             <b-col>
               <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
-              <ul
-                v-for="(k, index) in vastuuhenkilonArvio.valiarviointi
-                  .kehittamistoimenpideKategoriat"
-                :key="index"
-              >
-                <li>{{ naytaKehittamistoimenpideKategoria(kategoria) }}</li>
+              <ul>
+                <li
+                  v-for="(k, index) in vastuuhenkilonArvio.valiarviointi
+                    .kehittamistoimenpideKategoriat"
+                  :key="index"
+                >
+                  {{ naytaKehittamistoimenpideKategoria(k) }}
+                </li>
               </ul>
             </b-col>
           </b-row>
@@ -236,11 +238,135 @@
           <b-row>
             <b-col lg="4">
               <h5>{{ $t('lahikouluttaja') }}</h5>
-              <p>{{ vastuuhenkilonArvio.valiarvionti.lahikouluttaja.nimi }}</p>
+              <p>{{ vastuuhenkilonArvio.valiarviointi.lahikouluttaja.nimi }}</p>
             </b-col>
             <b-col lg="4">
               <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
-              <p>{{ vastuuhenkilonArvio.valiarvionti.lahiesimies.nimi }}</p>
+              <p>{{ vastuuhenkilonArvio.valiarviointi.lahiesimies.nimi }}</p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
+        <div v-if="!vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
+          <b-row>
+            <b-col>
+              <h3>{{ $t('kehittamistoimenpiteet-otsikko') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-alert variant="dark" show>
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  </em>
+                  <span>{{ $t('kehittamistoimenpiteet-tila-hyvaksytty') }}</span>
+                </div>
+              </b-alert>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('kehittamistoimenpiteiden-arviointi') }}</h5>
+              <p v-if="vastuuhenkilonArvio.kehittamistoimenpiteet.kehittamistoimenpiteetRiittavat">
+                {{ $t('kehittamistoimenpiteet-riittavat') }}
+              </p>
+              <p v-else>
+                {{ $t('kehittamistoimenpiteet-ei-riittavat') }}
+              </p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('lahikouluttaja') }}</h5>
+              <p>{{ vastuuhenkilonArvio.kehittamistoimenpiteet.lahikouluttaja.nimi }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
+              <p>{{ vastuuhenkilonArvio.kehittamistoimenpiteet.lahiesimies.nimi }}</p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('loppukeskustelu') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-alert variant="dark" show>
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  </em>
+                  <span>{{ $t('loppukeskustelu-tila-hyvaksytty') }}</span>
+                </div>
+              </b-alert>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa') }}</h5>
+              <p v-if="vastuuhenkilonArvio.loppukeskustelu.esitetaanKoejaksonHyvaksymista">
+                {{ $t('loppukeskustelu-kayty-hyvaksytty') }}
+              </p>
+              <p v-else>
+                {{ $t('loppukeskustelu-kayty-jatkotoimenpiteet') }}
+              </p>
+            </b-col>
+          </b-row>
+          <b-row v-if="!vastuuhenkilonArvio.loppukeskustelu.esitetaanKoejaksonHyvaksymista">
+            <b-col>
+              <h5>{{ $t('selvitys-jatkotoimista') }}</h5>
+              <p>{{ vastuuhenkilonArvio.loppukeskustelu.jatkotoimenpiteet }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('lahikouluttaja') }}</h5>
+              <p>{{ vastuuhenkilonArvio.loppukeskustelu.lahikouluttaja.nimi }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
+              <p>{{ vastuuhenkilonArvio.loppukeskustelu.lahiesimies.nimi }}</p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('koulutussopimus') }}</h5>
+              <p>{{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus-vastuuhenkilo') }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('koulutussuunnitelma') }}</h5>
+              <p>{{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}</p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
+              <p>
+                {{ vastuuhenkilonArvio.vastuuhenkilo.nimi }}
+                {{
+                  vastuuhenkilonArvio.vastuuhenkilo.nimike
+                    ? ', ' + vastuuhenkilonArvio.vastuuhenkilo.nimike
+                    : ''
+                }}
+              </p>
             </b-col>
           </b-row>
         </div>
