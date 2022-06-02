@@ -10,7 +10,7 @@ export default class ErikoistujienSeurantaMixin extends Vue {
   currentPage = 1
 
   vaihdaRooli(id: number) {
-    window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?erikoistuvaLaakariId=${id}`
+    window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}`
   }
 
   koejaksoTila(tila: LomakeTilat) {

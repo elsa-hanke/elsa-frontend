@@ -65,7 +65,7 @@
                   <elsa-button
                     variant="link"
                     class="p-0"
-                    @click="vaihdaRooli(eteneminen.erikoistuvaLaakariId)"
+                    @click="vaihdaRooli(eteneminen.opintooikeusId)"
                   >
                     <div>
                       {{ eteneminen.erikoistuvaLaakariEtuNimi }}
