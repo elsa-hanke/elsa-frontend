@@ -369,6 +369,51 @@
               </p>
             </b-col>
           </b-row>
+          <b-row>
+            <b-col lg="4">
+              <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-input
+                    :id="uid"
+                    v-model="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('vastuuhenkilonSahkoposti')"
+                    :value="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
+                  />
+                  <b-form-invalid-feedback
+                    v-if="!$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.required"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                  <b-form-invalid-feedback
+                    v-if="!$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.email"
+                    :state="validateState('vastuuhenkilonSahkoposti')"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+
+            <b-col lg="4">
+              <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-input
+                    :id="uid"
+                    v-model="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('vastuuhenkilonPuhelinnumero')"
+                    :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
+                  />
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+          </b-row>
         </div>
         <hr />
         <elsa-form-group :label="$t('koejakso-on')" :required="editable">
@@ -484,7 +529,7 @@
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { required, requiredIf } from 'vuelidate/lib/validators'
+  import { required, requiredIf, email } from 'vuelidate/lib/validators'
 
   import { getVastuuhenkilonArvio } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
@@ -518,6 +563,13 @@
     },
     validations: {
       vastuuhenkilonArvio: {
+        vastuuhenkilonPuhelinnumero: {
+          required
+        },
+        vastuuhenkilonSahkoposti: {
+          required,
+          email
+        },
         koejaksoHyvaksytty: {
           required
         },
