@@ -94,23 +94,38 @@
               <p>{{ $date(sp.alkamispaiva) }}</p>
             </b-col>
           </b-row>
-          LIITETIEDOSTOT TODO
+          <b-row>
+            <b-col>
+              <h5>{{ $t('liitetiedostot') }}</h5>
+              <asiakirjat-content
+                :asiakirjat="sp.asiakirjat"
+                :sorting-enabled="false"
+                :pagination-enabled="false"
+                :enable-search="false"
+                :enable-delete="false"
+                :no-results-info-text="$t('ei-liitetiedostoja')"
+                :loading="loading"
+              />
+            </b-col>
+          </b-row>
           <b-row>
             <b-col>
               <h5>{{ $t('kaytannon-koulutus') }}</h5>
-              <p>{{ sp.kaytannonKoulutus }}</p>
+              <p>
+                {{ displayKaytannonKoulutus(sp.kaytannonKoulutus) }}
+                {{ sp.omaaErikoisalaaTukeva ? ': ' + sp.omaaErikoisalaaTukeva.nimi : '' }}
+              </p>
             </b-col>
           </b-row>
-          KÄYTÄNNÖN KOULUTUS TODO
           <b-row v-if="sp.hyvaksyttyAiempaanErikoisalaan">
             <b-col>
               <h5>{{ $t('lisatiedot') }}</h5>
-              <p>{{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}%</p>
+              <p>{{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}</p>
             </b-col>
           </b-row>
           POISSAOLOT TODO
+          <hr />
         </div>
-        <hr />
         <div>
           <b-row>
             <b-col>
@@ -218,7 +233,7 @@
                     .kehittamistoimenpideKategoriat"
                   :key="index"
                 >
-                  {{ naytaKehittamistoimenpideKategoria(k) }}
+                  {{ displayKehittamistoimenpideKategoria(k) }}
                 </li>
               </ul>
             </b-col>
@@ -532,6 +547,7 @@
   import { required, requiredIf, email } from 'vuelidate/lib/validators'
 
   import { getVastuuhenkilonArvio } from '@/api/vastuuhenkilo'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -546,11 +562,19 @@
     VastuuhenkilonArvioLomake,
     KoejaksonVaihe
   } from '@/types'
-  import { LomakeTilat, LomakeTyypit, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import {
+    KaytannonKoulutusTyyppi,
+    LomakeTilat,
+    LomakeTyypit,
+    TyoskentelyjaksoTyyppi
+  } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
-  import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
+  import {
+    tyoskentelypaikkaTyyppiLabel,
+    tyoskentelyjaksoKaytannonKoulutusLabel
+  } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -559,7 +583,8 @@
       ElsaFormMultiselect,
       ElsaButton,
       ElsaConfirmationModal,
-      KoejaksonVaiheAllekirjoitukset
+      KoejaksonVaiheAllekirjoitukset,
+      AsiakirjatContent
     },
     validations: {
       vastuuhenkilonArvio: {
@@ -697,9 +722,13 @@
       return muu ? muu : tyoskentelypaikkaTyyppiLabel(this, tyyppi)
     }
 
-    naytaKehittamistoimenpideKategoria(kategoria: string) {
+    displayKehittamistoimenpideKategoria(kategoria: string) {
       if (kategoria === 'MUU') return this.vastuuhenkilonArvio?.valiarviointi?.muuKategoria
       return this.$t('kehittamistoimenpidekategoria-' + kategoria)
+    }
+
+    displayKaytannonKoulutus(value: KaytannonKoulutusTyyppi) {
+      return tyoskentelyjaksoKaytannonKoulutusLabel(this, value)
     }
 
     async onSign() {
