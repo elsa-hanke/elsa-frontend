@@ -14,6 +14,12 @@
                 </em>
                 <div>
                   {{ $t('vastuuhenkilon-arvio-ingressi-vastuuhenkilo') }}
+                  <div v-show="vastuuhenkilonArvio.lisatiedotVirkailijalta">
+                    <p class="mb-2 mt-3">
+                      <strong>{{ $t('lisatiedot-virkailijalta') }}:</strong>
+                      {{ vastuuhenkilonArvio.lisatiedotVirkailijalta }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </b-alert>
@@ -47,7 +53,10 @@
           :show-birthdate="false"
         />
         <hr />
-        <div v-for="(sp, index) in vastuuhenkilonArvio.koejaksonSuorituspaikat" :key="index">
+        <div
+          v-for="(sp, index) in vastuuhenkilonArvio.koejaksonSuorituspaikat.tyoskentelyjaksot"
+          :key="index"
+        >
           <b-row>
             <b-col>
               <h3>{{ $t('koejakson-suorituspaikka') }}</h3>
@@ -123,7 +132,12 @@
               <p>{{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}</p>
             </b-col>
           </b-row>
-          POISSAOLOT TODO
+          <b-row v-if="sp.poissaolot.length > 0">
+            <b-col>
+              <h5>{{ $t('poissaolot') }}</h5>
+              <elsa-poissaolot-display :poissaolot="sp.poissaolot" />
+            </b-col>
+          </b-row>
           <hr />
         </div>
         <div>
@@ -170,7 +184,7 @@
             <b-col>
               <h5>{{ $t('koejakso-suoritettu-kokoaikatyössä') }}</h5>
               <p v-if="vastuuhenkilonArvio.aloituskeskustelu.suoritettuKokoaikatyossa">
-                {{ $t('kyllä') }}
+                {{ $t('kylla') }}
               </p>
               <p v-else>
                 {{ $t('koejakso-suoritettu-osaaikatyossa') }}:
@@ -219,7 +233,7 @@
             <b-col>
               <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
               <p v-if="vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
-                {{ $t('kyllä') }}
+                {{ $t('kylla') }}
               </p>
               <p v-else>{{ $t('ei-huolenaiheita-on') }}</p>
             </b-col>
@@ -502,7 +516,10 @@
         </elsa-form-group>
         <div v-if="waitingForErikoistuva || acceptedByEveryone">
           <hr />
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
         </div>
         <div v-if="editable">
           <hr />
@@ -518,7 +535,7 @@
                 variant="primary"
                 class="ml-4 px-6"
               >
-                {{ $t('allekirjoita-laheta') }}
+                {{ $t('laheta-allekirjoitettavaksi') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -533,7 +550,7 @@
       id="confirm-sign"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-koejakso-arvioitu')"
-      :submitText="$t('allekirjoita-laheta')"
+      :submitText="$t('laheta-allekirjoitettavaksi')"
       @submit="onSign"
     />
   </div>
@@ -554,6 +571,7 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPoissaolotDisplay from '@/components/poissaolot-display/poissaolot-display.vue'
   import store from '@/store'
   import {
     Koejakso,
@@ -582,6 +600,7 @@
       ElsaFormGroup,
       ElsaFormMultiselect,
       ElsaButton,
+      ElsaPoissaolotDisplay,
       ElsaConfirmationModal,
       KoejaksonVaiheAllekirjoitukset,
       AsiakirjatContent
@@ -731,6 +750,17 @@
       return tyoskentelyjaksoKaytannonKoulutusLabel(this, value)
     }
 
+    yhdistaPoissaolot(data: VastuuhenkilonArvioLomake) {
+      let obj = data
+
+      obj.koejaksonSuorituspaikat?.tyoskentelyjaksot.forEach((tj) => {
+        tj.poissaolot = obj.koejaksonSuorituspaikat?.keskeytykset?.filter(
+          (keskeytys) => keskeytys.tyoskentelyjaksoId == tj.id
+        )
+      })
+      return obj
+    }
+
     async onSign() {
       try {
         this.buttonStates.primaryButtonLoading = true
@@ -750,6 +780,7 @@
       try {
         const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
         this.vastuuhenkilonArvio = data
+        this.vastuuhenkilonArvio = this.yhdistaPoissaolot(this.vastuuhenkilonArvio)
         this.loading = false
       } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))

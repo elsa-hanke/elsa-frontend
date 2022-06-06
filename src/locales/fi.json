@@ -487,7 +487,7 @@
   "laheta-kutsu": "Lähetä kutsu",
   "laheta-kutsu-uudelleen": "Lähetä kutsu uudelleen",
   "laheta-kutsu-viesti": "Jos erikoistuja on esimerkiksi kadottanut kutsulinkin sisältävän sähköpostin, voit kutsua erikoistujan Elsaan uudestaan",
-  "lahetyksen-jalkeen-koejakso-arvioitu": "Lähetyksen jälkeen koejakso on arvioitu.",
+  "lahetyksen-jalkeen-koejakso-arvioitu": "Lähetyksen jälkeen saat allekirjoituslinkin sähköpostiisi. Muista käydä allekirjoittamassa koejakson arvio.",
   "lahiesimies": "Lähiesimies",
   "lahiesimies-tai-muu": "Lähiesimies tai vastaava muu erikoisalan asiantuntija",
   "lahikouluttaja": "Lähikouluttaja",
@@ -532,6 +532,7 @@
   "lisahuomioita-ohje": "Voit lisätä omia muistiinpanoja ja huomioita koulutusjaksostasi. Mikä oli hyvää koulutusjaksolla? Miten kehittäisit koulutusjaksoa? Arviosi koulutuspaikasta.",
   "lisataan-tiedot-kayttajalle": "Lisätään tiedot käyttäjälle...",
   "lisatiedot": "Lisätiedot",
+  "lisatiedot-virkailijalta": "Lisätiedot virkailijalta",
   "lisatty": "Lisätty",
   "login": "Kirjautuminen",
   "login-ingressi": "ELSAssa erikoistuvat lääkärit, hammaslääkärit, kouluttajat ja virkailijat hoitavat monia erikoistumiseen liittyviä asioita.  ",
@@ -1149,7 +1150,7 @@
       "item3": "olet liittänyt työtodistuksen samaan työskentelyjaksoon"
     }
   },
-  "vastuuhenkilon-arvio-ingressi-vastuuhenkilo": "Anna arvio koejaksosta.",
+  "vastuuhenkilon-arvio-ingressi-vastuuhenkilo": "Anna arvio koejaksosta. Lähetyksen jälkeen saat allekirjoituslinkin sähköpostiisi. Muista käydä allekirjoittamassa koejakson arvio.",
   "vastuuhenkilon-arvio-koulutussopimus-varmistus": "Vakuutan, että koejakson koulutussopimus on tehty aiemmin ja toimitettu tiedekuntaan.",
   "vastuuhenkilon-arvio-koulutussopimus-varmistus-vastuuhenkilo": "Erikoistuja vakuuttaa, että koejakson koulutussopimus on tehty aiemmin ja toimitettu tiedekuntaan.",
   "vastuuhenkilon-arvio-koulutussuunnitelma-varmistus": "Henkilökohtainen koulutussuunnitelma on laadittu yhteistyössä erikoisalan vastuuhenkilön kanssa.",

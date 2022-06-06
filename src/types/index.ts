@@ -137,6 +137,7 @@ export interface Tyoskentelyjakso {
   liitettyKoejaksoon?: boolean
   asiakirjat?: Asiakirja[]
   label?: string
+  poissaolot?: Keskeytysaika[] | null
 }
 
 export interface Tyoskentelypaikka {
@@ -355,11 +356,17 @@ export interface VastuuhenkilonArvioLomake {
   virkailija?: KoejaksonVaiheHyvaksyja
   lisatiedotVirkailijalta?: string | null
   allekirjoitettu?: boolean
-  koejaksonSuorituspaikat?: Tyoskentelyjakso[] | null
+  koejaksonSuorituspaikat?: KoejaksonSuorituspaikka | null
   aloituskeskustelu?: AloituskeskusteluLomake
   valiarviointi?: ValiarviointiLomake
   kehittamistoimenpiteet?: VastuuhenkilonArvioKehittamistoimenpiteet
   loppukeskustelu?: VastuuhenkilonArvioLoppukeskustelu
+}
+
+export interface KoejaksonSuorituspaikka {
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  tilastot: null
+  keskeytykset: Keskeytysaika[] | null
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
