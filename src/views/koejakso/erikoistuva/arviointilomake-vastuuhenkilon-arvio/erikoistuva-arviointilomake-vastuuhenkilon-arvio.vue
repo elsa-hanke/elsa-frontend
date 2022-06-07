@@ -467,7 +467,10 @@
       if (this.account.impersonated) {
         return false
       }
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.UUSI
+      return (
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.UUSI ||
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      )
     }
 
     validateState(name: string) {
@@ -476,7 +479,12 @@
     }
 
     get waitingForAcceptance() {
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      return (
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
+        this.koejaksoData.vastuuhenkilonArvionTila ===
+          LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+      )
     }
 
     get waitingForErikoistuva() {
@@ -486,7 +494,7 @@
     }
 
     get acceptedByEveryone() {
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.HYVAKSYTTY
+      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ALLEKIRJOITETTU
     }
 
     get koejaksoData(): Koejakso {

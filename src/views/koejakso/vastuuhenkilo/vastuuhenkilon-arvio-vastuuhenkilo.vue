@@ -23,7 +23,7 @@
                 </div>
               </div>
             </b-alert>
-            <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3">
+            <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
               <div class="d-flex flex-row">
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
@@ -36,7 +36,7 @@
             <b-alert variant="success" :show="acceptedByEveryone">
               <div class="d-flex flex-row">
                 <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-muted mr-2" />
                 </em>
                 {{ $t('vastuuhenkilon-arvio-tila-vastuuhenkilo-hyvaksytty') }}
               </div>
@@ -514,7 +514,7 @@
             </div>
           </template>
         </elsa-form-group>
-        <div v-if="waitingForErikoistuva || acceptedByEveryone">
+        <div v-if="waitingForSignatures || acceptedByEveryone">
           <hr />
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
@@ -675,15 +675,18 @@
     }
 
     get editable() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      return (
+        this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
+        this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+      )
     }
 
-    get waitingForErikoistuva() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA
+    get waitingForSignatures() {
+      return this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
     }
 
     get acceptedByEveryone() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.HYVAKSYTTY
+      return this.vastuuhenkilonArvioTila === LomakeTilat.ALLEKIRJOITETTU
     }
 
     get koejaksoData(): Koejakso {
