@@ -95,6 +95,165 @@
           </b-col>
         </b-row>
         <hr />
+        <div v-if="editable">
+          <b-row>
+            <b-col lg="4">
+              <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-input
+                    :id="uid"
+                    v-model="form.erikoistuvanSahkoposti"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('erikoistuvanSahkoposti')"
+                    :value="account.erikoistuvaLaakari.sahkoposti"
+                  />
+                  <b-form-invalid-feedback
+                    v-if="!$v.form.erikoistuvanSahkoposti.required"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                  <b-form-invalid-feedback
+                    v-if="!$v.form.erikoistuvanSahkoposti.email"
+                    :state="validateState('erikoistuvanSahkoposti')"
+                    :id="`${uid}-feedback`"
+                  >
+                    {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+
+            <b-col lg="4">
+              <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-input
+                    :id="uid"
+                    v-model="form.erikoistuvanPuhelinnumero"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('erikoistuvanPuhelinnumero')"
+                    :value="account.erikoistuvaLaakari.puhelinnumero"
+                  />
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+          </b-row>
+          <hr />
+          <b-row v-if="muutOpintooikeudet">
+            <b-col>
+              <elsa-form-group :label="$t('useampi-opinto-oikeus')" :required="true">
+                <template v-slot="{ uid }">
+                  <p class="mb-3">
+                    {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja-ingressi') }}
+                  </p>
+                  <b-form-checkbox
+                    :id="uid"
+                    v-model="form.paataOpintooikeudet"
+                    :state="validateState('paataOpintooikeudet')"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    class="py-0"
+                  >
+                    {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja') }}
+                    <label class="d-block">
+                      <span v-for="(opintooikeus, index) in muutOpintooikeudet" :key="index">
+                        {{ opintooikeus.erikoisalaNimi }},
+                        {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
+                        <br />
+                      </span>
+                    </label>
+                  </b-form-checkbox>
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+          </b-row>
+          <hr />
+          <b-row v-if="!koulutussopimuksenHyvaksynta">
+            <b-col>
+              <elsa-form-group :label="$t('koulutussopimus')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-checkbox
+                    :id="uid"
+                    v-model="form.koulutussopimusHyvaksytty"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('koulutussopimusHyvaksytty')"
+                    class="py-0"
+                  >
+                    {{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus') }}
+                  </b-form-checkbox>
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <elsa-form-group :label="$t('koulutussuunnitelma')" :required="true">
+                <template v-slot="{ uid }">
+                  <b-form-checkbox
+                    :id="uid"
+                    v-model="form.koulutussuunnitelmaHyvaksytty"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                    :state="validateState('koulutussuunnitelmaHyvaksytty')"
+                    class="py-0"
+                  >
+                    {{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}
+                  </b-form-checkbox>
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+            </b-col>
+          </b-row>
+          <hr />
+        </div>
+        <div v-else>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('sahkopostiosoite') }}</h5>
+              <p>{{ account.erikoistuvaLaakari.sahkoposti }}</p>
+            </b-col>
+
+            <b-col lg="4">
+              <h5>{{ $t('matkapuhelinnumero') }}</h5>
+              <p>{{ account.erikoistuvaLaakari.puhelinnumero }}</p>
+            </b-col>
+          </b-row>
+          <hr />
+          <div v-if="muutOpintooikeudet">
+            <h3 class="mb-3">{{ $t('useampi-opinto-oikeus') }}</h3>
+            <p>
+              {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja') }}
+              <label class="d-block">
+                <span v-for="(opintooikeus, index) in muutOpintooikeudet" :key="index">
+                  {{ opintooikeus.erikoisalaNimi }},
+                  {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
+                  <br />
+                </span>
+              </label>
+            </p>
+            <hr />
+          </div>
+          <div v-if="!koulutussopimuksenHyvaksynta">
+            <h3 class="mb-3">{{ $t('koulutussopimus') }}</h3>
+            <p>
+              {{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus') }}
+            </p>
+          </div>
+          <h3 class="mb-3">{{ $t('koulutussuunnitelma') }}</h3>
+          <p>
+            {{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}
+          </p>
+          <hr />
+        </div>
         <b-row>
           <b-col v-if="waitingForErikoistuva || acceptedByEveryone">
             <elsa-form-group
@@ -130,7 +289,10 @@
         </b-row>
         <div v-if="waitingForErikoistuva || acceptedByEveryone">
           <hr />
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
         </div>
         <div v-if="!account.impersonated && (editable || waitingForErikoistuva)">
           <hr />
@@ -176,7 +338,9 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
+  import { validationMixin } from 'vuelidate'
+  import { email, required, requiredIf } from 'vuelidate/lib/validators'
 
   import { getVastuuhenkilonArvioLomake } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
@@ -190,14 +354,17 @@
     Koejakso,
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
+    Opintooikeus,
     VastuuhenkilonArvioLomake,
     VastuuhenkilonArvioLomakeErikoistuva
   } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
+  import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
+    mixins: [validationMixin],
     components: {
       ErikoistuvaDetails,
       ElsaFormGroup,
@@ -235,6 +402,10 @@
       erikoistuvanNimi: `${this.account.firstName} ${this.account.lastName}`,
       erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
       erikoistuvanYliopisto: this.account.erikoistuvaLaakari.yliopisto,
+      erikoistuvanSahkoposti: this.account.erikoistuvaLaakari.sahkoposti,
+      erikoistuvanPuhelinnumero: this.account.erikoistuvaLaakari.puhelinnumero,
+      muutOpintooikeudet: [],
+      paataOpintooikeudet: false,
       id: null,
       muokkauspaiva: '',
       koejaksoHyvaksytty: null,
@@ -245,12 +416,48 @@
       vastuuhenkilonKuittausaika: undefined
     }
     formData: VastuuhenkilonArvioLomakeErikoistuva = {
+      muutOpintooikeudet: [],
+      paataOpintooikeudet: false,
+      koulutussopimusHyvaksytty: true,
       vastuuhenkilo: null,
       tyoskentelyjaksoLiitetty: false,
       tyoskentelyjaksonPituusRiittava: false,
       tyotodistusLiitetty: false
     }
     loading = true
+    muutOpintooikeudet: Opintooikeus[] = []
+    koulutussopimuksenHyvaksynta = false
+
+    validations() {
+      return {
+        form: {
+          erikoistuvanSahkoposti: {
+            required,
+            email
+          },
+          erikoistuvanPuhelinnumero: {
+            required
+          },
+          paataOpintooikeudet: {
+            checked: (value: boolean) => value === true,
+            required: requiredIf(() => {
+              return this.muutOpintooikeudet
+            })
+          },
+          koulutussopimusHyvaksytty: {
+            checked: (value: boolean) => {
+              return this.koulutussopimuksenHyvaksynta || value === true
+            },
+            required: requiredIf(() => {
+              return !this.koulutussopimuksenHyvaksynta
+            })
+          },
+          koulutussuunnitelmaHyvaksytty: {
+            checked: (value: boolean) => value === true
+          }
+        }
+      }
+    }
 
     get account() {
       return store.getters['auth/account']
@@ -260,11 +467,24 @@
       if (this.account.impersonated) {
         return false
       }
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.UUSI
+      return (
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.UUSI ||
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+      )
+    }
+
+    validateState(name: string) {
+      const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? !$error : null
     }
 
     get waitingForAcceptance() {
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      return (
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
+        this.koejaksoData.vastuuhenkilonArvionTila ===
+          LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
+        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+      )
     }
 
     get waitingForErikoistuva() {
@@ -274,7 +494,7 @@
     }
 
     get acceptedByEveryone() {
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.HYVAKSYTTY
+      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ALLEKIRJOITETTU
     }
 
     get koejaksoData(): Koejakso {
@@ -319,6 +539,11 @@
     }
 
     onConfirm(modalId: string) {
+      this.$v.form.$touch()
+
+      if (this.$v.form.$anyError) {
+        return
+      }
       return this.$bvModal.show(modalId)
     }
 
@@ -328,6 +553,8 @@
         await store.dispatch('erikoistuva/postVastuuhenkilonArvio', this.form)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-lahetetty-onnistuneesti'))
+        this.$emit('skipRouteExitConfirm', true)
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
       } catch (err) {
         toastFail(this, this.$t('vastuuhenkilon-arvio-lahetys-epaonnistui'))
       }
@@ -341,6 +568,8 @@
           this.koejaksoData.vastuuhenkilonArvio.erikoistuvanAllekirjoitusaika
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
+        this.$emit('skipRouteExitConfirm', true)
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
       } catch (err) {
         toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
       }
@@ -353,9 +582,13 @@
       }
       this.setKoejaksoData()
       this.formData = (await getVastuuhenkilonArvioLomake()).data
+      this.muutOpintooikeudet = this.formData.muutOpintooikeudet
+      this.koulutussopimuksenHyvaksynta = this.formData.koulutussopimusHyvaksytty
 
       if (this.editable) {
         this.form.vastuuhenkilo = this.formData.vastuuhenkilo
+        this.form.erikoistuvanSahkoposti = this.account.erikoistuvaLaakari.sahkoposti
+        this.form.erikoistuvanPuhelinnumero = this.account.erikoistuvaLaakari.puhelinnumero
       }
 
       this.loading = false

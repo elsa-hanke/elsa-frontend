@@ -137,6 +137,7 @@ export interface Tyoskentelyjakso {
   liitettyKoejaksoon?: boolean
   asiakirjat?: Asiakirja[]
   label?: string
+  poissaolot?: Keskeytysaika[] | null
 }
 
 export interface Tyoskentelypaikka {
@@ -336,18 +337,37 @@ export interface VastuuhenkilonArvioLomake {
   erikoistuvanOpiskelijatunnus: string
   erikoistuvanYliopisto: string
   erikoistuvanAvatar?: string
+  erikoistuvanSahkoposti?: string
+  erikoistuvanPuhelinnumero?: string
   koejaksoHyvaksytty: boolean | null
   id: number | null
   muokkauspaiva: string
+  muutOpintooikeudet: Opintooikeus[]
+  paataOpintooikeudet: boolean
   vastuuhenkilo: Vastuuhenkilo | null
   vastuuhenkiloAllekirjoittanut: boolean | null
   perusteluHylkaamiselle: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
   vastuuhenkilonKuittausaika?: string
+  koulutussopimusHyvaksytty?: boolean
+  vastuuhenkilonPuhelinnumero?: string
+  vastuuhenkilonSahkoposti?: string
+  erikoistuvankuittausaika?: string | null
+  virkailija?: KoejaksonVaiheHyvaksyja
+  lisatiedotVirkailijalta?: string | null
+  allekirjoitettu?: boolean
+  koejaksonSuorituspaikat?: TyoskentelyjaksotTable | null
+  aloituskeskustelu?: AloituskeskusteluLomake
+  valiarviointi?: ValiarviointiLomake
+  kehittamistoimenpiteet?: KehittamistoimenpiteetLomake
+  loppukeskustelu?: LoppukeskusteluLomake
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
+  muutOpintooikeudet: Opintooikeus[]
   vastuuhenkilo: Vastuuhenkilo | null
+  koulutussopimusHyvaksytty: boolean
+  paataOpintooikeudet: boolean
   tyoskentelyjaksoLiitetty: boolean
   tyoskentelyjaksonPituusRiittava: boolean
   tyotodistusLiitetty: boolean
