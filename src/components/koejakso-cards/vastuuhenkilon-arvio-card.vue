@@ -39,7 +39,12 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
+      <koejakso-card-content
+        v-if="
+          tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
+          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+        "
+      >
         <template v-slot:content>
           <p class="pr-6 mb-2">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
@@ -63,7 +68,7 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
+      <koejakso-card-content v-if="tila === lomaketilat.ALLEKIRJOITETTU">
         <template v-slot:content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
