@@ -91,7 +91,7 @@
                 </template>
               </elsa-form-group>
             </div>
-            <elsa-form-group :label="$t('syntymaaika')">
+            <elsa-form-group v-if="syntymaaika" :label="$t('syntymaaika')">
               <template v-slot="{ uid }">
                 <span :id="uid">
                   {{ syntymaaika }}
