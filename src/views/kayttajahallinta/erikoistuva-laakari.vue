@@ -206,7 +206,7 @@
               <elsa-button
                 v-if="!editing"
                 :disabled="updatingTila"
-                :to="{ name: 'kayttajahallinta' }"
+                :to="{ name: 'kayttajahallinta', hash: '#erikoistuvat-laakarit' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
               >

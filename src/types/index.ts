@@ -463,6 +463,7 @@ export interface Kayttaja {
   sukunimi: string
   sahkoposti: string
   eppn: string
+  puhelin: string
   avatar: string
   userId: string
   authorities: KayttajaAuthority[]

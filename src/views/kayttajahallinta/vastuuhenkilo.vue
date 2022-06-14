@@ -180,7 +180,7 @@
               <elsa-button
                 v-if="!editing"
                 :disabled="updatingTila"
-                :to="{ name: 'kayttajahallinta' }"
+                :to="{ name: 'kayttajahallinta', hash: '#vastuuhenkilot' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
               >
@@ -356,18 +356,6 @@
 
       this.skipRouteExitConfirm = true
       this.updatingKayttaja = false
-    }
-
-    get kayttajaId() {
-      return this.kayttajaWrapper?.kayttaja?.id
-    }
-
-    get yliopisto() {
-      return this.kayttajaWrapper?.kayttaja?.yliopistotAndErikoisalat[0].yliopisto
-    }
-
-    get yliopistotAndErikoisalat() {
-      return this.kayttajaWrapper?.kayttaja?.yliopistotAndErikoisalat
     }
   }
 </script>

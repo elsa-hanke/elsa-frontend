@@ -16,6 +16,24 @@ export default class KayttajahallintaListMixin extends Mixins(KayttajahallintaMi
   @Prop({ required: true, type: Object })
   rajaimet!: KayttajahallintaRajaimet
 
+  fields = [
+    {
+      key: 'nimi',
+      label: this.$t('nimi'),
+      sortable: false
+    },
+    {
+      key: 'yliopistotAndErikoisalat',
+      label: this.$t('yliopisto-ja-erikoisala'),
+      sortable: false
+    },
+    {
+      key: 'tila',
+      label: this.$t('tilin-tila'),
+      sortable: false
+    }
+  ]
+
   sortFields: SortByEnum[] = [
     {
       name: this.$t('sukunimi-a-o'),

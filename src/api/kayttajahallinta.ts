@@ -46,8 +46,28 @@ export async function getVastuuhenkilot(params: {
   })
 }
 
+export async function getKouluttajat(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+}) {
+  const path = `${resolveRolePath()}/kouluttajat`
+  return await axios.get<Page<KayttajahallintaKayttajaListItem>>(path, {
+    params: {
+      ...params
+    }
+  })
+}
+
 export async function getErikoistuvaLaakari(kayttajaId: number | string) {
   const path = `${resolveRolePath()}/erikoistuvat-laakarit/${kayttajaId}`
+  return await axios.get<KayttajahallintaKayttajaWrapper>(path)
+}
+
+export async function getKouluttaja(kayttajaId: number | string) {
+  const path = `${resolveRolePath()}/kouluttajat/${kayttajaId}`
   return await axios.get<KayttajahallintaKayttajaWrapper>(path)
 }
 
