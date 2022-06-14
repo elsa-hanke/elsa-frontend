@@ -133,7 +133,23 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
     return this.kayttajaWrapper?.kayttaja?.sahkoposti
   }
 
+  get puhelin() {
+    return this.kayttajaWrapper?.kayttaja?.puhelin
+  }
+
   get eppn() {
     return this.kayttajaWrapper?.kayttaja?.eppn
+  }
+
+  get kayttajaId() {
+    return this.kayttajaWrapper?.kayttaja?.id
+  }
+
+  get yliopisto() {
+    return this.kayttajaWrapper?.kayttaja?.yliopistotAndErikoisalat[0].yliopisto
+  }
+
+  get yliopistotAndErikoisalat() {
+    return this.kayttajaWrapper?.kayttaja?.yliopistotAndErikoisalat
   }
 }

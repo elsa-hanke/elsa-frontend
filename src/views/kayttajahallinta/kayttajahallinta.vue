@@ -12,11 +12,14 @@
             {{ $t('lisaa-uusi-kayttaja') }}
           </elsa-button>
           <div v-if="!initializing">
-            <b-tabs content-class="mt-3" :no-fade="true">
-              <b-tab :title="$t('erikoistujat')" active>
+            <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+              <b-tab :title="$t('erikoistujat')" href="#erikoistuvat-laakarit">
                 <erikoistuvat-laakarit :rajaimet="rajaimet" />
               </b-tab>
-              <b-tab :title="$t('vastuuhenkilot')" lazy>
+              <b-tab :title="$t('kouluttajat')" lazy href="#kouluttajat">
+                <kouluttajat :rajaimet="rajaimet" />
+              </b-tab>
+              <b-tab :title="$t('vastuuhenkilot')" lazy href="#vastuuhenkilot">
                 <vastuuhenkilot :rajaimet="rajaimet" />
               </b-tab>
               <!-- <b-tab :title="$t('virkailijat')"></b-tab> -->
@@ -46,11 +49,13 @@
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
+  import Kouluttajat from '@/views/kayttajahallinta/kouluttajat.vue'
   import Vastuuhenkilot from '@/views/kayttajahallinta/vastuuhenkilot.vue'
 
   @Component({
     components: {
       ErikoistuvatLaakarit,
+      Kouluttajat,
       Vastuuhenkilot,
       ElsaButton,
       ElsaFormGroup,
@@ -62,6 +67,13 @@
   export default class Kayttajahallinta extends Mixins(KayttajahallintaMixin) {
     initializing = true
     rajaimet: KayttajahallintaRajaimet | null = null
+
+    tabIndex = 0
+    tabs = ['#erikoistuvat-laakarit', '#kouluttajat', '#vastuuhenkilot']
+
+    beforeMount() {
+      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
+    }
 
     async mounted() {
       try {
