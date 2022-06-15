@@ -202,7 +202,7 @@
   import { Component, Mixins } from 'vue-property-decorator'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
-  import { getVastuuhenkilo, putVastuuhenkilo } from '@/api/kayttajahallinta'
+  import { getKayttaja, putVastuuhenkilo } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
@@ -272,7 +272,7 @@
 
     async fetchKayttaja() {
       try {
-        this.kayttajaWrapper = (await getVastuuhenkilo(this.$route?.params?.kayttajaId)).data
+        this.kayttajaWrapper = (await getKayttaja(this.$route?.params?.kayttajaId)).data
         this.initForm()
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))

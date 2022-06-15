@@ -22,7 +22,9 @@
               <b-tab :title="$t('vastuuhenkilot')" lazy href="#vastuuhenkilot">
                 <vastuuhenkilot :rajaimet="rajaimet" />
               </b-tab>
-              <!-- <b-tab :title="$t('virkailijat')"></b-tab> -->
+              <b-tab :title="$t('virkailijat')" lazy href="#virkailijat">
+                <virkailijat :rajaimet="rajaimet" />
+              </b-tab>
               <!-- <b-tab :title="$t('paakayttajat')"></b-tab> -->
             </b-tabs>
           </div>
@@ -51,12 +53,14 @@
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
   import Kouluttajat from '@/views/kayttajahallinta/kouluttajat.vue'
   import Vastuuhenkilot from '@/views/kayttajahallinta/vastuuhenkilot.vue'
+  import Virkailijat from '@/views/kayttajahallinta/virkailijat.vue'
 
   @Component({
     components: {
       ErikoistuvatLaakarit,
       Kouluttajat,
       Vastuuhenkilot,
+      Virkailijat,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormMultiselect,
@@ -69,7 +73,7 @@
     rajaimet: KayttajahallintaRajaimet | null = null
 
     tabIndex = 0
-    tabs = ['#erikoistuvat-laakarit', '#kouluttajat', '#vastuuhenkilot']
+    tabs = ['#erikoistuvat-laakarit', '#kouluttajat', '#vastuuhenkilot', '#virkailijat']
 
     beforeMount() {
       this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
