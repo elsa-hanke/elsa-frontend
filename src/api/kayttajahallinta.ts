@@ -61,18 +61,27 @@ export async function getKouluttajat(params: {
   })
 }
 
+export async function getVirkailijat(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+}) {
+  const path = `${resolveRolePath()}/virkailijat`
+  return await axios.get<Page<KayttajahallintaKayttajaListItem>>(path, {
+    params: {
+      ...params
+    }
+  })
+}
+
 export async function getErikoistuvaLaakari(kayttajaId: number | string) {
   const path = `${resolveRolePath()}/erikoistuvat-laakarit/${kayttajaId}`
   return await axios.get<KayttajahallintaKayttajaWrapper>(path)
 }
 
-export async function getKouluttaja(kayttajaId: number | string) {
-  const path = `${resolveRolePath()}/kouluttajat/${kayttajaId}`
-  return await axios.get<KayttajahallintaKayttajaWrapper>(path)
-}
-
-export async function getVastuuhenkilo(kayttajaId: number | string) {
-  const path = `${resolveRolePath()}/vastuuhenkilot/${kayttajaId}`
+export async function getKayttaja(kayttajaId: number | string) {
+  const path = `${resolveRolePath()}/kayttajat/${kayttajaId}`
   return await axios.get<KayttajahallintaKayttajaWrapper>(path)
 }
 

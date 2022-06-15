@@ -108,7 +108,7 @@
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
 
-  import { getKouluttaja } from '@/api/kayttajahallinta'
+  import { getKayttaja } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
@@ -138,7 +138,7 @@
 
     async mounted() {
       try {
-        this.kayttajaWrapper = (await getKouluttaja(this.$route?.params?.kayttajaId)).data
+        this.kayttajaWrapper = (await getKayttaja(this.$route?.params?.kayttajaId)).data
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'kayttajahallinta' })
