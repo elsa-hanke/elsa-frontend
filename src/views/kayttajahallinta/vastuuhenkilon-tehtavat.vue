@@ -199,7 +199,7 @@
     </div>
     <elsa-button
       v-if="allowEditing"
-      @click="addErikoisala"
+      @click="addErikoisala(false)"
       variant="link"
       size="md"
       class="text-decoration-none shadow-none p-0"
@@ -304,7 +304,7 @@
           this.formData = (await getVastuuhenkilonTehtavatForm(yliopistoId)).data
           this.initForm()
           if (this.newVastuuhenkilo) {
-            this.addErikoisala()
+            this.addErikoisala(true)
           }
         }
       } catch {
@@ -417,8 +417,8 @@
       )
     }
 
-    addErikoisala() {
-      this.$emit('skipRouteExitConfirm', false)
+    addErikoisala(skipRouteExitConfirm: boolean) {
+      this.$emit('skipRouteExitConfirm', skipRouteExitConfirm)
       this.form.yliopistotAndErikoisalat.push({
         yliopisto: this.yliopisto,
         vastuuhenkilonTehtavat: []
