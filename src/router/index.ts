@@ -41,6 +41,7 @@ import ArviointilomakeLoppukeskustelu from '@/views/koejakso/kouluttaja-vastuuhe
 import ArviointilomakeValiarviointi from '@/views/koejakso/kouluttaja-vastuuhenkilo/arviointilomake-valiarviointi/arviointilomake-valiarviointi.vue'
 import Koulutussopimus from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus/koulutussopimus.vue'
 import VastuuhenkilonArvioVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/vastuuhenkilon-arvio-vastuuhenkilo.vue'
+import VirkailijanTarkistus from '@/views/koejakso/virkailija/virkailijan-tarkistus.vue'
 import Koulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/koulutusjakso.vue'
 import MuokkaaKoulutusjaksoa from '@/views/koulutussuunnitelma/koulutusjakso/muokkaa-koulutusjaksoa.vue'
 import UusiKoulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/uusi-koulutusjakso.vue'
@@ -554,7 +555,8 @@ const routes: Array<RouteConfig> = [
               allowedRoles: [
                 ELSA_ROLE.ErikoistuvaLaakari,
                 ELSA_ROLE.Kouluttaja,
-                ELSA_ROLE.Vastuuhenkilo
+                ELSA_ROLE.Vastuuhenkilo,
+                ELSA_ROLE.OpintohallinnonVirkailija
               ]
             }
           },
@@ -677,6 +679,15 @@ const routes: Array<RouteConfig> = [
             props: {
               routeComponent: VastuuhenkilonArvioVastuuhenkilo,
               allowedRoles: [ELSA_ROLE.Vastuuhenkilo]
+            }
+          },
+          {
+            path: 'virkailijan-tarkistus/:id',
+            name: 'virkailijan-tarkistus',
+            component: RoleSpecificRoute,
+            props: {
+              routeComponent: VirkailijanTarkistus,
+              allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
             }
           }
         ]

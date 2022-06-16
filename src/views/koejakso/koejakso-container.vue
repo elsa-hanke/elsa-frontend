@@ -3,6 +3,7 @@
     <koejakso-view-erikoistuva v-if="$isErikoistuva()"></koejakso-view-erikoistuva>
     <koejakso-view-kouluttaja v-if="$isKouluttaja()"></koejakso-view-kouluttaja>
     <koejakso-view-vastuuhenkilo v-if="$isVastuuhenkilo()"></koejakso-view-vastuuhenkilo>
+    <koejakso-view-virkailija v-if="$isVirkailija()"></koejakso-view-virkailija>
   </div>
 </template>
 
@@ -13,12 +14,14 @@
   import KoejaksoViewErikoistuva from '@/views/koejakso/erikoistuva/koejakso-view-erikoistuva.vue'
   import KoejaksoViewKouluttaja from '@/views/koejakso/kouluttaja/koejakso-view-kouluttaja.vue'
   import KoejaksoViewVastuuhenkilo from '@/views/koejakso/vastuuhenkilo/koejakso-view-vastuuhenkilo.vue'
+  import KoejaksoViewVirkailija from '@/views/koejakso/virkailija/koejakso-view-virkailija.vue'
 
   @Component({
     components: {
       KoejaksoViewKouluttaja,
       KoejaksoViewErikoistuva,
-      KoejaksoViewVastuuhenkilo
+      KoejaksoViewVastuuhenkilo,
+      KoejaksoViewVirkailija
     }
   })
   export default class KoejaksoContainer extends Vue {
