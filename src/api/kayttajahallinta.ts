@@ -11,7 +11,7 @@ import {
   KayttajahallintaUpdateKayttaja,
   KayttajahallintaVastuuhenkilonTehtavatLomake,
   KayttajahallintaNewKayttaja,
-  VastuuhenkiloLomake
+  Yliopisto
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -90,9 +90,9 @@ export async function getErikoistuvaLaakariLomake() {
   return await axios.get<ErikoistuvaLaakariLomake>(path)
 }
 
-export async function getVastuuhenkiloLomake() {
-  const path = `${resolveRolePath()}/vastuuhenkilo-lomake`
-  return await axios.get<VastuuhenkiloLomake>(path)
+export async function getYliopistot() {
+  const path = `${resolveRolePath()}/yliopistot`
+  return await axios.get<Yliopisto[]>(path)
 }
 
 export async function postErikoistuvaLaakari(form: UusiErikoistuvaLaakari) {
@@ -128,6 +128,11 @@ export async function patchErikoistuvaLaakari(
   return await axios.patch(path, form)
 }
 
+export async function patchVirkailija(kayttajaId: number, form: KayttajahallintaUpdateKayttaja) {
+  const path = `${resolveRolePath()}/virkailijat/${kayttajaId}`
+  return await axios.patch(path, form)
+}
+
 export async function getVastuuhenkilonTehtavatForm(yliopistoId: number) {
   const path = `${resolveRolePath()}/vastuuhenkilon-tehtavat-lomake/${yliopistoId}`
   return await axios.get<KayttajahallintaVastuuhenkilonTehtavatLomake>(path)
@@ -140,5 +145,10 @@ export async function putVastuuhenkilo(kayttajaId: number, form: Kayttajahallint
 
 export async function postVastuuhenkilo(form: KayttajahallintaNewKayttaja) {
   const path = `${resolveRolePath()}/vastuuhenkilot`
+  return await axios.post<KayttajahallintaKayttajaWrapper>(path, form)
+}
+
+export async function postVirkailija(form: KayttajahallintaNewKayttaja) {
+  const path = `${resolveRolePath()}/virkailijat`
   return await axios.post<KayttajahallintaKayttajaWrapper>(path, form)
 }

@@ -469,6 +469,7 @@ export interface Kayttaja {
   authorities: KayttajaAuthority[]
   nimike: string
   yliopistotAndErikoisalat: KayttajaYliopistoErikoisala[]
+  yliopistot: Yliopisto[]
   tila: KayttajatiliTila
 }
 
@@ -799,10 +800,6 @@ export interface ErikoistuvaLaakariLomake {
   erikoisalat: Erikoisala[]
   asetukset: Asetus[]
   opintooppaat: Opintoopas[]
-}
-
-export interface VastuuhenkiloLomake {
-  yliopistot: Yliopisto[]
 }
 
 export type Seurantajakso = {

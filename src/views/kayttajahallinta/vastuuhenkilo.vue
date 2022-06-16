@@ -341,8 +341,6 @@
         ).data
 
         toastSuccess(this, this.$t('kayttajan-tiedot-paivitetty'))
-        this.$emit('skipRouteExitConfirm', true)
-        this.editing = false
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
         const message = axiosError?.response?.data?.message
@@ -354,8 +352,9 @@
         )
       }
 
-      this.skipRouteExitConfirm = true
+      this.editing = false
       this.updatingKayttaja = false
+      this.skipRouteExitConfirm = true
     }
   }
 </script>

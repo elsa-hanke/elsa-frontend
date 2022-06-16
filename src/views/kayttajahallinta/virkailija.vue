@@ -91,62 +91,36 @@
                 </template>
               </elsa-form-group>
             </div>
-            <elsa-form-group v-if="syntymaaika" :label="$t('syntymaaika')">
+            <elsa-form-group :label="$t('yliopisto')">
               <template v-slot="{ uid }">
                 <span :id="uid">
-                  {{ syntymaaika }}
+                  {{ yliopistoNimi }}
                 </span>
               </template>
             </elsa-form-group>
-            <hr />
-            <h2>{{ $t('opintooikeudet') }}</h2>
-            <div
-              class="border rounded p-3 mb-4"
-              v-for="opintooikeus in opintooikeudet"
-              :key="opintooikeus.id"
+            <elsa-form-group
+              :required="editing && isKutsuttu"
+              :label="$t('yliopiston-kayttajatunnus')"
             >
-              <h3 class="mb-3">
-                {{
-                  `${$t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`)}, ${
-                    opintooikeus.erikoisalaNimi
-                  }`
-                }}
-              </h3>
-              <elsa-form-group :label="$t('opiskelijatunnus')" v-if="opintooikeus.opiskelijatunnus">
-                <template v-slot="{ uid }">
-                  <span :id="uid">{{ opintooikeus.opiskelijatunnus }}</span>
-                </template>
-              </elsa-form-group>
-              <elsa-form-group :label="$t('opintooikeus')">
-                <template v-slot="{ uid }">
-                  <span :id="uid">
-                    {{ `${$date(opintooikeus.opintooikeudenMyontamispaiva)} -` }}
-                  </span>
-                  <span
-                    :class="{ 'text-danger': isInPast(opintooikeus.opintooikeudenPaattymispaiva) }"
-                  >
-                    {{ `${$date(opintooikeus.opintooikeudenPaattymispaiva)}` }}
-                  </span>
-                </template>
-              </elsa-form-group>
-              <elsa-form-group :label="$t('asetus')">
-                <template v-slot="{ uid }">
-                  <span :id="uid">{{ opintooikeus.asetus.nimi }}</span>
-                </template>
-              </elsa-form-group>
-              <elsa-form-group :label="$t('kaytossa-oleva-opintoopas')">
-                <template v-slot="{ uid }">
-                  <span :id="uid">{{ opintooikeus.opintoopasNimi }}</span>
-                </template>
-              </elsa-form-group>
-              <elsa-form-group :label="$t('osaamisen-arvioinnin-oppaan-paivamaara')">
-                <template v-slot="{ uid }">
-                  <span :id="uid">
-                    {{ $date(opintooikeus.osaamisenArvioinninOppaanPvm) }}
-                  </span>
-                </template>
-              </elsa-form-group>
-            </div>
+              <template v-slot="{ uid }">
+                <div v-if="editing && isKutsuttu">
+                  <b-form-input
+                    class="col-sm-12 col-md-6 pr-md-3"
+                    :id="uid"
+                    v-model="form.eppn"
+                    @input="skipRouteExitConfirm = false"
+                    :state="validateState('eppn')"
+                  ></b-form-input>
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </div>
+                <div v-else>
+                  <span :id="uid">{{ form.eppn }}</span>
+                </div>
+              </template>
+            </elsa-form-group>
+            <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 v-if="editing"
@@ -177,7 +151,7 @@
                 {{ $t('aktivoi-kayttaja') }}
               </elsa-button>
               <elsa-button
-                v-else-if="isAktiivinen"
+                v-else-if="isAktiivinen || isKutsuttu"
                 variant="outline-danger"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
@@ -185,14 +159,6 @@
                 class="mb-3"
               >
                 {{ $t('passivoi-kayttaja') }}
-              </elsa-button>
-              <elsa-button
-                v-else-if="isKutsuttu"
-                variant="primary"
-                @click="onInvitationResend"
-                class="mb-3"
-              >
-                {{ $t('laheta-kutsu-uudelleen') }}
               </elsa-button>
               <elsa-button
                 v-if="editing"
@@ -206,7 +172,7 @@
               <elsa-button
                 v-if="!editing"
                 :disabled="updatingTila"
-                :to="{ name: 'kayttajahallinta', hash: '#erikoistuvat-laakarit' }"
+                :to="{ name: 'kayttajahallinta', hash: '#virkailijat' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
               >
@@ -228,17 +194,12 @@
   import { Component, Mixins } from 'vue-property-decorator'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
-  import {
-    getErikoistuvaLaakari,
-    putErikoistuvaLaakariInvitation,
-    patchErikoistuvaLaakari
-  } from '@/api/kayttajahallinta'
+  import { getKayttaja, patchVirkailija } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
-  import { KayttajahallintaUpdateKayttaja, ElsaError } from '@/types/index'
+  import { KayttajahallintaUpdateKayttaja, ElsaError } from '@/types'
   import { confirmExit } from '@/utils/confirm'
-  import { isInPast } from '@/utils/date'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -256,11 +217,14 @@
           required,
           email,
           sameAsSahkoposti: sameAs('sahkoposti')
+        },
+        eppn: {
+          required
         }
       }
     }
   })
-  export default class ErikoistuvaLaakariView extends Mixins(KayttajahallintaKayttajaMixin) {
+  export default class VirkailijaView extends Mixins(KayttajahallintaKayttajaMixin) {
     items = [
       {
         text: this.$t('kayttajahallinta'),
@@ -271,11 +235,12 @@
         active: true
       }
     ]
-    resending = false
 
-    form: KayttajahallintaUpdateKayttaja = {
+    form: Partial<KayttajahallintaUpdateKayttaja> = {
       sahkoposti: null,
-      sahkopostiUudelleen: null
+      sahkopostiUudelleen: null,
+      eppn: null,
+      yliopistotAndErikoisalat: []
     }
 
     async mounted() {
@@ -285,7 +250,7 @@
 
     async fetchKayttaja() {
       try {
-        this.kayttajaWrapper = (await getErikoistuvaLaakari(this.$route?.params?.kayttajaId)).data
+        this.kayttajaWrapper = (await getKayttaja(this.$route?.params?.kayttajaId)).data
         this.initForm()
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
@@ -297,30 +262,12 @@
       const sahkoposti = this.sahkoposti
       this.form.sahkoposti = sahkoposti
       this.form.sahkopostiUudelleen = sahkoposti
+      this.form.eppn = this.eppn
     }
 
-    async onInvitationResend() {
-      if (
-        this.kayttajaWrapper?.erikoistuvaLaakari?.id &&
-        (await this.$bvModal.msgBoxConfirm(this.$t('laheta-kutsu-viesti') as string, {
-          title: this.$t('laheta-kutsu-uudelleen') as string,
-          okVariant: 'primary',
-          okTitle: this.$t('laheta-kutsu') as string,
-          cancelTitle: this.$t('peruuta') as string,
-          cancelVariant: 'back',
-          hideHeaderClose: false,
-          centered: true
-        }))
-      ) {
-        this.resending = true
-        try {
-          await putErikoistuvaLaakariInvitation(this.kayttajaWrapper?.erikoistuvaLaakari?.id)
-          toastSuccess(this, this.$t('kutsulinkki-lahetetty-uudestaan'))
-        } catch (err) {
-          toastFail(this, this.$t('kutsulinkin-lahettaminen-epaonnistui'))
-        }
-        this.resending = false
-      }
+    onEditUser() {
+      this.editing = true
+      window.scrollTo(0, 0)
     }
 
     async onCancel() {
@@ -333,15 +280,15 @@
     }
 
     async onSave() {
-      if (!this.kayttajaWrapper?.kayttaja?.userId || !this.validateForm()) {
-        window.scrollTo(0, 0)
+      if (!this.kayttajaWrapper?.kayttaja?.id || !this.validateForm()) {
         return
       }
       this.updatingKayttaja = true
 
       try {
-        await patchErikoistuvaLaakari(this.kayttajaWrapper.kayttaja.userId, {
-          sahkoposti: this.form.sahkoposti
+        await patchVirkailija(this.kayttajaWrapper.kayttaja.id, {
+          sahkoposti: this.form.sahkoposti,
+          eppn: this.form.eppn
         })
         toastSuccess(this, this.$t('kayttajan-tiedot-paivitetty'))
       } catch (err) {
@@ -360,18 +307,8 @@
       this.skipRouteExitConfirm = true
     }
 
-    isInPast(date: string) {
-      return isInPast(date)
-    }
-
-    get syntymaaika() {
-      return this.kayttajaWrapper?.erikoistuvaLaakari?.syntymaaika
-        ? this.$date(this.kayttajaWrapper?.erikoistuvaLaakari?.syntymaaika)
-        : ''
-    }
-
-    get opintooikeudet() {
-      return this.kayttajaWrapper?.erikoistuvaLaakari?.opintooikeudet ?? []
+    get yliopistoNimi() {
+      return this.$t(`yliopisto-nimi.${this.kayttajaWrapper?.kayttaja?.yliopistot[0]?.nimi}`)
     }
   }
 </script>

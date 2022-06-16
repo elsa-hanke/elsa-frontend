@@ -86,8 +86,6 @@
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
-        <hr />
-        <h2 class="mb-3">{{ $t('yliopisto-ja-erikoisalat') }}</h2>
         <elsa-form-group :label="$t('yliopisto')" :required="yliopistot.length > 1">
           <template v-slot="{ uid }">
             <div v-if="yliopistot.length > 1">
@@ -123,13 +121,7 @@
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
-        <vastuuhenkilon-tehtavat
-          v-if="form.yliopisto"
-          :yliopisto="form.yliopisto"
-          :newVastuuhenkilo="true"
-          @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
-          ref="vastuuhenkilonTehtavat"
-        />
+        <hr />
         <div class="d-flex flex-row-reverse flex-wrap">
           <elsa-button variant="primary" @click="onSave" :loading="saving" class="mb-3 ml-3">
             {{ $t('tallenna') }}
@@ -157,19 +149,11 @@
   import { validationMixin } from 'vuelidate'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
-  import { postVastuuhenkilo, getYliopistot } from '@/api/kayttajahallinta'
+  import { postVirkailija, getYliopistot } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import {
-    KayttajahallintaNewKayttaja,
-    ErikoisalaForVastuuhenkilonTehtavat,
-    ElsaError,
-    KayttajaYliopistoErikoisala,
-    ReassignedVastuuhenkilonTehtava,
-    VastuuhenkilonTehtava,
-    Yliopisto
-  } from '@/types'
+  import { KayttajahallintaNewKayttaja, ElsaError, Yliopisto } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import VastuuhenkilonTehtavat from '@/views/kayttajahallinta/vastuuhenkilon-tehtavat.vue'
 
@@ -202,11 +186,7 @@
       }
     }
   })
-  export default class VastuuhenkiloForm extends Mixins(validationMixin) {
-    $refs!: {
-      vastuuhenkilonTehtavat: any
-    }
-
+  export default class VirkailijaForm extends Mixins(validationMixin) {
     form: KayttajahallintaNewKayttaja = {
       etunimi: null,
       sukunimi: null,
@@ -228,41 +208,22 @@
     }
 
     async onSave() {
-      const vastuuhenkilonTehtavatForm = this.form.yliopisto
-        ? this.$refs.vastuuhenkilonTehtavat.getFormIfValid()
-        : null
-      if (!this.validateForm() || !vastuuhenkilonTehtavatForm) {
+      if (!this.validateForm()) {
         return
       }
       this.saving = true
-      this.form.yliopistotAndErikoisalat = vastuuhenkilonTehtavatForm.yliopistotAndErikoisalat.map(
-        (ye: KayttajaYliopistoErikoisala) => {
-          return {
-            ...ye,
-            vastuuhenkilonTehtavat: ye.vastuuhenkilonTehtavat.filter(
-              (vt: VastuuhenkilonTehtava | boolean) => vt !== false
-            )
-          }
-        }
-      )
-      this.form.reassignedTehtavat = vastuuhenkilonTehtavatForm.erikoisalatForTehtavat
-        .map((e: ErikoisalaForVastuuhenkilonTehtavat) => e.reassignedTehtavat)
-        .flat()
-        .filter((r: ReassignedVastuuhenkilonTehtava) => r !== undefined)
 
       try {
         const kayttajaId = (
-          await postVastuuhenkilo({
-            ...this.form,
-            yliopistotAndErikoisalat: this.form.yliopistotAndErikoisalat,
-            reassignedTehtavat: this.form.reassignedTehtavat
+          await postVirkailija({
+            ...this.form
           })
         ).data.kayttaja?.id
-        toastSuccess(this, this.$t('vastuuhenkilo-lisatty'))
+        toastSuccess(this, this.$t('virkailija-lisatty'))
         this.$emit('skipRouteExitConfirm', true)
         this.saving = false
         this.$router.push({
-          name: 'vastuuhenkilo',
+          name: 'virkailija',
           params: { kayttajaId: `${kayttajaId}` }
         })
       } catch (err) {
