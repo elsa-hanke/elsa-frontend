@@ -80,7 +80,8 @@
         </b-nav-item>
         <b-nav-item
           v-if="
-            ($isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo()) && featurePreviewModeEnabled
+            ($isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo() || $isVirkailija()) &&
+            featurePreviewModeEnabled
           "
           class="border-bottom"
           :to="{ name: 'koejakso' }"
