@@ -19,6 +19,10 @@
             v-if="form.rooli === vastuuhenkiloRole"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
+          <virkailija-form
+            v-if="form.rooli === virkailijaRole"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+          />
         </b-col>
       </b-row>
       <div v-if="!form.rooli" class="d-flex flex-row-reverse flex-wrap">
@@ -41,12 +45,14 @@
   import { ELSA_ROLE } from '@/utils/roles'
   import ErikoistuvaLaakariForm from '@/views/kayttajahallinta/uusi-erikoistuva-laakari.vue'
   import VastuuhenkiloForm from '@/views/kayttajahallinta/uusi-vastuuhenkilo.vue'
+  import VirkailijaForm from '@/views/kayttajahallinta/uusi-virkailija.vue'
 
   @Component({
     components: {
       ElsaFormGroup,
       ErikoistuvaLaakariForm,
       VastuuhenkiloForm,
+      VirkailijaForm,
       ElsaButton
     }
   })
@@ -68,11 +74,15 @@
     roolit = [
       {
         text: this.$t('erikoistuva-laakari'),
-        value: ELSA_ROLE.ErikoistuvaLaakari
+        value: this.erikoistuvaLaakariRole
       },
       {
         text: this.$t('vastuuhenkilo'),
-        value: ELSA_ROLE.Vastuuhenkilo
+        value: this.vastuuhenkiloRole
+      },
+      {
+        text: this.$t('virkailija'),
+        value: this.virkailijaRole
       }
     ]
 
@@ -88,6 +98,10 @@
 
     get vastuuhenkiloRole() {
       return ELSA_ROLE.Vastuuhenkilo
+    }
+
+    get virkailijaRole() {
+      return ELSA_ROLE.OpintohallinnonVirkailija
     }
   }
 </script>
