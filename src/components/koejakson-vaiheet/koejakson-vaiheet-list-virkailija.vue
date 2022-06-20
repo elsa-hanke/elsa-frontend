@@ -8,7 +8,7 @@
           <elsa-search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
-            :placeholder="$t('hae-erikoistuvan-nimella')"
+            :placeholder="$t('hae-erikoistujan-nimella')"
           />
         </b-col>
       </b-row>
@@ -230,10 +230,6 @@
     perPage = 20
     currentPage = 1
     hakutermi = ''
-
-    mounted() {
-      console.log(this.koejaksot)
-    }
 
     get rows() {
       return this.tulokset?.length ?? 0
