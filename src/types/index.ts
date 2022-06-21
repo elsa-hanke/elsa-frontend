@@ -758,7 +758,7 @@ export interface KayttajahallintaNewKayttaja {
   sahkoposti: string | null
   sahkopostiUudelleen: string | null
   eppn: string | null
-  yliopisto: Yliopisto | null
+  yliopisto?: Yliopisto | null
   yliopistotAndErikoisalat?: KayttajaYliopistoErikoisala[]
   reassignedTehtavat?: ReassignedVastuuhenkilonTehtava[]
 }

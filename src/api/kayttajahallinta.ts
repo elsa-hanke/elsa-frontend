@@ -75,6 +75,20 @@ export async function getVirkailijat(params: {
   })
 }
 
+export async function getPaakayttajat(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+}) {
+  const path = `${resolveRolePath()}/paakayttajat`
+  return await axios.get<Page<KayttajahallintaKayttajaListItem>>(path, {
+    params: {
+      ...params
+    }
+  })
+}
+
 export async function getErikoistuvaLaakari(kayttajaId: number | string) {
   const path = `${resolveRolePath()}/erikoistuvat-laakarit/${kayttajaId}`
   return await axios.get<KayttajahallintaKayttajaWrapper>(path)
@@ -133,6 +147,11 @@ export async function patchVirkailija(kayttajaId: number, form: Kayttajahallinta
   return await axios.patch(path, form)
 }
 
+export async function patchPaakayttaja(kayttajaId: number, form: KayttajahallintaUpdateKayttaja) {
+  const path = `${resolveRolePath()}/paakayttajat/${kayttajaId}`
+  return await axios.patch(path, form)
+}
+
 export async function getVastuuhenkilonTehtavatForm(yliopistoId: number) {
   const path = `${resolveRolePath()}/vastuuhenkilon-tehtavat-lomake/${yliopistoId}`
   return await axios.get<KayttajahallintaVastuuhenkilonTehtavatLomake>(path)
@@ -150,5 +169,10 @@ export async function postVastuuhenkilo(form: KayttajahallintaNewKayttaja) {
 
 export async function postVirkailija(form: KayttajahallintaNewKayttaja) {
   const path = `${resolveRolePath()}/virkailijat`
+  return await axios.post<KayttajahallintaKayttajaWrapper>(path, form)
+}
+
+export async function postPaakayttaja(form: KayttajahallintaNewKayttaja) {
+  const path = `${resolveRolePath()}/paakayttajat`
   return await axios.post<KayttajahallintaKayttajaWrapper>(path, form)
 }

@@ -22,6 +22,7 @@ import KaytonAloitus from '@/views/kayton-aloitus/kayton-aloitus.vue'
 import ErikoistuvaLaakari from '@/views/kayttajahallinta/erikoistuva-laakari.vue'
 import Kayttajahallinta from '@/views/kayttajahallinta/kayttajahallinta.vue'
 import Kouluttaja from '@/views/kayttajahallinta/kouluttaja.vue'
+import Paakayttaja from '@/views/kayttajahallinta/paakayttaja.vue'
 import UusiKayttaja from '@/views/kayttajahallinta/uusi-kayttaja.vue'
 import Vastuuhenkilo from '@/views/kayttajahallinta/vastuuhenkilo.vue'
 import Virkailija from '@/views/kayttajahallinta/virkailija.vue'
@@ -739,6 +740,15 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: Virkailija,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/kayttajahallinta/paakayttajat/:kayttajaId',
+        name: 'paakayttaja',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Paakayttaja,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       },
       {

@@ -78,7 +78,6 @@
           class="p-0 border-0 shadow-none"
         >
           <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
-          <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
         </elsa-button>
       </template>
       <template #cell(yliopistotAndErikoisalat)="row">

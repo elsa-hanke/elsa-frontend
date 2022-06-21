@@ -25,7 +25,14 @@
               <b-tab :title="$t('virkailijat')" lazy href="#virkailijat">
                 <virkailijat :rajaimet="rajaimet" />
               </b-tab>
-              <!-- <b-tab :title="$t('paakayttajat')"></b-tab> -->
+              <b-tab
+                v-if="$isTekninenPaakayttaja()"
+                :title="$t('paakayttajat')"
+                lazy
+                href="#paakayttajat"
+              >
+                <paakayttajat :rajaimet="rajaimet" />
+              </b-tab>
             </b-tabs>
           </div>
           <div v-else class="text-center">
@@ -52,6 +59,7 @@
   import { toastFail } from '@/utils/toast'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
   import Kouluttajat from '@/views/kayttajahallinta/kouluttajat.vue'
+  import Paakayttajat from '@/views/kayttajahallinta/paakayttajat.vue'
   import Vastuuhenkilot from '@/views/kayttajahallinta/vastuuhenkilot.vue'
   import Virkailijat from '@/views/kayttajahallinta/virkailijat.vue'
 
@@ -61,6 +69,7 @@
       Kouluttajat,
       Vastuuhenkilot,
       Virkailijat,
+      Paakayttajat,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormMultiselect,
@@ -73,7 +82,13 @@
     rajaimet: KayttajahallintaRajaimet | null = null
 
     tabIndex = 0
-    tabs = ['#erikoistuvat-laakarit', '#kouluttajat', '#vastuuhenkilot', '#virkailijat']
+    tabs = [
+      '#erikoistuvat-laakarit',
+      '#kouluttajat',
+      '#vastuuhenkilot',
+      '#virkailijat',
+      '#paakayttajat'
+    ]
 
     beforeMount() {
       this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
