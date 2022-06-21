@@ -33,6 +33,8 @@ declare module 'vue/types/vue' {
     $isErikoistuva: Function
     $isKouluttaja: Function
     $isVastuuhenkilo: Function
+    $isTekninenPaakayttaja: Function
+    $isVirkailija: Function
   }
 }
 

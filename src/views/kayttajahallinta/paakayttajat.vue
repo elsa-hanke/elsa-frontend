@@ -5,7 +5,7 @@
         <elsa-search-input
           class="mb-3"
           :hakutermi.sync="hakutermi"
-          :placeholder="$t('hae-virkailijan-nimella')"
+          :placeholder="$t('hae-paakayttajan-nimella')"
         />
       </b-col>
       <b-col cols="12" lg="4">
@@ -55,7 +55,7 @@
       <template #cell(nimi)="row">
         <elsa-button
           :to="{
-            name: 'virkailija',
+            name: 'paakayttaja',
             params: { kayttajaId: row.item.kayttajaId }
           }"
           variant="link"
@@ -63,11 +63,6 @@
         >
           <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
         </elsa-button>
-      </template>
-      <template #cell(yliopisto)="row">
-        <div>
-          {{ getYliopisto(row.item.yliopistotAndErikoisalat) }}
-        </div>
       </template>
       <template #cell(tila)="row">
         <span :class="getTilaColor(row.item.kayttajatilinTila)">
@@ -88,14 +83,14 @@
 <script lang="ts">
   import { Component, Mixins, Watch } from 'vue-property-decorator'
 
-  import { getVirkailijat } from '@/api/kayttajahallinta'
+  import { getPaakayttajat } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import KayttajahallintaListMixin from '@/mixins/kayttajahallinta-list'
-  import { SortByEnum, YliopistoErikoisalaPair } from '@/types'
+  import { SortByEnum } from '@/types'
   import { KayttajaJarjestys } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
 
@@ -108,16 +103,11 @@
       ElsaSearchInput
     }
   })
-  export default class Virkailijat extends Mixins(KayttajahallintaListMixin) {
+  export default class Paakayttajat extends Mixins(KayttajahallintaListMixin) {
     fields = [
       {
         key: 'nimi',
         label: this.$t('nimi'),
-        sortable: false
-      },
-      {
-        key: 'yliopisto',
-        label: this.$t('yliopisto'),
         sortable: false
       },
       {
@@ -139,7 +129,7 @@
 
     async fetch() {
       this.kayttajat = (
-        await getVirkailijat({
+        await getPaakayttajat({
           page: this.currentPage - 1,
           size: this.perPage,
           sort: this.filtered.sortBy ?? 'user.lastName,asc',
@@ -183,12 +173,6 @@
       this.currentPage = 1
       await this.fetch()
       this.loading = false
-    }
-
-    getYliopisto(yliopistotAndErikoisalat: YliopistoErikoisalaPair[]) {
-      return yliopistotAndErikoisalat[0]
-        ? this.$t(`yliopisto-nimi.${yliopistotAndErikoisalat[0].yliopisto}`)
-        : ''
     }
 
     get rows() {

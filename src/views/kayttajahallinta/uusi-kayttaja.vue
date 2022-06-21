@@ -23,6 +23,10 @@
             v-if="form.rooli === virkailijaRole"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />
+          <paakayttaja-form
+            v-if="form.rooli === paakayttajaRole"
+            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+          />
         </b-col>
       </b-row>
       <div v-if="!form.rooli" class="d-flex flex-row-reverse flex-wrap">
@@ -44,6 +48,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { ELSA_ROLE } from '@/utils/roles'
   import ErikoistuvaLaakariForm from '@/views/kayttajahallinta/uusi-erikoistuva-laakari.vue'
+  import PaakayttajaForm from '@/views/kayttajahallinta/uusi-paakayttaja.vue'
   import VastuuhenkiloForm from '@/views/kayttajahallinta/uusi-vastuuhenkilo.vue'
   import VirkailijaForm from '@/views/kayttajahallinta/uusi-virkailija.vue'
 
@@ -53,6 +58,7 @@
       ErikoistuvaLaakariForm,
       VastuuhenkiloForm,
       VirkailijaForm,
+      PaakayttajaForm,
       ElsaButton
     }
   })
@@ -86,6 +92,15 @@
       }
     ]
 
+    mounted() {
+      if (this.$isTekninenPaakayttaja()) {
+        this.roolit.push({
+          text: this.$t('paakayttaja'),
+          value: this.paakayttajaRole
+        })
+      }
+    }
+
     onCancel() {
       this.$router.push({
         name: 'kayttajahallinta'
@@ -102,6 +117,10 @@
 
     get virkailijaRole() {
       return ELSA_ROLE.OpintohallinnonVirkailija
+    }
+
+    get paakayttajaRole() {
+      return ELSA_ROLE.TekninenPaakayttaja
     }
   }
 </script>

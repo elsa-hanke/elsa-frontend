@@ -215,6 +215,7 @@
   "hae-asiakirjoja": "Hae asiakirjoja...",
   "hae-erikoistujan-nimella": "Hae erikoistujan nimellä...",
   "hae-kouluttajan-nimella": "Hae kouluttajan nimellä...",
+  "hae-paakayttajan-nimella": "Hae pääkäyttäjän nimellä",
   "hae-tapahtuman-nimella": "Hae tapahtuman nimellä...",
   "hae-tiedot": "Hae tiedot",
   "hae-vastuuhenkilon-nimella": "Hae vastuuhenkilön nimellä...",
@@ -684,6 +685,8 @@
   "osaamisen-kartuttaminen-tooltip": "Kuvaa niitä konkreettisia keinoja, joilla aiot kartuttaa osaamistasi. Kuvaa konkreettinen suunnitelma, kuinka aiot saavuttaa osaamistavoitteesi, esim. miten hyödynnät eri koulutusjaksoja, teoriakoulutuksia, toimipaikkakoulutuksia, ohjaustapaamisia ym.",
   "osaamistavoitteet-omalla-erikoisalalla": "Osaamistavoitteet omalla erikoisalalla",
   "osaamistavoitteet-omalta-erikoisalalta": "Osaamistavoitteet omalta erikoisalalta",
+  "paakayttaja": "Pääkäyttäjä",
+  "paakayttaja-lisatty": "Uusi pääkäyttäjä lisätty",
   "paakayttajat": "Pääkäyttäjät",
   "paattymispaiva": "Päättymispäivä",
   "paattymispaiva-ei-voi-olla-ennen-alkamispaivaa": "Päättymispäivä ei voi olla ennen alkamispäivää",
@@ -1196,6 +1199,7 @@
   "viimeistele-koulutussopimus": "Viimeistele koulutussopimus",
   "virheellinen-syote": "Virheellinen syöte",
   "virkailija": "Virkailija",
+  "virkailija-lisatty": "Uusi virkailija lisätty",
   "virkailijat": "Virkailijat",
   "voit-valita-teoriakoulutuksen-johon-merkinta-liittyy": "Voit valita teoriakoulutuksen, johon merkintä liittyy",
   "vuorovaikutustaidot": "Vuorovaikutustaidot",
@@ -1218,6 +1222,5 @@
   "yliopistollinen-sairaala": "Yliopistollinen sairaala",
   "yliopiston-kayttajatunnus": "Yliopiston käyttäjätunnus / vierailijatunnus",
   "yliopistosairaala": "Yliopistosairaala",
-  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
-  "virkailija-lisatty": "Uusi virkailija lisätty"
+  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"
 }
