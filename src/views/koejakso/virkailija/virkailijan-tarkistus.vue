@@ -7,19 +7,14 @@
       <div v-if="!loading">
         <b-row lg>
           <b-col>
+            {{ /* TODO: Tilojen tarkastus ja lisätietojen testaus */ }}
             <b-alert :show="editable" variant="dark" class="mt-3 mb-0">
               <div class="d-flex flex-row">
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-ingressi-vastuuhenkilo') }}
-                  <div v-show="vastuuhenkilonArvio.lisatiedotVirkailijalta">
-                    <p class="mb-2 mt-3">
-                      <strong>{{ $t('lisatiedot-virkailijalta') }}:</strong>
-                      {{ vastuuhenkilonArvio.lisatiedotVirkailijalta }}
-                    </p>
-                  </div>
+                  {{ $t('vastuuhenkilon-arvio-ingressi-virkailija') }}
                 </div>
               </div>
             </b-alert>
@@ -29,16 +24,22 @@
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-vastuuhenkilo-allekirjoittanut') }}
+                  {{ $t('koejakso-on-tarkistettu-ja-odottaa-vastuuhenkilon-hyvaksyntaa') }}
+                  <div v-show="vastuuhenkilonArvio.lisatiedotVirkailijalta">
+                    <p class="mb-2 mt-3">
+                      <strong>{{ $t('lisatiedot-virkailijalta') }}:</strong>
+                      {{ vastuuhenkilonArvio.lisatiedotVirkailijalta }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </b-alert>
             <b-alert variant="success" :show="acceptedByEveryone">
               <div class="d-flex flex-row">
                 <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-muted mr-2" />
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                 </em>
-                {{ $t('vastuuhenkilon-arvio-tila-vastuuhenkilo-hyvaksytty') }}
+                {{ $t('koejakso-on-hyvaksytty-allekirjoitettu-vastuuhenkilo-erikoistuja') }}
               </div>
             </b-alert>
           </b-col>
@@ -50,8 +51,60 @@
           :erikoisala="vastuuhenkilonArvio.erikoistuvanErikoisala"
           :opiskelijatunnus="vastuuhenkilonArvio.erikoistuvanOpiskelijatunnus"
           :yliopisto="vastuuhenkilonArvio.erikoistuvanYliopisto"
-          :show-birthdate="false"
+          :show-birthdate="true"
         />
+        <div class="table-responsive">
+          <table class="table table-borderless border-0 table-sm erikoistuva-details-table">
+            <tr class="sr-only">
+              <th scope="col">{{ $t('kentta') }}</th>
+              <th scope="col">{{ $t('arvo') }}</th>
+            </tr>
+            <tr>
+              <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
+                {{ $t('koejakson-yhteenlaskettu-kesto') }}
+              </th>
+              <td class="pl-6">
+                {{ koejaksonKesto() }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('koulutussopimus') }}</h3>
+              <p>
+                {{ $t('useampi-opinto-oikeus-suostumus-vastuuhenkilo') }}
+                <label class="d-block">
+                  <span
+                    v-for="(opintooikeus, index) in vastuuhenkilonArvio.muutOpintooikeudet"
+                    :key="index"
+                  >
+                    {{ opintooikeus.erikoisalaNimi }},
+                    {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
+                    <br />
+                  </span>
+                </label>
+              </p>
+            </b-col>
+          </b-row>
+        </div>
+        <hr />
+        <div>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('koulutussopimus') }}</h3>
+              <p>{{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus-vastuuhenkilo') }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h3>{{ $t('koulutussuunnitelma') }}</h3>
+              <p>{{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}</p>
+            </b-col>
+          </b-row>
+        </div>
         <hr />
         <div
           v-for="(sp, index) in vastuuhenkilonArvio.koejaksonSuorituspaikat.tyoskentelyjaksot"
@@ -230,41 +283,6 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col>
-              <h5>{{ $t('edistyminen-osaamistavoitteiden-mukaista') }}</h5>
-              <p v-if="vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
-                {{ $t('kylla') }}
-              </p>
-              <p v-else>{{ $t('ei-huolenaiheita-on') }}</p>
-            </b-col>
-          </b-row>
-          <b-row v-if="!vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
-            <b-col>
-              <h5>{{ $t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista') }}</h5>
-              <ul>
-                <li
-                  v-for="(k, index) in vastuuhenkilonArvio.valiarviointi
-                    .kehittamistoimenpideKategoriat"
-                  :key="index"
-                >
-                  {{ displayKehittamistoimenpideKategoria(k) }}
-                </li>
-              </ul>
-            </b-col>
-          </b-row>
-          <b-row v-if="vastuuhenkilonArvio.valiarviointi.vahvuudet">
-            <b-col>
-              <h5>{{ $t('vahvuudet') }}</h5>
-              <p>{{ vastuuhenkilonArvio.valiarviointi.vahvuudet }}</p>
-            </b-col>
-          </b-row>
-          <b-row v-if="vastuuhenkilonArvio.valiarviointi.kehittamistoimenpiteet">
-            <b-col>
-              <h5>{{ $t('selvitys-kehittamistoimenpiteista') }}</h5>
-              <p>{{ vastuuhenkilonArvio.valiarviointi.kehittamistoimenpiteet }}</p>
-            </b-col>
-          </b-row>
-          <b-row>
             <b-col lg="4">
               <h5>{{ $t('lahikouluttaja') }}</h5>
               <p>{{ vastuuhenkilonArvio.valiarviointi.lahikouluttaja.nimi }}</p>
@@ -295,17 +313,6 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col>
-              <h5>{{ $t('kehittamistoimenpiteiden-arviointi') }}</h5>
-              <p v-if="vastuuhenkilonArvio.kehittamistoimenpiteet.kehittamistoimenpiteetRiittavat">
-                {{ $t('kehittamistoimenpiteet-riittavat') }}
-              </p>
-              <p v-else>
-                {{ $t('kehittamistoimenpiteet-ei-riittavat') }}
-              </p>
-            </b-col>
-          </b-row>
-          <b-row>
             <b-col lg="4">
               <h5>{{ $t('lahikouluttaja') }}</h5>
               <p>{{ vastuuhenkilonArvio.kehittamistoimenpiteet.lahikouluttaja.nimi }}</p>
@@ -315,8 +322,8 @@
               <p>{{ vastuuhenkilonArvio.kehittamistoimenpiteet.lahiesimies.nimi }}</p>
             </b-col>
           </b-row>
+          <hr />
         </div>
-        <hr />
         <div>
           <b-row>
             <b-col>
@@ -336,23 +343,6 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col>
-              <h5>{{ $t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa') }}</h5>
-              <p v-if="vastuuhenkilonArvio.loppukeskustelu.esitetaanKoejaksonHyvaksymista">
-                {{ $t('loppukeskustelu-kayty-hyvaksytty') }}
-              </p>
-              <p v-else>
-                {{ $t('loppukeskustelu-kayty-jatkotoimenpiteet') }}
-              </p>
-            </b-col>
-          </b-row>
-          <b-row v-if="!vastuuhenkilonArvio.loppukeskustelu.esitetaanKoejaksonHyvaksymista">
-            <b-col>
-              <h5>{{ $t('selvitys-jatkotoimista') }}</h5>
-              <p>{{ vastuuhenkilonArvio.loppukeskustelu.jatkotoimenpiteet }}</p>
-            </b-col>
-          </b-row>
-          <b-row>
             <b-col lg="4">
               <h5>{{ $t('lahikouluttaja') }}</h5>
               <p>{{ vastuuhenkilonArvio.loppukeskustelu.lahikouluttaja.nimi }}</p>
@@ -360,21 +350,6 @@
             <b-col lg="4">
               <h5>{{ $t('lahiesimies-tai-muu') }}</h5>
               <p>{{ vastuuhenkilonArvio.loppukeskustelu.lahiesimies.nimi }}</p>
-            </b-col>
-          </b-row>
-        </div>
-        <hr />
-        <div>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('koulutussopimus') }}</h5>
-              <p>{{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus-vastuuhenkilo') }}</p>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('koulutussuunnitelma') }}</h5>
-              <p>{{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}</p>
             </b-col>
           </b-row>
         </div>
@@ -398,144 +373,79 @@
               </p>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col lg="4">
-              <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                <template v-slot="{ uid }">
-                  <b-form-input
-                    :id="uid"
-                    v-model="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                    :state="validateState('vastuuhenkilonSahkoposti')"
-                    :value="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
-                  />
-                  <b-form-invalid-feedback
-                    v-if="!$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.required"
-                    :id="`${uid}-feedback`"
-                  >
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback
-                    v-if="!$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.email"
-                    :state="validateState('vastuuhenkilonSahkoposti')"
-                    :id="`${uid}-feedback`"
-                  >
-                    {{ $t('sahkopostiosoite-ei-kelvollinen') }}
-                  </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </b-col>
-
-            <b-col lg="4">
-              <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                <template v-slot="{ uid }">
-                  <b-form-input
-                    :id="uid"
-                    v-model="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                    :state="validateState('vastuuhenkilonPuhelinnumero')"
-                    :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
-                  />
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </b-col>
-          </b-row>
         </div>
         <hr />
-        <elsa-form-group :label="$t('koejakso-on')" :required="editable">
-          <template v-slot="{ uid }">
-            <div v-if="editable">
-              <b-form-radio-group
-                :id="uid"
-                v-model="vastuuhenkilonArvio.koejaksoHyvaksytty"
-                :options="koejaksoHyvaksyttyVaihtoehdot"
-                :state="validateState('koejaksoHyvaksytty')"
-                stacked
-              ></b-form-radio-group>
-              <b-form-invalid-feedback
-                :id="`${uid}-feedback`"
-                :state="validateState('koejaksoHyvaksytty')"
-              >
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
-            </div>
-            <div v-else>
-              {{ vastuuhenkilonArvio.koejaksoHyvaksytty ? $t('hyvaksytty') : $t('hylatty') }}
-            </div>
-          </template>
-        </elsa-form-group>
-        <elsa-form-group
-          v-if="vastuuhenkilonArvio.koejaksoHyvaksytty === false"
-          :label="$t('perustelu-hylkaamiselle')"
-          :required="editable"
-        >
-          <template v-slot="{ uid }">
-            <div v-if="editable">
-              <b-form-textarea
-                :id="uid"
-                :state="validateState('perusteluHylkaamiselle')"
-                v-model="vastuuhenkilonArvio.perusteluHylkaamiselle"
-                rows="7"
-              ></b-form-textarea>
-              <b-form-invalid-feedback :id="`${uid}-feedback`">
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
-            </div>
-            <div v-else>
-              {{ vastuuhenkilonArvio.perusteluHylkaamiselle }}
-            </div>
-          </template>
-        </elsa-form-group>
-        <elsa-form-group
-          v-if="vastuuhenkilonArvio.koejaksoHyvaksytty === false"
-          :label="$t('hylatyn-koejakson-arviointi-kayty-lapi-keskustellen')"
-          :required="editable"
-        >
-          <template v-slot="{ uid }">
-            <div v-if="editable">
-              <b-form-checkbox
-                v-model="vastuuhenkilonArvio.hylattyArviointiKaytyLapiKeskustellen"
-                :state="validateState('hylattyArviointiKaytyLapiKeskustellen')"
-              >
-                {{ $t('kylla') }}
-              </b-form-checkbox>
-              <b-form-invalid-feedback
-                :id="`${uid}-feedback`"
-                :state="validateState('hylattyArviointiKaytyLapiKeskustellen')"
-              >
-                {{ $t('hylatty-arviointi-kaytava-lapi-keskustellen') }}
-              </b-form-invalid-feedback>
-            </div>
-            <div v-else>
-              {{ $t('kylla') }}
-            </div>
-          </template>
-        </elsa-form-group>
-        <div v-if="waitingForSignatures || acceptedByEveryone">
+        <div v-if="vastuuhenkilonArvio.virkailija.kuittausaika">
+          <b-row>
+            <b-col>
+              <h3>{{ $t('tarkistanut') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('paivays') }}</h5>
+              <p>{{ formatDate(vastuuhenkilonArvio.virkailija.kuittausaika) }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('nimi-ja-nimike') }}</h5>
+              <p>
+                {{ vastuuhenkilonArvio.virkailija.nimi + ' '
+                }}{{
+                  vastuuhenkilonArvio.virkailija.nimike
+                    ? ', ' + vastuuhenkilonArvio.virkailija.nimike
+                    : ''
+                }}
+              </p>
+            </b-col>
+          </b-row>
           <hr />
+        </div>
+        <div v-if="vastuuhenkilonArvio.koejaksoHyvaksytty">
+          <b-row>
+            <b-col>
+              <h3>{{ $t('arvio-koejaksosta') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('koejakso-on') }}</h5>
+              <p>{{ vastuuhenkilonArvio.koejaksoHyvaksytty ? $t('hyvaksytty') : $t('hylatty') }}</p>
+            </b-col>
+          </b-row>
+          <hr />
+        </div>
+        {{ /* TODO: lomakkeen vaiheiden tarkastus, joku vika allekirjoituksissa */ }}
+        <div v-if="waitingForSignatures || acceptedByEveryone">
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
             title="hyvaksymispaivamaarat"
           />
+          <hr />
         </div>
         <div v-if="editable">
-          <hr />
           <b-row>
             <b-col class="text-right">
               <elsa-button variant="back" :to="{ name: 'koejakso' }">
                 {{ $t('peruuta') }}
               </elsa-button>
               <elsa-button
+                class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+                style="min-width: 14rem"
+                :disabled="buttonStates.primaryButtonLoading"
+                :loading="buttonStates.secondaryButtonLoading"
+                variant="outline-primary"
+                v-b-modal.return-to-sender
+              >
+                {{ $t('palauta-muokattavaksi') }}
+              </elsa-button>
+              <elsa-button
                 v-if="!loading"
                 @click="onValidateAndConfirm('confirm-sign')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
-                class="ml-4 px-6"
+                class="px-6"
               >
-                {{ $t('laheta-allekirjoitettavaksi') }}
+                {{ $t('hyvaksy-laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -545,31 +455,48 @@
         <b-spinner variant="primary" :label="$t('ladataan')" />
       </div>
     </b-container>
-
     <elsa-confirmation-modal
       id="confirm-sign"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('lahetyksen-jalkeen-koejakso-arvioitu')"
-      :submitText="$t('laheta-allekirjoitettavaksi')"
-      @submit="onSign"
+      :text="$t('lahetyksen-jalkeen-vastuuhenkilo-hyvaksynta')"
+      :submitText="$t('hyvaksy-laheta')"
+      @submit="onSend"
+    >
+      <template #modal-content>
+        <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolta')">
+          <template v-slot="{ uid }">
+            <b-form-textarea
+              :id="uid"
+              v-model="vastuuhenkilonArvio.lisatiedotVirkailijalta"
+              rows="7"
+            ></b-form-textarea>
+          </template>
+        </elsa-form-group>
+      </template>
+    </elsa-confirmation-modal>
+    <elsa-return-to-sender-modal
+      id="return-to-sender"
+      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+      @submit="onReturnToSender"
     />
   </div>
 </template>
 
 <script lang="ts">
-  import _get from 'lodash/get'
+  import { format, intervalToDuration, formatDuration } from 'date-fns'
+  import { fi, sv, enUS } from 'date-fns/locale'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { required, requiredIf, email } from 'vuelidate/lib/validators'
 
-  import { getVastuuhenkilonArvio } from '@/api/vastuuhenkilo'
+  import { getVastuuhenkilonArvio } from '@/api/virkailija'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolotDisplay from '@/components/poissaolot-display/poissaolot-display.vue'
   import store from '@/store'
@@ -577,8 +504,7 @@
     Koejakso,
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
-    VastuuhenkilonArvioLomake,
-    KoejaksonVaihe
+    VastuuhenkilonArvioLomake
   } from '@/types'
   import {
     KaytannonKoulutusTyyppi,
@@ -602,32 +528,9 @@
       ElsaButton,
       ElsaPoissaolotDisplay,
       ElsaConfirmationModal,
+      ElsaReturnToSenderModal,
       KoejaksonVaiheAllekirjoitukset,
       AsiakirjatContent
-    },
-    validations: {
-      vastuuhenkilonArvio: {
-        vastuuhenkilonPuhelinnumero: {
-          required
-        },
-        vastuuhenkilonSahkoposti: {
-          required,
-          email
-        },
-        koejaksoHyvaksytty: {
-          required
-        },
-        perusteluHylkaamiselle: {
-          required: requiredIf((value) => {
-            return value.koejaksoHyvaksytty === false
-          })
-        },
-        hylattyArviointiKaytyLapiKeskustellen: {
-          checked: function (val) {
-            return this.$data.vastuuhenkilonArvio.koejaksoHyvaksytty === true || val === true
-          }
-        }
-      }
     }
   })
   export default class VirkailijanTarkistus extends Mixins(validationMixin) {
@@ -664,14 +567,18 @@
     vastuuhenkilonArvio: VastuuhenkilonArvioLomake | null = null
     loading = true
 
-    validateState(value: string) {
-      const form = this.$v.vastuuhenkilonArvio
-      const { $dirty, $error } = _get(form, value) as any
-      return $dirty ? ($error ? false : null) : null
-    }
-
     get account() {
       return store.getters['auth/account']
+    }
+
+    get koejaksoData(): Koejakso {
+      return store.getters['virkailija/koejaksot']
+    }
+
+    get vastuuhenkilonArvioTila() {
+      /* TODO: Tilan määrittäminen ja niiden käsittely. Ks. alla olevat funktiot ja templaten alussa olevat if-elset */
+      console.log(LomakeTyypit)
+      return LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     get editable() {
@@ -689,16 +596,7 @@
       return this.vastuuhenkilonArvioTila === LomakeTilat.ALLEKIRJOITETTU
     }
 
-    get koejaksoData(): Koejakso {
-      return store.getters['virkailija/koejaksot']
-    }
-
-    get vastuuhenkilonArvioTila() {
-      return store.getters['virkailija/koejaksot'].find(
-        (k: KoejaksonVaihe) =>
-          k.id === this.vastuuhenkilonArvio?.id && k.tyyppi == LomakeTyypit.VASTUUHENKILON_ARVIO
-      )?.tila
-    }
+    /* TODO: Tähän asti */
 
     get vastuuhenkilonArvioId() {
       return Number(this.$route.params.id)
@@ -712,19 +610,23 @@
       return this.vastuuhenkilonArvio?.erikoistuvanNimi
     }
 
+    /* TODO: Allekirjoitukset eivät jostain syystä toimi */
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
-        this,
-        this.vastuuhenkilonArvio?.erikoistuvanNimi,
-        this.vastuuhenkilonArvio?.erikoistuvanAllekirjoitusaika
-      )
-      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
-        this.vastuuhenkilonArvio?.vastuuhenkilo ?? null
-      ) as KoejaksonVaiheAllekirjoitus
+      if (this.vastuuhenkilonArvio?.erikoistuvanKuittausaika) {
+        const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+          this,
+          this.vastuuhenkilonArvio?.erikoistuvanNimi,
+          this.vastuuhenkilonArvio?.erikoistuvanKuittausaika
+        )
+        const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+          this.vastuuhenkilonArvio?.vastuuhenkilo ?? null
+        ) as KoejaksonVaiheAllekirjoitus
 
-      return [allekirjoitusVastuuhenkilo, allekirjoitusErikoistuva].filter(
-        (a): a is KoejaksonVaiheAllekirjoitus => a !== null
-      )
+        return [allekirjoitusVastuuhenkilo, allekirjoitusErikoistuva].filter(
+          (a): a is KoejaksonVaiheAllekirjoitus => a !== null
+        )
+      }
+      return []
     }
 
     hideModal(id: string) {
@@ -732,11 +634,6 @@
     }
 
     onValidateAndConfirm(modalId: string) {
-      this.$v.$touch()
-      if (this.$v.$anyError) {
-        return
-      }
-
       return this.$bvModal.show(modalId)
     }
 
@@ -764,15 +661,76 @@
       return obj
     }
 
-    async onSign() {
+    koejaksonKesto() {
+      const koejaksonAlkamispaiva =
+        this.vastuuhenkilonArvio?.aloituskeskustelu?.koejaksonAlkamispaiva
+      const koejaksonLoppumispaiva =
+        this.vastuuhenkilonArvio?.aloituskeskustelu?.koejaksonPaattymispaiva
+      if (!koejaksonAlkamispaiva || !koejaksonLoppumispaiva) {
+        return null
+      }
+      return formatDuration(
+        intervalToDuration({
+          start: new Date(koejaksonAlkamispaiva),
+          end: new Date(koejaksonLoppumispaiva)
+        }),
+        {
+          format: ['months', 'days'],
+          locale: this.getLocaleObj()
+        }
+      )
+    }
+
+    getLocaleObj() {
+      switch (this.currentLocale) {
+        case 'fi':
+          return fi
+        case 'sv':
+          return sv
+        case 'en':
+          return enUS
+      }
+    }
+
+    get currentLocale() {
+      if (this.$i18n) {
+        return this.$i18n.locale
+      } else {
+        return 'fi'
+      }
+    }
+
+    formatDate(date: string) {
+      return format(new Date(date), 'yyyy-MM-dd')
+    }
+
+    async onSend() {
       try {
         this.buttonStates.primaryButtonLoading = true
-        await store.dispatch('vastuuhenkilo/putVastuuhenkilonArvio', this.vastuuhenkilonArvio)
+        await store.dispatch('virkailija/putVastuuhenkilonArvio', this.vastuuhenkilonArvio)
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
+        toastSuccess(this, this.$t('virkailijan-tarkistus-lahetetty-onnistuneesti'))
       } catch {
-        toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
+        toastFail(this, this.$t('virkailijan-tarkistus-lahetys-epaonnistui'))
+      }
+    }
+
+    async onReturnToSender(korjausehdotus: string) {
+      const form = {
+        ...this.vastuuhenkilonArvio,
+        perusteluHylkaamiselle: korjausehdotus,
+        lahetetty: false
+      }
+
+      try {
+        this.buttonStates.secondaryButtonLoading = true
+        await store.dispatch('virkailija/putVastuuhenkilonArvio', form)
+        this.buttonStates.primaryButtonLoading = false
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+        toastSuccess(this, this.$t('koejakso-palautettu-muokattavaksi'))
+      } catch {
+        toastFail(this, this.$t('koejakso-palautus-epaonnistui'))
       }
     }
 
@@ -787,7 +745,7 @@
         this.loading = false
       } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))
-        this.$router.replace({ name: 'koejakso' })
+        //this.$router.replace({ name: 'koejakso' })
       }
     }
   }
