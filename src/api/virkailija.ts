@@ -23,6 +23,11 @@ export async function getKoejaksot() {
   return await axios.get(path)
 }
 
+export async function getVastuuhenkilonArvio(id: number) {
+  const path = `/virkailija/koejakso/vastuuhenkilonarvio/${id}`
+  return await axios.get<VastuuhenkilonArvioLomake>(path)
+}
+
 export async function getErikoistujienSeurantaList(params: {
   page?: number
   size?: number

@@ -87,7 +87,7 @@
                 <elsa-button
                   variant="primary"
                   :to="{
-                    name: 'koejakso/virkailijan-tarkistus',
+                    name: 'virkailijan-tarkistus',
                     params: { id: row.item.id }
                   }"
                 >
@@ -317,6 +317,7 @@
       }
     }
     filterTulokset(tulokset: KoejaksonVaihe[], avoimet: boolean) {
+      /* TODO: Oikeat tilat listoille */
       if (avoimet) {
         return tulokset.filter((item: any) => item.tila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA)
       } else {

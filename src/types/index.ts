@@ -353,7 +353,7 @@ export interface VastuuhenkilonArvioLomake {
   koulutussopimusHyvaksytty?: boolean
   vastuuhenkilonPuhelinnumero?: string
   vastuuhenkilonSahkoposti?: string
-  erikoistuvankuittausaika?: string | null
+  erikoistuvanKuittausaika?: string | null
   virkailija?: KoejaksonVaiheHyvaksyja
   lisatiedotVirkailijalta?: string | null
   allekirjoitettu?: boolean
