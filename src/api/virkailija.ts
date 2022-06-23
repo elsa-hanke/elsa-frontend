@@ -3,6 +3,7 @@ import axios from 'axios'
 import {
   ErikoistujanEteneminenVirkailija,
   ErikoistujienSeurantaVirkailijaRajaimet,
+  KoejaksonVaihe,
   Page
 } from '@/types'
 
@@ -32,4 +33,9 @@ export async function getErikoistujienSeurantaList(params: {
       }
     }
   )
+}
+
+export async function getEtusivuKoejaksot() {
+  const path = '/virkailija/etusivu/koejaksot'
+  return await axios.get<KoejaksonVaihe[]>(path)
 }
