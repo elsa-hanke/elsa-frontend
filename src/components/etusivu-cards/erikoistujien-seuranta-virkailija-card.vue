@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('erikoistujien-seuranta') }}</h2>
-    <b-card-skeleton :header="`${this.$t(`yliopisto-nimi.${yliopisto}`)}`" :loading="initializing">
+    <b-card-skeleton :header="yliopistoNimi" :loading="initializing">
       <div v-if="!initializing">
         <b-row lg>
           <b-col cols="12" lg="4">
@@ -426,6 +426,12 @@
       this.currentPage = 1
       await this.fetch()
       this.loadingResults = false
+    }
+
+    get yliopistoNimi() {
+      if (this.yliopisto == null) {
+        return ''
+      } else return this.$t(`yliopisto-nimi.${this.yliopisto}`)
     }
   }
 </script>

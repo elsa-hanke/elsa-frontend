@@ -8,7 +8,8 @@ import {
   KehittamistoimenpiteetLomake,
   LoppukeskusteluLomake,
   Suoritusarviointi,
-  ErikoistujienSeuranta
+  ErikoistujienSeuranta,
+  KoejaksonVaihe
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -67,4 +68,9 @@ export async function putSuoritusarviointi(formData: FormData) {
 export async function getErikoistujienSeuranta() {
   const path = `/vastuuhenkilo/etusivu/erikoistujien-seuranta`
   return await axios.get<ErikoistujienSeuranta>(path)
+}
+
+export async function getEtusivuKoejaksot() {
+  const path = `/vastuuhenkilo/etusivu/koejaksot`
+  return await axios.get<KoejaksonVaihe[]>(path)
 }
