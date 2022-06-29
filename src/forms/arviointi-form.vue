@@ -3,7 +3,7 @@
     <b-table-simple borderless class="arviointi-table">
       <b-tr>
         <b-th scope="row" class="align-middle font-weight-500">
-          {{ $t('erikoistuva-laakari') }}
+          {{ $t('erikoistuja') }}
         </b-th>
         <b-td>
           <user-avatar

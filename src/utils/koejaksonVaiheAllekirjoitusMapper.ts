@@ -14,9 +14,7 @@ export function mapAllekirjoitusErikoistuva(
 ): KoejaksonVaiheAllekirjoitus | null {
   return allekirjoitusPvm
     ? {
-        nimiAndNimike: `${erikoistuvanNimi}, ${(
-          vue.$t('erikoistuva-laakari') as string
-        ).toLowerCase()}`,
+        nimiAndNimike: `${erikoistuvanNimi}, ${(vue.$t('erikoistuja') as string).toLowerCase()}`,
         pvm: allekirjoitusPvm
       }
     : null

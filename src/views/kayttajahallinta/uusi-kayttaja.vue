@@ -79,7 +79,7 @@
 
     roolit = [
       {
-        text: this.$t('erikoistuva-laakari'),
+        text: this.$t('erikoistuja'),
         value: this.erikoistuvaLaakariRole
       },
       {
