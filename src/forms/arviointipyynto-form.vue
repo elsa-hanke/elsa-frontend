@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group :label="$t('erikoistuva-laakari')">
+    <elsa-form-group :label="$t('erikoistuja')">
       <template v-slot="{ uid }">
         <user-avatar :id="uid" :src-base64="avatar" src-content-type="image/jpeg" />
       </template>
