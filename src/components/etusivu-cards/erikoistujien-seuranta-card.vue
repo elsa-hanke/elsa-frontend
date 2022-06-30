@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h2>{{ $t('erikoistujien-seuranta') }}</h2>
-    <b-card-skeleton :header="seurantaTitle" :loading="seuranta == null">
+    <b-card-skeleton :header="seurantaTitle" :loading="loading">
       <div v-if="seuranta != null">
         <div v-if="showKouluttajaKuvaus" class="mb-3 mb-lg-3">
           {{ $t('erikoistujien-seuranta-kouluttaja-kuvaus') }}
@@ -220,6 +219,8 @@
 <script lang="ts">
   import { Component, Mixins, Prop } from 'vue-property-decorator'
 
+  import { getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja } from '@/api/kouluttaja'
+  import { getErikoistujienSeuranta as getErikoistujienSeurantaVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -232,6 +233,7 @@
   import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
   import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
   import { sortByAsc, sortByDesc } from '@/utils/sort'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -245,8 +247,7 @@
     }
   })
   export default class ErikoistujienSeurantaCard extends Mixins(ErikoistujienSeurantaMixin) {
-    @Prop({ required: true, default: undefined })
-    seuranta!: ErikoistujienSeuranta
+    seuranta: ErikoistujienSeuranta | null = null
 
     @Prop({ required: false, default: false })
     showKouluttajaKuvaus!: boolean
@@ -281,6 +282,18 @@
 
     hakutermi = ''
     erikoisala = ''
+    loading = true
+
+    async mounted() {
+      try {
+        this.seuranta = this.$isVastuuhenkilo()
+          ? (await getErikoistujienSeurantaVastuuhenkilo()).data
+          : (await getErikoistujienSeurantaKouluttaja()).data
+      } catch (err) {
+        toastFail(this, this.$t('erikoistujien-seurannan-hakeminen-epaonnistui'))
+      }
+      this.loading = false
+    }
 
     get seurantaTitle() {
       if (this.seuranta == null) {
@@ -299,35 +312,35 @@
 
     get pagedTulokset() {
       const current = (this.currentPage - 1) * this.perPage
-      return this.tulokset.slice(current, current + this.perPage)
+      return this.tulokset?.slice(current, current + this.perPage)
     }
 
     get tulokset() {
-      let result = this.seuranta.erikoistujienEteneminen
+      let result = this.seuranta?.erikoistujienEteneminen
       if (this.hakutermi) {
-        result = result.filter((item) =>
+        result = result?.filter((item) =>
           (item.erikoistuvaLaakariEtuNimi + ' ' + item.erikoistuvaLaakariSukuNimi)
             .toLowerCase()
             .includes(this.hakutermi.toLowerCase())
         )
       }
       if (this.erikoisala) {
-        result = result.filter((item) => item.erikoisala === this.erikoisala)
+        result = result?.filter((item) => item.erikoisala === this.erikoisala)
       }
 
       switch (this.sortBy.value) {
         case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA:
-          result.sort((a, b) =>
+          result?.sort((a, b) =>
             sortByAsc(a.opintooikeudenPaattymispaiva, b.opintooikeudenPaattymispaiva)
           )
           break
         case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN:
-          result.sort((a, b) =>
+          result?.sort((a, b) =>
             sortByAsc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
           )
           break
         case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN:
-          result.sort((a, b) =>
+          result?.sort((a, b) =>
             sortByAsc(
               a.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa,
               b.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa
@@ -335,7 +348,7 @@
           )
           break
         case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN:
-          result.sort((a, b) =>
+          result?.sort((a, b) =>
             sortByDesc(
               a.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa,
               b.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa
@@ -343,12 +356,12 @@
           )
           break
         case ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC:
-          result.sort((a, b) =>
+          result?.sort((a, b) =>
             sortByAsc(a.erikoistuvaLaakariSukuNimi, b.erikoistuvaLaakariSukuNimi)
           )
           break
         case ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC:
-          result.sort((a, b) =>
+          result?.sort((a, b) =>
             sortByDesc(a.erikoistuvaLaakariSukuNimi, b.erikoistuvaLaakariSukuNimi)
           )
           break
@@ -358,7 +371,7 @@
     }
 
     get rows() {
-      return this.tulokset.length
+      return this.tulokset?.length
     }
 
     keskiarvoFormatted(keskiarvo: number) {
