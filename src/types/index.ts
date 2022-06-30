@@ -504,6 +504,12 @@ export type OmatTiedotLomake = {
   avatarUpdated: boolean
 }
 
+export type Arviointipyynto = {
+  id: number
+  erikoistujanNimi: string
+  pyynnonAika: string
+}
+
 export type Suoritusarviointi = {
   id?: number
   tapahtumanAjankohta: string | null | Date

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>{{ $t('erikoistujien-seuranta') }}</h2>
     <b-card-skeleton :header="yliopistoNimi" :loading="initializing">
       <div v-if="!initializing">
         <b-row lg>

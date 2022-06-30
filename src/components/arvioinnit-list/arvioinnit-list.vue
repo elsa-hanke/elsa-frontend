@@ -106,7 +106,7 @@
                   name: 'muokkaa-arviointia',
                   params: { arviointiId: row.item.id }
                 }"
-                class="d-flex pt-1 pb-1 pl-3"
+                class="pt-1 pb-1"
               >
                 {{ $t('tee-arviointi') }}
               </elsa-button>

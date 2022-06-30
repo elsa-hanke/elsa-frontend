@@ -9,7 +9,8 @@ import {
   LoppukeskusteluLomake,
   Suoritusarviointi,
   ErikoistujienSeuranta,
-  KoejaksonVaihe
+  KoejaksonVaihe,
+  Arviointipyynto
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -73,4 +74,9 @@ export async function getErikoistujienSeuranta() {
 export async function getEtusivuKoejaksot() {
   const path = `/vastuuhenkilo/etusivu/koejaksot`
   return await axios.get<KoejaksonVaihe[]>(path)
+}
+
+export async function getEtusivuArviointipyynnot() {
+  const path = `/vastuuhenkilo/arviointipyynnot`
+  return await axios.get<Arviointipyynto[]>(path)
 }
