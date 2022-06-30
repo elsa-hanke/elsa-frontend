@@ -7,7 +7,7 @@
     </b-row>
     <b-row v-for="(allekirjoitus, index) in allekirjoitukset" :key="index">
       <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
-        <h5>{{ $t('päiväys') }}</h5>
+        <h5>{{ $t('paivays') }}</h5>
         <p>
           {{ allekirjoitus.pvm ? $date(allekirjoitus.pvm) : '' }}
         </p>

@@ -39,10 +39,35 @@
         </template>
       </koejakso-card-content>
 
+      <koejakso-card-content v-if="tila === lomaketilat.PALAUTETTU_KORJATTAVAKSI">
+        <template v-slot:content>
+          <div>
+            <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-2" />
+          </div>
+          <div class="d-inline-flex">
+            <div class="pr-6">
+              <p class="mb-1">{{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi') }}</p>
+              <p class="mb-2">
+                <span>{{ $t('syy') }}</span>
+                <span>&nbsp;{{ korjausehdotus }}</span>
+              </p>
+            </div>
+          </div>
+        </template>
+        <template v-slot:button>
+          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
+            {{
+              account.impersonated ? $t('nayta-arviointipyynto') : $t('viimeistele-arviointipyynto')
+            }}
+          </elsa-button>
+        </template>
+      </koejakso-card-content>
+
       <koejakso-card-content
         v-if="
           tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
-          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
+          tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA
         "
       >
         <template v-slot:content>
@@ -110,6 +135,13 @@
 
     get koejakso() {
       return store.getters['erikoistuva/koejakso']
+    }
+
+    get korjausehdotus() {
+      if (this.koejakso.vastuuhenkilonArvio) {
+        return this.koejakso.vastuuhenkilonArvio.korjausehdotus
+      }
+      return null
     }
 
     get tila() {

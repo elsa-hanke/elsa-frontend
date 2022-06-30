@@ -7,6 +7,20 @@
       <div v-if="!loading">
         <b-row lg>
           <b-col>
+            <b-alert :show="showReturned" variant="danger" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                </em>
+                <div>
+                  {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi') }}
+                  <span class="d-block">
+                    {{ $t('syy') }}&nbsp;
+                    <span class="font-weight-500">{{ korjausehdotus }}</span>
+                  </span>
+                </div>
+              </div>
+            </b-alert>
             <b-alert
               :show="editable"
               variant="dark"
@@ -58,16 +72,6 @@
                 </em>
                 <div>
                   {{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}
-                </div>
-              </div>
-            </b-alert>
-            <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3 mb-2">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                </em>
-                <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
                 </div>
               </div>
             </b-alert>
@@ -255,7 +259,7 @@
           <hr />
         </div>
         <b-row>
-          <b-col v-if="waitingForErikoistuva || acceptedByEveryone">
+          <b-col v-if="acceptedByEveryone">
             <elsa-form-group
               class="mt-2"
               :class="{ 'mb-4': form.koejaksoHyvaksytty === false }"
@@ -287,14 +291,14 @@
             </elsa-form-group>
           </b-col>
         </b-row>
-        <div v-if="waitingForErikoistuva || acceptedByEveryone">
+        <div v-if="acceptedByEveryone">
           <hr />
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
             title="hyvaksymispaivamaarat"
           />
         </div>
-        <div v-if="!account.impersonated && (editable || waitingForErikoistuva)">
+        <div v-if="!account.impersonated && editable">
           <hr />
           <b-row>
             <b-col class="text-right">
@@ -303,13 +307,13 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onConfirm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')"
+                @click="onConfirm('confirm-send')"
                 :disabled="hasTyoskentelyjaksoErrors"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
               >
-                {{ waitingForErikoistuva ? $t('allekirjoita') : $t('laheta') }}
+                {{ $t('laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -326,13 +330,6 @@
       :text="$t('vahvista-pyyda-vastuuhenkilon-arvio')"
       :submitText="$t('laheta')"
       @submit="onSend"
-    />
-    <elsa-confirmation-modal
-      id="confirm-sign"
-      :title="$t('allekirjoita-vastuuhenkilon-arvio')"
-      :text="$t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })"
-      :submitText="$t('allekirjoita')"
-      @submit="onSign"
     />
   </div>
 </template>
@@ -396,8 +393,6 @@
     koejaksonVaihe = this.$t('vastuuhenkilon-arvio')
 
     form: VastuuhenkilonArvioLomake = {
-      erikoistuvaAllekirjoittanut: false,
-      erikoistuvanAllekirjoitusaika: undefined,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
       erikoistuvanNimi: `${this.account.firstName} ${this.account.lastName}`,
       erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
@@ -411,7 +406,7 @@
       koejaksoHyvaksytty: null,
       vastuuhenkilo: null,
       vastuuhenkiloAllekirjoittanut: null,
-      perusteluHylkaamiselle: null,
+      korjausehdotus: null,
       hylattyArviointiKaytyLapiKeskustellen: null,
       vastuuhenkilonKuittausaika: undefined
     }
@@ -473,6 +468,14 @@
       )
     }
 
+    get showReturned() {
+      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get korjausehdotus() {
+      return this.koejaksoData.vastuuhenkilonArvio?.korjausehdotus
+    }
+
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? !$error : null
@@ -484,12 +487,6 @@
         this.koejaksoData.vastuuhenkilonArvionTila ===
           LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
         this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
-      )
-    }
-
-    get waitingForErikoistuva() {
-      return (
-        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA
       )
     }
 
@@ -511,7 +508,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.form?.erikoistuvanNimi,
-        this.form?.erikoistuvanAllekirjoitusaika
+        this.form?.erikoistuvanKuittausaika
       )
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
         this.form.vastuuhenkilo
@@ -550,28 +547,17 @@
     async onSend() {
       try {
         this.buttonStates.primaryButtonLoading = true
-        await store.dispatch('erikoistuva/postVastuuhenkilonArvio', this.form)
+        if (this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI) {
+          await store.dispatch('erikoistuva/putVastuuhenkilonArvio', this.form)
+        } else {
+          await store.dispatch('erikoistuva/postVastuuhenkilonArvio', this.form)
+        }
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-lahetetty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
       } catch (err) {
         toastFail(this, this.$t('vastuuhenkilon-arvio-lahetys-epaonnistui'))
-      }
-    }
-
-    async onSign() {
-      try {
-        this.buttonStates.primaryButtonLoading = true
-        await store.dispatch('erikoistuva/putVastuuhenkilonArvio', this.form)
-        this.form.erikoistuvanAllekirjoitusaika =
-          this.koejaksoData.vastuuhenkilonArvio.erikoistuvanAllekirjoitusaika
-        this.buttonStates.primaryButtonLoading = false
-        toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
-        this.$emit('skipRouteExitConfirm', true)
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-      } catch (err) {
-        toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
       }
     }
 

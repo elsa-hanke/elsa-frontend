@@ -33,7 +33,7 @@ const virkailija: Module<any, any> = {
     async getKoejaksot({ commit }) {
       commit('koejaksotRequest')
       try {
-        const { data } = await api.getKoejaksot()
+        const data = null
         commit('koejaksotSuccess', data)
       } catch (err) {
         commit('koejaksotError')

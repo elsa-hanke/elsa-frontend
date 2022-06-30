@@ -445,6 +445,31 @@
           </b-row>
         </div>
         <hr />
+        <div v-if="vastuuhenkilonArvio.virkailija.kuittausaika">
+          <b-row>
+            <b-col>
+              <h3>{{ $t('tarkistanut') }}</h3>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col lg="4">
+              <h5>{{ $t('paivays') }}</h5>
+              <p>{{ $date(vastuuhenkilonArvio.virkailija.kuittausaika) }}</p>
+            </b-col>
+            <b-col lg="4">
+              <h5>{{ $t('nimi-ja-nimike') }}</h5>
+              <p>
+                {{ vastuuhenkilonArvio.virkailija.nimi + ' '
+                }}{{
+                  vastuuhenkilonArvio.virkailija.nimike
+                    ? ', ' + vastuuhenkilonArvio.virkailija.nimike
+                    : ''
+                }}
+              </p>
+            </b-col>
+          </b-row>
+          <hr />
+        </div>
         <elsa-form-group :label="$t('koejakso-on')" :required="editable">
           <template v-slot="{ uid }">
             <div v-if="editable">
@@ -716,7 +741,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.vastuuhenkilonArvio?.erikoistuvanNimi,
-        this.vastuuhenkilonArvio?.erikoistuvanAllekirjoitusaika
+        this.vastuuhenkilonArvio?.erikoistuvanKuittausaika
       )
       const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
         this.vastuuhenkilonArvio?.vastuuhenkilo ?? null

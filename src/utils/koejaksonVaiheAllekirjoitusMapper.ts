@@ -9,8 +9,8 @@ import {
 
 export function mapAllekirjoitusErikoistuva(
   vue: Vue,
-  erikoistuvanNimi?: string,
-  allekirjoitusPvm?: string
+  erikoistuvanNimi?: string | null,
+  allekirjoitusPvm?: string | null
 ): KoejaksonVaiheAllekirjoitus | null {
   return allekirjoitusPvm
     ? {
