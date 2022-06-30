@@ -26,6 +26,19 @@
                 </div>
               </div>
             </b-alert>
+            <b-alert :show="returned" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi-virkailija') }}
+                  <span class="d-block">
+                    {{ $t('syy') }} {{ vastuuhenkilonArvio.korjausehdotus }}
+                  </span>
+                </div>
+              </div>
+            </b-alert>
             <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
               <div class="d-flex flex-row">
                 <em class="align-middle">
@@ -46,6 +59,13 @@
             </b-alert>
           </b-col>
         </b-row>
+        <b-row v-if="!editable">
+          <b-col>
+            <elsa-button variant="primary" class="mr-3" :to="{ name: 'koejakso' }">
+              {{ $t('palaa-koejaksoihin') }}
+            </elsa-button>
+          </b-col>
+        </b-row>
         <hr />
         <erikoistuva-details
           :avatar="erikoistuvanAvatar"
@@ -56,7 +76,10 @@
           :show-birthdate="true"
         />
         <div class="table-responsive">
-          <table class="table table-borderless border-0 table-sm erikoistuva-details-table">
+          <table
+            class="table table-borderless border-0 table-sm erikoistuva-details-table"
+            :summary="$t('koejakson-yhteenlaskettu-kesto')"
+          >
             <tr class="sr-only">
               <th scope="col">{{ $t('kentta') }}</th>
               <th scope="col">{{ $t('arvo') }}</th>
@@ -511,9 +534,7 @@
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolotDisplay from '@/components/poissaolot-display/poissaolot-display.vue'
-  import store from '@/store'
   import {
-    Koejakso,
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
     VastuuhenkilonArvioLomake
@@ -574,20 +595,16 @@
     vastuuhenkilonArvio: VastuuhenkilonArvioLomake | null = null
     loading = true
 
-    get account() {
-      return store.getters['auth/account']
-    }
-
-    get koejaksoData(): Koejakso {
-      return store.getters['virkailija/koejaksot']
-    }
-
     get editable() {
       return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
     get waitingForVastuuhenkilo() {
       return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+    }
+
+    get returned() {
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
     get waitingForSignatures() {
@@ -628,21 +645,12 @@
       return []
     }
 
-    hideModal(id: string) {
-      return this.$bvModal.hide(id)
-    }
-
     onValidateAndConfirm(modalId: string) {
       return this.$bvModal.show(modalId)
     }
 
     displayTyoskentelypaikkaTyyppiLabel(muu: string, tyyppi: TyoskentelyjaksoTyyppi) {
       return muu ? muu : tyoskentelypaikkaTyyppiLabel(this, tyyppi)
-    }
-
-    displayKehittamistoimenpideKategoria(kategoria: string) {
-      if (kategoria === 'MUU') return this.vastuuhenkilonArvio?.valiarviointi?.muuKategoria
-      return this.$t('kehittamistoimenpidekategoria-' + kategoria)
     }
 
     displayKaytannonKoulutus(value: KaytannonKoulutusTyyppi) {
@@ -702,10 +710,12 @@
     async onSend() {
       try {
         this.buttonStates.primaryButtonLoading = true
-        await store.dispatch('virkailija/putVastuuhenkilonArvio', this.vastuuhenkilonArvio)
-        this.buttonStates.primaryButtonLoading = false
-        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('virkailijan-tarkistus-lahetetty-onnistuneesti'))
+        if (this.vastuuhenkilonArvio != null) {
+          await putVastuuhenkilonArvio(this.vastuuhenkilonArvio)
+          this.buttonStates.primaryButtonLoading = false
+          checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+          toastSuccess(this, this.$t('virkailijan-tarkistus-lahetetty-onnistuneesti'))
+        }
       } catch {
         toastFail(this, this.$t('virkailijan-tarkistus-lahetys-epaonnistui'))
       }
@@ -730,7 +740,6 @@
 
     async mounted() {
       this.loading = true
-      await store.dispatch('virkailija/getKoejaksot')
 
       try {
         const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
@@ -739,7 +748,7 @@
         this.loading = false
       } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))
-        //this.$router.replace({ name: 'koejakso' })
+        this.$router.replace({ name: 'koejakso' })
       }
     }
   }

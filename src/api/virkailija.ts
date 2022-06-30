@@ -6,7 +6,6 @@ import {
   KoejaksonVaihe,
   VastuuhenkilonArvioLomake,
   Page,
-  KoejaksonVaihe,
   Erikoisala
 } from '@/types'
 

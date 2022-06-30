@@ -21,16 +21,6 @@
                   </div>
                 </div>
               </b-alert>
-              <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3">
-                <div class="d-flex flex-row">
-                  <em class="align-middle">
-                    <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                  </em>
-                  <div>
-                    {{ $t('loppukeskustelu-tila-odottaa-erikoistuvan-hyvaksyntaa') }}
-                  </div>
-                </div>
-              </b-alert>
               <b-alert variant="success" :show="acceptedByEveryone">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
@@ -58,7 +48,7 @@
 
         <hr />
 
-        <div v-if="waitingForErikoistuva || acceptedByEveryone">
+        <div v-if="acceptedByEveryone">
           <h3 class="mb-3">{{ $t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa') }}</h3>
           <p v-if="loppukeskusteluLomake.esitetaanKoejaksonHyvaksymista">
             {{ $t('loppukeskustelu-kayty-hyvaksytty') }}
@@ -83,14 +73,14 @@
         />
         <hr />
 
-        <div v-if="waitingForErikoistuva || acceptedByEveryone">
+        <div v-if="acceptedByEveryone">
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
             title="hyvaksymispaivamaarat"
           />
         </div>
 
-        <div v-if="!account.impersonated && (editable || waitingForErikoistuva)">
+        <div v-if="!account.impersonated && editable">
           <hr v-if="allekirjoitukset.length > 0" />
 
           <b-row>
@@ -100,14 +90,12 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="
-                  onValidateAndConfirm(waitingForErikoistuva ? 'confirm-sign' : 'confirm-send')
-                "
+                @click="onValidateAndConfirm('confirm-send')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
               >
-                {{ waitingForErikoistuva ? $t('hyvaksy') : $t('laheta') }}
+                {{ $t('laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -124,13 +112,6 @@
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
       :submitText="$t('laheta')"
       @submit="onSend"
-    />
-    <elsa-confirmation-modal
-      id="confirm-sign"
-      :title="$t('hyvaksy-loppukeskustelu')"
-      :text="$t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })"
-      :submitText="$t('hyvaksy')"
-      @submit="onSign"
     />
   </div>
 </template>
@@ -266,10 +247,6 @@
       return this.koejaksoData.loppukeskustelunTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
-    get waitingForErikoistuva() {
-      return this.koejaksoData.loppukeskustelunTila === LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA
-    }
-
     get acceptedByEveryone() {
       return this.koejaksoData.loppukeskustelunTila === LomakeTilat.HYVAKSYTTY
     }
@@ -342,19 +319,6 @@
         await store.dispatch('erikoistuva/postLoppukeskustelu', this.loppukeskusteluLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-lahetetty-onnistuneesti'))
-      } catch {
-        toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
-      }
-    }
-
-    async onSign() {
-      try {
-        this.buttonStates.primaryButtonLoading = true
-        await store.dispatch('erikoistuva/putLoppukeskustelu', this.loppukeskusteluLomake)
-        this.loppukeskusteluLomake.erikoistuvanAllekirjoitusaika =
-          this.koejaksoData.loppukeskustelu.erikoistuvanAllekirjoitusaika
-        this.buttonStates.primaryButtonLoading = false
-        toastSuccess(this, this.$t('loppukeskustelu-allekirjoitettu-onnistuneesti'))
       } catch {
         toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
       }

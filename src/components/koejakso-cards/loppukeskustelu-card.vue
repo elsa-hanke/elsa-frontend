@@ -50,17 +50,6 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA">
-        <template v-slot:content>
-          <p class="pr-6 mb-2">{{ $t('loppukeskustelu-tila-odottaa-erikoistuvan-hyvaksyntaa') }}</p>
-        </template>
-        <template v-slot:button>
-          <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
-            {{ account.impersonated ? $t('nayta-arviointi') : $t('hyvaksy-arviointi') }}
-          </elsa-button>
-        </template>
-      </koejakso-card-content>
-
       <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template v-slot:content>
           <div>

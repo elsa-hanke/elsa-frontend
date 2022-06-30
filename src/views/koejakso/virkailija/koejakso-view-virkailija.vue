@@ -376,8 +376,6 @@
           return ['fas', 'check-circle']
         case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
           return this.$isKouluttaja() ? ['far', 'check-circle'] : ['far', 'clock']
-        case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
-          return ['far', 'check-circle']
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
           return ['far', 'check-circle']
         case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
@@ -399,8 +397,6 @@
           return 'text-success'
         case LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA:
           return this.$isKouluttaja() ? 'text-success' : 'text-warning'
-        case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
-          return 'text-success'
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
           return 'text-success'
         case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
@@ -424,8 +420,6 @@
           return this.$isKouluttaja()
             ? this.$t('lomake-tila-' + TaskStatus.VALMIS_ODOTTAA_ALLEKIRJOITUKSIA)
             : this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ALLEKIRJOITUKSIA)
-        case LomakeTilat.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA:
-          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ERIKOISTUVAN_HYVAKSYNTAA)
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
           return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA)
         case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
