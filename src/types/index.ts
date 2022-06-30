@@ -331,8 +331,6 @@ export interface LoppukeskusteluLomake {
 }
 
 export interface VastuuhenkilonArvioLomake {
-  erikoistuvaAllekirjoittanut: boolean
-  erikoistuvanAllekirjoitusaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
@@ -347,7 +345,7 @@ export interface VastuuhenkilonArvioLomake {
   paataOpintooikeudet: boolean
   vastuuhenkilo: Vastuuhenkilo | null
   vastuuhenkiloAllekirjoittanut: boolean | null
-  perusteluHylkaamiselle: string | null
+  korjausehdotus: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
   vastuuhenkilonKuittausaika?: string
   koulutussopimusHyvaksytty?: boolean
@@ -362,6 +360,7 @@ export interface VastuuhenkilonArvioLomake {
   valiarviointi?: ValiarviointiLomake
   kehittamistoimenpiteet?: KehittamistoimenpiteetLomake
   loppukeskustelu?: LoppukeskusteluLomake
+  tila?: string
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {

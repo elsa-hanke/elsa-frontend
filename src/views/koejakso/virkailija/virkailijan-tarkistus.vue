@@ -3,22 +3,14 @@
     <b-breadcrumb :items="items" class="mb-0" />
 
     <b-container fluid>
-      <h1 class="mb-3">{{ $t('erikoisalan-vastuuhenkilon-arvio-koejaksosta') }}</h1>
+      <h1 class="mb-0">{{ $t('virkailijan-tarkistus') }}</h1>
       <div v-if="!loading">
         <b-row lg>
           <b-col>
-            {{ /* TODO: Tilojen tarkastus ja lisätietojen testaus */ }}
-            <b-alert :show="editable" variant="dark" class="mt-3 mb-0">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                </em>
-                <div>
-                  {{ $t('vastuuhenkilon-arvio-ingressi-virkailija') }}
-                </div>
-              </div>
-            </b-alert>
-            <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
+            <div v-if="editable" class="mt-3">
+              {{ $t('vastuuhenkilon-arvio-ingressi-virkailija') }}
+            </div>
+            <b-alert :show="waitingForVastuuhenkilo" variant="dark" class="mt-3">
               <div class="d-flex flex-row">
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
@@ -31,6 +23,16 @@
                       {{ vastuuhenkilonArvio.lisatiedotVirkailijalta }}
                     </p>
                   </div>
+                </div>
+              </div>
+            </b-alert>
+            <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('vastuuhenkilon-arvio-tila-vastuuhenkilo-allekirjoittanut') }}
                 </div>
               </div>
             </b-alert>
@@ -70,10 +72,21 @@
           </table>
         </div>
         <hr />
+        <b-row>
+          <b-col lg="4">
+            <h5>{{ $t('sahkopostiosoite') }}</h5>
+            <p>{{ vastuuhenkilonArvio.erikoistuvanSahkoposti }}</p>
+          </b-col>
+          <b-col lg="4">
+            <h5>{{ $t('matkapuhelinnumero') }}</h5>
+            <p>{{ vastuuhenkilonArvio.erikoistuvanPuhelinnumero }}</p>
+          </b-col>
+        </b-row>
+        <hr class="mt-2" />
         <div>
           <b-row>
             <b-col>
-              <h3>{{ $t('koulutussopimus') }}</h3>
+              <h3>{{ $t('useampi-opinto-oikeus') }}</h3>
               <p>
                 {{ $t('useampi-opinto-oikeus-suostumus-vastuuhenkilo') }}
                 <label class="d-block">
@@ -384,7 +397,7 @@
           <b-row>
             <b-col lg="4">
               <h5>{{ $t('paivays') }}</h5>
-              <p>{{ formatDate(vastuuhenkilonArvio.virkailija.kuittausaika) }}</p>
+              <p>{{ $date(vastuuhenkilonArvio.virkailija.kuittausaika) }}</p>
             </b-col>
             <b-col lg="4">
               <h5>{{ $t('nimi-ja-nimike') }}</h5>
@@ -414,7 +427,6 @@
           </b-row>
           <hr />
         </div>
-        {{ /* TODO: lomakkeen vaiheiden tarkastus, joku vika allekirjoituksissa */ }}
         <div v-if="waitingForSignatures || acceptedByEveryone">
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
@@ -463,7 +475,7 @@
       @submit="onSend"
     >
       <template #modal-content>
-        <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolta')">
+        <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolle')">
           <template v-slot="{ uid }">
             <b-form-textarea
               :id="uid"
@@ -483,13 +495,13 @@
 </template>
 
 <script lang="ts">
-  import { format, intervalToDuration, formatDuration } from 'date-fns'
+  import { intervalToDuration, formatDuration } from 'date-fns'
   import { fi, sv, enUS } from 'date-fns/locale'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
 
-  import { getVastuuhenkilonArvio } from '@/api/virkailija'
+  import { getVastuuhenkilonArvio, putVastuuhenkilonArvio } from '@/api/virkailija'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -506,12 +518,7 @@
     KoejaksonVaiheButtonStates,
     VastuuhenkilonArvioLomake
   } from '@/types'
-  import {
-    KaytannonKoulutusTyyppi,
-    LomakeTilat,
-    LomakeTyypit,
-    TyoskentelyjaksoTyyppi
-  } from '@/utils/constants'
+  import { KaytannonKoulutusTyyppi, LomakeTilat, TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -575,28 +582,21 @@
       return store.getters['virkailija/koejaksot']
     }
 
-    get vastuuhenkilonArvioTila() {
-      /* TODO: Tilan määrittäminen ja niiden käsittely. Ks. alla olevat funktiot ja templaten alussa olevat if-elset */
-      console.log(LomakeTyypit)
-      return LomakeTilat.ODOTTAA_HYVAKSYNTAA
+    get editable() {
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
 
-    get editable() {
-      return (
-        this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
-        this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
-      )
+    get waitingForVastuuhenkilo() {
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
     }
 
     get waitingForSignatures() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
     }
 
     get acceptedByEveryone() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.ALLEKIRJOITETTU
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.ALLEKIRJOITETTU
     }
-
-    /* TODO: Tähän asti */
 
     get vastuuhenkilonArvioId() {
       return Number(this.$route.params.id)
@@ -610,7 +610,6 @@
       return this.vastuuhenkilonArvio?.erikoistuvanNimi
     }
 
-    /* TODO: Allekirjoitukset eivät jostain syystä toimi */
     get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
       if (this.vastuuhenkilonArvio?.erikoistuvanKuittausaika) {
         const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
@@ -700,10 +699,6 @@
       }
     }
 
-    formatDate(date: string) {
-      return format(new Date(date), 'yyyy-MM-dd')
-    }
-
     async onSend() {
       try {
         this.buttonStates.primaryButtonLoading = true
@@ -717,15 +712,14 @@
     }
 
     async onReturnToSender(korjausehdotus: string) {
-      const form = {
-        ...this.vastuuhenkilonArvio,
-        perusteluHylkaamiselle: korjausehdotus,
-        lahetetty: false
+      const form: VastuuhenkilonArvioLomake = {
+        ...(this.vastuuhenkilonArvio as VastuuhenkilonArvioLomake),
+        korjausehdotus: korjausehdotus
       }
 
       try {
         this.buttonStates.secondaryButtonLoading = true
-        await store.dispatch('virkailija/putVastuuhenkilonArvio', form)
+        await putVastuuhenkilonArvio(form)
         this.buttonStates.primaryButtonLoading = false
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('koejakso-palautettu-muokattavaksi'))

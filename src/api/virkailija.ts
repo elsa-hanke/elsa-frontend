@@ -5,7 +5,9 @@ import {
   ErikoistujienSeurantaVirkailijaRajaimet,
   KoejaksonVaihe,
   VastuuhenkilonArvioLomake,
-  Page
+  Page,
+  KoejaksonVaihe,
+  Erikoisala
 } from '@/types'
 
 export async function getErikoistujienSeurantaRajaimet() {
@@ -18,9 +20,19 @@ export async function getYliopisto() {
   return await axios.get<string>(path)
 }
 
-export async function getKoejaksot() {
-  const path = '/virkailija/koejaksot'
-  return await axios.get(path)
+export async function getKoejaksot(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'erikoistujanNimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  avoin?: boolean
+}) {
+  return await axios.get<Page<KoejaksonVaihe>>('/virkailija/koejaksot', {
+    params: {
+      ...params
+    }
+  })
 }
 
 export async function getVastuuhenkilonArvio(id: number) {
@@ -52,6 +64,11 @@ export async function getEtusivuKoejaksot() {
 }
 
 export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
-  const path = 'vastuuhenkilo/koejakso/vastuuhenkilonarvio'
+  const path = '/virkailija/koejakso/vastuuhenkilonarvio'
   return await axios.put<VastuuhenkilonArvioLomake>(path, form)
+}
+
+export async function getErikoisalat() {
+  const path = `/virkailija/erikoisalat`
+  return await axios.get<Erikoisala[]>(path)
 }
