@@ -366,7 +366,7 @@
         <hr />
         <div>
           <b-row>
-            <b-col>
+            <b-col v-if="!vastuuhenkilonArvio.koulutussopimusHyvaksytty">
               <h5>{{ $t('koulutussopimus') }}</h5>
               <p>{{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus-vastuuhenkilo') }}</p>
             </b-col>

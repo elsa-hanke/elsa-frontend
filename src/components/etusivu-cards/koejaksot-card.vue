@@ -129,6 +129,9 @@
     }
 
     linkComponent(type: LomakeTyypit) {
+      if (this.$isVirkailija && type === LomakeTyypit.VASTUUHENKILON_ARVIO) {
+        return 'virkailijan-tarkistus'
+      }
       return this.componentLinks.get(type)
     }
 
