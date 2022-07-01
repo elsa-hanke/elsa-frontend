@@ -129,7 +129,7 @@
         <hr />
         <div>
           <b-row>
-            <b-col>
+            <b-col v-if="!vastuuhenkilonArvio.koulutussopimusHyvaksytty">
               <h3>{{ $t('koulutussopimus') }}</h3>
               <p>{{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus-vastuuhenkilo') }}</p>
             </b-col>
@@ -572,7 +572,7 @@
         to: { name: 'koejakso' }
       },
       {
-        text: this.$t('koejakson-vastuuhenkilon-arvio'),
+        text: this.$t('virkailijan-tarkistus'),
         active: true
       }
     ]
