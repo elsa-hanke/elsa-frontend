@@ -79,10 +79,7 @@
           {{ $t('seurantakeskustelut') }}
         </b-nav-item>
         <b-nav-item
-          v-if="
-            ($isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo() || $isVirkailija()) &&
-            featurePreviewModeEnabled
-          "
+          v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo() || $isVirkailija()"
           class="border-bottom"
           :to="{ name: 'koejakso' }"
         >
@@ -190,9 +187,7 @@
       UserAvatar
     }
   })
-  export default class MobileNav extends Mixins(NavbarMixin) {
-    featurePreviewModeEnabled = process.env.VUE_APP_FEATURE_PREVIEW_MODE_ENABLED === 'true'
-  }
+  export default class MobileNav extends Mixins(NavbarMixin) {}
 </script>
 
 <style lang="scss" scoped>
