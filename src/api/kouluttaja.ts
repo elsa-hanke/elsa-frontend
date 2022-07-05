@@ -111,3 +111,8 @@ export async function getEtusivuArviointipyynnot() {
   const path = `/kouluttaja/arviointipyynnot`
   return await axios.get<Arviointipyynto[]>(path)
 }
+
+export async function getEtusivuSeurantajaksot() {
+  const path = `/kouluttaja/etusivu/seurantajaksot`
+  return await axios.get<Seurantajakso[]>(path)
+}

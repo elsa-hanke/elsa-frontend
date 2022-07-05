@@ -5,11 +5,7 @@
       <b-row class="mt-3">
         <b-col xxl="9">
           <arviointipyynnot-card />
-          <b-card-skeleton
-            :header="$t('seurantajaksot')"
-            :loading="true"
-            class="mb-3 d-none"
-          ></b-card-skeleton>
+          <seurantajaksot-card />
           <koejaksot-card />
           <b-card-skeleton
             :header="$t('vanhenevat-katseluoikeudet')"
@@ -43,6 +39,7 @@
   import ErikoistujienSeurantaCard from '@/components/etusivu-cards/erikoistujien-seuranta-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
+  import SeurantajaksotCard from '@/components/etusivu-cards/seurantajaksot-card.vue'
 
   @Component({
     components: {
@@ -51,7 +48,8 @@
       BCardSkeleton,
       ErikoistujienSeurantaCard,
       HenkilotiedotCard,
-      KoejaksotCard
+      KoejaksotCard,
+      SeurantajaksotCard
     }
   })
   export default class EtusivuKouluttaja extends Vue {}
