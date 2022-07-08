@@ -51,6 +51,11 @@ import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
 import Logout from '@/views/logout.vue'
+import Erikoisala from '@/views/opetussuunnitelmat/erikoisala.vue'
+import Opetussuunnitelmat from '@/views/opetussuunnitelmat/opetussuunnitelmat.vue'
+import LisaaOpintoopas from '@/views/opetussuunnitelmat/opintoopas/lisaa-opintoopas.vue'
+import MuokkaaOpintoopasta from '@/views/opetussuunnitelmat/opintoopas/muokkaa-opintoopasta.vue'
+import Opintoopas from '@/views/opetussuunnitelmat/opintoopas/opintoopas.vue'
 import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa-paivittaista-merkintaa.vue'
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
 import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
@@ -759,6 +764,51 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Paakayttaja,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat',
+        name: 'opetussuunnitelmat',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Opetussuunnitelmat,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId',
+        name: 'erikoisala',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Erikoisala,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/opintoopas/lisaa',
+        name: 'lisaa-opintoopas',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaOpintoopas,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/opintoopas/:opintoopasId',
+        name: 'opintoopas',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Opintoopas,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/opintoopas/:opintoopasId/muokkaa',
+        name: 'muokkaa-opintoopasta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaOpintoopasta,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       },
