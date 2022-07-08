@@ -98,6 +98,14 @@
           <font-awesome-icon icon="user-friends" fixed-width size="lg" />
           {{ $t('kayttajahallinta') }}
         </b-nav-item>
+        <b-nav-item
+          v-if="$isTekninenPaakayttaja()"
+          class="border-bottom"
+          :to="{ name: 'opetussuunnitelmat' }"
+        >
+          <font-awesome-icon icon="user-friends" fixed-width size="lg" />
+          {{ $t('opetussuunnitelmat') }}
+        </b-nav-item>
         <!--<b-nav-item class="border-bottom" :to="{ name: 'viestit' }">
           <font-awesome-icon :icon="['far', 'envelope']" fixed-width size="lg" />
           {{ $t('viestit') }}

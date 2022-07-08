@@ -172,16 +172,54 @@ export interface Erikoisala {
 export interface Opintoopas {
   id?: number | null
   nimi: string | null
+  nimiSv: string | null
   voimassaoloAlkaa: string
   voimassaoloPaattyy: string | null
-  kaytannonKoulutuksenVahimmaispituus: number
-  terveyskeskuskoulutusjaksonVahimmaispituus: number
-  yliopistosairaalajaksonVahimmaispituus: number
-  yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituus: number
+  kaytannonKoulutuksenVahimmaispituusVuodet: number
+  kaytannonKoulutuksenVahimmaispituusKuukaudet: number
+  terveyskeskuskoulutusjaksonVahimmaispituusVuodet: number
+  terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet: number
+  terveyskeskuskoulutusjaksonMaksimipituusVuodet?: number
+  terveyskeskuskoulutusjaksonMaksimipituusKuukaudet?: number
+  yliopistosairaalajaksonVahimmaispituusVuodet: number
+  yliopistosairaalajaksonVahimmaispituusKuukaudet: number
+  yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet: number
+  yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet: number
   erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number
   erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: number
   erikoisalanVaatimaJohtamisopintojenVahimmaismaara: number
   erikoisala: Erikoisala
+  arviointiasteikkoId: number
+  arviointiasteikkoNimi: string
+}
+
+export interface UusiOpintoopas {
+  nimi: string | null
+  nimiSv: string | null
+  voimassaoloAlkaa: string | null
+  voimassaoloPaattyy: string | null
+  kaytannonKoulutuksenVahimmaispituusVuodet: number | null
+  kaytannonKoulutuksenVahimmaispituusKuukaudet: number | null
+  terveyskeskuskoulutusjaksonVahimmaispituusVuodet: number | null
+  terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet: number | null
+  terveyskeskuskoulutusjaksonMaksimipituusVuodet?: number | null
+  terveyskeskuskoulutusjaksonMaksimipituusKuukaudet?: number | null
+  yliopistosairaalajaksonVahimmaispituusVuodet: number | null
+  yliopistosairaalajaksonVahimmaispituusKuukaudet: number | null
+  yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet: number | null
+  yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet: number | null
+  erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number | null
+  erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: number | null
+  erikoisalanVaatimaJohtamisopintojenVahimmaismaara: number | null
+  erikoisala: Erikoisala | null
+  arviointiasteikkoId: number | null
+}
+
+export interface OpintoopasSimple {
+  id?: number | null
+  nimi: string | null
+  voimassaoloAlkaa: string
+  voimassaoloPaattyy: string | null
 }
 
 export type Koulutuspaikka = {
