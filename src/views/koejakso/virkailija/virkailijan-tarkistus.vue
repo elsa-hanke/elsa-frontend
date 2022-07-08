@@ -45,7 +45,7 @@
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-vastuuhenkilo-allekirjoittanut') }}
+                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia-virkailija') }}
                 </div>
               </div>
             </b-alert>

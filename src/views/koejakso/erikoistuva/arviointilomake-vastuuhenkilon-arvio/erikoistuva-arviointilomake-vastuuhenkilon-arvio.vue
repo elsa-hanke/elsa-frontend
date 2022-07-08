@@ -21,6 +21,16 @@
                 </div>
               </div>
             </b-alert>
+            <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia') }}
+                </div>
+              </div>
+            </b-alert>
             <b-alert
               :show="editable"
               variant="dark"
@@ -146,7 +156,7 @@
             </b-col>
           </b-row>
           <hr />
-          <b-row v-if="muutOpintooikeudet">
+          <b-row v-if="muutOpintooikeudet != null && muutOpintooikeudet.length > 0">
             <b-col>
               <elsa-form-group :label="$t('useampi-opinto-oikeus')" :required="true">
                 <template v-slot="{ uid }">
@@ -232,7 +242,7 @@
             </b-col>
           </b-row>
           <hr />
-          <div v-if="muutOpintooikeudet">
+          <div v-if="muutOpintooikeudet != null && muutOpintooikeudet.length > 0">
             <h3 class="mb-3">{{ $t('useampi-opinto-oikeus') }}</h3>
             <p>
               {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja') }}
@@ -470,6 +480,10 @@
 
     get showReturned() {
       return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
+    }
+
+    get waitingForSignatures() {
+      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
     }
 
     get korjausehdotus() {
