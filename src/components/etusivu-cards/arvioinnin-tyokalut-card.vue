@@ -1,9 +1,18 @@
 <template>
-  <b-card-skeleton
-    :header="$t('arvioinnin-tyokalut')"
-    :loading="true"
-    class="mb-3 d-none"
-  ></b-card-skeleton>
+  <b-card-skeleton :header="$t('arvioinnin-tyokalut')" class="mb-3">
+    <div class="icon-container">
+      <font-awesome-icon icon="clipboard-list" fixed-width class="fa-5x text-primary icon" />
+    </div>
+    <div class="text-center">
+      <a
+        href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/elsa"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ $t('arvioinnin-tyokalut-tutustu') }}
+      </a>
+    </div>
+  </b-card-skeleton>
 </template>
 
 <script lang="ts">
@@ -18,3 +27,19 @@
   })
   export default class ArvioinninTyokalutCard extends Vue {}
 </script>
+
+<style lang="scss" scoped>
+  @import '~@/styles/variables';
+
+  .icon-container {
+    border: 2px solid $primary;
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+    margin: 0 auto 15px;
+    text-align: center;
+    .icon {
+      margin-top: 17px;
+    }
+  }
+</style>
