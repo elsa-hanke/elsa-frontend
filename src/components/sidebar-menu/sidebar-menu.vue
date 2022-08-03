@@ -39,6 +39,14 @@
           {{ $t('teoriakoulutukset') }}
         </b-nav-item>
         <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'opintosuoritukset' }"
+        >
+          <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
+          {{ $t('opintosuoritukset') }}
+        </b-nav-item>
+        <b-nav-item
           v-if="$isErikoistuva() && !isImpersonatedErikoistujaVirkailija"
           v-b-toggle.osaaminen-toggle
           class="osaaminen-nav"

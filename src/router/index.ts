@@ -56,6 +56,7 @@ import Opetussuunnitelmat from '@/views/opetussuunnitelmat/opetussuunnitelmat.vu
 import LisaaOpintoopas from '@/views/opetussuunnitelmat/opintoopas/lisaa-opintoopas.vue'
 import MuokkaaOpintoopasta from '@/views/opetussuunnitelmat/opintoopas/muokkaa-opintoopasta.vue'
 import Opintoopas from '@/views/opetussuunnitelmat/opintoopas/opintoopas.vue'
+import Opintosuoritukset from '@/views/opintosuoritukset/opintosuoritukset.vue'
 import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa-paivittaista-merkintaa.vue'
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
 import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
@@ -810,6 +811,15 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: MuokkaaOpintoopasta,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opintosuoritukset',
+        name: 'opintosuoritukset',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Opintosuoritukset,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
         }
       },
       {
