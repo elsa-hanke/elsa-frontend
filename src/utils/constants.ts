@@ -191,7 +191,7 @@ export enum OpintooikeusTila {
   VANHENTUNUT = 'VANHENTUNUT'
 }
 
-export enum OpintosuoritusTyyppi {
+export enum OpintosuoritusTyyppiEnum {
   JOHTAMISOPINTO = 'JOHTAMISOPINTO',
   SATEILYSUOJAKOULUTUS = 'SATEILYSUOJAKOULUTUS',
   VALTAKUNNALLINEN_KUULUSTELU = 'VALTAKUNNALLINEN_KUULUSTELU',

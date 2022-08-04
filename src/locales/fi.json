@@ -282,7 +282,11 @@
   "jatkotoimet-ja-raportointi-ohje": "Vapaaehtoinen. Kirjaa tarvittaessa tarpeet erikoistujan tulevasta koulutuksen sisällöstä ja konkreettinen toimintatapa tämän toteuttamiseksi. Mikäli erikoistujan etenemisessä todetaan huoli, sovitaan ja kirjataan raportointitapa.",
   "johtamiskoulutukset": "Johtamiskoulutukset",
   "johtamisopinnot": "Johtamisopinnot",
+<<<<<<< HEAD
   "johtamisopintojen-vahimmaismaara": "Johtamisopintojen vähimmäismäärä",
+=======
+  "johtamisopinnot-yhteensa": "Johtamisopinnot yhteensä",
+>>>>>>> Datan hakeminen ja käsittely, sivurakenne
   "johtamistaidot": "Johtamistaidot",
   "jos-aktiivivapaiden-maara-poikkeuksellisen-suuri-kuvaus": "Jos aktiivivapaiden tai muiden yllä mainittujen vapaiden määrä on poikkeuksellisen suuri, on erikoisalan vastuuhenkilön varmistuttava siitä, että koulutuksen osaamistavoitteet saavutetaan.",
   "jos-et-loyda-alta": ", jos et löydä alta",
@@ -527,6 +531,7 @@
   "kutsulinkin-lahettaminen-epaonnistui": "Kutsulinkin lähettäminen epäonnistui",
   "kutsulinkki-lahetetty-uudestaan": "Kutsulinkki lähetetty uudestaan",
   "kuulustelu": "Kuulustelu",
+  "kuulustelut": "Kuulustelut",
   "kylla": "Kyllä",
   "laaketieteellinen-osaaminen": "Lääketieteellinen osaaminen",
   "ladataan": "Ladataan",
@@ -719,6 +724,7 @@
   "opintooppaiden-hakeminen-epaonnistui": "Opinto-oppaiden hakeminen epäonnistui",
   "opintopistetta-lyhenne": "op",
   "opintosuoritukset": "Opintosuoritukset",
+  "opintosuoritukset-kuvaus": "Näet johtamisopintosi, valtakunnalliset kuulustelut sekä säteilysuojelukoulutukset (vain tietyt erikoisalat). Tiedot tuodaan suoraan opintotietojärjestelmästä. Jos johtamisopinnot eivät näy ELSAssa tai näytä oikealta, ota yhteyttä opintohallintoon. Toimita todistukset suoritetusta koulutuksesta oman yliopistosi opintohallintoon ",
   "opiskelijanumero": "Opiskelijanumero",
   "opiskelijatunnus": "Opiskelijatunnus",
   "opiskelu-ja-tyohistoria": "Opiskelu- ja työhistoria",
@@ -876,6 +882,7 @@
   "sahkopostiosoite-ei-kelvollinen": "Sähköpostiosoite ei ole kelvollinen",
   "sahkopostiosoite-uudelleen": "Sähköpostiosoite uudelleen",
   "sahkopostiosoitteet-eivat-tasmaa": "Sähköpostiosoitteet eivät täsmää",
+  "sahkopostitse": "sähköpostitse",
   "salasana": "Salasana",
   "sallitut-tiedostoformaatit-default": "Sallitut tiedostoformaatit: .pdf, .png, .jpeg ja .jpg.",
   "sallitut-tiedostoformaatit-pdf": "Sallitut tiedostoformaatit: .pdf",
@@ -885,6 +892,7 @@
   "sateilysuojakoulutuksen-vahimmaismaara": "Säteilysuojakoulutuksen vähimmäismäärä",
   "sateilysuojeluk": "Säteilysuojeluk.",
   "sateilysuojelukoulutus": "Säteilysuojelukoulutus",
+  "sateilysuojelukoulutukset": "Säteilysuojelukoulutukset",
   "selvitys-jatkotoimista": "Selvitys jatkotoimista",
   "selvitys-kehittamistoimenpiteista": "Selvitys keskustelussa sovituista kehittämistoimenpiteistä",
   "seuraava": "Seuraava",

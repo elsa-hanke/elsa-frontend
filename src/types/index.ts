@@ -11,7 +11,7 @@ import {
   PoissaolonSyyTyyppi,
   SeurantajaksoTila,
   OpintooikeusTila,
-  OpintosuoritusTyyppi,
+  OpintosuoritusTyyppiEnum,
   LomakeTyypit,
   LomakeTilat,
   KayttajatiliTila,
@@ -246,6 +246,11 @@ export interface Opintosuoritus {
   vanhenemispaiva: string | null
   yliopistoOpintooikeusId: string | null
   osakokonaisuudet: OpintosuoritusOsakokonaisuus[] | null
+}
+
+export interface OpintosuoritusTyyppi {
+  id: number
+  nimi: OpintosuoritusTyyppiEnum
 }
 
 export interface OpintosuoritusOsakokonaisuus {
