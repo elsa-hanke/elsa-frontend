@@ -7,11 +7,7 @@
           <arviointipyynnot-card />
           <seurantajaksot-card />
           <koejaksot-card />
-          <b-card-skeleton
-            :header="$t('vanhenevat-katseluoikeudet')"
-            :loading="true"
-            class="mb-3 d-none"
-          ></b-card-skeleton>
+          <vanhenevat-katseluoikeudet-card />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
           <erikoistujien-seuranta-card :showKouluttajaKuvaus="true" />
         </b-col>
@@ -40,6 +36,7 @@
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
   import SeurantajaksotCard from '@/components/etusivu-cards/seurantajaksot-card.vue'
+  import VanhenevatKatseluoikeudetCard from '@/components/etusivu-cards/vanhenevat-katseluoikeudet-card.vue'
 
   @Component({
     components: {
@@ -49,7 +46,8 @@
       ErikoistujienSeurantaCard,
       HenkilotiedotCard,
       KoejaksotCard,
-      SeurantajaksotCard
+      SeurantajaksotCard,
+      VanhenevatKatseluoikeudetCard
     }
   })
   export default class EtusivuKouluttaja extends Vue {}

@@ -11,7 +11,8 @@ import {
   ValiarviointiLomake,
   ErikoistujienSeuranta,
   KoejaksonVaihe,
-  Arviointipyynto
+  Arviointipyynto,
+  Katseluoikeus
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -115,4 +116,9 @@ export async function getEtusivuArviointipyynnot() {
 export async function getEtusivuSeurantajaksot() {
   const path = `/kouluttaja/etusivu/seurantajaksot`
   return await axios.get<Seurantajakso[]>(path)
+}
+
+export async function getEtusivuVanhenevatKatseluoikeudet() {
+  const path = `/kouluttaja/etusivu/vanhenevat-katseluoikeudet`
+  return await axios.get<Katseluoikeus[]>(path)
 }
