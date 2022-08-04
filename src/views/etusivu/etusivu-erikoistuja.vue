@@ -2,11 +2,7 @@
   <b-container fluid class="mt-3">
     <b-row class="mt-3">
       <b-col xxl="9">
-        <b-card-skeleton
-          :header="$t('avoimet-asiat')"
-          :loading="true"
-          class="mb-3 d-none"
-        ></b-card-skeleton>
+        <avoimet-asiat-card />
         <erikoistumisen-edistyminen-card />
         <b-row>
           <b-col xl="6">
@@ -50,12 +46,14 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import BCardSkeleton from '@/components/card/card.vue'
+  import AvoimetAsiatCard from '@/components/etusivu-cards/avoimet-asiat-card.vue'
   import ErikoistumisenEdistyminenCard from '@/components/etusivu-cards/erikoistumisen-edistyminen-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
 
   @Component({
     components: {
       BCardSkeleton,
+      AvoimetAsiatCard,
       ErikoistumisenEdistyminenCard,
       HenkilotiedotCard
     }

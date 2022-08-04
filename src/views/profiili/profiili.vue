@@ -6,11 +6,11 @@
         <b-col>
           <h1>{{ $t('oma-profiili') }}</h1>
           <p>{{ $t('oma-profiili-kuvaus') }}</p>
-          <b-tabs content-class="mt-3" :no-fade="true">
-            <b-tab :title="$t('omat-tiedot')" active>
+          <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+            <b-tab :title="$t('omat-tiedot')" href="#omat-tiedot">
               <omat-tiedot :editing="editing" @change="changeEditing" />
             </b-tab>
-            <b-tab v-if="$isErikoistuva()" :title="$t('katseluoikeudet')">
+            <b-tab v-if="$isErikoistuva()" :title="$t('katseluoikeudet')" href="#katseluoikeudet">
               <katseluoikeudet />
             </b-tab>
           </b-tabs>
@@ -47,6 +47,13 @@
     ]
     editing = false
     skipRouteExitConfirm = true
+
+    tabIndex = 0
+    tabs = ['#omat-tiedot', '#katseluoikeudet']
+
+    beforeMount() {
+      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
+    }
 
     changeEditing(event: boolean) {
       this.skipRouteExitConfirm = !event

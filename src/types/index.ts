@@ -14,7 +14,8 @@ import {
   LomakeTyypit,
   LomakeTilat,
   KayttajatiliTila,
-  ReassignedVastuuhenkilonTehtavaTyyppi
+  ReassignedVastuuhenkilonTehtavaTyyppi,
+  AvoinAsiaTyyppi
 } from '@/utils/constants'
 
 export type Opintooikeus = {
@@ -546,6 +547,13 @@ export type Arviointipyynto = {
   id: number
   erikoistujanNimi: string
   pyynnonAika: string
+}
+
+export type AvoinAsia = {
+  id: number
+  tyyppi: AvoinAsiaTyyppi
+  asia: string
+  pvm: string
 }
 
 export type Suoritusarviointi = {
@@ -1112,4 +1120,9 @@ export interface VastuuhenkilonTehtavatLomake {
 export interface KayttajahallintaVastuuhenkilonTehtavatLomake {
   erikoisalat: Erikoisala[]
   vastuuhenkilot: Kayttaja[]
+}
+
+export interface Katseluoikeus {
+  erikoistujanNimi: string
+  vanhenemispaiva: string
 }

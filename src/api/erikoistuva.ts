@@ -25,7 +25,8 @@ import {
   PaivakirjamerkintaRajaimet,
   KaytonAloitusModel,
   ErikoistuvaLaakari,
-  ErikoistumisenEdistyminen
+  ErikoistumisenEdistyminen,
+  AvoinAsia
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -321,4 +322,9 @@ export async function getErikoistumisenEdistyminen() {
 export async function patchOpintooikeusKaytossa(opintooikeusId: number) {
   const path = `erikoistuva-laakari/opinto-oikeus/${opintooikeusId}`
   return await axios.patch(path)
+}
+
+export async function getAvoimetAsiat() {
+  const path = 'erikoistuva-laakari/etusivu/avoimet-asiat'
+  return await axios.get<AvoinAsia[]>(path)
 }
