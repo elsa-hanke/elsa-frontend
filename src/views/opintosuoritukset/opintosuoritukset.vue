@@ -15,36 +15,34 @@
               {{ $t('sahkopostitse') }}
             </a>
           </p>
-          <div class="d-flex justify-content-center border rounded pt-3 mb-4">
-            <b-container fluid>
-              <elsa-form-group :label="$t('johtamisopinnot-yhteensa')">
-                <template v-slot="{ uid }">
-                  <div :id="uid">
-                    <elsa-progress-bar
-                      :value="opintosuorituksetWrapper.johtamisopinnotSuoritettu"
-                      :min-required="opintosuorituksetWrapper.johtamisopinnotVaadittu"
-                      :show-required-text="true"
-                      color="#41b257"
-                      backgroundColor="#b3e1bc"
-                      textColor="#000"
-                      class="mb-3"
-                      :customUnit="$t('opintopistetta-lyhenne')"
-                    />
-                  </div>
-                </template>
-              </elsa-form-group>
-            </b-container>
-          </div>
           <b-tabs content-class="mt-3" :no-fade="true">
-            <b-tab :title="$t('johtamisopinnot')" active>{{ johtamisopinnot }}</b-tab>
+            <b-tab :title="$t('johtamisopinnot')" active>
+              <opintosuoritus-tab
+                variant="johtaminen"
+                progress
+                :suoritettu="opintosuorituksetWrapper.johtamisopinnotSuoritettu"
+                :vaadittu="opintosuorituksetWrapper.johtamisopinnotVaadittu"
+                :os="johtamisopinnot"
+              />
+            </b-tab>
             <b-tab
               v-if="sateilysuojelukoulutukset.length > 0"
               :title="$t('sateilysuojelukoulutukset')"
             >
-              {{ sateilysuojelukoulutukset }}
+              <opintosuoritus-tab
+                variant="sateily"
+                progress
+                :suoritettu="opintosuorituksetWrapper.sateilysuojakoulutuksetSuoritettu"
+                :vaadittu="opintosuorituksetWrapper.sateilysuojakoulutuksetVaadittu"
+                :os="sateilysuojelukoulutukset"
+              />
             </b-tab>
-            <b-tab :title="$t('kuulustelut')">{{ kuulustelut }}</b-tab>
-            <b-tab :title="$t('muut')">{{ muut }}</b-tab>
+            <b-tab :title="$t('kuulustelu')">
+              <opintosuoritus-tab variant="kuulustelu" :os="kuulustelut" />
+            </b-tab>
+            <b-tab :title="$t('muut')">
+              <opintosuoritus-tab variant="muu" :os="muut" />
+            </b-tab>
           </b-tabs>
         </b-col>
       </b-row>
@@ -61,11 +59,13 @@
   import store from '@/store'
   import { OpintosuorituksetWrapper, Opintosuoritus } from '@/types'
   import { OpintosuoritusTyyppiEnum } from '@/utils/constants'
+  import OpintosuoritusTab from '@/views/opintosuoritukset/opintosuoritus-tab.vue'
 
   @Component({
     components: {
       ElsaFormGroup,
-      ElsaProgressBar
+      ElsaProgressBar,
+      OpintosuoritusTab
     }
   })
   export default class Opintosuoritukset extends Vue {
