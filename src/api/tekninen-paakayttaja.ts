@@ -36,6 +36,11 @@ export async function getOpintooppaat(erikoisalaId: string) {
   return await axios.get<Opintoopas[]>(path)
 }
 
+export async function getUusinOpas(erikoisalaId: string) {
+  const path = `/tekninen-paakayttaja/erikoisalat/${erikoisalaId}/uusinopas`
+  return await axios.get<Opintoopas>(path)
+}
+
 export async function getOpinoopas(id: string) {
   const path = `/tekninen-paakayttaja/opintoopas/${id}`
   return await axios.get<Opintoopas>(path)
