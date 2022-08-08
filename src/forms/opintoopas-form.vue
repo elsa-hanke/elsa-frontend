@@ -61,6 +61,14 @@
           </b-form-row>
           <hr />
           <h2>{{ $t('erikoisalan-vaatimukset') }}</h2>
+          <elsa-button
+            v-if="opas.id == null"
+            @click="tuoOppaanTiedot()"
+            variant="primary"
+            class="mt-2 mb-4"
+          >
+            {{ $t('tuo-edellisen-oppaan-tiedot') }}
+          </elsa-button>
           <elsa-form-group :label="$t('kaytannon-koulutuksen-vahimmaispituus')" :required="true">
             <template v-slot="{ uid }">
               <b-row>
@@ -592,6 +600,7 @@
   import { validationMixin } from 'vuelidate'
   import { maxValue, minValue, required, requiredIf } from 'vuelidate/lib/validators'
 
+  import { getUusinOpas } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -735,6 +744,37 @@
           a.nimi === ArviointiasteikkoTyyppi.EPA ? this.$t('luottamuksen-taso') : this.$t('etappi'),
         value: a.id
       }))
+    }
+
+    async tuoOppaanTiedot() {
+      const uusinOpas = (await getUusinOpas(this.$route.params.erikoisalaId)).data
+      this.opas.kaytannonKoulutuksenVahimmaispituusVuodet =
+        uusinOpas.kaytannonKoulutuksenVahimmaispituusVuodet
+      this.opas.kaytannonKoulutuksenVahimmaispituusKuukaudet =
+        uusinOpas.kaytannonKoulutuksenVahimmaispituusKuukaudet
+      this.opas.terveyskeskuskoulutusjaksonVahimmaispituusVuodet =
+        uusinOpas.terveyskeskuskoulutusjaksonVahimmaispituusVuodet
+      this.opas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet =
+        uusinOpas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet
+      this.opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet =
+        uusinOpas.terveyskeskuskoulutusjaksonMaksimipituusVuodet
+      this.opas.terveyskeskuskoulutusjaksonMaksimipituusKuukaudet =
+        uusinOpas.terveyskeskuskoulutusjaksonMaksimipituusKuukaudet
+      this.opas.yliopistosairaalajaksonVahimmaispituusVuodet =
+        uusinOpas.yliopistosairaalajaksonVahimmaispituusVuodet
+      this.opas.yliopistosairaalajaksonVahimmaispituusKuukaudet =
+        uusinOpas.yliopistosairaalajaksonVahimmaispituusKuukaudet
+      this.opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet =
+        uusinOpas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet
+      this.opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet =
+        uusinOpas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet
+      this.opas.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara =
+        uusinOpas.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara
+      this.opas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara =
+        uusinOpas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara
+      this.opas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara =
+        uusinOpas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara
+      this.opas.arviointiasteikkoId = uusinOpas.arviointiasteikkoId
     }
 
     validateState(name: string) {
