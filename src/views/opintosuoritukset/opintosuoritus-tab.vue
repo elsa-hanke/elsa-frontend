@@ -97,14 +97,14 @@
             </span>
           </b-td>
         </b-tr>
-        <b-tr v-for="(ok, index) in o.osakokonaisuudet" :key="index" class="ok-row">
-          <b-td class="col1 pl-4">
+        <b-tr v-for="(ok, index) in o.osakokonaisuudet" :key="index" class="ok-row py-2">
+          <b-td class="col1 pl-6 py-2">
             <span>{{ localizeName(ok) }}</span>
           </b-td>
-          <b-td class="col2">
+          <b-td class="col2 py-2">
             {{ $date(ok.suorituspaiva) }}
           </b-td>
-          <b-td class="col3">
+          <b-td class="col3 py-2">
             {{ ok.opintopisteet }}
           </b-td>
         </b-tr>
@@ -150,28 +150,37 @@
 </script>
 
 <style lang="scss" scoped>
+  table.opintosuoritus-table {
+    td,
+    th {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+    tbody {
+      border-top: 0;
+    }
+  }
   .col1 {
     width: 60%;
-    padding: 0.75 rem;
     span {
       display: block;
     }
   }
   .col2 {
     width: 15%;
-    padding: 0.75 rem;
   }
   .col3 {
     width: 25%;
-    padding: 0.75 rem;
   }
   span.bold {
     font-weight: 500;
   }
   .ok-row {
     td {
-      padding: 0.5 rem;
       border-top: 0;
+    }
+    &:last-child td {
+      padding-bottom: 1.5rem !important;
     }
   }
 </style>
