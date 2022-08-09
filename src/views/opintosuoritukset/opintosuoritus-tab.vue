@@ -2,7 +2,13 @@
   <div class="opintosuoritukset-tab">
     <div class="d-flex justify-content-center border rounded pt-3 mb-4" v-if="progress">
       <b-container fluid>
-        <elsa-form-group :label="$t('johtamisopinnot-yhteensa')">
+        <elsa-form-group
+          :label="
+            variant === 'sateily'
+              ? $t('sateilysuojelukoulutukset-yhteensa')
+              : $t('johtamisopinnot-yhteensa')
+          "
+        >
           <template v-slot="{ uid }">
             <div :id="uid">
               <elsa-progress-bar
@@ -20,15 +26,18 @@
         </elsa-form-group>
       </b-container>
     </div>
-    <b-table-simple stacked="md">
+    <b-table-simple
+      stacked="md"
+      v-if="variant === 'sateily' || variant === 'kuulustelu' || variant === 'muu'"
+      class="opintosuoritus-table"
+    >
       <b-thead>
         <b-tr>
-          <b-th v-if="variant === 'johtaminen'" class="col1">{{ $t('opinto') }}</b-th>
           <b-th v-if="variant === 'sateily'" class="col1">{{ $t('koulutus') }}</b-th>
           <b-th v-if="variant === 'kuulustelu'" class="col1">{{ $t('kuulustelu') }}</b-th>
           <b-th v-if="variant === 'muu'" class="col1">{{ $t('suoritus') }}</b-th>
           <b-th class="col2">{{ $t('suorituspvm') }}</b-th>
-          <b-th v-if="variant === 'johtaminen' || variant === 'sateily'" class="col3">
+          <b-th v-if="variant === 'sateily'" class="col3">
             {{ $t('opintopisteet') }}
           </b-th>
           <b-th v-if="variant === 'kuulustelu' || variant === 'muu'" class="col3">
@@ -38,15 +47,65 @@
       </b-thead>
       <b-tbody v-if="variant === 'kuulustelu' || variant === 'muu'">
         <b-tr v-for="(o, index) in os" :key="index">
-          <b-td>
-            <p>{{ o.nimi_fi }}</p>
+          <b-td class="col1">
+            <span class="bold">{{ localizeName(o) }}</span>
           </b-td>
-          <b-td>
-            {{ o.suorituspaiva }}
+          <b-td class="col2">
+            {{ $date(o.suorituspaiva) }}
           </b-td>
-          <b-td>
-            <span v-if="o.hyvaksytty">{{ $t('hyvaksytty') }}</span>
+          <b-td class="col3">
+            <span v-if="o.hyvaksytty">
+              <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success" />
+              {{ $t('hyvaksytty') }}
+            </span>
             <span v-if="!o.hyvaksytty" class="text-danger">{{ $t('hylatty') }}</span>
+          </b-td>
+        </b-tr>
+      </b-tbody>
+      <b-tbody v-if="variant === 'sateily'">
+        <b-tr v-for="(o, index) in os" :key="index">
+          <b-td class="col1">
+            <span class="bold">{{ localizeName(o) }}</span>
+          </b-td>
+          <b-td class="col2">
+            {{ $date(o.suorituspaiva) }}
+          </b-td>
+          <b-td class="col3">
+            {{ o.opintopisteet }}
+          </b-td>
+        </b-tr>
+      </b-tbody>
+    </b-table-simple>
+    <b-table-simple stacked="md" v-if="variant === 'johtaminen'" class="opintosuoritus-table">
+      <b-thead>
+        <b-tr>
+          <b-th class="col1">{{ $t('opinto') }}</b-th>
+          <b-th class="col2">{{ $t('suorituspvm') }}</b-th>
+          <b-th class="col3">{{ $t('opintopisteet') }}</b-th>
+        </b-tr>
+      </b-thead>
+      <b-tbody v-for="(o, index) in os" :key="index">
+        <b-tr>
+          <b-td class="col1">
+            <span class="bold">{{ localizeName(o) }}</span>
+          </b-td>
+          <b-td class="col2"></b-td>
+          <b-td class="col3">
+            <span class="bold">
+              {{ o.opintopisteet }}
+              {{ $t('yht') }}
+            </span>
+          </b-td>
+        </b-tr>
+        <b-tr v-for="(ok, index) in o.osakokonaisuudet" :key="index" class="ok-row">
+          <b-td class="col1 pl-4">
+            <span>{{ localizeName(ok) }}</span>
+          </b-td>
+          <b-td class="col2">
+            {{ $date(ok.suorituspaiva) }}
+          </b-td>
+          <b-td class="col3">
+            {{ ok.opintopisteet }}
           </b-td>
         </b-tr>
       </b-tbody>
@@ -82,17 +141,37 @@
 
     @Prop({ required: false, type: Boolean, default: false })
     progress!: boolean
+
+    localizeName(o: any) {
+      const key = `nimi_${this.$i18n.locale}`
+      return o[key]
+    }
   }
 </script>
 
 <style lang="scss" scoped>
   .col1 {
     width: 60%;
+    padding: 0.75 rem;
+    span {
+      display: block;
+    }
   }
   .col2 {
     width: 15%;
+    padding: 0.75 rem;
   }
   .col3 {
     width: 25%;
+    padding: 0.75 rem;
+  }
+  span.bold {
+    font-weight: 500;
+  }
+  .ok-row {
+    td {
+      padding: 0.5 rem;
+      border-top: 0;
+    }
   }
 </style>
