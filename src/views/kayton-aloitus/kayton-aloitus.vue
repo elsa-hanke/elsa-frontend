@@ -18,7 +18,7 @@
   import { getErikoistuvaLaakari, putKaytonAloitusLomake } from '@/api/erikoistuva'
   import KaytonAloitusForm from '@/forms/kayton-aloitus-form.vue'
   import { KaytonAloitusModel, Opintooikeus, ElsaError } from '@/types/index'
-  import { filterOpintooikeudetByAllowedStates } from '@/utils/opintooikeus'
+  import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -33,7 +33,10 @@
 
     async mounted() {
       const erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
-      this.opintooikeudet = filterOpintooikeudetByAllowedStates(erikoistuvaLaakari)
+      this.opintooikeudet = erikoistuvaLaakari.opintooikeudet.sort(
+        (a: Opintooikeus, b: Opintooikeus) =>
+          sortByDateDesc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
+      )
     }
 
     async onSubmit(form: KaytonAloitusModel) {
