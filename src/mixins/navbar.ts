@@ -6,7 +6,6 @@ import store from '@/store'
 import { Opintooikeus } from '@/types'
 import { sortByDateDesc } from '@/utils/date'
 import { getTitleFromAuthorities } from '@/utils/functions'
-import { filterOpintooikeudetByAllowedStates } from '@/utils/opintooikeus'
 import { ELSA_ROLE } from '@/utils/roles'
 
 @Component({})
@@ -17,7 +16,7 @@ export default class NavbarMixin extends Vue {
   async mounted() {
     if (this.isErikoistuvaLaakari) {
       const erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
-      this.opintooikeudet = filterOpintooikeudetByAllowedStates(erikoistuvaLaakari).sort(
+      this.opintooikeudet = erikoistuvaLaakari.opintooikeudet.sort(
         (a: Opintooikeus, b: Opintooikeus) =>
           sortByDateDesc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
       )
