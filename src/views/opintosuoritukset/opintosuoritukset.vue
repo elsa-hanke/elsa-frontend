@@ -22,7 +22,7 @@
                 progress
                 :suoritettu="opintosuorituksetWrapper.johtamisopinnotSuoritettu"
                 :vaadittu="opintosuorituksetWrapper.johtamisopinnotVaadittu"
-                :os="johtamisopinnot"
+                :suoritukset="johtamisopinnot"
               />
             </b-tab>
             <b-tab
@@ -34,14 +34,14 @@
                 progress
                 :suoritettu="opintosuorituksetWrapper.sateilysuojakoulutuksetSuoritettu"
                 :vaadittu="opintosuorituksetWrapper.sateilysuojakoulutuksetVaadittu"
-                :os="sateilysuojelukoulutukset"
+                :suoritukset="sateilysuojelukoulutukset"
               />
             </b-tab>
             <b-tab :title="$t('kuulustelu')">
-              <opintosuoritus-tab variant="kuulustelu" :os="kuulustelut" />
+              <opintosuoritus-tab variant="kuulustelu" :suoritukset="kuulustelut" />
             </b-tab>
             <b-tab :title="$t('muut')">
-              <opintosuoritus-tab variant="muu" :os="muut" />
+              <opintosuoritus-tab variant="muu" :suoritukset="muut" />
             </b-tab>
           </b-tabs>
         </b-col>

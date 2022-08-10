@@ -46,7 +46,7 @@
         </b-tr>
       </b-thead>
       <b-tbody v-if="variant === 'kuulustelu' || variant === 'muu'">
-        <b-tr v-for="(o, index) in os" :key="index">
+        <b-tr v-for="(o, index) in suoritukset" :key="index">
           <b-td class="col1">
             <span class="bold">{{ localizeName(o) }}</span>
           </b-td>
@@ -63,7 +63,7 @@
         </b-tr>
       </b-tbody>
       <b-tbody v-if="variant === 'sateily'">
-        <b-tr v-for="(o, index) in os" :key="index">
+        <b-tr v-for="(o, index) in suoritukset" :key="index">
           <b-td class="col1">
             <span class="bold">{{ localizeName(o) }}</span>
           </b-td>
@@ -84,7 +84,7 @@
           <b-th class="col3">{{ $t('opintopisteet') }}</b-th>
         </b-tr>
       </b-thead>
-      <b-tbody v-for="(o, index) in os" :key="index">
+      <b-tbody v-for="(o, index) in suoritukset" :key="index">
         <b-tr>
           <b-td class="col1">
             <span class="bold">{{ localizeName(o) }}</span>
@@ -128,7 +128,7 @@
   })
   export default class OpintosuoritusTab extends Vue {
     @Prop({ required: true, type: Array })
-    os!: Opintosuoritus[]
+    suoritukset!: Opintosuoritus[]
 
     @Prop({ required: true, type: String })
     variant!: string
