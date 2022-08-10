@@ -20,11 +20,7 @@
             ></b-card-skeleton>
           </b-col>
         </b-row>
-        <b-card-skeleton
-          :header="$t('paivittaiset-merkinnat')"
-          :loading="true"
-          class="mb-3 d-none"
-        ></b-card-skeleton>
+        <paivittaiset-merkinnat-card />
       </b-col>
       <b-col xxl="3">
         <b-row>
@@ -49,13 +45,15 @@
   import AvoimetAsiatCard from '@/components/etusivu-cards/avoimet-asiat-card.vue'
   import ErikoistumisenEdistyminenCard from '@/components/etusivu-cards/erikoistumisen-edistyminen-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
+  import PaivittaisetMerkinnatCard from '@/components/etusivu-cards/paivittaiset-merkinnat-card.vue'
 
   @Component({
     components: {
       BCardSkeleton,
       AvoimetAsiatCard,
       ErikoistumisenEdistyminenCard,
-      HenkilotiedotCard
+      HenkilotiedotCard,
+      PaivittaisetMerkinnatCard
     }
   })
   export default class EtusivuErikoistuja extends Vue {}
