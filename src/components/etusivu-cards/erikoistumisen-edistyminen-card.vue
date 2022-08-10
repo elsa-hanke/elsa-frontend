@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('erikoistumisen-edistyminen')" :loading="initializing">
+  <b-card-skeleton :header="$t('erikoistumisen-edistyminen')" :loading="initializing" class="mb-5">
     <b-container v-if="!initializing" fluid class="p-0">
       <b-row>
         <b-col xl="8">
