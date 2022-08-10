@@ -11,6 +11,7 @@ import {
   PoissaolonSyyTyyppi,
   SeurantajaksoTila,
   OpintooikeusTila,
+  OpintosuoritusTyyppiEnum,
   LomakeTyypit,
   LomakeTilat,
   KayttajatiliTila,
@@ -221,6 +222,48 @@ export interface OpintoopasSimple {
   nimi: string | null
   voimassaoloAlkaa: string
   voimassaoloPaattyy: string | null
+}
+
+export interface OpintosuorituksetWrapper {
+  opintosuoritukset: Opintosuoritus[] | null
+  johtamisopinnotSuoritettu: number | null
+  johtamisopinnotVaadittu: number | null
+  sateilysuojakoulutuksetSuoritettu: number | null
+  sateilysuojakoulutuksetVaadittu: number | null
+}
+
+export interface Opintosuoritus {
+  id: number | null
+  nimi_fi: string | null
+  nimi_sv: string | null
+  kurssikoodi: string | null
+  tyyppi: OpintosuoritusTyyppi | null
+  suorituspaiva: string | null
+  opintopisteet: number | null
+  hyvaksytty: boolean | null
+  arvio_fi: string | null
+  arvio_sv: string | null
+  vanhenemispaiva: string | null
+  yliopistoOpintooikeusId: string | null
+  osakokonaisuudet: OpintosuoritusOsakokonaisuus[] | null
+}
+
+export interface OpintosuoritusTyyppi {
+  id: number
+  nimi: OpintosuoritusTyyppiEnum
+}
+
+export interface OpintosuoritusOsakokonaisuus {
+  id: number | null
+  nimi_fi: string | null
+  nimi_sv: string | null
+  kurssikoodi: string | null
+  suorituspaiva: string | null
+  opintopisteet: number | null
+  hyvaksytty: boolean | null
+  arvio_fi: string | null
+  arvio_sv: string | null
+  vanhenemispaiva: string | null
 }
 
 export type Koulutuspaikka = {
