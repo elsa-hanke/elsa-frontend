@@ -2,7 +2,7 @@
   <div class="opintosuoritukset">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-row lg>
+      <b-row lg v-if="!loading">
         <b-col>
           <h1>{{ $t('opintosuoritukset') }}</h1>
           <p>
@@ -46,6 +46,13 @@
           </b-tabs>
         </b-col>
       </b-row>
+      <b-row lg>
+        <b-col>
+          <div v-if="loading" class="text-center mt-6">
+            <b-spinner variant="primary" :label="$t('ladataan')" />
+          </div>
+        </b-col>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -59,6 +66,7 @@
   import store from '@/store'
   import { OpintosuorituksetWrapper, Opintosuoritus } from '@/types'
   import { OpintosuoritusTyyppiEnum } from '@/utils/constants'
+  import { toastFail } from '@/utils/toast'
   import OpintosuoritusTab from '@/views/opintosuoritukset/opintosuoritus-tab.vue'
 
   @Component({
@@ -115,7 +123,7 @@
           }
         })
       } catch {
-        this.$t('asiakirjojen-haku-epaonnistui')
+        toastFail(this, this.$t('opintosuoritusten-haku-epaonnistui'))
       }
       this.loading = false
     }
