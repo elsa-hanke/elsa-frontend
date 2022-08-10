@@ -38,6 +38,7 @@
             type="submit"
             variant="primary"
             class="ml-2 text-nowrap"
+            :disabled="!valittuKouluttaja"
             @click="myonnaOikeus"
           >
             {{ $t('myonna-oikeus') }}
