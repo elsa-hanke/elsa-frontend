@@ -2,7 +2,7 @@
   <div class="opintosuoritukset">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-row lg v-if="!loading">
+      <b-row lg v-if="!loading && opintosuorituksetWrapper">
         <b-col>
           <h1>{{ $t('opintosuoritukset') }}</h1>
           <p>
@@ -121,11 +121,12 @@
             default:
               this.muut.push(os)
           }
+          this.loading = false
         })
       } catch {
         toastFail(this, this.$t('opintosuoritusten-haku-epaonnistui'))
+        this.loading = false
       }
-      this.loading = false
     }
   }
 </script>
