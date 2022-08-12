@@ -222,7 +222,12 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import { ElsaError, ErikoistuvaLaakariLomake, UusiErikoistuvaLaakari, Opintoopas } from '@/types'
+  import {
+    ElsaError,
+    ErikoistuvaLaakariLomake,
+    UusiErikoistuvaLaakari,
+    OpintoopasSimple
+  } from '@/types'
   import { dateBetween } from '@/utils/date'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -411,9 +416,9 @@
     }
 
     get opintooppaatFilteredAndSorted() {
-      let opintooppaat: Opintoopas[]
+      let opintooppaat: OpintoopasSimple[]
       if (this.form.erikoisala) {
-        opintooppaat = this.opintooppaat.filter((o) => o.erikoisala.id === this.form.erikoisala?.id)
+        opintooppaat = this.opintooppaat.filter((o) => o.erikoisalaId === this.form.erikoisala?.id)
       } else {
         opintooppaat = this.opintooppaat
       }
