@@ -222,6 +222,7 @@ export interface OpintoopasSimple {
   nimi: string | null
   voimassaoloAlkaa: string
   voimassaoloPaattyy: string | null
+  erikoisalaId: number | null
 }
 
 export interface OpintosuorituksetWrapper {
@@ -884,7 +885,7 @@ export interface UusiErikoistuvaLaakari {
   opintooikeusAlkaa: string | null
   opintooikeusPaattyy: string | null
   asetusId: number | null
-  opintoopas: Opintoopas | null
+  opintoopas: OpintoopasSimple | null
   opintoopasId?: number | null
   osaamisenArvioinninOppaanPvm: string | null
 }
@@ -893,7 +894,7 @@ export interface ErikoistuvaLaakariLomake {
   yliopistot: Yliopisto[]
   erikoisalat: Erikoisala[]
   asetukset: Asetus[]
-  opintooppaat: Opintoopas[]
+  opintooppaat: OpintoopasSimple[]
 }
 
 export type Seurantajakso = {
