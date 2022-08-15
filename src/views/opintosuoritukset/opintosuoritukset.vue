@@ -121,8 +121,8 @@
             default:
               this.muut.push(os)
           }
-          this.loading = false
         })
+        this.loading = false
       } catch {
         toastFail(this, this.$t('opintosuoritusten-haku-epaonnistui'))
         this.loading = false
