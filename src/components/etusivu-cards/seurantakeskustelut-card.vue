@@ -1,8 +1,21 @@
 <template>
   <b-card-skeleton :header="$t('seurantakeskustelut')" :loading="loading" class="mb-5">
     <div v-if="!loading">
+      <div v-if="!account.impersonated">
+        <b-row>
+          <b-col>
+            <elsa-button
+              :to="{ name: 'lisaa-seurantajakso' }"
+              variant="outline-primary"
+              class="mb-3"
+            >
+              {{ $t('lisaa-seurantajakso') }}
+            </elsa-button>
+          </b-col>
+        </b-row>
+      </div>
       <div v-if="seurantajaksot.length > 0">
-        <b-row v-for="(seurantajakso, index) in seurantajaksot" :key="index" lg>
+        <b-row v-for="(seurantajakso, index) in seurantajaksot.slice(0, 5)" :key="index" lg>
           <b-col>
             <div class="d-flex justify-content-center border rounded pt-1 pb-1 mb-4">
               <div class="container-fluid">
@@ -100,6 +113,7 @@
   import { getSeurantajaksot } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
+  import store from '@/store'
   import { Seurantajakso } from '@/types'
   import { SeurantajaksoTila } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
@@ -129,6 +143,10 @@
         this.seurantajaksot = []
       }
       this.loading = false
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
 
     showHyvaksytty(seurantajakso: Seurantajakso) {
