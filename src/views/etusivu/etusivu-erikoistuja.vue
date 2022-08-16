@@ -20,7 +20,7 @@
             ></b-card-skeleton>
           </b-col>
         </b-row>
-        <paivittaiset-merkinnat-card />
+        <paivittaiset-merkinnat-card v-if="!isImpersonatedVirkailija" />
       </b-col>
       <b-col xxl="3">
         <b-row>
@@ -46,6 +46,8 @@
   import ErikoistumisenEdistyminenCard from '@/components/etusivu-cards/erikoistumisen-edistyminen-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import PaivittaisetMerkinnatCard from '@/components/etusivu-cards/paivittaiset-merkinnat-card.vue'
+  import store from '@/store'
+  import { ELSA_ROLE } from '@/utils/roles'
 
   @Component({
     components: {
@@ -56,5 +58,13 @@
       PaivittaisetMerkinnatCard
     }
   })
-  export default class EtusivuErikoistuja extends Vue {}
+  export default class EtusivuErikoistuja extends Vue {
+    get isImpersonatedVirkailija() {
+      const account = store.getters['auth/account']
+      return (
+        account.impersonated &&
+        account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)
+      )
+    }
+  }
 </script>
