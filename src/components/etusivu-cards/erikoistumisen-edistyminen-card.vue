@@ -154,7 +154,11 @@
                 class="mb-3"
                 :customUnit="$t('t')"
               />
-              <elsa-button :to="{}" variant="link" class="pl-0 border-0 pt-0 pb-1">
+              <elsa-button
+                :to="{ name: 'opintosuoritukset', hash: '#johtamisopinnot' }"
+                variant="link"
+                class="pl-0 border-0 pt-0 pb-1"
+              >
                 <h3 class="mb-0">
                   {{ $t('johtamisopinnot') }}
                 </h3>
@@ -170,7 +174,11 @@
                 :customUnit="$t('opintopistetta-lyhenne')"
               />
               <div v-if="edistyminen.sateilysuojakoulutuksetVaadittu > 0">
-                <elsa-button :to="{}" variant="link" class="pl-0 border-0 pt-0 pb-1">
+                <elsa-button
+                  :to="{ name: 'opintosuoritukset', hash: '#sateilysuojakoulutukset' }"
+                  variant="link"
+                  class="pl-0 border-0 pt-0 pb-1"
+                >
                   <h3 class="mb-0">
                     {{ $t('sateilysuojelukoulutus') }}
                   </h3>
@@ -289,7 +297,11 @@
           </div>
           <div class="border rounded pt-3 pb-2 mb-4">
             <div class="container-fluid">
-              <elsa-button :to="{}" variant="link" class="pl-0 border-0 pt-0">
+              <elsa-button
+                :to="{ name: 'opintosuoritukset', hash: '#kuulustelu' }"
+                variant="link"
+                class="pl-0 border-0 pt-0"
+              >
                 <h3 class="mb-0">
                   {{ $t('kuulustelu') }}
                 </h3>
