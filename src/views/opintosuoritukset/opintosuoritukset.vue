@@ -15,8 +15,8 @@
               {{ $t('sahkopostitse') }}
             </a>
           </p>
-          <b-tabs content-class="mt-3" :no-fade="true">
-            <b-tab :title="$t('johtamisopinnot')" active>
+          <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+            <b-tab :title="$t('johtamisopinnot')" href="#johtamisopinnot">
               <opintosuoritus-tab
                 variant="johtaminen"
                 progress
@@ -28,6 +28,7 @@
             <b-tab
               v-if="sateilysuojelukoulutukset.length > 0"
               :title="$t('sateilysuojelukoulutukset')"
+              href="#sateilysuojakoulutukset"
             >
               <opintosuoritus-tab
                 variant="sateily"
@@ -37,10 +38,10 @@
                 :suoritukset="sateilysuojelukoulutukset"
               />
             </b-tab>
-            <b-tab :title="$t('kuulustelu')">
+            <b-tab :title="$t('kuulustelu')" href="#kuulustelu">
               <opintosuoritus-tab variant="kuulustelu" :suoritukset="kuulustelut" />
             </b-tab>
-            <b-tab :title="$t('muut')">
+            <b-tab :title="$t('muut')" href="#muut">
               <opintosuoritus-tab variant="muu" :suoritukset="muut" />
             </b-tab>
           </b-tabs>
@@ -95,12 +96,19 @@
       }
     ]
 
+    tabIndex = 0
+    tabs = ['#johtamisopinnot', '#sateilysuojakoulutukset', '#kuulustelu', '#muut']
+
     async mounted() {
       await this.fetch()
     }
 
     get account() {
       return store.getters['auth/account']
+    }
+
+    beforeMount() {
+      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
     }
 
     async fetch() {

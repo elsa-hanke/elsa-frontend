@@ -229,6 +229,65 @@
           </div>
           <div class="border rounded pt-3 pb-2 mb-4">
             <div class="container-fluid">
+              <elsa-button
+                :to="{
+                  name: terveyskeskusjaksoComponent(
+                    edistyminen.terveyskeskuskoulutusjaksoSuoritettu
+                  ),
+                  hash: terveyskeskusjaksoComponentHash(
+                    edistyminen.terveyskeskuskoulutusjaksoSuoritettu
+                  )
+                }"
+                variant="link"
+                class="pl-0 border-0 pt-0"
+              >
+                <h3 class="mb-0">
+                  {{ $t('terveyskeskuskoulutusjakso') }}
+                </h3>
+              </elsa-button>
+              <div class="d-flex align-items-center">
+                <font-awesome-icon
+                  v-if="
+                    terveyskeskusjaksoIcon(
+                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
+                        .terveyskeskusVaadittuVahintaan
+                    )
+                  "
+                  :icon="
+                    terveyskeskusjaksoIcon(
+                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
+                        .terveyskeskusVaadittuVahintaan
+                    )
+                  "
+                  :class="
+                    terveyskeskusjaksoIconClass(
+                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
+                        .terveyskeskusVaadittuVahintaan,
+                      edistyminen.opintooikeudenPaattymispaiva
+                    )
+                  "
+                />
+                <span>
+                  {{
+                    terveyskeskusjaksoStatusText(
+                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
+                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
+                        .terveyskeskusVaadittuVahintaan
+                    )
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="border rounded pt-3 pb-2 mb-4">
+            <div class="container-fluid">
               <elsa-button :to="{}" variant="link" class="pl-0 border-0 pt-0">
                 <h3 class="mb-0">
                   {{ $t('kuulustelu') }}
@@ -350,6 +409,42 @@
         differenceInMonths(parseISO(opintooikeudenPaattymispaiva), new Date()) <= 12
       )
         return 'text-danger'
+    }
+
+    terveyskeskusjaksoComponent(suoritusmerkintaExists: boolean) {
+      return suoritusmerkintaExists ? 'opintosuoritukset' : 'tyoskentelyjaksot'
+    }
+
+    terveyskeskusjaksoComponentHash(suoritusmerkintaExists: boolean) {
+      return suoritusmerkintaExists ? '#muut' : ''
+    }
+
+    terveyskeskusjaksoIcon(suoritusmerkintaExists: boolean, suoritettu: number, vaadittu: number) {
+      if (suoritusmerkintaExists || suoritettu >= vaadittu) {
+        return ['fas', 'check-circle']
+      }
+    }
+
+    terveyskeskusjaksoIconClass(
+      suoritusmerkintaExists: boolean,
+      suoritettu: number,
+      vaadittu: number
+    ) {
+      if (suoritusmerkintaExists || suoritettu >= vaadittu) {
+        return 'text-success mr-1'
+      }
+    }
+
+    terveyskeskusjaksoStatusText(
+      suoritusmerkintaExists: boolean,
+      suoritettu: number,
+      vaadittu: number
+    ) {
+      if (suoritusmerkintaExists || suoritettu >= vaadittu) {
+        return this.$t('hyvaksytty')
+      } else {
+        return this.$t('ei-suoritettu')
+      }
     }
 
     showOpintooikeusAlert(opintooikeudenPaattymispaiva: string) {
