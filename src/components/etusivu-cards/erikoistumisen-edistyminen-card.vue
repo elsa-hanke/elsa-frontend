@@ -192,7 +192,8 @@
             <div class="container-fluid">
               <elsa-button
                 :to="{
-                  name: 'koejakso'
+                  name: koejaksoComponent(edistyminen.koejaksonSuoritusmerkintaExists),
+                  hash: koejaksoComponentHash(edistyminen.koejaksonSuoritusmerkintaExists)
                 }"
                 variant="link"
                 class="pl-0 border-0 pt-0"
@@ -364,6 +365,14 @@
     async mounted() {
       this.edistyminen = (await getErikoistumisenEdistyminen()).data
       this.initializing = false
+    }
+
+    koejaksoComponent(suoritusmerkintaExists: boolean) {
+      return suoritusmerkintaExists ? 'opintosuoritukset' : 'koejakso'
+    }
+
+    koejaksoComponentHash(suoritusmerkintaExists: boolean) {
+      return suoritusmerkintaExists ? '#muut' : ''
     }
 
     koejaksoIcon(status: string, opintooikeudenPaattymispaiva: string) {

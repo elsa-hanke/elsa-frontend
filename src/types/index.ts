@@ -1048,6 +1048,7 @@ export interface ErikoistujanEteneminen {
   opintooikeudenPaattymispaiva: string
   asetus: string
   erikoisala: string
+  terveyskeskuskoulutusjaksoSuoritettu: boolean
 }
 
 export interface ErikoistujienSeuranta {
@@ -1085,6 +1086,7 @@ export interface ErikoistujanEteneminenVirkailija {
   sateilysuojakoulutuksetSuoritettu: number
   sateilysuojakoulutuksetVaadittu: number
   valtakunnallisetKuulustelutSuoritettuLkm: number
+  terveyskeskuskoulutusjaksoSuoritettu: boolean
 }
 
 export type SortByEnum = {
@@ -1109,9 +1111,11 @@ export interface ErikoistumisenEdistyminen {
   sateilysuojakoulutuksetSuoritettu: number
   sateilysuojakoulutuksetVaadittu: number
   koejaksoTila: string
+  koejaksonSuoritusmerkintaExists: boolean
   valtakunnallisetKuulustelutSuoritettuLkm: number
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
+  terveyskeskuskoulutusjaksoSuoritettu: boolean
 }
 
 export interface HyvaksyttyKoejaksonVaihe {
