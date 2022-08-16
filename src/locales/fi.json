@@ -1167,7 +1167,7 @@
   "vah": "Väh.",
   "vahvista-aloituskeskustelu-lahetys": "Lähetyksen jälkeen lomake menee lähikouluttajan ja lähiesimiehen käsiteltäväksi. Saat ilmoituksen, kun asia on käsitelty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-koejakson-vaihe-erikoistuvalle": "Lähetyksen jälkeen lomake menee erikoistujalle hyväksyttäväksi.",
-  "vahvista-koejakson-vaihe-esimiehelle": "Lähetyksen jälkeen lomake menee lähiesimiehelle hyväksyttäväksi.",
+  "vahvista-koejakson-vaihe-esimiehelle": "Lähetyksen jälkeen lomake menee lähiesimiehelle tai muulle erikoisalan asiantuntijalle hyväksyttäväksi.",
   "vahvista-koejakson-vaihe-hyvaksytty": "Hyväksynnän jälkeen {koejaksonVaihe} on hyväksytty kaikkien osapuolten toimesta.",
   "vahvista-koejakson-vaihe-lahetys": "Lähetyksen jälkeen lomake menee lähikouluttajan ja lähiesimiehen käsiteltäväksi. Saat ilmoituksen, kun asia on käsitelty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-koulutussopimus-hyvaksytty": "Hyväksynnän jälkeen saat sopimuksen allekirjoituslinkin sähköpostiisi. Muista käydä allekirjoittamassa sopimus.",
