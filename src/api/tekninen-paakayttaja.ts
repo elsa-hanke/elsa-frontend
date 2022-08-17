@@ -5,7 +5,10 @@ import {
   KayttajahallintaKayttajaListItem,
   Erikoisala,
   Opintoopas,
-  Arviointiasteikko
+  Arviointiasteikko,
+  ArvioitavanKokonaisuudenKategoria,
+  ArvioitavanKokonaisuudenKategoriaWithErikoisala,
+  ArvioitavaKokonaisuusWithErikoisala
 } from '@/types'
 
 export async function getErikoistuvatLaakarit(params: {
@@ -59,4 +62,48 @@ export async function putOpinoopas(form: Opintoopas) {
 export async function getArviointiasteikot() {
   const path = `/tekninen-paakayttaja/arviointiasteikot`
   return await axios.get<Arviointiasteikko[]>(path)
+}
+
+export async function getArvioitavanKokonaisuudenKategoriat(erikoisalaId: string) {
+  const path = `/tekninen-paakayttaja/erikoisalat/${erikoisalaId}/arvioitavankokonaisuudenkategoriat`
+  return await axios.get<ArvioitavanKokonaisuudenKategoria[]>(path)
+}
+
+export async function getArvioitavatKokonaisuudet(erikoisalaId: string) {
+  const path = `/tekninen-paakayttaja/erikoisalat/${erikoisalaId}/arvioitavatkokonaisuudet`
+  return await axios.get<ArvioitavanKokonaisuudenKategoria[]>(path)
+}
+
+export async function getArvioitavanKokonaisuudenKategoria(id: string) {
+  const path = `/tekninen-paakayttaja/arvioitavankokonaisuudenkategoria/${id}`
+  return await axios.get<ArvioitavanKokonaisuudenKategoriaWithErikoisala>(path)
+}
+
+export async function postArvioitavanKokonaisuudenKategoria(
+  form: ArvioitavanKokonaisuudenKategoriaWithErikoisala
+) {
+  const path = `/tekninen-paakayttaja/arvioitavankokonaisuudenkategoria`
+  return await axios.post<ArvioitavanKokonaisuudenKategoriaWithErikoisala>(path, form)
+}
+
+export async function putArvioitavanKokonaisuudenKategoria(
+  form: ArvioitavanKokonaisuudenKategoriaWithErikoisala
+) {
+  const path = `/tekninen-paakayttaja/arvioitavankokonaisuudenkategoria`
+  return await axios.put<ArvioitavanKokonaisuudenKategoriaWithErikoisala>(path, form)
+}
+
+export async function getArvioitavaKokonaisuus(id: string) {
+  const path = `/tekninen-paakayttaja/arvioitavakokonaisuus/${id}`
+  return await axios.get<ArvioitavaKokonaisuusWithErikoisala>(path)
+}
+
+export async function postArvioitavaKokonaisuus(form: ArvioitavaKokonaisuusWithErikoisala) {
+  const path = `/tekninen-paakayttaja/arvioitavakokonaisuus`
+  return await axios.post<ArvioitavaKokonaisuusWithErikoisala>(path, form)
+}
+
+export async function putArvioitavaKokonaisuus(form: ArvioitavaKokonaisuusWithErikoisala) {
+  const path = `/tekninen-paakayttaja/arvioitavakokonaisuus`
+  return await axios.put<ArvioitavaKokonaisuusWithErikoisala>(path, form)
 }

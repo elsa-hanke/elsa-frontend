@@ -643,7 +643,9 @@ export type SuoritusarvioinninKommentti = {
 export type ArvioitavaKokonaisuus = {
   id?: number
   nimi: string
+  nimiSv: string
   kuvaus: string
+  kuvausSv: string
   voimassaoloAlkaa: string
   voimassaoloLoppuu: string
   erikoisalaId: number
@@ -652,14 +654,49 @@ export type ArvioitavaKokonaisuus = {
   visible: boolean
 }
 
+export type UusiArvioitavaKokonaisuus = {
+  nimi: string | null
+  nimiSv: string | null
+  kuvaus: string | null
+  kuvausSv: string | null
+  voimassaoloAlkaa: string | null
+  voimassaoloLoppuu: string | null
+  kategoria: ArvioitavanKokonaisuudenKategoriaWithErikoisala | null
+}
+
+export type ArvioitavaKokonaisuusWithErikoisala = {
+  id?: number
+  nimi: string
+  nimiSv: string
+  kuvaus: string
+  kuvausSv: string
+  voimassaoloAlkaa: string
+  voimassaoloLoppuu: string
+  kategoria: ArvioitavanKokonaisuudenKategoriaWithErikoisala
+}
+
 export type ArvioitavanKokonaisuudenKategoria = {
   id?: number
   nimi: string
+  nimiSv: string
   jarjestysnumero: number
-  voimassaoloAlkaa: string
-  voimassaoloLoppuu: string
   arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[]
   visible: boolean
+}
+
+export type UusiArvioitavanKokonaisuudenKategoria = {
+  nimi: string | null
+  nimiSv: string | null
+  jarjestysnumero: number | null
+  erikoisala: Erikoisala | null
+}
+
+export type ArvioitavanKokonaisuudenKategoriaWithErikoisala = {
+  id?: number
+  nimi: string
+  nimiSv: string
+  jarjestysnumero: number
+  erikoisala: Erikoisala
 }
 
 export type Arviointiasteikko = {

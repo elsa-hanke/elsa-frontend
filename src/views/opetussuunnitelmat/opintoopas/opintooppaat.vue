@@ -15,8 +15,17 @@
     </b-row>
     <b-row>
       <b-col>
+        <div v-if="loading" class="text-center">
+          <b-spinner variant="primary" :label="$t('ladataan')" />
+        </div>
+        <div v-else-if="rows === 0">
+          <b-alert variant="dark" show>
+            <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+            {{ $t('ei-opintooppaita') }}
+          </b-alert>
+        </div>
         <b-table
-          v-if="!loading && rows > 0"
+          v-else
           fixed
           :items="opintooppaatSorted"
           :fields="fields"
@@ -40,18 +49,13 @@
             {{ data.item.voimassaoloPaattyy != null ? $date(data.item.voimassaoloPaattyy) : '' }}
           </template>
         </b-table>
-        <div v-else class="text-center">
-          <b-spinner variant="primary" :label="$t('ladataan')" />
-        </div>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script lang="ts">
-  import Avatar from 'vue-avatar'
   import { Component, Vue } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
 
   import { getOpintooppaat } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
@@ -61,15 +65,7 @@
 
   @Component({
     components: {
-      Avatar,
       ElsaButton
-    },
-    validations: {
-      form: {
-        email: {
-          required
-        }
-      }
     }
   })
   export default class Opintooppaat extends Vue {
