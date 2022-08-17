@@ -26,11 +26,11 @@
         </div>
         <b-table
           v-else
-          fixed
           :items="opintooppaatSorted"
           :fields="fields"
           class="opintooppaat-table"
           stacked="md"
+          responsive
         >
           <template #cell(nimi)="data">
             <b-link
@@ -111,3 +111,65 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  @import '~@/styles/variables';
+  @import '~bootstrap/scss/mixins/breakpoints';
+
+  .opintooppaat {
+    max-width: 1420px;
+  }
+  ::v-deep .opintooppaat-table {
+    .row-details {
+      padding: 0;
+      table {
+        margin: 0;
+
+        border: none;
+        thead,
+        &tr {
+          display: none;
+        }
+        td {
+          word-wrap: break-all;
+        }
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      border-bottom: 0;
+
+      tr {
+        border: $table-border-width solid $table-border-color;
+        border-radius: $border-radius;
+        margin-top: 0.5rem;
+        padding-top: $table-cell-padding;
+        padding-bottom: $table-cell-padding;
+      }
+
+      td {
+        border: none;
+        padding: 0 0.5rem;
+
+        & > div {
+          width: 100% !important;
+          padding: 0 0 0.5rem 0 !important;
+        }
+
+        &::before {
+          text-align: left !important;
+          font-weight: 500 !important;
+          width: 100% !important;
+          padding-right: 0 !important;
+        }
+        &:last-child > div {
+          padding-bottom: 0 !important;
+        }
+
+        &.last > div {
+          padding-bottom: 0 !important;
+        }
+      }
+    }
+  }
+</style>
