@@ -1,5 +1,10 @@
 <template>
-  <b-card-skeleton :header="$t('seurantakeskustelut')" :loading="loading" class="mb-5">
+  <b-card-skeleton
+    :headerRoute="'seurantakeskustelut'"
+    :header="$t('seurantakeskustelut')"
+    :loading="loading"
+    class="mb-5"
+  >
     <div v-if="!loading">
       <div v-if="!account.impersonated">
         <b-row>
@@ -7,7 +12,7 @@
             <elsa-button
               :to="{ name: 'lisaa-seurantajakso' }"
               variant="outline-primary"
-              class="mb-3"
+              class="mb-3 mt-1"
             >
               {{ $t('lisaa-seurantajakso') }}
             </elsa-button>
@@ -15,7 +20,7 @@
         </b-row>
       </div>
       <div v-if="seurantajaksot.length > 0">
-        <b-row v-for="(seurantajakso, index) in seurantajaksot.slice(0, 5)" :key="index" lg>
+        <b-row v-for="(seurantajakso, index) in seurantajaksot" :key="index" lg>
           <b-col>
             <div class="d-flex justify-content-center border rounded pt-1 pb-1 mb-4">
               <div class="container-fluid">

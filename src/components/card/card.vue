@@ -15,7 +15,10 @@
     <b-card v-bind="$attrs">
       <template v-slot:header>
         <slot name="header">
-          <span class="font-weight-500">{{ header }}</span>
+          <router-link v-if="headerRoute" :to="headerRoute" class="text-decoration-none">
+            <span class="font-weight-500 text-white">{{ header }}</span>
+          </router-link>
+          <span v-if="!headerRoute" class="font-weight-500">{{ header }}</span>
         </slot>
       </template>
       <template v-for="(index, name) in $slots" v-slot:[name]><slot :name="name" /></template>
@@ -35,5 +38,8 @@
 
     @Prop({ required: false, default: '', type: String })
     header!: string
+
+    @Prop({ required: false, default: '', type: String })
+    headerRoute!: string
   }
 </script>
