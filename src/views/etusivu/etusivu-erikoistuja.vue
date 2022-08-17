@@ -4,6 +4,7 @@
       <b-col xxl="9">
         <avoimet-asiat-card />
         <erikoistumisen-edistyminen-card />
+        <seurantakeskustelut-card />
         <b-row>
           <b-col xl="6">
             <b-card-skeleton
@@ -46,6 +47,7 @@
   import ErikoistumisenEdistyminenCard from '@/components/etusivu-cards/erikoistumisen-edistyminen-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import PaivittaisetMerkinnatCard from '@/components/etusivu-cards/paivittaiset-merkinnat-card.vue'
+  import SeurantakeskustelutCard from '@/components/etusivu-cards/seurantakeskustelut-card.vue'
   import store from '@/store'
   import { ELSA_ROLE } from '@/utils/roles'
 
@@ -53,6 +55,7 @@
     components: {
       BCardSkeleton,
       AvoimetAsiatCard,
+      SeurantakeskustelutCard,
       ErikoistumisenEdistyminenCard,
       HenkilotiedotCard,
       PaivittaisetMerkinnatCard
