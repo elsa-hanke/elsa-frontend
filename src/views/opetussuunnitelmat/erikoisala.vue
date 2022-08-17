@@ -7,12 +7,18 @@
           <div v-if="!loading">
             <h1>{{ erikoisala.nimi }}</h1>
             <p>{{ $t('opetussuunnitelmat-kuvaus') }}</p>
-            <b-tabs content-class="mt-3" :no-fade="true">
-              <b-tab :title="$t('opintooppaat')" active>
+            <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+              <b-tab :title="$t('opintooppaat')" lazy href="#opinto-oppaat">
                 <opintooppaat />
               </b-tab>
-              <b-tab :title="$t('arvioitavat-kokonaisuudet')" lazy></b-tab>
-              <b-tab :title="$t('suoritteet')" lazy></b-tab>
+              <b-tab
+                :title="$t('arvioitavat-kokonaisuudet')"
+                lazy
+                href="#arvioitavat-kokonaisuudet"
+              >
+                <arvioitavat-kokonaisuudet />
+              </b-tab>
+              <b-tab :title="$t('suoritteet')" lazy href="#suoritteet"></b-tab>
             </b-tabs>
           </div>
           <div v-else class="text-center">
@@ -32,19 +38,24 @@
   import SearchInput from '@/components/search-input/search-input.vue'
   import { Erikoisala } from '@/types'
   import { toastFail } from '@/utils/toast'
+  import ArvioitavatKokonaisuudet from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/arvioitavat-kokonaisuudet.vue'
   import Opintooppaat from '@/views/opetussuunnitelmat/opintoopas/opintooppaat.vue'
 
   @Component({
     components: {
       SearchInput,
       Pagination,
-      Opintooppaat
+      Opintooppaat,
+      ArvioitavatKokonaisuudet
     }
   })
   export default class ErikoisalaView extends Vue {
     erikoisala: Erikoisala | null = null
 
     loading = true
+
+    tabIndex = 0
+    tabs = ['#opinto-oppaat', '#arvioitavat-kokonaisuudet', '#suoritteet']
 
     get items() {
       return [
@@ -61,6 +72,10 @@
           active: true
         }
       ]
+    }
+
+    beforeMount() {
+      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
     }
 
     async mounted() {
@@ -82,6 +97,10 @@
 <style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
+
+  .erikoisala {
+    max-width: 1420px;
+  }
 
   .task-type {
     text-transform: capitalize;

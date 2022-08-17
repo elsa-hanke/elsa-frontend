@@ -51,6 +51,13 @@ import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
 import Logout from '@/views/logout.vue'
+import ArvioitavaKokonaisuus from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/arvioitava-kokonaisuus.vue'
+import ArvioitavanKokonaisuudenKategoria from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/arvioitavan-kokonaisuuden-kategoria.vue'
+import KorvaaArvioitavaKokonaisuus from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/korvaa-arvioitava-kokonaisuus.vue'
+import LisaaArvioitavaKokonaisuus from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/lisaa-arvioitava-kokonaisuus.vue'
+import LisaaArvioitavanKokonaisuudenKategoria from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/lisaa-arvioitavan-kokonaisuuden-kategoria.vue'
+import MuokkaaArvioitavaaKokonaisuutta from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/muokkaa-arvioitavaa-kokonaisuutta.vue'
+import MuokkaaArvioitavanKokonaisuudenKategoriaa from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/muokkaa-arvioitavan-kokonaisuuden-kategoriaa.vue'
 import Erikoisala from '@/views/opetussuunnitelmat/erikoisala.vue'
 import Opetussuunnitelmat from '@/views/opetussuunnitelmat/opetussuunnitelmat.vue'
 import LisaaOpintoopas from '@/views/opetussuunnitelmat/opintoopas/lisaa-opintoopas.vue'
@@ -810,6 +817,69 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaOpintoopasta,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavankokonaisuudenkategoria/lisaa',
+        name: 'lisaa-arvioitavan-kokonaisuuden-kategoria',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaArvioitavanKokonaisuudenKategoria,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavankokonaisuudenkategoria/:kategoriaId',
+        name: 'arvioitavan-kokonaisuuden-kategoria',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ArvioitavanKokonaisuudenKategoria,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavankokonaisuudenkategoria/:kategoriaId/muokkaa',
+        name: 'muokkaa-arvioitavan-kokonaisuuden-kategoriaa',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaArvioitavanKokonaisuudenKategoriaa,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavakokonaisuus/lisaa',
+        name: 'lisaa-arvioitava-kokonaisuus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaArvioitavaKokonaisuus,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavakokonaisuus/:kokonaisuusId',
+        name: 'arvioitava-kokonaisuus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ArvioitavaKokonaisuus,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavakokonaisuus/:kokonaisuusId/muokkaa',
+        name: 'muokkaa-arvioitavaa-kokonaisuutta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaArvioitavaaKokonaisuutta,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/arvioitavakokonaisuus/:kokonaisuusId/korvaa',
+        name: 'korvaa-arvioitava-kokonaisuus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: KorvaaArvioitavaKokonaisuus,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       },

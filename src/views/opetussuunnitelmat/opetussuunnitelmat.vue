@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="opetussuunnitelmat">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
@@ -149,6 +149,10 @@
 <style lang="scss" scoped>
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
+
+  .opetussuunnitelmat {
+    max-width: 1420px;
+  }
 
   .task-type {
     text-transform: capitalize;
