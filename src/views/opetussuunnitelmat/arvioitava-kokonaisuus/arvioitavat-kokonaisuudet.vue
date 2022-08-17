@@ -50,12 +50,12 @@
         </div>
         <b-table
           v-else
-          fixed
           :items="kategoriatSorted"
           :fields="fields"
           class="arvioitavat-kokonaisuudet-table"
           details-td-class="row-details"
           stacked="md"
+          responsive
         >
           <template #table-colgroup>
             <col span="1" width="10%" />
@@ -227,88 +227,58 @@
         }
       }
     }
-    @include media-breakpoint-up(xl) {
-      .actions {
-        text-align: right;
-      }
-    }
 
     @include media-breakpoint-down(sm) {
-      border-bottom: none;
+      border-bottom: 0;
+
+      .b-table-has-details {
+        .voimassaolo {
+          display: none !important;
+        }
+      }
+
+      .b-table-details {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 0;
+        border: 0;
+
+        tr {
+          &:first-child {
+            border-top: 0 !important;
+          }
+        }
+      }
 
       tr {
-        padding: 0.375rem 0 0.375rem 0;
         border: $table-border-width solid $table-border-color;
-
-        &.outer-table {
-          margin-bottom: 0.75rem;
-          border-radius: 0.25rem;
-        }
-
-        &.b-table-has-details {
-          margin-bottom: 0;
-          border-radius: 0.25rem 0.25rem 0 0;
-        }
-
-        &.b-table-details {
-          border: none;
-          padding: 0;
-          margin-bottom: 0.75rem;
-          :last-of-type {
-            border-radius: 0 0 0.25rem 0.25rem;
-          }
-
-          table {
-            margin: 0;
-
-            tr {
-              border-top: none;
-              margin-top: 0;
-              padding-top: 0;
-              td {
-                padding-top: 0.75rem;
-                &.nimi,
-                &.actions {
-                  display: none;
-                }
-              }
-            }
-          }
-        }
+        border-radius: $border-radius;
+        margin-top: 0.5rem;
+        padding-top: $table-cell-padding;
+        padding-bottom: $table-cell-padding;
       }
 
       td {
-        padding: 0.25rem 0 0.25rem 0.25rem;
         border: none;
+        padding: 0 0.5rem;
 
-        &.nimi {
-          font-size: $h4-font-size;
-          > div {
-            width: 100% !important;
-            padding: 0.25rem 0.375rem 0 0.375rem !important;
-          }
-          &::before {
-            display: none;
-          }
+        & > div {
+          width: 100% !important;
+          padding: 0 0 0.5rem 0 !important;
         }
 
-        &.tyyppi,
-        &.tila,
-        &.pvm,
-        &.actions {
-          > div {
-            &:empty {
-              display: none !important;
-            }
-            padding: 0 0.375rem 0 0.375rem !important;
-          }
-          &::before {
-            text-align: left !important;
-            padding-left: 0.375rem !important;
-            font-weight: 500 !important;
-            width: 100% !important;
-          }
-          text-align: left;
+        &::before {
+          text-align: left !important;
+          font-weight: 500 !important;
+          width: 100% !important;
+          padding-right: 0 !important;
+        }
+        &:last-child > div {
+          padding-bottom: 0 !important;
+        }
+
+        &.last > div {
+          padding-bottom: 0 !important;
         }
       }
     }
