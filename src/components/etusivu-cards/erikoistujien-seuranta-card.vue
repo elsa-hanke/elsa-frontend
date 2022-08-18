@@ -2,7 +2,7 @@
   <div>
     <b-card-skeleton :header="seurantaTitle" :loading="loading">
       <div v-if="seuranta != null">
-        <div v-if="showKouluttajaKuvaus" class="mb-3 mb-lg-3">
+        <div v-if="showKouluttajaKuvaus" class="mb-4 mb-lg-3">
           {{ $t('erikoistujien-seuranta-kouluttaja-kuvaus') }}
         </div>
         <b-row lg>

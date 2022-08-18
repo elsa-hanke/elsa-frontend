@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('koejakso')" :loading="loading" class="mb-3">
+  <b-card-skeleton :header="$t('koejakso')" :loading="loading" class="mb-4">
     <div v-if="rows > 0">
       <b-table fixed :items="vaiheet" :fields="fields" stacked="md">
         <template #cell(pvm)="data">

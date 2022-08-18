@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('vanhenevat-katseluoikeudet')" :loading="loading" class="mb-5">
+  <b-card-skeleton :header="$t('vanhenevat-katseluoikeudet')" :loading="loading" class="mb-4">
     <div v-if="rows > 0">
       <p class="mb-3">{{ $t('vanhenevat-katseluoikeudet-ingressi') }}</p>
       <b-table :items="katseluoikeudet" :fields="fields" stacked="md" responsive>

@@ -1,6 +1,6 @@
 <template>
   <div v-if="rows === 0">
-    <b-alert class="mb-5 pb-2" variant="light" show>
+    <b-alert class="mb-4 pt-3 pb-3" variant="light" show>
       <p class="d-flex mb-0">
         <font-awesome-icon
           icon="info-circle"
@@ -177,6 +177,8 @@
 
   ::v-deep {
     .alert {
+      border: 0 solid rgba(34, 34, 34, 0.125);
+      border-radius: 0.25rem;
       span {
         margin-left: -0.23em;
       }
@@ -184,6 +186,7 @@
 
     .alert-light {
       color: $black;
+      background-color: $white;
     }
 
     .card-body {
