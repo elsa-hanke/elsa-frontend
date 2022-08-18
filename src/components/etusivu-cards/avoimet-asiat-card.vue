@@ -136,12 +136,6 @@
           return 'koulutussopimus-erikoistuva'
         case AvoinAsiaTyyppi.ALOITUSKESKUSTELU:
           return 'koejakson-aloituskeskustelu'
-        case AvoinAsiaTyyppi.VALIARVIOINTI:
-          return 'koejakson-valiarviointi'
-        case AvoinAsiaTyyppi.KEHITTAMISTOIMENPITEET:
-          return 'koejakson-kehittamistoimenpiteet'
-        case AvoinAsiaTyyppi.LOPPUKESKUSTELU:
-          return 'koejakson-loppukeskustelu'
         case AvoinAsiaTyyppi.VASTUUHENKILON_ARVIO:
           return 'koejakson-vastuuhenkilon-arvio'
         case AvoinAsiaTyyppi.TERVEYSKESKUSKOULUTUSJAKSO:
