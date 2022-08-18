@@ -9,7 +9,7 @@
           <b-card-skeleton
             :header="$t('terveyskeskusjaksot')"
             :loading="true"
-            class="mb-3 d-none"
+            class="mb-4 d-none"
           ></b-card-skeleton>
           <valmistumispyynnot-card />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>

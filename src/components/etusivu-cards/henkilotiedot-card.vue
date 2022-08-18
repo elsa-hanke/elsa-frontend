@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('henkilotietosi')" :loading="!account" class="mb-3">
+  <b-card-skeleton :header="$t('henkilotietosi')" :loading="!account" class="mb-4">
     <div class="d-flex align-items-center">
       <div class="flex-fill">
         <user-avatar

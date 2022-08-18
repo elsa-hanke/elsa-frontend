@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('paivittaiset-merkinnat')" :loading="loading" class="mb-5">
+  <b-card-skeleton :header="$t('paivittaiset-merkinnat')" :loading="loading" class="mb-4">
     <div v-if="rows === 0" class="mt-2 mb-3">
       <font-awesome-icon icon="info-circle" fixed-width class="text-warning text-size-lg mr-1" />
       <span>{{ $t('paivakirjamerkintoja-ei-ole-lisatty') }}</span>

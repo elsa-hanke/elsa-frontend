@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('arvioinnin-tyokalut')" class="mb-3">
+  <b-card-skeleton :header="$t('arvioinnin-tyokalut')" class="mb-4">
     <div class="icon-container">
       <font-awesome-icon icon="clipboard-list" fixed-width class="fa-5x text-primary icon" />
     </div>
