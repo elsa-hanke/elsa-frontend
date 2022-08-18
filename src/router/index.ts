@@ -63,6 +63,13 @@ import Opetussuunnitelmat from '@/views/opetussuunnitelmat/opetussuunnitelmat.vu
 import LisaaOpintoopas from '@/views/opetussuunnitelmat/opintoopas/lisaa-opintoopas.vue'
 import MuokkaaOpintoopasta from '@/views/opetussuunnitelmat/opintoopas/muokkaa-opintoopasta.vue'
 import Opintoopas from '@/views/opetussuunnitelmat/opintoopas/opintoopas.vue'
+import KorvaaSuorite from '@/views/opetussuunnitelmat/suorite/korvaa-suorite.vue'
+import LisaaSuorite from '@/views/opetussuunnitelmat/suorite/lisaa-suorite.vue'
+import LisaaSuoritteenKategoria from '@/views/opetussuunnitelmat/suorite/lisaa-suoritteen-kategoria.vue'
+import MuokkaaSuoritetta from '@/views/opetussuunnitelmat/suorite/muokkaa-suoritetta.vue'
+import MuokkaaSuoritteenKategoriaa from '@/views/opetussuunnitelmat/suorite/muokkaa-suoritteen-kategoriaa.vue'
+import Suorite from '@/views/opetussuunnitelmat/suorite/suorite.vue'
+import SuoritteenKategoria from '@/views/opetussuunnitelmat/suorite/suoritteen-kategoria.vue'
 import Opintosuoritukset from '@/views/opintosuoritukset/opintosuoritukset.vue'
 import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa-paivittaista-merkintaa.vue'
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
@@ -880,6 +887,69 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: KorvaaArvioitavaKokonaisuus,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suoritteenkategoria/lisaa',
+        name: 'lisaa-suoritteen-kategoria',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaSuoritteenKategoria,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suoritteenkategoria/:kategoriaId',
+        name: 'suoritteen-kategoria',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: SuoritteenKategoria,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suoritteenkategoria/:kategoriaId/muokkaa',
+        name: 'muokkaa-suoritteen-kategoriaa',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaSuoritteenKategoriaa,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suorite/lisaa',
+        name: 'lisaa-suorite',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaSuorite,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suorite/:suoriteId',
+        name: 'suorite',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Suorite,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suorite/:suoriteId/muokkaa',
+        name: 'muokkaa-suoritetta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaSuoritetta,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/opetussuunnitelmat/erikoisala/:erikoisalaId/suorite/:suoriteId/korvaa',
+        name: 'korvaa-suorite',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: KorvaaSuorite,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       },

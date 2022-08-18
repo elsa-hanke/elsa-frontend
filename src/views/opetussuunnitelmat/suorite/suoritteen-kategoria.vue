@@ -4,13 +4,13 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('arvioitavan-kokonaisuuden-kategoria') }}</h1>
+          <h1>{{ $t('suoritteen-kategoria') }}</h1>
           <hr />
           <div v-if="!loading">
-            <arvioitavan-kokonaisuuden-kategoria-form :kategoria="kategoria" />
+            <suoritteen-kategoria-form :kategoria="kategoria" />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
-                :to="{ name: 'muokkaa-arvioitavan-kokonaisuuden-kategoriaa' }"
+                :to="{ name: 'muokkaa-suoritteen-kategoriaa' }"
                 variant="outline-primary"
                 class="ml-2 mb-3"
               >
@@ -18,20 +18,20 @@
               </elsa-button>
               <elsa-button
                 :to="{
-                  name: 'lisaa-arvioitava-kokonaisuus',
+                  name: 'lisaa-suorite',
                   params: { kategoriaId: kategoria.id }
                 }"
                 variant="primary"
                 class="ml-2 mb-3"
               >
-                {{ $t('lisaa-arvioitava-kokonaisuus') }}
+                {{ $t('lisaa-suorite') }}
               </elsa-button>
               <elsa-button
-                :to="{ name: 'erikoisala', hash: '#arvioitavat-kokonaisuudet' }"
+                :to="{ name: 'erikoisala', hash: '#suoritteet' }"
                 variant="link"
-                class="mb-3 mr-auto font-weight-500 arvioitava-kokonaisuus-link"
+                class="mb-3 mr-auto font-weight-500 suorite-link"
               >
-                {{ $t('palaa-arvioitaviin-kokonaisuuksiin') }}
+                {{ $t('palaa-suoritteisiin') }}
               </elsa-button>
             </div>
           </div>
@@ -47,20 +47,20 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getArvioitavanKokonaisuudenKategoria } from '@/api/tekninen-paakayttaja'
+  import { getSuoritteenKategoria } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
-  import ArvioitavanKokonaisuudenKategoriaForm from '@/forms/arvioitavan-kokonaisuuden-kategoria-form.vue'
-  import { ArvioitavanKokonaisuudenKategoriaWithErikoisala } from '@/types'
+  import SuoritteenKategoriaForm from '@/forms/suoritteen-kategoria-form.vue'
+  import { SuoritteenKategoriaWithErikoisala } from '@/types'
   import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
-      ArvioitavanKokonaisuudenKategoriaForm,
-      ElsaButton
+      ElsaButton,
+      SuoritteenKategoriaForm
     }
   })
-  export default class ArvioitavanKokonaisuudenKategoriaView extends Vue {
-    kategoria: ArvioitavanKokonaisuudenKategoriaWithErikoisala | null = null
+  export default class SuoritteenKategoriaView extends Vue {
+    kategoria: SuoritteenKategoriaWithErikoisala | null = null
 
     loading = true
 
@@ -92,12 +92,10 @@
 
     async fetchKategoria() {
       try {
-        this.kategoria = (
-          await getArvioitavanKokonaisuudenKategoria(this.$route?.params?.kategoriaId)
-        ).data
+        this.kategoria = (await getSuoritteenKategoria(this.$route?.params?.kategoriaId)).data
       } catch (err) {
-        toastFail(this, this.$t('arvioitavan-kokonaisuuden-kategorian-hakeminen-epaonnistui'))
-        this.$router.replace({ name: 'erikoisala', hash: '#arvioitavat-kokonaisuudet' })
+        toastFail(this, this.$t('suoritteen-kategorian-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'erikoisala', hash: '#suoritteet' })
       }
     }
   }
@@ -108,7 +106,7 @@
     max-width: 970px;
   }
 
-  .arvioitava-kokonaisuus-link::before {
+  .suorite-link::before {
     content: '<';
     position: absolute;
     left: 1rem;
