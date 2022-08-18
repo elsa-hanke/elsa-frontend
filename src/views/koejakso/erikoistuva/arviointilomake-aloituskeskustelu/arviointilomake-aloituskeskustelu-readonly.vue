@@ -81,7 +81,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.data.erikoistuvanNimi,
-        this.data.erikoistuvanAllekirjoitusaika
+        this.data.erikoistuvanKuittausaika
       ) as KoejaksonVaiheAllekirjoitus
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,

@@ -357,13 +357,13 @@ export interface AloituskeskusteluLomake {
   muokkauspaiva: string
   suoritettuKokoaikatyossa: boolean | null
   tyotunnitViikossa: number | null
-  erikoistuvanAllekirjoitusaika?: string
+  erikoistuvanKuittausaika?: string
 }
 
 export interface ValiarviointiLomake {
   edistyminenTavoitteidenMukaista: boolean | null
   erikoistuvaAllekirjoittanut: boolean
-  erikoistuvanAllekirjoitusaika?: string
+  erikoistuvanKuittausaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
@@ -382,7 +382,7 @@ export interface ValiarviointiLomake {
 
 export interface KehittamistoimenpiteetLomake {
   erikoistuvaAllekirjoittanut: boolean
-  erikoistuvanAllekirjoitusaika?: string
+  erikoistuvanKuittausaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
@@ -398,7 +398,7 @@ export interface KehittamistoimenpiteetLomake {
 
 export interface LoppukeskusteluLomake {
   erikoistuvaAllekirjoittanut: boolean
-  erikoistuvanAllekirjoitusaika?: string
+  erikoistuvanKuittausaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
   erikoistuvanOpiskelijatunnus: string
