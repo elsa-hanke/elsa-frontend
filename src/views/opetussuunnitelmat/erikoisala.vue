@@ -18,7 +18,9 @@
               >
                 <arvioitavat-kokonaisuudet />
               </b-tab>
-              <b-tab :title="$t('suoritteet')" lazy href="#suoritteet"></b-tab>
+              <b-tab :title="$t('suoritteet')" lazy href="#suoritteet">
+                <suoritteet />
+              </b-tab>
             </b-tabs>
           </div>
           <div v-else class="text-center">
@@ -40,13 +42,15 @@
   import { toastFail } from '@/utils/toast'
   import ArvioitavatKokonaisuudet from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/arvioitavat-kokonaisuudet.vue'
   import Opintooppaat from '@/views/opetussuunnitelmat/opintoopas/opintooppaat.vue'
+  import Suoritteet from '@/views/opetussuunnitelmat/suorite/suoritteet.vue'
 
   @Component({
     components: {
       SearchInput,
       Pagination,
       Opintooppaat,
-      ArvioitavatKokonaisuudet
+      ArvioitavatKokonaisuudet,
+      Suoritteet
     }
   })
   export default class ErikoisalaView extends Vue {

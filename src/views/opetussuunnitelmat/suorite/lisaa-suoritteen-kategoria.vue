@@ -4,9 +4,9 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('muokkaa-kategoriaa') }}</h1>
+          <h1>{{ $t('lisaa-kategoria') }}</h1>
           <hr />
-          <arvioitavan-kokonaisuuden-kategoria-form
+          <suoritteen-kategoria-form
             v-if="!loading"
             :editing="true"
             :kategoria="kategoria"
@@ -24,25 +24,27 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import {
-    getArvioitavanKokonaisuudenKategoria,
-    putArvioitavanKokonaisuudenKategoria
-  } from '@/api/tekninen-paakayttaja'
+  import { getErikoisala, postSuoritteenKategoria } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
-  import ArvioitavanKokonaisuudenKategoriaForm from '@/forms/arvioitavan-kokonaisuuden-kategoria-form.vue'
-  import { ArvioitavanKokonaisuudenKategoriaWithErikoisala } from '@/types'
+  import SuoritteenKategoriaForm from '@/forms/suoritteen-kategoria-form.vue'
+  import { SuoritteenKategoriaWithErikoisala, UusiSuoritteenKategoria } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
-      ArvioitavanKokonaisuudenKategoriaForm,
-      ElsaButton
+      ElsaButton,
+      SuoritteenKategoriaForm
     }
   })
-  export default class MuokkaaSuoritteenKategoriaa extends Vue {
-    loading = true
+  export default class LisaaSuoritteenKategoria extends Vue {
+    kategoria: UusiSuoritteenKategoria = {
+      nimi: null,
+      nimiSv: null,
+      jarjestysnumero: null,
+      erikoisala: null
+    }
 
-    kategoria: ArvioitavanKokonaisuudenKategoriaWithErikoisala | null = null
+    loading = true
 
     get items() {
       return [
@@ -55,42 +57,40 @@
           to: { name: 'opetussuunnitelmat' }
         },
         {
-          text: this.kategoria?.erikoisala.nimi,
+          text: this.kategoria?.erikoisala?.nimi,
           to: { name: 'erikoisala' }
         },
         {
-          text: this.$t('muokkaa-kategoriaa'),
+          text: this.$t('lisaa-kategoria'),
           active: true
         }
       ]
     }
 
     async mounted() {
-      await this.fetchKategoria()
+      await this.fetchErikoisala()
       this.loading = false
     }
 
-    async fetchKategoria() {
+    async fetchErikoisala() {
       try {
-        this.kategoria = (
-          await getArvioitavanKokonaisuudenKategoria(this.$route.params.kategoriaId)
-        ).data
+        this.kategoria.erikoisala = (await getErikoisala(this.$route.params.erikoisalaId)).data
       } catch (err) {
-        toastFail(this, this.$t('arvioitavan-kokonaisuuden-kategorian-hakeminen-epaonnistui'))
-        this.$router.replace({ name: 'arvioitavan-kokonaisuuden-kategoria' })
+        toastFail(this, this.$t('erikoisalan-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'opetussuunnitelmat', hash: '#suoritteet' })
       }
     }
 
-    async onSubmit(
-      value: ArvioitavanKokonaisuudenKategoriaWithErikoisala,
-      params: { saving: boolean }
-    ) {
+    async onSubmit(value: SuoritteenKategoriaWithErikoisala, params: { saving: boolean }) {
       params.saving = true
       try {
-        await putArvioitavanKokonaisuudenKategoria(value)
+        const uusiKategoria = await (await postSuoritteenKategoria(value)).data
         toastSuccess(this, this.$t('kategorian-tallentaminen-onnistui'))
         this.$emit('skipRouteExitConfirm', true)
-        this.$router.push({ name: 'arvioitavan-kokonaisuuden-kategoria' })
+        this.$router.push({
+          name: 'suoritteen-kategoria',
+          params: { kategoriaId: `${uusiKategoria.id}` }
+        })
       } catch (err) {
         toastFail(this, this.$t('kategorian-tallentaminen-epaonnistui'))
       }

@@ -1,10 +1,10 @@
 <template>
-  <div class="arvioitavat-kokonaisuudet mb-4">
+  <div class="suoritteet mb-4">
     <b-row align-h="between" align-v="center">
       <b-col sm="6" cols="auto">
         <elsa-button
           :to="{
-            name: 'lisaa-arvioitavan-kokonaisuuden-kategoria'
+            name: 'lisaa-suoritteen-kategoria'
           }"
           variant="primary"
           class="mb-2 mt-2 mr-3"
@@ -13,12 +13,12 @@
         </elsa-button>
         <elsa-button
           :to="{
-            name: 'lisaa-arvioitava-kokonaisuus'
+            name: 'lisaa-suorite'
           }"
           variant="primary"
           class="mb-2 mt-2"
         >
-          {{ $t('lisaa-arvioitava-kokonaisuus') }}
+          {{ $t('lisaa-suorite') }}
         </elsa-button>
       </b-col>
       <b-col cols="5" xl="auto">
@@ -44,7 +44,7 @@
               {{ $t('ei-hakutuloksia') }}
             </span>
             <span v-else>
-              {{ $t('ei-arvioitavia-kokonaisuuksia') }}
+              {{ $t('ei-suoritteita') }}
             </span>
           </b-alert>
         </div>
@@ -52,7 +52,7 @@
           v-else
           :items="kategoriatSorted"
           :fields="fields"
-          class="arvioitavat-kokonaisuudet-table"
+          class="suoritteet-table"
           details-td-class="row-details"
           stacked="md"
           responsive
@@ -70,7 +70,7 @@
           <template #cell(nimi)="data">
             <b-link
               :to="{
-                name: 'arvioitavan-kokonaisuuden-kategoria',
+                name: 'suoritteen-kategoria',
                 params: { kategoriaId: data.item.id }
               }"
             >
@@ -79,10 +79,7 @@
           </template>
 
           <template #row-details="row">
-            <b-table
-              :items="filteredKokonaisuudet(row.item.arvioitavatKokonaisuudet)"
-              :fields="fields"
-            >
+            <b-table :items="filteredSuoritteet(row.item.suoritteet)" :fields="fields">
               <template #table-colgroup>
                 <col span="1" width="12%" />
                 <col span="1" width="45%" />
@@ -92,8 +89,8 @@
               <template #cell(nimi)="data">
                 <b-link
                   :to="{
-                    name: 'arvioitava-kokonaisuus',
-                    params: { kokonaisuusId: data.item.id }
+                    name: 'suorite',
+                    params: { suoriteId: data.item.id }
                   }"
                 >
                   {{ data.item.nimi }}
@@ -101,8 +98,12 @@
               </template>
 
               <template #cell(voimassaolo)="data">
-                {{ $date(data.item.voimassaoloAlkaa) }} -
-                {{ data.item.voimassaoloLoppuu != null ? $date(data.item.voimassaoloLoppuu) : '' }}
+                {{ $date(data.item.voimassaolonAlkamispaiva) }} -
+                {{
+                  data.item.voimassaolonPaattymispaiva != null
+                    ? $date(data.item.voimassaolonPaattymispaiva)
+                    : ''
+                }}
               </template>
             </b-table>
           </template>
@@ -115,11 +116,11 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getArvioitavatKokonaisuudet } from '@/api/tekninen-paakayttaja'
+  import { getSuoritteet } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { ArvioitavaKokonaisuus, ArvioitavanKokonaisuudenKategoria } from '@/types'
+  import { Suorite, SuoritteenKategoria } from '@/types'
   import { dateBetween } from '@/utils/date'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
@@ -131,8 +132,8 @@
       ElsaFormGroup
     }
   })
-  export default class ArvioitavatKokonaisuudet extends Vue {
-    kategoriat: ArvioitavanKokonaisuudenKategoria[] = []
+  export default class Suoritteet extends Vue {
+    kategoriat: SuoritteenKategoria[] = []
 
     voimassaolo: string | null = null
 
@@ -153,6 +154,11 @@
         key: 'voimassaolo',
         label: this.$t('voimassaolo'),
         class: 'voimassaolo'
+      },
+      {
+        key: 'vaadittulkm',
+        label: this.$t('vaadittulkm'),
+        class: 'vaadittulkm'
       }
     ]
 
@@ -163,11 +169,9 @@
 
     async fetchKategoriat() {
       try {
-        this.kategoriat = (
-          await getArvioitavatKokonaisuudet(this.$route?.params?.erikoisalaId)
-        ).data
+        this.kategoriat = (await getSuoritteet(this.$route?.params?.erikoisalaId)).data
       } catch (err) {
-        toastFail(this, this.$t('arvioitavien-kokonaisuuksien-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('suoritteiden-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'opetussuunnitelmat' })
       }
     }
@@ -182,13 +186,13 @@
       return this.kategoriatSorted?.length ?? 0
     }
 
-    filteredKokonaisuudet(kokonaisuudet: ArvioitavaKokonaisuus[]) {
-      return kokonaisuudet
-        .filter((k) =>
+    filteredSuoritteet(suoritteet: Suorite[]) {
+      return suoritteet
+        .filter((s) =>
           dateBetween(
             this.voimassaolo ?? undefined,
-            k.voimassaoloAlkaa,
-            k.voimassaoloLoppuu ?? undefined
+            s.voimassaolonAlkamispaiva,
+            s.voimassaolonPaattymispaiva ?? undefined
           )
         )
         .sort((a, b) => sortByAsc(a.nimi, b.nimi))
@@ -209,7 +213,7 @@
     }
   }
 
-  ::v-deep .arvioitavat-kokonaisuudet-table {
+  ::v-deep .suoritteet-table {
     .row-details {
       padding: 0;
       table {

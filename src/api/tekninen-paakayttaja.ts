@@ -8,7 +8,10 @@ import {
   Arviointiasteikko,
   ArvioitavanKokonaisuudenKategoria,
   ArvioitavanKokonaisuudenKategoriaWithErikoisala,
-  ArvioitavaKokonaisuusWithErikoisala
+  ArvioitavaKokonaisuusWithErikoisala,
+  SuoritteenKategoria,
+  SuoritteenKategoriaWithErikoisala,
+  SuoriteWithErikoisala
 } from '@/types'
 
 export async function getErikoistuvatLaakarit(params: {
@@ -106,4 +109,44 @@ export async function postArvioitavaKokonaisuus(form: ArvioitavaKokonaisuusWithE
 export async function putArvioitavaKokonaisuus(form: ArvioitavaKokonaisuusWithErikoisala) {
   const path = `/tekninen-paakayttaja/arvioitavakokonaisuus`
   return await axios.put<ArvioitavaKokonaisuusWithErikoisala>(path, form)
+}
+
+export async function getSuoritteenKategoriat(erikoisalaId: string) {
+  const path = `/tekninen-paakayttaja/erikoisalat/${erikoisalaId}/suoritteenkategoriat`
+  return await axios.get<SuoritteenKategoria[]>(path)
+}
+
+export async function getSuoritteet(erikoisalaId: string) {
+  const path = `/tekninen-paakayttaja/erikoisalat/${erikoisalaId}/suoritteet`
+  return await axios.get<SuoritteenKategoria[]>(path)
+}
+
+export async function getSuoritteenKategoria(id: string) {
+  const path = `/tekninen-paakayttaja/suoritteenkategoria/${id}`
+  return await axios.get<SuoritteenKategoriaWithErikoisala>(path)
+}
+
+export async function postSuoritteenKategoria(form: SuoritteenKategoriaWithErikoisala) {
+  const path = `/tekninen-paakayttaja/suoritteenkategoria`
+  return await axios.post<SuoritteenKategoriaWithErikoisala>(path, form)
+}
+
+export async function putSuoritteenKategoria(form: SuoritteenKategoriaWithErikoisala) {
+  const path = `/tekninen-paakayttaja/suoritteenkategoria`
+  return await axios.put<SuoritteenKategoriaWithErikoisala>(path, form)
+}
+
+export async function getSuorite(id: string) {
+  const path = `/tekninen-paakayttaja/suorite/${id}`
+  return await axios.get<SuoriteWithErikoisala>(path)
+}
+
+export async function postSuorite(form: SuoriteWithErikoisala) {
+  const path = `/tekninen-paakayttaja/suorite`
+  return await axios.post<SuoriteWithErikoisala>(path, form)
+}
+
+export async function putSuorite(form: SuoriteWithErikoisala) {
+  const path = `/tekninen-paakayttaja/suorite`
+  return await axios.put<SuoriteWithErikoisala>(path, form)
 }

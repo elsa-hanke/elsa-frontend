@@ -45,7 +45,7 @@
       ElsaButton
     }
   })
-  export default class MuokkaaArvioitavaaKokonaisuutta extends Vue {
+  export default class KorvaaArvioitavaKokonaisuus extends Vue {
     kokonaisuus: ArvioitavaKokonaisuusWithErikoisala | null = null
 
     kokonaisuudenNimi: string | null = null

@@ -749,21 +749,55 @@ export type Vaativuustaso = {
 export type SuoritteenKategoria = {
   id?: number
   nimi: string
-  voimassaolonAlkamispaiva: string
-  voimassaolonPaattymispaiva: string
+  nimiSv: string
   erikoisalaId: number
   suoritteet: Suorite[]
   jarjestysnumero: number
 }
 
+export type UusiSuoritteenKategoria = {
+  nimi: string | null
+  nimiSv: string | null
+  jarjestysnumero: number | null
+  erikoisala: Erikoisala | null
+}
+
+export type SuoritteenKategoriaWithErikoisala = {
+  id?: number
+  nimi: string
+  nimiSv: string
+  jarjestysnumero: number
+  erikoisala: Erikoisala
+}
+
 export type Suorite = {
   id: number
   nimi: string
+  nimiSv: string
   voimassaolonAlkamispaiva: string
   voimassaolonPaattymispaiva: string
   kategoriaId: number
   vaadittulkm?: number
   suoritettulkm?: number
+}
+
+export type UusiSuorite = {
+  nimi: string | null
+  nimiSv: string | null
+  voimassaolonAlkamispaiva: string | null
+  voimassaolonPaattymispaiva: string | null
+  vaadittulkm: number | null
+  kategoria: SuoritteenKategoriaWithErikoisala | null
+}
+
+export type SuoriteWithErikoisala = {
+  id?: number
+  nimi: string
+  nimiSv: string
+  voimassaolonAlkamispaiva: string
+  voimassaolonPaattymispaiva: string
+  vaadittulkm?: number
+  kategoria: SuoritteenKategoriaWithErikoisala
 }
 
 export type Suoritemerkinta = {
