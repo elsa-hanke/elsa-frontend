@@ -1,6 +1,49 @@
 <template>
-  <b-card-skeleton :header="$t('avoimet-asiat')" :loading="loading" class="mb-5">
-    <div v-if="rows > 0">
+  <div v-if="rows === 0">
+    <b-alert class="mb-5 pb-2" variant="light" show>
+      <p class="d-flex mb-0">
+        <font-awesome-icon
+          icon="info-circle"
+          fixed-width
+          class="text-muted text-size-md mr-2 mt-1"
+        />
+        <span>
+          {{ $t('ei-avoimia-asioita-erikoistuja-info.voit-esimerkiksi') }}
+          <b-link :to="{ path: '/arvioinnit/arviointipyynto' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.pyytaa-arviointeja') }}
+          </b-link>
+          {{ $t('ei-avoimia-asioita-erikoistuja-info.osaamisestasi') }},
+          <b-link :to="{ path: '/suoritemerkinnat/uusi' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.lisata-suoritemerkintoja') }}
+          </b-link>
+          <span>,</span>
+          <b-link :to="{ name: 'koulutussuunnitelma' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.paivittaa-koulutussuunnitelmaasi') }}
+          </b-link>
+          <span>,</span>
+          <b-link :to="{ path: '/seurantakeskustelut/seurantajakso/uusi' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.lisata-seurantajakson') }}
+          </b-link>
+          {{ $t('ei-avoimia-asioita-erikoistuja-info.tai-tehda') }}
+          <b-link :to="{ path: '/paivittaiset-merkinnat/uusi' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.uuden-paivittaisen-merkinnan') }}
+          </b-link>
+          <span>.</span>
+          {{ $t('ei-avoimia-asioita-erikoistuja-info.muista-myos-lisata') }}
+          <b-link :to="{ name: 'tyoskentelyjaksot' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.tyoskentelyjaksot') }}
+          </b-link>
+          {{ $t('ei-avoimia-asioita-erikoistuja-info.ja') }}
+          <b-link :to="{ name: 'teoriakoulutukset' }">
+            {{ $t('ei-avoimia-asioita-erikoistuja-info.teoriakoulutukset') }}
+          </b-link>
+          <span>.</span>
+        </span>
+      </p>
+    </b-alert>
+  </div>
+  <div v-else>
+    <b-card-skeleton :header="$t('avoimet-asiat')" :loading="loading" class="mb-5">
       <b-table :items="avoimetAsiat" :fields="fields" stacked="md" responsive>
         <template #cell(asia)="row">
           <b-link
@@ -33,14 +76,8 @@
           </elsa-button>
         </template>
       </b-table>
-    </div>
-    <div v-else>
-      <b-alert variant="dark" show>
-        <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-        {{ $t('ei-avoimia-asioita-erikoistuja') }}
-      </b-alert>
-    </div>
-  </b-card-skeleton>
+    </b-card-skeleton>
+  </div>
 </template>
 
 <script lang="ts">
@@ -139,6 +176,16 @@
   @import '~bootstrap/scss/mixins/breakpoints';
 
   ::v-deep {
+    .alert {
+      span {
+        margin-left: -0.23em;
+      }
+    }
+
+    .alert-light {
+      color: $black;
+    }
+
     .card-body {
       padding-top: 0.75rem;
       padding-bottom: 0.5rem;
