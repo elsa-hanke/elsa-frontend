@@ -176,7 +176,7 @@
 
     kehittamistoimenpiteetLomake: KehittamistoimenpiteetLomake = {
       erikoistuvaAllekirjoittanut: false,
-      erikoistuvanAllekirjoitusaika: undefined,
+      erikoistuvanKuittausaika: undefined,
       erikoistuvanErikoisala: '',
       erikoistuvanNimi: '',
       erikoistuvanOpiskelijatunnus: '',
@@ -252,7 +252,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.kehittamistoimenpiteetLomake.erikoistuvanNimi,
-        this.kehittamistoimenpiteetLomake.erikoistuvanAllekirjoitusaika
+        this.kehittamistoimenpiteetLomake.erikoistuvanKuittausaika
       )
 
       return [

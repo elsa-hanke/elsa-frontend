@@ -495,7 +495,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.valiarviointi?.erikoistuvanNimi,
-        this.valiarviointi?.erikoistuvanAllekirjoitusaika
+        this.valiarviointi?.erikoistuvanKuittausaika
       )
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,

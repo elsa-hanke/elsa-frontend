@@ -359,7 +359,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.kehittamistoimenpiteet?.erikoistuvanNimi,
-        this.kehittamistoimenpiteet?.erikoistuvanAllekirjoitusaika
+        this.kehittamistoimenpiteet?.erikoistuvanKuittausaika
       ) as KoejaksonVaiheAllekirjoitus
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,

@@ -255,7 +255,7 @@
 
     get showAllekirjoitukset() {
       return (
-        this.aloituskeskustelu?.erikoistuvanAllekirjoitusaika !== null ||
+        this.aloituskeskustelu?.erikoistuvanKuittausaika !== null ||
         this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty ||
         this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty
       )
@@ -313,7 +313,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.aloituskeskustelu?.erikoistuvanNimi,
-        this.aloituskeskustelu?.erikoistuvanAllekirjoitusaika
+        this.aloituskeskustelu?.erikoistuvanKuittausaika
       ) as KoejaksonVaiheAllekirjoitus
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,

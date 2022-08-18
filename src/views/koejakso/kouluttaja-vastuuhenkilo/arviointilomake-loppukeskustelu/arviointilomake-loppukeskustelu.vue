@@ -440,7 +440,7 @@
       const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
         this,
         this.loppukeskustelu?.erikoistuvanNimi,
-        this.loppukeskustelu?.erikoistuvanAllekirjoitusaika
+        this.loppukeskustelu?.erikoistuvanKuittausaika
       )
       const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
         this,
