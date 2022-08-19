@@ -233,8 +233,16 @@
     @include media-breakpoint-down(sm) {
       border-bottom: 0;
 
+      .vaadittulkm {
+        display: none !important;
+      }
+
       .b-table-has-details {
         .voimassaolo {
+          display: none !important;
+        }
+
+        .vaadittulkm {
           display: none !important;
         }
       }
