@@ -26,7 +26,10 @@
               />
             </b-tab>
             <b-tab
-              v-if="sateilysuojelukoulutukset.length > 0"
+              v-if="
+                sateilysuojelukoulutukset.length > 0 ||
+                opintosuorituksetWrapper.sateilysuojakoulutuksetVaadittu > 0
+              "
               :title="$t('sateilysuojelukoulutukset')"
               href="#sateilysuojakoulutukset"
             >
