@@ -16,7 +16,8 @@ import {
   LomakeTilat,
   KayttajatiliTila,
   ReassignedVastuuhenkilonTehtavaTyyppi,
-  AvoinAsiaTyyppi
+  AvoinAsiaTyyppi,
+  ValmistumispyynnonTila
 } from '@/utils/constants'
 
 export type Opintooikeus = {
@@ -1276,4 +1277,56 @@ export type TyoskentelyjaksonAsiakirjat = {
   id?: number | null
   addedFiles: File[]
   deletedFiles: number[]
+}
+
+export interface ValmistumispyyntoVaatimuksetLomake {
+  tyoskentelyjaksot?: boolean
+  tyotodistukset?: boolean
+  kuulusteluJaJohtamisopinnot?: boolean
+  teoriakoulutus?: boolean
+  osaamisenArvioinnit?: boolean
+}
+
+export interface Valmistumispyynto {
+  tila?: ValmistumispyynnonTila
+  muokkauspaiva?: string
+  erikoistujanNimi?: string
+  erikoistujanOpiskelijatunnus?: string
+  erikoistujanSyntymaaika?: string
+  erikoistujanYliopisto?: string
+  erikoistujanLaillistamispaiva?: string
+  erikoistujanLaillistamistodistus?: string
+  erikoistujanLaillistamistodistusNimi?: string
+  erikoistujanLaillistamistodistusTyyppi?: string
+  selvitysVanhoistaSuorituksista?: string
+  asetus?: string
+  opintooikeudenMyontamispaiva?: string
+  erikoistujanKuittausaika?: string
+  vastuuhenkiloOsaamisenArvioijaNimi?: string
+  vastuuhenkiloOsaamisenArvioijaNimike?: string
+  vastuuhenkiloOsaamisenArvioijaKuittausaika?: string
+  vastuuhenkiloOsaamisenArvioijaPalautusaika?: string
+  vastuuhenkiloOsaamisenArvioijaKorjausehdotus?: string
+  virkailijaNimi?: string
+  virkailijanKuittausaika?: string
+  virkailijanPalautusaika?: string
+  virkailijanKorjausehdotus?: string
+  virkailijanSaate: string
+  vastuuhenkiloHyvaksyjaNimi?: string
+  vastuuhenkiloHyvaksyjaNimike?: string
+  vastuuhenkiloHyvaksyjaKuittausaika?: string
+  vastuuhenkiloHyvaksyjaPalautusaika?: string
+  vastuuhenkiloHyvaksyjaKorjausehdotus?: string
+  korjausehdotus?: string
+  allekirjoitusaika?: string
+}
+
+export interface ValmistumispyyntoSuoritustenTila {
+  erikoisalaTyyppi?: ErikoisalaTyyppi
+  vanhojaTyoskentelyjaksojaOrSuorituksiaExists?: boolean
+  kuulusteluVanhentunut?: boolean
+}
+
+export interface ValmistumispyyntoLomakeErikoistuja {
+  selvitysVanhentuneistaSuorituksista?: string
 }

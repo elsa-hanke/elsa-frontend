@@ -9,7 +9,7 @@
         <th scope="col">{{ $t('arvo') }}</th>
       </tr>
       <tr>
-        <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
+        <th scope="row" style="width: 11rem" class="align-middle font-weight-500">
           {{ $t('erikoistuja') }}
         </th>
         <td class="pl-6">
@@ -25,25 +25,37 @@
         </td>
       </tr>
       <tr v-if="opiskelijatunnus">
-        <th scope="row" class="font-weight-500">
+        <th scope="row" class="align-middle font-weight-500 pr-3">
           {{ $t('opiskelijanumero') }}
         </th>
         <td class="pl-6">{{ opiskelijatunnus }}</td>
       </tr>
       <tr v-if="showBirthdate && syntymaaika">
-        <th scope="row" class="font-weight-500">
+        <th scope="row" class="align-middle font-weight-500 pr-3">
           {{ $t('syntymaaika') }}
         </th>
         <td class="pl-6">{{ syntymaaika ? $date(syntymaaika) : '' }}</td>
       </tr>
       <tr>
-        <th scope="row" class="font-weight-500">
-          {{ $t('yliopisto') }}
+        <th scope="row" class="align-middle font-weight-500 pr-3">
+          {{ $t('yliopisto-jossa-opintooikeus') }}
         </th>
         <td class="pl-6">{{ $t(`yliopisto-nimi.${yliopisto}`) }}</td>
       </tr>
+      <tr v-if="showLaillistamispaiva">
+        <th scope="row" class="align-middle font-weight-500 pr-3">
+          {{ $t('laillistamispaiva') }}
+        </th>
+        <td class="pl-6">
+          <span class="align-middle">{{ $date(laillistamispaiva) }}</span>
+          -
+          <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
+            {{ laillistamistodistusNimi }}
+          </elsa-button>
+        </td>
+      </tr>
       <tr v-if="kehittamistoimenpiteet">
-        <th scope="row" class="font-weight-500">
+        <th scope="row" class="align-middle font-weight-500 pr-3">
           {{ $t('kehittamistoimenpiteet-otsikko') }}
         </th>
         <td class="pl-6">{{ kehittamistoimenpiteet }}</td>
@@ -57,11 +69,14 @@
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
 
+  import ElsaButton from '@/components/button/button.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
+  import { saveBlob } from '@/utils/blobs'
 
   @Component({
     components: {
-      UserAvatar
+      UserAvatar,
+      ElsaButton
     }
   })
   export default class ErikoistuvaDetails extends Vue {
@@ -89,12 +104,44 @@
     @Prop({ required: false, default: true })
     showBirthdate!: boolean
 
+    @Prop({ required: false, type: String })
+    laillistamispaiva?: string
+
+    @Prop({ required: false, type: String })
+    laillistamistodistus?: string
+
+    @Prop({ required: false, type: String })
+    laillistamistodistusNimi?: string
+
+    @Prop({ required: false, type: String })
+    laillistamistodistusTyyppi?: string
+
     get displayName() {
       return this.name
     }
 
     get displayNameAndErikoisala() {
       return this.erikoisala !== '' ? `${this.displayName}, ${this.erikoisala}` : this.displayName
+    }
+
+    get showLaillistamispaiva() {
+      return (
+        this.laillistamispaiva &&
+        this.laillistamistodistus &&
+        this.laillistamistodistusNimi &&
+        this.laillistamistodistusTyyppi
+      )
+    }
+
+    async onDownloadLaillistamistodistus() {
+      if (
+        this.laillistamistodistus &&
+        this.laillistamistodistusNimi &&
+        this.laillistamistodistusTyyppi
+      ) {
+        const data = Uint8Array.from(atob(this.laillistamistodistus), (c) => c.charCodeAt(0))
+        saveBlob(this.laillistamistodistusNimi, data, this.laillistamistodistusTyyppi)
+      }
     }
   }
 </script>

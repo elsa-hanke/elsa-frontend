@@ -107,6 +107,14 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
+          v-if="$isErikoistuva()"
+          class="border-bottom"
+          :to="{ name: 'valmistumispyynto' }"
+        >
+          <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
+          {{ $t('valmistumispyynto') }}
+        </b-nav-item>
+        <b-nav-item
           v-if="$isTekninenPaakayttaja() || $isVirkailija()"
           class="border-top border-bottom"
           :to="{ name: 'kayttajahallinta' }"
