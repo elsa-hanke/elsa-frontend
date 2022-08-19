@@ -1,7 +1,7 @@
 <template>
   <b-modal :id="id" :title="title" centered>
     <div v-if="text != null" class="d-block">
-      <p>{{ text }}</p>
+      <p class="mb-2">{{ text }}</p>
     </div>
 
     <template #modal-footer>

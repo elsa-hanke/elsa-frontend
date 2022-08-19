@@ -36,6 +36,7 @@ import {
   faSearch,
   faShare,
   faTheaterMasks,
+  faTrophy,
   faTimes,
   faToolbox,
   faUndoAlt,
@@ -79,6 +80,7 @@ library.add(faQuestionCircle)
 library.add(faSearch)
 library.add(faShare)
 library.add(faTheaterMasks)
+library.add(faTrophy)
 library.add(faTimes)
 library.add(faToolbox)
 library.add(faUndoAlt)

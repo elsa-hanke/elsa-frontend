@@ -28,7 +28,10 @@ import {
   ErikoistumisenEdistyminen,
   AvoinAsia,
   TerveyskeskuskoulutusjaksonHyvaksyminen,
-  TerveyskeskuskoulutusjaksonHyvaksyntaForm
+  TerveyskeskuskoulutusjaksonHyvaksyntaForm,
+  ValmistumispyyntoSuoritustenTila,
+  ValmistumispyyntoLomakeErikoistuja,
+  Valmistumispyynto
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -346,4 +349,24 @@ export async function postTerveyskeskuskoulutusjakso(
 ) {
   const path = 'erikoistuva-laakari/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta'
   return await axios.post<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, form)
+}
+
+export async function getValmistumispyynto() {
+  const path = 'erikoistuva-laakari/valmistumispyynto'
+  return await axios.get<Valmistumispyynto>(path)
+}
+
+export async function getValmistumispyyntoSuoritustenTila() {
+  const path = 'erikoistuva-laakari/valmistumispyynto-suoritusten-tila'
+  return await axios.get<ValmistumispyyntoSuoritustenTila>(path)
+}
+
+export async function postValmistumispyynto(form: ValmistumispyyntoLomakeErikoistuja) {
+  const path = 'erikoistuva-laakari/valmistumispyynto'
+  return await axios.post<Valmistumispyynto>(path, form)
+}
+
+export async function putValmistumispyynto(form: ValmistumispyyntoLomakeErikoistuja) {
+  const path = 'erikoistuva-laakari/valmistumispyynto'
+  return await axios.put<Valmistumispyynto>(path, form)
 }

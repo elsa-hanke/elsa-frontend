@@ -99,6 +99,7 @@ import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskent
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
+import ValmistumispyyntoErikoistuja from '@/views/valmistumispyynto/erikoistuja/valmistumispyynto-erikoistuja.vue'
 // import Viestit from '@/views/viestit.vue'
 
 Vue.use(VueRouter)
@@ -572,6 +573,17 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: Asiakirjat,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/valmistumispyynto',
+        name: 'valmistumispyynto',
+        beforeEnter: impersonatedErikoistuvaGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyyntoErikoistuja,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       },
       {
