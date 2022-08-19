@@ -1,5 +1,5 @@
 <template>
-  <div class="kokonaisuus mb-4">
+  <div class="suorite mb-4">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
