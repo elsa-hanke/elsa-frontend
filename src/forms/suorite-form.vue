@@ -77,23 +77,9 @@
               </template>
             </elsa-form-group>
           </b-form-row>
-          <elsa-form-group
-            :label="$t('vaadittu-lukumaara')"
-            class="col-12 pr-md-3 pl-0"
-            :required="true"
-          >
+          <elsa-form-group :label="$t('vaadittu-lukumaara')" class="col-12 pr-md-3 pl-0">
             <template v-slot="{ uid }">
-              <b-form-input
-                :id="uid"
-                v-model="suorite.vaadittulkm"
-                :state="validateState('vaadittulkm')"
-              ></b-form-input>
-              <b-form-invalid-feedback
-                :id="`${uid}-feedback`"
-                :state="validateState('vaadittulkm')"
-              >
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
+              <b-form-input :id="uid" v-model="suorite.vaadittulkm"></b-form-input>
             </template>
           </elsa-form-group>
           <hr class="mt-6" />
@@ -127,8 +113,8 @@
                 : ''
             }}
           </p>
-          <h5>{{ $t('vaadittulkm') }}</h5>
-          <p>{{ suorite.vaadittulkm }}</p>
+          <h5>{{ $t('vaadittu-lukumaara') }}</h5>
+          <p>{{ suorite.vaadittulkm != null ? suorite.vaadittulkm : '-' }}</p>
           <hr />
         </div>
       </b-col>
@@ -196,9 +182,6 @@
             required
           },
           voimassaolonAlkamispaiva: {
-            required
-          },
-          vaadittulkm: {
             required
           }
         }

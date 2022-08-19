@@ -52,7 +52,7 @@
           <h5>{{ $t('kategorian-nimi') }}</h5>
           <p>{{ kategoria.nimi }}</p>
           <h5>{{ $t('jarjestysnumero') }}</h5>
-          <p>{{ kategoria.jarjestysnumero }}</p>
+          <p>{{ kategoria.jarjestysnumero != null ? kategoria.jarjestysnumero : '-' }}</p>
           <hr />
         </div>
       </b-col>
