@@ -16,7 +16,7 @@
         </b-alert>
         <b-alert variant="dark" show>
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-          {{ $t('piloottikaytto-kuvaus') }}
+          {{ $t('pilottikaytto-kuvaus') }}
         </b-alert>
       </b-col>
     </b-row>
