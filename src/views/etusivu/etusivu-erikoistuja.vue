@@ -19,11 +19,9 @@
           <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
             <henkilotiedot-card />
           </b-col>
-          <b-card-skeleton
-            :header="$t('arvioitavat-kokonaisuudet')"
-            :loading="true"
-            class="mb-3 d-none"
-          ></b-card-skeleton>
+          <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
+            <arvioitavat-kokonaisuudet-card />
+          </b-col>
         </b-row>
       </b-col>
     </b-row>
@@ -34,6 +32,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import BCardSkeleton from '@/components/card/card.vue'
+  import ArvioitavatKokonaisuudetCard from '@/components/etusivu-cards/arvioitavat-kokonaisuudet-card.vue'
   import AvoimetAsiatCard from '@/components/etusivu-cards/avoimet-asiat-card.vue'
   import ErikoistumisenEdistyminenCard from '@/components/etusivu-cards/erikoistumisen-edistyminen-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
@@ -50,8 +49,9 @@
       SeurantakeskustelutCard,
       ErikoistumisenEdistyminenCard,
       HenkilotiedotCard,
-      PaivittaisetMerkinnatCard,
-      KoulutussuunnitelmaCard
+      KoulutussuunnitelmaCard,
+      ArvioitavatKokonaisuudetCard,
+      PaivittaisetMerkinnatCard
     }
   })
   export default class EtusivuErikoistuja extends Vue {

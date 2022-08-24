@@ -23,6 +23,9 @@
             <b-col xxl="12" lg="6">
               <arvioinnin-tyokalut-card />
             </b-col>
+            <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
+              <arvioitavat-kokonaisuudet-card />
+            </b-col>
           </b-row>
         </b-col>
       </b-row>
@@ -36,6 +39,7 @@
   import BCardSkeleton from '@/components/card/card.vue'
   import ArvioinninTyokalutCard from '@/components/etusivu-cards/arvioinnin-tyokalut-card.vue'
   import ArviointipyynnotCard from '@/components/etusivu-cards/arviointipyynnot-card.vue'
+  import ArvioitavatKokonaisuudetCard from '@/components/etusivu-cards/arvioitavat-kokonaisuudet-card.vue'
   import ErikoistujienSeurantaCard from '@/components/etusivu-cards/erikoistujien-seuranta-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
@@ -49,7 +53,8 @@
       ErikoistujienSeurantaCard,
       HenkilotiedotCard,
       KoejaksotCard,
-      ValmistumispyynnotCard
+      ValmistumispyynnotCard,
+      ArvioitavatKokonaisuudetCard
     }
   })
   export default class EtusivuVastuuhenkilo extends Vue {}
