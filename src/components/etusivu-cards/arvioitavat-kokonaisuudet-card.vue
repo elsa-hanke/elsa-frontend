@@ -1,6 +1,6 @@
 <template>
   <b-card-skeleton :header="$t('arvioitavat-kokonaisuudet')" class="mb-4">
-    <router-link to="arvioitavatkokonaisuudet" class="text-decoration-none">
+    <router-link to="arvioitavat-kokonaisuudet" class="text-decoration-none">
       <div class="text-center">
         <img
           src="@/assets/arvioitavatkokonaisuudet.svg"
