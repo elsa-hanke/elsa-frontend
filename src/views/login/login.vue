@@ -97,7 +97,7 @@
     }
 
     get contactMail() {
-      return 'matti.hiitola@oulu.fi'
+      return 'julia.sillanpaa@tuni.fi'
     }
   }
 </script>
