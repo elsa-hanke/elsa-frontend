@@ -4,18 +4,11 @@
       <b-col xxl="9">
         <avoimet-asiat-card />
         <erikoistumisen-edistyminen-card />
-        <seurantakeskustelut-card />
+        <seurantakeskustelut-card v-if="!isImpersonatedVirkailija" />
         <b-row>
           <b-col xl="6">
             <b-card-skeleton
               :header="$t('koulutussuunnitelma')"
-              :loading="true"
-              class="mb-3 d-none"
-            ></b-card-skeleton>
-          </b-col>
-          <b-col xl="6">
-            <b-card-skeleton
-              :header="$t('seurantakeskustelut')"
               :loading="true"
               class="mb-3 d-none"
             ></b-card-skeleton>
