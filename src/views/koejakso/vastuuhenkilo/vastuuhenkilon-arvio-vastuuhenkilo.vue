@@ -794,6 +794,7 @@
         this.buttonStates.primaryButtonLoading = true
         await store.dispatch('vastuuhenkilo/putVastuuhenkilonArvio', this.vastuuhenkilonArvio)
         this.buttonStates.primaryButtonLoading = false
+        this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
       } catch {

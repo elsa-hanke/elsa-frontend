@@ -185,8 +185,8 @@
                 </template>
               </elsa-form-group>
             </b-col>
+            <hr />
           </b-row>
-          <hr />
           <b-row v-if="!koulutussopimuksenHyvaksynta">
             <b-col>
               <elsa-form-group :label="$t('koulutussopimus')" :required="true">
