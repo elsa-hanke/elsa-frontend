@@ -46,11 +46,11 @@
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
+  import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
+  import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
+  import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
   import { ELSA_ROLE } from '@/utils/roles'
-  import ErikoistuvaLaakariForm from '@/views/kayttajahallinta/uusi-erikoistuva-laakari.vue'
-  import PaakayttajaForm from '@/views/kayttajahallinta/uusi-paakayttaja.vue'
-  import VastuuhenkiloForm from '@/views/kayttajahallinta/uusi-vastuuhenkilo.vue'
-  import VirkailijaForm from '@/views/kayttajahallinta/uusi-virkailija.vue'
 
   @Component({
     components: {
