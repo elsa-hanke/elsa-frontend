@@ -15,7 +15,7 @@
                 {{ $t('valmistumispyynto-lahetetty', { lahetetty }) }}
               </span>
               <p class="pt-1 mb-0">
-                {{ $t('valmistumispyynto-odottaa-osaamisen-tarkistusta-selite') }}
+                {{ $t('valmistumispyynto-odottaa-osaamisen-tarkastusta-selite') }}
               </p>
             </div>
           </div>

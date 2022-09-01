@@ -103,7 +103,9 @@ import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskent
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
-import ValmistumispyyntoErikoistuja from '@/views/valmistumispyynto/erikoistuja/valmistumispyynto-erikoistuja.vue'
+import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
+import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vue'
+import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
 // import Viestit from '@/views/viestit.vue'
 
 Vue.use(VueRouter)
@@ -627,9 +629,27 @@ const routes: Array<RouteConfig> = [
         beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
-          routeComponent: ValmistumispyyntoErikoistuja,
+          routeComponent: Valmistumispyynto,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
+        }
+      },
+      {
+        path: '/valmistumispyynnot',
+        name: 'valmistumispyynnot',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Valmistumispyynnot,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija, ELSA_ROLE.Vastuuhenkilo]
+        }
+      },
+      {
+        path: '/valmistumispyynnon-arviointi/:valmistumispyyntoId',
+        name: 'valmistumispyynnon-arviointi',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyynnonArviointi,
+          allowedRoles: [ELSA_ROLE.Vastuuhenkilo, ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
       {

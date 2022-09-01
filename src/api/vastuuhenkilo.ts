@@ -11,10 +11,15 @@ import {
   ErikoistujienSeuranta,
   KoejaksonVaihe,
   Arviointipyynto,
-  TerveyskeskuskoulutusjaksonVaihe,
   Page,
-  TerveyskeskuskoulutusjaksonHyvaksyminen
+  TerveyskeskuskoulutusjaksonVaihe,
+  TerveyskeskuskoulutusjaksonHyvaksyminen,
+  ValmistumispyyntoListItem,
+  Valmistumispyynto,
+  ValmistumispyyntoArviointienTila,
+  ValmistumispyyntoLomakeOsaamisenArviointi
 } from '@/types'
+import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
 export async function getKoejaksot() {
   const path = 'vastuuhenkilo/koejaksot'
@@ -117,4 +122,38 @@ export async function putTerveyskeskuskoulutusjakso(id: string, korjausehdotus: 
 export async function getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo() {
   const path = 'vastuuhenkilo/onko-terveyskeskuskoulutusjakso-vastuuhenkilo'
   return await axios.get<boolean>(path)
+}
+
+export async function getValmistumispyynnot(params: {
+  page?: number
+  size?: number
+  sort?: string
+  'erikoistujanNimi.contains'?: string
+  'tila.equals'?: string
+}) {
+  return await axios.get<Page<ValmistumispyyntoListItem>>('vastuuhenkilo/valmistumispyynnot', {
+    params: {
+      ...params
+    }
+  })
+}
+
+export async function getValmistumispyynnonHyvaksyjaRole() {
+  const path = '/vastuuhenkilo/valmistumispyynnon-hyvaksyja-role'
+  return await axios.get<ValmistumispyynnonHyvaksyjaRole>(path)
+}
+
+export async function getValmistumispyyntoOsaamisenArviointi(id: number) {
+  const path = `/vastuuhenkilo/valmistumispyynnon-arviointi/${id}`
+  return await axios.get<Valmistumispyynto>(path)
+}
+
+export async function getValmistumispyyntoArviointienTila(id: number) {
+  const path = `/vastuuhenkilo/valmistumispyynto-arviointien-tila/${id}`
+  return await axios.get<ValmistumispyyntoArviointienTila>(path)
+}
+
+export async function putValmistumispyynto(form: ValmistumispyyntoLomakeOsaamisenArviointi) {
+  const path = `/vastuuhenkilo/valmistumispyynnon-arviointi/${form.id}`
+  return await axios.put<Valmistumispyynto>(path, form)
 }

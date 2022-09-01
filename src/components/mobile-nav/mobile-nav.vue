@@ -99,7 +99,7 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() && featurePreviewModeEnabled"
+          v-if="$isErikoistuva() && !isImpersonated && featurePreviewModeEnabled"
           class="border-bottom"
           :to="{ name: 'valmistumispyynto' }"
         >
@@ -213,6 +213,10 @@
   })
   export default class MobileNav extends Mixins(NavbarMixin) {
     featurePreviewModeEnabled = process.env.VUE_APP_FEATURE_PREVIEW_MODE_ENABLED === 'true'
+
+    get isImpersonated() {
+      return this.account?.impersonated
+    }
   }
 </script>
 
