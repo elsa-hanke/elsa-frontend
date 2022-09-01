@@ -42,6 +42,14 @@
         </th>
         <td class="pl-6">{{ $t(`yliopisto-nimi.${yliopisto}`) }}</td>
       </tr>
+      <tr v-if="opintooikeudenMyontamispaiva">
+        <th scope="row" class="align-middle font-weight-500 pr-3">
+          {{ $t('opinto-oikeuden-myontamispaiva') }}
+        </th>
+        <td class="pl-6">
+          {{ $date(opintooikeudenMyontamispaiva) }}
+        </td>
+      </tr>
       <tr v-if="showLaillistamispaiva">
         <th scope="row" class="align-middle font-weight-500 pr-3">
           {{ $t('laillistamispaiva') }}
@@ -52,6 +60,14 @@
           <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
             {{ laillistamistodistusNimi }}
           </elsa-button>
+        </td>
+      </tr>
+      <tr v-if="asetus">
+        <th scope="row" class="align-middle font-weight-500 pr-3">
+          {{ $t('asetus') }}
+        </th>
+        <td class="pl-6">
+          {{ asetus }}
         </td>
       </tr>
       <tr v-if="kehittamistoimenpiteet">
@@ -105,6 +121,9 @@
     showBirthdate!: boolean
 
     @Prop({ required: false, type: String })
+    opintooikeudenMyontamispaiva?: string
+
+    @Prop({ required: false, type: String })
     laillistamispaiva?: string
 
     @Prop({ required: false, type: String })
@@ -115,6 +134,9 @@
 
     @Prop({ required: false, type: String })
     laillistamistodistusTyyppi?: string
+
+    @Prop({ required: false, type: String })
+    asetus?: string
 
     get displayName() {
       return this.name

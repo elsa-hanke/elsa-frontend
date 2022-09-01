@@ -302,10 +302,10 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import store from '@/store'
   import {
     ValmistumispyyntoVaatimuksetLomake,
-    Valmistumispyynto,
     ValmistumispyyntoLomakeErikoistuja,
     ValmistumispyyntoSuoritustenTila,
     ElsaError,
@@ -315,7 +315,7 @@
   import { ErikoisalaTyyppi, ValmistumispyynnonTila } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
-  import ValmistumispyynnonTilaErikoistuja from '@/views/valmistumispyynto/erikoistuja/valmistumispyynnon-tila-erikoistuja.vue'
+  import ValmistumispyynnonTilaErikoistuja from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynnon-tila-erikoistuja.vue'
 
   @Component({
     components: {
@@ -331,7 +331,10 @@
       ValmistumispyynnonTilaErikoistuja
     }
   })
-  export default class ValmistumispyyntoErikoistuja extends Mixins(validationMixin) {
+  export default class ValmistumispyyntoErikoistuja extends Mixins<ValmistumispyyntoMixin>(
+    validationMixin,
+    ValmistumispyyntoMixin
+  ) {
     $refs!: {
       laillistamispaiva: ElsaFormDatepicker
     }
@@ -347,7 +350,6 @@
       }
     ]
 
-    valmistumispyynto: Partial<Valmistumispyynto> = {}
     valmistumispyyntoSuoritustenTila: Partial<ValmistumispyyntoSuoritustenTila> = {}
     valmistumispyyntoVaatimuksetLomake: Partial<ValmistumispyyntoVaatimuksetLomake> = {}
     valmistumispyyntoLomake: ValmistumispyyntoLomakeErikoistuja = {
@@ -417,30 +419,6 @@
       )
     }
 
-    get vastuuhenkiloOsaamisenArvioija() {
-      return this.valmistumispyynto
-        ? `${this.valmistumispyynto?.vastuuhenkiloOsaamisenArvioijaNimi}${
-            this.valmistumispyynto?.vastuuhenkiloOsaamisenArvioijaNimike
-              ? `, ${this.valmistumispyynto?.vastuuhenkiloOsaamisenArvioijaNimike}`
-              : ''
-          }`
-        : ''
-    }
-
-    get vastuuhenkiloHyvaksyja() {
-      return this.valmistumispyynto
-        ? `${this.valmistumispyynto?.vastuuhenkiloHyvaksyjaNimi}${
-            this.valmistumispyynto?.vastuuhenkiloHyvaksyjaNimike
-              ? `, ${this.valmistumispyynto?.vastuuhenkiloHyvaksyjaNimike}`
-              : ''
-          }`
-        : ''
-    }
-
-    get useaVastuuhenkilo() {
-      return this.vastuuhenkiloOsaamisenArvioija !== this.vastuuhenkiloHyvaksyja
-    }
-
     get opiskelijatunnus() {
       return this.account.erikoistuvaLaakari.opiskelijatunnus ?? ''
     }
@@ -449,44 +427,10 @@
       return (
         this.valmistumispyynto?.tila === ValmistumispyynnonTila.UUSI ||
         this.valmistumispyynto?.tila ===
-          ValmistumispyynnonTila.VASTUUHENKILON_TARKISTUS_PALAUTETTU ||
-        this.valmistumispyynto?.tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKISTUS_PALAUTETTU ||
+          ValmistumispyynnonTila.VASTUUHENKILON_TARKASTUS_PALAUTETTU ||
+        this.valmistumispyynto?.tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU ||
         this.valmistumispyynto?.tila === ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU
       )
-    }
-
-    get vastuuhenkiloOsaamisenArvioijaPalauttanut() {
-      return (
-        this.valmistumispyynto.tila === ValmistumispyynnonTila.VASTUUHENKILON_TARKISTUS_PALAUTETTU
-      )
-    }
-
-    get vastuuhenkiloHyvaksyjaPalauttanut() {
-      return (
-        this.valmistumispyynto.tila === ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU
-      )
-    }
-
-    get virkailijaPalauttanut() {
-      return this.valmistumispyynto.tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKISTUS_PALAUTETTU
-    }
-
-    get valmistumispyyntoPalautettu() {
-      return (
-        this.vastuuhenkiloOsaamisenArvioijaPalauttanut ||
-        this.vastuuhenkiloHyvaksyjaPalauttanut ||
-        this.virkailijaPalauttanut
-      )
-    }
-
-    get korjausehdotus() {
-      if (this.vastuuhenkiloOsaamisenArvioijaPalauttanut) {
-        return this.valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus
-      } else if (this.virkailijaPalauttanut) {
-        return this.valmistumispyynto.virkailijanKorjausehdotus
-      } else {
-        return this.valmistumispyynto.vastuuhenkiloHyvaksyjaKorjausehdotus
-      }
     }
 
     validateVaatimuksetState(name: string) {

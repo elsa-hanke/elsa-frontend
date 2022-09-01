@@ -115,12 +115,20 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() && featurePreviewModeEnabled"
+          v-if="$isErikoistuva() && !isImpersonated && featurePreviewModeEnabled"
           class="border-bottom"
           :to="{ name: 'valmistumispyynto' }"
         >
           <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
           {{ $t('valmistumispyynto') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isVirkailija() || $isVastuuhenkilo()"
+          class="border-bottom"
+          :to="{ name: 'valmistumispyynnot' }"
+        >
+          <font-awesome-icon icon="award" fixed-width size="lg" />
+          {{ $t('valmistumispyynnot') }}
         </b-nav-item>
         <b-nav-item
           v-if="$isTekninenPaakayttaja() || $isVirkailija()"
@@ -197,6 +205,10 @@
       } else {
         this.sidebarPosition = 'position-fixed'
       }
+    }
+
+    get isImpersonated() {
+      return this.account?.impersonated
     }
 
     get isImpersonatedErikoistujaVirkailija() {

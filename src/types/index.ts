@@ -1308,18 +1308,22 @@ export interface ValmistumispyyntoVaatimuksetLomake {
 }
 
 export interface Valmistumispyynto {
+  id: number | null
   tila?: ValmistumispyynnonTila
   muokkauspaiva?: string
+  erikoistujanAvatar?: string
   erikoistujanNimi?: string
   erikoistujanOpiskelijatunnus?: string
   erikoistujanSyntymaaika?: string
+  erikoistujanErikoisala?: string
   erikoistujanYliopisto?: string
   erikoistujanLaillistamispaiva?: string
   erikoistujanLaillistamistodistus?: string
   erikoistujanLaillistamistodistusNimi?: string
   erikoistujanLaillistamistodistusTyyppi?: string
   selvitysVanhoistaSuorituksista?: string
-  asetus?: string
+  erikoistujanAsetus?: string
+  opintooikeusId?: number
   opintooikeudenMyontamispaiva?: string
   erikoistujanKuittausaika?: string
   vastuuhenkiloOsaamisenArvioijaNimi?: string
@@ -1337,8 +1341,12 @@ export interface Valmistumispyynto {
   vastuuhenkiloHyvaksyjaKuittausaika?: string
   vastuuhenkiloHyvaksyjaPalautusaika?: string
   vastuuhenkiloHyvaksyjaKorjausehdotus?: string
-  korjausehdotus?: string
   allekirjoitusaika?: string
+}
+
+export interface ValmistumispyyntoArviointienTila {
+  hasArvioitaviaKokonaisuuksiaWithArviointiLowerThanFour: boolean
+  hasArvioitaviaKokonaisuuksiaWithoutArviointi: boolean
 }
 
 export interface ValmistumispyyntoSuoritustenTila {
@@ -1351,4 +1359,18 @@ export interface ValmistumispyyntoLomakeErikoistuja {
   selvitysVanhentuneistaSuorituksista: string | null
   laillistamispaiva: string | null
   laillistamistodistus: File | null
+}
+
+export interface ValmistumispyyntoListItem {
+  id: number
+  erikoistujanNimi: string
+  tila: ValmistumispyynnonTila
+  tapahtumanAjankohta: string
+  isAvoinForCurrentKayttaja: boolean
+}
+
+export interface ValmistumispyyntoLomakeOsaamisenArviointi {
+  id: number | null
+  osaaminenRiittavaValmistumiseen: boolean | null
+  korjausehdotus: string | null
 }
