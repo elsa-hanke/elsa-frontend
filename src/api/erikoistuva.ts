@@ -150,6 +150,11 @@ export async function getVastuuhenkilonArvioLomake() {
   return await axios.get<VastuuhenkilonArvioLomakeErikoistuva>(path)
 }
 
+export async function getKoulutussuunnitelma() {
+  const path = 'erikoistuva-laakari/koulutussuunnitelma'
+  return await axios.get<Koulutussuunnitelma>(path)
+}
+
 export async function putKoulutussuunnitelma(form: Koulutussuunnitelma) {
   return await axios.put<Koulutussuunnitelma>(
     'erikoistuva-laakari/koulutussuunnitelma',

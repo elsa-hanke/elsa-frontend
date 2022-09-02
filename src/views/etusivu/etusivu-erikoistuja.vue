@@ -4,14 +4,12 @@
       <b-col xxl="9">
         <avoimet-asiat-card />
         <erikoistumisen-edistyminen-card />
-        <seurantakeskustelut-card v-if="!isImpersonatedVirkailija" />
         <b-row>
           <b-col xl="6">
-            <b-card-skeleton
-              :header="$t('koulutussuunnitelma')"
-              :loading="true"
-              class="mb-3 d-none"
-            ></b-card-skeleton>
+            <koulutussuunnitelma-card v-if="!isImpersonatedVirkailija" />
+          </b-col>
+          <b-col xl="6">
+            <seurantakeskustelut-card v-if="!isImpersonatedVirkailija" />
           </b-col>
         </b-row>
         <paivittaiset-merkinnat-card v-if="!isImpersonatedVirkailija" />
@@ -39,6 +37,7 @@
   import AvoimetAsiatCard from '@/components/etusivu-cards/avoimet-asiat-card.vue'
   import ErikoistumisenEdistyminenCard from '@/components/etusivu-cards/erikoistumisen-edistyminen-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
+  import KoulutussuunnitelmaCard from '@/components/etusivu-cards/koulutussuunnitelma-card.vue'
   import PaivittaisetMerkinnatCard from '@/components/etusivu-cards/paivittaiset-merkinnat-card.vue'
   import SeurantakeskustelutCard from '@/components/etusivu-cards/seurantakeskustelut-card.vue'
   import store from '@/store'
@@ -51,7 +50,8 @@
       SeurantakeskustelutCard,
       ErikoistumisenEdistyminenCard,
       HenkilotiedotCard,
-      PaivittaisetMerkinnatCard
+      PaivittaisetMerkinnatCard,
+      KoulutussuunnitelmaCard
     }
   })
   export default class EtusivuErikoistuja extends Vue {
