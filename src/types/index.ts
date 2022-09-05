@@ -1094,6 +1094,7 @@ export interface TyoskentelyjaksotTable {
   tyoskentelyjaksot: Tyoskentelyjakso[]
   keskeytykset: Keskeytysaika[]
   tilastot: TyoskentelyjaksotTilastot
+  terveyskeskuskoulutusjaksoLahetetty: boolean
 }
 
 export interface KayttajaErikoisalaPerYliopisto {
@@ -1244,4 +1245,35 @@ export interface KayttajahallintaVastuuhenkilonTehtavatLomake {
 export interface Katseluoikeus {
   erikoistujanNimi: string
   vanhenemispaiva: string
+}
+
+export type TerveyskeskuskoulutusjaksonHyvaksyminen = {
+  id?: number
+  erikoistuvanErikoisala: string
+  erikoistuvanNimi: string
+  erikoistuvanAvatar?: string
+  erikoistuvanOpiskelijatunnus: string
+  erikoistuvanSyntymaaika: string
+  erikoistuvanYliopisto: string
+  terveyskeskuskoulutusjaksonKesto: number
+  laillistamispaiva: string
+  laillistamispaivanLiite?: string
+  laillistamispaivanLiitteenNimi?: string
+  laillistamispaivanLiitteenTyyppi?: string
+  asetus: string
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  vastuuhenkilonNimi: string
+  vastuuhenkilonNimike: string
+}
+
+export type TerveyskeskuskoulutusjaksonHyvaksyntaForm = {
+  laillistamispaiva: string | null
+  laillistamispaivanLiite: File | null
+  tyoskentelyjaksoAsiakirjat: TyoskentelyjaksonAsiakirjat[]
+}
+
+export type TyoskentelyjaksonAsiakirjat = {
+  id?: number | null
+  addedFiles: File[]
+  deletedFiles: number[]
 }

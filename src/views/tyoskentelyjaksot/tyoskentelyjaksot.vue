@@ -20,6 +20,16 @@
             </elsa-button>
           </div>
           <div v-if="!loading">
+            <b-alert
+              v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksoLahetetty"
+              variant="dark"
+              show
+            >
+              <h5>{{ $t('terveyskeskuskoulutusjakson-hyvaksynta') }}</h5>
+              <span>
+                {{ $t('terveyskeskuskoulutusjakso-on-lahetetty-hyvaksyttavaksi') }}
+              </span>
+            </b-alert>
             <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
               <div class="container-fluid">
                 <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">

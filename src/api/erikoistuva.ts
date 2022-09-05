@@ -26,7 +26,9 @@ import {
   KaytonAloitusModel,
   ErikoistuvaLaakari,
   ErikoistumisenEdistyminen,
-  AvoinAsia
+  AvoinAsia,
+  TerveyskeskuskoulutusjaksonHyvaksyminen,
+  TerveyskeskuskoulutusjaksonHyvaksyntaForm
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -327,4 +329,16 @@ export async function patchOpintooikeusKaytossa(opintooikeusId: number) {
 export async function getAvoimetAsiat() {
   const path = 'erikoistuva-laakari/etusivu/avoimet-asiat'
   return await axios.get<AvoinAsia[]>(path)
+}
+
+export async function getTerveyskeskuskoulutusjakso() {
+  const path = 'erikoistuva-laakari/tyoskentelyjaksot/terveyskeskuskoulutusjakso'
+  return await axios.get<TerveyskeskuskoulutusjaksonHyvaksyminen>(path)
+}
+
+export async function postTerveyskeskuskoulutusjakso(
+  form: TerveyskeskuskoulutusjaksonHyvaksyntaForm
+) {
+  const path = 'erikoistuva-laakari/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta'
+  return await axios.post<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, form)
 }

@@ -93,6 +93,7 @@ import Teoriakoulutukset from '@/views/teoriakoulutukset/teoriakoulutukset.vue'
 import TeoriakoulutusTallennettu from '@/views/teoriakoulutukset/teoriakoulutus-tallennettu.vue'
 import TeoriakoulutusView from '@/views/teoriakoulutukset/teoriakoulutus.vue'
 import UusiTeoriakoulutus from '@/views/teoriakoulutukset/uusi-teoriakoulutus.vue'
+import TerveyskeskuskoulutusjaksonHyvaksynta from '@/views/terveyskeskuskoulutusjakso/erikoistuja/terveyskeskuskoulutusjakson-hyvaksynta.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
@@ -401,6 +402,17 @@ const routes: Array<RouteConfig> = [
         beforeEnter: impersonatedErikoistuvaGuard,
         props: {
           routeComponent: UusiTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/tyoskentelyjaksot/terveyskeskuskoulutusjakso',
+        name: 'terveyskeskuskoulutusjakson-hyvaksynta',
+        beforeEnter: impersonatedErikoistuvaGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TerveyskeskuskoulutusjaksonHyvaksynta,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
         }
