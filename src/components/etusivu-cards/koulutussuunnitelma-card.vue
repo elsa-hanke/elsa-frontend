@@ -3,7 +3,7 @@
     :headerRoute="'koulutussuunnitelma'"
     :header="$t('koulutussuunnitelma')"
     :loading="loading"
-    class="mb-5"
+    class="h-100"
   >
     <div v-if="!loading">
       <div>
@@ -52,21 +52,50 @@
           </b-col>
         </b-row>
       </div>
-      <div v-if="koulutusjaksot.length > 0">
-        <b-row v-for="(koulutusjakso, index) in koulutusjaksot" :key="index" lg>
+      <div v-if="koulutusjaksot.length > 0" class="koulutusjaksot-list">
+        <b-row
+          v-for="(koulutusjakso, index) in koulutusjaksot"
+          :key="index"
+          lg
+          class="koulutusjakso"
+        >
           <b-col>
-            <div class="d-flex justify-content-center border rounded pt-1 pb-1 mb-4">
+            <div class="line"></div>
+            <div class="indicator">
+              <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" class="icon" />
+            </div>
+            <div class="d-flex justify-content-center border rounded pt-1 pb-1 mb-4 ml-6">
               <div class="container-fluid">
                 <elsa-button
                   :to="{
-                    name: `koulutussuunnitelma/koulutusjaksot/${koulutusjakso.id} }`
+                    name: 'koulutusjakso',
+                    params: { koulutusjaksoId: koulutusjakso.id }
                   }"
                   variant="link"
                   class="pl-0"
                 >
-                  <h3 class="mb-0">
-                    {{ $t('koulutusjakso') }}
-                  </h3>
+                  <h5 class="mb-0">
+                    {{ koulutusjakso.nimi }}
+                  </h5>
+                  <div
+                    v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
+                    :key="tyoskentelyjakso.id"
+                  >
+                    <span class="date">
+                      {{
+                        tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
+                      }}
+                      -
+                      {{
+                        tyoskentelyjakso.paattymispaiva
+                          ? $date(tyoskentelyjakso.paattymispaiva)
+                          : $t('kesken') | lowercase
+                      }}
+                    </span>
+                    <span class="tyoskentelypaikka">
+                      {{ tyoskentelyjakso.tyoskentelypaikka.nimi }}
+                    </span>
+                  </div>
                 </elsa-button>
               </div>
             </div>
@@ -139,6 +168,56 @@
     .card-body {
       padding-top: 0.75rem;
       padding-bottom: 0.5rem;
+    }
+  }
+  .koulutusjaksot-list {
+    .btn {
+      text-align: left;
+      color: $body-color;
+    }
+    .date {
+      display: block;
+      color: $gray-600;
+      font-size: $font-size-sm;
+    }
+    .tyoskentelypaikka {
+      display: block;
+    }
+    .koulutusjakso {
+      position: relative;
+      .indicator {
+        position: absolute;
+        width: 37px;
+        height: 37px;
+        border-radius: 50%;
+        border: 1px solid $gray-500;
+        left: 1em;
+        top: 0.5em;
+        background: white;
+        .icon {
+          margin: 6px 5px;
+        }
+        &.active {
+          background: $success;
+          border-color: $success;
+          .icon {
+            color: $white;
+          }
+        }
+      }
+      .line {
+        background: $gray-300;
+        height: 100%;
+        position: absolute;
+        width: 1px;
+        left: 2.125em;
+        top: 0.5em;
+      }
+      &:last-child {
+        .line {
+          display: none;
+        }
+      }
     }
   }
 </style>

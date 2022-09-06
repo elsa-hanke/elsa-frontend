@@ -4,11 +4,11 @@
       <b-col xxl="9">
         <avoimet-asiat-card />
         <erikoistumisen-edistyminen-card />
-        <b-row>
-          <b-col xl="6">
+        <b-row class="d-flex">
+          <b-col xl="6" class="mb-5">
             <koulutussuunnitelma-card v-if="!isImpersonatedVirkailija" />
           </b-col>
-          <b-col xl="6">
+          <b-col xl="6" class="mb-5">
             <seurantakeskustelut-card v-if="!isImpersonatedVirkailija" />
           </b-col>
         </b-row>
