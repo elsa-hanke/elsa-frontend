@@ -112,6 +112,9 @@
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
+    <div class="row">
+      <elsa-form-error :active="this.$v.$anyError" />
+    </div>
   </b-form>
 </template>
 
@@ -126,6 +129,7 @@
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Asiakirja, Teoriakoulutus } from '@/types'
   import { mapFiles } from '@/utils/fileMapper'
@@ -133,6 +137,7 @@
   @Component({
     components: {
       ElsaFormGroup,
+      ElsaFormError,
       ElsaFormDatepicker,
       ElsaButton,
       AsiakirjatContent,

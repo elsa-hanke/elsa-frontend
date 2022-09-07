@@ -637,6 +637,7 @@
   "login": "Kirjautuminen",
   "login-ingressi": "ELSAssa erikoistuvat lääkärit, hammaslääkärit, kouluttajat ja virkailijat hoitavat monia erikoistumiseen liittyviä asioita.  ",
   "lomake-ei-taytetty": "Lomaketta ei ole vielä täytetty.",
+  "lomake-sisaltaa-virheita": "Lomake sisältää virheitä. Korjaa virheet ja yritä uudelleen.",
   "lomake-tila-ALLEKIRJOITETTU": "Allekirjoitettu",
   "lomake-tila-AVOIN": "Avoin",
   "lomake-tila-AVOIN_PALAUTUNUT": "Avoin (palautunut)",
