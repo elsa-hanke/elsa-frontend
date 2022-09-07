@@ -3,7 +3,7 @@
     :headerRoute="'seurantakeskustelut'"
     :header="$t('seurantakeskustelut')"
     :loading="loading"
-    class="mb-5"
+    class="h-100"
   >
     <div v-if="!loading">
       <div v-if="!account.impersonated">
