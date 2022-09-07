@@ -7,7 +7,7 @@
   >
     <div v-if="!loading">
       <div>
-        <b-row>
+        <b-row v-if="koulutussuunnitelma.muokkauspaiva">
           <b-col>
             <elsa-button
               :to="{
@@ -23,7 +23,7 @@
             <p>
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-0" />
               {{ $t('paivitetty-viimeksi') }}
-              <b>xx.xx.xxx</b>
+              <strong>{{ $date(koulutussuunnitelma.muokkauspaiva) }}</strong>
             </p>
           </b-col>
         </b-row>
@@ -143,13 +143,13 @@
       try {
         this.koulutusjaksot = (await getKoulutusjaksot()).data
       } catch {
-        toastFail(this, this.$t('seurantakeskustelujen-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('koulutusjaksojen-hakeminen-epaonnistui'))
         this.koulutusjaksot = []
       }
       try {
         this.koulutussuunnitelma = (await getKoulutussuunnitelma()).data
       } catch {
-        toastFail(this, this.$t('seurantakeskustelujen-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('koulutussuunnitelman-hakeminen-epaonnistui'))
       }
       this.loading = false
     }
