@@ -32,6 +32,7 @@
   import BCardSkeleton from '@/components/card/card.vue'
   import ArvioinninTyokalutCard from '@/components/etusivu-cards/arvioinnin-tyokalut-card.vue'
   import ArviointipyynnotCard from '@/components/etusivu-cards/arviointipyynnot-card.vue'
+  import ArvioitavatKokonaisuudetCard from '@/components/etusivu-cards/arvioitavat-kokonaisuudet-card.vue'
   import ErikoistujienSeurantaCard from '@/components/etusivu-cards/erikoistujien-seuranta-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
@@ -47,7 +48,8 @@
       HenkilotiedotCard,
       KoejaksotCard,
       SeurantajaksotCard,
-      VanhenevatKatseluoikeudetCard
+      VanhenevatKatseluoikeudetCard,
+      ArvioitavatKokonaisuudetCard
     }
   })
   export default class EtusivuKouluttaja extends Vue {}
