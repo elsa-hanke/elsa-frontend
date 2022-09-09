@@ -17,6 +17,7 @@ import {
   KayttajatiliTila,
   ReassignedVastuuhenkilonTehtavaTyyppi,
   AvoinAsiaTyyppi,
+  TerveyskeskuskoulutusjaksonTila,
   ValmistumispyynnonTila
 } from '@/utils/constants'
 
@@ -1095,7 +1096,8 @@ export interface TyoskentelyjaksotTable {
   tyoskentelyjaksot: Tyoskentelyjakso[]
   keskeytykset: Keskeytysaika[]
   tilastot: TyoskentelyjaksotTilastot
-  terveyskeskuskoulutusjaksoLahetetty: boolean
+  terveyskeskuskoulutusjaksonTila: TerveyskeskuskoulutusjaksonTila
+  terveyskeskuskoulutusjaksonKorjausehdotus: string
 }
 
 export interface KayttajaErikoisalaPerYliopisto {
@@ -1265,6 +1267,9 @@ export type TerveyskeskuskoulutusjaksonHyvaksyminen = {
   tyoskentelyjaksot: Tyoskentelyjakso[]
   vastuuhenkilonNimi: string
   vastuuhenkilonNimike: string
+  tila: TerveyskeskuskoulutusjaksonTila
+  korjausehdotus: string
+  lisatiedotVirkailijalta: string
 }
 
 export type TerveyskeskuskoulutusjaksonHyvaksyntaForm = {
@@ -1277,6 +1282,13 @@ export type TyoskentelyjaksonAsiakirjat = {
   id?: number | null
   addedFiles: File[]
   deletedFiles: number[]
+}
+
+export type TerveyskeskuskoulutusjaksonVaihe = {
+  id: number
+  tila: TerveyskeskuskoulutusjaksonTila
+  erikoistuvanNimi: string
+  pvm: string
 }
 
 export interface ValmistumispyyntoVaatimuksetLomake {

@@ -6,7 +6,9 @@ import {
   KoejaksonVaihe,
   VastuuhenkilonArvioLomake,
   Page,
-  Erikoisala
+  Erikoisala,
+  TerveyskeskuskoulutusjaksonHyvaksyminen,
+  TerveyskeskuskoulutusjaksonVaihe
 } from '@/types'
 
 export async function getErikoistujienSeurantaRajaimet() {
@@ -70,4 +72,39 @@ export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
 export async function getErikoisalat() {
   const path = `/virkailija/erikoisalat`
   return await axios.get<Erikoisala[]>(path)
+}
+
+export async function getTerveyskeskuskoulutusjaksot(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'erikoistujanNimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  avoin?: boolean
+}) {
+  return await axios.get<Page<TerveyskeskuskoulutusjaksonVaihe>>(
+    '/virkailija/terveyskeskuskoulutusjaksot',
+    {
+      params: {
+        ...params
+      }
+    }
+  )
+}
+
+export async function getTerveyskeskuskoulutusjakso(id: string) {
+  const path = `virkailija/terveyskeskuskoulutusjakso/${id}`
+  return await axios.get<TerveyskeskuskoulutusjaksonHyvaksyminen>(path)
+}
+
+export async function putTerveyskeskuskoulutusjakso(
+  id: string,
+  korjausehdotus: string,
+  lisatiedotVirkailijalta: string
+) {
+  const path = `virkailija/terveyskeskuskoulutusjakson-hyvaksynta/${id}`
+  return await axios.put<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, {
+    korjausehdotus: korjausehdotus,
+    lisatiedotVirkailijalta: lisatiedotVirkailijalta
+  })
 }
