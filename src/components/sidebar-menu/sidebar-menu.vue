@@ -95,6 +95,14 @@
           {{ $t('seurantakeskustelut') }}
         </b-nav-item>
         <b-nav-item
+          v-if="$isVirkailija()"
+          class="border-bottom"
+          :to="{ name: 'terveyskeskuskoulutusjaksot' }"
+        >
+          <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
+          {{ $t('terveyskeskusjaksot') }}
+        </b-nav-item>
+        <b-nav-item
           v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo() || $isVirkailija()"
           class="border-bottom"
           :to="{ name: 'koejakso' }"

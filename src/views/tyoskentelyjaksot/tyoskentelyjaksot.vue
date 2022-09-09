@@ -19,14 +19,42 @@
               {{ $t('lisaa-poissaolo') }}
             </elsa-button>
           </div>
-          <div v-if="!loading">
+          <div v-if="!loading && tyoskentelyjaksotTaulukko != null && tilastot != null">
             <b-alert
-              v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksoLahetetty"
+              v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonTila != null"
               variant="dark"
               show
             >
               <h5>{{ $t('terveyskeskuskoulutusjakson-hyvaksynta') }}</h5>
-              <span>
+              <div v-if="terveyskeskuskoulutusjaksoPalautettuKorjattavaksi">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon
+                      :icon="['fas', 'exclamation-circle']"
+                      class="mr-2 text-danger"
+                    />
+                  </em>
+                  <div>
+                    {{ $t('terveyskeskuskoulutusjakso-on-palautettu-muokattavaksi') }}
+                    <span class="d-block">
+                      {{ $t('syy') }}&nbsp;
+                      <span>
+                        {{ tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonKorjausehdotus }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <elsa-button
+                  :to="{
+                    name: 'terveyskeskuskoulutusjakson-hyvaksynta'
+                  }"
+                  variant="primary"
+                  class="mt-2"
+                >
+                  {{ $t('pyyda-hyvaksyntaa') }}
+                </elsa-button>
+              </div>
+              <span v-if="terveyskeskuskoulutusjaksoLahetetty">
                 {{ $t('terveyskeskuskoulutusjakso-on-lahetetty-hyvaksyttavaksi') }}
               </span>
             </b-alert>
@@ -199,7 +227,7 @@
     TyoskentelyjaksotTilastotKaytannonKoulutus,
     TyoskentelyjaksotTilastotTyoskentelyjaksot
   } from '@/types'
-  import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import { KaytannonKoulutusTyyppi, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
   import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
@@ -492,6 +520,22 @@
           ).length
         }))
         .sort((a, b) => sortByDateDesc(a.paattymispaiva, b.paattymispaiva))
+    }
+
+    get terveyskeskuskoulutusjaksoPalautettuKorjattavaksi() {
+      return (
+        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
+        TerveyskeskuskoulutusjaksonTila.PALAUTETTU_KORJATTAVAKSI
+      )
+    }
+
+    get terveyskeskuskoulutusjaksoLahetetty() {
+      return (
+        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
+          TerveyskeskuskoulutusjaksonTila.ODOTTAA_VIRKAILIJAN_TARKISTUSTA ||
+        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
+          TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+      )
     }
   }
 </script>
