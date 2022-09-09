@@ -1344,7 +1344,7 @@
   "valmistumispyynto-tyotodistukset": "Kaikista työskentelyjaksoista tulee olla asianmukaiset työtodistukset. Työtodistuksissa tulee aina olla kohta \"poissaolot ja keskeytykset\". Mikäli poissaoloja ja keskeytyksiä ei ole, on se ilmettävä työtodistuksesta.",
   "valmistumispyynto-vahvistus": "Lähetyksen jälkeen valmistumispyyntö odottaa vastuuhenkilön suorittamaa osaamisten tarkistusta, opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää. Tämän jälkeen pääset allekirjoittamaan hyväksytyn valmistumispyynnön sähköisesti.",
   "valmistumispyynto-valtakunnallinen-kuulustelu-yli-4-vuotta": "Valtakunnallinen kuulustelu on hyväksytty yli 4 vuotta sitten.",
-  "valmistumispyynto-vanhoja-tyoskentelyjaksoja-tai-suorituksia": "Sinulla on yli {vanhojaSuorituksiaVuodet} vuotta vanhoja työskentelyjaksoja tai opintosuorituksia.",
+  "valmistumispyynto-vanhoja-tyoskentelyjaksoja-tai-suorituksia": "Sinulla on yli {vanhentunutSuoritusVuotta} vuotta vanhoja työskentelyjaksoja tai opintosuorituksia.",
   "valmistumispyynto-vastuuhenkilo-ei-viela-hyvaksynyt": "Vastuuhenkilö ei ole vielä hyväksynyt valmistumispyyntöä.",
   "valmistumispyynto-vastuuhenkilo-ei-viela-tarkistanut-osaamista": "Vastuuhenkilö ei ole vielä tarkistanut osaamista.",
   "valmistumispyynto-vastuuhenkilo-hyvaksynyt": "Vastuuhenkilö on hyväksynyt valmistumispyynnön {vastuuhenkiloHyvaksyjaKuittausaika}",

@@ -117,7 +117,7 @@
                   :name="`${account.firstName} ${account.lastName}`"
                   :erikoisala="account.erikoistuvaLaakari.erikoisalaNimi"
                   :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
-                  :opiskelijatunnus="account.erikoistuvaLaakari.opiskelijatunnus"
+                  :opiskelijatunnus="opiskelijatunnus"
                   :yliopisto="account.erikoistuvaLaakari.yliopisto"
                   :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
                   :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
@@ -388,11 +388,11 @@
         if (this.showValmistumispyyntoForm) {
           this.valmistumispyyntoSuoritustenTila = (await getValmistumispyyntoSuoritustenTila()).data
           this.initLaillistamispaivaAndTodistus()
+          this.loading = false
         }
       } catch (err) {
         toastFail(this, this.$t('valmistumispyynnon-hakeminen-epaonnistui'))
       }
-      this.loading = false
     }
 
     get account() {
@@ -436,13 +436,17 @@
       return this.vastuuhenkiloOsaamisenArvioija !== this.vastuuhenkiloHyvaksyja
     }
 
+    get opiskelijatunnus() {
+      return this.account.erikoistuvaLaakari.opiskelijatunnus ?? ''
+    }
+
     get showValmistumispyyntoForm() {
       return (
-        this.valmistumispyynto.tila === ValmistumispyynnonTila.UUSI ||
-        this.valmistumispyynto.tila ===
+        this.valmistumispyynto?.tila === ValmistumispyynnonTila.UUSI ||
+        this.valmistumispyynto?.tila ===
           ValmistumispyynnonTila.VASTUUHENKILON_TARKISTUS_PALAUTETTU ||
-        this.valmistumispyynto.tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKISTUS_PALAUTETTU ||
-        this.valmistumispyynto.tila === ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU
+        this.valmistumispyynto?.tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKISTUS_PALAUTETTU ||
+        this.valmistumispyynto?.tila === ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU
       )
     }
 
