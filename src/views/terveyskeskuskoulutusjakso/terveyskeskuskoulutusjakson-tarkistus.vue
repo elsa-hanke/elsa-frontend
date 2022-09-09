@@ -7,20 +7,32 @@
           <h1>{{ $t('terveyskeskuskoulutusjakson-tarkistus') }}</h1>
           <div v-if="hyvaksynta != null">
             <b-alert :show="showReturned" variant="dark">
-              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-              <div>
-                {{ $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi') }}
-                <span class="d-block">
-                  {{ $t('syy') }}&nbsp;
-                  <span class="font-weight-500">{{ hyvaksynta.korjausehdotus }}</span>
-                </span>
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi') }}
+                  <span class="d-block">
+                    {{ $t('syy') }}&nbsp;
+                    <span class="font-weight-500">{{ hyvaksynta.korjausehdotus }}</span>
+                  </span>
+                </div>
               </div>
             </b-alert>
             <b-alert :show="showSent" variant="dark">
-              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-              <span>
-                {{ $t('terveyskeskuskoulutusjakso-on-tarkistettu') }}
-              </span>
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+                </em>
+                <div>
+                  {{ $t('terveyskeskuskoulutusjakso-on-tarkistettu') }}
+                  <span class="d-block">
+                    {{ $t('lisatiedot-vastuuhenkilolle') }}:&nbsp;
+                    <span class="font-weight-500">{{ hyvaksynta.lisatiedotVirkailijalta }}</span>
+                  </span>
+                </div>
+              </div>
             </b-alert>
             <p v-if="editable">{{ $t('terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}</p>
             <elsa-button

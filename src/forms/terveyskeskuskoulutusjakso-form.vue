@@ -21,17 +21,17 @@
           <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
             {{ $t('terveyskeskuskoulutuksen-yhteenlaskettu-kesto') }}
           </th>
-          <td class="pl-6">
+          <td class="erikoistuja-details-padding">
             {{ $duration(hyvaksynta.terveyskeskuskoulutusjaksonKesto) }}
           </td>
         </tr>
         <tr
           v-if="hyvaksynta.laillistamispaiva != null && hyvaksynta.laillistamispaivanLiite != null"
         >
-          <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
+          <th scope="row" class="align-middle font-weight-500">
             {{ $t('laillistamispaiva') }}
           </th>
-          <td class="pl-6">
+          <td class="erikoistuja-details-padding">
             {{ $date(hyvaksynta.laillistamispaiva) }} -
             <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
               {{ hyvaksynta.laillistamispaivanLiitteenNimi }}
@@ -39,10 +39,10 @@
           </td>
         </tr>
         <tr v-if="!$isErikoistuva() && hyvaksynta.asetus != null">
-          <th scope="row" style="width: 12rem" class="align-middle font-weight-500">
+          <th scope="row" class="align-middle font-weight-500">
             {{ $t('asetus') }}
           </th>
-          <td class="pl-6">
+          <td class="erikoistuja-details-padding">
             {{ hyvaksynta.asetus }}
           </td>
         </tr>
@@ -211,7 +211,7 @@
     </div>
     <b-row>
       <b-col lg="8">
-        <h3>{{ $t('vastuuhenkilo') }}</h3>
+        <h3>{{ $t('yleislaaketieteen-vastuuhenkilo') }}</h3>
         <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
         <p>
           {{ hyvaksynta.vastuuhenkilonNimi }}
@@ -220,13 +220,34 @@
       </b-col>
     </b-row>
     <hr />
+    <div v-if="showVirkailijaKuittaus">
+      <b-row>
+        <b-col>
+          <h3>{{ $t('tarkistanut') }}</h3>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col lg="4">
+          <h5>{{ $t('paivays') }}</h5>
+          <p>{{ $date(hyvaksynta.virkailijanKuittausaika) }}</p>
+        </b-col>
+        <b-col lg="4">
+          <h5>{{ $t('nimi-ja-nimike') }}</h5>
+          <p>
+            {{ hyvaksynta.virkailijanNimi + ' '
+            }}{{ hyvaksynta.virkailijanNimike ? ', ' + hyvaksynta.virkailijanNimike : '' }}
+          </p>
+        </b-col>
+      </b-row>
+      <hr />
+    </div>
     <div v-if="editable" class="d-flex flex-row-reverse flex-wrap">
       <elsa-button
         v-if="$isErikoistuva()"
         :loading="params.saving"
-        type="submit"
         variant="primary"
         class="ml-2"
+        @click="onValidateAndConfirm('confirm-send')"
       >
         {{ $t('laheta') }}
       </elsa-button>
@@ -251,6 +272,13 @@
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
+    <elsa-confirmation-modal
+      id="confirm-send"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="$t('lahetyksen-jalkeen-virkailijan-tarkistus')"
+      :submitText="$t('laheta')"
+      @submit="onSubmit"
+    />
     <elsa-confirmation-modal
       id="confirm-sign"
       :title="$t('vahvista-lomakkeen-lahetys')"
@@ -300,7 +328,11 @@
     Tyoskentelyjakso
   } from '@/types'
   import { saveBlob } from '@/utils/blobs'
-  import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import {
+    KaytannonKoulutusTyyppi,
+    TerveyskeskuskoulutusjaksonTila,
+    TyoskentelyjaksoTyyppi
+  } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import {
     tyoskentelyjaksoKaytannonKoulutusLabel,
@@ -402,6 +434,14 @@
     get existingFileNamesInOtherViews() {
       return this.reservedAsiakirjaNimetMutable?.filter(
         (nimi) => !this.existingFileNamesInCurrentView.includes(nimi)
+      )
+    }
+
+    get showVirkailijaKuittaus() {
+      return (
+        this.hyvaksynta?.tila ===
+          TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
+        this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
       )
     }
 
@@ -568,5 +608,9 @@
     @include media-breakpoint-down(sm) {
       display: none;
     }
+  }
+
+  .erikoistuja-details-padding {
+    padding-left: 1.7rem;
   }
 </style>

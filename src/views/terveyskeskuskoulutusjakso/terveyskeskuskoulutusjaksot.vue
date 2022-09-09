@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="terveyskeskuskoulutusjaksot">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <h1>{{ $t('terveyskeskuskoulutusjaksot') }}</h1>
@@ -277,7 +277,7 @@
       try {
         await Promise.all([this.fetchRajaimet(), this.fetch()])
       } catch {
-        toastFail(this, this.$t('koejaksojen-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('terveyskeskuskoulutusjaksojen-hakeminen-epaonnistui'))
       }
       this.loading = false
     }
@@ -413,6 +413,9 @@
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
+  .terveyskeskuskoulutusjaksot {
+    max-width: 1024px;
+  }
   .task-type {
     text-transform: capitalize;
   }

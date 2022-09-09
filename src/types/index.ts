@@ -1270,6 +1270,9 @@ export type TerveyskeskuskoulutusjaksonHyvaksyminen = {
   tila: TerveyskeskuskoulutusjaksonTila
   korjausehdotus: string
   lisatiedotVirkailijalta: string
+  virkailijanNimi: string
+  virkailijanNimike: string
+  virkailijanKuittausaika: string
 }
 
 export type TerveyskeskuskoulutusjaksonHyvaksyntaForm = {
