@@ -19,9 +19,6 @@
             <b-col xxl="12" lg="6">
               <arvioinnin-tyokalut-card />
             </b-col>
-            <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
-              <arvioitavat-kokonaisuudet-card />
-            </b-col>
           </b-row>
         </b-col>
       </b-row>
