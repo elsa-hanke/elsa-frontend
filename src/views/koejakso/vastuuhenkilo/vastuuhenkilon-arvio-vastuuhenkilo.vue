@@ -478,6 +478,7 @@
                 v-model="vastuuhenkilonArvio.koejaksoHyvaksytty"
                 :options="koejaksoHyvaksyttyVaihtoehdot"
                 :state="validateState('koejaksoHyvaksytty')"
+                @input="$emit('skipRouteExitConfirm', false)"
                 stacked
               ></b-form-radio-group>
               <b-form-invalid-feedback
