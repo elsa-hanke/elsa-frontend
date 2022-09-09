@@ -1328,5 +1328,7 @@ export interface ValmistumispyyntoSuoritustenTila {
 }
 
 export interface ValmistumispyyntoLomakeErikoistuja {
-  selvitysVanhentuneistaSuorituksista?: string
+  selvitysVanhentuneistaSuorituksista: string | null
+  laillistamispaiva: string | null
+  laillistamistodistus: File | null
 }

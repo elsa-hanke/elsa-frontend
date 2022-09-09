@@ -362,11 +362,25 @@ export async function getValmistumispyyntoSuoritustenTila() {
 }
 
 export async function postValmistumispyynto(form: ValmistumispyyntoLomakeErikoistuja) {
+  const formData = wrapToFormData(form)
+  if (form.laillistamistodistus) {
+    formData.append('laillistamistodistus', form.laillistamistodistus)
+  }
   const path = 'erikoistuva-laakari/valmistumispyynto'
-  return await axios.post<Valmistumispyynto>(path, form)
+  return await axios.post<Valmistumispyynto>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
 
 export async function putValmistumispyynto(form: ValmistumispyyntoLomakeErikoistuja) {
+  const formData = wrapToFormData(form)
+  if (form.laillistamistodistus) {
+    formData.append('laillistamistodistus', form.laillistamistodistus)
+  }
   const path = 'erikoistuva-laakari/valmistumispyynto'
-  return await axios.put<Valmistumispyynto>(path, form)
+  return await axios.put<Valmistumispyynto>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
