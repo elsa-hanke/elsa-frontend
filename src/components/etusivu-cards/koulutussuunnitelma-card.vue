@@ -42,7 +42,7 @@
             </elsa-button>
             <div>
               <elsa-button
-                :to="{ name: 'koulutussuunnitelma/koulutusjaksot/uusi' }"
+                :to="{ name: 'uusi-koulutusjakso' }"
                 variant="outline-primary"
                 class="mb-3 mt-1"
               >
