@@ -495,6 +495,9 @@
               {{ $t('tallenna') }}
             </elsa-button>
           </div>
+          <div class="row">
+            <elsa-form-error :active="this.$v.$anyError" />
+          </div>
         </b-form>
         <div v-else>
           <h5>{{ $t('opintooppaan-nimi') }}</h5>
@@ -603,6 +606,7 @@
   import { getUusinOpas } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Arviointiasteikko, Opintoopas } from '@/types'
   import { ArviointiasteikkoTyyppi } from '@/utils/constants'
@@ -611,6 +615,7 @@
     components: {
       ElsaButton,
       ElsaFormGroup,
+      ElsaFormError,
       ElsaFormDatepicker
     }
   })

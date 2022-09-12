@@ -213,6 +213,9 @@
                 {{ $t('palaa-kayttajahallintaan') }}
               </elsa-button>
             </div>
+            <div class="row">
+              <elsa-form-error :active="this.$v.$anyError" />
+            </div>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -234,6 +237,7 @@
     patchErikoistuvaLaakari
   } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
   import { KayttajahallintaUpdateKayttaja, ElsaError } from '@/types/index'
@@ -244,6 +248,7 @@
   @Component({
     components: {
       ElsaButton,
+      ElsaFormError,
       ElsaFormGroup
     },
     validations: {

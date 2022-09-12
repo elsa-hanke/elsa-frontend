@@ -193,6 +193,9 @@
           </div>
         </b-col>
       </b-row>
+      <b-row>
+        <elsa-form-error :active="this.$v.$anyError" />
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -204,6 +207,7 @@
 
   import { getKayttaja, putVastuuhenkilo } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
   import {
@@ -221,6 +225,7 @@
   @Component({
     components: {
       ElsaButton,
+      ElsaFormError,
       ElsaFormGroup,
       VastuuhenkilonTehtavat
     },

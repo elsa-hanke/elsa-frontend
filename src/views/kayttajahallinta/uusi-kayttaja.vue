@@ -37,6 +37,9 @@
           {{ $t('peruuta') }}
         </elsa-button>
       </div>
+      <div class="row">
+        <elsa-form-error :active="this.$v.$anyError" />
+      </div>
     </b-container>
   </div>
 </template>
@@ -45,6 +48,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { ELSA_ROLE } from '@/utils/roles'
   import ErikoistuvaLaakariForm from '@/views/kayttajahallinta/uusi-erikoistuva-laakari.vue'
@@ -55,6 +59,7 @@
   @Component({
     components: {
       ElsaFormGroup,
+      ElsaFormError,
       ErikoistuvaLaakariForm,
       VastuuhenkiloForm,
       VirkailijaForm,

@@ -270,6 +270,9 @@
               </elsa-button>
             </b-col>
           </b-row>
+          <b-row>
+            <elsa-form-error :active="this.$v.$anyError" />
+          </b-row>
         </div>
       </div>
       <div v-else class="text-center">
@@ -308,6 +311,7 @@
   import { getValiarviointi as getValiarviointiVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
@@ -330,6 +334,7 @@
     components: {
       ErikoistuvaDetails,
       ElsaFormGroup,
+      ElsaFormError,
       ElsaButton,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,

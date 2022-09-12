@@ -194,6 +194,9 @@
         </elsa-button>
       </b-col>
     </b-row>
+    <b-row>
+      <elsa-form-error :active="this.$v.$anyError" />
+    </b-row>
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
@@ -221,6 +224,7 @@
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -243,6 +247,7 @@
       KoulutuspaikkaDetails,
       KouluttajaDetails,
       ElsaFormGroup,
+      ElsaFormError,
       ElsaFormDatepicker,
       ElsaButton,
       ElsaPopover,

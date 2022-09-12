@@ -136,8 +136,8 @@
 
   @Component({
     components: {
-      ElsaFormGroup,
       ElsaFormError,
+      ElsaFormGroup,
       ElsaFormDatepicker,
       ElsaButton,
       AsiakirjatContent,
