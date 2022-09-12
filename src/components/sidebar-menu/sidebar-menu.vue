@@ -107,7 +107,7 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva()"
+          v-if="$isErikoistuva() && featurePreviewModeEnabled"
           class="border-bottom"
           :to="{ name: 'valmistumispyynto' }"
         >
@@ -148,6 +148,7 @@
     paddingTop = 64
     sideNavSubItemHeight = 38
     sidebarPosition = 'position-fixed'
+    featurePreviewModeEnabled = process.env.VUE_APP_FEATURE_PREVIEW_MODE_ENABLED === 'true'
 
     // Tarkistetaan sivunavigaation paikka
     mounted() {

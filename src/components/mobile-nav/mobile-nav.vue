@@ -91,6 +91,14 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
+          v-if="$isErikoistuva() && featurePreviewModeEnabled"
+          class="border-bottom"
+          :to="{ name: 'valmistumispyynto' }"
+        >
+          <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
+          {{ $t('valmistumispyynto') }}
+        </b-nav-item>
+        <b-nav-item
           v-if="$isTekninenPaakayttaja() || $isVirkailija()"
           class="border-bottom"
           :to="{ name: 'kayttajahallinta' }"
@@ -195,7 +203,9 @@
       UserAvatar
     }
   })
-  export default class MobileNav extends Mixins(NavbarMixin) {}
+  export default class MobileNav extends Mixins(NavbarMixin) {
+    featurePreviewModeEnabled = process.env.VUE_APP_FEATURE_PREVIEW_MODE_ENABLED === 'true'
+  }
 </script>
 
 <style lang="scss" scoped>

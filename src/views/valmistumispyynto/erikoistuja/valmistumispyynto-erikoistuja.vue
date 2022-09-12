@@ -388,8 +388,8 @@
         if (this.showValmistumispyyntoForm) {
           this.valmistumispyyntoSuoritustenTila = (await getValmistumispyyntoSuoritustenTila()).data
           this.initLaillistamispaivaAndTodistus()
-          this.loading = false
         }
+        this.loading = false
       } catch (err) {
         toastFail(this, this.$t('valmistumispyynnon-hakeminen-epaonnistui'))
       }
