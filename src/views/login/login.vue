@@ -15,8 +15,18 @@
           <a v-if="showMail" :href="`mailto:${contactMail}`">{{ contactMail }}</a>
         </b-alert>
         <b-alert variant="dark" show>
-          <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-          {{ $t('pilottikaytto-kuvaus') }}
+          <div class="d-flex flex-row">
+            <em class="align-middle">
+              <font-awesome-icon
+                icon="info-circle"
+                fixed-width
+                class="text-muted text-size-md mr-2"
+              />
+            </em>
+            <div>
+              {{ $t('pilottikaytto-kuvaus') }}
+            </div>
+          </div>
         </b-alert>
       </b-col>
     </b-row>
