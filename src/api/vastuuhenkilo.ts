@@ -10,7 +10,10 @@ import {
   Suoritusarviointi,
   ErikoistujienSeuranta,
   KoejaksonVaihe,
-  Arviointipyynto
+  Arviointipyynto,
+  TerveyskeskuskoulutusjaksonVaihe,
+  Page,
+  TerveyskeskuskoulutusjaksonHyvaksyminen
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -79,4 +82,39 @@ export async function getEtusivuKoejaksot() {
 export async function getEtusivuArviointipyynnot() {
   const path = `/vastuuhenkilo/arviointipyynnot`
   return await axios.get<Arviointipyynto[]>(path)
+}
+
+export async function getTerveyskeskuskoulutusjaksot(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'erikoistujanNimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  avoin?: boolean
+}) {
+  return await axios.get<Page<TerveyskeskuskoulutusjaksonVaihe>>(
+    '/vastuuhenkilo/terveyskeskuskoulutusjaksot',
+    {
+      params: {
+        ...params
+      }
+    }
+  )
+}
+
+export async function getTerveyskeskuskoulutusjakso(id: string) {
+  const path = `vastuuhenkilo/terveyskeskuskoulutusjakso/${id}`
+  return await axios.get<TerveyskeskuskoulutusjaksonHyvaksyminen>(path)
+}
+
+export async function putTerveyskeskuskoulutusjakso(id: string, korjausehdotus: string) {
+  const path = `vastuuhenkilo/terveyskeskuskoulutusjakson-hyvaksynta/${id}`
+  return await axios.put<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, {
+    korjausehdotus: korjausehdotus
+  })
+}
+
+export async function getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo() {
+  const path = 'vastuuhenkilo/onko-terveyskeskuskoulutusjakso-vastuuhenkilo'
+  return await axios.get<boolean>(path)
 }

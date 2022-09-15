@@ -21,7 +21,10 @@
           </div>
           <div v-if="!loading && tyoskentelyjaksotTaulukko != null && tilastot != null">
             <b-alert
-              v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonTila != null"
+              v-if="
+                terveyskeskuskoulutusjaksoPalautettuKorjattavaksi ||
+                terveyskeskuskoulutusjaksoLahetetty
+              "
               variant="dark"
               show
             >
@@ -46,7 +49,7 @@
                 </div>
                 <elsa-button
                   :to="{
-                    name: 'terveyskeskuskoulutusjakson-hyvaksynta'
+                    name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto'
                   }"
                   variant="primary"
                   class="mt-2"
@@ -100,6 +103,27 @@
                     </template>
                   </elsa-form-group>
                 </b-row>
+                <elsa-form-group :label="$t('terveyskeskuskoulutusjakso')">
+                  <template v-slot="{ uid }">
+                    <div :id="uid" class="d-flex flex-wrap">
+                      <em class="align-middle">
+                        <font-awesome-icon
+                          :icon="['fas', 'check-circle']"
+                          class="text-success mr-2"
+                        />
+                      </em>
+                      <div>
+                        {{
+                          $t('terveyskeskuskoulutusjakso-on-hyvaksytty-pvm', {
+                            pvm: $date(
+                              tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonHyvaksymispvm
+                            )
+                          })
+                        }}
+                      </div>
+                    </div>
+                  </template>
+                </elsa-form-group>
               </div>
             </div>
             <div class="tyoskentelyjaksot-table">

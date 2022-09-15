@@ -34,6 +34,14 @@
                 </div>
               </div>
             </b-alert>
+            <b-alert variant="success" :show="showAcceptedByEveryone">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                <span>{{ $t('terveyskeskuskoulutusjakso-on-hyvaksytty') }}</span>
+              </div>
+            </b-alert>
             <p v-if="editable">{{ $t('terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}</p>
             <elsa-button
               v-if="!editable"
@@ -132,6 +140,10 @@
       return (
         this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
+    }
+
+    get showAcceptedByEveryone() {
+      return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
     }
 
     async onSubmit(formData: { hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen }) {

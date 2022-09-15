@@ -1098,6 +1098,7 @@ export interface TyoskentelyjaksotTable {
   tilastot: TyoskentelyjaksotTilastot
   terveyskeskuskoulutusjaksonTila: TerveyskeskuskoulutusjaksonTila
   terveyskeskuskoulutusjaksonKorjausehdotus: string
+  terveyskeskuskoulutusjaksonHyvaksymispvm: string
 }
 
 export interface KayttajaErikoisalaPerYliopisto {
@@ -1265,14 +1266,17 @@ export type TerveyskeskuskoulutusjaksonHyvaksyminen = {
   laillistamispaivanLiitteenTyyppi?: string
   asetus: string
   tyoskentelyjaksot: Tyoskentelyjakso[]
-  vastuuhenkilonNimi: string
-  vastuuhenkilonNimike: string
+  yleislaaketieteenVastuuhenkilonNimi: string
+  yleislaaketieteenVastuuhenkilonNimike: string
   tila: TerveyskeskuskoulutusjaksonTila
   korjausehdotus: string
   lisatiedotVirkailijalta: string
   virkailijanNimi: string
   virkailijanNimike: string
   virkailijanKuittausaika: string
+  vastuuhenkilonNimi: string
+  vastuuhenkilonNimike: string
+  vastuuhenkilonKuittausaika: string
 }
 
 export type TerveyskeskuskoulutusjaksonHyvaksyntaForm = {

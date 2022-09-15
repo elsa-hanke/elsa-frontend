@@ -18,6 +18,14 @@ export class RolesPlugin {
       return store.getters['auth/account'].authorities.includes(ELSA_ROLE.Vastuuhenkilo)
     }
 
+    vue.prototype.$isTerveyskeskuskoulutusjaksoVastuuhenkilo = (): boolean => {
+      const data = store.getters['auth/account']
+      return (
+        data.authorities.includes(ELSA_ROLE.Vastuuhenkilo) &&
+        data.terveyskeskuskoulutusjaksoVastuuhenkilo
+      )
+    }
+
     vue.prototype.$isTekninenPaakayttaja = (): boolean => {
       return store.getters['auth/account'].authorities.includes(ELSA_ROLE.TekninenPaakayttaja)
     }
@@ -33,6 +41,7 @@ declare module 'vue/types/vue' {
     $isErikoistuva: Function
     $isKouluttaja: Function
     $isVastuuhenkilo: Function
+    $isTerveyskeskuskoulutusjaksoVastuuhenkilo: Function
     $isTekninenPaakayttaja: Function
     $isVirkailija: Function
   }

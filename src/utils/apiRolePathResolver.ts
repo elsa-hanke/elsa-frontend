@@ -7,6 +7,8 @@ export function resolveRolePath() {
     return 'vastuuhenkilo'
   } else if (Vue.prototype.$isKouluttaja()) {
     return 'kouluttaja'
+  } else if (Vue.prototype.$isVirkailija()) {
+    return 'virkailija'
   } else {
     return ''
   }

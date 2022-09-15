@@ -95,6 +95,7 @@ import TeoriakoulutusTallennettu from '@/views/teoriakoulutukset/teoriakoulutus-
 import TeoriakoulutusView from '@/views/teoriakoulutukset/teoriakoulutus.vue'
 import UusiTeoriakoulutus from '@/views/teoriakoulutukset/uusi-teoriakoulutus.vue'
 import TerveyskeskuskoulutusjaksonHyvaksynta from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-hyvaksynta.vue'
+import TerveyskeskuskoulutusjaksonHyvaksyntaPyynto from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-hyvaksyntapyynto.vue'
 import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-tarkistus.vue'
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
@@ -421,17 +422,17 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: '/tyoskentelyjaksot/terveyskeskuskoulutusjakso',
-        name: 'terveyskeskuskoulutusjakson-hyvaksynta',
+        name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto',
         beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
-          routeComponent: TerveyskeskuskoulutusjaksonHyvaksynta,
+          routeComponent: TerveyskeskuskoulutusjaksonHyvaksyntaPyynto,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
         }
       },
       {
-        path: '/tyoskentelyjaksot/terveyskeskuskoulutusjakso/:terveyskeskuskoulutusjaksoId',
+        path: '/terveyskeskuskoulutusjaksot/terveyskeskuskoulutusjakson-tarkistus/:terveyskeskuskoulutusjaksoId',
         name: 'terveyskeskuskoulutusjakson-tarkistus',
         beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
@@ -442,13 +443,24 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
+        path: '/terveyskeskuskoulutusjaksot/terveyskeskuskoulutusjakson-hyvaksynta/:terveyskeskuskoulutusjaksoId',
+        name: 'terveyskeskuskoulutusjakson-hyvaksynta',
+        beforeEnter: impersonatedErikoistuvaGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TerveyskeskuskoulutusjaksonHyvaksynta,
+          allowedRoles: [ELSA_ROLE.Vastuuhenkilo],
+          confirmRouteExit: true
+        }
+      },
+      {
         path: '/tyoskentelyjaksot/terveyskeskuskoulutusjaksot',
         name: 'terveyskeskuskoulutusjaksot',
         beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: Terveyskeskuskoulutusjaksot,
-          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija],
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija, ELSA_ROLE.Vastuuhenkilo],
           confirmRouteExit: true
         }
       },
