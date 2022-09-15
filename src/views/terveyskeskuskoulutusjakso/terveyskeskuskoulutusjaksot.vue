@@ -3,7 +3,13 @@
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <h1>{{ $t('terveyskeskuskoulutusjaksot') }}</h1>
-      <p class="mb-2">{{ $t('terveyskeskuskoulutusjaksot-ingressi-virkailija') }}</p>
+      <p class="mb-2">
+        {{
+          $isVirkailija()
+            ? $t('terveyskeskuskoulutusjaksot-ingressi-virkailija')
+            : $t('terveyskeskuskoulutusjaksot-ingressi-vastuuhenkilo')
+        }}
+      </p>
       <b-row lg>
         <b-col cols="12" lg="5">
           <elsa-search-input
@@ -67,7 +73,9 @@
                 <template #cell(erikoistuvanNimi)="data">
                   <b-link
                     :to="{
-                      name: 'terveyskeskuskoulutusjakson-tarkistus',
+                      name: $isVirkailija()
+                        ? 'terveyskeskuskoulutusjakson-tarkistus'
+                        : 'terveyskeskuskoulutusjakson-hyvaksynta',
                       params: { terveyskeskuskoulutusjaksoId: data.item.id }
                     }"
                     class="task-type"
@@ -94,11 +102,13 @@
                   <elsa-button
                     variant="primary"
                     :to="{
-                      name: 'terveyskeskuskoulutusjakson-tarkistus',
+                      name: $isVirkailija()
+                        ? 'terveyskeskuskoulutusjakson-tarkistus'
+                        : 'terveyskeskuskoulutusjakson-hyvaksynta',
                       params: { terveyskeskuskoulutusjaksoId: row.item.id }
                     }"
                   >
-                    {{ $t('tarkista') }}
+                    {{ $isVirkailija() ? $t('tarkista') : $t('hyvaksy') }}
                   </elsa-button>
                 </template>
               </b-table>
@@ -149,7 +159,9 @@
                 <template #cell(erikoistuvanNimi)="data">
                   <b-link
                     :to="{
-                      name: 'terveyskeskuskoulutusjakson-tarkistus',
+                      name: $isVirkailija()
+                        ? 'terveyskeskuskoulutusjakson-tarkistus'
+                        : 'terveyskeskuskoulutusjakson-hyvaksynta',
                       params: { terveyskeskuskoulutusjaksoId: data.item.id }
                     }"
                     class="task-type"
@@ -190,17 +202,19 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Watch } from 'vue-property-decorator'
 
-  import { getErikoisalat, getTerveyskeskuskoulutusjaksot } from '@/api/virkailija'
+  import { getErikoisalat } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import { Erikoisala, Page, TerveyskeskuskoulutusjaksonVaihe } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { LomakeTilat, TaskStatus, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
@@ -283,33 +297,43 @@
     }
 
     async fetchRajaimet() {
-      this.erikoisalat = (await getErikoisalat()).data
+      this.erikoisalat = this.$isVirkailija() ? (await getErikoisalat()).data : []
     }
 
     async fetch() {
       this.avoimetJaksot = (
-        await getTerveyskeskuskoulutusjaksot({
-          page: this.currentAvoinPage - 1,
-          size: this.perPage,
-          sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
-          ...(this.filtered.nimi ? { 'erikoistujanNimi.contains': this.filtered.nimi } : {}),
-          ...(this.filtered.erikoisala?.id
-            ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-            : {}),
-          avoin: true
-        })
+        await axios.get<Page<TerveyskeskuskoulutusjaksonVaihe>>(
+          `/${resolveRolePath()}/terveyskeskuskoulutusjaksot`,
+          {
+            params: {
+              page: this.currentAvoinPage - 1,
+              size: this.perPage,
+              sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
+              ...(this.filtered.nimi ? { 'erikoistujanNimi.contains': this.filtered.nimi } : {}),
+              ...(this.filtered.erikoisala?.id
+                ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
+                : {}),
+              avoin: true
+            }
+          }
+        )
       ).data
       this.muutJaksot = (
-        await getTerveyskeskuskoulutusjaksot({
-          page: this.currentMuutPage - 1,
-          size: this.perPage,
-          sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
-          ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
-          ...(this.filtered.erikoisala?.id
-            ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-            : {}),
-          avoin: false
-        })
+        await axios.get<Page<TerveyskeskuskoulutusjaksonVaihe>>(
+          `/${resolveRolePath()}/terveyskeskuskoulutusjaksot`,
+          {
+            params: {
+              page: this.currentMuutPage - 1,
+              size: this.perPage,
+              sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
+              ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+              ...(this.filtered.erikoisala?.id
+                ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
+                : {}),
+              avoin: false
+            }
+          }
+        )
       ).data
     }
 

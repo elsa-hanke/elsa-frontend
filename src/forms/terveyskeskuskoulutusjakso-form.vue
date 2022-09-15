@@ -214,8 +214,12 @@
         <h3>{{ $t('yleislaaketieteen-vastuuhenkilo') }}</h3>
         <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
         <p>
-          {{ hyvaksynta.vastuuhenkilonNimi }}
-          {{ hyvaksynta.vastuuhenkilonNimike ? ', ' + hyvaksynta.vastuuhenkilonNimike : '' }}
+          {{ hyvaksynta.yleislaaketieteenVastuuhenkilonNimi }}
+          {{
+            hyvaksynta.yleislaaketieteenVastuuhenkilonNimike
+              ? ', ' + hyvaksynta.yleislaaketieteenVastuuhenkilonNimike
+              : ''
+          }}
         </p>
       </b-col>
     </b-row>
@@ -241,24 +245,54 @@
       </b-row>
       <hr />
     </div>
+    <div v-if="showVastuuhenkiloKuittaus">
+      <b-row>
+        <b-col>
+          <h3>{{ $t('hyvaksynyt') }}</h3>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col lg="4">
+          <h5>{{ $t('paivays') }}</h5>
+          <p>{{ $date(hyvaksynta.vastuuhenkilonKuittausaika) }}</p>
+        </b-col>
+        <b-col lg="4">
+          <h5>{{ $t('nimi-ja-nimike') }}</h5>
+          <p>
+            {{ hyvaksynta.vastuuhenkilonNimi + ' '
+            }}{{ hyvaksynta.vastuuhenkilonNimike ? ', ' + hyvaksynta.vastuuhenkilonNimike : '' }}
+          </p>
+        </b-col>
+      </b-row>
+      <hr />
+    </div>
     <div v-if="editable" class="d-flex flex-row-reverse flex-wrap">
       <elsa-button
         v-if="$isErikoistuva()"
         :loading="params.saving"
         variant="primary"
         class="ml-2"
-        @click="onValidateAndConfirm('confirm-send')"
+        @click="onValidateAndConfirm('confirm-erikoistuja')"
       >
         {{ $t('laheta') }}
       </elsa-button>
       <elsa-button
-        v-if="!$isErikoistuva()"
+        v-if="$isVirkailija()"
         :loading="params.saving"
         variant="primary"
         class="ml-3"
-        @click="onValidateAndConfirm('confirm-sign')"
+        @click="onValidateAndConfirm('confirm-virkailija')"
       >
         {{ $t('hyvaksy-laheta') }}
+      </elsa-button>
+      <elsa-button
+        v-if="$isVastuuhenkilo()"
+        :loading="params.saving"
+        variant="primary"
+        class="ml-3"
+        @click="onValidateAndConfirm('confirm-vastuuhenkilo')"
+      >
+        {{ $t('hyvaksy') }}
       </elsa-button>
       <elsa-button
         v-if="!$isErikoistuva()"
@@ -273,14 +307,14 @@
       </elsa-button>
     </div>
     <elsa-confirmation-modal
-      id="confirm-send"
+      id="confirm-erikoistuja"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-virkailijan-tarkistus')"
       :submitText="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal
-      id="confirm-sign"
+      id="confirm-virkailija"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-vastuuhenkilo-hyvaksynta')"
       :submitText="$t('hyvaksy-laheta')"
@@ -298,6 +332,13 @@
         </elsa-form-group>
       </template>
     </elsa-confirmation-modal>
+    <elsa-confirmation-modal
+      id="confirm-vastuuhenkilo"
+      :title="$t('vahvista-lomakkeen-lahetys')"
+      :text="$t('vahvistuksen-jalkeen-terveyskeskuskoulutusjakso-hyvaksytty')"
+      :submitText="$t('laheta')"
+      @submit="onSubmit"
+    />
     <elsa-return-to-sender-modal
       id="return-to-sender"
       :title="$t('palauta-erikoistuvalle-muokattavaksi')"
@@ -443,6 +484,10 @@
           TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
         this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
       )
+    }
+
+    get showVastuuhenkiloKuittaus() {
+      return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
     }
 
     validateForm(): boolean {

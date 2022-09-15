@@ -6,19 +6,13 @@
         <b-col>
           <h1>{{ $t('terveyskeskuskoulutusjakson-hyvaksynta') }}</h1>
           <div v-if="hyvaksynta != null">
-            <b-alert :show="showSent" variant="dark">
-              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-              <span>
-                {{ $t('terveyskeskuskoulutusjakso-on-lahetetty-hyvaksyttavaksi') }}
-              </span>
-            </b-alert>
-            <b-alert :show="showReturned" variant="danger" class="mt-3">
+            <b-alert :show="showReturned" variant="dark">
               <div class="d-flex flex-row">
                 <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                  <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('terveyskeskuskoulutusjakso-on-palautettu-muokattavaksi') }}
+                  {{ $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi') }}
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
                     <span class="font-weight-500">{{ hyvaksynta.korjausehdotus }}</span>
@@ -26,23 +20,37 @@
                 </div>
               </div>
             </b-alert>
-            <p v-if="editable">{{ $t('terveyskeskuskoulutusjakson-hyvaksynta-kuvaus') }}</p>
+            <b-alert variant="success" :show="showAcceptedByEveryone">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                <span>{{ $t('terveyskeskuskoulutusjakso-on-hyvaksytty') }}</span>
+              </div>
+            </b-alert>
+            <div v-if="editable">
+              {{ $t('terveyskeskuskoulutusjakson-hyvaksynta-vastuuhenkilo-kuvaus') }}
+              <div v-show="hyvaksynta.lisatiedotVirkailijalta != null">
+                <p class="mb-2">
+                  <strong>{{ $t('lisatiedot-virkailijalta') }}:</strong>
+                  {{ hyvaksynta.lisatiedotVirkailijalta }}
+                </p>
+              </div>
+            </div>
+            <elsa-button
+              v-if="!editable"
+              :to="{ name: 'terveyskeskuskoulutusjaksot' }"
+              variant="primary"
+            >
+              {{ $t('palaa-terveyskeskuskoulutusjaksoihin') }}
+            </elsa-button>
             <hr />
             <terveyskeskuskoulutusjakso-form
               :hyvaksynta="hyvaksynta"
-              :reservedAsiakirjaNimetMutable="reservedAsiakirjaNimetMutable"
               :editable="editable"
               @submit="onSubmit"
               @cancel="onCancel"
             />
-            <elsa-button
-              v-if="!editable"
-              :to="{ name: 'tyoskentelyjaksot' }"
-              variant="link"
-              :class="'mb-3 mr-auto font-weight-500 tyoskentelyjaksot-link'"
-            >
-              {{ $t('palaa-tyoskentelyjaksoihin') }}
-            </elsa-button>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -54,18 +62,13 @@
 </template>
 
 <script lang="ts">
-  import axios, { AxiosError } from 'axios'
+  import { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getTerveyskeskuskoulutusjakso } from '@/api/erikoistuva'
+  import { getTerveyskeskuskoulutusjakso, putTerveyskeskuskoulutusjakso } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import TerveyskeskuskoulutusjaksoForm from '@/forms/terveyskeskuskoulutusjakso-form.vue'
-  import store from '@/store'
-  import {
-    ElsaError,
-    TerveyskeskuskoulutusjaksonHyvaksyminen,
-    TerveyskeskuskoulutusjaksonHyvaksyntaForm
-  } from '@/types'
+  import { ElsaError, TerveyskeskuskoulutusjaksonHyvaksyminen } from '@/types'
   import { TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -82,8 +85,8 @@
         to: { name: 'etusivu' }
       },
       {
-        text: this.$t('tyoskentelyjaksot'),
-        to: { name: 'tyoskentelyjaksot' }
+        text: this.$t('terveyskeskuskoulutusjaksot'),
+        to: { name: 'terveyskeskuskoulutusjaksot' }
       },
       {
         text: this.$t('terveyskeskuskoulutusjakson-hyvaksynta'),
@@ -96,13 +99,11 @@
     }
 
     hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen | null = null
-    reservedAsiakirjaNimetMutable: string[] | undefined = []
 
     async mounted() {
       try {
-        this.hyvaksynta = (await getTerveyskeskuskoulutusjakso()).data
-        this.reservedAsiakirjaNimetMutable = (
-          await axios.get('erikoistuva-laakari/asiakirjat/nimet')
+        this.hyvaksynta = (
+          await getTerveyskeskuskoulutusjakso(this.$route.params.terveyskeskuskoulutusjaksoId)
         ).data
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
@@ -115,18 +116,13 @@
               )}`
             : this.$t('terveyskeskuskoulutusjakson-tietojen-hakeminen-epaonnistui')
         )
-        this.$router.replace({ name: 'tyoskentelyjaksot' })
+        this.$router.replace({ name: 'terveyskeskuskoulutusjaksot' })
       }
-    }
-
-    get account() {
-      return store.getters['auth/account']
     }
 
     get editable() {
       return (
-        (this.hyvaksynta?.id == null || this.hyvaksynta?.korjausehdotus != null) &&
-        !this.account.impersonated
+        this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
     }
 
@@ -134,91 +130,28 @@
       return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.PALAUTETTU_KORJATTAVAKSI
     }
 
-    get showSent() {
-      return (
-        this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.ODOTTAA_VIRKAILIJAN_TARKISTUSTA ||
-        this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
-      )
+    get showAcceptedByEveryone() {
+      return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
     }
 
-    async onSubmit(
-      submitData: {
-        hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen
-        form: TerveyskeskuskoulutusjaksonHyvaksyntaForm
-      },
-      params: { saving: boolean }
-    ) {
-      params.saving = true
-
-      for (const asiakirjat of submitData.form.tyoskentelyjaksoAsiakirjat) {
-        const formData = new FormData()
-        asiakirjat.addedFiles.forEach((file: File) =>
-          formData.append(`addedFiles`, file, file.name)
-        )
-        asiakirjat.deletedFiles.forEach((file: number) =>
-          formData.append(`deletedFiles`, String(file))
-        )
-
-        try {
-          await axios.put(
-            `erikoistuva-laakari/tyoskentelyjaksot/${asiakirjat.id}/asiakirjat`,
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              timeout: 120000
-            }
-          )
-        } catch (err) {
-          const axiosError = err as AxiosError<ElsaError>
-          const message = axiosError?.response?.data?.message
-          toastFail(
-            this,
-            message
-              ? `${this.$t('terveyskeskuskoulutusjakson-lahetys-epaonnistui')}: ${this.$t(message)}`
-              : this.$t('terveyskeskuskoulutusjakson-lahetys-epaonnistui')
-          )
-          return
-        }
-      }
+    async onSubmit(formData: { hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen }) {
+      this.params.saving = true
 
       try {
-        const formData = new FormData()
-        if (submitData.form.laillistamispaiva != null)
-          formData.append('laillistamispaiva', submitData.form.laillistamispaiva)
-        if (submitData.form.laillistamispaivanLiite != null)
-          formData.append(
-            'laillistamispaivanLiite',
-            submitData.form.laillistamispaivanLiite,
-            submitData.form.laillistamispaivanLiite?.name
-          )
-        if (this.hyvaksynta?.id === null) {
-          await axios.post(
-            'erikoistuva-laakari/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta',
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              timeout: 120000
-            }
-          )
-        } else {
-          await axios.put(
-            'erikoistuva-laakari/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta',
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              timeout: 120000
-            }
-          )
-        }
-        toastSuccess(this, this.$t('terveyskeskuskoulutusjakson-lahetys-onnistui'))
+        await putTerveyskeskuskoulutusjakso(
+          this.$route.params.terveyskeskuskoulutusjaksoId,
+          formData.hyvaksynta?.korjausehdotus
+        )
+
+        toastSuccess(
+          this,
+          formData.hyvaksynta?.korjausehdotus != null
+            ? this.$t('terveyskeskuskoulutusjakso-palautettu-muokattavaksi')
+            : this.$t('terveyskeskuskoulutusjakso-hyvaksytty')
+        )
+
         this.$emit('skipRouteExitConfirm', true)
-        this.$router.push({ name: 'tyoskentelyjaksot' })
+        this.$router.push({ name: 'terveyskeskuskoulutusjaksot' })
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
         const message = axiosError?.response?.data?.message
@@ -233,7 +166,7 @@
     }
 
     async onCancel() {
-      this.$router.push({ name: 'tyoskentelyjaksot' })
+      this.$router.push({ name: 'terveyskeskuskoulutusjaksot' })
     }
   }
 </script>
@@ -241,11 +174,5 @@
 <style lang="scss" scoped>
   .terveyskeskuskoulutusjakso {
     max-width: 1024px;
-  }
-
-  .tyoskentelyjaksot-link::before {
-    content: '<';
-    position: absolute;
-    left: 1rem;
   }
 </style>

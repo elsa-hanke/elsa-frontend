@@ -3,6 +3,7 @@ import { Module } from 'vuex'
 
 import * as api from '@/api'
 import { getErikoistuvaLaakari } from '@/api/erikoistuva'
+import { getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo } from '@/api/vastuuhenkilo'
 
 const auth: Module<any, any> = {
   namespaced: true,
@@ -62,6 +63,11 @@ const auth: Module<any, any> = {
         }
         if (data.impersonated) {
           data.originalUser = (await axios.get('kayttaja-impersonated')).data
+        }
+        if (data.authorities.includes('ROLE_VASTUUHENKILO')) {
+          data.terveyskeskuskoulutusjaksoVastuuhenkilo = (
+            await getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo()
+          ).data
         }
         commit('authSuccess', data)
       } catch (err) {
