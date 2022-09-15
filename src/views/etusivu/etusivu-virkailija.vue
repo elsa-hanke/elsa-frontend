@@ -5,6 +5,7 @@
       <b-row>
         <b-col xxl="9">
           <div v-if="!loading">
+            <terveyskeskuskoulutusjaksot-card />
             <koejaksot-card :showVaihe="false" />
             <valmistumispyynnot-card />
           </div>
@@ -30,6 +31,7 @@
   import ErikoistujienSeurantaVirkailijaCard from '@/components/etusivu-cards/erikoistujien-seuranta-virkailija-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
+  import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
 
   @Component({
@@ -38,6 +40,7 @@
       ErikoistujienSeurantaVirkailijaCard,
       HenkilotiedotCard,
       KoejaksotCard,
+      TerveyskeskuskoulutusjaksotCard,
       ValmistumispyynnotCard
     }
   })

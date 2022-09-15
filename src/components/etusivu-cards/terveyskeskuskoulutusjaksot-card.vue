@@ -1,5 +1,5 @@
 <template>
-  <b-card-skeleton :header="$t('koejaksot')" :loading="loading" class="mb-4">
+  <b-card-skeleton :header="$t('terveyskeskuskoulutusjaksot')" :loading="loading" class="mb-4">
     <div v-if="rows > 0">
       <b-table fixed :items="vaiheet" :fields="fields" stacked="md">
         <template #cell(pvm)="data">
@@ -15,8 +15,10 @@
         <template #cell(erikoistuvanNimi)="data">
           <b-link
             :to="{
-              name: linkComponent(data.item.tyyppi),
-              params: { id: data.item.id }
+              name: $isVirkailija()
+                ? 'terveyskeskuskoulutusjakson-tarkistus'
+                : 'terveyskeskuskoulutusjakson-hyvaksynta',
+              params: { terveyskeskuskoulutusjaksoId: data.item.id }
             }"
             class="task-type"
           >
@@ -29,11 +31,13 @@
             variant="primary"
             class="pt-1 pb-1"
             :to="{
-              name: linkComponent(data.item.tyyppi),
-              params: { id: data.item.id }
+              name: $isVirkailija()
+                ? 'terveyskeskuskoulutusjakson-tarkistus'
+                : 'terveyskeskuskoulutusjakson-hyvaksynta',
+              params: { terveyskeskuskoulutusjaksoId: data.item.id }
             }"
           >
-            {{ $t(buttonText(data.item.tyyppi)) }}
+            {{ $isVirkailija() ? $t('tarkista') : $t('hyvaksy') }}
           </elsa-button>
         </template>
       </b-table>
@@ -41,22 +45,20 @@
     <div v-else>
       <b-alert variant="dark" show>
         <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-        {{ $t('ei-avoimia-koejakson-vaiheita') }}
+        {{ $t('ei-avoimia-terveyskoulutusjaksoja') }}
       </b-alert>
     </div>
   </b-card-skeleton>
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
-  import { getEtusivuKoejaksot as getEtusivuKoejaksotKouluttaja } from '@/api/kouluttaja'
-  import { getEtusivuKoejaksot as getEtusivuKoejaksotVastuuhenkilo } from '@/api/vastuuhenkilo'
-  import { getEtusivuKoejaksot as getEtusivuKoejaksotVirkailija } from '@/api/virkailija'
+  import { getTerveyskeskuskoulutusjaksot as getTerveyskeskuskoulutusjaksotVastuuhenkilo } from '@/api/vastuuhenkilo'
+  import { getTerveyskeskuskoulutusjaksot as getTerveyskeskuskoulutusjaksotVirkailija } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
-  import { KoejaksonVaihe } from '@/types'
-  import { LomakeTyypit } from '@/utils/constants'
+  import { TerveyskeskuskoulutusjaksonVaihe } from '@/types'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -65,11 +67,9 @@
       ElsaButton
     }
   })
-  export default class KoejaksotCard extends Vue {
-    vaiheet: KoejaksonVaihe[] | null = null
+  export default class TerveyskeskuskoulutusjaksotCard extends Vue {
+    vaiheet: TerveyskeskuskoulutusjaksonVaihe[] | null = null
 
-    @Prop({ required: false, default: true })
-    showVaihe!: boolean
     get fields() {
       return [
         {
@@ -83,13 +83,6 @@
           sortable: true
         },
         {
-          key: 'tyyppi',
-          label: this.$t('vaihe'),
-          sortable: true,
-          thClass: this.showVaihe ? '' : 'd-none',
-          tdClass: this.showVaihe ? '' : 'd-none'
-        },
-        {
           key: 'actions',
           label: '',
           sortable: false,
@@ -100,56 +93,27 @@
 
     loading = true
 
-    private componentLinks = new Map([
-      [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
-      [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja'],
-      [LomakeTyypit.VALIARVIOINTI, 'valiarviointi-kouluttaja'],
-      [LomakeTyypit.KEHITTAMISTOIMENPITEET, 'kehittamistoimenpiteet-kouluttaja'],
-      [LomakeTyypit.LOPPUKESKUSTELU, 'loppukeskustelu-kouluttaja'],
-      [LomakeTyypit.VASTUUHENKILON_ARVIO, 'vastuuhenkilon-arvio-vastuuhenkilo']
-    ])
-
     async mounted() {
       try {
-        if (this.$isVastuuhenkilo()) {
-          this.vaiheet = (await getEtusivuKoejaksotVastuuhenkilo()).data
-        } else if (this.$isVirkailija()) {
-          this.vaiheet = (await getEtusivuKoejaksotVirkailija()).data
-        } else {
-          this.vaiheet = (await getEtusivuKoejaksotKouluttaja()).data
+        const avoinParams = {
+          page: 0,
+          size: 10,
+          sort: 'muokkauspaiva,asc',
+          avoin: true
         }
+        this.vaiheet = (
+          await (this.$isVirkailija()
+            ? getTerveyskeskuskoulutusjaksotVirkailija(avoinParams)
+            : getTerveyskeskuskoulutusjaksotVastuuhenkilo(avoinParams))
+        ).data.content
       } catch (err) {
-        toastFail(this, this.$t('koejaksojen-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('terveyskeskuskoulutusjaksojen-hakeminen-epaonnistui'))
       }
       this.loading = false
     }
 
     get rows() {
       return this.vaiheet?.length ?? 0
-    }
-
-    linkComponent(type: LomakeTyypit) {
-      if (this.$isVirkailija() && type === LomakeTyypit.VASTUUHENKILON_ARVIO) {
-        return 'virkailijan-tarkistus'
-      }
-      return this.componentLinks.get(type)
-    }
-
-    buttonText(type: LomakeTyypit) {
-      switch (type) {
-        case LomakeTyypit.KOULUTUSSOPIMUS:
-          return 'hyvaksy'
-        case LomakeTyypit.ALOITUSKESKUSTELU:
-          return 'hyvaksy'
-        case LomakeTyypit.VALIARVIOINTI:
-          return 'tee-arviointi'
-        case LomakeTyypit.KEHITTAMISTOIMENPITEET:
-          return 'tee-arviointi'
-        case LomakeTyypit.LOPPUKESKUSTELU:
-          return 'tee-arviointi'
-        case LomakeTyypit.VASTUUHENKILON_ARVIO:
-          return 'tee-arviointi'
-      }
     }
   }
 </script>

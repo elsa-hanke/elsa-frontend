@@ -6,11 +6,7 @@
         <b-col xxl="9">
           <arviointipyynnot-card />
           <koejaksot-card />
-          <b-card-skeleton
-            :header="$t('terveyskeskusjaksot')"
-            :loading="true"
-            class="mb-4 d-none"
-          ></b-card-skeleton>
+          <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
           <valmistumispyynnot-card />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
           <erikoistujien-seuranta-card />
@@ -40,6 +36,7 @@
   import ErikoistujienSeurantaCard from '@/components/etusivu-cards/erikoistujien-seuranta-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
+  import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
 
   @Component({
@@ -50,6 +47,7 @@
       ErikoistujienSeurantaCard,
       HenkilotiedotCard,
       KoejaksotCard,
+      TerveyskeskuskoulutusjaksotCard,
       ValmistumispyynnotCard,
       ArvioitavatKokonaisuudetCard
     }
