@@ -202,19 +202,21 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Watch } from 'vue-property-decorator'
 
-  import { getErikoisalat } from '@/api/virkailija'
+  import { getTerveyskeskuskoulutusjaksot as getTerveyskeskuskoulutusjaksotVastuuhenkilo } from '@/api/vastuuhenkilo'
+  import {
+    getErikoisalat,
+    getTerveyskeskuskoulutusjaksot as getTerveyskeskuskoulutusjaksotVirkailija
+  } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import { Erikoisala, Page, TerveyskeskuskoulutusjaksonVaihe } from '@/types'
-  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { LomakeTilat, TaskStatus, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
@@ -301,39 +303,36 @@
     }
 
     async fetch() {
+      const avoinParams = {
+        page: this.currentAvoinPage - 1,
+        size: this.perPage,
+        sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
+        ...(this.filtered.nimi ? { 'erikoistujanNimi.contains': this.filtered.nimi } : {}),
+        ...(this.filtered.erikoisala?.id
+          ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
+          : {}),
+        avoin: true
+      }
       this.avoimetJaksot = (
-        await axios.get<Page<TerveyskeskuskoulutusjaksonVaihe>>(
-          `/${resolveRolePath()}/terveyskeskuskoulutusjaksot`,
-          {
-            params: {
-              page: this.currentAvoinPage - 1,
-              size: this.perPage,
-              sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
-              ...(this.filtered.nimi ? { 'erikoistujanNimi.contains': this.filtered.nimi } : {}),
-              ...(this.filtered.erikoisala?.id
-                ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-                : {}),
-              avoin: true
-            }
-          }
-        )
+        await (this.$isVirkailija()
+          ? getTerveyskeskuskoulutusjaksotVirkailija(avoinParams)
+          : getTerveyskeskuskoulutusjaksotVastuuhenkilo(avoinParams))
       ).data
+
+      const muutParams = {
+        page: this.currentMuutPage - 1,
+        size: this.perPage,
+        sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
+        ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+        ...(this.filtered.erikoisala?.id
+          ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
+          : {}),
+        avoin: false
+      }
       this.muutJaksot = (
-        await axios.get<Page<TerveyskeskuskoulutusjaksonVaihe>>(
-          `/${resolveRolePath()}/terveyskeskuskoulutusjaksot`,
-          {
-            params: {
-              page: this.currentMuutPage - 1,
-              size: this.perPage,
-              sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
-              ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
-              ...(this.filtered.erikoisala?.id
-                ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-                : {}),
-              avoin: false
-            }
-          }
-        )
+        await (this.$isVirkailija()
+          ? getTerveyskeskuskoulutusjaksotVirkailija(muutParams)
+          : getTerveyskeskuskoulutusjaksotVastuuhenkilo(muutParams))
       ).data
     }
 
