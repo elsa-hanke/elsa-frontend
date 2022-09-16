@@ -272,6 +272,7 @@
   import { getKoulutussopimus as getKoulutussopimusVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
@@ -299,6 +300,7 @@
       KouluttajaKoulutussopimusForm,
       VastuuhenkiloKoulutussopimusForm,
       ElsaFormGroup,
+      ElsaFormError,
       ElsaButton,
       KoulutussopimusReadonly,
       ErikoistuvaDetails,

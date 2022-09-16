@@ -159,6 +159,9 @@
         {{ editing ? $t('tallenna') : $t('laheta') }}
       </elsa-button>
     </div>
+    <div class="row">
+      <elsa-form-error :active="this.$v.$anyError" />
+    </div>
   </b-form>
 </template>
 
@@ -173,6 +176,7 @@
   import { postLahikouluttaja } from '@/api/erikoistuva'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
@@ -198,6 +202,7 @@
       KouluttajaForm,
       TyoskentelyjaksoForm,
       ElsaFormGroup,
+      ElsaFormError,
       ElsaFormMultiselect,
       UserAvatar,
       ElsaFormDatepicker,

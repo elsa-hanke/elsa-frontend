@@ -185,6 +185,9 @@
           </div>
         </b-col>
       </b-row>
+      <b-row>
+        <elsa-form-error :active="this.$v.$anyError" />
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -196,6 +199,7 @@
 
   import { getKayttaja, patchVirkailija } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
   import { KayttajahallintaUpdateKayttaja, ElsaError } from '@/types'
@@ -205,7 +209,8 @@
   @Component({
     components: {
       ElsaButton,
-      ElsaFormGroup
+      ElsaFormGroup,
+      ElsaFormError
     },
     validations: {
       form: {
@@ -267,7 +272,6 @@
 
     onEditUser() {
       this.editing = true
-      window.scrollTo(0, 0)
     }
 
     async onCancel() {

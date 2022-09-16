@@ -32,6 +32,9 @@
         {{ $t('lisaa') }}
       </elsa-button>
     </div>
+    <div class="row">
+      <elsa-form-error :active="this.$v.$anyError" />
+    </div>
   </b-form>
 </template>
 
@@ -42,11 +45,13 @@
   import { required, email } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
 
   @Component({
     components: {
       ElsaFormGroup,
+      ElsaFormError,
       ElsaButton
     },
     validations: {

@@ -109,6 +109,9 @@
               {{ $t('tallenna') }}
             </elsa-button>
           </div>
+          <div class="row">
+            <elsa-form-error :active="this.$v.$anyError" />
+          </div>
         </b-form>
         <div v-else>
           <h5>{{ $t('kategorian-nimi') }}</h5>
@@ -138,6 +141,7 @@
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaTextEditor from '@/components/text-editor/text-editor.vue'
@@ -149,6 +153,7 @@
       Editor,
       ElsaButton,
       ElsaFormGroup,
+      ElsaFormError,
       ElsaFormDatepicker,
       ElsaFormMultiselect,
       ElsaTextEditor

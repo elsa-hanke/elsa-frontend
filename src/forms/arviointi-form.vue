@@ -472,6 +472,9 @@
           </elsa-button>
         </div>
       </div>
+      <div class="row">
+        <elsa-form-error :active="this.$v.$anyError" />
+      </div>
     </b-form>
   </div>
 </template>
@@ -489,6 +492,7 @@
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -514,6 +518,7 @@
   @Component({
     components: {
       ElsaFormGroup,
+      ElsaFormError,
       ElsaFormMultiselect,
       UserAvatar,
       ElsaArviointiasteikonTaso,

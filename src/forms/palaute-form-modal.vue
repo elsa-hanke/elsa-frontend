@@ -89,6 +89,9 @@
           {{ $t('palaute-laheta') }}
         </elsa-button>
       </div>
+      <div class="row">
+        <elsa-form-error :active="this.$v.$anyError" />
+      </div>
     </div>
   </b-modal>
 </template>
@@ -101,11 +104,13 @@
   import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import { Palaute } from '@/types'
 
   @Component({
     components: {
+      ElsaFormError,
       ElsaFormGroup,
       ElsaButton
     },
