@@ -142,6 +142,7 @@ export interface Tyoskentelyjakso {
   asiakirjat?: Asiakirja[]
   label?: string
   poissaolot?: Keskeytysaika[] | null
+  liitettyTerveyskeskuskoulutusjaksoon?: boolean
 }
 
 export interface Tyoskentelypaikka {
