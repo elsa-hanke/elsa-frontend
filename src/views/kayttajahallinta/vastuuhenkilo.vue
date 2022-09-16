@@ -297,7 +297,6 @@
     onEditUser() {
       this.editing = true
       this.$refs.vastuuhenkilonTehtavat.initForm()
-      window.scrollTo(0, 0)
     }
 
     async onCancel() {

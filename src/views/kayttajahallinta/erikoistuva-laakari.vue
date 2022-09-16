@@ -339,7 +339,6 @@
 
     async onSave() {
       if (!this.kayttajaWrapper?.kayttaja?.userId || !this.validateForm()) {
-        window.scrollTo(0, 0)
         return
       }
       this.updatingKayttaja = true
