@@ -94,6 +94,7 @@
               variant="outline-primary"
               v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan && !account.impersonated"
               :to="{ name: 'uusi-poissaolo', params: { tyoskentelyjaksoId: tyoskentelyjakso.id } }"
+              :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
               class="mt-3"
             >
               {{ $t('lisaa-poissaolo') }}
@@ -107,6 +108,7 @@
                 v-if="!account.impersonated"
                 :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
                 variant="primary"
+                :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
                 class="ml-2 mb-3"
               >
                 {{ $t('muokkaa-jaksoa') }}
@@ -116,7 +118,10 @@
                 :loading="deleting"
                 :variant="tyoskentelyjakso.tapahtumia ? 'outline-primary' : 'outline-danger'"
                 @click="onTyoskentelyjaksoDelete"
-                :disabled="tyoskentelyjakso.tapahtumia"
+                :disabled="
+                  tyoskentelyjakso.tapahtumia ||
+                  tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon
+                "
                 class="mb-3"
               >
                 {{ $t('poista-jakso') }}
@@ -135,14 +140,26 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="tyoskentelyjakso && tyoskentelyjakso.tapahtumia && !account.impersonated">
+      <b-row
+        v-if="
+          tyoskentelyjakso &&
+          (tyoskentelyjakso.tapahtumia || tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon) &&
+          !account.impersonated
+        "
+      >
         <b-col>
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
             </em>
             <div>
-              <span class="text-size-sm">{{ $t('tyoskentelyjaksoa-ei-voi-poistaa-tooltip') }}</span>
+              <span class="text-size-sm">
+                {{
+                  tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon
+                    ? $t('tyoskentelyjaksoa-ei-voi-muokata-tai-poistaa-tooltip')
+                    : $t('tyoskentelyjaksoa-ei-voi-poistaa-tooltip')
+                }}
+              </span>
             </div>
           </div>
         </b-col>

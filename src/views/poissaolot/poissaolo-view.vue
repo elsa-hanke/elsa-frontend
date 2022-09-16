@@ -47,6 +47,7 @@
               <elsa-button
                 v-if="!account.impersonated"
                 :to="{ name: 'muokkaa-poissaoloa' }"
+                :disabled="poissaoloWrapper.tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
                 variant="primary"
                 class="ml-2 mb-3"
               >
@@ -55,6 +56,7 @@
               <elsa-button
                 v-if="!account.impersonated"
                 :loading="deleting"
+                :disabled="poissaoloWrapper.tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
                 variant="outline-danger"
                 class="mb-3"
                 @click="onPoissaoloDelete"
@@ -69,6 +71,25 @@
                 {{ $t('palaa-tyoskentelyjaksoihin') }}
               </elsa-button>
             </div>
+            <b-row
+              v-if="
+                poissaoloWrapper.tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon &&
+                !account.impersonated
+              "
+            >
+              <b-col>
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-1" />
+                  </em>
+                  <div>
+                    <span class="text-size-sm">
+                      {{ $t('poissaoloa-ei-voi-muokata-tai-poistaa-tooltip') }}
+                    </span>
+                  </div>
+                </div>
+              </b-col>
+            </b-row>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
