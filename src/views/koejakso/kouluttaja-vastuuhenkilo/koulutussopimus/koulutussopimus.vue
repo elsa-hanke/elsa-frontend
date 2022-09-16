@@ -224,9 +224,6 @@
               </elsa-button>
             </b-col>
           </b-row>
-          <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
-          </b-row>
         </b-form>
       </div>
       <div v-else class="text-center">

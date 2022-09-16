@@ -156,7 +156,7 @@
             </b-col>
           </b-row>
           <hr />
-          <b-row v-if="muutOpintooikeudet != null && muutOpintooikeudet.length > 0">
+          <b-row v-if="muutOpintooikeudetEnabled">
             <b-col>
               <elsa-form-group :label="$t('useampi-opinto-oikeus')" :required="true">
                 <template v-slot="{ uid }">
@@ -242,7 +242,7 @@
             </b-col>
           </b-row>
           <hr />
-          <div v-if="muutOpintooikeudet != null && muutOpintooikeudet.length > 0">
+          <div v-if="muutOpintooikeudetEnabled">
             <h3 class="mb-3">{{ $t('useampi-opinto-oikeus') }}</h3>
             <p>
               {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja') }}
@@ -436,6 +436,7 @@
     }
     loading = true
     muutOpintooikeudet: Opintooikeus[] = []
+    muutOpintooikeudetEnabled = false
     koulutussopimuksenHyvaksynta = false
 
     validations() {
@@ -449,9 +450,11 @@
             required
           },
           paataOpintooikeudet: {
-            checked: (value: boolean) => value === true,
+            checked: (value: boolean) => {
+              return !this.muutOpintooikeudetEnabled || value === true
+            },
             required: requiredIf(() => {
-              return this.muutOpintooikeudet
+              return this.muutOpintooikeudetEnabled
             })
           },
           koulutussopimusHyvaksytty: {
@@ -589,6 +592,8 @@
       this.formData = (await getVastuuhenkilonArvioLomake()).data
       this.muutOpintooikeudet = this.formData.muutOpintooikeudet
       this.koulutussopimuksenHyvaksynta = this.formData.koulutussopimusHyvaksytty
+      this.muutOpintooikeudetEnabled =
+        this.muutOpintooikeudet != null && this.muutOpintooikeudet.length > 0
 
       if (this.editable) {
         this.form.vastuuhenkilo = this.formData.vastuuhenkilo
