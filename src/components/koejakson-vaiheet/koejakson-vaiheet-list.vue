@@ -139,7 +139,7 @@
             </template>
           </b-table>
           <elsa-pagination
-            v-if="loading"
+            v-if="!loading"
             :current-page.sync="currentPage"
             :per-page="perPage"
             :rows="rows"
