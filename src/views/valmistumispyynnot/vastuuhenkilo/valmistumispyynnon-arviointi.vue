@@ -5,264 +5,268 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('valmistumispyynto') }}</h1>
-          <div v-if="odottaaOsaamisenArviointia">
-            <p class="mt-1 mb-3">
-              {{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-1') }}
-            </p>
-            <p class="mb-3">{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-2') }}</p>
-            <p>{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-3') }}</p>
-          </div>
-          <div class="mt-3" v-else>
-            <b-alert :show="!allekirjoitettu" variant="dark">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon
-                    :icon="['fas', 'info-circle']"
-                    class="text-muted text-size-md mr-2"
-                  />
-                </em>
-                <div>
-                  <span v-if="odottaaVirkailijanTarkastusta">
-                    {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-virkailijan-tarkastusta') }}
-                  </span>
-                  <span v-else-if="odottaaHyvaksyntaa">
-                    {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-hyvaksyntaa') }}
-                  </span>
-                  <span v-else-if="odottaaAllekirjoituksia">
-                    {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-allekirjoituksia') }}
-                  </span>
-                  <span v-else-if="vastuuhenkiloOsaamisenArvioijaPalauttanut">
-                    {{ $t('valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle') }}
-                  </span>
-                  <span v-else-if="virkailijaPalauttanut">
-                    {{
-                      $t(
-                        'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-virkailijan-toimesta'
-                      )
-                    }}
-                  </span>
-                  <span v-else-if="vastuuhenkiloHyvaksyjaPalauttanut">
-                    {{
-                      $t(
-                        'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-hyvaksyjan-toimesta'
-                      )
-                    }}
-                  </span>
-                  <span
-                    v-if="virkailijaPalauttanut || vastuuhenkiloHyvaksyjaPalauttanut"
-                    class="d-block"
-                  >
-                    {{ $t('syy') }}&nbsp;
-                    <span>
-                      {{ korjausehdotus }}
+          <div v-if="!loading">
+            <div v-if="odottaaOsaamisenArviointia">
+              <p class="mt-1 mb-3">
+                {{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-1') }}
+              </p>
+              <p class="mb-3">{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-2') }}</p>
+              <p>{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-3') }}</p>
+            </div>
+            <div class="mt-3" v-else>
+              <b-alert :show="!allekirjoitettu" variant="dark">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      class="text-muted text-size-md mr-2"
+                    />
+                  </em>
+                  <div>
+                    <span v-if="odottaaVirkailijanTarkastusta">
+                      {{
+                        $t('valmistumispyynto-osaaminen-arvioitu-odottaa-virkailijan-tarkastusta')
+                      }}
                     </span>
-                  </span>
+                    <span v-else-if="odottaaHyvaksyntaa">
+                      {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-hyvaksyntaa') }}
+                    </span>
+                    <span v-else-if="odottaaAllekirjoituksia">
+                      {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-allekirjoituksia') }}
+                    </span>
+                    <span v-else-if="vastuuhenkiloOsaamisenArvioijaPalauttanut">
+                      {{ $t('valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle') }}
+                    </span>
+                    <span v-else-if="virkailijaPalauttanut">
+                      {{
+                        $t(
+                          'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-virkailijan-toimesta'
+                        )
+                      }}
+                    </span>
+                    <span v-else-if="vastuuhenkiloHyvaksyjaPalauttanut">
+                      {{
+                        $t(
+                          'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-hyvaksyjan-toimesta'
+                        )
+                      }}
+                    </span>
+                    <span
+                      v-if="virkailijaPalauttanut || vastuuhenkiloHyvaksyjaPalauttanut"
+                      class="d-block"
+                    >
+                      {{ $t('syy') }}&nbsp;
+                      <span>
+                        {{ korjausehdotus }}
+                      </span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </b-alert>
-            <b-alert :show="allekirjoitettu" variant="success">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-                </em>
-                <div>
-                  <span>
-                    {{ $t('valmistumispyynto-osaaminen-arvioitu-allekirjoitettu') }}
-                  </span>
+              </b-alert>
+              <b-alert :show="allekirjoitettu" variant="success">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                  </em>
+                  <div>
+                    <span>
+                      {{ $t('valmistumispyynto-osaaminen-arvioitu-allekirjoitettu') }}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </b-alert>
-            <elsa-button
-              variant="primary"
-              class="mt-2 mb-1"
-              :to="{
-                name: 'valmistumispyynnot'
-              }"
-            >
-              {{ $t('palaa-valmistumispyyntoihin') }}
-            </elsa-button>
-          </div>
-          <hr />
-          <div v-if="!loadingValmistumispyynto">
-            <erikoistuva-details
-              :avatar="valmistumispyynto.erikoistujanAvatar"
-              :name="valmistumispyynto.erikoistujanNimi"
-              :erikoisala="valmistumispyynto.erikoistujanErikoisala"
-              :opiskelijatunnus="valmistumispyynto.erikoistujanOpiskelijatunnus"
-              :syntymaaika="valmistumispyynto.erikoistujanSyntymaaika"
-              :yliopisto="valmistumispyynto.erikoistujanYliopisto"
-              :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
-              :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
-              :laillistamistodistusNimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
-              :laillistamistodistusTyyppi="valmistumispyynto.erikoistujanLaillistamistodistusTyyppi"
-              :opintooikeudenMyontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
-              :asetus="valmistumispyynto.erikoistujanAsetus"
-            ></erikoistuva-details>
-          </div>
-          <div v-else class="text-center mt-3">
-            <b-spinner variant="primary" :label="$t('ladataan')" />
-          </div>
-          <hr />
-          <h2>{{ $t('osaamisen-arviointi') }}</h2>
-          <div v-if="odottaaOsaamisenArviointia && valmistumispyyntoArviointienTila">
-            <p class="mb-3">
-              {{ $t('valmistumispyynto-osaamisen-arviointi-selite') }}
-            </p>
-            <div
-              v-if="
-                valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithArviointiLowerThanFour ||
-                valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithoutArviointi
-              "
-              class="d-flex flex-row"
-            >
-              <em class="align-middle">
-                <font-awesome-icon
-                  :icon="['fas', 'info-circle']"
-                  class="mr-2 text-danger text-size-md"
-                />
-              </em>
-              <div class="mb-4">
-                <p
-                  class="m-0"
-                  v-if="
-                    valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithArviointiLowerThanFour
-                  "
-                >
-                  {{ $t('valmistumispyynto-arviointeja-ei-yhtaan-vahintaan-tasolla-nelja') }}
-                </p>
-                <p
-                  class="m-0"
-                  v-if="
-                    valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithoutArviointi
-                  "
-                >
-                  {{ $t('valmistumispyynto-arvioitavia-kokonaisuuksia-ilman-arviointia') }}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div v-if="loadingArviointienTila" class="text-center mt-3 mb-3">
-            <b-spinner variant="primary" :label="$t('ladataan')" />
-          </div>
-          <elsa-button
-            variant="outline-primary"
-            class="mt-2 mb-4"
-            @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
-          >
-            {{ $t('nayta-erikoistujan-suoritustiedot') }}
-          </elsa-button>
-          <b-form @submit.stop.prevent="onSubmit" v-if="!loadingArviointienTila">
-            <elsa-form-group
-              class="mb-2"
-              :label="$t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen')"
-              :required="odottaaOsaamisenArviointia"
-            >
-              <template v-slot="{ uid }">
-                <div v-if="odottaaOsaamisenArviointia">
-                  <b-form-radio-group
-                    :id="uid"
-                    v-model="form.osaaminenRiittavaValmistumiseen"
-                    :state="validateState('osaaminenRiittavaValmistumiseen')"
-                    stacked
-                  >
-                    <b-form-radio @input="$emit('skipRouteExitConfirm', false)" :value="true">
-                      <span>{{ $t('kylla') }}</span>
-                    </b-form-radio>
-                    <b-form-radio @input="$emit('skipRouteExitConfirm', false)" :value="false">
-                      <span>{{ $t('ei-osaaminen-ei-riita-valmistumiseen') }}</span>
-                    </b-form-radio>
-                  </b-form-radio-group>
-                  <b-form-invalid-feedback
-                    :id="`${uid}-feedback`"
-                    :state="validateState('osaaminenRiittavaValmistumiseen')"
-                  >
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                </div>
-                <div v-else>
-                  <span>
-                    {{
-                      !vastuuhenkiloOsaamisenArvioijaPalauttanut
-                        ? $t('kylla')
-                        : $t('ei-osaaminen-ei-riita-valmistumiseen')
-                    }}
-                  </span>
-                </div>
-              </template>
-            </elsa-form-group>
-            <div
-              v-if="odottaaOsaamisenArviointia && form.osaaminenRiittavaValmistumiseen === false"
-            >
-              <elsa-form-group
-                class="ml-4"
-                :label="$t('lisatiedot-erikoistujalle')"
-                :required="true"
-              >
-                <template v-slot="{ uid }">
-                  <b-form-textarea
-                    :id="uid"
-                    v-model="form.korjausehdotus"
-                    :state="validateState('korjausehdotus')"
-                    rows="5"
-                  ></b-form-textarea>
-                  <b-form-invalid-feedback
-                    :id="`${uid}-feedback`"
-                    :state="validateState('korjausehdotus')"
-                  >
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </div>
-            <elsa-form-group
-              class="mt-3"
-              v-if="vastuuhenkiloOsaamisenArvioijaPalauttanut"
-              :label="$t('lisatiedot-erikoistujalle')"
-            >
-              <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
-            </elsa-form-group>
-            <div
-              class="mt-5"
-              v-if="
-                !odottaaOsaamisenArviointia && vastuuhenkiloOsaamisenArvioijaKuittausOrPalautusaika
-              "
-            >
-              <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
-              <b-row>
-                <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
-                  <h5>{{ $t('paivays') }}</h5>
-                  <p>
-                    {{ vastuuhenkiloOsaamisenArvioijaKuittausOrPalautusaika }}
-                  </p>
-                </b-col>
-                <b-col>
-                  <h5>{{ $t('vastuuhenkilon-nimi-ja-nimike') }}</h5>
-                  <p>
-                    {{ vastuuhenkiloOsaamisenArvioija }}
-                  </p>
-                </b-col>
-              </b-row>
-            </div>
-            <hr v-if="odottaaOsaamisenArviointia" />
-            <div v-if="odottaaOsaamisenArviointia" class="text-right">
+              </b-alert>
               <elsa-button
-                variant="back"
+                variant="primary"
+                class="mt-2 mb-1"
                 :to="{
                   name: 'valmistumispyynnot'
                 }"
               >
-                {{ $t('peruuta') }}
-              </elsa-button>
-              <elsa-button
-                :loading="sending"
-                @click="onValidateAndConfirmSend('confirm-send')"
-                variant="primary"
-                class="ml-2"
-              >
-                {{ $t('tallenna-ja-laheta') }}
+                {{ $t('palaa-valmistumispyyntoihin') }}
               </elsa-button>
             </div>
-          </b-form>
+            <hr />
+            <div>
+              <erikoistuva-details
+                :avatar="valmistumispyynto.erikoistujanAvatar"
+                :name="valmistumispyynto.erikoistujanNimi"
+                :erikoisala="valmistumispyynto.erikoistujanErikoisala"
+                :opiskelijatunnus="valmistumispyynto.erikoistujanOpiskelijatunnus"
+                :syntymaaika="valmistumispyynto.erikoistujanSyntymaaika"
+                :yliopisto="valmistumispyynto.erikoistujanYliopisto"
+                :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
+                :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
+                :laillistamistodistusNimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
+                :laillistamistodistusTyyppi="
+                  valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
+                "
+                :opintooikeudenMyontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
+                :asetus="valmistumispyynto.erikoistujanAsetus"
+              ></erikoistuva-details>
+            </div>
+            <hr />
+            <h2>{{ $t('osaamisen-arviointi') }}</h2>
+            <div v-if="odottaaOsaamisenArviointia && valmistumispyyntoArviointienTila">
+              <p class="mb-3">
+                {{ $t('valmistumispyynto-osaamisen-arviointi-selite') }}
+              </p>
+              <div
+                v-if="
+                  valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithArviointiLowerThanFour ||
+                  valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithoutArviointi
+                "
+                class="d-flex flex-row"
+              >
+                <em class="align-middle">
+                  <font-awesome-icon
+                    :icon="['fas', 'info-circle']"
+                    class="mr-2 text-danger text-size-md"
+                  />
+                </em>
+                <div class="mb-4">
+                  <p
+                    class="m-0"
+                    v-if="
+                      valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithArviointiLowerThanFour
+                    "
+                  >
+                    {{ $t('valmistumispyynto-arviointeja-ei-yhtaan-vahintaan-tasolla-nelja') }}
+                  </p>
+                  <p
+                    class="m-0"
+                    v-if="
+                      valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithoutArviointi
+                    "
+                  >
+                    {{ $t('valmistumispyynto-arvioitavia-kokonaisuuksia-ilman-arviointia') }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <elsa-button
+              variant="outline-primary"
+              class="mt-2 mb-4"
+              @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
+            >
+              {{ $t('nayta-erikoistujan-suoritustiedot') }}
+            </elsa-button>
+            <b-form @submit.stop.prevent="onSubmit">
+              <elsa-form-group
+                class="mb-2"
+                :label="$t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen')"
+                :required="odottaaOsaamisenArviointia"
+              >
+                <template v-slot="{ uid }">
+                  <div v-if="odottaaOsaamisenArviointia">
+                    <b-form-radio-group
+                      :id="uid"
+                      v-model="form.osaaminenRiittavaValmistumiseen"
+                      :state="validateState('osaaminenRiittavaValmistumiseen')"
+                      stacked
+                    >
+                      <b-form-radio @input="$emit('skipRouteExitConfirm', false)" :value="true">
+                        <span>{{ $t('kylla') }}</span>
+                      </b-form-radio>
+                      <b-form-radio @input="$emit('skipRouteExitConfirm', false)" :value="false">
+                        <span>{{ $t('ei-osaaminen-ei-riita-valmistumiseen') }}</span>
+                      </b-form-radio>
+                    </b-form-radio-group>
+                    <b-form-invalid-feedback
+                      :id="`${uid}-feedback`"
+                      :state="validateState('osaaminenRiittavaValmistumiseen')"
+                    >
+                      {{ $t('pakollinen-tieto') }}
+                    </b-form-invalid-feedback>
+                  </div>
+                  <div v-else>
+                    <span>
+                      {{
+                        !vastuuhenkiloOsaamisenArvioijaPalauttanut
+                          ? $t('kylla')
+                          : $t('ei-osaaminen-ei-riita-valmistumiseen')
+                      }}
+                    </span>
+                  </div>
+                </template>
+              </elsa-form-group>
+              <div
+                v-if="odottaaOsaamisenArviointia && form.osaaminenRiittavaValmistumiseen === false"
+              >
+                <elsa-form-group
+                  class="ml-4"
+                  :label="$t('lisatiedot-erikoistujalle')"
+                  :required="true"
+                >
+                  <template v-slot="{ uid }">
+                    <b-form-textarea
+                      :id="uid"
+                      v-model="form.korjausehdotus"
+                      :state="validateState('korjausehdotus')"
+                      rows="5"
+                    ></b-form-textarea>
+                    <b-form-invalid-feedback
+                      :id="`${uid}-feedback`"
+                      :state="validateState('korjausehdotus')"
+                    >
+                      {{ $t('pakollinen-tieto') }}
+                    </b-form-invalid-feedback>
+                  </template>
+                </elsa-form-group>
+              </div>
+              <elsa-form-group
+                class="mt-3"
+                v-if="vastuuhenkiloOsaamisenArvioijaPalauttanut"
+                :label="$t('lisatiedot-erikoistujalle')"
+              >
+                <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
+              </elsa-form-group>
+              <div
+                class="mt-5"
+                v-if="
+                  !odottaaOsaamisenArviointia &&
+                  vastuuhenkiloOsaamisenArvioijaKuittausOrPalautusaika
+                "
+              >
+                <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
+                <b-row>
+                  <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
+                    <h5>{{ $t('paivays') }}</h5>
+                    <p>
+                      {{ vastuuhenkiloOsaamisenArvioijaKuittausOrPalautusaika }}
+                    </p>
+                  </b-col>
+                  <b-col>
+                    <h5>{{ $t('vastuuhenkilon-nimi-ja-nimike') }}</h5>
+                    <p>
+                      {{ vastuuhenkiloOsaamisenArvioija }}
+                    </p>
+                  </b-col>
+                </b-row>
+              </div>
+              <hr v-if="odottaaOsaamisenArviointia" />
+              <div v-if="odottaaOsaamisenArviointia" class="text-right">
+                <elsa-button
+                  variant="back"
+                  :to="{
+                    name: 'valmistumispyynnot'
+                  }"
+                >
+                  {{ $t('peruuta') }}
+                </elsa-button>
+                <elsa-button
+                  :loading="sending"
+                  @click="onValidateAndConfirmSend('confirm-send')"
+                  variant="primary"
+                  class="ml-2"
+                >
+                  {{ $t('tallenna-ja-laheta') }}
+                </elsa-button>
+              </div>
+            </b-form>
+          </div>
+          <div v-else class="text-center mt-3">
+            <b-spinner variant="primary" :label="$t('ladataan')" />
+          </div>
         </b-col>
       </b-row>
       <b-row>
@@ -352,8 +356,7 @@
     }
 
     valmistumispyyntoArviointienTila: ValmistumispyyntoArviointienTila | null = null
-    loadingValmistumispyynto = true
-    loadingArviointienTila = false
+    loading = true
     sending = false
 
     async mounted() {
@@ -363,18 +366,16 @@
           await getValmistumispyyntoOsaamisenArviointi(parseInt(valmistumispyyntoId)).then(
             (response) => {
               this.valmistumispyynto = response.data
-              this.loadingValmistumispyynto = false
             }
           )
           if (this.odottaaOsaamisenArviointia) {
-            this.loadingArviointienTila = true
             await getValmistumispyyntoArviointienTila(parseInt(valmistumispyyntoId)).then(
               (response) => {
                 this.valmistumispyyntoArviointienTila = response.data
-                this.loadingArviointienTila = false
               }
             )
           }
+          this.loading = false
         } catch {
           toastFail(this, this.$t('valmistumispyynnon-hakeminen-epaonnistui'))
           this.$router.replace({ name: 'valmistumispyynnot' })

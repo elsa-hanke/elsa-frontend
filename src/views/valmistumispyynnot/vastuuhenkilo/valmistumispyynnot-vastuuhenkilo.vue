@@ -72,8 +72,8 @@
     currentAvoinPage = 1
     currentMuutPage = 1
     perPage = 10
-    loadingAvoimet = false
-    loadingMuut = false
+    loadingAvoimet = true
+    loadingMuut = true
     valmistumispyynnotAvoimet: Page<ValmistumispyyntoListItem> | null = null
     valmistumispyynnotMuut: Page<ValmistumispyyntoListItem> | null = null
     valmistumispyynnonHyvaksyjaRole: ValmistumispyynnonHyvaksyjaRole | null = null
@@ -100,6 +100,8 @@
     }
 
     async filterResults() {
+      this.loadingAvoimet = true
+      this.loadingMuut = true
       this.currentAvoinPage = 1
       this.currentMuutPage = 1
       this.fetchAll()
@@ -111,8 +113,10 @@
     }
 
     async fetchAvoimet() {
-      if (!this.valmistumispyynnonHyvaksyjaRole) return
-      this.loadingAvoimet = true
+      if (!this.valmistumispyynnonHyvaksyjaRole) {
+        this.loadingAvoimet = false
+        return
+      }
       getValmistumispyynnot({
         page: this.currentAvoinPage - 1,
         size: this.perPage,
@@ -128,8 +132,10 @@
     }
 
     async fetchMuut() {
-      if (!this.valmistumispyynnonHyvaksyjaRole) return
-      this.loadingMuut = true
+      if (!this.valmistumispyynnonHyvaksyjaRole) {
+        this.loadingMuut = false
+        return
+      }
       getValmistumispyynnot({
         page: this.currentMuutPage - 1,
         size: this.perPage,
@@ -145,11 +151,13 @@
     }
 
     onAvoinPageInput(value: number) {
+      this.loadingAvoimet = true
       this.currentAvoinPage = value
       this.fetchAvoimet()
     }
 
     onMuutPageInput(value: number) {
+      this.loadingMuut = true
       this.currentMuutPage = value
       this.fetchMuut()
     }
