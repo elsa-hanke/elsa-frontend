@@ -112,7 +112,9 @@ Vue.use(VueRouter)
 Vue.use(Meta)
 
 const guard = async (to: Route, from: Route, next: NavigationGuardNext) => {
-  await store.dispatch('auth/authorize')
+  if (!store.getters['auth/isLoggedIn']) {
+    await store.dispatch('auth/authorize')
+  }
 
   if (store.getters['auth/isLoggedIn']) {
     const account = store.getters['auth/account']
@@ -1105,7 +1107,9 @@ const routes: Array<RouteConfig> = [
         name: 'login',
         component: Login,
         beforeEnter: async (to, from, next) => {
-          await store.dispatch('auth/authorize')
+          if (!store.getters['auth/isLoggedIn']) {
+            await store.dispatch('auth/authorize')
+          }
 
           if (store.getters['auth/isLoggedIn']) {
             const account = store.getters['auth/account']
@@ -1131,7 +1135,9 @@ const routes: Array<RouteConfig> = [
         name: 'kaytonaloitus',
         component: KaytonAloitus,
         beforeEnter: async (to, from, next) => {
-          await store.dispatch('auth/authorize')
+          if (!store.getters['auth/isLoggedIn']) {
+            await store.dispatch('auth/authorize')
+          }
 
           if (store.getters['auth/isLoggedIn']) {
             if (store.getters['auth/account'].email) {
@@ -1149,7 +1155,9 @@ const routes: Array<RouteConfig> = [
         name: 'haka-yliopisto',
         component: HakaYliopisto,
         beforeEnter: async (to, from, next) => {
-          await store.dispatch('auth/authorize')
+          if (!store.getters['auth/isLoggedIn']) {
+            await store.dispatch('auth/authorize')
+          }
 
           if (store.getters['auth/isLoggedIn']) {
             if (store.getters['auth/account'].authorities.length > 0) {
@@ -1169,7 +1177,9 @@ const routes: Array<RouteConfig> = [
     name: 'logout',
     component: Logout,
     beforeEnter: async (to, from, next) => {
-      await store.dispatch('auth/authorize')
+      if (!store.getters['auth/isLoggedIn']) {
+        await store.dispatch('auth/authorize')
+      }
 
       if (store.getters['auth/isLoggedIn']) {
         next('/etusivu')
