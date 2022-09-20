@@ -52,7 +52,9 @@
     @Watch('$route', { immediate: true, deep: true })
     async onUrlChange() {
       this.skipRouteExitConfirm = this.confirmRouteExit
-      await store.dispatch('auth/authorize')
+      if (!store.getters['auth/isLoggedIn']) {
+        await store.dispatch('auth/authorize')
+      }
       this.loading = false
     }
   }
