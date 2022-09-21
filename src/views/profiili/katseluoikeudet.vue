@@ -195,7 +195,7 @@
 
     isLoading = false
 
-    async onKouluttajaSubmit(value: any, params: any, modal: BModal) {
+    async onKouluttajaSubmit(value: Kayttaja, params: any, modal: BModal) {
       params.saving = true
       try {
         const kouluttaja = (await postLahikouluttaja(value)).data
