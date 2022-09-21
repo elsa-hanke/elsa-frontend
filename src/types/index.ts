@@ -1374,3 +1374,9 @@ export interface ValmistumispyyntoLomakeOsaamisenArviointi {
   osaaminenRiittavaValmistumiseen: boolean | null
   korjausehdotus: string | null
 }
+
+export interface UusiKouluttaja {
+  etunimi: string
+  sukunimi: string
+  sahkoposti: string
+}
