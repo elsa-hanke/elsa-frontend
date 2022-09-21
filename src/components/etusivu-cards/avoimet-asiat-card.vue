@@ -138,8 +138,6 @@
           return 'koejakson-aloituskeskustelu'
         case AvoinAsiaTyyppi.VASTUUHENKILON_ARVIO:
           return 'koejakson-vastuuhenkilon-arvio'
-        case AvoinAsiaTyyppi.TERVEYSKESKUSKOULUTUSJAKSO:
-          return 'terveyskeskuskoulutusjakso'
         case AvoinAsiaTyyppi.VALMISTUMISPYYNTO:
           return 'valmistumispyynto'
         case AvoinAsiaTyyppi.KOULUTTAJAVALTUUTUS:
@@ -150,9 +148,14 @@
     }
 
     getComponentPath(tyyppi: AvoinAsiaTyyppi, id: number) {
-      return tyyppi === AvoinAsiaTyyppi.SEURANTAJAKSO
-        ? `/seurantakeskustelut/seurantajakso/${id}`
-        : ''
+      switch (tyyppi) {
+        case AvoinAsiaTyyppi.SEURANTAJAKSO:
+          return `/seurantakeskustelut/seurantajakso/${id}`
+        case AvoinAsiaTyyppi.TERVEYSKESKUSKOULUTUSJAKSO:
+          return '/tyoskentelyjaksot/terveyskeskuskoulutusjakso'
+        default:
+          return ''
+      }
     }
 
     getHash(tyyppi: AvoinAsiaTyyppi) {
