@@ -1375,6 +1375,61 @@ export interface ValmistumispyyntoLomakeOsaamisenArviointi {
   korjausehdotus: string | null
 }
 
+export interface ValmistumispyyntoVirkailijanTarkistus {
+  id: number | null
+  yekSuoritettu: boolean
+  yekSuorituspaiva: string | null
+  ptlSuoritettu: boolean
+  ptlSuorituspaiva: string | null
+  aiempiElKoulutusSuoritettu: boolean
+  aiempiElKoulutusSuorituspaiva: string | null
+  ltTutkintoSuoritettu: boolean
+  ltTutkintoSuorituspaiva: string | null
+  virkailijanSaate: string | null
+  tyoskentelyjaksotTilastot: TyoskentelyjaksotTilastotKoulutustyypit | null
+  terveyskeskustyoHyvaksyttyPvm: string | null
+  terveyskeskustyoHyvaksyntaId: number | null
+  terveyskeskustyoOpintosuoritusId: number | null
+  yliopistosairaalanUlkopuolinenTyoTarkistettu: boolean
+  yliopistosairaalatyoTarkistettu: boolean
+  kokonaistyoaikaTarkistettu: boolean
+  teoriakoulutusSuoritettu: number | null
+  teoriakoulutusVaadittu: number | null
+  teoriakoulutusTarkistettu: boolean
+  sateilusuojakoulutusSuoritettu: number | null
+  sateilusuojakoulutusVaadittu: number | null
+  johtamiskoulutusSuoritettu: number | null
+  johtamiskoulutusVaadittu: number | null
+  kuulustelut: Opintosuoritus[] | null
+  koejaksoHyvaksyttyPvm: string | null
+  suoritustenTila: ValmistumispyyntoSuoritustenTila | null
+  lisatiedotVastuuhenkilolle: string | null
+  kommentitVirkailijoille: string | null
+  keskenerainen: boolean
+  korjausehdotus?: string | null
+  valmistumispyynto?: Valmistumispyynto
+}
+
+export interface ValmistumispyynnonVirkailijanTarkistusLomake {
+  id: number | null
+  yekSuoritettu: boolean
+  yekSuorituspaiva: string | null
+  ptlSuoritettu: boolean
+  ptlSuorituspaiva: string | null
+  aiempiElKoulutusSuoritettu: boolean
+  aiempiElKoulutusSuorituspaiva: string | null
+  ltTutkintoSuoritettu: boolean
+  ltTutkintoSuorituspaiva: string | null
+  yliopistosairaalanUlkopuolinenTyoTarkistettu: boolean
+  yliopistosairaalatyoTarkistettu: boolean
+  kokonaistyoaikaTarkistettu: boolean
+  teoriakoulutusTarkistettu: boolean
+  kommentitVirkailijoille: string | null
+  lisatiedotVastuuhenkilolle?: string | null
+  keskenerainen?: boolean
+  korjausehdotus?: string | null
+}
+
 export interface UusiKouluttaja {
   etunimi: string
   sukunimi: string

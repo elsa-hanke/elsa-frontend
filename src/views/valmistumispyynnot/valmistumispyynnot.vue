@@ -8,6 +8,7 @@
         </b-col>
       </b-row>
       <valmistumispyynnot-vastuuhenkilo v-if="$isVastuuhenkilo()" />
+      <valmistumispyynnot-virkailija v-if="$isVirkailija()" />
     </b-container>
   </div>
 </template>
@@ -16,10 +17,12 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import ValmistumispyynnotVastuuhenkilo from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnot-vastuuhenkilo.vue'
+  import ValmistumispyynnotVirkailija from '@/views/valmistumispyynnot/virkailija/valmistumispyynnot-virkailija.vue'
 
   @Component({
     components: {
-      ValmistumispyynnotVastuuhenkilo
+      ValmistumispyynnotVastuuhenkilo,
+      ValmistumispyynnotVirkailija
     }
   })
   export default class Valmistumispyynnot extends Vue {

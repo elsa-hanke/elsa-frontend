@@ -145,7 +145,7 @@
     linkComponent(valmistumispyynto: ValmistumispyyntoListItem) {
       switch (this.valmistumispyynnonHyvaksyjaRole) {
         case ValmistumispyynnonHyvaksyjaRole.VIRKAILIJA:
-          return 'valmistumispyynnon-tarkastus'
+          return 'valmistumispyynnon-tarkistus'
         case ValmistumispyynnonHyvaksyjaRole.VASTUUHENKILO_OSAAMISEN_ARVIOIJA_HYVAKSYJA:
           switch (valmistumispyynto.tila) {
             case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA:
@@ -181,6 +181,8 @@
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA:
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
+          case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
+          case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
             return ['far', 'clock']
         }
       } else {
@@ -188,6 +190,7 @@
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
           case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
+          case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
             return ['far', 'check-circle']
           case ValmistumispyynnonTila.VASTUUHENKILON_TARKASTUS_PALAUTETTU:
           case ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU:
@@ -204,6 +207,8 @@
         switch (status) {
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA:
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
+          case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
+          case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
           case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
             return 'text-warning'
         }
@@ -212,6 +217,7 @@
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
           case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
+          case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
           case ValmistumispyynnonTila.ALLEKIRJOITETTU:
             return 'text-success'
         }
@@ -228,6 +234,10 @@
             return this.$t('valmistumispyynnon-tila.avoin-odottaa-hyvaksyntaa')
           case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
             return this.$t('valmistumispyynnon-tila.avoin-odottaa-allekirjoituksia')
+          case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
+            return this.$t('valmistumispyynnon-tila.avoin-odottaa-virkailijan-tarkastusta')
+          case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
+            return this.$t('valmistumispyynnon-tila.avoin-virkailijan-tarkastus-kesken')
         }
       } else {
         switch (status) {
