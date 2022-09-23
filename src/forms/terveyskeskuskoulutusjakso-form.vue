@@ -306,6 +306,9 @@
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
+    <div class="row" v-if="editable">
+      <elsa-form-error :active="this.$v.$anyError" />
+    </div>
     <elsa-confirmation-modal
       id="confirm-erikoistuja"
       :title="$t('vahvista-lomakkeen-lahetys')"
@@ -358,6 +361,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -387,6 +391,7 @@
       ElsaConfirmationModal,
       ElsaButton,
       ElsaFormDatepicker,
+      ElsaFormError,
       ElsaFormGroup,
       ElsaReturnToSenderModal,
       ElsaPoissaolotDisplay,
