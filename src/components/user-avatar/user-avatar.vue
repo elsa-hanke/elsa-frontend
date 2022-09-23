@@ -10,7 +10,7 @@
       class="d-inline-block mr-2 avatar"
       :class="{ 'my-2': title }"
     ></avatar>
-    <div>
+    <div class="mr-1">
       <span class="avatar-line-height">
         <slot name="display-name">{{ displayNameOrAccountName }}</slot>
       </span>
@@ -88,5 +88,7 @@
 
   .title-text {
     font-size: 0.625rem;
+    max-width: 8rem;
+    white-space: normal;
   }
 </style>
