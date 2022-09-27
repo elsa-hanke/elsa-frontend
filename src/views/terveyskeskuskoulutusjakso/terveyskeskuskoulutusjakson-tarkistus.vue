@@ -54,6 +54,7 @@
             <terveyskeskuskoulutusjakso-form
               :hyvaksynta="hyvaksynta"
               :editable="editable"
+              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
               @submit="onSubmit"
               @cancel="onCancel"
             />
@@ -144,6 +145,10 @@
 
     get showAcceptedByEveryone() {
       return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return `virkailija/terveyskeskuskoulutusjakso/tyoskentelyjakso-liite`
     }
 
     async onSubmit(formData: { hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen }) {

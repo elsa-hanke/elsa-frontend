@@ -6,6 +6,7 @@
       :erikoisala="hyvaksynta.erikoistuvanErikoisala"
       :opiskelijatunnus="hyvaksynta.erikoistuvanOpiskelijatunnus"
       :yliopisto="hyvaksynta.erikoistuvanYliopisto"
+      :syntymaaika="hyvaksynta.erikoistuvanSyntymaaika"
       :show-birthdate="true"
     />
     <div class="table-responsive">
@@ -188,6 +189,7 @@
               @deleteAsiakirja="onDeleteLiitetiedosto(sp, ...arguments)"
               :no-results-info-text="$t('ei-liitetiedostoja')"
               :state="validateTyoskentelyjaksoState(index)"
+              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
             />
             <b-form-invalid-feedback :state="validateTyoskentelyjaksoState(index)">
               {{ $t('pakollinen-tieto') }}
@@ -306,6 +308,9 @@
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
+    <div class="row">
+      <elsa-form-error :active="$v.$anyError" />
+    </div>
     <elsa-confirmation-modal
       id="confirm-erikoistuja"
       :title="$t('vahvista-lomakkeen-lahetys')"
@@ -358,6 +363,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -386,6 +392,7 @@
       AsiakirjatUpload,
       ElsaConfirmationModal,
       ElsaButton,
+      ElsaFormError,
       ElsaFormDatepicker,
       ElsaFormGroup,
       ElsaReturnToSenderModal,
@@ -433,6 +440,9 @@
 
     @Prop({ required: false, default: false })
     editable!: boolean
+
+    @Prop({ required: false, default: '' })
+    asiakirjaDataEndpointUrl!: string
 
     form: TerveyskeskuskoulutusjaksonHyvaksyntaForm = {
       laillistamispaiva: null,
@@ -507,10 +517,6 @@
     }
 
     onValidateAndConfirm(modalId: string) {
-      return this.$bvModal.show(modalId)
-    }
-
-    onSubmit() {
       const validations = [
         this.validateForm(),
         this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
@@ -519,6 +525,10 @@
       if (validations.includes(false) || this.hyvaksynta == null) {
         return
       }
+      return this.$bvModal.show(modalId)
+    }
+
+    onSubmit() {
       this.params.saving = true
 
       const submitData = {
