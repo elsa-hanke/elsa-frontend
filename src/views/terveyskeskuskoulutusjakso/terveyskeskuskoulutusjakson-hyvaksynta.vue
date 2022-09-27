@@ -30,7 +30,7 @@
             </b-alert>
             <div v-if="editable">
               {{ $t('terveyskeskuskoulutusjakson-hyvaksynta-vastuuhenkilo-kuvaus') }}
-              <div v-show="hyvaksynta.lisatiedotVirkailijalta != null">
+              <div v-show="hyvaksynta.lisatiedotVirkailijalta">
                 <p class="mb-2">
                   <strong>{{ $t('lisatiedot-virkailijalta') }}:</strong>
                   {{ hyvaksynta.lisatiedotVirkailijalta }}
@@ -48,6 +48,7 @@
             <terveyskeskuskoulutusjakso-form
               :hyvaksynta="hyvaksynta"
               :editable="editable"
+              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
               @submit="onSubmit"
               @cancel="onCancel"
             />
@@ -132,6 +133,10 @@
 
     get showAcceptedByEveryone() {
       return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return 'vastuuhenkilo/terveyskeskuskoulutusjakso/tyoskentelyjakso-liite'
     }
 
     async onSubmit(formData: { hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen }) {

@@ -40,6 +40,7 @@
               :hyvaksynta="hyvaksynta"
               :reservedAsiakirjaNimetMutable="reservedAsiakirjaNimetMutable"
               :editable="editable"
+              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
               @submit="onSubmit"
               @cancel="onCancel"
             />
@@ -151,6 +152,10 @@
 
     get showAcceptedByEveryone() {
       return this.hyvaksynta?.tila === TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return 'erikoistuva-laakari/asiakirjat/'
     }
 
     async onSubmit(
