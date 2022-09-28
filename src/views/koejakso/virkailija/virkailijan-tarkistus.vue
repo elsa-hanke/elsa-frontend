@@ -202,6 +202,7 @@
                 :enable-search="false"
                 :enable-delete="false"
                 :no-results-info-text="$t('ei-liitetiedostoja')"
+                :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
                 :loading="loading"
               />
             </b-col>
@@ -643,6 +644,10 @@
         )
       }
       return []
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return '/virkailija/koejakso/tyoskentelyjakso-liite'
     }
 
     onValidateAndConfirm(modalId: string) {
