@@ -113,6 +113,7 @@
                 :enable-search="false"
                 :enable-delete="false"
                 :no-results-info-text="$t('ei-liitetiedostoja')"
+                :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
                 :loading="loading"
               />
             </b-col>
@@ -751,6 +752,10 @@
       return [allekirjoitusVastuuhenkilo, allekirjoitusErikoistuva].filter(
         (a): a is KoejaksonVaiheAllekirjoitus => a !== null
       )
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return `/vastuuhenkilo/koejakso/vastuuhenkilonarvio/${this.vastuuhenkilonArvio?.id}/tyoskentelyjakso-liite`
     }
 
     hideModal(id: string) {
