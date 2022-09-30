@@ -384,7 +384,7 @@
     }
 
     vaihdaRooli(id: number) {
-      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}`
+      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
     validateState(name: string) {
