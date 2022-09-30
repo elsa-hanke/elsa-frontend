@@ -95,12 +95,12 @@
           </b-row>
           <b-row>
             <b-col lg="4">
-              <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
+              <h5>{{ $t('alkamispaiva') }}</h5>
               <p>{{ $date(sp.alkamispaiva) }}</p>
             </b-col>
             <b-col lg="4">
-              <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
-              <p>{{ $date(sp.alkamispaiva) }}</p>
+              <h5>{{ $t('paattymispaiva') }}</h5>
+              <p>{{ sp.paattymispaiva ? $date(sp.paattymispaiva) : '-' }}</p>
             </b-col>
           </b-row>
           <b-row>
