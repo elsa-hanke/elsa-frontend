@@ -666,6 +666,6 @@
   }
 
   .erikoistuja-details-padding {
-    padding-left: 1.7rem;
+    padding-left: 0.7rem;
   }
 </style>
