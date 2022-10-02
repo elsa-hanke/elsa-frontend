@@ -425,7 +425,7 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/tyoskentelyjaksot/terveyskeskuskoulutusjakso',
+        path: '/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta',
         name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto',
         beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
@@ -458,7 +458,7 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/tyoskentelyjaksot/terveyskeskuskoulutusjaksot',
+        path: '/terveyskeskuskoulutusjaksot',
         name: 'terveyskeskuskoulutusjaksot',
         beforeEnter: impersonatedErikoistuvaGuard,
         component: RoleSpecificRoute,
