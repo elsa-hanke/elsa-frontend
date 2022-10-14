@@ -8,7 +8,10 @@ import {
   Page,
   Erikoisala,
   TerveyskeskuskoulutusjaksonHyvaksyminen,
-  TerveyskeskuskoulutusjaksonVaihe
+  TerveyskeskuskoulutusjaksonVaihe,
+  ValmistumispyyntoListItem,
+  ValmistumispyyntoVirkailijanTarkistus,
+  ValmistumispyynnonVirkailijanTarkistusLomake
 } from '@/types'
 
 export async function getErikoistujienSeurantaRajaimet() {
@@ -64,6 +67,20 @@ export async function getEtusivuKoejaksot() {
   return await axios.get<KoejaksonVaihe[]>(path)
 }
 
+export async function getValmistumispyynnot(params: {
+  page?: number
+  size?: number
+  sort?: string
+  'erikoistujanNimi.contains'?: string
+  'tila.equals'?: string
+}) {
+  return await axios.get<Page<ValmistumispyyntoListItem>>('virkailija/valmistumispyynnot', {
+    params: {
+      ...params
+    }
+  })
+}
+
 export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
   const path = '/virkailija/koejakso/vastuuhenkilonarvio'
   return await axios.put<VastuuhenkilonArvioLomake>(path, form)
@@ -107,4 +124,14 @@ export async function putTerveyskeskuskoulutusjakso(
     korjausehdotus: korjausehdotus,
     lisatiedotVirkailijalta: lisatiedotVirkailijalta
   })
+}
+
+export async function getValmistumispyyntoTarkistus(id: number) {
+  const path = `/virkailija/valmistumispyynnon-tarkistus/${id}`
+  return await axios.get<ValmistumispyyntoVirkailijanTarkistus>(path)
+}
+
+export async function putValmistumispyynto(form: ValmistumispyynnonVirkailijanTarkistusLomake) {
+  const path = `/virkailija/valmistumispyynnon-tarkistus/${form.id}`
+  return await axios.put<ValmistumispyynnonVirkailijanTarkistusLomake>(path, form)
 }

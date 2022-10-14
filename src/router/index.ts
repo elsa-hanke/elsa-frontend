@@ -106,6 +106,7 @@ import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjaks
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
 import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vue'
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
+import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
 // import Viestit from '@/views/viestit.vue'
 
 Vue.use(VueRouter)
@@ -651,7 +652,16 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: ValmistumispyynnonArviointi,
-          allowedRoles: [ELSA_ROLE.Vastuuhenkilo, ELSA_ROLE.OpintohallinnonVirkailija]
+          allowedRoles: [ELSA_ROLE.Vastuuhenkilo]
+        }
+      },
+      {
+        path: '/valmistumispyynnon-tarkistus/:valmistumispyyntoId',
+        name: 'valmistumispyynnon-tarkistus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyynnonTarkistus,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
       {
