@@ -470,10 +470,13 @@
                 <h5>
                   {{ $t('koejakso') }}
                 </h5>
-                <p class="mb-1">
+                <p class="mb-1" v-if="form.koejaksoHyvaksyttyPvm">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('hyvaksytty') }}
                   {{ $date(form.koejaksoHyvaksyttyPvm) }}
+                </p>
+                <p class="mb-1" v-if="!form.koejaksoHyvaksyttyPvm">
+                  {{ $t('koejakso-ei-hyvaksytty') }}
                 </p>
               </div>
               <div class="my-3">
