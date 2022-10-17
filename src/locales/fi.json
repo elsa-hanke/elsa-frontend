@@ -1415,6 +1415,7 @@
   "valmistumispyynto-hyvaksynta-lahetys-epaonnistui": "Valmistumispyynnön hyväksynnän lähetys epäonnistui",
   "valmistumispyynto-hyvaksynta-lahetys-onnistui": "Valmistumispyynnön hyväksyntä lähetetty onnistuneesti",
   "valmistumispyynto-hyvaksynta-lahetys-palautettu": "Valmistumispyyntö on palautettu erikoistujalle vastuuhenkilön toimesta",
+  "valmistumispyynto-hyvaksynta-odottaa-allekirjoituksia": "Valmistumispyyntö on tarkistettu ja vastuuhenkilö on hyväksynyt sen. Saat allekirjoituslinkin sähköpostiisi. Muista käydä allekirjoittamassa valmistumispyyntö.",
   "valmistumispyynto-hyvaksynta-vahvistus": "Vahvistuksen jälkeen valmistumispyyntö on hyväksytty ja saat allekirjoituslinkin sähköpostiisi. Muista käydä allekirjoittamassa valmistumispyyntö.",
   "valmistumispyynto-hyvaksynta-virkailija-tarkastanut": "Erikoistujan osaaminen on arvioitu. Virkailija on tarkistanut erikoistumisen määrälliset vaatimukset. Voit seuraavaksi hyväksyä valmistumispyynnön tai palauttaa pyynnön erikoistujalle. Tutustu sitä ennen virkailijan tarkistamiin tietoihin",
   "valmistumispyynto-ingressi-hae-koulutustodistusta-kappale": "Hae koulutustodistusta erikoislääkäri- tai erikoishammaslääkärikoulutuksen suorittamisesta. Hakemus menee opintohallintoon ja erikoisalan vastuuhenkilölle tarkistettavaksi.",

@@ -7,7 +7,7 @@
           <h1>{{ $t('valmistumispyynnon-hyvaksynta') }}</h1>
           <div v-if="!loading">
             <div class="mt-3">
-              <b-alert :show="odottaaHyvaksyntaa" variant="dark">
+              <b-alert :show="odottaaHyvaksyntaa || odottaaAllekirjoituksia" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon
@@ -26,6 +26,9 @@
                       </span>
                     </span>
                   </div>
+                  <span v-if="odottaaAllekirjoituksia">
+                    {{ $t('valmistumispyynto-hyvaksynta-odottaa-allekirjoituksia') }}
+                  </span>
                 </div>
               </b-alert>
               <b-alert :show="allekirjoitettu" variant="success">
@@ -348,8 +351,8 @@
               >
                 <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
               </elsa-form-group>
-              <hr v-if="odottaaOsaamisenArviointia" />
-              <div class="text-right">
+              <hr v-if="odottaaHyvaksyntaa" />
+              <div class="text-right" v-if="odottaaHyvaksyntaa">
                 <elsa-button
                   variant="back"
                   :to="{
