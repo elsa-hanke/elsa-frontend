@@ -1430,6 +1430,11 @@ export interface ValmistumispyynnonVirkailijanTarkistusLomake {
   korjausehdotus?: string | null
 }
 
+export interface ValmistumispyyntoHyvaksynta {
+  id: number | null
+  korjausehdotus?: string | null
+}
+
 export interface UusiKouluttaja {
   etunimi: string
   sukunimi: string
