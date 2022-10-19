@@ -43,7 +43,9 @@
       this.loading = true
       try {
         await putKaytonAloitusLomake(form)
-        this.$router.push({ name: 'etusivu' })
+
+        // Reitittää etusivulle. Jostain syystä push() ei toimi. ELSASC-20
+        this.$router.go(0)
       } catch (err) {
         this.loading = false
         const axiosError = err as AxiosError<ElsaError>
