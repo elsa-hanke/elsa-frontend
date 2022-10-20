@@ -17,6 +17,7 @@
 
   import { getErikoistuvaLaakari, putKaytonAloitusLomake } from '@/api/erikoistuva'
   import KaytonAloitusForm from '@/forms/kayton-aloitus-form.vue'
+  import store from '@/store'
   import { KaytonAloitusModel, Opintooikeus, ElsaError } from '@/types/index'
   import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
@@ -43,6 +44,13 @@
       this.loading = true
       try {
         await putKaytonAloitusLomake(form)
+        const account = store.getters['auth/account']
+
+        account.email = form.sahkoposti
+        if (form.opintooikeusId) {
+          account.erikoistuvaLaakari.opintooikeusKaytossaId = form.opintooikeusId
+        }
+
         this.$router.push({ name: 'etusivu' })
       } catch (err) {
         this.loading = false
