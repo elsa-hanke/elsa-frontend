@@ -55,7 +55,7 @@
                 >
                   <span>
                     {{
-                      `${$t(`yliopisto-nimi.${yliopisto.nimi}`)}: ${
+                      `${$t(`yliopisto-nimi.${yliopistoAndErikoisala.yliopisto.nimi}`)}: ${
                         yliopistoAndErikoisala.erikoisala.nimi
                       }`
                     }}
