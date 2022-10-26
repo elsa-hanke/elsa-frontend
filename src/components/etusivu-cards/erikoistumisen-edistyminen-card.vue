@@ -256,40 +256,15 @@
               </elsa-button>
               <div class="d-flex align-items-center">
                 <font-awesome-icon
-                  v-if="
-                    terveyskeskusjaksoIcon(
-                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
-                        .terveyskeskusVaadittuVahintaan
-                    )
-                  "
-                  :icon="
-                    terveyskeskusjaksoIcon(
-                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
-                        .terveyskeskusVaadittuVahintaan
-                    )
-                  "
+                  v-if="terveyskeskusjaksoIcon(edistyminen.terveyskeskuskoulutusjaksoSuoritettu)"
+                  :icon="terveyskeskusjaksoIcon(edistyminen.terveyskeskuskoulutusjaksoSuoritettu)"
                   :class="
-                    terveyskeskusjaksoIconClass(
-                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
-                        .terveyskeskusVaadittuVahintaan,
-                      edistyminen.opintooikeudenPaattymispaiva
-                    )
+                    terveyskeskusjaksoIconClass(edistyminen.terveyskeskuskoulutusjaksoSuoritettu)
                   "
                 />
                 <span>
                   {{
-                    terveyskeskusjaksoStatusText(
-                      edistyminen.terveyskeskuskoulutusjaksoSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit.terveyskeskusSuoritettu,
-                      edistyminen.tyoskentelyjaksoTilastot.koulutustyypit
-                        .terveyskeskusVaadittuVahintaan
-                    )
+                    terveyskeskusjaksoStatusText(edistyminen.terveyskeskuskoulutusjaksoSuoritettu)
                   }}
                 </span>
               </div>
@@ -440,28 +415,20 @@
       return suoritusmerkintaExists ? '#muut' : ''
     }
 
-    terveyskeskusjaksoIcon(suoritusmerkintaExists: boolean, suoritettu: number, vaadittu: number) {
-      if (suoritusmerkintaExists || suoritettu >= vaadittu) {
+    terveyskeskusjaksoIcon(suoritusmerkintaExists: boolean) {
+      if (suoritusmerkintaExists) {
         return ['fas', 'check-circle']
       }
     }
 
-    terveyskeskusjaksoIconClass(
-      suoritusmerkintaExists: boolean,
-      suoritettu: number,
-      vaadittu: number
-    ) {
-      if (suoritusmerkintaExists || suoritettu >= vaadittu) {
+    terveyskeskusjaksoIconClass(suoritusmerkintaExists: boolean) {
+      if (suoritusmerkintaExists) {
         return 'text-success mr-1'
       }
     }
 
-    terveyskeskusjaksoStatusText(
-      suoritusmerkintaExists: boolean,
-      suoritettu: number,
-      vaadittu: number
-    ) {
-      if (suoritusmerkintaExists || suoritettu >= vaadittu) {
+    terveyskeskusjaksoStatusText(suoritusmerkintaExists: boolean) {
+      if (suoritusmerkintaExists) {
         return this.$t('hyvaksytty')
       } else {
         return this.$t('ei-suoritettu')
