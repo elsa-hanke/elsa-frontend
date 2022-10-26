@@ -136,8 +136,8 @@
                 {{ $t('nayta-erikoistujan-suoritustiedot') }}
               </elsa-button>
               <h5>{{ $t('muut-koulutukset-ja-tutkinnot') }}</h5>
-              <div class="my-3" v-if="yekSuorituspaivaTila">
-                <p v-if="form.yekSuorituspaiva">
+              <div class="mb-3" v-if="yekSuorituspaivaTila">
+                <p v-if="form.yekSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('yek-suoritettu') }}
                   {{ $date(form.yekSuorituspaiva) }}
@@ -167,8 +167,8 @@
                   </template>
                 </elsa-form-group>
               </div>
-              <div class="my-3" v-if="ptlSuorituspaivaTila">
-                <p v-if="form.ptlSuorituspaiva">
+              <div class="mb-3" v-if="ptlSuorituspaivaTila">
+                <p v-if="form.ptlSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('ptl-suoritettu') }}
                   {{ $date(form.ptlSuorituspaiva) }}
@@ -198,8 +198,8 @@
                   </template>
                 </elsa-form-group>
               </div>
-              <div class="my-3" v-if="aiempiElKoulutusSuorituspaivaTila">
-                <p v-if="form.aiempiElKoulutusSuorituspaiva">
+              <div class="mb-3" v-if="aiempiElKoulutusSuorituspaivaTila">
+                <p v-if="form.aiempiElKoulutusSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('aiempi-el-koulutus-suoritettu') }}
                   {{ $date(form.aiempiElKoulutusSuorituspaiva) }}
@@ -229,8 +229,8 @@
                   </template>
                 </elsa-form-group>
               </div>
-              <div class="my-3" v-if="ltTutkintoSuorituspaivaTila">
-                <p v-if="form.ltTutkintoSuorituspaiva">
+              <div class="mb-3" v-if="ltTutkintoSuorituspaivaTila">
+                <p v-if="form.ltTutkintoSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('lt-tutkinto-suoritettu') }}
                   {{ $date(form.ltTutkintoSuorituspaiva) }}
@@ -537,7 +537,7 @@
                   <b-col lg="4">
                     <h5>{{ $t('nimi-ja-nimike') }}</h5>
                     <p>
-                      {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi + ' '
+                      {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi
                       }}{{
                         valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimike
                           ? ', ' + valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimike

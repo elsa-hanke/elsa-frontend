@@ -106,6 +106,7 @@ import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjaks
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
 import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vue'
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
+import ValmistumispyynnonHyvaksynta from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta.vue'
 import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
 // import Viestit from '@/views/viestit.vue'
 
@@ -652,6 +653,15 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: ValmistumispyynnonArviointi,
+          allowedRoles: [ELSA_ROLE.Vastuuhenkilo]
+        }
+      },
+      {
+        path: '/valmistumispyynnon-hyvaksynta/:valmistumispyyntoId',
+        name: 'valmistumispyynnon-hyvaksynta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyynnonHyvaksynta,
           allowedRoles: [ELSA_ROLE.Vastuuhenkilo]
         }
       },
