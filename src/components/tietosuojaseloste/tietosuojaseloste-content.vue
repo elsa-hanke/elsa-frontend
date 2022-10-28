@@ -12,10 +12,6 @@
       <a href="https://tietosuoja.fi/" target="_blank" rel="noopener noreferrer">tietosuoja.fi</a>
     </p>
     <h1>ELSA-palvelun tietosuojaseloste</h1>
-    <p>
-      Huom. ELSA-palvelua ollaan vasta kehittämässä, joten myös tietosuojaa tullaan tarkentamaan mm.
-      yhteyshenkilöiden osalta, kun palvelu otetaan käyttöön vuonna 2022.
-    </p>
     <h2>1. Rekisterinpitäjät</h2>
     <p>
       ELSA-palvelun tuottaa yhteenliittymä, jonka yhteisrekisterinpitäjiä ovat Oulun yliopisto,
@@ -83,9 +79,9 @@
     </p>
     <h3>2. a) Järjestelmän toteutuksen aikainen yhteyshenkilö</h3>
     <p>
-      Matti Hiitola, projektipäällikkö, Oulun yliopisto
+      Julia Sillanpää, tekninen pääkäyttäjä, Tampereen yliopisto
       <br />
-      matti.hiitola@oulu.fi, +358 50 3564178
+      julia.sillanpaa@tuni.fi
     </p>
     <h3>2. b) Rekisterin vastuuhenkilö</h3>
     <p>Nimetään ennen tuotantovaiheen aloitusta, esimerkiksi nimetty opintohallinnon virkailija</p>
