@@ -45,6 +45,9 @@
                         )
                       }}
                     </span>
+                    <span v-else-if="odottaaAllekirjoituksia">
+                      {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-allekirjoituksia') }}
+                    </span>
                     <span
                       v-if="virkailijaPalauttanut || vastuuhenkiloHyvaksyjaPalauttanut"
                       class="d-block"
@@ -753,7 +756,9 @@
             if (
               this.valmistumispyynto.tila ==
                 ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
-              this.valmistumispyynto.tila == ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU
+              this.valmistumispyynto.tila ==
+                ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU ||
+              this.valmistumispyynto.tila == ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA
             ) {
               this.editable = false
             }
