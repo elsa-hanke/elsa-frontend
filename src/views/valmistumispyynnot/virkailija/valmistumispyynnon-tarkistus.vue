@@ -1,5 +1,5 @@
 <template>
-  <div class="vp">
+  <div class="valmistumispyynto">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
