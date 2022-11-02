@@ -42,7 +42,7 @@
           </elsa-button>
         </div>
         <div class="mb-4">
-          <h4 class="mb-1">{{ $t('muut-kayttajaroolit-kuin-erikoistuva-tai-kouluttaja') }}</h4>
+          <h4 class="mb-1">{{ $t('vastuuhenkilo-tai-virkailija') }}</h4>
           <p class="mb-3">{{ $t('kirjaudu-sisaan-haka') }}</p>
           <elsa-button variant="primary" :to="{ name: 'haka-yliopisto' }" class="mr-3 mb-2">
             {{ $t('kirjaudu-sisaan') }} (HAKA)
