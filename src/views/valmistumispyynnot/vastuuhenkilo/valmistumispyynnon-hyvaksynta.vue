@@ -546,7 +546,7 @@
           this.$router.replace({ name: 'valmistumispyynnot' })
         }
       } catch (err) {
-        toastFail(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-epaonnistui'))
+        toastFail(this, this.$t('valmistumispyynto-hyvaksynta-palautus-epaonnistui'))
       }
       this.sending = false
     }
