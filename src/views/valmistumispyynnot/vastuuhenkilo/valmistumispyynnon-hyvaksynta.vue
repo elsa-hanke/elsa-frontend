@@ -38,7 +38,7 @@
                   </em>
                   <div>
                     <span>
-                      {{ $t('valmistumispyynto-hyvaksynta-virkailija-tarkastanut') }}
+                      {{ $t('valmistumispyynto-allekirjoitettu-kaikkien-osapuolten-toimesta') }}
                     </span>
                   </div>
                 </div>
@@ -333,13 +333,57 @@
                   <b-col lg="4">
                     <h5>{{ $t('nimi-ja-nimike') }}</h5>
                     <p>
-                      {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi
+                      {{ valmistumispyynto.virkailijaNimi }}
+                    </p>
+                  </b-col>
+                </b-row>
+                <hr />
+              </div>
+              <div v-if="valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika">
+                <b-row>
+                  <b-col>
+                    <h3>{{ $t('hyvaksynyt') }}</h3>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col lg="4">
+                    <h5>{{ $t('paivays') }}</h5>
+                    <p>{{ $date(valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika) }}</p>
+                  </b-col>
+                  <b-col lg="4">
+                    <h5>{{ $t('nimi-ja-nimike') }}</h5>
+                    <p>
+                      {{ valmistumispyynto.vastuuhenkiloHyvaksyjaNimi
                       }}{{
-                        valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimike
-                          ? ', ' + valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimike
+                        valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
+                          ? ', ' + valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
                           : ''
                       }}
                     </p>
+                  </b-col>
+                </b-row>
+                <hr />
+              </div>
+              <div v-if="yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl">
+                <b-row>
+                  <b-col>
+                    <h3>{{ $t('dokumentit') }}</h3>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <asiakirja-button
+                      v-if="yhteenvetoAsiakirjaUrl"
+                      :asiakirjaDataEndpointUrl="yhteenvetoAsiakirjaUrl"
+                      :asiakirjaLabel="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                      :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                    />
+                    <asiakirja-button
+                      v-if="liitteetAsiakirjaUrl"
+                      :asiakirjaDataEndpointUrl="liitteetAsiakirjaUrl"
+                      :asiakirjaLabel="$t('valmistumispyynnon-liitteet')"
+                      :id="valmistumispyynto.liitteetAsiakirjaId"
+                    />
                   </b-col>
                 </b-row>
                 <hr />
@@ -351,7 +395,6 @@
               >
                 <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
               </elsa-form-group>
-              <hr v-if="odottaaHyvaksyntaa" />
               <div class="text-right" v-if="odottaaHyvaksyntaa">
                 <elsa-button
                   variant="back"
@@ -405,6 +448,7 @@
     getValmistumispyyntoHyvaksynta,
     putValmistumispyyntoHyvaksynta
   } from '@/api/vastuuhenkilo'
+  import AsiakirjaButton from '@/components/asiakirjat/asiakirja-button.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -421,6 +465,7 @@
 
   @Component({
     components: {
+      AsiakirjaButton,
       ElsaButton,
       ElsaFormGroup,
       ErikoistuvaDetails,
@@ -489,6 +534,8 @@
     valmistumispyyntoArviointienTila: ValmistumispyyntoArviointienTila | null = null
     loading = true
     sending = false
+    yhteenvetoAsiakirjaUrl: string | null = null
+    liitteetAsiakirjaUrl: string | null = null
 
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
@@ -498,6 +545,12 @@
             this.virkailijanTarkistus = response.data
             if (response.data.valmistumispyynto) {
               this.valmistumispyynto = response.data.valmistumispyynto
+              if (this.valmistumispyynto.yhteenvetoAsiakirjaId) {
+                this.yhteenvetoAsiakirjaUrl = `/vastuuhenkilo/valmistumispyynto/${this.valmistumispyynto.id}/asiakirja/`
+              }
+              if (this.valmistumispyynto.liitteetAsiakirjaId) {
+                this.liitteetAsiakirjaUrl = `/vastuuhenkilo/valmistumispyynto/${this.valmistumispyynto.id}/asiakirja/`
+              }
             }
           })
           this.loading = false

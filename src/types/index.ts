@@ -1343,6 +1343,8 @@ export interface Valmistumispyynto {
   vastuuhenkiloHyvaksyjaPalautusaika?: string
   vastuuhenkiloHyvaksyjaKorjausehdotus?: string
   allekirjoitusaika?: string
+  yhteenvetoAsiakirjaId?: number | null
+  liitteetAsiakirjaId?: number | null
 }
 
 export interface ValmistumispyyntoArviointienTila {

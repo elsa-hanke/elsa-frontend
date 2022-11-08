@@ -118,6 +118,31 @@
               <p class="mt-2 mb-0">
                 {{ $t('valmistumispyynto-allekirjoitettu-selite') }}
               </p>
+              <div
+                v-if="
+                  yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl || koulutussuunnitelmaAsiakirjaUrl
+                "
+                class="mt-2"
+              >
+                <h3>{{ $t('lataa-dokumentit') }}</h3>
+                <asiakirja-button
+                  v-if="yhteenvetoAsiakirjaUrl"
+                  :asiakirjaDataEndpointUrl="yhteenvetoAsiakirjaUrl"
+                  :asiakirjaLabel="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                  :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                />
+                <asiakirja-button
+                  v-if="liitteetAsiakirjaUrl"
+                  :asiakirjaDataEndpointUrl="liitteetAsiakirjaUrl"
+                  :asiakirjaLabel="$t('valmistumispyynnon-liitteet')"
+                  :id="valmistumispyynto.liitteetAsiakirjaId"
+                />
+                <asiakirja-button
+                  v-if="koulutussuunnitelmaAsiakirjaUrl"
+                  :asiakirjaDataEndpointUrl="koulutussuunnitelmaAsiakirjaUrl"
+                  :asiakirjaLabel="$t('koulutussuunnitelma-ja-osaaminen')"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -129,9 +154,14 @@
 <script lang="ts">
   import { Component, Vue, Prop } from 'vue-property-decorator'
 
+  import AsiakirjaButton from '@/components/asiakirjat/asiakirja-button.vue'
   import { Valmistumispyynto } from '@/types'
 
-  @Component
+  @Component({
+    components: {
+      AsiakirjaButton
+    }
+  })
   export default class ValmistumispyynnonTilaErikoistuja extends Vue {
     @Prop({ required: true })
     valmistumispyynto!: Valmistumispyynto
@@ -164,6 +194,18 @@
       return this.valmistumispyynto.allekirjoitusaika
         ? this.$date(this.valmistumispyynto.allekirjoitusaika)
         : null
+    }
+
+    get yhteenvetoAsiakirjaUrl() {
+      return this.valmistumispyynto.yhteenvetoAsiakirjaId ? `erikoistuva-laakari/asiakirjat/` : null
+    }
+
+    get liitteetAsiakirjaUrl() {
+      return this.valmistumispyynto.liitteetAsiakirjaId ? `erikoistuva-laakari/asiakirjat/` : null
+    }
+
+    get koulutussuunnitelmaAsiakirjaUrl() {
+      return null
     }
 
     tilaIcon(vaiheHyvaksytty: boolean) {

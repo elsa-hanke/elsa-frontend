@@ -67,7 +67,7 @@
                   </em>
                   <div>
                     <span>
-                      {{ $t('valmistumispyynto-osaaminen-arvioitu-allekirjoitettu') }}
+                      {{ $t('valmistumispyynto-allekirjoitettu-kaikkien-osapuolten-toimesta') }}
                     </span>
                   </div>
                 </div>
@@ -540,13 +540,57 @@
                   <b-col lg="4">
                     <h5>{{ $t('nimi-ja-nimike') }}</h5>
                     <p>
-                      {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi
+                      {{ valmistumispyynto.virkailijaNimi }}
+                    </p>
+                  </b-col>
+                </b-row>
+                <hr />
+              </div>
+              <div v-if="valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika && !editable">
+                <b-row>
+                  <b-col>
+                    <h3>{{ $t('hyvaksynyt') }}</h3>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col lg="4">
+                    <h5>{{ $t('paivays') }}</h5>
+                    <p>{{ $date(valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika) }}</p>
+                  </b-col>
+                  <b-col lg="4">
+                    <h5>{{ $t('nimi-ja-nimike') }}</h5>
+                    <p>
+                      {{ valmistumispyynto.vastuuhenkiloHyvaksyjaNimi
                       }}{{
-                        valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimike
-                          ? ', ' + valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimike
+                        valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
+                          ? ', ' + valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
                           : ''
                       }}
                     </p>
+                  </b-col>
+                </b-row>
+                <hr />
+              </div>
+              <div v-if="yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl">
+                <b-row>
+                  <b-col>
+                    <h3>{{ $t('dokumentit') }}</h3>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col>
+                    <asiakirja-button
+                      v-if="yhteenvetoAsiakirjaUrl"
+                      :asiakirjaDataEndpointUrl="yhteenvetoAsiakirjaUrl"
+                      :asiakirjaLabel="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                      :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                    />
+                    <asiakirja-button
+                      v-if="liitteetAsiakirjaUrl"
+                      :asiakirjaDataEndpointUrl="liitteetAsiakirjaUrl"
+                      :asiakirjaLabel="$t('valmistumispyynnon-liitteet')"
+                      :id="valmistumispyynto.liitteetAsiakirjaId"
+                    />
                   </b-col>
                 </b-row>
                 <hr />
@@ -639,6 +683,7 @@
 
   import { ELSA_API_LOCATION } from '@/api'
   import { getValmistumispyyntoTarkistus, putValmistumispyynto } from '@/api/virkailija'
+  import AsiakirjaButton from '@/components/asiakirjat/asiakirja-button.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -665,7 +710,8 @@
       ErikoistuvaDetails,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
-      OpintosuoritusTab
+      OpintosuoritusTab,
+      AsiakirjaButton
     }
   })
   export default class ValmistumispyynnonTarkistus extends Mixins<ValmistumispyyntoMixin>(
@@ -743,6 +789,8 @@
     ptlSuorituspaivaTila = false
     aiempiElKoulutusSuorituspaivaTila = false
     ltTutkintoSuorituspaivaTila = false
+    yhteenvetoAsiakirjaUrl: string | null = null
+    liitteetAsiakirjaUrl: string | null = null
 
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
@@ -758,7 +806,8 @@
                 ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
               this.valmistumispyynto.tila ==
                 ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU ||
-              this.valmistumispyynto.tila == ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA
+              this.valmistumispyynto.tila == ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA ||
+              this.valmistumispyynto.tila == ValmistumispyynnonTila.ALLEKIRJOITETTU
             ) {
               this.editable = false
             }
@@ -782,6 +831,12 @@
               this.ptlSuorituspaivaTila = false
               this.aiempiElKoulutusSuorituspaivaTila = false
               this.ltTutkintoSuorituspaivaTila = false
+            }
+            if (this.valmistumispyynto.yhteenvetoAsiakirjaId) {
+              this.yhteenvetoAsiakirjaUrl = `/virkailija/valmistumispyynto/${this.valmistumispyynto.id}/asiakirja/`
+            }
+            if (this.valmistumispyynto.liitteetAsiakirjaId) {
+              this.liitteetAsiakirjaUrl = `/virkailija/valmistumispyynto/${this.valmistumispyynto.id}/asiakirja/`
             }
           })
           this.loading = false
