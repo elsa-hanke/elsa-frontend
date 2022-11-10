@@ -19,7 +19,8 @@ import {
   ValmistumispyyntoArviointienTila,
   ValmistumispyyntoLomakeOsaamisenArviointi,
   ValmistumispyyntoVirkailijanTarkistus,
-  ValmistumispyyntoHyvaksynta
+  ValmistumispyyntoHyvaksynta,
+  Asiakirja
 } from '@/types'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -168,4 +169,12 @@ export async function putValmistumispyyntoHyvaksynta(form: ValmistumispyyntoHyva
 export async function putValmistumispyynto(form: ValmistumispyyntoLomakeOsaamisenArviointi) {
   const path = `/vastuuhenkilo/valmistumispyynnon-arviointi/${form.id}`
   return await axios.put<Valmistumispyynto>(path, form)
+}
+
+export async function getValmistumispyyntoAsiakirja(
+  asiakirjaId: number,
+  valmistumispyyntoId: number
+) {
+  const path = `/vastuuhenkilo/valmistumispyynto/${valmistumispyyntoId}/asiakirja/${asiakirjaId}`
+  return await axios.get<Asiakirja>(path)
 }
