@@ -81,6 +81,9 @@
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
+      <b-form-checkbox v-model="form.anonyymiPalaute">
+        {{ $t('laheta-palaute-anonyymisti') }}
+      </b-form-checkbox>
       <div class="text-right mt-4">
         <elsa-button variant="back" :disabled="saving" @click="hideAndReset">
           {{ $t('peruuta') }}
@@ -121,6 +124,9 @@
         },
         palaute: {
           required
+        },
+        anonyymiPalaute: {
+          required
         }
       }
     }
@@ -135,7 +141,8 @@
 
     form: Palaute = {
       palautteenAihe: null,
-      palaute: null
+      palaute: null,
+      anonyymiPalaute: false
     }
 
     validateState(name: string) {
@@ -157,7 +164,8 @@
       this.$v.form.$reset()
       this.form = {
         palautteenAihe: null,
-        palaute: null
+        palaute: null,
+        anonyymiPalaute: false
       }
       this.showFormSent = false
       this.showError = false

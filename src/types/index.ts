@@ -852,6 +852,7 @@ export interface BarChartRow {
 export interface Palaute {
   palautteenAihe: string | null
   palaute: string | null
+  anonyymiPalaute: boolean
 }
 
 export interface Teoriakoulutukset {
