@@ -308,16 +308,6 @@
                 </p>
               </div>
               <hr />
-              <h2 class="mb-3">{{ $t('huomiot') }}</h2>
-              <div class="my-3">
-                <h5>{{ $t('kommentit-muille-virkailijoille-ei-nayteta-muille') }}</h5>
-                <p v-if="virkailijanTarkistus.kommentitVirkailijoille">
-                  {{ virkailijanTarkistus.kommentitVirkailijoille }}
-                </p>
-                <p v-else>
-                  {{ $t('ei-kommentteja') }}
-                </p>
-              </div>
               <div v-if="valmistumispyynto.virkailijanKuittausaika">
                 <hr />
                 <b-row>
