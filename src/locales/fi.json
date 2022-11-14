@@ -451,6 +451,8 @@
   },
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
   "kirjautuminen-huoltokatkoilmoitus": "Palvelussa 30 minuutin huoltokatko alkaen",
+  "kirjautumissivu-info-erikoistuja": "Osa suorituksista ei vielä siirry opintotietojärjestelmistä. Kliinisten ja diagnostisten hammaslääketieteen erikoisalojen kirjautuminen ei toimi Itä-Suomen ja Turun yliopistojen erikoistujilla.",
+  "kirjautumissivu-info-kouluttaja": "Jos olet kirjautumassa palveluun ensimmäistä kertaa, käytäthän sähköpostiisi saapunutta kutsulinkkiä.",
   "kirjoita-kommenttisi-tahan": "Kirjoita kommenttisi tähän...",
   "kirjoita-tai-valitse": "Kirjoita tai valitse",
   "klo": "klo",
