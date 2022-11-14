@@ -307,7 +307,6 @@
                   {{ valmistumispyynto.selvitysVanhentuneistaSuorituksista }}
                 </p>
               </div>
-              <hr />
               <div v-if="valmistumispyynto.virkailijanKuittausaika">
                 <hr />
                 <b-row>
@@ -327,9 +326,9 @@
                     </p>
                   </b-col>
                 </b-row>
-                <hr />
               </div>
               <div v-if="valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika">
+                <hr />
                 <b-row>
                   <b-col>
                     <h3>{{ $t('hyvaksynyt') }}</h3>
@@ -352,9 +351,9 @@
                     </p>
                   </b-col>
                 </b-row>
-                <hr />
               </div>
               <div v-if="yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl">
+                <hr />
                 <b-row>
                   <b-col>
                     <h3>{{ $t('dokumentit') }}</h3>
