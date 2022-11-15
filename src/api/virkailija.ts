@@ -68,6 +68,11 @@ export async function getEtusivuKoejaksot() {
   return await axios.get<KoejaksonVaihe[]>(path)
 }
 
+export async function getEtusivuValmistumispyynnot() {
+  const path = `/virkailija/etusivu/valmistumispyynnot`
+  return await axios.get<ValmistumispyyntoListItem[]>(path)
+}
+
 export async function getValmistumispyynnot(params: {
   page?: number
   size?: number
