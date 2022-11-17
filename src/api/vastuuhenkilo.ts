@@ -92,6 +92,11 @@ export async function getEtusivuArviointipyynnot() {
   return await axios.get<Arviointipyynto[]>(path)
 }
 
+export async function getEtusivuValmistumispyynnot() {
+  const path = `/vastuuhenkilo/etusivu/valmistumispyynnot`
+  return await axios.get<ValmistumispyyntoListItem[]>(path)
+}
+
 export async function getTerveyskeskuskoulutusjaksot(params: {
   page?: number
   size?: number
