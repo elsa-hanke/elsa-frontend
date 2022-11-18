@@ -11,7 +11,8 @@ import {
   TerveyskeskuskoulutusjaksonVaihe,
   ValmistumispyyntoListItem,
   ValmistumispyyntoVirkailijanTarkistus,
-  ValmistumispyynnonVirkailijanTarkistusLomake
+  ValmistumispyynnonVirkailijanTarkistusLomake,
+  Asiakirja
 } from '@/types'
 
 export async function getErikoistujienSeurantaRajaimet() {
@@ -65,6 +66,11 @@ export async function getErikoistujienSeurantaList(params: {
 export async function getEtusivuKoejaksot() {
   const path = '/virkailija/etusivu/koejaksot'
   return await axios.get<KoejaksonVaihe[]>(path)
+}
+
+export async function getEtusivuValmistumispyynnot() {
+  const path = `/virkailija/etusivu/valmistumispyynnot`
+  return await axios.get<ValmistumispyyntoListItem[]>(path)
 }
 
 export async function getValmistumispyynnot(params: {
@@ -134,4 +140,12 @@ export async function getValmistumispyyntoTarkistus(id: number) {
 export async function putValmistumispyynto(form: ValmistumispyynnonVirkailijanTarkistusLomake) {
   const path = `/virkailija/valmistumispyynnon-tarkistus/${form.id}`
   return await axios.put<ValmistumispyynnonVirkailijanTarkistusLomake>(path, form)
+}
+
+export async function getValmistumispyyntoAsiakirja(
+  asiakirjaId: number,
+  valmistumispyyntoId: number
+) {
+  const path = `/virkailija/valmistumispyynto/${valmistumispyyntoId}/asiakirja/${asiakirjaId}`
+  return await axios.get<Asiakirja>(path)
 }

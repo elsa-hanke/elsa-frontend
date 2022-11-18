@@ -2,7 +2,10 @@ import axios from 'axios'
 
 import { BlobDataResult } from '@/types'
 
-async function fetchBlobData(endpointUrl: string, id?: number | null): Promise<BlobDataResult> {
+export async function fetchBlobData(
+  endpointUrl: string,
+  id?: number | null
+): Promise<BlobDataResult> {
   if (id) {
     endpointUrl =
       endpointUrl.slice(endpointUrl.length - 1) !== '/' ? `${endpointUrl}/${id}` : endpointUrl + id

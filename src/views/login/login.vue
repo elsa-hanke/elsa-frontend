@@ -24,7 +24,11 @@
               />
             </em>
             <div>
-              {{ $t('pilottikaytto-kuvaus') }}
+              <strong>{{ $t('kouluttaja') }}:</strong>
+              {{ $t('kirjautumissivu-info-kouluttaja') }}
+              <br />
+              <strong>{{ $t('erikoistuja') }}:</strong>
+              {{ $t('kirjautumissivu-info-erikoistuja') }}
             </div>
           </div>
         </b-alert>

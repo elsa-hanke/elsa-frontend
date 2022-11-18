@@ -59,7 +59,7 @@
         </template>
         <template #cell(pvm)="row">
           <span class="text-nowrap">
-            {{ $date(row.item.pvm) }}
+            {{ row.item.pvm ? $date(row.item.pvm) : '' }}
           </span>
         </template>
         <template #cell(actions)="row">
@@ -152,7 +152,7 @@
         case AvoinAsiaTyyppi.SEURANTAJAKSO:
           return `/seurantakeskustelut/seurantajakso/${id}`
         case AvoinAsiaTyyppi.TERVEYSKESKUSKOULUTUSJAKSO:
-          return '/tyoskentelyjaksot/terveyskeskuskoulutusjakso'
+          return '/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta'
         default:
           return ''
       }
