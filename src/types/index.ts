@@ -646,6 +646,8 @@ export type SuoritusarvioinninKommentti = {
 export type ArvioitavatKokonaisuudetList = {
   erikoisalaId: number
   erikoisalaNimi: string
+  id?: number
+  nimi?: string
   vanhentuneet: ArvioitavaKokonaisuus[]
   voimassaolevat: ArvioitavaKokonaisuus[]
 }

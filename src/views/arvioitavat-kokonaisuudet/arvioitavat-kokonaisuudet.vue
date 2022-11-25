@@ -1,22 +1,19 @@
 <template>
-  <div class="arvioitavat-kokonaisuudet" v-if="!loading && arvioitavatKokonaisuudet">
+  <div class="arvioitavat-kokonaisuudet" v-if="!loading">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('arvioitavat-kokonaisuudet') }}</h1>
+          <h1 class="mt-3">{{ $t('arvioitavat-kokonaisuudet') }}</h1>
         </b-col>
       </b-row>
-      <div
-        class="filter"
-        v-if="arvioitavatKokonaisuudetErikoisaloittain.length > 1 && !$isErikoistuva()"
-      >
+      <div class="filter mt-3" v-if="erikoisalat.length > 1 && !$isErikoistuva()">
         <elsa-form-group :label="$t('erikoisala')" class="mb-4">
           <template v-slot="{ uid }">
             <elsa-form-multiselect
               :id="uid"
-              v-model="filtered.erikoisala"
-              :options="erikoisalatSorted"
+              v-model="erikoisala"
+              :options="erikoisalat"
               label="nimi"
               @select="onErikoisalaSelect"
               @clearMultiselect="onErikoisalaReset"
@@ -31,10 +28,25 @@
         />
       </div>
       <div v-else>
-        <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+        <h3 class="mt-6">{{ selectedErikoisalaName }}</h3>
+        <b-tabs
+          content-class="mt-3"
+          :no-fade="true"
+          v-model="tabIndex"
+          v-if="!erikoisalatLoading && this.endpointUrl"
+        >
           <b-tab :title="$t('voimassa-olevat-kokonaisuudet')">
-            <arvioitavat-kokonaisuudet-lista
-              :arvioitavatKokonaisuudet="arvioitavatKokonaisuudet"
+            <arvioitavat-kokonaisuudet-lista-vastuuhenkilo
+              :url="endpointUrl"
+              :erikoisala="selectedErikoisala"
+              :locale="$i18n.locale"
+            />
+          </b-tab>
+          <b-tab :title="$t('voimassaolo-paattynyt')">
+            <arvioitavat-kokonaisuudet-lista-vastuuhenkilo
+              :url="endpointUrl"
+              :erikoisala="selectedErikoisala"
+              :voimassaolevat="false"
               :locale="$i18n.locale"
             />
           </b-tab>
@@ -52,8 +64,9 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import store from '@/store'
-  import { ArvioitavaKokonaisuus, ArvioitavatKokonaisuudetList } from '@/types'
+  import { ArvioitavaKokonaisuus } from '@/types'
   import { toastFail } from '@/utils/toast'
+  import ArvioitavatKokonaisuudetListaVastuuhenkilo from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet-lista-vastuuhenkilo.vue'
   import ArvioitavatKokonaisuudetLista from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet-lista.vue'
 
   type ErikoisalaSelectItem = {
@@ -65,19 +78,22 @@
     components: {
       ElsaAccordian,
       ArvioitavatKokonaisuudetLista,
+      ArvioitavatKokonaisuudetListaVastuuhenkilo,
       ElsaFormMultiselect,
       ElsaFormGroup
     }
   })
   export default class ArvioitavatKokonaisuudet extends Vue {
     private endpointUrl = ''
+    private erikoisalatUrl = ''
+    private erikoisala: ErikoisalaSelectItem | null = null
     private arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[] = []
-    private arvioitavatKokonaisuudetErikoisaloittain: ArvioitavatKokonaisuudetList[] = []
-    private arvioitavatKokonaisuudetFiltered: ArvioitavatKokonaisuudetList[] = []
     private loading = false
+    private erikoisalatLoading = false
     private showErikoisalaDropdown = false
-    private erikoisalat: ArvioitavatKokonaisuudetList[] = []
+    private erikoisalat: ErikoisalaSelectItem[] = []
     private selectedErikoisala: number | null = null
+    private selectedErikoisalaName = ''
     private tabIndex = 0
     private items = [
       {
@@ -101,15 +117,24 @@
     async fetch() {
       try {
         this.loading = true
+        this.erikoisalatLoading = true
         if (this.$isKouluttaja()) {
           this.endpointUrl = 'kouluttaja/arvioitavatkokonaisuudet'
+          this.erikoisalatUrl = 'kouluttaja/erikoisalat'
         } else if (this.$isVastuuhenkilo()) {
           this.endpointUrl = 'vastuuhenkilo/arvioitavatkokonaisuudet'
+          this.erikoisalatUrl = 'vastuuhenkilo/erikoisalat'
         } else {
           this.endpointUrl = 'erikoistuva-laakari/arvioitavatkokonaisuudet'
         }
-        if (this.$isKouluttaja() || this.$isVastuuhenkilo()) {
-          this.arvioitavatKokonaisuudetErikoisaloittain = (await axios.get(this.endpointUrl)).data
+        if (this.endpointUrl && (this.$isKouluttaja() || this.$isVastuuhenkilo())) {
+          this.erikoisalat = (await axios.get(this.erikoisalatUrl)).data
+          if (this.erikoisalat[0].id) {
+            this.erikoisala = this.erikoisalat[0]
+            this.selectedErikoisala = this.erikoisalat[0].id
+            this.selectedErikoisalaName = this.erikoisalat[0].nimi
+          }
+          this.erikoisalatLoading = false
         } else {
           this.arvioitavatKokonaisuudet = (await axios.get(this.endpointUrl)).data
         }
@@ -120,32 +145,14 @@
       }
     }
 
-    get erikoisalatSorted() {
-      let erikoisalat: ErikoisalaSelectItem[] = []
-      this.arvioitavatKokonaisuudetErikoisaloittain.forEach((e) => {
-        erikoisalat.push({ nimi: e.erikoisalaNimi, id: e.erikoisalaId })
-      })
-      return erikoisalat
-    }
-
     onErikoisalaSelect(erikoisala: ErikoisalaSelectItem) {
-      this.filterResults(erikoisala.id)
+      this.selectedErikoisala = erikoisala.id
+      this.selectedErikoisalaName = erikoisala.nimi
     }
 
     onErikoisalaReset() {
-      this.filterResults(null)
-    }
-
-    filterResults(id: number | null) {
-      console.log('filter')
-      if (id) {
-        this.arvioitavatKokonaisuudetFiltered =
-          this.arvioitavatKokonaisuudetErikoisaloittain.filter(
-            (erikoisala) => erikoisala.erikoisalaId > id
-          )
-      } else {
-        this.arvioitavatKokonaisuudetFiltered = this.arvioitavatKokonaisuudetErikoisaloittain
-      }
+      this.selectedErikoisala = null
+      this.selectedErikoisalaName = ''
     }
   }
 </script>
