@@ -71,7 +71,7 @@
   import { requiredIf } from 'vuelidate/lib/validators'
 
   const defaultDateFormat = 'yyyy-MM-dd'
-  const defaultMinDate = format(subYears(new Date(), 15), defaultDateFormat)
+  const defaultMinDate = format(subYears(new Date(), 25), defaultDateFormat)
   const defaultMaxDate = format(addYears(new Date(), 30), defaultDateFormat)
 
   interface DateForm {

@@ -54,11 +54,11 @@
     @Prop({ required: false, type: Boolean, default: true })
     voimassaolevat!: boolean
 
-    private loading = false
-    private arvioitavatKokonaisuudetPageable: Page<ArvioitavaKokonaisuus> | null = null
-    private arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[] = []
-    private currentPage = 1
-    private rows = 0
+    loading = false
+    arvioitavatKokonaisuudetPageable: Page<ArvioitavaKokonaisuus> | null = null
+    arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[] = []
+    currentPage = 1
+    rows = 0
 
     async mounted() {
       await this.fetch()
@@ -71,7 +71,7 @@
             params: {
               page: this.currentPage - 1,
               size: 20,
-              sort: 'nimi,asc',
+              sort: this.voimassaolevat ? 'nimi,asc' : ['nimi,asc', 'paivamaara,desc'],
               erikoisalaId: this.erikoisala,
               voimassaolevat: this.voimassaolevat
             }
@@ -88,6 +88,7 @@
 
     @Watch('erikoisala')
     onErikoisalaChanged() {
+      this.currentPage = 1
       this.fetch()
     }
 

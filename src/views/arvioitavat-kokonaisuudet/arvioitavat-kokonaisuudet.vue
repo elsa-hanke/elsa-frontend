@@ -42,7 +42,7 @@
               :locale="$i18n.locale"
             />
           </b-tab>
-          <b-tab :title="$t('voimassaolo-paattynyt')">
+          <b-tab :title="$t('voimassaolo-paattynyt')" lazy>
             <arvioitavat-kokonaisuudet-lista-vastuuhenkilo
               :url="endpointUrl"
               :erikoisala="selectedErikoisala"
@@ -84,18 +84,18 @@
     }
   })
   export default class ArvioitavatKokonaisuudet extends Vue {
-    private endpointUrl = ''
-    private erikoisalatUrl = ''
-    private erikoisala: ErikoisalaSelectItem | null = null
-    private arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[] = []
-    private loading = false
-    private erikoisalatLoading = false
-    private showErikoisalaDropdown = false
-    private erikoisalat: ErikoisalaSelectItem[] = []
-    private selectedErikoisala: number | null = null
-    private selectedErikoisalaName = ''
-    private tabIndex = 0
-    private items = [
+    endpointUrl = ''
+    erikoisalatUrl = ''
+    erikoisala: ErikoisalaSelectItem | null = null
+    arvioitavatKokonaisuudet: ArvioitavaKokonaisuus[] = []
+    loading = false
+    erikoisalatLoading = false
+    showErikoisalaDropdown = false
+    erikoisalat: ErikoisalaSelectItem[] = []
+    selectedErikoisala: number | null = null
+    selectedErikoisalaName = ''
+    tabIndex = 0
+    items = [
       {
         text: this.$t('etusivu'),
         to: { name: 'etusivu' }
