@@ -334,6 +334,15 @@
                 <p class="mb-1" v-if="!virkailijanTarkistus.koejaksoHyvaksyttyPvm">
                   {{ $t('koejakso-ei-hyvaksytty') }}
                 </p>
+                <p
+                  class="mb-1"
+                  v-if="
+                    !virkailijanTarkistus.koejaksoHyvaksyttyPvm &&
+                    virkailijanTarkistus.koejaksoEiVaadittu
+                  "
+                >
+                  {{ $t('koejaksoa-ei-vaadita') }}
+                </p>
               </div>
               <div class="my-3">
                 <h5>
