@@ -73,6 +73,53 @@
               ></erikoistuva-details>
             </div>
             <hr />
+            <div v-if="odottaaHyvaksyntaa">
+              <b-row>
+                <b-col lg="4">
+                  <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                    <template v-slot="{ uid }">
+                      <b-form-input
+                        :id="uid"
+                        v-model="form.sahkoposti"
+                        @input="$emit('skipRouteExitConfirm', false)"
+                        :state="validateState('sahkoposti')"
+                        :value="account.email"
+                      />
+                      <b-form-invalid-feedback
+                        v-if="!$v.form.sahkoposti.required"
+                        :id="`${uid}-feedback`"
+                      >
+                        {{ $t('pakollinen-tieto') }}
+                      </b-form-invalid-feedback>
+                      <b-form-invalid-feedback
+                        v-if="!$v.form.sahkoposti.email"
+                        :state="validateState('sahkoposti')"
+                        :id="`${uid}-feedback`"
+                      >
+                        {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                      </b-form-invalid-feedback>
+                    </template>
+                  </elsa-form-group>
+                </b-col>
+                <b-col lg="4">
+                  <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
+                    <template v-slot="{ uid }">
+                      <b-form-input
+                        :id="uid"
+                        v-model="form.puhelinnumero"
+                        @input="$emit('skipRouteExitConfirm', false)"
+                        :state="validateState('puhelinnumero')"
+                        :value="account.phoneNumber"
+                      />
+                      <b-form-invalid-feedback :id="`${uid}-feedback`">
+                        {{ $t('pakollinen-tieto') }}
+                      </b-form-invalid-feedback>
+                    </template>
+                  </elsa-form-group>
+                </b-col>
+              </b-row>
+              <hr />
+            </div>
             <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
             <div>
               <h5>
@@ -431,6 +478,7 @@
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
+  import { required, email } from 'vuelidate/lib/validators'
 
   import { ELSA_API_LOCATION } from '@/api'
   import {
@@ -444,6 +492,7 @@
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
+  import store from '@/store'
   import {
     ValmistumispyyntoArviointienTila,
     ValmistumispyyntoVirkailijanTarkistus,
@@ -484,7 +533,9 @@
 
     form: ValmistumispyyntoHyvaksynta = {
       id: null,
-      korjausehdotus: null
+      korjausehdotus: null,
+      sahkoposti: null,
+      puhelinnumero: null
     }
 
     virkailijanTarkistus: ValmistumispyyntoVirkailijanTarkistus = {
@@ -526,6 +577,20 @@
     yhteenvetoAsiakirjaUrl: string | null = null
     liitteetAsiakirjaUrl: string | null = null
 
+    validations() {
+      return {
+        form: {
+          sahkoposti: {
+            required,
+            email
+          },
+          puhelinnumero: {
+            required
+          }
+        }
+      }
+    }
+
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
       if (valmistumispyyntoId) {
@@ -541,6 +606,8 @@
                 this.liitteetAsiakirjaUrl = `/vastuuhenkilo/valmistumispyynto/${this.valmistumispyynto.id}/asiakirja/`
               }
             }
+            this.form.sahkoposti = this.account.email
+            this.form.puhelinnumero = this.account.phoneNumber
           })
           this.loading = false
         } catch {
@@ -548,6 +615,15 @@
           this.$router.replace({ name: 'valmistumispyynnot' })
         }
       }
+    }
+
+    get account() {
+      return store.getters['auth/account']
+    }
+
+    validateState(name: string) {
+      const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? !$error : null
     }
 
     vaihdaRooli(id: number) {
@@ -562,7 +638,13 @@
       try {
         this.sending = true
         if (this.valmistumispyynto.id) {
-          this.form = (await putValmistumispyyntoHyvaksynta({ id: this.valmistumispyynto.id })).data
+          this.form = (
+            await putValmistumispyyntoHyvaksynta({
+              id: this.valmistumispyynto.id,
+              puhelinnumero: this.form.puhelinnumero,
+              sahkoposti: this.form.sahkoposti
+            })
+          ).data
           this.$emit('skipRouteExitConfirm', true)
           toastSuccess(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-onnistui'))
           this.$router.replace({ name: 'valmistumispyynnot' })
