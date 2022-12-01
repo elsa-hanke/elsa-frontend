@@ -373,7 +373,6 @@
     hakutermi = ''
 
     async mounted() {
-      // await store.dispatch('vastuuhenkilo/getKoejaksot')
       try {
         await this.fetchAll()
       } catch {
