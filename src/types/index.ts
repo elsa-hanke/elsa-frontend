@@ -1354,6 +1354,7 @@ export interface Valmistumispyynto {
   allekirjoitusaika?: string
   yhteenvetoAsiakirjaId?: number | null
   liitteetAsiakirjaId?: number | null
+  erikoistujanTiedotAsiakirjaId?: number | null
 }
 
 export interface ValmistumispyyntoArviointienTila {
