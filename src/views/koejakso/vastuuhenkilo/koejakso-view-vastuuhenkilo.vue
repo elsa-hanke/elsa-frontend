@@ -426,7 +426,6 @@
       const muut = store.getters['vastuuhenkilo/koejaksot'].filter(
         (k: KoejaksonVaihe) => k.tila !== LomakeTilat.ODOTTAA_HYVAKSYNTAA
       )
-      console.log(this.toPage(this.filterByHakutermi(muut), this.currentMuutPage))
       return this.toPage(this.filterByHakutermi(muut), this.currentMuutPage)
     }
 
