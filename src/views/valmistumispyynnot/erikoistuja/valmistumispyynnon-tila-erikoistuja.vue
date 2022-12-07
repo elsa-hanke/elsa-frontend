@@ -141,6 +141,7 @@
                   v-if="koulutussuunnitelmaAsiakirjaUrl"
                   :asiakirjaDataEndpointUrl="koulutussuunnitelmaAsiakirjaUrl"
                   :asiakirjaLabel="$t('koulutussuunnitelma-ja-osaaminen')"
+                  :id="valmistumispyynto.erikoistujanTiedotAsiakirjaId"
                 />
               </div>
             </div>
@@ -205,7 +206,9 @@
     }
 
     get koulutussuunnitelmaAsiakirjaUrl() {
-      return null
+      return this.valmistumispyynto.erikoistujanTiedotAsiakirjaId
+        ? `erikoistuva-laakari/asiakirjat/`
+        : null
     }
 
     tilaIcon(vaiheHyvaksytty: boolean) {
