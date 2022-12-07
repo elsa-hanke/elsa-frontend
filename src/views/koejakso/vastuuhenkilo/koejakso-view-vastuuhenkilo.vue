@@ -15,7 +15,7 @@
       <b-row>
         <b-col>
           <h3>{{ $t('avoimet') }}</h3>
-          <div v-if="!loadingAvoimet">
+          <div v-if="!loading">
             <b-alert v-if="avoimetRows === 0" variant="dark" show>
               <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
               <span v-if="hakutermi.length > 0">
@@ -28,7 +28,7 @@
             <div v-else>
               <b-table
                 fixed
-                :items="avoimetKoejaksot.content"
+                :items="avoimet.content"
                 :fields="fields"
                 :per-page="perPage"
                 class="koejakson-vaiheet-table"
@@ -138,7 +138,7 @@
                 @update:currentPage="onAvoinPageInput"
                 :current-page="currentAvoinPage"
                 :per-page="perPage"
-                :rows="avoimetKoejaksot.totalElements"
+                :rows="avoimet.totalElements"
               />
             </div>
           </div>
@@ -146,7 +146,7 @@
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
           <h3 class="mt-4">{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
-          <div v-if="!loadingMuut">
+          <div v-if="!loading">
             <b-alert v-if="muutRows === 0" variant="dark" show>
               <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
               <span v-if="hakutermi.length > 0">
@@ -159,7 +159,7 @@
             <div v-else>
               <b-table
                 fixed
-                :items="muutKoejaksot.content"
+                :items="muut.content"
                 :fields="fields"
                 :per-page="perPage"
                 class="koejakson-vaiheet-table"
@@ -269,7 +269,7 @@
                 @update:currentPage="onMuutPageInput"
                 :current-page="currentMuutPage"
                 :per-page="perPage"
-                :rows="muutKoejaksot.totalElements"
+                :rows="muut.totalElements"
               />
             </div>
           </div>
@@ -292,7 +292,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
-  import { getKoejaksot } from '@/store/vastuuhenkilo'
+  import store from '@/store'
   import { KoejaksonVaihe, Page } from '@/types'
   import { LomakeTilat, LomakeTyypit, TaskStatus } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
@@ -307,8 +307,7 @@
     }
   })
   export default class KoejaksoViewVastuuhenkilo extends Vue {
-    private loadingAvoimet = true
-    private loadingMuut = true
+    private loading = true
 
     private componentLinks = new Map([
       [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
@@ -318,9 +317,6 @@
       [LomakeTyypit.LOPPUKESKUSTELU, 'loppukeskustelu-kouluttaja'],
       [LomakeTyypit.VASTUUHENKILON_ARVIO, 'vastuuhenkilon-arvio-vastuuhenkilo']
     ])
-
-    avoimetKoejaksot: Page<KoejaksonVaihe> | null = null
-    muutKoejaksot: Page<KoejaksonVaihe> | null = null
 
     items = [
       {
@@ -373,41 +369,13 @@
     hakutermi = ''
 
     async mounted() {
+      this.loading = true
       try {
-        await this.fetchAll()
+        await store.dispatch('vastuuhenkilo/getKoejaksot')
       } catch {
         toastFail(this, this.$t('koejaksojen-hakeminen-epaonnistui'))
       }
-    }
-
-    async fetchAll() {
-      await Promise.all([this.fetchAvoimet(), this.fetchMuut()])
-    }
-
-    async fetchAvoimet() {
-      this.loadingAvoimet = true
-      this.avoimetKoejaksot = (
-        await getKoejaksot({
-          page: this.currentAvoinPage - 1,
-          size: this.perPage,
-          avoin: true,
-          ...(this.hakutermi && { nimi: this.hakutermi })
-        })
-      ).data
-      this.loadingAvoimet = false
-    }
-
-    async fetchMuut() {
-      this.loadingMuut = true
-      this.muutKoejaksot = (
-        await getKoejaksot({
-          page: this.currentMuutPage - 1,
-          size: this.perPage,
-          avoin: false,
-          ...(this.hakutermi && { nimi: this.hakutermi })
-        })
-      ).data
-      this.loadingMuut = false
+      this.loading = false
     }
 
     @Watch('hakutermi')
@@ -436,26 +404,77 @@
 
     onAvoinPageInput(value: number) {
       this.currentAvoinPage = value
-      this.fetchAvoimet()
     }
 
     onMuutPageInput(value: number) {
       this.currentMuutPage = value
-      this.fetchMuut()
     }
 
     private async onResultsFiltered() {
       this.currentAvoinPage = 1
       this.currentMuutPage = 1
-      await this.fetchAll()
+    }
+
+    get avoimet() {
+      const avoimet = store.getters['vastuuhenkilo/koejaksot'].filter(
+        (k: KoejaksonVaihe) => k.tila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      )
+      return this.toPage(this.filterByHakutermi(avoimet), this.currentAvoinPage)
+    }
+
+    get muut() {
+      const muut = store.getters['vastuuhenkilo/koejaksot'].filter(
+        (k: KoejaksonVaihe) => k.tila !== LomakeTilat.ODOTTAA_HYVAKSYNTAA
+      )
+      console.log(this.toPage(this.filterByHakutermi(muut), this.currentMuutPage))
+      return this.toPage(this.filterByHakutermi(muut), this.currentMuutPage)
+    }
+
+    private filterByHakutermi(koejaksonVaiheet: KoejaksonVaihe[]): KoejaksonVaihe[] {
+      if (!this.hakutermi) return koejaksonVaiheet
+      else
+        return koejaksonVaiheet.filter((k: KoejaksonVaihe) =>
+          k.erikoistuvanNimi.toLowerCase().includes(this.hakutermi.toLowerCase())
+        )
+    }
+
+    private toPage(koejaksonVaiheet: KoejaksonVaihe[], currentPage: number): Page<KoejaksonVaihe> {
+      const sort = {
+        empty: true,
+        unsorted: false,
+        sorted: false
+      }
+      const fromIndex = Math.min(this.perPage * (currentPage - 1), koejaksonVaiheet.length)
+      const toIndex = Math.min(fromIndex + this.perPage, koejaksonVaiheet.length)
+      const subList = koejaksonVaiheet.slice(fromIndex, toIndex)
+      return {
+        content: subList,
+        pageable: {
+          sort: sort,
+          offset: fromIndex,
+          pageSize: this.perPage,
+          pageNumber: currentPage - 1,
+          unpaged: false,
+          paged: true
+        },
+        last: koejaksonVaiheet.length === toIndex,
+        totalPages: koejaksonVaiheet.length % this.perPage,
+        totalElements: koejaksonVaiheet.length,
+        first: fromIndex === 0,
+        number: currentPage,
+        sort: sort,
+        size: this.perPage,
+        numberOfElements: subList.length,
+        empty: subList.length === 0
+      } as Page<KoejaksonVaihe>
     }
 
     get avoimetRows() {
-      return this.avoimetKoejaksot?.content.length ?? 0
+      return this.avoimet.content.length ?? 0
     }
 
     get muutRows() {
-      return this.muutKoejaksot?.content.length ?? 0
+      return this.muut.content.length ?? 0
     }
 
     taskIcon(status: string) {
