@@ -1,8 +1,6 @@
-import axios from 'axios'
 import { Module } from 'vuex'
 
 import * as api from '@/api/vastuuhenkilo'
-import { KoejaksonVaihe, Page } from '@/types'
 
 const vastuuhenkilo: Module<any, any> = {
   namespaced: true,
@@ -69,14 +67,6 @@ const vastuuhenkilo: Module<any, any> = {
     status: (state) => state.status,
     koejaksot: (state) => state.koejaksot
   }
-}
-
-export async function getKoejaksot(params: { page?: number; size?: number; avoin?: boolean }) {
-  return await axios.get<Page<KoejaksonVaihe>>('/vastuuhenkilo/koejaksot', {
-    params: {
-      ...params
-    }
-  })
 }
 
 export default vastuuhenkilo
