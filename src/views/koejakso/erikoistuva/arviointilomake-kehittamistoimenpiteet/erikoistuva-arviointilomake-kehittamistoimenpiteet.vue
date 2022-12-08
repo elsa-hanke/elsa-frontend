@@ -68,6 +68,7 @@
           :isReadonly="!editable"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
+          :allowDuplicates="true"
         />
         <hr />
 
