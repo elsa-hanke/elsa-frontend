@@ -550,6 +550,12 @@
         this.valmistumispyynto = this.valmistumispyyntoPalautettu
           ? (await putValmistumispyynto(this.valmistumispyyntoLomake)).data
           : (await postValmistumispyynto(this.valmistumispyyntoLomake)).data
+        const account = store.getters['auth/account']
+        account.erikoistuvaLaakari.sahkoposti = this.valmistumispyyntoLomake.erikoistujanSahkoposti
+        account.email = this.valmistumispyyntoLomake.erikoistujanSahkoposti
+        account.erikoistuvaLaakari.puhelinnumero =
+          this.valmistumispyyntoLomake.erikoistujanPuhelinnumero
+        account.phoneNumber = this.valmistumispyyntoLomake.erikoistujanPuhelinnumero
         this.$emit('skipRouteExitConfirm', true)
         toastSuccess(this, this.$t('valmistumispyynto-lahetetty-onnistuneesti'))
       } catch (err) {
