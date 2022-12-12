@@ -645,6 +645,9 @@
               sahkoposti: this.form.sahkoposti
             })
           ).data
+          const account = store.getters['auth/account']
+          account.email = this.form.sahkoposti
+          account.phoneNumber = this.form.puhelinnumero
           this.$emit('skipRouteExitConfirm', true)
           toastSuccess(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-onnistui'))
           this.$router.replace({ name: 'valmistumispyynnot' })
