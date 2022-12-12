@@ -1372,6 +1372,8 @@ export interface ValmistumispyyntoLomakeErikoistuja {
   selvitysVanhentuneistaSuorituksista: string | null
   laillistamispaiva: string | null
   laillistamistodistus: File | null
+  erikoistujanPuhelinnumero: string | null
+  erikoistujanSahkoposti: string | null
 }
 
 export interface ValmistumispyyntoListItem {
@@ -1446,6 +1448,8 @@ export interface ValmistumispyynnonVirkailijanTarkistusLomake {
 export interface ValmistumispyyntoHyvaksynta {
   id: number | null
   korjausehdotus?: string | null
+  sahkoposti?: string | null
+  puhelinnumero?: string | null
 }
 
 export interface UusiKouluttaja {

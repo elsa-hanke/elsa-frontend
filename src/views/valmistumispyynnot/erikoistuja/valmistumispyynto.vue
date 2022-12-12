@@ -127,6 +127,54 @@
                   "
                 />
                 <hr />
+                <div>
+                  <b-row>
+                    <b-col lg="4">
+                      <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                        <template v-slot="{ uid }">
+                          <b-form-input
+                            :id="uid"
+                            v-model="valmistumispyyntoLomake.erikoistujanSahkoposti"
+                            @input="$emit('skipRouteExitConfirm', false)"
+                            :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
+                            :value="account.erikoistuvaLaakari.sahkoposti"
+                          />
+                          <b-form-invalid-feedback
+                            v-if="!$v.valmistumispyyntoLomake.erikoistujanSahkoposti.required"
+                            :id="`${uid}-feedback`"
+                          >
+                            {{ $t('pakollinen-tieto') }}
+                          </b-form-invalid-feedback>
+                          <b-form-invalid-feedback
+                            v-if="!$v.valmistumispyyntoLomake.erikoistujanSahkoposti.email"
+                            :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
+                            :id="`${uid}-feedback`"
+                          >
+                            {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                          </b-form-invalid-feedback>
+                        </template>
+                      </elsa-form-group>
+                    </b-col>
+
+                    <b-col lg="4">
+                      <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
+                        <template v-slot="{ uid }">
+                          <b-form-input
+                            :id="uid"
+                            v-model="valmistumispyyntoLomake.erikoistujanPuhelinnumero"
+                            @input="$emit('skipRouteExitConfirm', false)"
+                            :state="validateValmistumispyyntoState('erikoistujanPuhelinnumero')"
+                            :value="account.erikoistuvaLaakari.puhelinnumero"
+                          />
+                          <b-form-invalid-feedback :id="`${uid}-feedback`">
+                            {{ $t('pakollinen-tieto') }}
+                          </b-form-invalid-feedback>
+                        </template>
+                      </elsa-form-group>
+                    </b-col>
+                  </b-row>
+                  <hr />
+                </div>
                 <div
                   v-if="
                     !valmistumispyynto.erikoistujanLaillistamispaiva ||
@@ -285,7 +333,7 @@
   import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
-  import { requiredIf } from 'vuelidate/lib/validators'
+  import { requiredIf, required, email } from 'vuelidate/lib/validators'
 
   import {
     getValmistumispyynto,
@@ -355,7 +403,9 @@
     valmistumispyyntoLomake: ValmistumispyyntoLomakeErikoistuja = {
       selvitysVanhentuneistaSuorituksista: null,
       laillistamispaiva: null,
-      laillistamistodistus: null
+      laillistamistodistus: null,
+      erikoistujanPuhelinnumero: null,
+      erikoistujanSahkoposti: null
     }
     vaatimuksetHyvaksytty = false
     loading = true
@@ -372,6 +422,13 @@
           osaamisenArvioinnit: { checked: (value: boolean) => value === true }
         },
         valmistumispyyntoLomake: {
+          erikoistujanSahkoposti: {
+            required,
+            email
+          },
+          erikoistujanPuhelinnumero: {
+            required
+          },
           selvitysVanhentuneistaSuorituksista: {
             required: requiredIf(() => this.hasVanhentuneitaSuorituksia)
           },
@@ -395,6 +452,10 @@
         if (this.showValmistumispyyntoForm) {
           this.valmistumispyyntoSuoritustenTila = (await getValmistumispyyntoSuoritustenTila()).data
           this.initLaillistamispaivaAndTodistus()
+          this.valmistumispyyntoLomake.erikoistujanSahkoposti =
+            this.account.erikoistuvaLaakari.sahkoposti
+          this.valmistumispyyntoLomake.erikoistujanPuhelinnumero =
+            this.account.erikoistuvaLaakari.puhelinnumero
         }
         this.loading = false
       } catch (err) {
@@ -489,6 +550,12 @@
         this.valmistumispyynto = this.valmistumispyyntoPalautettu
           ? (await putValmistumispyynto(this.valmistumispyyntoLomake)).data
           : (await postValmistumispyynto(this.valmistumispyyntoLomake)).data
+        const account = store.getters['auth/account']
+        account.erikoistuvaLaakari.sahkoposti = this.valmistumispyyntoLomake.erikoistujanSahkoposti
+        account.email = this.valmistumispyyntoLomake.erikoistujanSahkoposti
+        account.erikoistuvaLaakari.puhelinnumero =
+          this.valmistumispyyntoLomake.erikoistujanPuhelinnumero
+        account.phoneNumber = this.valmistumispyyntoLomake.erikoistujanPuhelinnumero
         this.$emit('skipRouteExitConfirm', true)
         toastSuccess(this, this.$t('valmistumispyynto-lahetetty-onnistuneesti'))
       } catch (err) {
@@ -533,6 +600,10 @@
       this.valmistumispyyntoVaatimuksetLomake.teoriakoulutus = false
       this.valmistumispyyntoVaatimuksetLomake.osaamisenArvioinnit = false
       this.valmistumispyyntoLomake.selvitysVanhentuneistaSuorituksista = null
+      this.valmistumispyyntoLomake.erikoistujanSahkoposti =
+        this.account.erikoistuvaLaakari.sahkoposti
+      this.valmistumispyyntoLomake.erikoistujanPuhelinnumero =
+        this.account.erikoistuvaLaakari.puhelinnumero
       this.vaatimuksetHyvaksytty = false
       this.initLaillistamispaivaAndTodistus()
     }
