@@ -478,8 +478,21 @@
                   {{ $t('hyvaksytty') }}
                   {{ $date(form.koejaksoHyvaksyttyPvm) }}
                 </p>
-                <p class="mb-1" v-if="!form.koejaksoHyvaksyttyPvm">
+                <p class="mb-1" v-if="!form.koejaksoHyvaksyttyPvm && editable">
                   {{ $t('koejakso-ei-hyvaksytty') }}
+                  <b-form-checkbox
+                    class="mt-3"
+                    v-model="form.koejaksoEiVaadittu"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                  >
+                    {{ $t('koejaksoa-ei-vaadita') }}
+                  </b-form-checkbox>
+                </p>
+                <p class="mb-1" v-if="!form.koejaksoHyvaksyttyPvm && !editable">
+                  {{ $t('koejakso-ei-hyvaksytty') }}
+                </p>
+                <p class="mb-1" v-if="form.koejaksoEiVaadittu && !editable">
+                  {{ $t('koejaksoa-ei-vaadita') }}
                 </p>
               </div>
               <div class="my-3">
@@ -773,6 +786,7 @@
       johtamiskoulutusVaadittu: null,
       kuulustelut: null,
       koejaksoHyvaksyttyPvm: null,
+      koejaksoEiVaadittu: false,
       suoritustenTila: null,
       kommentitVirkailijoille: null,
       lisatiedotVastuuhenkilolle: null,
@@ -894,6 +908,7 @@
           kokonaistyoaikaTarkistettu: this.form.kokonaistyoaikaTarkistettu,
           teoriakoulutusTarkistettu: this.form.teoriakoulutusTarkistettu,
           kommentitVirkailijoille: this.form.kommentitVirkailijoille,
+          koejaksoEiVaadittu: this.form.koejaksoEiVaadittu,
           lisatiedotVastuuhenkilolle: this.form.lisatiedotVastuuhenkilolle,
           keskenerainen: this.form.keskenerainen
         }
@@ -930,6 +945,7 @@
         yliopistosairaalatyoTarkistettu: this.form.yliopistosairaalatyoTarkistettu,
         kokonaistyoaikaTarkistettu: this.form.kokonaistyoaikaTarkistettu,
         teoriakoulutusTarkistettu: this.form.teoriakoulutusTarkistettu,
+        koejaksoEiVaadittu: this.form.koejaksoEiVaadittu,
         kommentitVirkailijoille: this.form.kommentitVirkailijoille,
         keskenerainen: false,
         korjausehdotus: korjausehdotus

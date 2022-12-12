@@ -1417,6 +1417,7 @@ export interface ValmistumispyyntoVirkailijanTarkistus {
   johtamiskoulutusVaadittu: number | null
   kuulustelut: Opintosuoritus[] | null
   koejaksoHyvaksyttyPvm: string | null
+  koejaksoEiVaadittu?: boolean
   suoritustenTila: ValmistumispyyntoSuoritustenTila | null
   lisatiedotVastuuhenkilolle: string | null
   kommentitVirkailijoille: string | null
@@ -1439,6 +1440,7 @@ export interface ValmistumispyynnonVirkailijanTarkistusLomake {
   yliopistosairaalatyoTarkistettu: boolean
   kokonaistyoaikaTarkistettu: boolean
   teoriakoulutusTarkistettu: boolean
+  koejaksoEiVaadittu?: boolean
   kommentitVirkailijoille: string | null
   lisatiedotVastuuhenkilolle?: string | null
   keskenerainen?: boolean
