@@ -144,7 +144,7 @@
         {{ $t('peruuta') }}
       </elsa-button>
       <elsa-button
-        v-if="poissaolo.id"
+        v-if="poissaolo.id && !account.impersonated"
         :loading="params.deleting"
         variant="outline-danger"
         @click="onDelete"
@@ -176,6 +176,7 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
   import TyoskentelyjaksoMixin from '@/mixins/tyoskentelyjakso'
+  import store from '@/store'
   import { Poissaolo, PoissaolonSyy, Tyoskentelyjakso } from '@/types'
   import { dateBetween } from '@/utils/date'
   import { sortByAsc } from '@/utils/sort'
@@ -355,6 +356,10 @@
 
     get paattymispaivaInitialDate() {
       return this.form.alkamispaiva
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
   }
 </script>

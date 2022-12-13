@@ -13,6 +13,9 @@
             <b-tab v-if="$isErikoistuva()" :title="$t('katseluoikeudet')" href="#katseluoikeudet">
               <katseluoikeudet />
             </b-tab>
+            <b-tab v-if="$isErikoistuva()" :title="$t('muokkausoikeudet')" href="#muokkausoikeudet">
+              <muokkausoikeudet />
+            </b-tab>
           </b-tabs>
         </b-col>
       </b-row>
@@ -27,11 +30,13 @@
 
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
   import Katseluoikeudet from '@/views/profiili/katseluoikeudet.vue'
+  import Muokkausoikeudet from '@/views/profiili/muokkausoikeudet.vue'
 
   @Component({
     components: {
       OmatTiedot,
-      Katseluoikeudet
+      Katseluoikeudet,
+      Muokkausoikeudet
     }
   })
   export default class Profiili extends Mixins(ConfirmRouteExit) {

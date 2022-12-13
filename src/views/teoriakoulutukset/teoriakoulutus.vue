@@ -62,7 +62,7 @@
             <hr v-if="teoriakoulutus.todistukset.length === 0" />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
-                v-if="!account.impersonated"
+                v-if="muokkausoikeudet"
                 :to="{ name: 'muokkaa-teoriakoulutusta' }"
                 variant="primary"
                 class="ml-2 mb-3"
@@ -107,6 +107,7 @@
   import store from '@/store'
   import { Teoriakoulutus } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
+  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -171,6 +172,21 @@
         }
         this.deleting = false
       }
+    }
+
+    get muokkausoikeudet() {
+      if (!this.account.impersonated) {
+        return true
+      }
+
+      if (
+        this.account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija) &&
+        this.account.erikoistuvaLaakari.muokkausoikeudetVirkailijoilla
+      ) {
+        return true
+      }
+
+      return false
     }
   }
 </script>
