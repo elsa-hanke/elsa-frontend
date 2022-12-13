@@ -105,7 +105,7 @@
               class="d-flex flex-row-reverse flex-wrap"
             >
               <elsa-button
-                v-if="!account.impersonated"
+                v-if="muokkausoikeudet"
                 :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
                 variant="primary"
                 :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
@@ -180,6 +180,7 @@
   import { Tyoskentelyjakso } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import {
     tyoskentelyjaksoKaytannonKoulutusLabel,
@@ -275,6 +276,21 @@
         return tyoskentelypaikkaTyyppiLabel(this, this.tyoskentelyjakso?.tyoskentelypaikka?.tyyppi)
       }
       return undefined
+    }
+
+    get muokkausoikeudet() {
+      if (!this.account.impersonated) {
+        return true
+      }
+
+      if (
+        this.account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija) &&
+        this.account.erikoistuvaLaakari.muokkausoikeudetVirkailijoilla
+      ) {
+        return true
+      }
+
+      return false
     }
   }
 </script>

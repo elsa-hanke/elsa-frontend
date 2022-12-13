@@ -162,6 +162,26 @@ const impersonatedErikoistuvaGuard = async (to: Route, from: Route, next: Naviga
   }
 }
 
+const impersonatedErikoistuvaWithMuokkausoikeudetGuard = async (
+  _to: Route,
+  _from: Route,
+  next: NavigationGuardNext
+) => {
+  const account = store.getters['auth/account']
+  if (
+    !account.impersonated ||
+    (account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija) &&
+      account.erikoistuvaLaakari.muokkausoikeudetVirkailijoilla)
+  ) {
+    next()
+  } else {
+    next({
+      name: 'page-not-found',
+      replace: true
+    })
+  }
+}
+
 const impersonatedErikoistuvaVirkailijaGuard = async (
   to: Route,
   from: Route,
@@ -486,7 +506,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/tyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus',
         name: 'muokkaa-tyoskentelyjaksoa',
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaTyoskentelyjaksoa,
@@ -517,7 +537,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/tyoskentelyjaksot/poissaolot/:poissaoloId/muokkaus',
         name: 'muokkaa-poissaoloa',
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaPoissaoloa,
@@ -567,7 +587,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/teoriakoulutukset/:teoriakoulutusId/muokkaus',
         name: 'muokkaa-teoriakoulutusta',
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaTeoriakoulutusta,

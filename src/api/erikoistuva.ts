@@ -384,3 +384,12 @@ export async function putValmistumispyynto(form: ValmistumispyyntoLomakeErikoist
     timeout: 120000
   })
 }
+
+export async function postMuokkausoikeudet(muokkausoikeudet: boolean) {
+  const path = 'erikoistuva-laakari/muokkausoikeudet'
+  const formData = wrapToFormData({ muokkausoikeudet: muokkausoikeudet })
+  return await axios.post(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
+}
