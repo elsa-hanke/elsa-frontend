@@ -420,6 +420,13 @@
     }
 
     get editable() {
+      if (
+        this.valiarviointi?.lahiesimies.id == this.valiarviointi?.lahikouluttaja.id &&
+        !this.valiarviointi?.lahiesimies.sopimusHyvaksytty &&
+        !this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty
+      ) {
+        return true
+      }
       return (
         this.$isKouluttaja() &&
         !this.isCurrentUserLahiesimies &&

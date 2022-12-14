@@ -139,6 +139,9 @@
     @Prop({ required: false, default: false })
     isReadonly!: boolean
 
+    @Prop({ required: false, default: false })
+    allowDuplicates!: boolean
+
     form = {
       lahikouluttaja: null,
       lahiesimies: null
@@ -152,7 +155,7 @@
 
     get lahikouluttajatList() {
       const lahikouluttajat = this.kouluttajat?.map((k: any) => {
-        if (this.lahiesimies?.id === k.id) {
+        if (this.lahiesimies?.id === k.id && !this.allowDuplicates) {
           return {
             ...k,
             $isDisabled: true
@@ -165,7 +168,7 @@
 
     get lahiesimiesList() {
       const lahiesimiehet = this.kouluttajat?.map((k: any) => {
-        if (this.lahikouluttaja?.id === k.id) {
+        if (this.lahikouluttaja?.id === k.id && !this.allowDuplicates) {
           return {
             ...k,
             $isDisabled: true

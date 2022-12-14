@@ -196,6 +196,7 @@
       :buttonStates="buttonStates"
       @lahikouluttajaSelect="onLahikouluttajaSelect"
       @lahiesimiesSelect="onLahiesimiesSelect"
+      :allowDuplicates="true"
     />
     <hr />
 

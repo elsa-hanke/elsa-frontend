@@ -53,6 +53,7 @@
             :lahiesimies="valiarviointiLomake.lahiesimies"
             @lahikouluttajaSelect="onLahikouluttajaSelect"
             @lahiesimiesSelect="onLahiesimiesSelect"
+            :allowDuplicates="true"
           />
           <hr />
         </b-form>
