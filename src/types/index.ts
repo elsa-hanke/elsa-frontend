@@ -855,6 +855,7 @@ export interface BarChartRow {
   backgroundColor: string
   value: number
   minRequired: number
+  maxLength?: number
   highlight: boolean
 }
 
@@ -1074,6 +1075,7 @@ export type Keskeytysaika = {
 
 export type TyoskentelyjaksotTilastotKoulutustyypit = {
   terveyskeskusVaadittuVahintaan: number
+  terveyskeskusMaksimipituus?: number
   terveyskeskusSuoritettu: number
   yliopistosairaalaVaadittuVahintaan: number
   yliopistosairaalaSuoritettu: number
