@@ -28,6 +28,7 @@
             backgroundColor: '#ffe19b',
             value: this.tilastot.koulutustyypit.terveyskeskusSuoritettu,
             minRequired: this.tilastot.koulutustyypit.terveyskeskusVaadittuVahintaan,
+            maxLength: this.tilastot.koulutustyypit.terveyskeskusMaksimipituus,
             highlight: false
           },
           {

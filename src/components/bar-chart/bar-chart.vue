@@ -32,7 +32,8 @@
             'pt-1': !row.highlight
           }"
         >
-          {{ $t('vah') }} {{ $duration(row.minRequired) }}
+          <span v-if="row.maxLength == null || row.maxLength === 0">{{ $t('vah') }}</span>
+          {{ $duration(row.minRequired) }}
         </b-td>
       </b-tr>
     </b-table-simple>
