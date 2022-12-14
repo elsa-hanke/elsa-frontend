@@ -114,7 +114,7 @@
                 {{ $t('muokkaa-jaksoa') }}
               </elsa-button>
               <elsa-button
-                v-if="!tyoskentelyjakso.suoritusarvioinnit && !account.impersonated"
+                v-if="!tyoskentelyjakso.suoritusarvioinnit && muokkausoikeudet"
                 :loading="deleting"
                 :variant="tyoskentelyjakso.tapahtumia ? 'outline-primary' : 'outline-danger'"
                 @click="onTyoskentelyjaksoDelete"

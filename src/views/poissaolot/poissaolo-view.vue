@@ -54,7 +54,7 @@
                 {{ $t('muokkaa-poissaoloa') }}
               </elsa-button>
               <elsa-button
-                v-if="!account.impersonated"
+                v-if="muokkausoikeudet"
                 :loading="deleting"
                 :disabled="poissaoloWrapper.tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
                 variant="outline-danger"

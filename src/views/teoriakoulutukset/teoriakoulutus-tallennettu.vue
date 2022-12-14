@@ -7,7 +7,7 @@
           <h1 class="text-center mb-4">
             {{ $t('teoriakoulutus-tallennettu') }}
           </h1>
-          <p class="text-center">
+          <p v-if="!account.impersonated" class="text-center">
             {{ $t('teoriakoulutus-tallennettu-kuvaus') }}
           </p>
           <div class="d-flex justify-content-center">
@@ -15,6 +15,7 @@
               {{ $t('palaa-teoriakoulutuksiin') }}
             </elsa-button>
             <elsa-button
+              v-if="!account.impersonated"
               variant="primary"
               :to="{
                 name: 'uusi-paivittainen-merkinta',
@@ -34,6 +35,7 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import ElsaButton from '@/components/button/button.vue'
+  import store from '@/store'
 
   @Component({
     components: {
@@ -58,6 +60,10 @@
 
     get teoriakoulutusId() {
       return this.$route.params.teoriakoulutusId
+    }
+
+    get account() {
+      return store.getters['auth/account']
     }
   }
 </script>

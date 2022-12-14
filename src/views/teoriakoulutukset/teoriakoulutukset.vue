@@ -8,7 +8,7 @@
           <p v-html="$t('teoriakoulutukset-ingressi', { opintooppaastaLinkki, kopiLinkki })" />
           <elsa-vanha-asetus-varoitus />
           <elsa-button
-            v-if="!account.impersonated"
+            v-if="muokkausoikeudet"
             variant="primary"
             :to="{ name: 'uusi-teoriakoulutus' }"
             class="mb-4"
@@ -92,6 +92,7 @@
   import { Asiakirja, Teoriakoulutus } from '@/types'
   import { fetchAndOpenBlob } from '@/utils/blobs'
   import { sortByDateDesc } from '@/utils/date'
+  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -207,6 +208,21 @@
 
         Vue.set(asiakirja, 'disablePreview', false)
       }
+    }
+
+    get muokkausoikeudet() {
+      if (!this.account.impersonated) {
+        return true
+      }
+
+      if (
+        this.account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija) &&
+        this.account.erikoistuvaLaakari.muokkausoikeudetVirkailijoilla
+      ) {
+        return true
+      }
+
+      return false
     }
   }
 </script>

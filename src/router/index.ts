@@ -443,7 +443,7 @@ const routes: Array<RouteConfig> = [
         path: '/tyoskentelyjaksot/uusi',
         name: 'uusi-tyoskentelyjakso',
         component: RoleSpecificRoute,
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         props: {
           routeComponent: UusiTyoskentelyjakso,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
@@ -517,7 +517,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/tyoskentelyjaksot/poissaolot/uusi',
         name: 'uusi-poissaolo',
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiPoissaolo,
@@ -557,7 +557,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/teoriakoulutukset/uusi',
         name: 'uusi-teoriakoulutus',
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiTeoriakoulutus,
@@ -568,7 +568,7 @@ const routes: Array<RouteConfig> = [
       {
         path: '/teoriakoulutukset/teoriakoulutus-tallennettu',
         name: 'teoriakoulutus-tallennettu',
-        beforeEnter: impersonatedErikoistuvaGuard,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {
           routeComponent: TeoriakoulutusTallennettu,
