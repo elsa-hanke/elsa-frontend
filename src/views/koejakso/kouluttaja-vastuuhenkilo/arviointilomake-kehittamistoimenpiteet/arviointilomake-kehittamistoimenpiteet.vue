@@ -308,6 +308,14 @@
     }
 
     get editable() {
+      if (
+        this.kehittamistoimenpiteet?.lahiesimies.id ==
+          this.kehittamistoimenpiteet?.lahikouluttaja.id &&
+        !this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty &&
+        !this.kehittamistoimenpiteet?.lahikouluttaja.sopimusHyvaksytty
+      ) {
+        return true
+      }
       return (
         this.$isKouluttaja() &&
         !this.isCurrentUserLahiesimies &&

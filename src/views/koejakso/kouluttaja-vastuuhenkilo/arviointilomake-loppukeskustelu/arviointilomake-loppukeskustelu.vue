@@ -389,6 +389,13 @@
     }
 
     get editable() {
+      if (
+        this.loppukeskustelu?.lahiesimies.id == this.loppukeskustelu?.lahikouluttaja.id &&
+        !this.loppukeskustelu?.lahiesimies.sopimusHyvaksytty &&
+        !this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty
+      ) {
+        return true
+      }
       return (
         this.$isKouluttaja() &&
         !this.isCurrentUserLahiesimies &&
