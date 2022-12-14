@@ -7,7 +7,7 @@
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
           <p v-html="$t('tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki })" />
           <elsa-vanha-asetus-varoitus />
-          <div v-if="!account.impersonated" class="d-flex flex-wrap mb-3 mb-lg-4">
+          <div v-if="muokkausoikeudet" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
               variant="primary"
               :to="{ name: 'uusi-tyoskentelyjakso' }"
@@ -253,6 +253,7 @@
   } from '@/types'
   import { KaytannonKoulutusTyyppi, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
+  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail } from '@/utils/toast'
   import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
 
@@ -560,6 +561,21 @@
         this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
           TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
+    }
+
+    get muokkausoikeudet() {
+      if (!this.account.impersonated) {
+        return true
+      }
+
+      if (
+        this.account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija) &&
+        this.account.erikoistuvaLaakari.muokkausoikeudetVirkailijoilla
+      ) {
+        return true
+      }
+
+      return false
     }
   }
 </script>

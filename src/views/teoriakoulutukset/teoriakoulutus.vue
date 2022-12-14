@@ -70,7 +70,7 @@
                 {{ $t('muokkaa-teoriakoulutusta') }}
               </elsa-button>
               <elsa-button
-                v-if="!account.impersonated"
+                v-if="muokkausoikeudet"
                 :loading="deleting"
                 variant="outline-danger"
                 @click="onTeoriakoulutusDelete"
