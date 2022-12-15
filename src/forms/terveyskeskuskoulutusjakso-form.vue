@@ -412,7 +412,7 @@
             $each: {
               asiakirjat: {
                 required,
-                minLength: minLength(1)
+                minLength: minLength(2)
               }
             }
           }
