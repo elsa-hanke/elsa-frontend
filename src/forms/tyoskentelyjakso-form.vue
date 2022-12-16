@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
+        <div>
           <b-form-radio
             v-for="(tyyppi, index) in tyypit"
             :key="index"
@@ -48,17 +48,11 @@
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
         </div>
-        <div v-else>
-          <span :id="uid">{{ tyyppiLabel }}</span>
-          <span v-if="form.tyoskentelypaikka.muuTyyppi">
-            : {{ form.tyoskentelypaikka.muuTyyppi }}
-          </span>
-        </div>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('tyoskentelypaikka')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
+        <div>
           <b-form-input
             :id="uid"
             v-model="form.tyoskentelypaikka.nimi"
@@ -69,14 +63,11 @@
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
         </div>
-        <div v-else>
-          <span :id="uid">{{ form.tyoskentelypaikka.nimi }}</span>
-        </div>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('kunta')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
+        <div>
           <elsa-form-multiselect
             :id="uid"
             v-model="form.tyoskentelypaikka.kunta"
@@ -90,9 +81,6 @@
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
         </div>
-        <div v-else>
-          <span :id="uid">{{ form.tyoskentelypaikka.kunta.abbreviation }}</span>
-        </div>
       </template>
     </elsa-form-group>
     <b-form-row>
@@ -102,7 +90,7 @@
         :required="!value.tapahtumia"
       >
         <template v-slot="{ uid }">
-          <div v-if="!value.tapahtumia">
+          <div>
             <elsa-form-datepicker
               ref="alkamispaiva"
               v-if="childDataReceived"
@@ -112,9 +100,6 @@
               :max="maxAlkamispaiva"
               :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
             ></elsa-form-datepicker>
-          </div>
-          <div v-else>
-            <span v-if="form.alkamispaiva" :id="uid">{{ $date(form.alkamispaiva) }}</span>
           </div>
         </template>
       </elsa-form-group>
@@ -146,7 +131,7 @@
       :required="!value.tapahtumia"
     >
       <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
+        <div>
           <div class="d-flex align-items-center">
             <b-form-input
               :id="uid"
@@ -171,12 +156,11 @@
             {{ $t('osaaikaprosentti-validointivirhe') }} 50–100 %
           </b-form-invalid-feedback>
         </div>
-        <div v-else>{{ form.osaaikaprosentti }} %</div>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('kaytannon-koulutus')" :required="!value.tapahtumia">
       <template v-slot="{ uid }">
-        <div v-if="!value.tapahtumia">
+        <div>
           <b-form-radio
             v-model="form.kaytannonKoulutus"
             @input="$emit('skipRouteExitConfirm', false)"
@@ -232,10 +216,6 @@
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
-        </div>
-        <div v-else>
-          <span :id="uid">{{ kaytannonKoulutusLabel }}</span>
-          <span v-if="form.omaaErikoisalaaTukeva">: {{ form.omaaErikoisalaaTukeva.nimi }}</span>
         </div>
       </template>
     </elsa-form-group>
