@@ -98,8 +98,18 @@
               :value.sync="form.alkamispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
               :max="maxAlkamispaiva"
-              :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
+              :maxErrorText="
+                value.tapahtumia
+                  ? $t('tyoskentelyjakso-datepicker-help')
+                  : $t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')
+              "
             ></elsa-form-datepicker>
+            <small v-if="value.tapahtumia" class="form-text text-muted">
+              {{ $t('tyoskentelyjakso-paattymispaiva-help') }}
+            </small>
+            <small v-else class="form-text text-muted">
+              {{ $t('jata-tyhjaksi-jos-ei-tiedossa') }}
+            </small>
           </div>
         </template>
       </elsa-form-group>
@@ -112,7 +122,11 @@
             :value.sync="form.paattymispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
             :min="minPaattymispaiva"
-            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+            :minErrorText="
+              value.tapahtumia
+                ? $t('tyoskentelyjakso-datepicker-help')
+                : $t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')
+            "
             :required="false"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
@@ -396,6 +410,7 @@
       alkamispaiva: null,
       paattymispaiva: null,
       minPaattymispaiva: null,
+      maxAlkamispaiva: null,
       osaaikaprosentti: 100,
       tyoskentelypaikka: {
         nimi: null,
@@ -541,7 +556,11 @@
     }
 
     get maxAlkamispaiva() {
-      return this.form.paattymispaiva
+      if (this.form.tapahtumia) {
+        return this.form.maxAlkamispaiva
+      } else {
+        return this.form.paattymispaiva
+      }
     }
 
     get minPaattymispaiva() {

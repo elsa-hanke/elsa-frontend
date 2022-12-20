@@ -1265,6 +1265,7 @@
   "tyoskentelyaikaa-eniten": "Työskentelyaikaa eniten",
   "tyoskentelyaikaa-vahiten": "Työskentelyaikaa vähiten",
   "tyoskentelyjakso": "Työskentelyjakso",
+  "tyoskentelyjakso-datepicker-help": "Yksi tai useampi poissaolo, suoritemerkintä tai arviointi on valitun ajanjakson ulkopuolella.",
   "tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle": "Työskentelyjakso on aiemmin hyväksytty toiselle erikoisalalle",
   "tyoskentelyjakso-paattymispaiva-help": "Työskentelyjaksolle merkityt tapahtumat huomioidaan.",
   "tyoskentelyjakso-poistettu-koejaksolta-onnistuneesti": "Työskentelyjakso poistettu koejaksolta onnistuneesti",
