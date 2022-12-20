@@ -131,6 +131,7 @@ export interface Tyoskentelyjakso {
   alkamispaiva: string | null
   paattymispaiva: string | null
   minPaattymispaiva: string | null
+  maxAlkamispaiva: string | null
   osaaikaprosentti: number | null
   kaytannonKoulutus: KaytannonKoulutusTyyppi | null
   hyvaksyttyAiempaanErikoisalaan: boolean | null

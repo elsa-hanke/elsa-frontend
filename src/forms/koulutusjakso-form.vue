@@ -216,6 +216,7 @@
               alkamispaiva: null,
               paattymispaiva: null,
               minPaattymispaiva: null,
+              maxAlkamispaiva: null,
               osaaikaprosentti: 100,
               tyoskentelypaikka: {
                 nimi: null,
@@ -248,6 +249,7 @@
         alkamispaiva: null,
         paattymispaiva: null,
         minPaattymispaiva: null,
+        maxAlkamispaiva: null,
         osaaikaprosentti: 100,
         tyoskentelypaikka: {
           nimi: null,
