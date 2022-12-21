@@ -103,7 +103,10 @@
                     </template>
                   </elsa-form-group>
                 </b-row>
-                <elsa-form-group :label="$t('terveyskeskuskoulutusjakso')">
+                <elsa-form-group
+                  v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonHyvaksymispvm != null"
+                  :label="$t('terveyskeskuskoulutusjakso')"
+                >
                   <template v-slot="{ uid }">
                     <div :id="uid" class="d-flex flex-wrap">
                       <em class="align-middle">
