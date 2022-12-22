@@ -228,7 +228,10 @@
                 {{ $t('peruuta') }}
               </elsa-button>
               <elsa-button
-                v-if="isCurrentUserLahiesimies"
+                v-if="
+                  isCurrentUserLahiesimies &&
+                  loppukeskustelu.lahiesimies.id != loppukeskustelu.lahikouluttaja.id
+                "
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 variant="outline-primary"
