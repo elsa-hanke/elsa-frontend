@@ -99,7 +99,7 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() && !isImpersonated && featurePreviewModeEnabled"
+          v-if="$isErikoistuva() && !isImpersonated"
           class="border-bottom"
           :to="{ name: 'valmistumispyynto' }"
         >
