@@ -591,6 +591,17 @@ export type OmatTiedotLomake = {
   avatarUpdated: boolean
 }
 
+export type OmatTiedotLomakeErikoistuja = {
+  email: string | null
+  phoneNumber: string | null
+  avatar: any
+  avatarUpdated: boolean
+  laillistamispaiva?: string | null
+  laillistamistodistus?: File | string | null
+  laillistamistodistusNimi?: string | null
+  laillistamistodistusTyyppi?: string | null
+}
+
 export type Arviointipyynto = {
   id: number
   erikoistujanNimi: string

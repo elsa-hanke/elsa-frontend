@@ -7,7 +7,10 @@
           <h1>{{ $t('oma-profiili') }}</h1>
           <p>{{ $t('oma-profiili-kuvaus') }}</p>
           <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
-            <b-tab :title="$t('omat-tiedot')" href="#omat-tiedot">
+            <b-tab v-if="$isErikoistuva()" :title="$t('omat-tiedot')" href="#omat-tiedot">
+              <omat-tiedot-erikoistuja :editing="editing" @change="changeEditing" />
+            </b-tab>
+            <b-tab v-else :title="$t('omat-tiedot')" href="#omat-tiedot">
               <omat-tiedot :editing="editing" @change="changeEditing" />
             </b-tab>
             <b-tab v-if="$isErikoistuva()" :title="$t('katseluoikeudet')" href="#katseluoikeudet">
@@ -26,6 +29,7 @@
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
 
+  import OmatTiedotErikoistuja from './omat-tiedot-erikoistuja.vue'
   import OmatTiedot from './omat-tiedot.vue'
 
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
@@ -35,6 +39,7 @@
   @Component({
     components: {
       OmatTiedot,
+      OmatTiedotErikoistuja,
       Katseluoikeudet,
       Muokkausoikeudet
     }
