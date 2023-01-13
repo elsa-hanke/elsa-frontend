@@ -411,7 +411,7 @@
                     {{ $t('suoritettu') }}
                     {{ Math.round(form.teoriakoulutusSuoritettu) }} /
                     {{ Math.round(form.teoriakoulutusVaadittu) }}
-                    {{ $t('opintopistetta-lyhenne') }}
+                    {{ $t('tuntia-lyhenne') }}
                   </p>
                   <b-form-checkbox
                     :id="uid"
@@ -431,7 +431,7 @@
                   {{ $t('suoritettu') }}
                   {{ Math.round(form.teoriakoulutusSuoritettu) }} /
                   {{ Math.round(form.teoriakoulutusVaadittu) }}
-                  {{ $t('opintopistetta-lyhenne') }}
+                  {{ $t('tuntia-lyhenne') }}
                 </p>
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
