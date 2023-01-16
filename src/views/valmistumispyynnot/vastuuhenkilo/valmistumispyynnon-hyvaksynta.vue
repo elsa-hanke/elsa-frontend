@@ -284,7 +284,7 @@
                   {{ $t('suoritettu') }}
                   {{ Math.round(virkailijanTarkistus.teoriakoulutusSuoritettu) }} /
                   {{ Math.round(virkailijanTarkistus.teoriakoulutusVaadittu) }}
-                  {{ $t('opintopistetta-lyhenne') }}
+                  {{ $t('tuntia-lyhenne') }}
                 </p>
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
