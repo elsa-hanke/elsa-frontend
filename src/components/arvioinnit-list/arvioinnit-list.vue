@@ -5,10 +5,11 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('arvioinnit') }}</h1>
+          <p>{{ $t('arvioinnit-kouluttaja-kuvaus') }}</p>
           <elsa-search-input
             class="mb-4"
             :hakutermi.sync="hakutermi"
-            :placeholder="$t('hae-tapahtuman-nimella')"
+            :placeholder="$t('hae-erikoistujan-nimella')"
           />
         </b-col>
       </b-row>
@@ -41,15 +42,16 @@
             stacked="xl"
           >
             <template #table-colgroup>
-              <col span="1" style="width: 6rem" />
               <col span="1" style="width: 15%" />
+              <col span="1" style="width: 6rem" />
               <col span="1" style="width: 7rem" />
               <col span="1" style="width: 15%" />
               <col span="1" style="width: 30%" />
               <col span="1" style="width: 12rem" />
               <col span="1" style="width: 9rem" />
             </template>
-            <template #cell(tapahtumanAjankohta)="row">
+            <!-- eslint-disable-next-line -->
+            <template #cell(arvioinninSaaja.nimi)="row">
               <elsa-button
                 :to="{
                   name: 'arviointi',
@@ -58,13 +60,13 @@
                 variant="link"
                 class="shadow-none px-0 text-truncate text-left w-100"
               >
-                <span class="text-nowrap">
-                  {{ $date(row.item.tapahtumanAjankohta) }}
-                </span>
+                {{ row.item.arvioinninSaaja.nimi }}
               </elsa-button>
             </template>
-            <template #cell(arvioitavaTapahtuma)="row">
-              {{ row.item.arvioitavaTapahtuma }}
+            <template #cell(tapahtumanAjankohta)="row">
+              <span class="text-nowrap">
+                {{ $date(row.item.arviointiAika ? row.item.arviointiAika : row.item.pyynnonAika) }}
+              </span>
             </template>
             <template #cell(tila)="row">
               <span v-if="row.item.lukittu" class="text-nowrap">
@@ -80,12 +82,10 @@
                 {{ $t('avoin') }}
               </span>
             </template>
-            <!-- eslint-disable-next-line -->
-            <template #cell(arvioinninSaaja.nimi)="row">
-              <div class="text-truncate w-100">
-                {{ row.item.arvioinninSaaja.nimi }}
-              </div>
+            <template #cell(arvioitavaTapahtuma)="row">
+              {{ row.item.arvioitavaTapahtuma }}
             </template>
+
             <!-- eslint-disable-next-line -->
             <template #cell(arvioitavaKokonaisuus.nimi)="row">
               <div class="text-truncate w-100">
@@ -158,15 +158,15 @@
     ]
     fields = [
       {
+        key: 'arvioinninSaaja.nimi',
+        label: this.$t('erikoistuja'),
+        sortable: true
+      },
+      {
         key: 'tapahtumanAjankohta',
         label: this.$t('pvm'),
         sortable: true,
         thClass: 'pvm-field'
-      },
-      {
-        key: 'arvioitavaTapahtuma',
-        label: this.$t('tapahtuma'),
-        sortable: true
       },
       {
         key: 'tila',
@@ -175,10 +175,11 @@
         thClass: 'tila-field'
       },
       {
-        key: 'arvioinninSaaja.nimi',
-        label: this.$t('nimi'),
+        key: 'arvioitavaTapahtuma',
+        label: this.$t('tapahtuma'),
         sortable: true
       },
+
       {
         key: 'arvioitavaKokonaisuus.nimi',
         label: this.$t('arvioitava-kokonaisuus'),
@@ -204,8 +205,8 @@
       return this.hakutermi
         ? this.arvioinnit?.filter(
             (item) =>
-              item.arvioitavaTapahtuma &&
-              item.arvioitavaTapahtuma.toLowerCase().includes(this.hakutermi.toLowerCase())
+              item.arvioinninSaaja.nimi &&
+              item.arvioinninSaaja.nimi.toLowerCase().includes(this.hakutermi.toLowerCase())
           )
         : this.arvioinnit
     }
