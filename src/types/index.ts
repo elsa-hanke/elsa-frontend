@@ -597,7 +597,12 @@ export type OmatTiedotLomakeErikoistuja = {
   avatar: any
   avatarUpdated: boolean
   laillistamispaiva?: string | null
-  laillistamistodistus?: File | string | null
+  laillistamispaivanLiite?: File | null
+}
+
+export type Laillistamistiedot = {
+  laillistamispaiva?: string | null
+  laillistamistodistus?: string | null
   laillistamistodistusNimi?: string | null
   laillistamistodistusTyyppi?: string | null
 }

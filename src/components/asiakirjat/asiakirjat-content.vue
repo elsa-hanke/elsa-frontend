@@ -133,6 +133,9 @@
     enableDelete!: boolean
 
     @Prop({ required: false, type: Boolean, default: true })
+    enableLisatty!: boolean
+
+    @Prop({ required: false, type: Boolean, default: true })
     showInfoIfEmpty!: boolean
 
     @Prop({ required: false, type: String })
@@ -167,7 +170,8 @@
           width: 10,
           formatter: (val: string) => {
             return new Date(val).toLocaleDateString(this.$i18n.locale)
-          }
+          },
+          disabled: !this.enableLisatty
         },
         {
           key: 'download',
