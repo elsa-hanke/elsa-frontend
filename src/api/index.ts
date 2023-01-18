@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import store from '@/store'
-import { OmatTiedotLomake } from '@/types'
+import { OmatTiedotLomake, OmatTiedotLomakeErikoistuja } from '@/types'
 import { setCookie, getCookie } from '@/utils/cookies'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -58,6 +58,12 @@ export async function getKayttaja() {
 
 export async function putKayttaja(form: OmatTiedotLomake) {
   return await axios.put('kayttaja', wrapToFormData(form), {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export async function putErikoistuvaLaakari(form: OmatTiedotLomakeErikoistuja) {
+  return await axios.put('erikoistuva-laakari', wrapToFormData(form), {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }

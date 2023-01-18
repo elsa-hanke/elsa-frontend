@@ -4,6 +4,7 @@ import { Module } from 'vuex'
 import * as api from '@/api'
 import { getErikoistuvaLaakari } from '@/api/erikoistuva'
 import { getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo } from '@/api/vastuuhenkilo'
+import { ELSA_ROLE } from '@/utils/roles'
 
 const auth: Module<any, any> = {
   namespaced: true,
@@ -58,13 +59,13 @@ const auth: Module<any, any> = {
       commit('authRequest')
       try {
         const { data } = await api.getKayttaja()
-        if (data.authorities.includes('ROLE_ERIKOISTUVA_LAAKARI')) {
+        if (data.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
           data.erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
         }
         if (data.impersonated) {
           data.originalUser = (await axios.get('kayttaja-impersonated')).data
         }
-        if (data.authorities.includes('ROLE_VASTUUHENKILO')) {
+        if (data.authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
           data.terveyskeskuskoulutusjaksoVastuuhenkilo = (
             await getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo()
           ).data
@@ -86,6 +87,17 @@ const auth: Module<any, any> = {
         window.location.href = '/uloskirjaus'
       }
       commit('logoutRequest')
+    },
+    async putErikoistuvaLaakari({ commit }, userDetails) {
+      commit('formRequest')
+      try {
+        const { data } = await api.putErikoistuvaLaakari(userDetails)
+        data.erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
+        commit('formSuccess', data)
+      } catch (err) {
+        commit('formError')
+        throw err
+      }
     },
     async putUser({ commit }, userDetails) {
       commit('formRequest')

@@ -22,45 +22,42 @@
         </div>
         <div class="flex-fill">
           <elsa-form-group
-            :label="title ? title : $t('nimi')"
+            :label="$t('erikoistuva-laakari')"
             label-cols-md="4"
             label-cols-xl="4"
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>{{ displayName }}</template>
-          </elsa-form-group>
-          <elsa-form-group class="col-xs-12 col-sm-3 pl-0" :label="$t('laillistamispaiva')">
-            <template v-slot="{ uid }">
-              <elsa-form-datepicker
-                ref="laillistamispaiva"
-                :id="uid"
-                :value.sync="form.laillistamispaiva"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></elsa-form-datepicker>
+            <template>
+              {{ displayName }}
             </template>
           </elsa-form-group>
-          <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
-            <span>
-              {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
-            </span>
-            <asiakirjat-upload
-              class="mt-3"
-              :isPrimaryButton="false"
-              :allowMultiplesFiles="false"
-              :buttonText="$t('lisaa-liitetiedosto')"
-              @selectedFiles="onLaillistamispaivaFilesAdded"
-              :disabled="form.laillistamistodistus"
-            />
-            <asiakirjat-content
-              :asiakirjat="form.laillistamistodistus"
-              :sorting-enabled="false"
-              :pagination-enabled="false"
-              :enable-search="false"
-              :enable-delete="true"
-              @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
-              :no-results-info-text="$t('ei-liitetiedostoja')"
-            />
+          <elsa-form-group
+            :label="$t('syntymaaika')"
+            label-cols-md="4"
+            label-cols-xl="4"
+            label-cols="12"
+            class="align-items-center mb-md-0"
+          >
+            <template>
+              {{ syntymaaika }}
+            </template>
+          </elsa-form-group>
+          <elsa-form-group
+            :label="$t('laillistamispaiva')"
+            label-cols-md="4"
+            label-cols-xl="4"
+            label-cols="12"
+            class="align-items-center mb-md-0"
+          >
+            <template>
+              <div v-if="form.laillistamispaiva">
+                {{ $date(form.laillistamispaiva) }} -
+                <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
+                  {{ laillistamistodistusNimi }}
+                </elsa-button>
+              </div>
+            </template>
           </elsa-form-group>
           <elsa-form-group
             v-if="account.email"
@@ -70,7 +67,9 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>{{ account.email }}</template>
+            <template>
+              {{ account.email }}
+            </template>
           </elsa-form-group>
           <elsa-form-group
             v-if="account.phoneNumber"
@@ -80,28 +79,125 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>{{ account.phoneNumber }}</template>
+            <template>
+              {{ account.phoneNumber }}
+            </template>
           </elsa-form-group>
+          <div class="mt-2">
+            <elsa-button variant="primary" @click="() => $emit('change', !editing)">
+              {{ $t('muokkaa-tietoja') }}
+            </elsa-button>
+          </div>
         </div>
       </div>
-      <div class="text-right">
-        <elsa-button variant="primary" @click="() => $emit('change', !editing)">
-          {{ $t('muokkaa-tietoja') }}
-        </elsa-button>
-      </div>
+      <h3 class="mt-6">{{ $t('opinto-oikeudet') }}</h3>
+      <i18n path="opinto-oikeudet-help" tag="p" class="mb-2">
+        <a
+          href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/lomakkeet"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ $t('luopumisilmoituksen') }}
+        </a>
+      </i18n>
+      <b-row v-for="(opintooikeus, index) in opintooikeudet" :key="index" lg>
+        <b-col>
+          <div class="d-flex justify-content-center border rounded pt-1 pb-1 mb-4">
+            <div class="container-fluid">
+              <h4 class="mt-2 mb-3">
+                {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }},
+                {{ opintooikeus.erikoisalaNimi }}
+              </h4>
+              <div v-if="opintooikeus.opiskelijatunnus">
+                <h5 class="mb-0">{{ $t('opiskelijanumero') }}</h5>
+                <div class="mb-3">{{ opintooikeus.opiskelijatunnus }}</div>
+              </div>
+              <h5 class="mb-0">{{ $t('opinto-opas') }}</h5>
+              <div class="mb-3">{{ opintooikeus.opintoopasNimi }}</div>
+              <h5 class="mb-0">{{ $t('opinto-oikeus') }}</h5>
+              <div class="mb-3">
+                {{ $date(opintooikeus.opintooikeudenMyontamispaiva) }} -
+                {{ $date(opintooikeus.opintooikeudenPaattymispaiva) }}
+              </div>
+              <h5 class="mb-0">{{ $t('asetus') }}</h5>
+              <div class="mb-3">{{ opintooikeus.asetus.nimi }}</div>
+              <h5 class="mb-0">{{ $t('osaamisen-arvioinnin-oppaan-paivamaara') }}</h5>
+              <div class="mb-3">
+                {{ $date(opintooikeus.osaamisenArvioinninOppaanPvm) }}
+              </div>
+            </div>
+          </div>
+        </b-col>
+      </b-row>
     </div>
     <div v-else>
       <b-form @submit.stop.prevent="onSubmit">
         <elsa-form-group
-          :label="title ? $t(title) : $t('nimi')"
+          :label="$t('erikoistuva-laakari')"
           label-cols-md="4"
           label-cols-xl="4"
           label-cols="12"
           class="align-items-center mb-md-0"
         >
-          <template>{{ displayName }}</template>
+          <template>
+            {{ displayName }}
+          </template>
+        </elsa-form-group>
+        <elsa-form-group
+          :label="$t('syntymaaika')"
+          label-cols-md="4"
+          label-cols-xl="4"
+          label-cols="12"
+          class="align-items-center mb-md-0"
+        >
+          <template>
+            {{ syntymaaika }}
+          </template>
         </elsa-form-group>
         <hr />
+        <elsa-form-group class="col-xs-12 col-sm-3 pl-0" :label="$t('laillistamispaiva')">
+          <template v-slot="{ uid }">
+            <elsa-form-datepicker
+              ref="laillistamispaiva"
+              :id="uid"
+              :value.sync="form.laillistamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
+            ></elsa-form-datepicker>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
+          <span>
+            {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
+          </span>
+          <asiakirjat-upload
+            class="mt-3"
+            :isPrimaryButton="false"
+            :allowMultiplesFiles="false"
+            :buttonText="$t('lisaa-liitetiedosto')"
+            @selectedFiles="onLaillistamispaivaFilesAdded"
+            :disabled="laillistamispaivaAsiakirjat.length > 0"
+          />
+          <div v-if="laillistamispaivaAsiakirjat.length > 0">
+            <asiakirjat-content
+              :asiakirjat="laillistamispaivaAsiakirjat"
+              :sorting-enabled="false"
+              :pagination-enabled="false"
+              :enable-search="false"
+              :enable-delete="true"
+              :enableLisatty="false"
+              @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
+              :no-results-info-text="$t('ei-liitetiedostoja')"
+            />
+          </div>
+          <div v-else>
+            <b-alert variant="dark" class="mt-3" show>
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+              <span>
+                {{ $t('ei-asiakirjoja') }}
+              </span>
+            </b-alert>
+          </div>
+        </elsa-form-group>
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
@@ -131,7 +227,7 @@
               :size="160"
             />
             <input
-              ref="avatar-file-input"
+              ref="avatarFileInput"
               id="avatar-file-input"
               type="file"
               accept="image/jpeg,image/png"
@@ -163,7 +259,7 @@
           </elsa-button>
         </div>
         <div class="row">
-          <elsa-form-error :active="this.$v.$anyError" />
+          <elsa-form-error :active="$v.$anyError" />
         </div>
       </b-form>
     </div>
@@ -183,9 +279,18 @@
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
-  import { OmatTiedotLomakeErikoistuja, ElsaError } from '@/types'
+  import {
+    OmatTiedotLomakeErikoistuja,
+    ElsaError,
+    Laillistamistiedot,
+    Asiakirja,
+    Opintooikeus
+  } from '@/types'
+  import { saveBlob } from '@/utils/blobs'
   import { confirmExit } from '@/utils/confirm'
+  import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { getTitleFromAuthorities } from '@/utils/functions'
+  import { sortByDesc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -210,23 +315,45 @@
     @Prop({ required: false, default: false })
     editing!: boolean
 
+    $refs!: {
+      laillistamispaiva: ElsaFormDatepicker
+      avatarFileInput: HTMLInputElement
+    }
+
     form: OmatTiedotLomakeErikoistuja = {
       email: null,
       phoneNumber: null,
       avatar: null,
       avatarUpdated: false,
       laillistamispaiva: null,
-      laillistamistodistus: null
+      laillistamispaivanLiite: null
     }
+
+    laillistamispaivaAsiakirjat: Asiakirja[] = []
+
     params = {
       saving: false
     }
 
     async mounted() {
       try {
-        this.form.laillistamispaiva = (
+        const laillistamistiedot: Laillistamistiedot = (
           await axios.get('/erikoistuva-laakari/laillistamispaiva/')
         ).data
+        this.form.laillistamispaiva = laillistamistiedot.laillistamispaiva
+
+        if (laillistamistiedot.laillistamistodistus) {
+          const data = Uint8Array.from(atob(laillistamistiedot.laillistamistodistus), (c) =>
+            c.charCodeAt(0)
+          )
+          this.laillistamispaivaAsiakirjat.push(
+            mapFile(
+              new File([data], laillistamistiedot.laillistamistodistusNimi || '', {
+                type: laillistamistiedot.laillistamistodistusTyyppi || ''
+              })
+            )
+          )
+        }
       } catch {
         toastFail(this, this.$t('laillistamispaivan-hakeminen-epaonnistui'))
       }
@@ -234,15 +361,13 @@
     }
 
     selectAvatar() {
-      const inputEl = this.$refs['avatar-file-input'] as HTMLInputElement
-      inputEl.click()
+      this.$refs.avatarFileInput.click()
     }
 
     removeAvatar() {
       this.form.avatar = null
       this.form.avatarUpdated = true
-      const inputEl = this.$refs['avatar-file-input'] as HTMLInputElement
-      inputEl.value = ''
+      this.$refs.avatarFileInput.value = ''
     }
 
     avatarChange(e: Event) {
@@ -254,12 +379,24 @@
       }
     }
 
+    async onDownloadLaillistamistodistus() {
+      if (this.laillistamispaivaAsiakirjat.length > 0) {
+        const file = this.laillistamispaivaAsiakirjat[0]
+        const data = await file.data
+        if (data) {
+          saveBlob(file.nimi, data, file.contentType || '')
+        }
+      }
+    }
+
     onLaillistamispaivaFilesAdded(files: File[]) {
-      this.form.laillistamistodistus = files[0]
+      this.form.laillistamispaivanLiite = files[0]
+      this.laillistamispaivaAsiakirjat.push(...mapFiles(files))
     }
 
     async onDeleteLaillistamispaivanLiite() {
-      this.form.laillistamistodistus = null
+      this.form.laillistamispaivanLiite = null
+      this.laillistamispaivaAsiakirjat = []
     }
 
     initForm(): OmatTiedotLomakeErikoistuja {
@@ -268,7 +405,7 @@
         phoneNumber: this.account?.phoneNumber || null,
         avatar: this.account?.avatar || null,
         avatarUpdated: false,
-        laillistamispaiva: null
+        laillistamispaiva: this.form.laillistamispaiva
       }
     }
 
@@ -277,16 +414,38 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    async onSubmit() {
+    validateForm(): boolean {
       this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
+      return !this.$v.$anyError
+    }
+
+    async onSubmit() {
+      const validations = [
+        this.validateForm(),
+        this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
+      ]
+
+      if (validations.includes(false)) {
         return
       }
 
       try {
         this.params.saving = true
+        if (
+          this.form.laillistamispaivanLiite == null &&
+          this.laillistamispaivaAsiakirjat.length > 0
+        ) {
+          const file = this.laillistamispaivaAsiakirjat[0]
+          const data = await file.data
+          if (data) {
+            this.form.laillistamispaivanLiite = new File([data], file.nimi || '', {
+              type: file.contentType || ''
+            })
+          }
+        }
+
         await store.dispatch(
-          'auth/putUser',
+          'auth/putErikoistuvaLaakari',
           // Ohitetaan olemassa olevan avatarin lähettäminen
           !this.form.avatar?.name
             ? {
@@ -341,6 +500,13 @@
       return ''
     }
 
+    get syntymaaika() {
+      if (this.account) {
+        return this.$date(this.account.erikoistuvaLaakari.syntymaaika)
+      }
+      return ''
+    }
+
     get avatarSrc() {
       if (this.account) {
         return `data:image/jpeg;base64,${this.account.avatar}`
@@ -364,6 +530,20 @@
         return this.account.avatar
       }
       return null
+    }
+
+    get laillistamistodistusNimi() {
+      if (this.laillistamispaivaAsiakirjat.length > 0) {
+        return this.laillistamispaivaAsiakirjat[0].nimi
+      }
+      return null
+    }
+
+    get opintooikeudet() {
+      return this.account.erikoistuvaLaakari.opintooikeudet.sort(
+        (a: Opintooikeus, b: Opintooikeus) =>
+          sortByDesc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
+      )
     }
   }
 </script>

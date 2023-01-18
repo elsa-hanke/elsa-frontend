@@ -13,10 +13,20 @@
             <b-tab v-else :title="$t('omat-tiedot')" href="#omat-tiedot">
               <omat-tiedot :editing="editing" @change="changeEditing" />
             </b-tab>
-            <b-tab v-if="$isErikoistuva()" :title="$t('katseluoikeudet')" href="#katseluoikeudet">
+            <b-tab
+              v-if="$isErikoistuva()"
+              :title="$t('katseluoikeudet')"
+              href="#katseluoikeudet"
+              lazy
+            >
               <katseluoikeudet />
             </b-tab>
-            <b-tab v-if="$isErikoistuva()" :title="$t('muokkausoikeudet')" href="#muokkausoikeudet">
+            <b-tab
+              v-if="$isErikoistuva()"
+              :title="$t('muokkausoikeudet')"
+              href="#muokkausoikeudet"
+              lazy
+            >
               <muokkausoikeudet />
             </b-tab>
           </b-tabs>
