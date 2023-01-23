@@ -10,6 +10,13 @@
             <b-tab v-if="$isErikoistuva()" :title="$t('omat-tiedot')" href="#omat-tiedot">
               <omat-tiedot-erikoistuja :editing="editing" @change="changeEditing" />
             </b-tab>
+            <b-tab
+              v-else-if="$isKouluttaja() || $isVastuuhenkilo()"
+              :title="$t('omat-tiedot')"
+              href="#omat-tiedot"
+            >
+              <omat-tiedot-kouluttaja-vastuuhenkilo :editing="editing" @change="changeEditing" />
+            </b-tab>
             <b-tab v-else :title="$t('omat-tiedot')" href="#omat-tiedot">
               <omat-tiedot :editing="editing" @change="changeEditing" />
             </b-tab>
@@ -40,6 +47,7 @@
   import { Component, Mixins } from 'vue-property-decorator'
 
   import OmatTiedotErikoistuja from './omat-tiedot-erikoistuja.vue'
+  import OmatTiedotKouluttajaVastuuhenkilo from './omat-tiedot-kouluttaja-vastuuhenkilo.vue'
   import OmatTiedot from './omat-tiedot.vue'
 
   import ConfirmRouteExit from '@/mixins/confirm-route-exit'
@@ -50,6 +58,7 @@
     components: {
       OmatTiedot,
       OmatTiedotErikoistuja,
+      OmatTiedotKouluttajaVastuuhenkilo,
       Katseluoikeudet,
       Muokkausoikeudet
     }
