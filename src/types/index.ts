@@ -594,6 +594,8 @@ export type OmatTiedotLomake = {
   phoneNumber: string | null
   avatar: any
   avatarUpdated: boolean
+  nimike: string | null
+  kayttajanYliopistotJaErikoisalat: KayttajaYliopistoErikoisalat[]
 }
 
 export type OmatTiedotLomakeErikoistuja = {
@@ -605,15 +607,6 @@ export type OmatTiedotLomakeErikoistuja = {
   laillistamispaivanLiite?: File | null
 }
 
-export type OmatTiedotLomakeKouluttajaVastuuhenkilo = {
-  nimike: string | null
-  email: string | null
-  phoneNumber: string | null
-  avatar: any
-  avatarUpdated: boolean
-  kayttajanYliopistot: KayttajaYliopistoErikoisalat[]
-}
-
 export type Laillistamistiedot = {
   laillistamispaiva?: string | null
   laillistamistodistus?: string | null
@@ -623,7 +616,8 @@ export type Laillistamistiedot = {
 
 export type Kayttajatiedot = {
   nimike: string | null
-  kayttajanYliopistot?: KayttajaYliopistoErikoisalat[] | null
+  kayttajanYliopistot?: Yliopisto[] | null
+  kayttajanYliopistotJaErikoisalat?: KayttajaYliopistoErikoisalat[] | null
   yliopistot?: Yliopisto[] | null
   erikoisalat?: Erikoisala[] | null
 }

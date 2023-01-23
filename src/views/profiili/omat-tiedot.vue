@@ -28,8 +28,60 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>{{ displayName }}</template>
+            <template>
+              {{ displayName }}
+            </template>
           </elsa-form-group>
+          <div v-if="$isKouluttaja() || $isVastuuhenkilo()">
+            <elsa-form-group
+              :label="$t('nimike')"
+              label-cols-md="4"
+              label-cols-xl="4"
+              label-cols="12"
+              class="align-items-center mb-md-0"
+            >
+              <template>
+                {{ form.nimike }}
+              </template>
+            </elsa-form-group>
+            <elsa-form-group
+              :label="$t('yliopisto-ja-erikoisalat')"
+              label-cols-md="4"
+              label-cols-xl="4"
+              label-cols="12"
+              class="align-items-center mb-md-0"
+            >
+              <template>
+                <div
+                  v-for="yliopistoErikoisalat in form.kayttajanYliopistotJaErikoisalat"
+                  :key="yliopistoErikoisalat.yliopisto.id"
+                >
+                  <div v-for="erikoisala in yliopistoErikoisalat.erikoisalat" :key="erikoisala.id">
+                    {{ $t(`yliopisto-nimi.${yliopistoErikoisalat.yliopisto.nimi}`) }}:
+                    {{ erikoisala.nimi }}
+                  </div>
+                </div>
+              </template>
+            </elsa-form-group>
+          </div>
+          <div v-if="$isVirkailija()">
+            <elsa-form-group
+              :label="$t('yliopisto')"
+              label-cols-md="4"
+              label-cols-xl="4"
+              label-cols="12"
+              class="align-items-center mb-md-0"
+            >
+              <template>
+                <div
+                  v-for="yliopisto in kayttajaTiedot ? kayttajaTiedot.kayttajanYliopistot : []"
+                  :key="yliopisto.id"
+                >
+                  {{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}
+                </div>
+              </template>
+            </elsa-form-group>
+          </div>
           <elsa-form-group
             v-if="account.email"
             :label="$t('sahkopostiosoite')"
@@ -38,7 +90,9 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>{{ account.email }}</template>
+            <template>
+              {{ account.email }}
+            </template>
           </elsa-form-group>
           <elsa-form-group
             v-if="account.phoneNumber"
@@ -48,7 +102,9 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>{{ account.phoneNumber }}</template>
+            <template>
+              {{ account.phoneNumber }}
+            </template>
           </elsa-form-group>
         </div>
       </div>
@@ -61,15 +117,121 @@
     <div v-else>
       <b-form @submit.stop.prevent="onSubmit">
         <elsa-form-group
-          :label="title ? $t(title) : $t('nimi')"
+          :label="title ? title : $t('nimi')"
           label-cols-md="4"
           label-cols-xl="4"
           label-cols="12"
-          class="align-items-center mb-md-0"
+          class="align-items-center mb-md-2"
         >
-          <template>{{ displayName }}</template>
+          <template>
+            {{ displayName }}
+          </template>
         </elsa-form-group>
-        <hr />
+        <div v-if="$isVastuuhenkilo()">
+          <elsa-form-group
+            :label="$t('yliopisto-ja-erikoisalat')"
+            label-cols-md="4"
+            label-cols-xl="4"
+            label-cols="12"
+            class="align-items-center mb-md-0"
+          >
+            <template>
+              <div
+                v-for="yliopistoErikoisalat in form.kayttajanYliopistotJaErikoisalat"
+                :key="yliopistoErikoisalat.yliopisto.id"
+              >
+                <div v-for="erikoisala in yliopistoErikoisalat.erikoisalat" :key="erikoisala.id">
+                  {{ $t(`yliopisto-nimi.${yliopistoErikoisalat.yliopisto.nimi}`) }}:
+                  {{ erikoisala.nimi }}
+                </div>
+              </div>
+            </template>
+          </elsa-form-group>
+          <hr />
+        </div>
+        <div v-if="$isVirkailija()">
+          <elsa-form-group
+            :label="$t('yliopisto')"
+            label-cols-md="4"
+            label-cols-xl="4"
+            label-cols="12"
+            class="align-items-center mb-md-0"
+          >
+            <template>
+              <div
+                v-for="yliopisto in kayttajaTiedot ? kayttajaTiedot.kayttajanYliopistot : []"
+                :key="yliopisto.id"
+              >
+                {{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}
+              </div>
+            </template>
+          </elsa-form-group>
+          <hr />
+        </div>
+        <elsa-form-group v-if="$isKouluttaja() || $isVastuuhenkilo()" :label="$t('nimike')">
+          <template v-slot="{ uid }">
+            <b-form-input :id="uid" v-model="form.nimike"></b-form-input>
+          </template>
+        </elsa-form-group>
+        <div v-if="$isKouluttaja()">
+          <hr />
+          <div
+            v-for="(yliopistoErikoisalat, index) in form.kayttajanYliopistotJaErikoisalat"
+            :key="yliopistoErikoisalat.yliopisto.id"
+          >
+            <hr v-if="index > 0" />
+            <elsa-form-group :label="$t('yliopisto')">
+              <template v-slot="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="form.kayttajanYliopistotJaErikoisalat[index].yliopisto"
+                  :options="
+                    yliopistotOptions(form.kayttajanYliopistotJaErikoisalat[index].yliopisto)
+                  "
+                  :state="validateKayttajanYliopistoState(index)"
+                  :customLabel="yliopistoLabel"
+                ></elsa-form-multiselect>
+                <b-form-invalid-feedback :state="validateKayttajanYliopistoState(index)">
+                  {{ $t('pakollinen-tieto') }}
+                </b-form-invalid-feedback>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group :label="$t('erikoisala')">
+              <template v-slot="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="form.kayttajanYliopistotJaErikoisalat[index].erikoisalat"
+                  :options="kayttajaTiedot ? kayttajaTiedot.erikoisalat : []"
+                  :multiple="true"
+                  :state="validateKayttajanYliopistoErikoisalaState(index)"
+                  label="nimi"
+                  track-by="id"
+                ></elsa-form-multiselect>
+                <b-form-invalid-feedback :state="validateKayttajanYliopistoErikoisalaState(index)">
+                  {{ $t('pakollinen-tieto') }}
+                </b-form-invalid-feedback>
+              </template>
+            </elsa-form-group>
+            <elsa-button
+              v-if="index !== 0"
+              @click="deleteYliopistoErikoisala(index)"
+              variant="link"
+              class="text-decoration-none shadow-none p-0"
+            >
+              <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
+              {{ $t('poista-yliopisto-ja-erikoisala') }}
+            </elsa-button>
+          </div>
+          <elsa-button
+            @click="addYliopistoErikoisala"
+            variant="link"
+            class="text-decoration-none shadow-none p-0"
+          >
+            <font-awesome-icon icon="plus" fixed-width size="sm" />
+            {{ $t('lisaa-yliopisto-ja-erikoisala') }}
+          </elsa-button>
+          <hr />
+        </div>
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template v-slot="{ uid }">
             <b-form-input
@@ -131,7 +293,7 @@
           </elsa-button>
         </div>
         <div class="row">
-          <elsa-form-error :active="this.$v.$anyError" />
+          <elsa-form-error :active="$v.$anyError" />
         </div>
       </b-form>
     </div>
@@ -139,16 +301,25 @@
 </template>
 
 <script lang="ts">
-  import { AxiosError } from 'axios'
+  import axios, { AxiosError } from 'axios'
   import Avatar from 'vue-avatar'
-  import { Component, Vue, Prop } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
+  import { TranslateResult } from 'vue-i18n'
+  import { Component, Vue, Prop, Mixins } from 'vue-property-decorator'
+  import { Validation, validationMixin } from 'vuelidate'
+  import { minLength, required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import store from '@/store'
-  import { OmatTiedotLomake, ElsaError } from '@/types'
+  import {
+    ElsaError,
+    OmatTiedotLomake,
+    Yliopisto,
+    Kayttajatiedot,
+    KayttajaYliopistoErikoisalat
+  } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { getTitleFromAuthorities } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -158,31 +329,54 @@
       Avatar,
       ElsaButton,
       ElsaFormError,
-      ElsaFormGroup
-    },
-    validations: {
-      form: {
-        email: {
-          required
-        }
-      }
+      ElsaFormGroup,
+      ElsaFormMultiselect
     }
   })
-  export default class OmatTiedot extends Vue {
+  export default class OmatTiedot extends Mixins(validationMixin) {
     @Prop({ required: false, default: false })
     editing!: boolean
 
+    validations() {
+      return {
+        form: {
+          email: {
+            required
+          },
+          kayttajanYliopistotJaErikoisalat: {
+            $each: {
+              yliopisto: {
+                id: {
+                  required
+                }
+              },
+              erikoisalat: {
+                required,
+                minLength: minLength(1)
+              }
+            }
+          }
+        }
+      }
+    }
+
     form: OmatTiedotLomake = {
+      nimike: null,
       email: null,
       phoneNumber: null,
       avatar: null,
-      avatarUpdated: false
+      avatarUpdated: false,
+      kayttajanYliopistotJaErikoisalat: []
     }
     params = {
       saving: false
     }
 
-    mounted() {
+    kayttajaTiedot: Kayttajatiedot | null = null
+    valittuYliopisto: Yliopisto | null = null
+
+    async mounted() {
+      this.kayttajaTiedot = (await axios.get('/kayttaja-lisatiedot')).data
       this.form = this.initForm()
     }
 
@@ -212,13 +406,49 @@
         email: this.account?.email || null,
         phoneNumber: this.account?.phoneNumber || null,
         avatar: this.account?.avatar || null,
-        avatarUpdated: false
+        avatarUpdated: false,
+        nimike: this.kayttajaTiedot?.nimike || null,
+        kayttajanYliopistotJaErikoisalat:
+          this.kayttajaTiedot?.kayttajanYliopistotJaErikoisalat || []
       }
     }
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    validateKayttajanYliopistoState(index: number) {
+      const { $dirty, $error } = this.$v.form?.kayttajanYliopistotJaErikoisalat?.$each[index]
+        ?.yliopisto.id as Validation
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    validateKayttajanYliopistoErikoisalaState(index: number) {
+      const { $dirty, $error } = this.$v.form?.kayttajanYliopistotJaErikoisalat?.$each[index]
+        ?.erikoisalat as Validation
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    addYliopistoErikoisala() {
+      this.form.kayttajanYliopistotJaErikoisalat.push({
+        yliopisto: { nimi: '', erikoisalat: [] },
+        erikoisalat: []
+      })
+    }
+
+    deleteYliopistoErikoisala(index: number) {
+      if (this.form.kayttajanYliopistotJaErikoisalat) {
+        Vue.delete(this.form.kayttajanYliopistotJaErikoisalat, index)
+      }
+    }
+
+    yliopistoLabel(yliopisto: Yliopisto): TranslateResult {
+      return yliopisto.nimi === '' ? '' : this.$t(`yliopisto-nimi.${yliopisto.nimi}`)
+    }
+
+    onSelectYliopisto(event: any) {
+      console.log(typeof event)
     }
 
     async onSubmit() {
@@ -241,6 +471,7 @@
         )
         toastSuccess(this, this.$t('omat-tiedot-paivitetty'))
         this.$v.form.$reset()
+        this.kayttajaTiedot = (await axios.get('/kayttaja-lisatiedot')).data
         this.form = this.initForm()
         this.$emit('change', false)
       } catch (err) {
@@ -308,6 +539,22 @@
         return this.account.avatar
       }
       return null
+    }
+
+    yliopistotOptions(yliopisto: Yliopisto) {
+      return this.kayttajaTiedot?.yliopistot?.map((y: Yliopisto) => {
+        if (
+          this.form.kayttajanYliopistotJaErikoisalat
+            .map((y2: KayttajaYliopistoErikoisalat) => y2.yliopisto.id)
+            .includes(y.id)
+        ) {
+          return {
+            ...y,
+            $isDisabled: y.id !== yliopisto.id
+          }
+        }
+        return y
+      })
     }
   }
 </script>
