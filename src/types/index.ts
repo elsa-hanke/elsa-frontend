@@ -567,6 +567,11 @@ export interface KayttajaYliopistoErikoisala {
   vastuuhenkilonTehtavat: VastuuhenkilonTehtava[]
 }
 
+export interface KayttajaYliopistoErikoisalat {
+  yliopisto: Yliopisto
+  erikoisalat?: Erikoisala[]
+}
+
 export interface Yliopisto {
   id?: number
   nimi: string
@@ -600,11 +605,27 @@ export type OmatTiedotLomakeErikoistuja = {
   laillistamispaivanLiite?: File | null
 }
 
+export type OmatTiedotLomakeKouluttajaVastuuhenkilo = {
+  nimike: string | null
+  email: string | null
+  phoneNumber: string | null
+  avatar: any
+  avatarUpdated: boolean
+  kayttajanYliopistot: KayttajaYliopistoErikoisalat[]
+}
+
 export type Laillistamistiedot = {
   laillistamispaiva?: string | null
   laillistamistodistus?: string | null
   laillistamistodistusNimi?: string | null
   laillistamistodistusTyyppi?: string | null
+}
+
+export type Kayttajatiedot = {
+  nimike: string | null
+  kayttajanYliopistot?: KayttajaYliopistoErikoisalat[] | null
+  yliopistot?: Yliopisto[] | null
+  erikoisalat?: Erikoisala[] | null
 }
 
 export type Arviointipyynto = {
