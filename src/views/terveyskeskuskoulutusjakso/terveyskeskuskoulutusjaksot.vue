@@ -54,8 +54,6 @@
                 fixed
                 :items="avoimetJaksot.content"
                 :fields="fields"
-                :per-page="perPage"
-                :current-page="currentAvoinPage"
                 class="terveyskeskuskoulutusjakson-vaiheet-table"
                 stacked="md"
               >
@@ -113,7 +111,7 @@
                 </template>
               </b-table>
               <elsa-pagination
-                @update:currentAvoinPage="onAvoinPageInput"
+                @update:currentPage="onAvoinPageInput"
                 :current-page="currentAvoinPage"
                 :per-page="perPage"
                 :rows="avoimetRows"
@@ -140,8 +138,6 @@
                 fixed
                 :items="muutJaksot.content"
                 :fields="fields"
-                :per-page="perPage"
-                :current-page="currentMuutPage"
                 class="terveyskeskuskoulutusjakson-vaiheet-table"
                 stacked="md"
               >
@@ -185,7 +181,7 @@
                 </template>
               </b-table>
               <elsa-pagination
-                @update:currentMuutPage="onMuutPageInput"
+                @update:currentPage="onMuutPageInput"
                 :current-page="currentMuutPage"
                 :per-page="perPage"
                 :rows="muutRows"
@@ -303,6 +299,11 @@
     }
 
     async fetch() {
+      await this.fetchAvoimet()
+      await this.fetchMuut()
+    }
+
+    async fetchAvoimet() {
       const avoinParams = {
         page: this.currentAvoinPage - 1,
         size: this.perPage,
@@ -318,7 +319,9 @@
           ? getTerveyskeskuskoulutusjaksotVirkailija(avoinParams)
           : getTerveyskeskuskoulutusjaksotVastuuhenkilo(avoinParams))
       ).data
+    }
 
+    async fetchMuut() {
       const muutParams = {
         page: this.currentMuutPage - 1,
         size: this.perPage,
@@ -349,14 +352,14 @@
       }, 400)
     }
 
-    onAvoinPageInput(value: number) {
+    async onAvoinPageInput(value: number) {
       this.currentAvoinPage = value
-      this.fetch()
+      await this.fetchAvoimet()
     }
 
     onMuutPageInput(value: number) {
       this.currentMuutPage = value
-      this.fetch()
+      this.fetchMuut()
     }
 
     onErikoisalaSelect(erikoisala: Erikoisala) {
@@ -378,11 +381,11 @@
     }
 
     get avoimetRows() {
-      return this.avoimetJaksot?.content.length ?? 0
+      return this.avoimetJaksot?.totalElements ?? 0
     }
 
     get muutRows() {
-      return this.muutJaksot?.content.length ?? 0
+      return this.muutJaksot?.totalElements ?? 0
     }
 
     get erikoisalatSorted() {
