@@ -5,7 +5,8 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('oma-profiili') }}</h1>
-          <p>{{ $t('oma-profiili-kuvaus') }}</p>
+          <p v-if="$isErikoistuva()">{{ $t('oma-profiili-kuvaus-erikoistuja') }}</p>
+          <p v-else>{{ $t('oma-profiili-kuvaus') }}</p>
           <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
             <b-tab v-if="$isErikoistuva()" :title="$t('omat-tiedot')" href="#omat-tiedot">
               <omat-tiedot-erikoistuja :editing="editing" @change="changeEditing" />
