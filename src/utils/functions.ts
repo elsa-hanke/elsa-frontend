@@ -32,7 +32,9 @@ export function wrapToFormData(form: { [key: string]: any }): FormData {
   const formData = new FormData()
   for (const [key, value] of Object.entries(form)) {
     if (value !== null) {
-      if (value instanceof Object) {
+      if (value instanceof File) {
+        formData.append(key, value)
+      } else if (value instanceof Object) {
         formData.append(key, JSON.stringify(value))
       } else {
         formData.append(key, value)
