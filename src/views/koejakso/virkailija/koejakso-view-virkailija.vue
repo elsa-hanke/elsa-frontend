@@ -44,11 +44,10 @@
             </b-alert>
             <div v-else>
               <b-table
+                v-if="avoimetKoejaksot != null"
                 fixed
                 :items="avoimetKoejaksot.content"
                 :fields="fields"
-                :per-page="perPage"
-                :current-page="currentAvoinPage"
                 class="koejakson-vaiheet-table"
                 stacked="md"
               >
@@ -102,7 +101,7 @@
                 </template>
               </b-table>
               <elsa-pagination
-                @update:currentAvoinPage="onAvoinPageInput"
+                @update:currentPage="onAvoinPageInput"
                 :current-page="currentAvoinPage"
                 :per-page="perPage"
                 :rows="avoimetRows"
@@ -125,11 +124,10 @@
             </b-alert>
             <div v-else>
               <b-table
+                v-if="muutKoejaksot != null"
                 fixed
                 :items="muutKoejaksot.content"
                 :fields="fields"
-                :per-page="perPage"
-                :current-page="currentMuutPage"
                 class="koejakson-vaiheet-table"
                 stacked="md"
               >
@@ -171,7 +169,7 @@
                 </template>
               </b-table>
               <elsa-pagination
-                @update:currentMuutPage="onMuutPageInput"
+                @update:currentPage="onMuutPageInput"
                 :current-page="currentMuutPage"
                 :per-page="perPage"
                 :rows="muutRows"
@@ -267,7 +265,7 @@
     }
     currentAvoinPage = 1
     currentMuutPage = 1
-    perPage = 20
+    perPage = 10
     debounce?: number
     loading = true
 
@@ -285,6 +283,11 @@
     }
 
     async fetch() {
+      await this.fetchAvoimet()
+      await this.fetchMuut()
+    }
+
+    async fetchAvoimet() {
       this.avoimetKoejaksot = (
         await getKoejaksot({
           page: this.currentAvoinPage - 1,
@@ -297,6 +300,9 @@
           avoin: true
         })
       ).data
+    }
+
+    async fetchMuut() {
       this.muutKoejaksot = (
         await getKoejaksot({
           page: this.currentMuutPage - 1,
@@ -326,12 +332,12 @@
 
     onAvoinPageInput(value: number) {
       this.currentAvoinPage = value
-      this.fetch()
+      this.fetchAvoimet()
     }
 
     onMuutPageInput(value: number) {
       this.currentMuutPage = value
-      this.fetch()
+      this.fetchMuut()
     }
 
     onErikoisalaSelect(erikoisala: Erikoisala) {
@@ -353,11 +359,11 @@
     }
 
     get avoimetRows() {
-      return this.avoimetKoejaksot?.content.length ?? 0
+      return this.avoimetKoejaksot?.totalElements ?? 0
     }
 
     get muutRows() {
-      return this.muutKoejaksot?.content.length ?? 0
+      return this.muutKoejaksot?.totalElements ?? 0
     }
 
     get erikoisalatSorted() {
