@@ -1493,3 +1493,8 @@ export interface UusiKouluttaja {
   sukunimi: string
   sahkoposti: string
 }
+
+export type Ilmoitus = {
+  id?: number
+  teksti: string | null
+}

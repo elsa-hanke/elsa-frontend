@@ -14,8 +14,8 @@
           {{ HuoltokatkoTime }}
           <a v-if="showMail" :href="`mailto:${contactMail}`">{{ contactMail }}</a>
         </b-alert>
-        <b-alert variant="dark" show>
-          <div class="d-flex flex-row">
+        <b-alert v-for="ilmoitus in ilmoitukset" :key="ilmoitus.id" variant="dark" show>
+          <div class="d-flex flex-row ilmoitus">
             <em class="align-middle">
               <font-awesome-icon
                 icon="info-circle"
@@ -23,13 +23,7 @@
                 class="text-muted text-size-md mr-2"
               />
             </em>
-            <div>
-              <strong>{{ $t('kouluttaja') }}:</strong>
-              {{ $t('kirjautumissivu-info-kouluttaja') }}
-              <br />
-              <strong>{{ $t('erikoistuja') }}:</strong>
-              {{ $t('kirjautumissivu-info-erikoistuja') }}
-            </div>
+            <div v-html="ilmoitus.teksti"></div>
           </div>
         </b-alert>
       </b-col>
@@ -61,12 +55,13 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import { parseISO, format } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { ELSA_API_LOCATION } from '@/api'
+  import { getIlmoitukset, getSeuraavaPaivitys } from '@/api/julkinen'
   import ElsaButton from '@/components/button/button.vue'
+  import { Ilmoitus } from '@/types'
 
   @Component({
     components: {
@@ -78,8 +73,11 @@
     HuoltokatkoDay = ''
     HuoltokatkoDate = ''
     HuoltokatkoTime = ''
+    ilmoitukset: Ilmoitus[] | null = null
+
     async mounted() {
-      this.handleHuoltokatkoDates((await axios.get('/julkinen/seuraava-paivitys')).data)
+      this.handleHuoltokatkoDates((await getSeuraavaPaivitys()).data)
+      this.ilmoitukset = (await getIlmoitukset()).data
     }
 
     loginSuomiFi() {
@@ -119,5 +117,11 @@
 <style lang="scss" scoped>
   .text-primary {
     font-size: 1.75rem;
+  }
+
+  .ilmoitus ::v-deep {
+    p {
+      margin-bottom: 0;
+    }
   }
 </style>

@@ -146,6 +146,14 @@
           <font-awesome-icon icon="user-friends" fixed-width size="lg" />
           {{ $t('opetussuunnitelmat') }}
         </b-nav-item>
+        <b-nav-item
+          v-if="$isTekninenPaakayttaja()"
+          class="border-top border-bottom"
+          :to="{ name: 'ilmoitukset' }"
+        >
+          <font-awesome-icon icon="info-circle" fixed-width size="lg" />
+          {{ $t('julkiset-ilmoitukset') }}
+        </b-nav-item>
       </b-nav>
     </nav>
     <b-toaster class="toaster" :style="{ top: paddingTop + 'px' }" name="b-toaster-top-right" />
