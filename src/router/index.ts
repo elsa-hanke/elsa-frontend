@@ -19,6 +19,9 @@ import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import ArvioitavatKokonaisuudet from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
 import Etusivu from '@/views/etusivu/etusivu.vue'
+import Ilmoitukset from '@/views/ilmoitukset/ilmoitukset.vue'
+import LisaaIlmoitus from '@/views/ilmoitukset/lisaa-ilmoitus.vue'
+import MuokkaaIlmoitusta from '@/views/ilmoitukset/muokkaa-ilmoitusta.vue'
 import KaytonAloitus from '@/views/kayton-aloitus/kayton-aloitus.vue'
 import ErikoistuvaLaakari from '@/views/kayttajahallinta/erikoistuva-laakari.vue'
 import Kayttajahallinta from '@/views/kayttajahallinta/kayttajahallinta.vue'
@@ -1138,6 +1141,33 @@ const routes: Array<RouteConfig> = [
           routeComponent: MuokkaaSeurantajaksoa,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja],
           confirmRouteExit: true
+        }
+      },
+      {
+        path: '/ilmoitukset',
+        name: 'ilmoitukset',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Ilmoitukset,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/ilmoitukset/uusi',
+        name: 'lisaa-ilmoitus',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaIlmoitus,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/ilmoitukset/:ilmoitusId/muokkaa',
+        name: 'muokkaa-ilmoitusta',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaIlmoitusta,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       }
     ]
