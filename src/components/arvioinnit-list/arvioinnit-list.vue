@@ -46,7 +46,6 @@
               <col span="1" style="width: 6rem" />
               <col span="1" style="width: 7rem" />
               <col span="1" style="width: 15%" />
-              <col span="1" style="width: 30%" />
               <col span="1" style="width: 12rem" />
               <col span="1" style="width: 9rem" />
             </template>
@@ -87,12 +86,6 @@
             </template>
 
             <!-- eslint-disable-next-line -->
-            <template #cell(arvioitavaKokonaisuus.nimi)="row">
-              <div class="text-truncate w-100">
-                {{ row.item.arvioitavaKokonaisuus.nimi }}
-              </div>
-            </template>
-            <!-- eslint-disable-next-line -->
             <template #cell(tyoskentelyjakso.tyoskentelypaikka.nimi)="row">
               <div class="text-truncate w-100">
                 {{ row.item.tyoskentelyjakso.tyoskentelypaikka.nimi }}
@@ -131,6 +124,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
+  import { Suoritusarviointi } from '@/types'
 
   @Component({
     components: {
@@ -141,7 +135,7 @@
   })
   export default class ArvioinnitList extends Vue {
     @Prop({ required: true, default: undefined })
-    arvioinnit!: null | any[]
+    arvioinnit!: null | Suoritusarviointi[]
 
     @Prop({ required: false, type: Boolean, default: false })
     loading!: boolean
@@ -179,12 +173,6 @@
         label: this.$t('tapahtuma'),
         sortable: true
       },
-
-      {
-        key: 'arvioitavaKokonaisuus.nimi',
-        label: this.$t('arvioitava-kokonaisuus'),
-        sortable: true
-      },
       {
         key: 'tyoskentelyjakso.tyoskentelypaikka.nimi',
         label: this.$t('tyoskentelypaikka'),
@@ -207,12 +195,12 @@
             (item) =>
               item.arvioinninSaaja.nimi &&
               item.arvioinninSaaja.nimi.toLowerCase().includes(this.hakutermi.toLowerCase())
-          )
-        : this.arvioinnit
+          ) || []
+        : this.arvioinnit || []
     }
 
     get rows() {
-      return this.tulokset?.length
+      return this.tulokset?.length || 0
     }
 
     sortCompare(a: any, b: any, key: string): any {

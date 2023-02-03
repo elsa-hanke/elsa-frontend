@@ -74,7 +74,7 @@
           <b-badge
             :id="uid"
             v-for="osaamistavoite in seurantajaksonTiedot.osaamistavoitteet"
-            :key="osaamistavoite.id"
+            :key="osaamistavoite"
             pill
             variant="light"
             class="font-weight-400 mr-2 mb-1 osaamistavoitteet"
@@ -91,7 +91,7 @@
           <div
             :id="uid"
             v-for="muutavoite in seurantajaksonTiedot.muutOsaamistavoitteet"
-            :key="muutavoite.id"
+            :key="muutavoite"
             class="mb-1"
           >
             <span>{{ muutavoite }}</span>
@@ -143,7 +143,11 @@
                     {{ $t('suorituspaiva') }}
                   </dt>
                   <dd class="mb-0">
-                    <elsa-button variant="link" class="pl-0" @click="showArviointi(arviointi)">
+                    <elsa-button
+                      variant="link"
+                      class="pl-0"
+                      @click="showArviointi(arviointi.suoritusarviointiId)"
+                    >
                       {{ $date(arviointi.tapahtumanAjankohta) }}
                     </elsa-button>
                   </dd>
@@ -154,14 +158,14 @@
           <b-table-simple v-else small fixed class="mb-4 arvioinnit-table" stacked="md" responsive>
             <b-thead>
               <b-tr class="text-size-sm">
-                <b-th scope="col" style="width: 35%">
-                  {{ $t('tapahtuma') | uppercase }}
+                <b-th scope="col" style="width: 35%" class="text-uppercase">
+                  {{ $t('tapahtuma') }}
                 </b-th>
-                <b-th scope="col" style="width: 50%">
-                  {{ $t('luottamuksen-taso') | uppercase }}
+                <b-th scope="col" style="width: 50%" class="text-uppercase">
+                  {{ $t('luottamuksen-taso') }}
                 </b-th>
-                <b-th scope="col">
-                  {{ $t('suorituspaiva') | uppercase }}
+                <b-th scope="col" class="text-uppercase">
+                  {{ $t('suorituspaiva') }}
                 </b-th>
               </b-tr>
             </b-thead>
@@ -178,7 +182,11 @@
                   />
                 </b-td>
                 <b-td :stacked-heading="$t('suorituspaiva')">
-                  <elsa-button variant="link" class="pl-0" @click="showArviointi(arviointi)">
+                  <elsa-button
+                    variant="link"
+                    class="pl-0"
+                    @click="showArviointi(arviointi.suoritusarviointiId)"
+                  >
                     {{ $date(arviointi.tapahtumanAjankohta) }}
                   </elsa-button>
                 </b-td>
@@ -256,14 +264,14 @@
       >
         <b-thead>
           <b-tr class="text-size-sm">
-            <b-th scope="col" style="width: 35%">
-              {{ $t('suorite') | uppercase }}
+            <b-th scope="col" style="width: 35%" class="text-uppercase">
+              {{ $t('suorite') }}
             </b-th>
-            <b-th scope="col" style="width: 50%">
-              {{ $t('luottamuksen-taso') | uppercase }}
+            <b-th scope="col" style="width: 50%" class="text-uppercase">
+              {{ $t('luottamuksen-taso') }}
             </b-th>
-            <b-th scope="col">
-              {{ $t('suorituspaiva') | uppercase }}
+            <b-th scope="col" class="text-uppercase">
+              {{ $t('suorituspaiva') }}
             </b-th>
           </b-tr>
         </b-thead>
@@ -368,17 +376,17 @@
       >
         <b-thead>
           <b-tr class="text-size-sm">
-            <b-th scope="col">
-              {{ $t('koulutuksen-nimi') | uppercase }}
+            <b-th scope="col" class="text-uppercase">
+              {{ $t('koulutuksen-nimi') }}
             </b-th>
-            <b-th scope="col">
-              {{ $t('paikka') | uppercase }}
+            <b-th scope="col" class="text-uppercase">
+              {{ $t('paikka') }}
             </b-th>
-            <b-th scope="col">
-              {{ $t('pvm') | uppercase }}
+            <b-th scope="col" class="text-uppercase">
+              {{ $t('pvm') }}
             </b-th>
-            <b-th scope="col">
-              {{ $t('tunnit') | uppercase }}
+            <b-th scope="col" class="text-uppercase">
+              {{ $t('tunnit') }}
             </b-th>
           </b-tr>
         </b-thead>
@@ -793,7 +801,7 @@
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
 
     <b-modal id="arviointi-modal" :title="$t('arviointi')" size="lg">
@@ -851,7 +859,7 @@
 </template>
 
 <script lang="ts">
-  import { AxiosError } from 'axios'
+  import axios, { AxiosError } from 'axios'
   import { BModal } from 'bootstrap-vue'
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
@@ -881,6 +889,7 @@
     Suoritemerkinta,
     Suoritusarviointi
   } from '@/types'
+  import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import SuoritemerkintaDetails from '@/views/suoritemerkinnat/suoritemerkinta-details.vue'
@@ -1057,8 +1066,10 @@
       params.saving = false
     }
 
-    showArviointi(arviointi: Suoritusarviointi) {
-      this.selectedArviointi = arviointi
+    async showArviointi(suoritusarviointiId: number) {
+      this.selectedArviointi = (
+        await axios.get(`${resolveRolePath()}/suoritusarvioinnit/${suoritusarviointiId}`)
+      ).data
       this.$bvModal.show('arviointi-modal')
     }
 

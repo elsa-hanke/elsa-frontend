@@ -99,19 +99,19 @@
       }
     }
 
-    async onSubmit(value: any, params: any) {
+    async onSubmit(value: Partial<Suoritusarviointi>, params: { saving: boolean }) {
       params.saving = true
       if (this.arviointipyynto) {
         try {
           await axios.put('erikoistuva-laakari/suoritusarvioinnit', {
             id: this.arviointipyynto.id,
             tyoskentelyjaksoId: value.tyoskentelyjaksoId,
-            arvioitavaKokonaisuusId: value.arvioitavaKokonaisuusId,
+            arvioitavatKokonaisuudet: value.arvioitavatKokonaisuudet,
             arvioitavaTapahtuma: value.arvioitavaTapahtuma,
             arvioinninAntajaId: value.arvioinninAntajaId,
             tapahtumanAjankohta: value.tapahtumanAjankohta,
             lisatiedot: value.lisatiedot
-          })
+          } as Partial<Suoritusarviointi>)
           toastSuccess(this, this.$t('arviointipyynnon-tallentaminen-onnistui'))
           this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
@@ -220,7 +220,7 @@
             ...this.arviointipyynto.tyoskentelyjakso,
             label: tyoskentelyjaksoLabel(this, this.arviointipyynto.tyoskentelyjakso)
           },
-          arvioitavaKokonaisuus: this.arviointipyynto.arvioitavaKokonaisuus,
+          arvioitavatKokonaisuudet: this.arviointipyynto.arvioitavatKokonaisuudet,
           kouluttajaOrVastuuhenkilo: this.arviointipyynto.arvioinninAntaja
         }
       } else {

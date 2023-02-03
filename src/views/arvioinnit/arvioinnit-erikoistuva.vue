@@ -16,7 +16,7 @@
           </elsa-button>
           <b-tabs content-class="mt-3" :no-fade="true" @input="onTabChange">
             <b-tab :title="$t('arvioinnit')" active>
-              <small>{{ $t('rajaa-arviointeja') | uppercase }}</small>
+              <small class="text-uppercase">{{ $t('rajaa-arviointeja') }}</small>
               <b-container fluid class="px-0 mt-2">
                 <b-row :class="{ 'mb-3': !isFiltered }">
                   <b-col md="4">
@@ -29,6 +29,7 @@
                           label="label"
                           track-by="id"
                           @select="onTyoskentelyjaksoSelect"
+                          @clearMultiselect="onTyoskentelyjaksoReset"
                         ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
@@ -43,6 +44,7 @@
                           label="nimi"
                           track-by="id"
                           @select="onArvioitavaKokonaisuusSelect"
+                          @clearMultiselect="onArvioitavaKokonaisuusReset"
                         ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
@@ -57,6 +59,7 @@
                           label="nimi"
                           track-by="id"
                           @select="onKouluttajaOrVastuuhenkiloSelect"
+                          @clearMultiselect="onKouluttajaOrVastuuhenkiloReset"
                         ></elsa-form-multiselect>
                       </template>
                     </elsa-form-group>
@@ -115,23 +118,23 @@
                           <b-table-simple small fixed class="mb-0" stacked="md" responsive>
                             <b-thead>
                               <b-tr class="text-size-sm">
-                                <b-th scope="col" style="width: 12%">
-                                  {{ $t('pvm') | uppercase }}
+                                <b-th scope="col" style="width: 12%" class="text-uppercase">
+                                  {{ $t('pvm') }}
                                 </b-th>
-                                <b-th scope="col" style="width: 15%">
-                                  {{ $t('tapahtuma') | uppercase }}
+                                <b-th scope="col" style="width: 15%" class="text-uppercase">
+                                  {{ $t('tapahtuma') }}
                                 </b-th>
-                                <b-th scope="col" style="width: 13%">
-                                  {{ $t('arviointi') | uppercase }}
+                                <b-th scope="col" style="width: 13%" class="text-uppercase">
+                                  {{ $t('arviointi') }}
                                 </b-th>
-                                <b-th scope="col" style="width: 18%">
-                                  {{ $t('itsearviointi') | uppercase }}
+                                <b-th scope="col" style="width: 18%" class="text-uppercase">
+                                  {{ $t('itsearviointi') }}
                                 </b-th>
-                                <b-th scope="col" style="width: 22%">
-                                  {{ $t('tyoskentelypaikka') | uppercase }}
+                                <b-th scope="col" style="width: 22%" class="text-uppercase">
+                                  {{ $t('tyoskentelypaikka') }}
                                 </b-th>
-                                <b-th scope="col" style="width: 20%">
-                                  {{ $t('arvioinnin-antaja') | uppercase }}
+                                <b-th scope="col" style="width: 20%" class="text-uppercase">
+                                  {{ $t('arvioinnin-antaja') }}
                                 </b-th>
                               </b-tr>
                             </b-thead>
@@ -260,7 +263,8 @@
     ArvioitavaKokonaisuus,
     ArvioitavanKokonaisuudenKategoria,
     Tyoskentelyjakso,
-    Kayttaja
+    Kayttaja,
+    SuoritusarvioinninArvioitavaKokonaisuus
   } from '@/types'
   import { sortByDateDesc } from '@/utils/date'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
@@ -332,13 +336,28 @@
       await this.fetch()
     }
 
+    async onTyoskentelyjaksoReset() {
+      this.selected.tyoskentelyjakso = null
+      await this.fetch()
+    }
+
     async onArvioitavaKokonaisuusSelect(selected: ArvioitavaKokonaisuus) {
       this.selected.arvioitavaKokonaisuus = selected
       await this.fetch()
     }
 
+    async onArvioitavaKokonaisuusReset() {
+      this.selected.arvioitavaKokonaisuus = null
+      await this.fetch()
+    }
+
     async onKouluttajaOrVastuuhenkiloSelect(selected: Kayttaja) {
       this.selected.kouluttajaOrVastuuhenkilo = selected
+      await this.fetch()
+    }
+
+    async onKouluttajaOrVastuuhenkiloReset() {
+      this.selected.kouluttajaOrVastuuhenkilo = null
       await this.fetch()
     }
 
@@ -370,7 +389,7 @@
             params: {
               ...options,
               'tyoskentelyjaksoId.equals': this.selected.tyoskentelyjakso?.id,
-              'arvioitavaKokonaisuusId.equals': this.selected.arvioitavaKokonaisuus?.id,
+              arvioitavaKokonaisuusId: this.selected.arvioitavaKokonaisuus?.id,
               'arvioinninAntajaId.equals': this.selected.kouluttajaOrVastuuhenkilo?.id
             }
           })
@@ -387,7 +406,12 @@
       // Muodostetaan arvioitavat kokonaisuudet -lista
       const arvioitavatKokonaisuudetArray = (
         this.selected.tyoskentelyjakso || this.selected.kouluttajaOrVastuuhenkilo
-          ? this.arvioinnit?.map((arviointi: Suoritusarviointi) => arviointi.arvioitavaKokonaisuus)
+          ? this.arvioinnit?.flatMap((arviointi: Suoritusarviointi) =>
+              arviointi.arvioitavatKokonaisuudet.map(
+                (kokonaisuus: SuoritusarvioinninArvioitavaKokonaisuus) =>
+                  kokonaisuus.arvioitavaKokonaisuus
+              )
+            )
           : this.suoritusArvioinnitOptions?.arvioitavatKokonaisuudet.filter(
               (a: ArvioitavaKokonaisuus) =>
                 this.selected.arvioitavaKokonaisuus
@@ -428,12 +452,20 @@
       // Liitetään arvioinnit arvioitaviin kokonaisuuksiin
       if (this.arvioinnit) {
         this.arvioinnit.forEach((arviointi) => {
-          const arvioitavaKokonaisuus = arvioitavatKokonaisuudetMap?.find(
-            (a: ArvioitavaKokonaisuus | null) => a?.id === arviointi.arvioitavaKokonaisuusId
-          )
-          if (arvioitavaKokonaisuus) {
-            arvioitavaKokonaisuus.arvioinnit.push(arviointi)
-          }
+          arviointi.arvioitavatKokonaisuudet.forEach((kokonaisuus) => {
+            const arvioitavaKokonaisuus = arvioitavatKokonaisuudetMap?.find(
+              (a: ArvioitavaKokonaisuus | null) => a?.id === kokonaisuus.arvioitavaKokonaisuusId
+            )
+            if (arvioitavaKokonaisuus) {
+              arvioitavaKokonaisuus.arvioinnit.push({
+                ...arviointi,
+                arviointiasteikonTaso: kokonaisuus.arviointiasteikonTaso as number,
+                itsearviointiArviointiasteikonTaso:
+                  kokonaisuus.itsearviointiArviointiasteikonTaso as number,
+                arvioitavaKokonaisuusId: kokonaisuus.arvioitavaKokonaisuusId
+              })
+            }
+          })
         })
       }
 

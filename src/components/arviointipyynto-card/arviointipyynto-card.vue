@@ -28,7 +28,12 @@
                     {{ $t('arvioitava-kokonaisuus') }}
                   </b-th>
                   <b-td class="py-0 pr-0 pl-1">
-                    {{ value.arvioitavaKokonaisuus.nimi }}
+                    <div
+                      v-for="kokonaisuus in value.arvioitavatKokonaisuudet"
+                      :key="kokonaisuus.id"
+                    >
+                      {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
+                    </div>
                   </b-td>
                 </b-tr>
                 <b-tr>
@@ -111,6 +116,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import store from '@/store'
+  import { Suoritusarviointi } from '@/types'
 
   @Component({
     components: {
@@ -121,7 +127,7 @@
   })
   export default class ArviointipyyntoCard extends Vue {
     @Prop({})
-    value!: any
+    value!: Suoritusarviointi
 
     get account() {
       return store.getters['auth/account']

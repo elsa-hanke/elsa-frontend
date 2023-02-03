@@ -37,14 +37,15 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('arvioitava-kokonaisuus')" :required="true">
+    <elsa-form-group :label="$t('arvioitavat-kokonaisuudet')" :required="true">
       <template v-slot="{ uid }">
         <elsa-form-multiselect
           :id="uid"
-          v-model="form.arvioitavaKokonaisuus"
+          v-model="arvioitavatKokonaisuudet"
           @input="$emit('skipRouteExitConfirm', false)"
           :options="arvioitavanKokonaisuudenKategoriat"
-          :state="validateState('arvioitavaKokonaisuus')"
+          :multiple="true"
+          :state="validateArvioitavatKokonaisuudet()"
           group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
           :group-select="false"
@@ -56,6 +57,9 @@
             <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
           </template>
         </elsa-form-multiselect>
+        <small class="form-text text-muted">
+          {{ $t('valitse-arvioitavat-kokonaisuudet-help') }}
+        </small>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
@@ -160,7 +164,7 @@
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>
@@ -191,7 +195,8 @@
     Kunta,
     Suoritusarviointi,
     Tyoskentelyjakso,
-    ElsaError
+    ElsaError,
+    ArvioitavaKokonaisuus
   } from '@/types'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastSuccess, toastFail } from '@/utils/toast'
@@ -213,12 +218,12 @@
         tyoskentelyjakso: {
           required
         },
-        arvioitavaKokonaisuus: {
-          required
-        },
         arvioinninAntaja: {
           required
         }
+      },
+      arvioitavatKokonaisuudet: {
+        required
       }
     }
   })
@@ -250,7 +255,7 @@
       type: Object,
       default: () => ({
         tyoskentelyjakso: null,
-        arvioitavaKokonaisuus: null,
+        arvioitavatKokonaisuudet: [],
         arvioitavaTapahtuma: null,
         kouluttajaOrVastuuhenkilo: null,
         tapahtumanAjankohta: null,
@@ -261,12 +266,15 @@
 
     form: Partial<Suoritusarviointi> = {
       tyoskentelyjakso: null,
-      arvioitavaKokonaisuus: null,
+      arvioitavatKokonaisuudet: [],
       arvioitavaTapahtuma: null,
       arvioinninAntaja: null,
       tapahtumanAjankohta: null,
       lisatiedot: null
     }
+
+    arvioitavatKokonaisuudet: (ArvioitavaKokonaisuus | null)[] | undefined = []
+
     params = {
       saving: false,
       deleting: false
@@ -278,7 +286,10 @@
       if (this.form.tyoskentelyjakso) {
         this.form.tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, this.value?.tyoskentelyjakso)
       }
-      this.form.arvioitavaKokonaisuus = this.value?.arvioitavaKokonaisuus
+      this.form.arvioitavatKokonaisuudet = this.value?.arvioitavatKokonaisuudet
+      this.arvioitavatKokonaisuudet = this.form.arvioitavatKokonaisuudet?.map(
+        (k) => k.arvioitavaKokonaisuus
+      )
       this.form.arvioitavaTapahtuma = this.value?.arvioitavaTapahtuma
       this.form.arvioinninAntaja = this.value?.arvioinninAntaja
       this.form.lisatiedot = this.value?.lisatiedot
@@ -288,6 +299,11 @@
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    validateArvioitavatKokonaisuudet() {
+      const { $dirty, $error } = this.$v.arvioitavatKokonaisuudet as any
       return $dirty ? ($error ? false : null) : null
     }
 
@@ -307,12 +323,14 @@
         'submit',
         {
           tyoskentelyjaksoId: this.form.tyoskentelyjakso?.id,
-          arvioitavaKokonaisuusId: this.form.arvioitavaKokonaisuus?.id,
+          arvioitavatKokonaisuudet: this.arvioitavatKokonaisuudet?.map((k) => {
+            return { arvioitavaKokonaisuusId: k?.id }
+          }),
           arvioitavaTapahtuma: this.form.arvioitavaTapahtuma,
           arvioinninAntajaId: this.form.arvioinninAntaja?.id,
           tapahtumanAjankohta: this.form.tapahtumanAjankohta,
           lisatiedot: this.form.lisatiedot
-        },
+        } as Partial<Suoritusarviointi>,
         this.params
       )
     }
