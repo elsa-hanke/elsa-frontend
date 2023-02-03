@@ -28,17 +28,10 @@
         </b-td>
       </b-tr>
       <b-tr>
-        <b-th scope="row" class="font-weight-500">{{ $t('arvioitava-kokonaisuus') }}</b-th>
+        <b-th scope="row" class="font-weight-500">{{ $t('arvioitava-tapahtuma') }}</b-th>
         <b-td>
-          {{ value.arvioitavaKokonaisuus.kategoria.nimi }}:
-          {{ value.arvioitavaKokonaisuus.nimi }}
-          <elsa-popover>
-            <template>
-              <p v-html="value.arvioitavaKokonaisuus.kuvaus" />
-            </template>
-          </elsa-popover>
+          {{ value.arvioitavaTapahtuma }}
           <span v-if="$isErikoistuva() && !value.arviointiAika && !account.impersonated">
-            <br />
             <span>(</span>
             <elsa-button
               variant="link"
@@ -49,12 +42,6 @@
             </elsa-button>
             <span>)</span>
           </span>
-        </b-td>
-      </b-tr>
-      <b-tr>
-        <b-th scope="row" class="font-weight-500">{{ $t('arvioitava-tapahtuma') }}</b-th>
-        <b-td>
-          {{ value.arvioitavaTapahtuma }}
         </b-td>
       </b-tr>
       <b-tr>
@@ -90,30 +77,15 @@
         </b-td>
       </b-tr>
     </b-table-simple>
+    <hr />
 
     <b-form @submit.stop.prevent="onSubmit">
       <div v-if="!editing">
         <b-table-simple class="mt-2 mb-4" responsive bordered>
           <b-thead>
             <b-tr>
-              <b-th scope="col" style="width: 24%"></b-th>
-              <b-th scope="col" style="width: 38%">
-                {{ $t('arviointi') }}
-                <span v-if="value.arviointiAika" class="font-weight-400">
-                  {{ ` (${$date(value.arviointiAika)})` }}
-                </span>
-              </b-th>
-              <b-th scope="col" style="width: 38%">
-                {{ $t('itsearviointi') }}
-                <span v-if="value.itsearviointiAika" class="font-weight-400">
-                  {{ ` (${$date(value.itsearviointiAika)})` }}
-                </span>
-              </b-th>
-            </b-tr>
-          </b-thead>
-          <b-tbody>
-            <b-tr>
-              <b-th scope="row">
+              <b-th scope="col" style="width: 40%">
+                {{ $t('arvioitava-kokonaisuus') }},
                 {{ arviointiAsteikonNimi }}
                 <elsa-popover>
                   <elsa-arviointiasteikon-taso-tooltip-content
@@ -122,8 +94,36 @@
                   />
                 </elsa-popover>
               </b-th>
+              <b-th scope="col" style="width: 30%">
+                {{ $t('arviointi') }}
+                <span v-if="value.arviointiAika" class="font-weight-400">
+                  {{ ` (${$date(value.arviointiAika)})` }}
+                </span>
+              </b-th>
+              <b-th scope="col" style="width: 30%">
+                {{ $t('itsearviointi') }}
+                <span v-if="value.itsearviointiAika" class="font-weight-400">
+                  {{ ` (${$date(value.itsearviointiAika)})` }}
+                </span>
+              </b-th>
+            </b-tr>
+          </b-thead>
+          <b-tbody>
+            <b-tr
+              v-for="(kokonaisuus, index) in value.arvioitavatKokonaisuudet"
+              :key="kokonaisuus.id"
+            >
               <b-td>
-                <div v-if="!value.arviointiAika" class="d-inline-flex">
+                {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
+                {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
+                <elsa-popover>
+                  <template>
+                    <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
+                  </template>
+                </elsa-popover>
+              </b-td>
+              <b-td>
+                <div v-if="!value.arviointiAika && index === 0" class="d-inline-flex">
                   <elsa-button
                     v-if="$isKouluttaja() || $isVastuuhenkilo()"
                     variant="primary"
@@ -141,14 +141,16 @@
                 </div>
                 <elsa-arviointiasteikon-taso
                   v-if="value.arviointiAika"
-                  :value="value.arviointiasteikonTaso"
+                  :value="kokonaisuus.arviointiasteikonTaso"
                   :tasot="value.arviointiasteikko.tasot"
                 />
               </b-td>
               <b-td>
                 <div v-if="!value.itsearviointiAika" class="d-inline-flex">
                   <elsa-button
-                    v-if="$isErikoistuva() && !value.lukittu && !account.impersonated"
+                    v-if="
+                      $isErikoistuva() && !value.lukittu && !account.impersonated && index === 0
+                    "
                     variant="primary"
                     class="d-flex align-items-center text-decoration-none"
                     :to="{
@@ -170,22 +172,26 @@
                 </div>
                 <elsa-arviointiasteikon-taso
                   v-if="value.itsearviointiAika"
-                  :value="value.itsearviointiArviointiasteikonTaso"
+                  :value="kokonaisuus.itsearviointiArviointiasteikonTaso"
                   :tasot="value.arviointiasteikko.tasot"
                 />
               </b-td>
             </b-tr>
+          </b-tbody>
+        </b-table-simple>
+        <b-table-simple class="mt-2 mb-4" responsive bordered>
+          <b-tbody>
             <b-tr>
-              <b-th scope="row">
+              <b-th scope="row" style="width: 40%">
                 {{ $t('vaativuustaso') }}
                 <elsa-popover>
                   <elsa-vaativuustaso-tooltip-content />
                 </elsa-popover>
               </b-th>
-              <b-td>
+              <b-td style="width: 30%">
                 <elsa-vaativuustaso v-if="value.vaativuustaso" :value="value.vaativuustaso" />
               </b-td>
-              <b-td>
+              <b-td style="width: 30%">
                 <elsa-vaativuustaso
                   v-if="value.itsearviointiAika"
                   :value="value.itsearviointiVaativuustaso"
@@ -276,42 +282,57 @@
         <hr />
       </div>
       <div v-else>
-        <hr />
-        <b-form-row>
-          <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
-            <template #label-help>
-              <elsa-popover>
-                <elsa-arviointiasteikon-taso-tooltip-content
-                  :arviointiasteikonNimi="arviointiAsteikonNimi"
-                  :arviointiasteikonTasot="arviointiasteikonTasot"
-                />
-              </elsa-popover>
-            </template>
-            <template v-slot="{ uid }">
-              <elsa-form-multiselect
-                :id="uid"
-                v-model="form.arviointiasteikonTaso"
-                @input="$emit('skipRouteExitConfirm', false)"
-                :options="arviointiasteikonTasot"
-                :state="validateState('arviointiasteikonTaso')"
-                :custom-label="(value) => `${value.taso} ${value.nimi}`"
-                track-by="taso"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <span class="font-weight-700">{{ option.taso }}</span>
-                  {{ $t('arviointiasteikon-taso-' + option.nimi) }}
-                </template>
-                <template slot="option" slot-scope="{ option }">
-                  <span class="font-weight-700">{{ option.taso }}</span>
-                  {{ $t('arviointiasteikon-taso-' + option.nimi) }}
-                </template>
-              </elsa-form-multiselect>
-              <b-form-invalid-feedback :id="`${uid}-feedback`">
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
-            </template>
+        <div v-for="(kokonaisuus, index) in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
+          <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
+            {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
+            {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
+            <elsa-popover>
+              <template>
+                <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
+              </template>
+            </elsa-popover>
           </elsa-form-group>
-        </b-form-row>
+          <b-form-row>
+            <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
+              <template #label-help>
+                <elsa-popover>
+                  <elsa-arviointiasteikon-taso-tooltip-content
+                    :arviointiasteikonNimi="arviointiAsteikonNimi"
+                    :arviointiasteikonTasot="arviointiasteikonTasot"
+                  />
+                </elsa-popover>
+              </template>
+              <template v-slot="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="kokonaisuus.arviointiasteikonTaso"
+                  @input="$emit('skipRouteExitConfirm', false)"
+                  :options="arviointiasteikonTasot"
+                  :state="validateArvioitavaKokonaisuusState(index)"
+                  :custom-label="(value) => `${value.taso} ${value.nimi}`"
+                  track-by="taso"
+                >
+                  <template slot="singleLabel" slot-scope="{ option }">
+                    <span class="font-weight-700">{{ option.taso }}</span>
+                    {{ $t('arviointiasteikon-taso-' + option.nimi) }}
+                  </template>
+                  <template slot="option" slot-scope="{ option }">
+                    <span class="font-weight-700">{{ option.taso }}</span>
+                    {{ $t('arviointiasteikon-taso-' + option.nimi) }}
+                  </template>
+                </elsa-form-multiselect>
+                <b-form-invalid-feedback :id="`${uid}-feedback`">
+                  {{ $t('pakollinen-tieto') }}
+                </b-form-invalid-feedback>
+              </template>
+            </elsa-form-group>
+          </b-form-row>
+          <hr v-if="form.arvioitavatKokonaisuudet && form.arvioitavatKokonaisuudet.length > 1" />
+        </div>
+        <div v-if="form.arvioitavatKokonaisuudet && form.arvioitavatKokonaisuudet.length > 1">
+          <h3>{{ $t('yhteiset-arviointisisallot') }}</h3>
+          <p>{{ $t('yhteiset-arviointisisallot-kuvaus') }}</p>
+        </div>
         <b-form-row>
           <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-6">
             <template #label-help>
@@ -462,7 +483,7 @@
             variant="back"
             :to="{
               name: 'arviointi',
-              params: { arviointiId: this.$route.params.arviointiId }
+              params: { arviointiId: $route.params.arviointiId }
             }"
           >
             {{ $t('peruuta') }}
@@ -473,7 +494,7 @@
         </div>
       </div>
       <div class="row">
-        <elsa-form-error :active="this.$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError" />
       </div>
     </b-form>
   </div>
@@ -483,7 +504,7 @@
   import axios from 'axios'
   import Component from 'vue-class-component'
   import { Mixins, Prop, Vue } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
+  import { Validation, validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
@@ -533,8 +554,12 @@
     },
     validations: {
       form: {
-        arviointiasteikonTaso: {
-          required
+        arvioitavatKokonaisuudet: {
+          $each: {
+            arviointiasteikonTaso: {
+              required
+            }
+          }
         },
         sanallinenArviointi: {
           required
@@ -565,7 +590,7 @@
     // Joko arviointi tai itsearviointi
     form: SuoritusarviointiForm = {
       vaativuustaso: null,
-      arviointiasteikonTaso: null,
+      arvioitavatKokonaisuudet: null,
       sanallinenArviointi: null,
       arviointityokalut: [],
       arviointiPerustuu: null,
@@ -603,9 +628,14 @@
           vaativuustaso: vaativuustasot.find(
             (taso) => taso.arvo === this.value.itsearviointiVaativuustaso
           ),
-          arviointiasteikonTaso: this.arviointiasteikonTasot.find(
-            (asteikonTaso) => asteikonTaso.taso === this.value.itsearviointiArviointiasteikonTaso
-          ),
+          arvioitavatKokonaisuudet: this.value.arvioitavatKokonaisuudet.map((k) => {
+            return {
+              ...k,
+              arviointiasteikonTaso: this.arviointiasteikonTasot.find(
+                (asteikonTaso) => asteikonTaso.taso === k.itsearviointiArviointiasteikonTaso
+              )
+            }
+          }),
           sanallinenArviointi: this.value.sanallinenItsearviointi,
           arviointiAsiakirjaUpdated: false
         }
@@ -613,9 +643,14 @@
         this.form = {
           ...this.value,
           vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
-          arviointiasteikonTaso: this.arviointiasteikonTasot.find(
-            (asteikonTaso) => asteikonTaso.taso === this.value.arviointiasteikonTaso
-          ),
+          arvioitavatKokonaisuudet: this.value.arvioitavatKokonaisuudet.map((k) => {
+            return {
+              ...k,
+              arviointiasteikonTaso: this.arviointiasteikonTasot.find(
+                (asteikonTaso) => asteikonTaso.taso === k.arviointiasteikonTaso
+              )
+            }
+          }),
           sanallinenArviointi: this.value.sanallinenArviointi,
           arviointityokalut: this.value.arviointityokalut,
           arviointiPerustuu:
@@ -662,6 +697,12 @@
       return $dirty ? ($error ? false : null) : null
     }
 
+    validateArvioitavaKokonaisuusState(index: number) {
+      const { $dirty, $error } = this.$v.form?.arvioitavatKokonaisuudet?.$each[index]
+        ?.arviointiasteikonTaso as Validation
+      return $dirty ? ($error ? false : null) : null
+    }
+
     onArviointiFileAdded(files: File[]) {
       const file = files[0]
       Vue.set(this.form, 'arviointiAsiakirja', mapFile(file))
@@ -685,8 +726,16 @@
           'submit',
           {
             ...this.value,
+            arvioitavatKokonaisuudet: this.form.arvioitavatKokonaisuudet?.map((k) => {
+              return {
+                ...k,
+                itsearviointiArviointiasteikonTaso: (
+                  k.arviointiasteikonTaso as ArviointiasteikonTaso
+                ).taso,
+                arviointiasteikonTaso: null
+              }
+            }),
             itsearviointiVaativuustaso: this.form.vaativuustaso?.arvo,
-            itsearviointiArviointiasteikonTaso: this.form.arviointiasteikonTaso?.taso,
             sanallinenItsearviointi: this.form.sanallinenArviointi,
             arviointiasteikko: null
           },
@@ -697,8 +746,14 @@
           'submit',
           {
             ...this.value,
+            arvioitavatKokonaisuudet: this.form.arvioitavatKokonaisuudet?.map((k) => {
+              return {
+                ...k,
+                arviointiasteikonTaso: (k.arviointiasteikonTaso as ArviointiasteikonTaso).taso,
+                itsearviointiArviointiasteikonTaso: null
+              }
+            }),
             vaativuustaso: this.form.vaativuustaso?.arvo,
-            arviointiasteikonTaso: this.form.arviointiasteikonTaso?.taso,
             sanallinenArviointi: this.form.sanallinenArviointi,
             arviointityokalut: this.form.arviointityokalut,
             arviointiPerustuu: this.form.perustuuMuuhun
@@ -762,10 +817,9 @@
         font-weight: $font-weight-500;
       }
       tbody td:first-child {
-        padding-left: 0;
+        border-left: none;
       }
       tbody td:last-child {
-        padding-right: 0;
         border-right: none;
       }
     }

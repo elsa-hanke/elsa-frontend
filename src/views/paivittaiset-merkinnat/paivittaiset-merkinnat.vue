@@ -17,7 +17,7 @@
             </elsa-button>
             <hr />
             <div v-if="!loading">
-              <small>{{ $t('rajaa-merkintoja') | uppercase }}</small>
+              <small class="text-uppercase">{{ $t('rajaa-merkintoja') }}</small>
               <b-container fluid class="px-0 mt-2" :class="{ 'mb-md-5': !anyFilterSelected }">
                 <b-row>
                   <b-col md="4">

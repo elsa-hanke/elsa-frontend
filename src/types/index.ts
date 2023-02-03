@@ -642,6 +642,34 @@ export type Suoritusarviointi = {
   pyynnonAika: string
   lisatiedot: string | null
   itsearviointiVaativuustaso: number
+  sanallinenItsearviointi: string
+  itsearviointiAika: string
+  vaativuustaso: number
+  sanallinenArviointi: string
+  arviointiAika: string
+  lukittu: boolean
+  kommentit: SuoritusarvioinninKommentti[]
+  arvioinninAntajaId: number
+  arviointiasteikko: Arviointiasteikko
+  tyoskentelyjaksoId: number
+  arvioinninSaaja: Kayttaja
+  arvioinninAntaja: Kayttaja | null
+  arvioitavatKokonaisuudet: SuoritusarvioinninArvioitavaKokonaisuus[]
+  tyoskentelyjakso: Tyoskentelyjakso | null
+  arviointityokalut: Arviointityokalu[]
+  arviointiPerustuu: ArvioinninPerustuminen
+  muuPeruste: string
+  arviointiAsiakirja: Asiakirja
+  arviointiAsiakirjaUpdated: boolean
+}
+
+export type SuoritusarviointiByKokonaisuus = {
+  id?: number
+  tapahtumanAjankohta: string | null | Date
+  arvioitavaTapahtuma: string | null
+  pyynnonAika: string
+  lisatiedot: string | null
+  itsearviointiVaativuustaso: number
   itsearviointiArviointiasteikonTaso: number
   sanallinenItsearviointi: string
   itsearviointiAika: string
@@ -657,13 +685,21 @@ export type Suoritusarviointi = {
   tyoskentelyjaksoId: number
   arvioinninSaaja: Kayttaja
   arvioinninAntaja: Kayttaja | null
-  arvioitavaKokonaisuus: ArvioitavaKokonaisuus | null
   tyoskentelyjakso: Tyoskentelyjakso | null
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
   muuPeruste: string
   arviointiAsiakirja: Asiakirja
   arviointiAsiakirjaUpdated: boolean
+}
+
+export type SuoritusarvioinninArvioitavaKokonaisuus = {
+  id?: number
+  itsearviointiArviointiasteikonTaso: number | ArviointiasteikonTaso
+  arviointiasteikonTaso: number | ArviointiasteikonTaso | undefined
+  arvioitavaKokonaisuusId: number
+  arvioitavaKokonaisuus: ArvioitavaKokonaisuus | null
+  suoritusarviointiId: number
 }
 
 export type SuoritusarvioinninKommentti = {
@@ -694,7 +730,7 @@ export type ArvioitavaKokonaisuus = {
   voimassaoloLoppuu: string
   erikoisalaId: number
   kategoria: ArvioitavanKokonaisuudenKategoria
-  arvioinnit: Suoritusarviointi[]
+  arvioinnit: SuoritusarviointiByKokonaisuus[]
   visible: boolean
 }
 
@@ -761,7 +797,7 @@ export type Arviointityokalu = {
 
 export type SuoritusarviointiForm = {
   vaativuustaso: Vaativuustaso | null | undefined
-  arviointiasteikonTaso: ArviointiasteikonTaso | null | undefined
+  arvioitavatKokonaisuudet: SuoritusarvioinninArvioitavaKokonaisuus[] | null | undefined
   sanallinenArviointi: string | null
   arviointityokalut?: Arviointityokalu[]
   arviointiPerustuu?: ArvioinninPerustuminen | null
@@ -1050,7 +1086,15 @@ export type SeurantajaksonArviointiKategoria = {
 
 export type SeurantajaksonArviointiKokonaisuus = {
   nimi: string
-  arvioinnit: Suoritusarviointi[]
+  arvioinnit: SeurantajaksonArviointi[]
+}
+
+export type SeurantajaksonArviointi = {
+  arvioitavaTapahtuma: string
+  arviointiasteikonTaso: number
+  tapahtumanAjankohta: string
+  arviointiasteikko: Arviointiasteikko
+  suoritusarviointiId: number
 }
 
 export type SeurantajaksonTiedot = {
@@ -1065,7 +1109,7 @@ export type SeurantajaksonTiedot = {
 
 export type SeurantajaksonSuoritemerkinta = {
   suorite: string
-  suoritemerkinnat: Suoritusarviointi[]
+  suoritemerkinnat: Suoritemerkinta[]
 }
 
 export interface PageSort {
