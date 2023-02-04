@@ -8,12 +8,12 @@
             class="col-sm-12 col-md-6 pr-md-3"
             :required="true"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-input
                 :id="uid"
                 v-model="form.etunimi"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState('etunimi')"
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-input>
               <b-form-invalid-feedback :id="`${uid}-feedback`">
                 {{ $t('pakollinen-tieto') }}
@@ -25,12 +25,12 @@
             class="col-sm-12 col-md-6 pl-md-3"
             :required="true"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-input
                 :id="uid"
                 v-model="form.sukunimi"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState('sukunimi')"
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-input>
               <b-form-invalid-feedback :id="`${uid}-feedback`">
                 {{ $t('pakollinen-tieto') }}
@@ -39,12 +39,12 @@
           </elsa-form-group>
         </b-form-row>
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.sahkopostiosoite"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sahkopostiosoite')"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -52,12 +52,12 @@
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('sahkopostiosoite-uudelleen')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.sahkopostiosoiteUudelleen"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sahkopostiosoiteUudelleen')"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -68,15 +68,15 @@
         <h2>{{ $t('opintooikeus') }}</h2>
         <div class="border rounded p-3 mb-4">
           <elsa-form-group v-if="yliopistot.length > 1" :label="$t('yliopisto')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.yliopisto"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="yliopistot"
                 :state="validateState('yliopisto')"
                 :custom-label="(value) => $t(`yliopisto-nimi.${value.nimi}`)"
                 track-by="id"
+                @input="$emit('skipRouteExitConfirm', false)"
               />
               <b-form-invalid-feedback :id="`${uid}-feedback`">
                 {{ $t('pakollinen-tieto') }}
@@ -84,20 +84,20 @@
             </template>
           </elsa-form-group>
           <elsa-form-group v-else :label="$t('yliopisto')">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <span :id="uid">{{ $t(`yliopisto-nimi.${form.yliopisto.nimi}`) }}</span>
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('erikoisala')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.erikoisala"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="erikoisalatSorted"
                 :state="validateState('erikoisala')"
                 label="nimi"
                 track-by="id"
+                @input="$emit('skipRouteExitConfirm', false)"
                 @select="onErikoisalaSelected"
               />
               <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -106,7 +106,7 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('opiskelijatunnus')">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-input
                 :id="uid"
                 v-model="form.opiskelijatunnus"
@@ -123,14 +123,14 @@
               class="col-xs-12 col-sm-6 pr-sm-3"
               :required="true"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-datepicker
-                  ref="opiskeluoikeudenAlkamispaiva"
                   :id="uid"
+                  ref="opiskeluoikeudenAlkamispaiva"
                   :value.sync="form.opintooikeusAlkaa"
-                  @input="onOpiskeluoikeudenAlkamispaivaChange"
                   :max="maxAlkamispaiva"
-                  :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
+                  :max-error-text="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
+                  @input="onOpiskeluoikeudenAlkamispaivaChange"
                 ></elsa-form-datepicker>
               </template>
             </elsa-form-group>
@@ -139,44 +139,44 @@
               class="col-xs-12 col-sm-6 pl-sm-3"
               :required="true"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-datepicker
-                  ref="opiskeluoikeudenPaattymispaiva"
                   :id="uid"
+                  ref="opiskeluoikeudenPaattymispaiva"
                   :value.sync="form.opintooikeusPaattyy"
-                  @input="$emit('skipRouteExitConfirm', false)"
                   :min="minPaattymispaiva"
-                  :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+                  :min-error-text="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
                   class="datepicker-range"
+                  @input="$emit('skipRouteExitConfirm', false)"
                 ></elsa-form-datepicker>
               </template>
             </elsa-form-group>
           </b-form-row>
           <elsa-form-group :label="$t('asetus')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-radio-group
                 :id="uid"
                 v-model="form.asetusId"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="asetuksetSorted"
                 value-field="id"
                 text-field="nimi"
                 stacked
                 :state="validateState('asetusId')"
+                @input="$emit('skipRouteExitConfirm', false)"
               />
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('kaytossa-oleva-opintoopas')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.opintoopas"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="opintooppaatFilteredAndSorted"
                 :state="validateState('opintoopas')"
                 label="nimi"
                 value-field="id"
                 track-by="id"
+                @input="$emit('skipRouteExitConfirm', false)"
               />
               <b-form-invalid-feedback :id="`${uid}-feedback`">
                 {{ $t('pakollinen-tieto') }}
@@ -184,10 +184,10 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('osaamisen-arvioinnin-oppaan-paivamaara')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-datepicker
-                ref="osaamisenArvioinninOppaanPvm"
                 :id="uid"
+                ref="osaamisenArvioinninOppaanPvm"
                 :value.sync="form.osaamisenArvioinninOppaanPvm"
                 @input="$emit('skipRouteExitConfirm', false)"
               ></elsa-form-datepicker>
@@ -198,12 +198,12 @@
           <elsa-button :loading="saving" type="submit" variant="primary" class="ml-2 mb-2">
             {{ $t('tallenna') }}
           </elsa-button>
-          <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+          <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
             {{ $t('peruuta') }}
           </elsa-button>
         </div>
         <div class="row">
-          <elsa-form-error :active="this.$v.$anyError" />
+          <elsa-form-error :active="$v.$anyError" />
         </div>
       </b-form>
     </div>

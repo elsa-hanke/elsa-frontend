@@ -8,23 +8,23 @@
           <hr />
           <div v-if="kayttajaWrapper">
             <elsa-form-group :label="$t('tilin-tila')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid" :class="tilaColor">{{ tilinTilaText }}</span>
               </template>
             </elsa-form-group>
             <elsa-form-group v-if="rooli" :label="$t('rooli')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ rooli }}</span>
               </template>
             </elsa-form-group>
             <b-form-row>
               <elsa-form-group :label="$t('etunimi')" class="col-sm-12 col-md-6 pr-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">{{ etunimi }}</span>
                 </template>
               </elsa-form-group>
               <elsa-form-group :label="$t('sukunimi')" class="col-sm-12 col-md-6 pl-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">{{ sukunimi }}</span>
                 </template>
               </elsa-form-group>
@@ -33,14 +33,14 @@
               :required="editing && isKutsuttu"
               :label="$t('yliopiston-kayttajatunnus')"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <div v-if="editing && isKutsuttu">
                   <b-form-input
-                    class="col-sm-12 col-md-6 pr-md-3"
                     :id="uid"
                     v-model="form.eppn"
-                    @input="skipRouteExitConfirm = false"
+                    class="col-sm-12 col-md-6 pr-md-3"
                     :state="validateState('eppn')"
+                    @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
                     {{ $t('pakollinen-tieto') }}
@@ -53,12 +53,12 @@
             </elsa-form-group>
             <div v-if="editing">
               <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
                     v-model="form.sahkoposti"
-                    @input="skipRouteExitConfirm = false"
                     :state="validateState('sahkoposti')"
+                    @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     v-if="!$v.form.sahkoposti.required"
@@ -72,12 +72,12 @@
                 </template>
               </elsa-form-group>
               <elsa-form-group :label="$t('sahkopostiosoite-uudelleen')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
                     v-model="form.sahkopostiUudelleen"
-                    @input="skipRouteExitConfirm = false"
                     :state="validateState('sahkopostiUudelleen')"
+                    @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     v-if="!$v.form.sahkopostiUudelleen.required"
@@ -106,7 +106,7 @@
             </div>
             <div v-else>
               <elsa-form-group :label="$t('sahkopostiosoite')">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">
                     {{ form.sahkoposti }}
                   </span>
@@ -118,18 +118,18 @@
               <elsa-button
                 v-if="editing"
                 variant="primary"
-                @click="onSave"
                 :loading="updatingKayttaja"
                 class="mb-3 ml-3"
+                @click="onSave"
               >
                 {{ $t('tallenna') }}
               </elsa-button>
               <elsa-button
                 v-else
                 variant="primary"
-                @click="onEditUser"
                 :disabled="updatingTila"
                 class="mb-3 ml-3"
+                @click="onEditUser"
               >
                 {{ $t('muokkaa-kayttajaa') }}
               </elsa-button>
@@ -138,8 +138,8 @@
                 variant="outline-success"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
-                @click="onActivateKayttaja"
                 class="mb-3"
+                @click="onActivateKayttaja"
               >
                 {{ $t('aktivoi-kayttaja') }}
               </elsa-button>
@@ -148,8 +148,8 @@
                 variant="outline-danger"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
-                @click="onPassivateKayttaja"
                 class="mb-3"
+                @click="onPassivateKayttaja"
               >
                 {{ $t('passivoi-kayttaja') }}
               </elsa-button>
@@ -157,8 +157,8 @@
                 v-if="editing"
                 variant="back"
                 :disabled="updatingKayttaja"
-                @click.stop.prevent="onCancel"
                 class="mb-3 mr-3"
+                @click.stop.prevent="onCancel"
               >
                 {{ $t('peruuta') }}
               </elsa-button>
@@ -179,7 +179,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <elsa-form-error :active="this.$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError" />
       </b-row>
     </b-container>
   </div>

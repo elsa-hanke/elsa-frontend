@@ -4,10 +4,10 @@
       v-if="form.koulutusjaksot.length > 0 && uusiJakso"
       :label="$t('koulutusjakso')"
     >
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <div
-          :id="uid"
           v-for="koulutusjakso in form.koulutusjaksot"
+          :id="uid"
           :key="koulutusjakso.id"
           class="mb-1"
         >
@@ -33,8 +33,8 @@
             label-cols="12"
             class="align-items-center mb-md-0 ml-md-0 kouluttaja-form-input"
           >
-            <template v-slot="{ uid }">
-              <span :id="uid" v-if="form.alkamispaiva != null">
+            <template #default="{ uid }">
+              <span v-if="form.alkamispaiva != null" :id="uid">
                 {{ $date(form.alkamispaiva) }} - {{ $date(form.paattymispaiva) }}
               </span>
             </template>
@@ -45,7 +45,7 @@
     <b-row v-else>
       <b-col>
         <elsa-form-group :label="$t('seurantajakso')" class="mb-0">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid" class="mb-1">
               <span v-if="form.alkamispaiva != null">
                 {{ $date(form.alkamispaiva) }} - {{ $date(form.paattymispaiva) }}
@@ -56,9 +56,9 @@
       </b-col>
       <b-col>
         <elsa-button
-          @click.stop.prevent="onUusiHaku"
           variant="outline-primary"
           class="mt-2 float-right uusihaku"
+          @click.stop.prevent="onUusiHaku"
         >
           {{ $t('tee-uusi-haku') }}
         </elsa-button>
@@ -70,10 +70,10 @@
     <div v-if="seurantajaksonTiedot.osaamistavoitteet.length > 0">
       <h3 class="mb-3">{{ $t('suunnitellut-tavoitteet') }}</h3>
       <elsa-form-group :label="$t('osaamistavoitteet-omalla-erikoisalalla')">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-badge
-            :id="uid"
             v-for="osaamistavoite in seurantajaksonTiedot.osaamistavoitteet"
+            :id="uid"
             :key="osaamistavoite"
             pill
             variant="light"
@@ -87,10 +87,10 @@
         v-if="seurantajaksonTiedot.muutOsaamistavoitteet.length > 0"
         :label="$t('muut-osaamistavoitteet')"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div
-            :id="uid"
             v-for="muutavoite in seurantajaksonTiedot.muutOsaamistavoitteet"
+            :id="uid"
             :key="muutavoite"
             class="mb-1"
           >
@@ -117,14 +117,17 @@
           <h4>{{ kategoria.nimi }}</h4>
           <hr class="mt-0 mb-0" />
         </div>
-        <div v-for="(oa, index) in kategoria.arvioitavatKokonaisuudet" :key="index">
+        <div
+          v-for="(oa, kokonaisuusIndex) in kategoria.arvioitavatKokonaisuudet"
+          :key="kokonaisuusIndex"
+        >
           <p class="font-weight-500 pt-2 mb-1">{{ oa.nimi }}</p>
 
-          <b-card-group class="mt-2" v-if="!$screen.sm" deck>
+          <b-card-group v-if="!$screen.sm" class="mt-2" deck>
             <b-card
+              v-for="(arviointi, arviointiIndex) in oa.arvioinnit"
+              :key="`arviointi-${arviointiIndex}`"
               class="mt-2 border"
-              v-for="(arviointi, index) in oa.arvioinnit"
-              :key="`arviointi-${index}`"
             >
               <b-card-text>
                 <h5 class="mb-3">{{ arviointi.arvioitavaTapahtuma }}</h5>
@@ -170,7 +173,10 @@
               </b-tr>
             </b-thead>
             <b-tbody>
-              <b-tr v-for="(arviointi, index) in oa.arvioinnit" :key="`arviointi-${index}`">
+              <b-tr
+                v-for="(arviointi, arviointiIndex) in oa.arvioinnit"
+                :key="`arviointi-${arviointiIndex}`"
+              >
                 <b-td :stacked-heading="$t('tapahtuma')">
                   {{ arviointi.arvioitavaTapahtuma }}
                 </b-td>
@@ -210,8 +216,8 @@
 
     <b-collapse id="suoritemerkinnat-toggle" visible class="mb-4">
       <b-card-group
-        class="mt-2"
         v-if="!$screen.sm && seurantajaksonTiedot.suoritemerkinnat.length > 0"
+        class="mt-2"
         deck
       >
         <template
@@ -220,9 +226,9 @@
           ) in seurantajaksonTiedot.suoritemerkinnat"
         >
           <b-card
-            class="mt-2 border"
             v-for="(suoritemerkinta, index) in seurantajaksonSuoritemerkinta.suoritemerkinnat"
             :key="`suoritemerkinta-${seurantajaksonSuoritemerkintaIndex}-${index}`"
+            class="mt-2 border"
           >
             <b-card-text>
               <h5 class="mb-3">{{ seurantajaksonSuoritemerkinta.suorite }}</h5>
@@ -328,14 +334,14 @@
 
     <b-collapse id="teoriakoulutukset-toggle" visible class="mb-4">
       <b-card-group
-        class="mt-2"
         v-if="!$screen.sm && seurantajaksonTiedot.teoriakoulutukset.length > 0"
+        class="mt-2"
         deck
       >
         <b-card
-          class="mt-2 border"
           v-for="(koulutus, index) in seurantajaksonTiedot.teoriakoulutukset"
           :key="`teoriakoulutus-${index}`"
+          class="mt-2 border"
         >
           <b-card-text>
             <h5 class="mb-3">{{ koulutus.koulutuksenNimi }}</h5>
@@ -417,13 +423,13 @@
     <h3 class="mb-3">{{ $t('erikoistujan-oma-arviointi') }}</h3>
     <div v-if="editing && $isErikoistuva()">
       <elsa-form-group :label="$t('oma-arviointi-seurantajaksolta')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
             v-model="form.omaArviointi"
-            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('omaArviointi')"
             rows="3"
+            @input="$emit('skipRouteExitConfirm', false)"
           />
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -431,43 +437,37 @@
         </template>
         <template #label-help>
           <elsa-popover>
-            <template>
-              {{ $t('oma-arviointi-seurantajaksolta-ohje') }}
-            </template>
+            {{ $t('oma-arviointi-seurantajaksolta-ohje') }}
           </elsa-popover>
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('lisahuomioita')">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
             v-model="form.lisahuomioita"
-            @input="$emit('skipRouteExitConfirm', false)"
             rows="3"
+            @input="$emit('skipRouteExitConfirm', false)"
           />
         </template>
         <template #label-help>
           <elsa-popover>
-            <template>
-              {{ $t('lisahuomioita-ohje') }}
-            </template>
+            {{ $t('lisahuomioita-ohje') }}
           </elsa-popover>
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('seuraavan-jakson-tavoitteet')">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
             v-model="form.seuraavanJaksonTavoitteet"
-            @input="$emit('skipRouteExitConfirm', false)"
             rows="3"
+            @input="$emit('skipRouteExitConfirm', false)"
           />
         </template>
         <template #label-help>
           <elsa-popover>
-            <template>
-              {{ $t('seuraavan-jakson-tavoitteet-ohje') }}
-            </template>
+            {{ $t('seuraavan-jakson-tavoitteet-ohje') }}
           </elsa-popover>
         </template>
       </elsa-form-group>
@@ -477,12 +477,12 @@
         v-if="form.omaArviointi != null"
         :label="$t('oma-arviointi-seurantajaksolta')"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div :id="uid">{{ form.omaArviointi }}</div>
         </template>
       </elsa-form-group>
       <elsa-form-group v-if="form.lisahuomioita != null" :label="$t('lisahuomioita')">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div :id="uid">{{ form.lisahuomioita }}</div>
         </template>
       </elsa-form-group>
@@ -490,7 +490,7 @@
         v-if="form.seuraavanJaksonTavoitteet != null"
         :label="$t('seuraavan-jakson-tavoitteet')"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div :id="uid">{{ form.seuraavanJaksonTavoitteet }}</div>
         </template>
       </elsa-form-group>
@@ -513,20 +513,20 @@
             :required="true"
             @submit="onKouluttajaSubmit"
           >
-            <template v-slot:modal-content="{ submit, cancel }">
+            <template #modal-content="{ submit, cancel }">
               <kouluttaja-form @submit="submit" @cancel="cancel" />
             </template>
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
-                v-model="form.kouluttaja"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :id="uid"
+                v-model="form.kouluttaja"
                 :options="formattedKouluttajat"
                 :state="validateState('kouluttaja')"
                 label="nimi"
                 track-by="nimi"
+                @input="$emit('skipRouteExitConfirm', false)"
               >
-                <template v-slot:option="{ option }">
+                <template #option="{ option }">
                   <div v-if="option.nimi != null">{{ option.nimi }}</div>
                 </template>
               </elsa-form-multiselect>
@@ -542,7 +542,7 @@
             class="mb-0"
             :label="$t('lahikouluttaja')"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <div :id="uid">{{ form.kouluttaja.nimi }}</div>
             </template>
           </elsa-form-group>
@@ -560,14 +560,14 @@
           :required="true"
           class="mb-1"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-radio-group
               :id="uid"
               v-model="form.edistyminenTavoitteidenMukaista"
-              @input="$emit('skipRouteExitConfirm', false)"
               :options="edistyminenVaihtoehdot"
               :state="validateState('edistyminenTavoitteidenMukaista')"
               stacked
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-radio-group>
             <b-form-invalid-feedback
               :id="`${uid}-feedback`"
@@ -583,13 +583,13 @@
           :required="true"
           class="mb-0 ml-4"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.huolenaiheet"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('huolenaiheet')"
               rows="3"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -601,13 +601,13 @@
           :required="true"
           class="mt-4"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.kouluttajanArvio"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('kouluttajanArvio')"
               rows="3"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -615,62 +615,56 @@
           </template>
           <template #label-help>
             <elsa-popover>
-              <template>
-                {{ $t('lahikouluttajan-arviointi-jaksosta-ohje') }}
-              </template>
+              {{ $t('lahikouluttajan-arviointi-jaksosta-ohje') }}
             </elsa-popover>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('erikoisalan-tyoskentelyvalmiudet')" class="mt-4">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.erikoisalanTyoskentelyvalmiudet"
-              @input="$emit('skipRouteExitConfirm', false)"
               rows="3"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
           </template>
           <template #label-help>
             <elsa-popover>
-              <template>
-                {{ $t('erikoisalan-tyoskentelyvalmiudet-ohje') }}
-              </template>
+              {{ $t('erikoisalan-tyoskentelyvalmiudet-ohje') }}
             </elsa-popover>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('jatkotoimet-ja-raportointi')" class="mt-4">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.jatkotoimetJaRaportointi"
-              @input="$emit('skipRouteExitConfirm', false)"
               rows="3"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
           </template>
           <template #label-help>
             <elsa-popover>
-              <template>
-                {{ $t('jatkotoimet-ja-raportointi-ohje') }}
-              </template>
+              {{ $t('jatkotoimet-ja-raportointi-ohje') }}
             </elsa-popover>
           </template>
         </elsa-form-group>
       </div>
       <div v-else>
         <elsa-form-group :label="$t('edistyminen-osaamistavoitteiden-mukaista')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid">
               {{ form.edistyminenTavoitteidenMukaista ? $t('kylla') : $t('ei-huolenaiheita-on') }}
             </div>
           </template>
         </elsa-form-group>
         <elsa-form-group v-if="form.huolenaiheet != null" :label="$t('huolenaiheet')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid">{{ form.huolenaiheet }}</div>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('lahikouluttajan-arviointi-jaksosta')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid">{{ form.kouluttajanArvio }}</div>
           </template>
         </elsa-form-group>
@@ -678,7 +672,7 @@
           v-if="form.erikoisalanTyoskentelyvalmiudet != null"
           :label="$t('erikoisalan-tyoskentelyvalmiudet')"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid">{{ form.erikoisalanTyoskentelyvalmiudet }}</div>
           </template>
         </elsa-form-group>
@@ -686,7 +680,7 @@
           v-if="form.jatkotoimetJaRaportointi != null"
           :label="$t('jatkotoimet-ja-raportointi')"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid">{{ form.jatkotoimetJaRaportointi }}</div>
           </template>
         </elsa-form-group>
@@ -705,14 +699,14 @@
           :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
           :required="!uusiJakso"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.seurantakeskustelunYhteisetMerkinnat"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('seurantakeskustelunYhteisetMerkinnat')"
               :disabled="uusiJakso"
               rows="3"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -724,17 +718,17 @@
             class="col-xs-12 col-sm-4 mb-2"
             :label="$t('seuraavan-keskustelun-ajankohta')"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-datepicker
-                ref="seuraavanKeskustelunAjankohta"
                 :id="uid"
+                ref="seuraavanKeskustelunAjankohta"
                 :value.sync="form.seuraavanKeskustelunAjankohta"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :initial-date="minSeuraavaKeskustelu"
                 :disabled="uusiJakso"
                 :min="minAlkamispaiva"
-                :minErrorText="$t('paivamaara-ei-voi-olla-menneisyydessa')"
+                :min-error-text="$t('paivamaara-ei-voi-olla-menneisyydessa')"
                 :required="false"
+                @input="$emit('skipRouteExitConfirm', false)"
               ></elsa-form-datepicker>
             </template>
           </elsa-form-group>
@@ -746,7 +740,7 @@
             class="mt-3"
             :label="$t('yhteiset-merkinnat-keskustelusta-ja-jatkosuunnitelmista')"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <div :id="uid">{{ form.seurantakeskustelunYhteisetMerkinnat }}</div>
             </template>
           </elsa-form-group>
@@ -754,7 +748,7 @@
             v-if="form.seuraavanKeskustelunAjankohta != null"
             :label="$t('seuraavan-keskustelun-ajankohta')"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <div :id="uid">{{ $date(form.seuraavanKeskustelunAjankohta) }}</div>
             </template>
           </elsa-form-group>
@@ -783,20 +777,20 @@
         "
         :loading="params.deleting"
         variant="outline-danger"
-        @click="onSeurantajaksoDelete"
         class="mb-2"
+        @click="onSeurantajaksoDelete"
       >
         {{ $t('poista-seurantajakso') }}
       </elsa-button>
       <elsa-button
         v-if="$isKouluttaja() && form.seurantakeskustelunYhteisetMerkinnat != null"
-        variant="outline-primary"
         v-b-modal.return-to-sender
+        variant="outline-primary"
         class="mb-2"
       >
         {{ $t('palauta-muokattavaksi') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+      <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
@@ -827,7 +821,7 @@
     <elsa-confirmation-modal
       id="confirm-modal"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :submitText="$t('tallenna-ja-laheta')"
+      :submit-text="$t('tallenna-ja-laheta')"
       @submit="onSend"
     >
       <template #modal-content>

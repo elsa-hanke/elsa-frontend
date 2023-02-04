@@ -8,18 +8,18 @@
           <hr />
           <div v-if="poissaoloWrapper">
             <elsa-form-group :label="$t('poissaolon-syy')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ poissaoloWrapper.poissaolonSyy.nimi }}</span>
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('tyoskentelyjakso')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ poissaoloWrapper.tyoskentelyjakso.label }}</span>
               </template>
             </elsa-form-group>
             <b-form-row>
               <elsa-form-group :label="$t('alkamispaiva')" class="col-sm-12 col-md-6 pr-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">
                     {{ poissaoloWrapper.alkamispaiva ? $date(poissaoloWrapper.alkamispaiva) : '' }}
                   </span>
@@ -30,7 +30,7 @@
                 :label="$t('paattymispaiva')"
                 class="col-sm-12 col-md-6 pl-md-3"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid" class="datepicker-range">
                     {{ $date(poissaoloWrapper.paattymispaiva) }}
                   </span>
@@ -38,7 +38,7 @@
               </elsa-form-group>
             </b-form-row>
             <elsa-form-group :label="$t('poissaolo-nykyisesta-taydesta-tyoajasta') + ' (%)'">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ poissaoloWrapper.poissaoloprosentti }} %</span>
               </template>
             </elsa-form-group>

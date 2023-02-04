@@ -12,18 +12,18 @@
       :deselect-group-label="deselectGroupLabelText"
       :allow-empty="allowEmpty"
       :max="max"
-      :customLabel="customLabel"
-      v-on="$listeners"
+      :custom-label="customLabel"
       :class="{ 'is-invalid': isInvalid, 'is-valid': isValid }"
+      v-on="$listeners"
     >
       <template slot="maxElements">{{ $t('valittuna-enimmäismaara', { max }) }}</template>
       <template slot="noResult">{{ $t('ei-hakutuloksia') }}</template>
       <template slot="noOptions">{{ $t('ei-vaihtoehtoja') }}</template>
-      <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+      <template v-for="(index, name) in $scopedSlots" #[name]="data">
         <slot :name="name" v-bind="data"></slot>
       </template>
       <template v-if="$attrs.value && !$attrs.taggable" slot="clear">
-        <b-button variant="link" @click="clearMultiselect" class="clear-button p-0 m-0 border-0">
+        <b-button variant="link" class="clear-button p-0 m-0 border-0" @click="clearMultiselect">
           <font-awesome-layers>
             <font-awesome-icon icon="circle" />
             <font-awesome-icon icon="times" class="times" transform="shrink-4" />

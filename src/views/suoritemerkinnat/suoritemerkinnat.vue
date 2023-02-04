@@ -26,10 +26,10 @@
                       {{ arviointiAsteikonNimi(suoritteetTable.arviointiasteikko) }}
                       <elsa-popover>
                         <elsa-arviointiasteikon-taso-tooltip-content
-                          :arviointiasteikonNimi="
+                          :arviointiasteikon-nimi="
                             arviointiAsteikonNimi(suoritteetTable.arviointiasteikko)
                           "
-                          :arviointiasteikonTasot="suoritteetTable.arviointiasteikko.tasot"
+                          :arviointiasteikon-tasot="suoritteetTable.arviointiasteikko.tasot"
                         />
                       </elsa-popover>
                     </b-th>
@@ -39,22 +39,22 @@
                   </b-tr>
                 </b-thead>
                 <b-tbody>
-                  <template v-for="(row, index) in kategoria.rows">
+                  <template v-for="(row, kategoriaIndex) in kategoria.rows">
                     <div
+                      v-if="kategoriaIndex === 0 && !$screen.md"
+                      :key="`header-${kategoriaIndex}`"
                       class="text-uppercase text-size-sm"
-                      v-if="index === 0 && !$screen.md"
-                      :key="`header-${index}`"
                     >
                       {{ `${$t('suorite')}: ${kategoria.nimi}` }}
                     </div>
                     <b-tr
+                      :key="kategoriaIndex"
                       :class="{
                         'row-details': row.details,
                         'details-showing': row.suoritemerkinta && row.suoritemerkinta.showDetails,
                         'mt-1': index === 0,
                         last: row.lastDetails
                       }"
-                      :key="index"
                     >
                       <b-td>
                         <div v-if="!row.details" class="d-flex align-items-center">

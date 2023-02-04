@@ -7,7 +7,7 @@
           <h1>{{ $t('opintoopas') }}</h1>
           <hr />
           <div v-if="!loading">
-            <opintoopas-form :opas="opas" :erikoisalaId="$route.params.erikoisalaId" />
+            <opintoopas-form :opas="opas" :erikoisala-id="$route.params.erikoisalaId" />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 :to="{ name: 'muokkaa-opintoopasta' }"

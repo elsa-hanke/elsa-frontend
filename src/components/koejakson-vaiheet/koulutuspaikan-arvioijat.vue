@@ -14,20 +14,20 @@
           :required="true"
           @submit="onLahikouluttajaSubmit"
         >
-          <template v-slot:modal-content="{ submit, cancel }">
+          <template #modal-content="{ submit, cancel }">
             <kouluttaja-form @submit="submit" @cancel="cancel" />
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-multiselect
-              v-model="form.lahikouluttaja"
               :id="uid"
+              v-model="form.lahikouluttaja"
               :options="lahikouluttajatList"
               :state="validateState('lahikouluttaja')"
               label="nimi"
               track-by="nimi"
               @select="onLahikouluttajaSelect"
             >
-              <template v-slot:option="{ option }">
+              <template #option="{ option }">
                 <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
               </template>
             </elsa-form-multiselect>
@@ -44,20 +44,20 @@
           :required="true"
           @submit="onLahiesimiesSubmit"
         >
-          <template v-slot:modal-content="{ submit, cancel }">
+          <template #modal-content="{ submit, cancel }">
             <kouluttaja-form @submit="submit" @cancel="cancel" />
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-multiselect
-              v-model="form.lahiesimies"
               :id="uid"
+              v-model="form.lahiesimies"
               :options="lahiesimiesList"
               :state="validateState('lahiesimies')"
               label="nimi"
               track-by="nimi"
               @select="onLahiesimiesSelect"
             >
-              <template v-slot:option="{ option }">
+              <template #option="{ option }">
                 <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
               </template>
             </elsa-form-multiselect>

@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('teoriakoulutukset') }}</h1>
-          <p v-html="$t('teoriakoulutukset-ingressi', { opintooppaastaLinkki, kopiLinkki })" />
+          <p>{{ $t('teoriakoulutukset-ingressi', { opintooppaastaLinkki, kopiLinkki }) }}</p>
           <elsa-vanha-asetus-varoitus />
           <elsa-button
             v-if="muokkausoikeudet"
@@ -19,15 +19,15 @@
             <div class="d-flex justify-content-center border rounded pt-3 mb-4">
               <b-container fluid>
                 <elsa-form-group :label="$t('teoriakoulutusaika-yhteensa')">
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <div :id="uid">
                       <elsa-progress-bar
                         :value="suoritettuTeoriakoulutusMaara"
                         :min-required="erikoisalanVaatimaTeoriakoulutustenVahimmaismaara"
                         :show-required-text="true"
                         color="#41b257"
-                        backgroundColor="#b3e1bc"
-                        :customUnit="$t('t')"
+                        background-color="#b3e1bc"
+                        :custom-unit="$t('t')"
                       />
                     </div>
                   </template>
@@ -51,10 +51,10 @@
                 <template #cell(todistus)="row">
                   <div v-for="todistus in row.item.todistukset" :key="todistus.id">
                     <elsa-button
-                      @click="onViewAsiakirja(todistus)"
                       variant="link"
                       class="p-0 border-0 shadow-none"
                       :loading="todistus.disablePreview"
+                      @click="onViewAsiakirja(todistus)"
                     >
                       {{ todistus.nimi }}
                     </elsa-button>

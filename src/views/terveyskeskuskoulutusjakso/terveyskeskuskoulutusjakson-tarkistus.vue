@@ -54,7 +54,7 @@
             <terveyskeskuskoulutusjakso-form
               :hyvaksynta="hyvaksynta"
               :editable="editable"
-              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+              :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
               @submit="onSubmit"
               @cancel="onCancel"
             />

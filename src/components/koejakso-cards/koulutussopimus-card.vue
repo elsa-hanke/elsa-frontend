@@ -3,10 +3,10 @@
     <div class="container-fluid">
       <h2>{{ $t('koulutussopimus') }}</h2>
       <koejakso-card-content v-if="tila === lomaketilat.UUSI">
-        <template v-slot:content>
-          <span class="pr-6" v-html="$t('koulutussopimus-tila-uusi')" />
+        <template #content>
+          <span class="pr-6">{{ $t('koulutussopimus-tila-uusi') }}</span>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button
             v-if="!account.impersonated"
             variant="primary"
@@ -19,18 +19,17 @@
       </koejakso-card-content>
 
       <koejakso-card-content v-if="tila === lomaketilat.TALLENNETTU_KESKENERAISENA">
-        <template v-slot:content>
+        <template #content>
           <div>
             <font-awesome-icon :icon="['far', 'clock']" class="text-warning mr-2" />
           </div>
           <div>
-            <span
-              class="pr-6 mb-2"
-              v-html="$t('koulutussopimus-tila-tallennettu-keskeneraisena')"
-            />
+            <span class="pr-6 mb-2">
+              {{ $t('koulutussopimus-tila-tallennettu-keskeneraisena') }}
+            </span>
           </div>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
             {{
               account.impersonated ? $t('nayta-koulutussopimus') : $t('viimeistele-koulutussopimus')
@@ -47,10 +46,10 @@
           tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA
         "
       >
-        <template v-slot:content>
-          <p class="pr-6 mb-2" v-html="$t('koulutussopimus-tila-odottaa-hyvaksyntaa')" />
+        <template #content>
+          <p class="pr-6 mb-2">{{ $t('koulutussopimus-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
             {{ $t('nayta-koulutussopimus') }}
           </elsa-button>
@@ -58,7 +57,7 @@
       </koejakso-card-content>
 
       <koejakso-card-content v-if="tila === lomaketilat.PALAUTETTU_KORJATTAVAKSI">
-        <template v-slot:content>
+        <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-danger mr-2" />
           </div>
@@ -72,7 +71,7 @@
             </div>
           </div>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
             {{
               account.impersonated ? $t('nayta-koulutussopimus') : $t('viimeistele-koulutussopimus')
@@ -82,7 +81,7 @@
       </koejakso-card-content>
 
       <koejakso-card-content v-if="tila === lomaketilat.ALLEKIRJOITETTU">
-        <template v-slot:content>
+        <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
@@ -93,7 +92,7 @@
             </span>
           </div>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button variant="primary" class="mb-4" :to="{ name: url }">
             {{ $t('nayta-koulutussopimus') }}
           </elsa-button>

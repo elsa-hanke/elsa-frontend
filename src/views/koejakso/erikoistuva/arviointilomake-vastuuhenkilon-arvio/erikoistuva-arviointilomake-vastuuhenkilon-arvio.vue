@@ -63,14 +63,14 @@
               </div>
             </b-alert>
             <div v-if="editable">
-              <div class="text-error" v-if="formData.tyoskentelyjaksoLiitetty === false">
+              <div v-if="formData.tyoskentelyjaksoLiitetty === false" class="text-error">
                 {{ $t('tyoskentelyjaksoa-ei-liitetty-koejaksoon') }}
               </div>
               <div v-else>
-                <div class="text-error" v-if="formData.tyoskentelyjaksonPituusRiittava === false">
+                <div v-if="formData.tyoskentelyjaksonPituusRiittava === false" class="text-error">
                   {{ $t('tyoskentelyjakson-pituus-alle-6-kk') }}
                 </div>
-                <div class="text-error" v-if="formData.tyotodistusLiitetty === false">
+                <div v-if="formData.tyotodistusLiitetty === false" class="text-error">
                   {{ $t('tyotodistusta-ei-liitetty-tyoskentelyjaksoon') }}
                 </div>
               </div>
@@ -113,13 +113,13 @@
           <b-row>
             <b-col lg="4">
               <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
                     v-model="form.erikoistuvanSahkoposti"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState('erikoistuvanSahkoposti')"
                     :value="account.erikoistuvaLaakari.sahkoposti"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback
                     v-if="!$v.form.erikoistuvanSahkoposti.required"
@@ -129,8 +129,8 @@
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
                     v-if="!$v.form.erikoistuvanSahkoposti.email"
-                    :state="validateState('erikoistuvanSahkoposti')"
                     :id="`${uid}-feedback`"
+                    :state="validateState('erikoistuvanSahkoposti')"
                   >
                     {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                   </b-form-invalid-feedback>
@@ -140,13 +140,13 @@
 
             <b-col lg="4">
               <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
                     v-model="form.erikoistuvanPuhelinnumero"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState('erikoistuvanPuhelinnumero')"
                     :value="account.erikoistuvaLaakari.puhelinnumero"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
                     {{ $t('pakollinen-tieto') }}
@@ -159,7 +159,7 @@
           <b-row v-if="muutOpintooikeudetEnabled">
             <b-col>
               <elsa-form-group :label="$t('useampi-opinto-oikeus')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <p class="mb-3">
                     {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja-ingressi') }}
                   </p>
@@ -167,8 +167,8 @@
                     :id="uid"
                     v-model="form.paataOpintooikeudet"
                     :state="validateState('paataOpintooikeudet')"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     class="py-0"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja') }}
                     <label class="d-block">
@@ -190,13 +190,13 @@
           <b-row v-if="!koulutussopimuksenHyvaksynta">
             <b-col>
               <elsa-form-group :label="$t('koulutussopimus')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-checkbox
                     :id="uid"
                     v-model="form.koulutussopimusHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState('koulutussopimusHyvaksytty')"
                     class="py-0"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus') }}
                   </b-form-checkbox>
@@ -210,13 +210,13 @@
           <b-row>
             <b-col>
               <elsa-form-group :label="$t('koulutussuunnitelma')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-checkbox
                     :id="uid"
                     v-model="form.koulutussuunnitelmaHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState('koulutussuunnitelmaHyvaksytty')"
                     class="py-0"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}
                   </b-form-checkbox>
@@ -317,18 +317,18 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onConfirm('confirm-send')"
                 :disabled="hasTyoskentelyjaksoErrors"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
+                @click="onConfirm('confirm-send')"
               >
                 {{ $t('laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
           <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </b-row>
         </div>
       </div>
@@ -341,7 +341,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-pyyda-vastuuhenkilon-arvio')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSend"
     />
   </div>

@@ -191,19 +191,19 @@
                 {{ $t('peruuta') }}
               </elsa-button>
               <elsa-button
+                v-b-modal.return-to-sender
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 variant="outline-primary"
                 :disabled="buttonStates.primaryButtonLoading"
                 :loading="buttonStates.secondaryButtonLoading"
-                v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
               <elsa-button
+                v-if="!$isVastuuhenkilo()"
                 class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
-                v-if="!$isVastuuhenkilo()"
                 :disabled="buttonStates.secondaryButtonLoading"
                 :loading="buttonStates.primaryButtonLoading"
                 type="submit"
@@ -212,9 +212,9 @@
                 {{ $t('hyvaksy-laheta') }}
               </elsa-button>
               <elsa-button
+                v-if="$isVastuuhenkilo()"
                 class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
-                v-if="$isVastuuhenkilo()"
                 :disabled="buttonStates.secondaryButtonLoading"
                 :loading="buttonStates.primaryButtonLoading"
                 type="submit"
@@ -245,14 +245,14 @@
           ? $t('vahvista-koulutussopimus-kouluttajat-hyvaksytty')
           : $t('vahvista-koulutussopimus-kouluttaja-hyvaksytty')
       "
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="updateSentForm"
     />
     <elsa-confirmation-modal
       id="confirm-send-vastuuhenkilo"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koulutussopimus-hyvaksytty')"
-      :submitText="$t('laheta-allekirjoitettavaksi')"
+      :submit-text="$t('laheta-allekirjoitettavaksi')"
       @submit="updateSentForm"
     />
     <elsa-return-to-sender-modal

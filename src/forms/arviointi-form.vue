@@ -89,8 +89,8 @@
                 {{ arviointiAsteikonNimi }}
                 <elsa-popover>
                   <elsa-arviointiasteikon-taso-tooltip-content
-                    :arviointiasteikonNimi="arviointiAsteikonNimi"
-                    :arviointiasteikonTasot="arviointiasteikonTasot"
+                    :arviointiasteikon-nimi="arviointiAsteikonNimi"
+                    :arviointiasteikon-tasot="arviointiasteikonTasot"
                   />
                 </elsa-popover>
               </b-th>
@@ -117,9 +117,8 @@
                 {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
                 {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
                 <elsa-popover>
-                  <template>
-                    <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
-                  </template>
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
                 </elsa-popover>
               </b-td>
               <b-td>
@@ -135,7 +134,7 @@
                   >
                     {{ $t('tee-arviointi') }}
                   </elsa-button>
-                  <span class="text-size-sm text-lighter ml-2" v-else>
+                  <span v-else class="text-size-sm text-lighter ml-2">
                     {{ $t('arviointia-ei-ole-viela-annettu') }}
                   </span>
                 </div>
@@ -160,13 +159,13 @@
                   >
                     {{ $t('tee-itsearviointi') }}
                   </elsa-button>
-                  <span class="text-size-sm text-lighter ml-2" v-else-if="!value.lukittu">
+                  <span v-else-if="!value.lukittu" class="text-size-sm text-lighter ml-2">
                     {{ $t('itsearviointia-ei-viela-tehty') }}
                   </span>
-                  <span class="text-size-sm text-lighter ml-2" v-else-if="$isErikoistuva()">
+                  <span v-else-if="$isErikoistuva()" class="text-size-sm text-lighter ml-2">
                     {{ $t('suoritusarviointi-on-lukittu-itsearviointi-luonti') }}
                   </span>
-                  <span class="text-size-sm text-lighter ml-2" v-else>
+                  <span v-else class="text-size-sm text-lighter ml-2">
                     {{ $t('itsearviointia-ei-tehty') }}
                   </span>
                 </div>
@@ -201,7 +200,7 @@
           </b-tbody>
         </b-table-simple>
         <elsa-form-group :label="$t('sanallinen-arviointi')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
           </template>
         </elsa-form-group>
@@ -237,17 +236,17 @@
           <asiakirjat-content
             class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
             :asiakirjat="asiakirjatTableItems"
-            :sortingEnabled="false"
-            :paginationEnabled="false"
-            :enableSearch="false"
-            :showInfoIfEmpty="false"
-            :enableDelete="false"
-            :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :show-info-if-empty="false"
+            :enable-delete="false"
+            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
           />
         </elsa-form-group>
         <hr v-if="value.arviointiAsiakirja.nimi" />
         <elsa-form-group :label="$t('sanallinen-itsearviointi')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">
               {{ value.sanallinenItsearviointi }}
             </p>
@@ -287,9 +286,8 @@
             {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
             {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
             <elsa-popover>
-              <template>
-                <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
-              </template>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
             </elsa-popover>
           </elsa-form-group>
           <b-form-row>
@@ -297,20 +295,20 @@
               <template #label-help>
                 <elsa-popover>
                   <elsa-arviointiasteikon-taso-tooltip-content
-                    :arviointiasteikonNimi="arviointiAsteikonNimi"
-                    :arviointiasteikonTasot="arviointiasteikonTasot"
+                    :arviointiasteikon-nimi="arviointiAsteikonNimi"
+                    :arviointiasteikon-tasot="arviointiasteikonTasot"
                   />
                 </elsa-popover>
               </template>
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
                   v-model="kokonaisuus.arviointiasteikonTaso"
-                  @input="$emit('skipRouteExitConfirm', false)"
                   :options="arviointiasteikonTasot"
                   :state="validateArvioitavaKokonaisuusState(index)"
                   :custom-label="(value) => `${value.taso} ${value.nimi}`"
                   track-by="taso"
+                  @input="$emit('skipRouteExitConfirm', false)"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <span class="font-weight-700">{{ option.taso }}</span>
@@ -340,14 +338,14 @@
                 <elsa-vaativuustaso-tooltip-content />
               </elsa-popover>
             </template>
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.vaativuustaso"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="vaativuustasot"
                 :custom-label="(value) => `${value.arvo} ${value.nimi}`"
                 track-by="arvo"
+                @input="$emit('skipRouteExitConfirm', false)"
               >
                 <template slot="singleLabel" slot-scope="{ option }">
                   <span class="font-weight-700">{{ option.arvo }}</span>
@@ -366,16 +364,16 @@
         </b-form-row>
         <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
           <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-6">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.arviointityokalut"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="arviointityokalut"
                 :custom-label="(value) => `${value.nimi}`"
                 :multiple="true"
                 :allow-empty="true"
                 track-by="nimi"
+                @input="$emit('skipRouteExitConfirm', false)"
               >
                 <template slot="option" slot-scope="{ option }">
                   {{ option.nimi }}
@@ -389,42 +387,40 @@
           :label="$t('liitetiedostot')"
           :help="$t('arviointi-liite-tooltip')"
         >
-          <span v-html="$t('arviointi-liitetiedostot-kuvaus', { linkki })"></span>
+          <span>{{ $t('arviointi-liitetiedostot-kuvaus', { linkki }) }}</span>
           <asiakirjat-upload
             class="mt-3"
-            :isPrimaryButton="false"
-            :allowMultiplesFiles="false"
-            :buttonText="$t('lisaa-liitetiedosto')"
-            :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
+            :is-primary-button="false"
+            :allow-multiples-files="false"
+            :button-text="$t('lisaa-liitetiedosto')"
+            :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
+            :allowed-file-types="['application/pdf']"
             @selectedFiles="onArviointiFileAdded"
-            :allowedFileTypes="['application/pdf']"
           />
           <asiakirjat-content
             class="px-0 col-md-8 col-lg-12 col-xl-8"
             :asiakirjat="asiakirjatTableItems"
-            :sortingEnabled="false"
-            :paginationEnabled="false"
-            :enableSearch="false"
-            :showInfoIfEmpty="false"
-            :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :show-info-if-empty="false"
+            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
             @deleteAsiakirja="onArviointiFileDeleted"
           />
         </elsa-form-group>
         <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
           <template #label-help>
             <elsa-popover>
-              <template>
-                <h3>{{ $t('arvioinnin-osa-alueita') }}</h3>
-                <div class="d-flex flex-column canmeds-container">
-                  <img src="@/assets/canmeds.svg" class="m-2" alt="canmeds" />
-                  <a href="#" class="text-size-normal" rel="noreferrer noopener" target="_blank">
-                    {{ $t('canmeds-linkki-teksti') }}
-                  </a>
-                </div>
-              </template>
+              <h3>{{ $t('arvioinnin-osa-alueita') }}</h3>
+              <div class="d-flex flex-column canmeds-container">
+                <img src="@/assets/canmeds.svg" class="m-2" alt="canmeds" />
+                <a href="#" class="text-size-normal" rel="noreferrer noopener" target="_blank">
+                  {{ $t('canmeds-linkki-teksti') }}
+                </a>
+              </div>
             </elsa-popover>
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div v-if="itsearviointi">
               <p class="mb-2">
                 {{ $t('sanallinen-itsearviointi-ohjeteksti') }}
@@ -433,9 +429,9 @@
             <b-form-textarea
               :id="uid"
               v-model="form.sanallinenArviointi"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sanallinenArviointi')"
               rows="5"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-textarea>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -446,7 +442,7 @@
           v-if="editing && ($isKouluttaja() || $isVastuuhenkilo())"
           :label="$t('lisatiedot')"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-checkbox
               v-model="form.perustuuMuuhun"
               @input="$emit('skipRouteExitConfirm', false)"
@@ -457,10 +453,10 @@
               <b-form-radio-group
                 :id="uid"
                 v-model="form.arviointiPerustuu"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="arviointiperusteet"
                 :state="validateState('arviointiPerustuu')"
                 stacked
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-radio-group>
               <b-form-invalid-feedback
                 :id="`${uid}-feedback`"
@@ -471,8 +467,8 @@
               <b-form-input
                 v-if="muuValittu"
                 v-model="form.muuPeruste"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState('muuPeruste')"
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-input>
               <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
             </div>

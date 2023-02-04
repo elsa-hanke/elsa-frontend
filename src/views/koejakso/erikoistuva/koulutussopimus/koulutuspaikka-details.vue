@@ -1,7 +1,7 @@
 <template>
   <div>
     <elsa-form-group :label="$t('toimipaikan-nimi')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input :id="uid" v-model="form.nimi" :state="validateState('nimi')" name="nimi" />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -11,13 +11,11 @@
     <elsa-form-group :label="$t('toimipaikalla-koulutussopimus.header')" :required="true">
       <template #label-help>
         <elsa-popover>
-          <template>
-            <h3>{{ $t('toimipaikan-koulutussopimukset') }}</h3>
-            <p class="mb-0" v-html="$t('toimipaikan-koulutussopimukset-tooltip', { linkki })" />
-          </template>
+          <h3>{{ $t('toimipaikan-koulutussopimukset') }}</h3>
+          <p class="mb-0">{{ $t('toimipaikan-koulutussopimukset-tooltip', { linkki }) }}</p>
         </elsa-popover>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-radio-group
           :id="uid"
           v-model="form.koulutussopimusOmanYliopistonKanssa"

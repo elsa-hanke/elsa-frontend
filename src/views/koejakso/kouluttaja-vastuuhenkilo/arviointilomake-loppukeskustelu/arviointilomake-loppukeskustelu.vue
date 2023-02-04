@@ -162,7 +162,7 @@
                 :label="$t('koejakson-tavoitteet-on-kasitelty-loppukeskustelussa')"
                 :required="true"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-radio-group
                     :id="uid"
                     v-model="loppukeskustelu.esitetaanKoejaksonHyvaksymista"
@@ -177,14 +177,14 @@
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
                   <elsa-form-group
-                    class="mt-4"
                     v-if="loppukeskustelu.esitetaanKoejaksonHyvaksymista === false"
+                    class="mt-4"
                     :label="$t('selvitys-jatkotoimista')"
                     :required="true"
                   >
-                    <template v-slot="{ uid }">
+                    <template #default="{ jatkotoimenpiteetUid }">
                       <b-form-textarea
-                        :id="uid"
+                        :id="jatkotoimenpiteetUid"
                         v-model="loppukeskustelu.jatkotoimenpiteet"
                         :state="validateState('jatkotoimenpiteet')"
                         rows="7"
@@ -204,7 +204,7 @@
         <koulutuspaikan-arvioijat
           :lahikouluttaja="loppukeskustelu.lahikouluttaja"
           :lahiesimies="loppukeskustelu.lahiesimies"
-          :isReadonly="true"
+          :is-readonly="true"
         />
         <hr />
 
@@ -232,12 +232,12 @@
                   isCurrentUserLahiesimies &&
                   loppukeskustelu.lahiesimies.id != loppukeskustelu.lahikouluttaja.id
                 "
+                v-b-modal.return-to-sender
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 variant="outline-primary"
                 :disabled="buttonStates.primaryButtonLoading"
                 :loading="buttonStates.secondaryButtonLoading"
-                v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
@@ -254,7 +254,7 @@
             </b-col>
           </b-row>
           <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </b-row>
         </div>
       </div>
@@ -271,7 +271,7 @@
           ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSign"
     />
 

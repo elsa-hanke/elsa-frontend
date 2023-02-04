@@ -6,11 +6,11 @@
         <b-col>
           <div v-if="!loading" class="mb-4">
             <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-            <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
+            <p>{{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki }) }}</p>
             <hr />
             <koulutussuunnitelma-form
               :value="koulutussuunnitelma"
-              :reservedAsiakirjaNimet="reservedAsiakirjaNimet"
+              :reserved-asiakirja-nimet="reservedAsiakirjaNimet"
               @submit="onSubmit"
               @cancel="onCancel"
               @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"

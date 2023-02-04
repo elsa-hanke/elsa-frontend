@@ -3,12 +3,12 @@
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-row>
         <elsa-form-group :label="$t('etunimi')" class="col-sm-12 col-md-6 pr-md-3" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.etunimi"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('etunimi')"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -20,12 +20,12 @@
           class="col-sm-12 col-md-6 pl-md-3"
           :required="true"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.sukunimi"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sukunimi')"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -34,13 +34,13 @@
         </elsa-form-group>
       </b-form-row>
       <elsa-form-group :required="true" :label="$t('yliopiston-kayttajatunnus')">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
-            class="col-sm-12 col-md-6 pr-md-3"
             :id="uid"
             v-model="form.eppn"
-            @input="$emit('skipRouteExitConfirm', false)"
+            class="col-sm-12 col-md-6 pr-md-3"
             :state="validateState('eppn')"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -48,12 +48,12 @@
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.sahkoposti"
-            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('sahkoposti')"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
           <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -64,12 +64,12 @@
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('sahkopostiosoite-uudelleen')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.sahkopostiUudelleen"
-            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('sahkopostiUudelleen')"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
           <b-form-invalid-feedback
             v-if="!$v.form.sahkopostiUudelleen.required"
@@ -97,20 +97,20 @@
       </elsa-form-group>
       <hr />
       <div class="d-flex flex-row-reverse flex-wrap">
-        <elsa-button variant="primary" @click="onSave" :loading="saving" class="mb-3 ml-3">
+        <elsa-button variant="primary" :loading="saving" class="mb-3 ml-3" @click="onSave">
           {{ $t('tallenna') }}
         </elsa-button>
         <elsa-button
           variant="back"
           :disabled="saving"
-          @click.stop.prevent="onCancel"
           class="mb-3 mr-3"
+          @click.stop.prevent="onCancel"
         >
           {{ $t('peruuta') }}
         </elsa-button>
       </div>
       <div class="row">
-        <elsa-form-error :active="this.$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError" />
       </div>
     </b-form>
   </div>

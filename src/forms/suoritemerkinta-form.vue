@@ -7,7 +7,7 @@
       :required="true"
       @submit="onTyoskentelyjaksoSubmit"
     >
-      <template v-slot:modal-content="{ submit, cancel }">
+      <template #modal-content="{ submit, cancel }">
         <tyoskentelyjakso-form
           :kunnat="kunnat"
           :erikoisalat="erikoisalat"
@@ -15,15 +15,15 @@
           @cancel="cancel"
         />
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           label="label"
           track-by="id"
+          @input="$emit('skipRouteExitConfirm', false)"
           @select="onTyoskentelyjaksoSelect"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -32,11 +32,10 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('suorite')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.suorite"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="suoritteenKategoriat"
           :state="validateState('suorite')"
           group-values="suoritteet"
@@ -44,6 +43,7 @@
           :group-select="false"
           label="nimi"
           track-by="id"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           <template slot="option" slot-scope="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
@@ -59,19 +59,19 @@
       <template #label-help>
         <elsa-popover>
           <elsa-arviointiasteikon-taso-tooltip-content
-            :arviointiasteikonNimi="arviointiAsteikonNimi"
-            :arviointiasteikonTasot="arviointiasteikko.tasot"
+            :arviointiasteikon-nimi="arviointiAsteikonNimi"
+            :arviointiasteikon-tasot="arviointiasteikko.tasot"
           />
         </elsa-popover>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.arviointiasteikonTaso"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="arviointiasteikko.tasot"
           :custom-label="(value) => `${value.taso} ${value.nimi}`"
           track-by="taso"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           <template slot="singleLabel" slot-scope="{ option }">
             <span class="font-weight-700">{{ option.taso }}</span>
@@ -94,14 +94,14 @@
             <elsa-vaativuustaso-tooltip-content />
           </elsa-popover>
         </template>
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-multiselect
             :id="uid"
             v-model="form.vaativuustaso"
-            @input="$emit('skipRouteExitConfirm', false)"
             :options="vaativuustasot"
             :custom-label="(value) => `${value.arvo} ${value.nimi}`"
             track-by="arvo"
+            @input="$emit('skipRouteExitConfirm', false)"
           >
             <template slot="singleLabel" slot-scope="{ option }">
               <span class="font-weight-700">{{ option.arvo }}</span>
@@ -118,28 +118,28 @@
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('suorituspaiva')" class="col-md-4" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="suorituspaiva"
             v-if="childDataReceived"
             :id="uid"
+            ref="suorituspaiva"
             :value.sync="form.suorituspaiva"
-            @input="$emit('skipRouteExitConfirm', false)"
             :min="tyoskentelyjaksonAlkamispaiva"
-            :minErrorText="$t('suorituspaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
+            :min-error-text="$t('suorituspaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
             :max="tyoskentelyjaksonPaattymispaiva"
-            :maxErrorText="$t('suorituspaiva-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')"
+            :max-error-text="$t('suorituspaiva-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></elsa-form-datepicker>
         </template>
       </elsa-form-group>
     </b-form-row>
     <elsa-form-group :label="$t('lisatiedot')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.lisatiedot"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="5"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-textarea>
       </template>
     </elsa-form-group>
@@ -160,7 +160,7 @@
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>

@@ -61,11 +61,11 @@
     </b-table>
     <elsa-pagination
       v-if="!loading"
-      @update:currentPage="onPageInput"
       :current-page="currentPage"
       :per-page="perPage"
       :rows="rows"
       :style="{ 'max-width': '1420px' }"
+      @update:currentPage="onPageInput"
     />
   </div>
   <div v-else class="text-center mt-3">

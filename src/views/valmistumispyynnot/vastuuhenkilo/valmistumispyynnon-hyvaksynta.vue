@@ -64,11 +64,11 @@
                 :yliopisto="valmistumispyynto.erikoistujanYliopisto"
                 :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
                 :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
-                :laillistamistodistusNimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
-                :laillistamistodistusTyyppi="
+                :laillistamistodistus-nimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
+                :laillistamistodistus-tyyppi="
                   valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                 "
-                :opintooikeudenMyontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
+                :opintooikeuden-myontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
                 :asetus="valmistumispyynto.erikoistujanAsetus"
               ></erikoistuva-details>
             </div>
@@ -77,13 +77,13 @@
               <b-row>
                 <b-col lg="4">
                   <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                    <template v-slot="{ uid }">
+                    <template #default="{ uid }">
                       <b-form-input
                         :id="uid"
                         v-model="form.sahkoposti"
-                        @input="$emit('skipRouteExitConfirm', false)"
                         :state="validateState('sahkoposti')"
                         :value="account.email"
+                        @input="$emit('skipRouteExitConfirm', false)"
                       />
                       <b-form-invalid-feedback
                         v-if="!$v.form.sahkoposti.required"
@@ -93,8 +93,8 @@
                       </b-form-invalid-feedback>
                       <b-form-invalid-feedback
                         v-if="!$v.form.sahkoposti.email"
-                        :state="validateState('sahkoposti')"
                         :id="`${uid}-feedback`"
+                        :state="validateState('sahkoposti')"
                       >
                         {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                       </b-form-invalid-feedback>
@@ -103,13 +103,13 @@
                 </b-col>
                 <b-col lg="4">
                   <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                    <template v-slot="{ uid }">
+                    <template #default="{ uid }">
                       <b-form-input
                         :id="uid"
                         v-model="form.puhelinnumero"
-                        @input="$emit('skipRouteExitConfirm', false)"
                         :state="validateState('puhelinnumero')"
                         :value="account.phoneNumber"
+                        @input="$emit('skipRouteExitConfirm', false)"
                       />
                       <b-form-invalid-feedback :id="`${uid}-feedback`">
                         {{ $t('pakollinen-tieto') }}
@@ -129,7 +129,7 @@
                 {{ $t('kylla') }}
               </p>
             </div>
-            <div class="mt-3" v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika">
+            <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
               <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
               <b-row>
                 <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
@@ -228,8 +228,8 @@
                 </span>
               </div>
               <div
-                class="my-3"
                 v-if="virkailijanTarkistus.yliopistosairaalanUlkopuolinenTyoTarkistettu"
+                class="my-3"
               >
                 <h5>
                   {{ $t('yliopistosairaalatyo') }}
@@ -248,7 +248,7 @@
                   {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
                 </p>
               </div>
-              <div class="my-3" v-if="virkailijanTarkistus.yliopistosairaalatyoTarkistettu">
+              <div v-if="virkailijanTarkistus.yliopistosairaalatyoTarkistettu" class="my-3">
                 <h5>
                   {{ $t('yliopistosairaalatyo') }}
                 </h5>
@@ -261,7 +261,7 @@
                   {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
                 </p>
               </div>
-              <div class="my-3" v-if="virkailijanTarkistus.kokonaistyoaikaTarkistettu">
+              <div v-if="virkailijanTarkistus.kokonaistyoaikaTarkistettu" class="my-3">
                 <h5>
                   {{ $t('kokonaistyoaika') }}
                 </h5>
@@ -276,7 +276,7 @@
               </div>
               <hr />
               <h2 class="mb-3">{{ $t('koulutukset') }}</h2>
-              <div class="my-3" v-if="virkailijanTarkistus.teoriakoulutusTarkistettu">
+              <div v-if="virkailijanTarkistus.teoriakoulutusTarkistettu" class="my-3">
                 <h5>
                   {{ $t('teoriakoulutus') }}
                 </h5>
@@ -291,7 +291,7 @@
                   {{ $t('todistukset-tarkistettu') }}
                 </p>
               </div>
-              <div class="my-3" v-if="virkailijanTarkistus.sateilusuojakoulutusVaadittu > 0">
+              <div v-if="virkailijanTarkistus.sateilusuojakoulutusVaadittu > 0" class="my-3">
                 <h5>
                   {{ $t('sateilysuojelukoulutus') }}
                 </h5>
@@ -326,20 +326,20 @@
                 <h5>
                   {{ $t('koejakso') }}
                 </h5>
-                <p class="mb-1" v-if="virkailijanTarkistus.koejaksoHyvaksyttyPvm">
+                <p v-if="virkailijanTarkistus.koejaksoHyvaksyttyPvm" class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('hyvaksytty') }}
                   {{ $date(virkailijanTarkistus.koejaksoHyvaksyttyPvm) }}
                 </p>
-                <p class="mb-1" v-if="!virkailijanTarkistus.koejaksoHyvaksyttyPvm">
+                <p v-if="!virkailijanTarkistus.koejaksoHyvaksyttyPvm" class="mb-1">
                   {{ $t('koejakso-ei-hyvaksytty') }}
                 </p>
                 <p
-                  class="mb-1"
                   v-if="
                     !virkailijanTarkistus.koejaksoHyvaksyttyPvm &&
                     virkailijanTarkistus.koejaksoEiVaadittu
                   "
+                  class="mb-1"
                 >
                   {{ $t('koejaksoa-ei-vaadita') }}
                 </p>
@@ -348,14 +348,14 @@
                 <h5>
                   {{ $t('vanhat-suoritukset') }}
                 </h5>
-                <p class="mb-1" v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista">
+                <p v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
                   {{ $t('erikoistuvalla-on-vanhoja-yli-10v-suorituksia') }}
                 </p>
-                <p class="mb-1" v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista">
+                <p v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
                   {{ $t('erikoistuvalla-ei-vanhoja-yli-10v-suorituksia') }}
                 </p>
               </div>
-              <div class="my-3" v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista">
+              <div v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="my-3">
                 <h5>
                   {{ $t('selvitys-vanhentuneista-suorituksista-virkailija') }}
                 </h5>
@@ -419,28 +419,28 @@
                   <b-col>
                     <asiakirja-button
                       v-if="yhteenvetoAsiakirjaUrl"
-                      :asiakirjaDataEndpointUrl="yhteenvetoAsiakirjaUrl"
-                      :asiakirjaLabel="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
                       :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                      :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
+                      :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
                     />
                     <asiakirja-button
                       v-if="liitteetAsiakirjaUrl"
-                      :asiakirjaDataEndpointUrl="liitteetAsiakirjaUrl"
-                      :asiakirjaLabel="$t('valmistumispyynnon-liitteet')"
                       :id="valmistumispyynto.liitteetAsiakirjaId"
+                      :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
+                      :asiakirja-label="$t('valmistumispyynnon-liitteet')"
                     />
                   </b-col>
                 </b-row>
                 <hr />
               </div>
               <elsa-form-group
-                class="mt-3"
                 v-if="vastuuhenkiloOsaamisenArvioijaPalauttanut"
+                class="mt-3"
                 :label="$t('lisatiedot-erikoistujalle')"
               >
                 <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
               </elsa-form-group>
-              <div class="text-right" v-if="odottaaHyvaksyntaa">
+              <div v-if="odottaaHyvaksyntaa" class="text-right">
                 <elsa-button
                   variant="back"
                   :to="{
@@ -449,14 +449,14 @@
                 >
                   {{ $t('peruuta') }}
                 </elsa-button>
-                <elsa-button variant="outline-primary" v-b-modal.return-to-sender class="ml-6">
+                <elsa-button v-b-modal.return-to-sender variant="outline-primary" class="ml-6">
                   {{ $t('palauta-erikoistujalle') }}
                 </elsa-button>
                 <elsa-button
                   :loading="sending"
-                  @click="openConfirmationModal('confirm-send')"
                   variant="primary"
                   class="ml-2"
+                  @click="openConfirmationModal('confirm-send')"
                 >
                   {{ $t('laheta-allekirjoitettavaksi') }}
                 </elsa-button>
@@ -478,7 +478,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('valmistumispyynto-hyvaksynta-vahvistus')"
-      :submitText="$t('laheta-allekirjoitettavaksi')"
+      :submit-text="$t('laheta-allekirjoitettavaksi')"
       @submit="onSend"
     />
   </div>

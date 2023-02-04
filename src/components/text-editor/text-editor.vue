@@ -1,6 +1,6 @@
 <template>
   <div>
-    <editor v-bind="$attrs" v-on="$listeners" :init="init" />
+    <editor v-bind="$attrs" :init="init" v-on="$listeners" />
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <b-pagination
     v-if="rows > perPage"
-    class="mt-4 user-select-none"
     v-model="currentPageMutable"
+    class="mt-4 user-select-none"
     :total-rows="rows"
     :per-page="perPage"
     :first-number="true"

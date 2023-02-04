@@ -8,7 +8,7 @@
             :required="true"
             class="col-12 pr-md-3 pl-0"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-input-group class="mb-2">
                 <b-input-group-prepend>
                   <b-input-group-text class="input-group-fi">{{ 'FI' }}</b-input-group-text>
@@ -28,7 +28,7 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('jarjestysnumero')" class="col-12 pr-md-3 pl-0">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-input :id="uid" v-model="kategoria.jarjestysnumero"></b-form-input>
             </template>
           </elsa-form-group>
@@ -48,7 +48,7 @@
             </elsa-button>
           </div>
           <div class="row">
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </div>
         </b-form>
         <div v-else>

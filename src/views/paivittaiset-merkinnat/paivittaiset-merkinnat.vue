@@ -22,7 +22,7 @@
                 <b-row>
                   <b-col md="4">
                     <elsa-form-group :label="$t('aihe')" class="mb-md-0">
-                      <template v-slot="{ uid }">
+                      <template #default="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.aihe"
@@ -41,15 +41,15 @@
                       class="mb-md-0"
                       :class="{ 'mb-0': anyFilterSelected }"
                     >
-                      <template v-slot="{ uid }">
+                      <template #default="{ uid }">
                         <elsa-form-datepicker
-                          ref="ajankohtaAlkaa"
                           :id="uid"
+                          ref="ajankohtaAlkaa"
                           :value="selected.ajankohtaAlkaa"
-                          @input="onAjankohtaAlkaaSelect"
                           :max="maxAjankohtaAlkaa"
-                          :maxErrorText="$t('ajankohta-ei-voi-alkaa-paattymisen-jalkeen')"
+                          :max-error-text="$t('ajankohta-ei-voi-alkaa-paattymisen-jalkeen')"
                           :required="false"
+                          @input="onAjankohtaAlkaaSelect"
                         />
                       </template>
                     </elsa-form-group>
@@ -60,16 +60,16 @@
                       class="mb-md-0"
                       :class="{ 'mb-0': anyFilterSelected }"
                     >
-                      <template v-slot="{ uid }">
+                      <template #default="{ uid }">
                         <elsa-form-datepicker
-                          ref="ajankohtaPaattyy"
                           :id="uid"
+                          ref="ajankohtaPaattyy"
                           :value="selected.ajankohtaPaattyy"
-                          @input="onAjankohtaPaattyySelect"
                           :min="minAjankohtaPaattyy"
-                          :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+                          :min-error-text="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
                           :required="false"
                           class="datepicker-range"
+                          @input="onAjankohtaPaattyySelect"
                         />
                       </template>
                     </elsa-form-group>
@@ -97,8 +97,8 @@
                 </span>
               </b-alert>
               <div
-                v-else
                 v-for="(paivittainenMerkinta, index) in merkinnat.content"
+                v-else
                 :key="index"
                 class="d-flex flex-column border rounded p-2 mb-2"
               >
@@ -135,10 +135,10 @@
                 </div>
               </div>
               <elsa-pagination
-                @update:currentPage="onPageInput"
                 :current-page="currentPage"
                 :per-page="perPage"
                 :rows="rows"
+                @update:currentPage="onPageInput"
               />
             </div>
             <div v-else class="text-center">

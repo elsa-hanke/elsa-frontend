@@ -8,7 +8,7 @@
           <hr />
           <div v-if="koulutusjakso">
             <elsa-form-group :label="$t('koulutusjakson-nimi')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ koulutusjakso.nimi }}</span>
               </template>
             </elsa-form-group>
@@ -16,7 +16,7 @@
               v-if="koulutusjakso.tyoskentelyjaksot.length > 0"
               :label="$t('tyoskentelyjaksot')"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <div :id="uid">
                   <div
                     v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
@@ -39,7 +39,7 @@
               v-if="koulutusjakso.osaamistavoitteet.length > 0"
               :label="$t('osaamistavoitteet-omalta-erikoisalalta')"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <div :id="uid">
                   <b-badge
                     v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
@@ -57,7 +57,7 @@
               v-if="koulutusjakso.muutOsaamistavoitteet"
               :label="$t('muut-osaamistavoitteet')"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid" class="text-preline">
                   {{ koulutusjakso.muutOsaamistavoitteet }}
                 </span>
@@ -79,8 +79,8 @@
                 :disabled="koulutusjakso.lukittu"
                 :loading="deleting"
                 variant="outline-danger"
-                @click="onKoulutusjaksoDelete"
                 class="mb-3"
+                @click="onKoulutusjaksoDelete"
               >
                 {{ $t('poista-koulutusjakso') }}
               </elsa-button>

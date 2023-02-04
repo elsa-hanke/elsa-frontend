@@ -2,7 +2,7 @@
   <koejakson-vaiheet-list
     :loading="loading"
     :koejaksot="koejaksot"
-    :componentLinks="componentLinks"
+    :component-links="componentLinks"
     :vastuuhenkilo="true"
   />
 </template>

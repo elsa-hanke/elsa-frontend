@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
-          <p v-html="$t('tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki })" />
+          <p>{{ $t('tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki }) }}</p>
           <elsa-vanha-asetus-varoitus />
           <div v-if="muokkausoikeudet" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
@@ -64,7 +64,7 @@
             <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
               <div class="container-fluid">
                 <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <div :id="uid" class="d-flex flex-wrap">
                       <div class="d-flex flex-column mb-2 duration-card">
                         <span class="duration-text">
@@ -96,7 +96,7 @@
                     <tyoskentelyjaksot-bar-chart :tilastot="tilastot" />
                   </elsa-form-group>
                   <elsa-form-group :label="$t('kaytannon-koulutus')" class="col-xl-6 mb-0">
-                    <template v-slot="{ uid }">
+                    <template #default="{ uid }">
                       <div :id="uid" class="donut-chart">
                         <apexchart :options="donutOptions" :series="donutSeries"></apexchart>
                       </div>
@@ -107,7 +107,7 @@
                   v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonHyvaksymispvm != null"
                   :label="$t('terveyskeskuskoulutusjakso')"
                 >
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <div :id="uid" class="d-flex flex-wrap">
                       <em class="align-middle">
                         <font-awesome-icon
@@ -184,9 +184,7 @@
                           <b-th style="width: 60%">
                             {{ $t('poissaolon-syy') }}
                             <elsa-popover>
-                              <template>
-                                <elsa-poissaolon-syyt />
-                              </template>
+                              <elsa-poissaolon-syyt />
                             </elsa-popover>
                           </b-th>
                           <b-th style="width: 25%">{{ $t('ajankohta') }}</b-th>

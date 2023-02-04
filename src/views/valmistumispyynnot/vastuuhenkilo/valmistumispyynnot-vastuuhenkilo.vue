@@ -15,11 +15,11 @@
         <h3>{{ $t('avoimet') }}</h3>
         <valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotAvoimet"
-          :valmistumispyynnonHyvaksyjaRole="valmistumispyynnonHyvaksyjaRole"
-          :currentPage="currentAvoinPage"
-          :perPage="perPage"
+          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
+          :current-page="currentAvoinPage"
+          :per-page="perPage"
           :loading="loadingAvoimet"
-          :hakutermiExists="hakutermi.length > 0"
+          :hakutermi-exists="hakutermi.length > 0"
           @update:currentPage="onAvoinPageInput"
         />
       </b-col>
@@ -29,11 +29,11 @@
         <h3>{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
         <valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotMuut"
-          :valmistumispyynnonHyvaksyjaRole="valmistumispyynnonHyvaksyjaRole"
-          :currentPage="currentMuutPage"
-          :perPage="perPage"
+          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
+          :current-page="currentMuutPage"
+          :per-page="perPage"
           :loading="loadingMuut"
-          :hakutermiExists="hakutermi.length > 0"
+          :hakutermi-exists="hakutermi.length > 0"
           @update:currentPage="onMuutPageInput"
         />
       </b-col>

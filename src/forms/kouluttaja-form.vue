@@ -6,7 +6,7 @@
         class="col-sm-12 col-md-5 pr-md-3"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.etunimi"
@@ -23,7 +23,7 @@
         class="col-sm-12 col-md-7 pl-md-3"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.sukunimi"
@@ -37,7 +37,7 @@
       </elsa-form-group>
     </b-form-row>
     <elsa-form-group :label="$t('kouluttajan-sahkoposti')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.sahkoposti"

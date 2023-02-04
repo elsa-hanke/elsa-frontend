@@ -1,6 +1,6 @@
 <template>
   <b-card-skeleton
-    :headerRoute="'koulutussuunnitelma'"
+    :header-route="'koulutussuunnitelma'"
     :header="$t('koulutussuunnitelma')"
     :loading="loading"
     class="h-100"

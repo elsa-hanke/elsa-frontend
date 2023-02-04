@@ -9,12 +9,12 @@
     <b-row>
       <b-col lg="4">
         <elsa-form-group :label="$t('lahikouluttajan-nimike')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.nimike"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('nimike')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -27,12 +27,12 @@
     <b-row>
       <b-col lg="4">
         <elsa-form-group :label="$t('toimipaikka')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.toimipaikka"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('toimipaikka')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -45,12 +45,12 @@
     <b-row>
       <b-col lg="4">
         <elsa-form-group :label="$t('lahiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.lahiosoite"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('lahiosoite')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -61,12 +61,12 @@
 
       <b-col lg="4">
         <elsa-form-group :label="$t('postitoimipaikka')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.postitoimipaikka"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('postitoimipaikka')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -79,21 +79,21 @@
     <b-row>
       <b-col lg="4">
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.sahkoposti"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('sahkoposti')"
               :value="account.email"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
               v-if="!$v.form.sahkoposti.email"
-              :state="validateState('sahkoposti')"
               :id="`${uid}-feedback`"
+              :state="validateState('sahkoposti')"
             >
               {{ $t('sahkopostiosoite-ei-kelvollinen') }}
             </b-form-invalid-feedback>
@@ -103,13 +103,13 @@
 
       <b-col lg="4">
         <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.puhelin"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('puhelin')"
               :value="account.phoneNumber"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}

@@ -31,7 +31,7 @@
                           :required="false"
                           @submit="onTyoskentelyjaksoSubmit"
                         >
-                          <template v-slot:modal-content="{ submit, cancel }">
+                          <template #modal-content="{ submit, cancel }">
                             <tyoskentelyjakso-form
                               :kunnat="kunnat"
                               :erikoisalat="erikoisalat"
@@ -39,7 +39,7 @@
                               @cancel="cancel"
                             />
                           </template>
-                          <template v-slot="{ uid }">
+                          <template #default="{ uid }">
                             <elsa-form-multiselect
                               :id="uid"
                               v-model="form.tyoskentelyjakso"
@@ -72,8 +72,8 @@
                     </b-row>
                   </b-col>
                   <b-table
-                    class="tyoskentelyjaksot-koejakso-table mt-1 mr-3 mr-md-4 ml-3"
                     v-if="tyoskentelyjaksotKoejakso.length > 0"
+                    class="tyoskentelyjaksot-koejakso-table mt-1 mr-3 mr-md-4 ml-3"
                     :items="tyoskentelyjaksotKoejakso"
                     :fields="fields"
                     :sort-by.sync="sortBy"
@@ -102,10 +102,10 @@
                     <template #cell(delete)="row">
                       <elsa-button
                         v-if="!account.impersonated"
-                        @click="onTyoskentelyjaksoDetached(row.item)"
                         variant="outline-primary"
                         class="border-0 p-0"
                         :loading="row.item.disableDelete"
+                        @click="onTyoskentelyjaksoDetached(row.item)"
                       >
                         <font-awesome-icon
                           :hidden="row.item.disableDelete"

@@ -14,7 +14,7 @@
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :arvioitavan-kokonaisuuden-kategoriat="arvioitavanKokonaisuudenKategoriat"
-            :kouluttajatAndVastuuhenkilot="kouluttajatAndVastuuhenkilot"
+            :kouluttajat-and-vastuuhenkilot="kouluttajatAndVastuuhenkilot"
             :editing="editing"
             @submit="onSubmit"
             @delete="onDelete"

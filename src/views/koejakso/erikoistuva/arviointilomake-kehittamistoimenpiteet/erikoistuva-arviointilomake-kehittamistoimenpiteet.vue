@@ -4,7 +4,7 @@
 
     <b-container fluid>
       <h1 class="mb-3">{{ $t('koejakson-kehittamistoimenpiteet') }}</h1>
-      <div v-if="!this.loading">
+      <div v-if="!loading">
         <b-row lg>
           <b-col>
             <div v-if="editable">
@@ -43,7 +43,7 @@
               :yliopisto="account.erikoistuvaLaakari.yliopisto"
               :syntymaaika="account.erikoistuvaLaakari.syntymaaika"
               :kehittamistoimenpiteet="koejaksoData.valiarviointi.kehittamistoimenpiteet"
-              :showKehittamistoimenpiteet="true"
+              :show-kehittamistoimenpiteet="true"
             ></erikoistuva-details>
           </b-col>
         </b-row>
@@ -65,10 +65,10 @@
           ref="koulutuspaikanArvioijat"
           :lahikouluttaja="kehittamistoimenpiteetLomake.lahikouluttaja"
           :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
-          :isReadonly="!editable"
+          :is-readonly="!editable"
+          :allow-duplicates="true"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
-          :allowDuplicates="true"
         />
         <hr />
 
@@ -88,10 +88,10 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onValidateAndConfirm('confirm-send')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
+                @click="onValidateAndConfirm('confirm-send')"
               >
                 {{ $t('laheta') }}
               </elsa-button>
@@ -108,7 +108,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSend"
     />
   </div>

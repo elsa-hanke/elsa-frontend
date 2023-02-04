@@ -14,9 +14,9 @@
             />
           </b-col>
           <b-col cols="12" lg="4">
-            <div class="erikoisalat" v-if="seuranta.erikoisalat.length > 1">
+            <div v-if="seuranta.erikoisalat.length > 1" class="erikoisalat">
               <elsa-form-group :label="$t('erikoisala')" class="mb-4">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
                     v-model="erikoisala"
@@ -29,7 +29,7 @@
           <b-col cols="12" lg="4">
             <div class="jarjestys">
               <elsa-form-group :label="$t('jarjestys')" class="mb-4">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
                     v-model="sortBy"
@@ -38,7 +38,7 @@
                     track-by="name"
                     :taggable="true"
                   >
-                    <template v-slot:option="{ option }">
+                    <template #option="{ option }">
                       <div v-if="option.name">{{ option.name }}</div>
                     </template>
                   </elsa-form-multiselect>
@@ -123,8 +123,8 @@
                             "
                             :color="'#41b257'"
                             :background-color="'#b3e1bc'"
-                            :textColor="'black'"
-                            :showRequiredDuration="true"
+                            :text-color="'black'"
+                            :show-required-duration="true"
                           />
                         </b-col>
                         <b-col cols="1" class="pl-0 pr-0">
@@ -141,8 +141,10 @@
                       <b-row>
                         <b-col cols="11" class="pr-2">
                           <span
-                            v-for="(row, index) in barValues(eteneminen.tyoskentelyjaksoTilastot)"
-                            :key="index"
+                            v-for="(row, tilastotIndex) in barValues(
+                              eteneminen.tyoskentelyjaksoTilastot
+                            )"
+                            :key="tilastotIndex"
                           >
                             <div class="text-size-sm mt-1">{{ row.text }}</div>
                             <elsa-progress-bar
@@ -150,7 +152,7 @@
                               :min-required="row.minRequired"
                               :color="row.color"
                               :background-color="row.backgroundColor"
-                              :showRequiredDuration="true"
+                              :show-required-duration="true"
                             />
                           </span>
                         </b-col>

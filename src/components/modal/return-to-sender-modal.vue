@@ -3,7 +3,7 @@
     <div class="d-block">
       <b-form>
         <elsa-form-group :label="$t('syy-palautukseen')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="korjausehdotus"

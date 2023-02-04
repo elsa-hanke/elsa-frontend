@@ -13,7 +13,7 @@
           <suorite-form
             v-if="!loading"
             :editing="true"
-            :kategoriaEditable="false"
+            :kategoria-editable="false"
             :suorite="suorite"
             :kategoriat="kategoriat"
             @submit="onSubmit"

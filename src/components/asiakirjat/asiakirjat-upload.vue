@@ -4,18 +4,18 @@
       v-if="allowMultiplesFiles"
       :id="uid"
       type="file"
-      @change="handleFileChange"
       :disabled="uploading || disabled"
       multiple
       hidden
+      @change="handleFileChange"
     />
     <input
       v-else
       :id="uid"
       type="file"
-      @change="handleFileChange"
       :disabled="uploading || disabled"
       hidden
+      @change="handleFileChange"
     />
     <label
       class="user-select-none"
@@ -27,12 +27,12 @@
       <span>{{ buttonText }}</span>
       <b-spinner v-if="uploading" small class="ml-2"></b-spinner>
     </label>
-    <b-alert variant="danger" :show="hasErrors" @dismissed="onDismissAlert" dismissible>
+    <b-alert variant="danger" :show="hasErrors" dismissible @dismissed="onDismissAlert">
       <div class="d-flex flex-row">
         <em class="align-middle">
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
         </em>
-        <div v-if="this.selectedFilesCount === 1">
+        <div v-if="selectedFilesCount === 1">
           <h4>
             {{ $t('asiakirjan-tallentaminen-epaonnistui') }}
           </h4>
@@ -45,8 +45,8 @@
             </li>
             <li v-if="filesOfWrongType.length > 0">
               {{
-                this.wrongFileTypeErrorMessage
-                  ? this.wrongFileTypeErrorMessage
+                wrongFileTypeErrorMessage
+                  ? wrongFileTypeErrorMessage
                   : $t('sallitut-tiedostoformaatit-default')
               }}
             </li>
@@ -60,7 +60,7 @@
             {{ $t('asiakirjojen-tallentaminen-epaonnistui') }}
           </h4>
           <div class="mb-3">{{ $t('yhtakaan-tiedostoa-ei-tallennettu') }}</div>
-          <div class="mb-2" v-if="maxFilesTotalSizeExceeded">
+          <div v-if="maxFilesTotalSizeExceeded" class="mb-2">
             {{ $t('asiakirjojen-yhteenlaskettu-koko-ylitetty') }}
           </div>
           <span v-if="duplicateFilesInCurrentView.length > 0">
@@ -81,8 +81,8 @@
           </span>
           <span v-if="filesOfWrongType.length > 0">
             {{
-              this.wrongFileTypeErrorMessage
-                ? this.wrongFileTypeErrorMessage
+              wrongFileTypeErrorMessage
+                ? wrongFileTypeErrorMessage
                 : $t('sallitut-tiedostoformaatit-default')
             }}
             <ul>

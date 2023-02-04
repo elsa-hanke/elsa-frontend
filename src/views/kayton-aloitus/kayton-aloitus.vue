@@ -3,7 +3,7 @@
     <b-row>
       <b-col lg="5">
         <h1 class="text-primary">{{ $t('melkein-valmista') }}</h1>
-        <kayton-aloitus-form :opintooikeudet="opintooikeudet" @submit="onSubmit" class="mb-3" />
+        <kayton-aloitus-form :opintooikeudet="opintooikeudet" class="mb-3" @submit="onSubmit" />
       </b-col>
       <b-col>
         <img src="@/assets/elsa-kirjautuminen.svg" :alt="$t('elsa-palvelu')" class="img-fluid" />

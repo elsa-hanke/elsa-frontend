@@ -67,7 +67,7 @@
           <seurantajakso-form
             :editing="false"
             :seurantajakso="seurantajakso"
-            :seurantajaksonTiedot="seurantajaksonTiedot"
+            :seurantajakson-tiedot="seurantajaksonTiedot"
           />
           <div class="d-flex flex-row-reverse flex-wrap">
             <elsa-button

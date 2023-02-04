@@ -7,7 +7,7 @@
           <div v-if="!loading">
             <h1>{{ erikoisala.nimi }}</h1>
             <p>{{ $t('opetussuunnitelmat-kuvaus') }}</p>
-            <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+            <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('opintooppaat')" lazy href="#opinto-oppaat">
                 <opintooppaat />
               </b-tab>

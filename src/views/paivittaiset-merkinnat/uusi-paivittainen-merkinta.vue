@@ -10,11 +10,11 @@
           <paivittainen-merkinta-form
             v-if="!loading"
             :value="paivakirjamerkinta"
+            :aihekategoriat="aihekategoriat"
+            :teoriakoulutukset="teoriakoulutukset"
             @submit="onSubmit"
             @cancel="onCancel"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
-            :aihekategoriat="aihekategoriat"
-            :teoriakoulutukset="teoriakoulutukset"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />

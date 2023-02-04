@@ -11,7 +11,7 @@
       <b-col cols="12" lg="4">
         <div class="drop-down-filter">
           <elsa-form-group :label="$t('jarjestys')" class="mb-4">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 :id="uid"
                 v-model="sortBy"
@@ -20,7 +20,7 @@
                 :taggable="true"
                 @select="onSortBySelect"
               >
-                <template v-slot:option="{ option }">
+                <template #option="{ option }">
                   <div v-if="option.name">{{ option.name }}</div>
                 </template>
               </elsa-form-multiselect>
@@ -72,10 +72,10 @@
     </b-table>
     <elsa-pagination
       v-if="!loading"
-      @update:currentPage="onPageInput"
       :current-page="currentPage"
       :per-page="perPage"
       :rows="rows"
+      @update:currentPage="onPageInput"
     />
   </div>
 </template>

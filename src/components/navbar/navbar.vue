@@ -37,7 +37,7 @@
             :src-base64="avatar"
             src-content-type="image/jpeg"
             :title="title"
-            :displayName="displayName"
+            :display-name="displayName"
           />
         </template>
         <div class="user-dropdown-content">

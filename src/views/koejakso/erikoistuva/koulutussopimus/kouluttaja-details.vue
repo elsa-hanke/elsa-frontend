@@ -6,13 +6,13 @@
     :required="true"
     @submit="onKouluttajaSubmit"
   >
-    <template v-slot:modal-content="{ submit, cancel }">
+    <template #modal-content="{ submit, cancel }">
       <kouluttaja-form @submit="submit" @cancel="cancel" />
     </template>
-    <template v-slot="{ uid }">
+    <template #default="{ uid }">
       <elsa-form-multiselect
-        v-model="form.kouluttaja"
         :id="uid"
+        v-model="form.kouluttaja"
         :options="kouluttajat"
         :state="validateState('kouluttaja')"
         label="nimi"
@@ -20,7 +20,7 @@
         @select="onKouluttajaSelect"
         @valueToBeCleared="clearKouluttaja"
       >
-        <template v-slot:option="{ option }">
+        <template #option="{ option }">
           <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
         </template>
       </elsa-form-multiselect>

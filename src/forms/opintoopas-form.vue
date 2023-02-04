@@ -8,7 +8,7 @@
             :required="true"
             class="col-12 pr-md-3 pl-0"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-input-group class="mb-2">
                 <b-input-group-prepend>
                   <b-input-group-text class="input-group-fi">{{ 'FI' }}</b-input-group-text>
@@ -33,10 +33,10 @@
               class="col-xs-12 col-sm-6 col-md-4 pr-sm-3"
               :required="true"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-datepicker
-                  ref="voimassaoloAlkaa"
                   :id="uid"
+                  ref="voimassaoloAlkaa"
                   v-model="opas.voimassaoloAlkaa"
                   :state="validateState('voimassaoloAlkaa')"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -47,14 +47,14 @@
               :label="$t('voimassaolon-paattymispaiva')"
               class="col-xs-12 col-sm-6 col-md-4 pl-sm-3"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-datepicker
-                  ref="voimassaoloPaattyy"
                   :id="uid"
+                  ref="voimassaoloPaattyy"
                   v-model="opas.voimassaoloPaattyy"
-                  @input="$emit('skipRouteExitConfirm', false)"
                   :required="false"
                   class="datepicker-range"
+                  @input="$emit('skipRouteExitConfirm', false)"
                 ></elsa-form-datepicker>
               </template>
             </elsa-form-group>
@@ -63,14 +63,14 @@
           <h2>{{ $t('erikoisalan-vaatimukset') }}</h2>
           <elsa-button
             v-if="opas.id == null"
-            @click="tuoOppaanTiedot()"
             variant="primary"
             class="mt-2 mb-4"
+            @click="tuoOppaanTiedot()"
           >
             {{ $t('tuo-edellisen-oppaan-tiedot') }}
           </elsa-button>
           <elsa-form-group :label="$t('kaytannon-koulutuksen-vahimmaispituus')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
                   <b-row>
@@ -129,7 +129,7 @@
               class="col-xs-12 col-sm-6 col-md-6 pr-sm-3"
               :required="true"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <b-row>
                   <b-col cols="4">
                     <b-row>
@@ -194,7 +194,7 @@
               :label="$t('tk-jakson-maksimipituus')"
               class="col-xs-12 col-sm-6 col-md-6 pr-sm-3"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <b-row>
                   <b-col cols="4">
                     <b-row>
@@ -245,7 +245,7 @@
             </elsa-form-group>
           </b-form-row>
           <elsa-form-group :label="$t('yliopistosairaalajakson-vahimmaispituus')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
                   <b-row>
@@ -302,7 +302,7 @@
             :label="$t('yliopistosairaalan-ulkop-tyoskentelyjakson-vahimmaispituus')"
             :required="true"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
                   <b-row>
@@ -371,7 +371,7 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('teoriakoulutusten-vahimmaismaara')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
                   <b-row align-v="center">
@@ -401,7 +401,7 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('johtamisopintojen-vahimmaismaara')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
                   <b-row align-v="center">
@@ -431,7 +431,7 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('sateilysuojakoulutuksen-vahimmaismaara')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
                   <b-row align-v="center">
@@ -465,14 +465,14 @@
             </template>
           </elsa-form-group>
           <elsa-form-group :label="$t('kaytossa-oleva-arviointiasteikko')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-radio-group
                 :id="uid"
                 v-model="opas.arviointiasteikkoId"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="arviointiasteikotFormatted"
                 :state="validateState('arviointiasteikkoId')"
                 stacked
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-radio-group>
               <b-form-invalid-feedback
                 :id="`${uid}-feedback`"
@@ -496,7 +496,7 @@
             </elsa-button>
           </div>
           <div class="row">
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </div>
         </b-form>
         <div v-else>

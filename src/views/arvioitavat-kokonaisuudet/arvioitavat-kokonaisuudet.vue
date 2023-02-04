@@ -1,5 +1,5 @@
 <template>
-  <div class="arvioitavat-kokonaisuudet" v-if="!loading">
+  <div v-if="!loading" class="arvioitavat-kokonaisuudet">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
@@ -7,9 +7,9 @@
           <h1 class="mt-3">{{ $t('arvioitavat-kokonaisuudet') }}</h1>
         </b-col>
       </b-row>
-      <div class="filter mt-3" v-if="erikoisalat.length > 1 && !$isErikoistuva()">
+      <div v-if="erikoisalat.length > 1 && !$isErikoistuva()" class="filter mt-3">
         <elsa-form-group :label="$t('erikoisala')" class="mb-4">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-multiselect
               :id="uid"
               v-model="erikoisala"
@@ -23,17 +23,17 @@
       </div>
       <div v-if="!$isKouluttaja() && !$isVastuuhenkilo()">
         <arvioitavat-kokonaisuudet-lista
-          :arvioitavatKokonaisuudet="arvioitavatKokonaisuudet"
+          :arvioitavat-kokonaisuudet="arvioitavatKokonaisuudet"
           :locale="$i18n.locale"
         />
       </div>
       <div v-else>
         <h3 class="mt-6">{{ selectedErikoisalaName }}</h3>
         <b-tabs
+          v-if="!erikoisalatLoading && endpointUrl"
+          v-model="tabIndex"
           content-class="mt-3"
           :no-fade="true"
-          v-model="tabIndex"
-          v-if="!erikoisalatLoading && this.endpointUrl"
         >
           <b-tab :title="$t('voimassa-olevat-kokonaisuudet')">
             <arvioitavat-kokonaisuudet-lista-vastuuhenkilo

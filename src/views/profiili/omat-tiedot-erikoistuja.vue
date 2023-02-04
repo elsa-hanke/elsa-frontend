@@ -28,9 +28,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ displayName }}
-            </template>
+            {{ displayName }}
           </elsa-form-group>
           <elsa-form-group
             :label="$t('syntymaaika')"
@@ -39,9 +37,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ syntymaaika }}
-            </template>
+            {{ syntymaaika }}
           </elsa-form-group>
           <elsa-form-group
             :label="$t('laillistamispaiva')"
@@ -50,14 +46,12 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              <div v-if="form.laillistamispaiva">
-                {{ $date(form.laillistamispaiva) }} -
-                <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
-                  {{ laillistamistodistusNimi }}
-                </elsa-button>
-              </div>
-            </template>
+            <div v-if="form.laillistamispaiva">
+              {{ $date(form.laillistamispaiva) }} -
+              <elsa-button variant="link" class="pl-0" @click="onDownloadLaillistamistodistus">
+                {{ laillistamistodistusNimi }}
+              </elsa-button>
+            </div>
           </elsa-form-group>
           <elsa-form-group
             v-if="account.email"
@@ -67,9 +61,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ account.email }}
-            </template>
+            {{ account.email }}
           </elsa-form-group>
           <elsa-form-group
             v-if="account.phoneNumber"
@@ -79,9 +71,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ account.phoneNumber }}
-            </template>
+            {{ account.phoneNumber }}
           </elsa-form-group>
           <div class="mt-2">
             <elsa-button variant="primary" @click="() => $emit('change', !editing)">
@@ -139,9 +129,7 @@
           label-cols="12"
           class="align-items-center mb-md-0"
         >
-          <template>
-            {{ displayName }}
-          </template>
+          {{ displayName }}
         </elsa-form-group>
         <elsa-form-group
           :label="$t('syntymaaika')"
@@ -150,16 +138,14 @@
           label-cols="12"
           class="align-items-center mb-md-0"
         >
-          <template>
-            {{ syntymaaika }}
-          </template>
+          {{ syntymaaika }}
         </elsa-form-group>
         <hr />
         <elsa-form-group class="col-xs-12 col-sm-3 pl-0" :label="$t('laillistamispaiva')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-datepicker
-              ref="laillistamispaiva"
               :id="uid"
+              ref="laillistamispaiva"
               :value.sync="form.laillistamispaiva"
               @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
@@ -171,11 +157,11 @@
           </span>
           <asiakirjat-upload
             class="mt-3"
-            :isPrimaryButton="false"
-            :allowMultiplesFiles="false"
-            :buttonText="$t('lisaa-liitetiedosto')"
-            @selectedFiles="onLaillistamispaivaFilesAdded"
+            :is-primary-button="false"
+            :allow-multiples-files="false"
+            :button-text="$t('lisaa-liitetiedosto')"
             :disabled="laillistamispaivaAsiakirjat.length > 0"
+            @selectedFiles="onLaillistamispaivaFilesAdded"
           />
           <div v-if="laillistamispaivaAsiakirjat.length > 0">
             <asiakirjat-content
@@ -184,9 +170,9 @@
               :pagination-enabled="false"
               :enable-search="false"
               :enable-delete="true"
-              :enableLisatty="false"
-              @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
+              :enable-lisatty="false"
               :no-results-info-text="$t('ei-liitetiedostoja')"
+              @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
             />
           </div>
           <div v-else>
@@ -199,7 +185,7 @@
           </div>
         </elsa-form-group>
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.email"
@@ -212,42 +198,40 @@
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('puhelinnumero')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input :id="uid" v-model="form.phoneNumber"></b-form-input>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('profiilikuva')">
-          <template>
-            <avatar
-              :src="previewSrc"
-              src-content-type="image/jpeg"
-              :username="displayName"
-              background-color="gray"
-              color="white"
-              :size="160"
-            />
-            <input
-              ref="avatarFileInput"
-              id="avatar-file-input"
-              type="file"
-              accept="image/jpeg,image/png"
-              @change="avatarChange"
-              hidden
-            />
-            <div class="d-flex flex-wrap">
-              <div class="mt-2">
-                <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
-                  {{ $t('valitse-profiilikuva') }}
-                </elsa-button>
-              </div>
-              <div class="mt-2">
-                <elsa-button variant="outline-danger" v-if="form.avatar" @click="removeAvatar">
-                  <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
-                  {{ $t('poista-kuva') }}
-                </elsa-button>
-              </div>
+          <avatar
+            :src="previewSrc"
+            src-content-type="image/jpeg"
+            :username="displayName"
+            background-color="gray"
+            color="white"
+            :size="160"
+          />
+          <input
+            id="avatar-file-input"
+            ref="avatarFileInput"
+            type="file"
+            accept="image/jpeg,image/png"
+            hidden
+            @change="avatarChange"
+          />
+          <div class="d-flex flex-wrap">
+            <div class="mt-2">
+              <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
+                {{ $t('valitse-profiilikuva') }}
+              </elsa-button>
             </div>
-          </template>
+            <div class="mt-2">
+              <elsa-button v-if="form.avatar" variant="outline-danger" @click="removeAvatar">
+                <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
+                {{ $t('poista-kuva') }}
+              </elsa-button>
+            </div>
+          </div>
         </elsa-form-group>
         <hr />
         <div class="text-right">

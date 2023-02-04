@@ -21,7 +21,7 @@
                 <b-row :class="{ 'mb-3': !isFiltered }">
                   <b-col md="4">
                     <elsa-form-group :label="$t('tyoskentelyjakso')" class="mb-md-0">
-                      <template v-slot="{ uid }">
+                      <template #default="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.tyoskentelyjakso"
@@ -36,7 +36,7 @@
                   </b-col>
                   <b-col md="4">
                     <elsa-form-group :label="$t('arvioitava-kokonaisuus')" class="mb-md-0">
-                      <template v-slot="{ uid }">
+                      <template #default="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.arvioitavaKokonaisuus"
@@ -51,7 +51,7 @@
                   </b-col>
                   <b-col md="4">
                     <elsa-form-group :label="$t('kouluttaja-tai-vastuuhenkilo')" class="mb-0">
-                      <template v-slot="{ uid }">
+                      <template #default="{ uid }">
                         <elsa-form-multiselect
                           :id="uid"
                           v-model="selected.kouluttajaOrVastuuhenkilo"
@@ -108,9 +108,9 @@
                     </elsa-button>
                     <div v-if="kategoria.visible">
                       <div
+                        v-for="(a, kokonaisuusIndex) in kategoria.arvioitavatKokonaisuudet"
+                        :key="kokonaisuusIndex"
                         :class="{ 'mb-3': a.arvioinnit.length === 0 }"
-                        v-for="(a, index) in kategoria.arvioitavatKokonaisuudet"
-                        :key="index"
                       >
                         <hr v-if="index !== 0" class="mt-1 mb-2" />
                         <p class="font-weight-500 p-2 mb-0 mt-2">{{ a.nimi }}</p>
@@ -140,10 +140,10 @@
                             </b-thead>
                             <b-tbody>
                               <b-tr
-                                v-for="(arviointi, index) in a.visible
+                                v-for="(arviointi, arviointiIndex) in a.visible
                                   ? a.arvioinnit
                                   : a.arvioinnit.slice(0, 1)"
-                                :key="`arviointi-${index}`"
+                                :key="`arviointi-${arviointiIndex}`"
                               >
                                 <b-td :stacked-heading="$t('pvm')">
                                   <elsa-button

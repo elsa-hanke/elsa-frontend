@@ -1,7 +1,7 @@
 <template>
   <div class="col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid v-if="!loading">
+    <b-container v-if="!loading" fluid>
       <h1 class="mb-3">{{ $t('aloituskeskustelu-kouluttaja') }}</h1>
 
       <div v-if="editable && isCurrentUserLahiesimies">
@@ -100,7 +100,7 @@
         <koulutuspaikan-arvioijat
           :lahikouluttaja="aloituskeskustelu.lahikouluttaja"
           :lahiesimies="aloituskeskustelu.lahiesimies"
-          :isReadonly="true"
+          :is-readonly="true"
         />
         <hr />
         <b-row>
@@ -128,21 +128,21 @@
             {{ $t('peruuta') }}
           </elsa-button>
           <elsa-button
+            v-b-modal.return-to-sender
             class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
             style="min-width: 14rem"
             :disabled="buttonStates.primaryButtonLoading"
             :loading="buttonStates.secondaryButtonLoading"
             variant="outline-primary"
-            v-b-modal.return-to-sender
           >
             {{ $t('palauta-muokattavaksi') }}
           </elsa-button>
           <elsa-button
+            v-b-modal.confirm-send
             class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
             style="min-width: 14rem"
             :disabled="buttonStates.secondaryButtonLoading"
             :loading="buttonStates.primaryButtonLoading"
-            v-b-modal.confirm-send
             variant="primary"
           >
             {{ $t('hyvaksy-laheta') }}
@@ -159,7 +159,7 @@
           ? $t('vahvista-koejakson-vaihe-hyvaksytty', { koejaksonVaihe })
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSubmit"
     />
     <elsa-return-to-sender-modal

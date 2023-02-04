@@ -15,7 +15,7 @@
         class="ml-2 text-dark"
       />
     </elsa-button>
-    <div class="poissaolot-table" v-show="isOpen">
+    <div v-show="isOpen" class="poissaolot-table">
       <b-table-simple stacked="md">
         <b-thead>
           <b-tr>

@@ -12,7 +12,7 @@
             {{ $t('lisaa-uusi-kayttaja') }}
           </elsa-button>
           <div v-if="!initializing">
-            <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+            <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('erikoistujat')" href="#erikoistuvat-laakarit">
                 <erikoistuvat-laakarit :rajaimet="rajaimet" />
               </b-tab>

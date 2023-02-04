@@ -3,10 +3,10 @@
     <b-input-group class="date-input-group">
       <b-form-input
         :id="`date-input-${id}`"
+        v-model="form.dateStr"
         class="date-input"
         :state="validateState('dateStr')"
         maxlength="10"
-        v-model="form.dateStr"
         v-bind="$attrs"
         type="text"
         @input="onDateStrInput"
@@ -30,7 +30,7 @@
           @input="onDateInput"
           v-on="$listeners"
         >
-          <template v-slot:button-content>
+          <template #button-content>
             <font-awesome-icon :icon="['far', 'calendar-alt']" class="text-primary" />
           </template>
         </b-form-datepicker>

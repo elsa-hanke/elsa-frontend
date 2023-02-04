@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 class="mb-3">{{ arviointiasteikonNimi }}</h3>
-    <p class="mb-3" v-if="selite">{{ selite }}</p>
+    <p v-if="selite" class="mb-3">{{ selite }}</p>
     <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
       <h4 class="mb-1">
         {{ asteikonTaso.taso }}

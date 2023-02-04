@@ -1,12 +1,13 @@
 <template>
   <div>
-    <b-row lg v-for="(ak, index) in arvioitavatKokonaisuudet" :key="index">
+    <b-row v-for="(ak, index) in arvioitavatKokonaisuudet" :key="index" lg>
       <b-col>
         <elsa-accordian :ref="ak.nimi" :visible="false">
           <template #title>
             {{ locale == 'sv' ? ak.nimiSv : ak.nimi }}
           </template>
           <div class="mt-3 mb-3">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <p v-html="locale == 'sv' ? ak.kuvausSv : ak.kuvaus"></p>
           </div>
         </elsa-accordian>

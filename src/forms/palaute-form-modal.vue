@@ -3,9 +3,9 @@
     id="palauteFormModal"
     centered
     :title="$t('palaute-otsikko')"
-    @hide="hideAndReset"
     size="lg"
     :hide-footer="true"
+    @hide="hideAndReset"
   >
     <div v-if="showFormSent">
       <div class="text-center mb-6">
@@ -37,7 +37,7 @@
     <div v-else>
       <p>{{ $t('palaute-ingressi') }}</p>
       <elsa-form-group :label="$t('palautteen-aihe')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-radio
             v-model="form.palautteenAihe"
             name="palautteen-aihe"
@@ -68,7 +68,7 @@
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('palaute')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
             v-model="form.palaute"
@@ -93,7 +93,7 @@
         </elsa-button>
       </div>
       <div class="row">
-        <elsa-form-error :active="this.$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError" />
       </div>
     </div>
   </b-modal>

@@ -86,8 +86,8 @@
             <template #cell(actions)="row">
               <b-link
                 v-if="showCompleted(row.item)"
-                @click="row.toggleDetails"
                 class="text-decoration-none"
+                @click="row.toggleDetails"
               >
                 {{ row.detailsShowing ? $t('piilota') : $t('nayta') }} {{ $t('aiemmat') }}
                 <font-awesome-icon

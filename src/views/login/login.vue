@@ -23,6 +23,7 @@
                 class="text-muted text-size-md mr-2"
               />
             </em>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="ilmoitus.teksti"></div>
           </div>
         </b-alert>
@@ -35,7 +36,7 @@
         <div class="mb-4">
           <h4 class="mb-1">{{ $t('erikoistuva-laakari-ja-kouluttaja') }}</h4>
           <p class="mb-3">{{ $t('kirjaudu-sisaan-suomifi') }}</p>
-          <elsa-button variant="primary" @click="loginSuomiFi" class="mr-3 mb-2">
+          <elsa-button variant="primary" class="mr-3 mb-2" @click="loginSuomiFi">
             {{ $t('kirjaudu-sisaan') }} (Suomi.fi)
           </elsa-button>
         </div>
