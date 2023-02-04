@@ -13,9 +13,9 @@
           />
         </b-col>
         <b-col cols="12" lg="4" md="6">
-          <div class="filter" v-if="erikoisalat != null && erikoisalat.length > 1">
+          <div v-if="erikoisalat != null && erikoisalat.length > 1" class="filter">
             <elsa-form-group :label="$t('erikoisala')" class="mb-4">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
                   v-model="filtered.erikoisala"
@@ -101,10 +101,10 @@
                 </template>
               </b-table>
               <elsa-pagination
-                @update:currentPage="onAvoinPageInput"
                 :current-page="currentAvoinPage"
                 :per-page="perPage"
                 :rows="avoimetRows"
+                @update:currentPage="onAvoinPageInput"
               />
             </div>
           </div>
@@ -169,10 +169,10 @@
                 </template>
               </b-table>
               <elsa-pagination
-                @update:currentPage="onMuutPageInput"
                 :current-page="currentMuutPage"
                 :per-page="perPage"
                 :rows="muutRows"
+                @update:currentPage="onMuutPageInput"
               />
             </div>
           </div>

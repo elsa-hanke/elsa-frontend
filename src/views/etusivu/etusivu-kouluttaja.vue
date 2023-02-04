@@ -9,7 +9,7 @@
           <koejaksot-card />
           <vanhenevat-katseluoikeudet-card />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
-          <erikoistujien-seuranta-card :showKouluttajaKuvaus="true" />
+          <erikoistujien-seuranta-card :show-kouluttaja-kuvaus="true" />
         </b-col>
         <b-col xxl="3">
           <b-row>

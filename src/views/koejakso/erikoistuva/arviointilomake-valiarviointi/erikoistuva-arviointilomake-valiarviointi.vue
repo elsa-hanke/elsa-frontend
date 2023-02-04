@@ -51,9 +51,9 @@
             ref="koulutuspaikanArvioijat"
             :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
             :lahiesimies="valiarviointiLomake.lahiesimies"
+            :allow-duplicates="true"
             @lahikouluttajaSelect="onLahikouluttajaSelect"
             @lahiesimiesSelect="onLahiesimiesSelect"
-            :allowDuplicates="true"
           />
           <hr />
         </b-form>
@@ -100,7 +100,7 @@
           <koulutuspaikan-arvioijat
             :lahikouluttaja="valiarviointiLomake.lahikouluttaja"
             :lahiesimies="valiarviointiLomake.lahiesimies"
-            :isReadonly="true"
+            :is-readonly="true"
           />
           <hr />
         </div>
@@ -121,10 +121,10 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onValidateAndConfirm('confirm-send')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
+                @click="onValidateAndConfirm('confirm-send')"
               >
                 {{ $t('laheta') }}
               </elsa-button>
@@ -141,7 +141,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSend"
     />
   </div>

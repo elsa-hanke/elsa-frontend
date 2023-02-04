@@ -113,7 +113,7 @@
                 :enable-search="false"
                 :enable-delete="false"
                 :no-results-info-text="$t('ei-liitetiedostoja')"
-                :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
                 :loading="loading"
               />
             </b-col>
@@ -402,13 +402,13 @@
           <b-row>
             <b-col lg="4">
               <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
                     v-model="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState('vastuuhenkilonSahkoposti')"
                     :value="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback
                     v-if="!$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.required"
@@ -418,8 +418,8 @@
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
                     v-if="!$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.email"
-                    :state="validateState('vastuuhenkilonSahkoposti')"
                     :id="`${uid}-feedback`"
+                    :state="validateState('vastuuhenkilonSahkoposti')"
                   >
                     {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                   </b-form-invalid-feedback>
@@ -429,13 +429,13 @@
 
             <b-col lg="4">
               <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
                     v-model="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState('vastuuhenkilonPuhelinnumero')"
                     :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
                     {{ $t('pakollinen-tieto') }}
@@ -472,15 +472,15 @@
           <hr />
         </div>
         <elsa-form-group :label="$t('koejakso-on')" :required="editable">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div v-if="editable">
               <b-form-radio-group
                 :id="uid"
                 v-model="vastuuhenkilonArvio.koejaksoHyvaksytty"
                 :options="koejaksoHyvaksyttyVaihtoehdot"
                 :state="validateState('koejaksoHyvaksytty')"
-                @input="$emit('skipRouteExitConfirm', false)"
                 stacked
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-radio-group>
               <b-form-invalid-feedback
                 :id="`${uid}-feedback`"
@@ -499,12 +499,12 @@
           :label="$t('perustelu-hylkaamiselle')"
           :required="editable"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div v-if="editable">
               <b-form-textarea
                 :id="uid"
-                :state="validateState('perusteluHylkaamiselle')"
                 v-model="vastuuhenkilonArvio.perusteluHylkaamiselle"
+                :state="validateState('perusteluHylkaamiselle')"
                 rows="7"
               ></b-form-textarea>
               <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -521,7 +521,7 @@
           :label="$t('hylatyn-koejakson-arviointi-kayty-lapi-keskustellen')"
           :required="editable"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div v-if="editable">
               <b-form-checkbox
                 v-model="vastuuhenkilonArvio.hylattyArviointiKaytyLapiKeskustellen"
@@ -557,10 +557,10 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onValidateAndConfirm('confirm-sign')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
+                @click="onValidateAndConfirm('confirm-sign')"
               >
                 {{ $t('laheta-allekirjoitettavaksi') }}
               </elsa-button>
@@ -577,7 +577,7 @@
       id="confirm-sign"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-koejakso-arvioitu')"
-      :submitText="$t('laheta-allekirjoitettavaksi')"
+      :submit-text="$t('laheta-allekirjoitettavaksi')"
       @submit="onSign"
     />
   </div>

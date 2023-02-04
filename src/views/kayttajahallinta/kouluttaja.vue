@@ -8,30 +8,30 @@
           <hr />
           <div v-if="kayttajaWrapper">
             <elsa-form-group :label="$t('tilin-tila')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid" :class="tilaColor">{{ tilinTilaText }}</span>
               </template>
             </elsa-form-group>
             <elsa-form-group v-if="rooli" :label="$t('rooli')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ rooli }}</span>
               </template>
             </elsa-form-group>
             <b-form-row>
               <elsa-form-group :label="$t('etunimi')" class="col-sm-12 col-md-6 pr-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">{{ etunimi }}</span>
                 </template>
               </elsa-form-group>
               <elsa-form-group :label="$t('sukunimi')" class="col-sm-12 col-md-6 pl-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">{{ sukunimi }}</span>
                 </template>
               </elsa-form-group>
             </b-form-row>
             <div>
               <elsa-form-group :label="$t('sahkopostiosoite')">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">
                     {{ sahkoposti }}
                   </span>
@@ -40,7 +40,7 @@
             </div>
             <div>
               <elsa-form-group :label="$t('puhelinnumero')">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">
                     {{ puhelin ? puhelin : '-' }}
                   </span>
@@ -70,8 +70,8 @@
                 variant="outline-success"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
-                @click="onActivateKayttaja"
                 class="mb-3"
+                @click="onActivateKayttaja"
               >
                 {{ $t('aktivoi-kayttaja') }}
               </elsa-button>
@@ -80,8 +80,8 @@
                 variant="outline-danger"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
-                @click="onPassivateKayttaja"
                 class="mb-3"
+                @click="onPassivateKayttaja"
               >
                 {{ $t('passivoi-kayttaja') }}
               </elsa-button>

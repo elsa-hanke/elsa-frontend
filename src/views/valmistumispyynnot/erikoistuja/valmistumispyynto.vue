@@ -50,8 +50,8 @@
                     v-model="valmistumispyyntoVaatimuksetLomake.tyoskentelyjaksot"
                     :state="validateVaatimuksetState('tyoskentelyjaksot')"
                     :disabled="vaatimuksetHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     <span>
                       {{ $t('valmistumispyynto-tyoskentelyjaksot-suoritettu') }}
@@ -68,8 +68,8 @@
                     v-model="valmistumispyyntoVaatimuksetLomake.tyotodistukset"
                     :state="validateVaatimuksetState('tyotodistukset')"
                     :disabled="vaatimuksetHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('valmistumispyynto-tyotodistukset') }}
                   </b-form-checkbox>
@@ -77,8 +77,8 @@
                     v-model="valmistumispyyntoVaatimuksetLomake.kuulusteluJaJohtamisopinnot"
                     :state="validateVaatimuksetState('kuulusteluJaJohtamisopinnot')"
                     :disabled="vaatimuksetHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('valmistumispyynto-kuulustelu-ja-johtamisopinnot') }}
                   </b-form-checkbox>
@@ -86,8 +86,8 @@
                     v-model="valmistumispyyntoVaatimuksetLomake.teoriakoulutus"
                     :state="validateVaatimuksetState('teoriakoulutus')"
                     :disabled="vaatimuksetHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('valmistumispyynto-teoriakoulutusta-riittavasti') }}
                   </b-form-checkbox>
@@ -95,8 +95,8 @@
                     v-model="valmistumispyyntoVaatimuksetLomake.osaamisenArvioinnit"
                     :state="validateVaatimuksetState('osaamisenArvioinnit')"
                     :disabled="vaatimuksetHyvaksytty"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('valmistumispyynto-osaamisen-arvioinnit') }}
                   </b-form-checkbox>
@@ -121,8 +121,10 @@
                   :yliopisto="account.erikoistuvaLaakari.yliopisto"
                   :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
                   :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
-                  :laillistamistodistusNimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
-                  :laillistamistodistusTyyppi="
+                  :laillistamistodistus-nimi="
+                    valmistumispyynto.erikoistujanLaillistamistodistusNimi
+                  "
+                  :laillistamistodistus-tyyppi="
                     valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                   "
                 />
@@ -131,13 +133,13 @@
                   <b-row>
                     <b-col lg="4">
                       <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                        <template v-slot="{ uid }">
+                        <template #default="{ uid }">
                           <b-form-input
                             :id="uid"
                             v-model="valmistumispyyntoLomake.erikoistujanSahkoposti"
-                            @input="$emit('skipRouteExitConfirm', false)"
                             :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
                             :value="account.erikoistuvaLaakari.sahkoposti"
+                            @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <b-form-invalid-feedback
                             v-if="!$v.valmistumispyyntoLomake.erikoistujanSahkoposti.required"
@@ -147,8 +149,8 @@
                           </b-form-invalid-feedback>
                           <b-form-invalid-feedback
                             v-if="!$v.valmistumispyyntoLomake.erikoistujanSahkoposti.email"
-                            :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
                             :id="`${uid}-feedback`"
+                            :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
                           >
                             {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                           </b-form-invalid-feedback>
@@ -158,13 +160,13 @@
 
                     <b-col lg="4">
                       <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                        <template v-slot="{ uid }">
+                        <template #default="{ uid }">
                           <b-form-input
                             :id="uid"
                             v-model="valmistumispyyntoLomake.erikoistujanPuhelinnumero"
-                            @input="$emit('skipRouteExitConfirm', false)"
                             :state="validateValmistumispyyntoState('erikoistujanPuhelinnumero')"
                             :value="account.erikoistuvaLaakari.puhelinnumero"
+                            @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <b-form-invalid-feedback :id="`${uid}-feedback`">
                             {{ $t('pakollinen-tieto') }}
@@ -189,10 +191,10 @@
                     :label="$t('laillistamispaiva')"
                     :required="true"
                   >
-                    <template v-slot="{ uid }">
+                    <template #default="{ uid }">
                       <elsa-form-datepicker
-                        ref="laillistamispaiva"
                         :id="uid"
+                        ref="laillistamispaiva"
                         :value.sync="valmistumispyyntoLomake.laillistamispaiva"
                         @input="$emit('skipRouteExitConfirm', false)"
                       ></elsa-form-datepicker>
@@ -207,11 +209,11 @@
                     </span>
                     <asiakirjat-upload
                       class="mt-3"
-                      :isPrimaryButton="false"
-                      :allowMultiplesFiles="false"
-                      :buttonText="$t('lisaa-liitetiedosto')"
-                      @selectedFiles="onLaillistamistodistusFilesAdded"
+                      :is-primary-button="false"
+                      :allow-multiples-files="false"
+                      :button-text="$t('lisaa-liitetiedosto')"
                       :disabled="laillistamispaivaAsiakirjat.length > 0"
+                      @selectedFiles="onLaillistamistodistusFilesAdded"
                     />
                     <asiakirjat-content
                       :asiakirjat="laillistamispaivaAsiakirjat"
@@ -219,9 +221,9 @@
                       :pagination-enabled="false"
                       :enable-search="false"
                       :enable-delete="true"
-                      @deleteAsiakirja="onDeletelaillistamistodistus"
                       :no-results-info-text="$t('ei-liitetiedostoja')"
                       :state="validateValmistumispyyntoState('laillistamistodistus')"
+                      @deleteAsiakirja="onDeletelaillistamistodistus"
                     />
                     <b-form-invalid-feedback
                       :state="validateValmistumispyyntoState('laillistamistodistus')"
@@ -252,15 +254,15 @@
                     :required="true"
                     class="mt-4"
                   >
-                    <template v-slot="{ uid }">
+                    <template #default="{ uid }">
                       <b-form-textarea
                         :id="uid"
                         v-model="valmistumispyyntoLomake.selvitysVanhentuneistaSuorituksista"
-                        @input="$emit('skipRouteExitConfirm', false)"
                         :state="
                           validateValmistumispyyntoState('selvitysVanhentuneistaSuorituksista')
                         "
                         rows="5"
+                        @input="$emit('skipRouteExitConfirm', false)"
                       ></b-form-textarea>
                       <b-form-invalid-feedback :id="`${uid}-feedback`">
                         {{ $t('pakollinen-tieto') }}
@@ -293,11 +295,11 @@
                     </elsa-button>
                     <elsa-button
                       v-if="!loading"
-                      @click="onValidateAndConfirmSend('confirm-send')"
                       :loading="sending"
                       variant="primary"
                       class="ml-2"
                       style="min-width: 14rem"
+                      @click="onValidateAndConfirmSend('confirm-send')"
                     >
                       {{ $t('laheta-pyynto') }}
                     </elsa-button>
@@ -307,7 +309,7 @@
             </b-col>
           </b-row>
           <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </b-row>
         </div>
         <div v-else>
@@ -323,7 +325,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('valmistumispyynto-vahvistus')"
-      :submitText="$t('laheta-pyynto')"
+      :submit-text="$t('laheta-pyynto')"
       @submit="onSend"
     />
   </div>

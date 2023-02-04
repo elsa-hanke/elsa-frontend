@@ -13,7 +13,7 @@
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :arviointiasteikko="suoritemerkinta.arviointiasteikko"
-            :arviointiasteikonTaso="arviointiasteikonTaso"
+            :arviointiasteikon-taso="arviointiasteikonTaso"
             @submit="onSubmit"
             @delete="onDelete"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"

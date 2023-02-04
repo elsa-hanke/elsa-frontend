@@ -3,12 +3,12 @@
     <b-row>
       <b-col lg="8">
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanSahkoposti"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanSahkoposti')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -21,12 +21,12 @@
     <b-row>
       <b-col lg="8">
         <elsa-form-group :label="$t('koejakson-suorituspaikka')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.koejaksonSuorituspaikka"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonSuorituspaikka')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -35,9 +35,9 @@
         </elsa-form-group>
         <elsa-button
           v-if="!local.toinenSuorituspaikka"
-          @click="local.toinenSuorituspaikka = true"
           variant="outline-primary"
           class="border-0 p-0"
+          @click="local.toinenSuorituspaikka = true"
         >
           + {{ $t('suorituspaikka-toinen') }}
         </elsa-button>
@@ -47,12 +47,12 @@
     <b-row v-if="local.toinenSuorituspaikka">
       <b-col lg="8">
         <elsa-form-group :label="$t('koejakson-toinen-suorituspaikka')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.koejaksonToinenSuorituspaikka"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonToinenSuorituspaikka')"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -60,9 +60,9 @@
           </template>
         </elsa-form-group>
         <elsa-button
-          @click="deleteToinenSuorituspaikka"
           variant="outline-primary"
           class="border-0 p-0"
+          @click="deleteToinenSuorituspaikka"
         >
           <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
           {{ $t('suorituspaikka-poista') }}
@@ -75,27 +75,25 @@
         <elsa-form-group :label="$t('koejakson-alkamispäivä')" :required="true">
           <template #label-help>
             <elsa-popover>
-              <template>
-                <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
-                <p>{{ $t('koejakson-alkamis-tooltip') }}</p>
-              </template>
+              <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
+              <p>{{ $t('koejakson-alkamis-tooltip') }}</p>
             </elsa-popover>
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-datepicker
-              ref="koejaksonAlkamispaiva"
               v-if="childDataReceived"
               :id="uid"
+              ref="koejaksonAlkamispaiva"
               :value.sync="form.koejaksonAlkamispaiva"
-              @input="$emit('skipRouteExitConfirm', false)"
               :min="opintooikeudenMyontamispaiva"
-              :minErrorText="$t('koejakso-ei-voi-alkaa-ennen-opinto-oikeuden-myontamispaivaa')"
+              :min-error-text="$t('koejakso-ei-voi-alkaa-ennen-opinto-oikeuden-myontamispaivaa')"
               :max="maxKoejaksonAlkamispaiva"
-              :maxErrorText="
+              :max-error-text="
                 $t(
                   'koejakson-voi-aloittaa-viimeistaan-puoli-vuotta-ennen-opinto-oikeuden-paattymista'
                 )
               "
+              @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
           </template>
         </elsa-form-group>
@@ -103,17 +101,17 @@
 
       <b-col xl="4" lg="8">
         <elsa-form-group :label="$t('koejakson-päättymispäivä')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-datepicker
-              ref="koejaksonPaattymispaiva"
               v-if="childDataReceived"
               :id="uid"
+              ref="koejaksonPaattymispaiva"
               :value.sync="form.koejaksonPaattymispaiva"
-              @input="$emit('skipRouteExitConfirm', false)"
               :min="minKoejaksonPaattymispaiva"
-              :minErrorText="$t('koejakso-voi-paattya-aikaisintaan-6kk-alkamispaivasta')"
+              :min-error-text="$t('koejakso-voi-paattya-aikaisintaan-6kk-alkamispaivasta')"
               :max="maxKoejaksonPaattymispaiva"
-              :maxErrorText="$t('koejakson-maksimi-paattymispaiva-kuvaus')"
+              :max-error-text="$t('koejakson-maksimi-paattymispaiva-kuvaus')"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
           </template>
         </elsa-form-group>
@@ -129,21 +127,19 @@
         >
           <template #label-help>
             <elsa-popover>
-              <template>
-                <h3>{{ $t('koejakso-suoritettu-kokoaikatyössä-tooltip-header') }}</h3>
-                <p>{{ $t('koejakso-suoritettu-kokoaikatyössä-tooltip-content') }}</p>
-              </template>
+              <h3>{{ $t('koejakso-suoritettu-kokoaikatyössä-tooltip-header') }}</h3>
+              <p>{{ $t('koejakso-suoritettu-kokoaikatyössä-tooltip-content') }}</p>
             </elsa-popover>
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-radio-group
               :id="uid"
               v-model="form.suoritettuKokoaikatyossa"
-              @input="$emit('skipRouteExitConfirm', false)"
               :options="suorittettuKokoaikatyossaOptions"
               :state="validateState('suoritettuKokoaikatyossa')"
               name="suoritettu-kokoaikatyossa"
               stacked
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-radio-group>
             <b-form-invalid-feedback
               :id="`${uid}-feedback`"
@@ -158,29 +154,29 @@
     <b-row v-if="form.suoritettuKokoaikatyossa === false" class="mb-3">
       <b-col lg="3">
         <elsa-form-group :label="$t('suoritetaan-osa-aikatyossa')" :required="true" class="ml-4">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div class="d-inline-flex align-items-center">
               <b-form-input
                 :id="uid"
                 v-model="local.tyotunnitViikossa"
-                @input="$emit('skipRouteExitConfirm', false)"
                 class="tyotunnit-viikossa-input"
                 :state="validateState('tyotunnitViikossa')"
+                @input="$emit('skipRouteExitConfirm', false)"
                 @change="onTyotunnitViikossaChange"
               />
               <span class="ml-2">({{ $t('tuntia-viikossa') }})</span>
             </div>
             <b-form-invalid-feedback
               v-if="!$v.form.tyotunnitViikossa.required"
-              :state="validateState('tyotunnitViikossa')"
               :id="`${uid}-feedback`"
+              :state="validateState('tyotunnitViikossa')"
             >
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
               v-if="!$v.form.tyotunnitViikossa.between"
-              :state="validateState('tyotunnitViikossa')"
               :id="`${uid}-feedback`"
+              :state="validateState('tyotunnitViikossa')"
             >
               {{ $t('koejakso-suoritettu-osaaikatyossa.invalid') }}
             </b-form-invalid-feedback>
@@ -193,10 +189,10 @@
       ref="koulutuspaikanArvioijat"
       :lahikouluttaja="form.lahikouluttaja"
       :lahiesimies="form.lahiesimies"
-      :buttonStates="buttonStates"
+      :button-states="buttonStates"
+      :allow-duplicates="true"
       @lahikouluttajaSelect="onLahikouluttajaSelect"
       @lahiesimiesSelect="onLahiesimiesSelect"
-      :allowDuplicates="true"
     />
     <hr />
 
@@ -204,14 +200,14 @@
       <b-col>
         <h3>{{ $t('aloituskeskustelu-tavoitteet') }}</h3>
         <elsa-form-group :label="$t('koejakso-osaamistavoitteet')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.koejaksonOsaamistavoitteet"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('koejaksonOsaamistavoitteet')"
               rows="7"
               class="textarea-min-height"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></b-form-textarea>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -234,12 +230,12 @@
           {{ $t('peruuta') }}
         </elsa-button>
         <elsa-button
+          v-b-modal.confirm-save
           class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
           style="min-width: 14rem"
           variant="outline-primary"
           :disabled="buttonStates.primaryButtonLoading"
           :loading="buttonStates.secondaryButtonLoading"
-          v-b-modal.confirm-save
         >
           {{ $t('tallenna-keskeneraisena') }}
         </elsa-button>
@@ -256,20 +252,20 @@
       </b-col>
     </b-row>
     <b-row>
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </b-row>
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal
       id="confirm-save"
       :title="$t('vahvista-tallennus-keskeneraisena-title')"
       :text="$t('vahvista-tallennus-keskeneraisena-body')"
-      :submitText="$t('tallenna-keskeneraisena')"
+      :submit-text="$t('tallenna-keskeneraisena')"
       @submit="saveAndExit"
     />
   </b-form>

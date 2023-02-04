@@ -11,7 +11,7 @@
             v-if="!loading"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :poissaolon-syyt="poissaolonSyyt"
-            :tyoskentelyjaksoId="tyoskentelyjaksoId"
+            :tyoskentelyjakso-id="tyoskentelyjaksoId"
             @submit="onSubmit"
             @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
           />

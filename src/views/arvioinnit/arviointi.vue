@@ -35,7 +35,7 @@
               <b-form @submit.stop.prevent="onKommenttiSubmit">
                 <div class="uusi-kommentti mb-3">
                   <elsa-form-group :label="$t('uusi-kommentti')">
-                    <template v-slot="{ uid }">
+                    <template #default="{ uid }">
                       <b-form-textarea
                         :id="uid"
                         v-model="kommentti.teksti"

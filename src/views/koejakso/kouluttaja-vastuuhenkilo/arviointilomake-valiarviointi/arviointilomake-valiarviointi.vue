@@ -106,14 +106,14 @@
                 :label="$t('edistyminen-osaamistavoitteiden-mukaista')"
                 :required="true"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-radio-group
                     :id="uid"
                     v-model="valiarviointi.edistyminenTavoitteidenMukaista"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :options="edistyminenVaihtoehdot"
                     :state="validateState('edistyminenTavoitteidenMukaista')"
                     stacked
+                    @input="$emit('skipRouteExitConfirm', false)"
                   ></b-form-radio-group>
                   <b-form-invalid-feedback
                     :id="`${uid}-feedback`"
@@ -139,15 +139,15 @@
                 v-else
                 :label="$t('keskustelu-ja-toimenpiteet-tarpeen-ennen-hyvaksymista')"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-checkbox-group
                     :id="uid"
                     v-model="valiarviointi.kehittamistoimenpideKategoriat"
                     :options="kehittamistoimenpideKategoriat"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :required="true"
                     :state="validateState('kehittamistoimenpideKategoriat')"
                     stacked
+                    @input="$emit('skipRouteExitConfirm', false)"
                   ></b-form-checkbox-group>
                   <b-form-invalid-feedback
                     :id="`${uid}-feedback`"
@@ -158,9 +158,9 @@
                   <div class="ml-4">
                     <b-form-input
                       v-if="muuValittu"
-                      @input="$emit('skipRouteExitConfirm', false)"
                       v-model="valiarviointi.muuKategoria"
                       :state="validateState('muuKategoria')"
+                      @input="$emit('skipRouteExitConfirm', false)"
                     ></b-form-input>
                     <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
                   </div>
@@ -177,13 +177,13 @@
                 </div>
               </div>
               <elsa-form-group v-else :label="$t('vahvuudet')">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-textarea
                     :id="uid"
                     v-model="valiarviointi.vahvuudet"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     rows="7"
                     class="textarea-min-height"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   ></b-form-textarea>
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
                     {{ $t('pakollinen-tieto') }}
@@ -201,13 +201,13 @@
                 </div>
               </div>
               <elsa-form-group v-else :label="$t('selvitys-kehittamistoimenpiteista')">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-textarea
                     :id="uid"
                     v-model="valiarviointi.kehittamistoimenpiteet"
-                    @input="$emit('skipRouteExitConfirm', false)"
                     rows="7"
                     class="textarea-min-height"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   ></b-form-textarea>
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
                     {{ $t('pakollinen-tieto') }}
@@ -221,7 +221,7 @@
         <koulutuspaikan-arvioijat
           :lahikouluttaja="valiarviointi.lahikouluttaja"
           :lahiesimies="valiarviointi.lahiesimies"
-          :isReadonly="true"
+          :is-readonly="true"
         />
         <hr />
 
@@ -238,10 +238,10 @@
             <b-col class="text-right">
               <elsa-button
                 class="ml-1 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block text-left"
-                @input="$emit('skipRouteExitConfirm', false)"
                 style="max-width: 14rem"
                 variant="back"
                 :to="{ name: 'koejakso' }"
+                @input="$emit('skipRouteExitConfirm', false)"
               >
                 {{ $t('peruuta') }}
               </elsa-button>
@@ -250,23 +250,23 @@
                   isCurrentUserLahiesimies &&
                   valiarviointi.lahiesimies.id != valiarviointi.lahikouluttaja.id
                 "
+                v-b-modal.return-to-sender
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                @input="$emit('skipRouteExitConfirm', false)"
                 style="min-width: 14rem"
                 variant="outline-primary"
                 :disabled="buttonStates.primaryButtonLoading"
                 :loading="buttonStates.secondaryButtonLoading"
-                v-b-modal.return-to-sender
+                @input="$emit('skipRouteExitConfirm', false)"
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
               <elsa-button
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
-                @input="$emit('skipRouteExitConfirm', false)"
                 style="min-width: 14rem"
                 variant="primary"
                 :disabled="buttonStates.secondaryButtonLoading"
                 :loading="buttonStates.primaryButtonLoading"
+                @input="$emit('skipRouteExitConfirm', false)"
                 @click="onValidateAndConfirm"
               >
                 {{ $t('hyvaksy-laheta') }}
@@ -274,7 +274,7 @@
             </b-col>
           </b-row>
           <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </b-row>
         </div>
       </div>
@@ -291,7 +291,7 @@
           ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSign"
     />
 

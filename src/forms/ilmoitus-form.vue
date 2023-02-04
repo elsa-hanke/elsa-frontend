@@ -2,7 +2,7 @@
   <div>
     <b-form @submit.stop.prevent="onSubmit">
       <elsa-form-group :label="$t('sisalto')" class="col-12 pr-md-3 pl-0 kuvaus mb-1 mt-4">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-input-group :id="uid" class="mb-2">
             <b-col class="pl-0 pr-0">
               <elsa-text-editor v-model="form.teksti" />
@@ -18,7 +18,7 @@
         <elsa-button variant="back" :to="{ name: 'ilmoitukset' }">
           {{ $t('peruuta') }}
         </elsa-button>
-        <elsa-button v-if="form.id" @click="onDelete()" variant="outline-danger">
+        <elsa-button v-if="form.id" variant="outline-danger" @click="onDelete()">
           {{ $t('poista-ilmoitus') }}
         </elsa-button>
         <elsa-button type="submit" :loading="params.saving" variant="primary" class="ml-2">

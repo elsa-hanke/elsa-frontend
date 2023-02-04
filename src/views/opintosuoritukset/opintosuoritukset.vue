@@ -2,7 +2,7 @@
   <div class="opintosuoritukset">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-row lg v-if="!loading && opintosuorituksetWrapper">
+      <b-row v-if="!loading && opintosuorituksetWrapper" lg>
         <b-col>
           <h1>{{ $t('opintosuoritukset') }}</h1>
           <p>
@@ -15,7 +15,7 @@
               {{ $t('sahkopostitse') }}
             </a>
           </p>
-          <b-tabs content-class="mt-3" :no-fade="true" v-model="tabIndex">
+          <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
             <b-tab :title="$t('johtamisopinnot')" href="#johtamisopinnot">
               <opintosuoritus-tab
                 variant="johtaminen"

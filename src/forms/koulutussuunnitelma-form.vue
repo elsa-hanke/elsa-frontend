@@ -4,54 +4,54 @@
       {{ $t('henkilokohtainen-koulutussuunnitelma-liitteena-kuvaus') }}
     </p>
     <asiakirjat-upload
-      :isPrimaryButton="false"
-      :allowMultiplesFiles="false"
-      :existingFileNamesInCurrentView="motivaatiokirjeAsiakirjatTableItems.map((k) => k.nimi)"
-      :existingFileNamesInOtherViews="reservedAsiakirjaNimet"
-      :buttonText="$t('lisaa-liitetiedosto')"
-      :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
-      :allowedFileTypes="['application/pdf']"
+      :is-primary-button="false"
+      :allow-multiples-files="false"
+      :existing-file-names-in-current-view="motivaatiokirjeAsiakirjatTableItems.map((k) => k.nimi)"
+      :existing-file-names-in-other-views="reservedAsiakirjaNimet"
+      :button-text="$t('lisaa-liitetiedosto')"
+      :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
+      :allowed-file-types="['application/pdf']"
       @selectedFiles="onKoulutussuunnitelmaFileAdded"
     />
     <asiakirjat-content
       class="px-0 col-md-6 col-lg-12 col-xl-6"
       :asiakirjat="koulutussuunnitelmaAsiakirjatTableItems"
-      :sortingEnabled="false"
-      :paginationEnabled="false"
-      :enableSearch="false"
-      :showInfoIfEmpty="false"
+      :sorting-enabled="false"
+      :pagination-enabled="false"
+      :enable-search="false"
+      :show-info-if-empty="false"
       @deleteAsiakirja="onKoulutussuunnitelmaFileDeleted"
     />
     <hr class="mt-0" />
     <elsa-form-group :label="$t('motivaatiokirje')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <p class="mb-3">{{ $t('motivaatiokirje-kuvas') }}</p>
         <asiakirjat-upload
-          :isPrimaryButton="false"
-          :allowMultiplesFiles="false"
-          :existingFileNamesInCurrentView="
+          :is-primary-button="false"
+          :allow-multiples-files="false"
+          :existing-file-names-in-current-view="
             koulutussuunnitelmaAsiakirjatTableItems.map((k) => k.nimi)
           "
-          :existingFileNamesInOtherViews="reservedAsiakirjaNimet"
-          :buttonText="$t('lisaa-liitetiedosto')"
-          :wrongFileTypeErrorMessage="$t('sallitut-tiedostoformaatit-pdf')"
-          :allowedFileTypes="['application/pdf']"
+          :existing-file-names-in-other-views="reservedAsiakirjaNimet"
+          :button-text="$t('lisaa-liitetiedosto')"
+          :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
+          :allowed-file-types="['application/pdf']"
           @selectedFiles="onMotivaatiokirjeFileAdded"
         />
         <asiakirjat-content
           class="px-0 col-md-6 col-lg-12 col-xl-6"
           :asiakirjat="motivaatiokirjeAsiakirjatTableItems"
-          :sortingEnabled="false"
-          :paginationEnabled="false"
-          :enableSearch="false"
-          :showInfoIfEmpty="false"
+          :sorting-enabled="false"
+          :pagination-enabled="false"
+          :enable-search="false"
+          :show-info-if-empty="false"
           @deleteAsiakirja="onMotivaatiokirjeFileDeleted"
         />
         <b-form-textarea
           :id="uid"
           v-model="form.motivaatiokirje"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="3"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -62,18 +62,18 @@
       <template #label-right>
         <b-form-checkbox
           v-model="form.opiskeluJaTyohistoriaYksityinen"
-          @input="$emit('skipRouteExitConfirm', false)"
           class="py-0"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.opiskeluJaTyohistoria"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="3"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -83,12 +83,12 @@
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.vahvuudet"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="3"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -99,18 +99,18 @@
       <template #label-right>
         <b-form-checkbox
           v-model="form.tulevaisuudenVisiointiYksityinen"
-          @input="$emit('skipRouteExitConfirm', false)"
           class="py-0"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.tulevaisuudenVisiointi"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="3"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -121,18 +121,18 @@
       <template #label-right>
         <b-form-checkbox
           v-model="form.osaamisenKartuttaminenYksityinen"
-          @input="$emit('skipRouteExitConfirm', false)"
           class="py-0"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.osaamisenKartuttaminen"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="3"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -140,18 +140,18 @@
       <template #label-right>
         <b-form-checkbox
           v-model="form.elamankenttaYksityinen"
-          @input="$emit('skipRouteExitConfirm', false)"
           class="py-0"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           {{ $t('piilota-kouluttajilta-kuvaus') }}
         </b-form-checkbox>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.elamankentta"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="3"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -159,12 +159,12 @@
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('tallenna') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+      <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>

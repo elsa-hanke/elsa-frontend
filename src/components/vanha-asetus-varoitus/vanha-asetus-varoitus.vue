@@ -1,7 +1,7 @@
 <template>
   <p v-if="vanhanAsetuksenMukainen" class="d-flex">
     <font-awesome-icon icon="info-circle" class="text-muted mr-2 mt-1" />
-    <span v-html="$t('vanhan-asetuksen-mukaisesti', { opintooppaastasiLinkki })" />
+    <span>{{ $t('vanhan-asetuksen-mukaisesti', { opintooppaastasiLinkki }) }}</span>
   </p>
 </template>
 

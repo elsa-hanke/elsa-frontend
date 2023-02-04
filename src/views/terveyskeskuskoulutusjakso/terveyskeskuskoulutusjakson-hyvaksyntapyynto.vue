@@ -38,9 +38,9 @@
             <hr />
             <terveyskeskuskoulutusjakso-form
               :hyvaksynta="hyvaksynta"
-              :reservedAsiakirjaNimetMutable="reservedAsiakirjaNimetMutable"
+              :reserved-asiakirja-nimet-mutable="reservedAsiakirjaNimetMutable"
               :editable="editable"
-              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+              :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
               @submit="onSubmit"
               @cancel="onCancel"
             />

@@ -1,6 +1,6 @@
 <template>
   <b-card-skeleton
-    :headerRoute="'seurantakeskustelut'"
+    :header-route="'seurantakeskustelut'"
     :header="$t('seurantakeskustelut')"
     :loading="loading"
     class="h-100"

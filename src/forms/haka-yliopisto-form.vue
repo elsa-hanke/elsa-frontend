@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('valitse-oma-yliopistosi')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="valittuYliopisto"

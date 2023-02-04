@@ -34,7 +34,7 @@
           </th>
           <td class="erikoistuja-details-padding">
             {{ $date(hyvaksynta.laillistamispaiva) }} -
-            <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
+            <elsa-button variant="link" class="pl-0" @click="onDownloadLaillistamistodistus">
               {{ hyvaksynta.laillistamispaivanLiitteenNimi }}
             </elsa-button>
           </td>
@@ -65,10 +65,10 @@
         :label="$t('laillistamispaiva')"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="laillistamispaiva"
             :id="uid"
+            ref="laillistamispaiva"
             :value.sync="form.laillistamispaiva"
             @input="$emit('skipRouteExitConfirm', false)"
           ></elsa-form-datepicker>
@@ -81,11 +81,11 @@
         </span>
         <asiakirjat-upload
           class="mt-3"
-          :isPrimaryButton="false"
-          :allowMultiplesFiles="false"
-          :buttonText="$t('lisaa-liitetiedosto')"
-          @selectedFiles="onLaillistamispaivaFilesAdded"
+          :is-primary-button="false"
+          :allow-multiples-files="false"
+          :button-text="$t('lisaa-liitetiedosto')"
           :disabled="laillistamispaivaAsiakirjat.length > 0"
+          @selectedFiles="onLaillistamispaivaFilesAdded"
         />
         <asiakirjat-content
           :asiakirjat="laillistamispaivaAsiakirjat"
@@ -93,9 +93,9 @@
           :pagination-enabled="false"
           :enable-search="false"
           :enable-delete="true"
-          @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
           :no-results-info-text="$t('ei-liitetiedostoja')"
           :state="validateState('laillistamispaivanLiite')"
+          @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
         />
         <b-form-invalid-feedback :state="validateState('laillistamispaivanLiite')">
           {{ $t('pakollinen-tieto') }}
@@ -172,11 +172,11 @@
               </span>
               <asiakirjat-upload
                 class="mt-3"
-                :isPrimaryButton="false"
-                :allowMultiplesFiles="false"
-                :buttonText="$t('lisaa-liitetiedosto')"
-                :existingFileNamesInCurrentView="existingFileNamesInCurrentView"
-                :existingFileNamesInOtherViews="existingFileNamesInOtherViews"
+                :is-primary-button="false"
+                :allow-multiples-files="false"
+                :button-text="$t('lisaa-liitetiedosto')"
+                :existing-file-names-in-current-view="existingFileNamesInCurrentView"
+                :existing-file-names-in-other-views="existingFileNamesInOtherViews"
                 @selectedFiles="onFilesAdded(sp, ...arguments)"
               />
             </div>
@@ -186,10 +186,10 @@
               :pagination-enabled="false"
               :enable-search="false"
               :enable-delete="editable && $isErikoistuva()"
-              @deleteAsiakirja="onDeleteLiitetiedosto(sp, ...arguments)"
               :no-results-info-text="$t('ei-liitetiedostoja')"
               :state="validateTyoskentelyjaksoState(index)"
-              :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+              :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+              @deleteAsiakirja="onDeleteLiitetiedosto(sp, ...arguments)"
             />
             <b-form-invalid-feedback :state="validateTyoskentelyjaksoState(index)">
               {{ $t('pakollinen-tieto') }}
@@ -298,13 +298,13 @@
       </elsa-button>
       <elsa-button
         v-if="!$isErikoistuva()"
-        variant="outline-primary"
         v-b-modal.return-to-sender
+        variant="outline-primary"
         class="ml-2"
       >
         {{ $t('palauta-muokattavaksi') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="font-weight-500">
+      <elsa-button variant="back" class="font-weight-500" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
@@ -315,19 +315,19 @@
       id="confirm-erikoistuja"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-virkailijan-tarkistus')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal
       id="confirm-virkailija"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-vastuuhenkilo-hyvaksynta')"
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSubmit"
     >
       <template #modal-content>
         <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolle')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="hyvaksynta.lisatiedotVirkailijalta"
@@ -341,7 +341,7 @@
       id="confirm-vastuuhenkilo"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvistuksen-jalkeen-terveyskeskuskoulutusjakso-hyvaksytty')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-return-to-sender-modal

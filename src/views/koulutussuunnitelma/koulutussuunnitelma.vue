@@ -79,7 +79,7 @@
             </section>
             <section>
               <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-              <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
+              <p>{{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki }) }}</p>
               <div class="d-flex flex-wrap justify-content-between d-print-none">
                 <elsa-button
                   v-if="!account.impersonated"
@@ -105,14 +105,14 @@
               >
                 <b-card-text class="p-2">
                   <asiakirjat-content
-                    class="asiakirjat-table asiakirjat-table--border-xs-0"
                     v-if="koulutussuunnitelma.koulutussuunnitelmaAsiakirja"
+                    class="asiakirjat-table asiakirjat-table--border-xs-0"
                     :asiakirjat="koulutussuunnitelmaAsiakirjatTableItems"
-                    :sortingEnabled="false"
-                    :paginationEnabled="false"
-                    :enableSearch="false"
-                    :enableDelete="false"
-                    :showInfoIfEmpty="false"
+                    :sorting-enabled="false"
+                    :pagination-enabled="false"
+                    :enable-search="false"
+                    :enable-delete="false"
+                    :show-info-if-empty="false"
                   />
                 </b-card-text>
               </b-card>
@@ -127,14 +127,14 @@
                   </span>
                 </template>
                 <asiakirjat-content
-                  class="asiakirjat-table"
                   v-if="koulutussuunnitelma.motivaatiokirjeAsiakirja"
+                  class="asiakirjat-table"
                   :asiakirjat="motivaatiokirjeAsiakirjatTableItems"
-                  :sortingEnabled="false"
-                  :paginationEnabled="false"
-                  :enableSearch="false"
-                  :enableDelete="false"
-                  :showInfoIfEmpty="false"
+                  :sorting-enabled="false"
+                  :pagination-enabled="false"
+                  :enable-search="false"
+                  :enable-delete="false"
+                  :show-info-if-empty="false"
                 />
                 <div v-if="koulutussuunnitelma.motivaatiokirje" class="text-preline">
                   {{ koulutussuunnitelma.motivaatiokirje }}

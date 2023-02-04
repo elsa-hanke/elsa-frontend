@@ -57,8 +57,8 @@
             </template>
           </b-table>
           <pagination
-            :currentPage.sync="currentPage"
-            :perPage="perPage"
+            :current-page.sync="currentPage"
+            :per-page="perPage"
             :rows="rows"
             :loading="loading"
           />

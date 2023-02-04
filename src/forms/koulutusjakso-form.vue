@@ -1,12 +1,12 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('koulutusjakson-nimi')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.nimi"
-          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('nimi')"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -19,7 +19,7 @@
       :add-new-label="$t('lisaa-tyoskentelyjakso')"
       @submit="onTyoskentelyjaksoSubmit"
     >
-      <template v-slot:modal-content="{ submit, cancel }">
+      <template #modal-content="{ submit, cancel }">
         <tyoskentelyjakso-form
           :kunnat="kunnat"
           :erikoisalat="erikoisalat"
@@ -27,39 +27,39 @@
           @cancel="cancel"
         />
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <div
-          :id="uid"
           v-for="(tyoskentelyjakso, index) in form.tyoskentelyjaksot"
+          :id="uid"
           :key="index"
           class="mb-2"
         >
           <elsa-form-multiselect
             :id="uid"
-            :value="form.tyoskentelyjaksot"
             v-model="form.tyoskentelyjaksot[index]"
-            @input="$emit('skipRouteExitConfirm', false)"
+            :value="form.tyoskentelyjaksot"
             :options="tyoskentelyjaksotFiltered"
             label="label"
             track-by="id"
+            @input="$emit('skipRouteExitConfirm', false)"
             @select="onTyoskentelyjaksoSelect"
           />
           <elsa-button
             v-if="index !== 0"
-            @click="deleteTyoskentelyjakso(index)"
             variant="link"
             size="sm"
             class="text-decoration-none shadow-none p-0"
+            @click="deleteTyoskentelyjakso(index)"
           >
             <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
             {{ $t('poista-tyoskentelyjakso') }}
           </elsa-button>
         </div>
         <elsa-button
-          @click="addTyoskentelyjakso"
           variant="link"
           size="sm"
           class="text-decoration-none shadow-none p-0"
+          @click="addTyoskentelyjakso"
         >
           <font-awesome-icon icon="plus" fixed-width size="sm" />
           {{ $t('useampi-jakso') | lowercase }}
@@ -67,11 +67,10 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('osaamistavoitteet-omalta-erikoisalalta')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.osaamistavoitteet"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="arvioitavanKokonaisuudenKategoriatSorted"
           group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
@@ -81,6 +80,7 @@
           :allow-empty="true"
           :multiple="true"
           :taggable="true"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           <template slot="option" slot-scope="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
@@ -90,12 +90,12 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('muut-osaamistavoitteet')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.muutOsaamistavoitteet"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="5"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
       </template>
     </elsa-form-group>
@@ -104,12 +104,12 @@
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('tallenna-koulutusjakso') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+      <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>

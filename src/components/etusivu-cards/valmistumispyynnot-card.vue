@@ -26,13 +26,13 @@
 
         <template #cell(actions)="data">
           <elsa-button
+            v-if="showButton(data.item.tila)"
             variant="primary"
             class="pt-1 pb-1"
             :to="{
               name: linkComponent(data.item.tila),
               params: { valmistumispyyntoId: data.item.id }
             }"
-            v-if="showButton(data.item.tila)"
           >
             {{ $t(buttonText(data.item.tyyppi)) }}
           </elsa-button>

@@ -28,9 +28,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ displayName }}
-            </template>
+            {{ displayName }}
           </elsa-form-group>
           <div v-if="$isKouluttaja() || $isVastuuhenkilo()">
             <elsa-form-group
@@ -40,9 +38,7 @@
               label-cols="12"
               class="align-items-center mb-md-0"
             >
-              <template>
-                {{ form.nimike }}
-              </template>
+              {{ form.nimike }}
             </elsa-form-group>
             <elsa-form-group
               :label="$t('yliopisto-ja-erikoisalat')"
@@ -51,17 +47,15 @@
               label-cols="12"
               class="align-items-center mb-md-0"
             >
-              <template>
-                <div
-                  v-for="yliopistoErikoisalat in form.kayttajanYliopistotJaErikoisalat"
-                  :key="yliopistoErikoisalat.yliopisto.id"
-                >
-                  <div v-for="erikoisala in yliopistoErikoisalat.erikoisalat" :key="erikoisala.id">
-                    {{ $t(`yliopisto-nimi.${yliopistoErikoisalat.yliopisto.nimi}`) }}:
-                    {{ erikoisala.nimi }}
-                  </div>
+              <div
+                v-for="yliopistoErikoisalat in form.kayttajanYliopistotJaErikoisalat"
+                :key="yliopistoErikoisalat.yliopisto.id"
+              >
+                <div v-for="erikoisala in yliopistoErikoisalat.erikoisalat" :key="erikoisala.id">
+                  {{ $t(`yliopisto-nimi.${yliopistoErikoisalat.yliopisto.nimi}`) }}:
+                  {{ erikoisala.nimi }}
                 </div>
-              </template>
+              </div>
             </elsa-form-group>
           </div>
           <div v-if="$isVirkailija()">
@@ -72,14 +66,12 @@
               label-cols="12"
               class="align-items-center mb-md-0"
             >
-              <template>
-                <div
-                  v-for="yliopisto in kayttajaTiedot ? kayttajaTiedot.kayttajanYliopistot : []"
-                  :key="yliopisto.id"
-                >
-                  {{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}
-                </div>
-              </template>
+              <div
+                v-for="yliopisto in kayttajaTiedot ? kayttajaTiedot.kayttajanYliopistot : []"
+                :key="yliopisto.id"
+              >
+                {{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}
+              </div>
             </elsa-form-group>
           </div>
           <elsa-form-group
@@ -90,9 +82,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ account.email }}
-            </template>
+            {{ account.email }}
           </elsa-form-group>
           <elsa-form-group
             v-if="account.phoneNumber"
@@ -102,9 +92,7 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              {{ account.phoneNumber }}
-            </template>
+            {{ account.phoneNumber }}
           </elsa-form-group>
         </div>
       </div>
@@ -123,9 +111,7 @@
           label-cols="12"
           class="align-items-center mb-md-2"
         >
-          <template>
-            {{ displayName }}
-          </template>
+          {{ displayName }}
         </elsa-form-group>
         <div v-if="$isVastuuhenkilo()">
           <elsa-form-group
@@ -135,17 +121,15 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              <div
-                v-for="yliopistoErikoisalat in form.kayttajanYliopistotJaErikoisalat"
-                :key="yliopistoErikoisalat.yliopisto.id"
-              >
-                <div v-for="erikoisala in yliopistoErikoisalat.erikoisalat" :key="erikoisala.id">
-                  {{ $t(`yliopisto-nimi.${yliopistoErikoisalat.yliopisto.nimi}`) }}:
-                  {{ erikoisala.nimi }}
-                </div>
+            <div
+              v-for="yliopistoErikoisalat in form.kayttajanYliopistotJaErikoisalat"
+              :key="yliopistoErikoisalat.yliopisto.id"
+            >
+              <div v-for="erikoisala in yliopistoErikoisalat.erikoisalat" :key="erikoisala.id">
+                {{ $t(`yliopisto-nimi.${yliopistoErikoisalat.yliopisto.nimi}`) }}:
+                {{ erikoisala.nimi }}
               </div>
-            </template>
+            </div>
           </elsa-form-group>
           <hr />
         </div>
@@ -157,19 +141,17 @@
             label-cols="12"
             class="align-items-center mb-md-0"
           >
-            <template>
-              <div
-                v-for="yliopisto in kayttajaTiedot ? kayttajaTiedot.kayttajanYliopistot : []"
-                :key="yliopisto.id"
-              >
-                {{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}
-              </div>
-            </template>
+            <div
+              v-for="yliopisto in kayttajaTiedot ? kayttajaTiedot.kayttajanYliopistot : []"
+              :key="yliopisto.id"
+            >
+              {{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}
+            </div>
           </elsa-form-group>
           <hr />
         </div>
         <elsa-form-group v-if="$isKouluttaja() || $isVastuuhenkilo()" :label="$t('nimike')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input :id="uid" v-model="form.nimike"></b-form-input>
           </template>
         </elsa-form-group>
@@ -181,7 +163,7 @@
           >
             <hr v-if="index > 0" />
             <elsa-form-group :label="$t('yliopisto')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
                   v-model="form.kayttajanYliopistotJaErikoisalat[index].yliopisto"
@@ -189,7 +171,7 @@
                     yliopistotOptions(form.kayttajanYliopistotJaErikoisalat[index].yliopisto)
                   "
                   :state="validateKayttajanYliopistoState(index)"
-                  :customLabel="yliopistoLabel"
+                  :custom-label="yliopistoLabel"
                 ></elsa-form-multiselect>
                 <b-form-invalid-feedback :state="validateKayttajanYliopistoState(index)">
                   {{ $t('pakollinen-tieto') }}
@@ -197,7 +179,7 @@
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('erikoisala')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
                   v-model="form.kayttajanYliopistotJaErikoisalat[index].erikoisalat"
@@ -214,18 +196,18 @@
             </elsa-form-group>
             <elsa-button
               v-if="index !== 0"
-              @click="deleteYliopistoErikoisala(index)"
               variant="link"
               class="text-decoration-none shadow-none p-0"
+              @click="deleteYliopistoErikoisala(index)"
             >
               <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
               {{ $t('poista-yliopisto-ja-erikoisala') }}
             </elsa-button>
           </div>
           <elsa-button
-            @click="addYliopistoErikoisala"
             variant="link"
             class="text-decoration-none shadow-none p-0"
+            @click="addYliopistoErikoisala"
           >
             <font-awesome-icon icon="plus" fixed-width size="sm" />
             {{ $t('lisaa-yliopisto-ja-erikoisala') }}
@@ -233,7 +215,7 @@
           <hr />
         </div>
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.email"
@@ -246,42 +228,40 @@
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('puhelinnumero')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input :id="uid" v-model="form.phoneNumber"></b-form-input>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('profiilikuva')">
-          <template>
-            <avatar
-              :src="previewSrc"
-              src-content-type="image/jpeg"
-              :username="displayName"
-              background-color="gray"
-              color="white"
-              :size="160"
-            />
-            <input
-              ref="avatar-file-input"
-              id="avatar-file-input"
-              type="file"
-              accept="image/jpeg,image/png"
-              @change="avatarChange"
-              hidden
-            />
-            <div class="d-flex flex-wrap">
-              <div class="mt-2">
-                <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
-                  {{ $t('valitse-profiilikuva') }}
-                </elsa-button>
-              </div>
-              <div class="mt-2">
-                <elsa-button variant="outline-danger" v-if="form.avatar" @click="removeAvatar">
-                  <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
-                  {{ $t('poista-kuva') }}
-                </elsa-button>
-              </div>
+          <avatar
+            :src="previewSrc"
+            src-content-type="image/jpeg"
+            :username="displayName"
+            background-color="gray"
+            color="white"
+            :size="160"
+          />
+          <input
+            id="avatar-file-input"
+            ref="avatar-file-input"
+            type="file"
+            accept="image/jpeg,image/png"
+            hidden
+            @change="avatarChange"
+          />
+          <div class="d-flex flex-wrap">
+            <div class="mt-2">
+              <elsa-button variant="primary" class="mr-2" @click="selectAvatar">
+                {{ $t('valitse-profiilikuva') }}
+              </elsa-button>
             </div>
-          </template>
+            <div class="mt-2">
+              <elsa-button v-if="form.avatar" variant="outline-danger" @click="removeAvatar">
+                <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
+                {{ $t('poista-kuva') }}
+              </elsa-button>
+            </div>
+          </div>
         </elsa-form-group>
         <hr />
         <div class="text-right">

@@ -3,8 +3,8 @@
     <b-row>
       <b-col lg="8">
         <h5>{{ $t('opinto-oikeuden-alkamispäivä') }}</h5>
-        <p v-if="this.form.opintooikeudenMyontamispaiva">
-          {{ $date(this.form.opintooikeudenMyontamispaiva) }}
+        <p v-if="form.opintooikeudenMyontamispaiva">
+          {{ $date(form.opintooikeudenMyontamispaiva) }}
         </p>
       </b-col>
     </b-row>
@@ -13,28 +13,26 @@
         <elsa-form-group :label="$t('koejakson-alkamispäivä')" :required="true">
           <template #label-help>
             <elsa-popover>
-              <template>
-                <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
-                <p class="mb-0">{{ $t('koejakson-alkamis-tooltip') }}</p>
-              </template>
+              <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
+              <p class="mb-0">{{ $t('koejakson-alkamis-tooltip') }}</p>
             </elsa-popover>
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-datepicker
-              ref="koejaksonAlkamispaiva"
               v-if="childDataReceived"
               :id="uid"
+              ref="koejaksonAlkamispaiva"
               :value.sync="form.koejaksonAlkamispaiva"
-              @input="$emit('skipRouteExitConfirm', false)"
               :min="form.opintooikeudenMyontamispaiva"
-              :minErrorText="$t('koejakso-ei-voi-alkaa-ennen-opinto-oikeuden-myontamispaivaa')"
+              :min-error-text="$t('koejakso-ei-voi-alkaa-ennen-opinto-oikeuden-myontamispaivaa')"
               :max="maxKoejaksonAlkamispaiva"
-              :maxErrorText="
+              :max-error-text="
                 $t(
                   'koejakson-voi-aloittaa-viimeistaan-puoli-vuotta-ennen-opinto-oikeuden-paattymista'
                 )
               "
               :disabled="!form.opintooikeudenMyontamispaiva"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
           </template>
         </elsa-form-group>
@@ -43,13 +41,13 @@
     <b-row>
       <b-col lg="4">
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanSahkoposti"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanSahkoposti')"
               :value="account.email"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback
               v-if="!$v.form.erikoistuvanSahkoposti.required"
@@ -59,8 +57,8 @@
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
               v-if="!$v.form.erikoistuvanSahkoposti.email"
-              :state="validateState('erikoistuvanSahkoposti')"
               :id="`${uid}-feedback`"
+              :state="validateState('erikoistuvanSahkoposti')"
             >
               {{ $t('sahkopostiosoite-ei-kelvollinen') }}
             </b-form-invalid-feedback>
@@ -69,13 +67,13 @@
       </b-col>
       <b-col lg="4">
         <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-input
               :id="uid"
               v-model="form.erikoistuvanPuhelinnumero"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('erikoistuvanPuhelinnumero')"
               :value="account.phoneNumber"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('pakollinen-tieto') }}
@@ -101,18 +99,18 @@
         ></koulutuspaikka-details>
         <elsa-button
           v-if="form.koulutuspaikat.length >= 2"
-          @click="deleteKoulutuspaikka"
           variant="outline-primary"
           class="border-0 p-0"
+          @click="deleteKoulutuspaikka"
         >
           <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
           {{ $t('poista-toimipaikka') }}
         </elsa-button>
         <elsa-button
           v-else
-          @click="addKoulutuspaikka"
           variant="outline-primary"
           class="border-0 p-0"
+          @click="addKoulutuspaikka"
         >
           + {{ $t('toinen-toimipaikka') }}
         </elsa-button>
@@ -138,14 +136,14 @@
         ></kouluttaja-details>
         <elsa-button
           v-if="form.kouluttajat.length >= 2"
-          @click="deleteKouluttaja"
           variant="outline-primary"
           class="border-0 p-0"
+          @click="deleteKouluttaja"
         >
           <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
           {{ $t('lahikouluttaja-poista') }}
         </elsa-button>
-        <elsa-button v-else @click="addKouluttaja" variant="outline-primary" class="border-0 p-0">
+        <elsa-button v-else variant="outline-primary" class="border-0 p-0" @click="addKouluttaja">
           + {{ $t('lahikouluttaja-toinen') }}
         </elsa-button>
       </b-col>
@@ -187,8 +185,8 @@
           style="min-width: 14rem"
           :disabled="buttonStates.secondaryButtonLoading"
           :loading="buttonStates.primaryButtonLoading"
-          @click="validateAndConfirmSend"
           variant="primary"
+          @click="validateAndConfirmSend"
         >
           {{ $t('laheta') }}
         </elsa-button>
@@ -198,14 +196,14 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koulutussopimus-lahetys')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal
       id="confirm-save"
       :title="$t('vahvista-tallennus-keskeneraisena-title')"
       :text="$t('vahvista-tallennus-keskeneraisena-body')"
-      :submitText="$t('tallenna-keskeneraisena')"
+      :submit-text="$t('tallenna-keskeneraisena')"
       @submit="saveAndExit"
     />
   </b-form>

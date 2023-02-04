@@ -86,8 +86,8 @@
             <template #cell(actions)="row">
               <b-link
                 v-if="row.item.aiemmatJaksot.length > 0"
-                @click="row.toggleDetails"
                 class="text-decoration-none"
+                @click="row.toggleDetails"
               >
                 {{ row.detailsShowing ? $t('piilota') : $t('nayta') }} {{ $t('aiemmat') }}
                 <font-awesome-icon
@@ -142,8 +142,8 @@
             </template>
           </b-table>
           <pagination
-            :currentPage.sync="currentPage"
-            :perPage="perPage"
+            :current-page.sync="currentPage"
+            :per-page="perPage"
             :rows="rows"
             :loading="loading"
           />

@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('erikoistuja')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <user-avatar :id="uid" :src-base64="avatar" src-content-type="image/jpeg" />
       </template>
     </elsa-form-group>
@@ -12,7 +12,7 @@
       :required="true"
       @submit="onTyoskentelyjaksoSubmit"
     >
-      <template v-slot:modal-content="{ submit, cancel, skipRouteExitConfirm }">
+      <template #modal-content="{ submit, cancel, skipRouteExitConfirm }">
         <tyoskentelyjakso-form
           :kunnat="kunnat"
           :erikoisalat="erikoisalat"
@@ -21,15 +21,15 @@
           @skipRouteExitConfirm="skipRouteExitConfirm"
         />
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           label="label"
           track-by="id"
+          @input="$emit('skipRouteExitConfirm', false)"
           @select="onTyoskentelyjaksoSelect"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -38,11 +38,10 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('arvioitavat-kokonaisuudet')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="arvioitavatKokonaisuudet"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="arvioitavanKokonaisuudenKategoriat"
           :multiple="true"
           :state="validateArvioitavatKokonaisuudet()"
@@ -51,6 +50,7 @@
           :group-select="false"
           label="nimi"
           track-by="id"
+          @input="$emit('skipRouteExitConfirm', false)"
         >
           <template slot="option" slot-scope="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
@@ -67,12 +67,12 @@
     </elsa-form-group>
     <b-form-row>
       <elsa-form-group :label="$t('arvioitava-tapahtuma')" class="col-md-8">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.arvioitavaTapahtuma"
-            @input="$emit('skipRouteExitConfirm', false)"
             :aria-describedby="`${uid}-feedback`"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -80,19 +80,21 @@
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('tapahtuman-ajankohta')" class="col-md-4" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="tapahtumanAjankohta"
             v-if="childDataReceived"
             :id="uid"
-            @input="$emit('skipRouteExitConfirm', false)"
+            ref="tapahtumanAjankohta"
             :value.sync="form.tapahtumanAjankohta"
             :min="tyoskentelyjaksonAlkamispaiva"
             :max="tyoskentelyjaksonPaattymispaiva"
-            :minErrorText="$t('tapahtuman-ajankohta-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
-            :maxErrorText="
+            :min-error-text="
+              $t('tapahtuman-ajankohta-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
+            "
+            :max-error-text="
               $t('tapahtuman-ajankohta-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')
             "
+            @input="$emit('skipRouteExitConfirm', false)"
           ></elsa-form-datepicker>
         </template>
       </elsa-form-group>
@@ -106,25 +108,25 @@
         class="col-md-12"
         @submit="onKouluttajaSubmit"
       >
-        <template v-slot:modal-content="{ submit, cancel, skipRouteExitConfirm }">
+        <template #modal-content="{ submit, cancel, skipRouteExitConfirm }">
           <kouluttaja-form
             @submit="submit"
             @cancel="cancel"
             @skipRouteExitConfirm="skipRouteExitConfirm"
           />
         </template>
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-multiselect
             :id="uid"
             v-model="form.arvioinninAntaja"
-            @input="$emit('skipRouteExitConfirm', false)"
             :options="formattedKouluttajatAndVastuuhenkilot"
             :state="validateState('arvioinninAntaja')"
             :disabled="editing"
             label="nimi"
             track-by="nimi"
+            @input="$emit('skipRouteExitConfirm', false)"
           >
-            <template v-slot:option="{ option }">
+            <template #option="{ option }">
               <div v-if="option.nimi != null">{{ option.nimi }}</div>
             </template>
           </elsa-form-multiselect>
@@ -139,12 +141,12 @@
       </elsa-form-group>
     </b-form-row>
     <elsa-form-group :label="$t('lisatiedot')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.lisatiedot"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="5"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-textarea>
       </template>
     </elsa-form-group>

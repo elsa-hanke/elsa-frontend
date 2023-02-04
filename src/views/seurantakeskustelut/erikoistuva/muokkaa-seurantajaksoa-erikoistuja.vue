@@ -39,7 +39,7 @@
           <seurantajakso-form
             :editing="true"
             :seurantajakso="seurantajakso"
-            :seurantajaksonTiedot="seurantajaksonTiedot"
+            :seurantajakson-tiedot="seurantajaksonTiedot"
             @submit="onSubmit"
             @cancel="onCancel"
             @delete="onDelete"

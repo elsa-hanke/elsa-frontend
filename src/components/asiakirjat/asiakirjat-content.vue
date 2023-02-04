@@ -20,8 +20,8 @@
       <b-spinner variant="primary" :label="$t('ladataan')" />
     </div>
     <b-table
-      class="asiakirjat-table"
       v-if="rows > 0"
+      class="asiakirjat-table"
       :items="tulokset"
       :fields="computedFields"
       :per-page="perPage"
@@ -37,8 +37,8 @@
         <elsa-button
           variant="link"
           class="shadow-none p-0"
-          @click="onViewAsiakirja(row.item)"
           :loading="row.item.disablePreview"
+          @click="onViewAsiakirja(row.item)"
         >
           {{ row.item.nimi }}
         </elsa-button>
@@ -47,8 +47,8 @@
         <elsa-button
           variant="outline-primary"
           class="border-0 p-0"
-          @click="onDownloadAsiakirja(row.item)"
           :loading="row.item.disableDownload"
+          @click="onDownloadAsiakirja(row.item)"
         >
           <font-awesome-icon
             :hidden="row.item.disableDownload"
@@ -60,10 +60,10 @@
       </template>
       <template v-if="enableDelete" #cell(delete)="row">
         <elsa-button
-          @click="onDeleteAsiakirja(row.item)"
           variant="outline-primary"
           class="border-0 p-0"
           :loading="row.item.disableDelete"
+          @click="onDeleteAsiakirja(row.item)"
         >
           <font-awesome-icon
             :hidden="row.item.disableDelete"

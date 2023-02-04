@@ -8,9 +8,9 @@
           <p>{{ $t('asiakirjat-kuvaus') }}</p>
           <asiakirjat-upload
             v-if="!account.impersonated"
-            :buttonText="$t('lisaa-asiakirja')"
+            :button-text="$t('lisaa-asiakirja')"
             :uploading="uploading"
-            :existingFileNamesInCurrentView="existingFileNames"
+            :existing-file-names-in-current-view="existingFileNames"
             @selectedFiles="onAsiakirjatAdded"
           >
             {{ $t('lisaa-asiakirja') }}
@@ -18,9 +18,9 @@
           <asiakirjat-content
             :asiakirjat="asiakirjat"
             :loading="loading"
-            :sortBy="sortBy"
-            :confirmDeleteTitle="$t('poista-asiakirja')"
-            :confirmDeleteTypeText="$t('asiakirjan')"
+            :sort-by="sortBy"
+            :confirm-delete-title="$t('poista-asiakirja')"
+            :confirm-delete-type-text="$t('asiakirjan')"
             @deleteAsiakirja="onDeleteAsiakirja"
           />
         </b-col>

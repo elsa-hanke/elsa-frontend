@@ -1,6 +1,6 @@
 <template>
   <div class="opintosuoritukset-tab">
-    <div class="d-flex justify-content-center border rounded pt-3 mb-4" v-if="progress">
+    <div v-if="progress" class="d-flex justify-content-center border rounded pt-3 mb-4">
       <b-container fluid>
         <elsa-form-group
           :label="
@@ -9,17 +9,17 @@
               : $t('johtamisopinnot-yhteensa')
           "
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <div :id="uid">
               <elsa-progress-bar
                 :value="suoritettu"
                 :min-required="vaadittu"
                 :show-required-text="true"
                 color="#41b257"
-                backgroundColor="#b3e1bc"
-                textColor="#000"
+                background-color="#b3e1bc"
+                text-color="#000"
                 class="mb-3"
-                :customUnit="$t('opintopistetta-lyhenne')"
+                :custom-unit="$t('opintopistetta-lyhenne')"
               />
             </div>
           </template>
@@ -28,8 +28,8 @@
     </div>
     <div v-if="suoritukset.length > 0">
       <b-table-simple
-        stacked="md"
         v-if="variant === 'sateily' || variant === 'kuulustelu' || variant === 'muu'"
+        stacked="md"
         class="opintosuoritus-table"
       >
         <b-thead>
@@ -77,7 +77,7 @@
           </b-tr>
         </b-tbody>
       </b-table-simple>
-      <b-table-simple stacked="md" v-if="variant === 'johtaminen'" class="opintosuoritus-table">
+      <b-table-simple v-if="variant === 'johtaminen'" stacked="md" class="opintosuoritus-table">
         <b-thead>
           <b-tr>
             <b-th class="col1">{{ $t('opinto') }}</b-th>
@@ -98,7 +98,11 @@
               </span>
             </b-td>
           </b-tr>
-          <b-tr v-for="(ok, index) in o.osakokonaisuudet" :key="index" class="ok-row py-2">
+          <b-tr
+            v-for="(ok, kokonaisuusIndex) in o.osakokonaisuudet"
+            :key="kokonaisuusIndex"
+            class="ok-row py-2"
+          >
             <b-td class="col1 pl-6 py-2">
               <span>{{ localizeName(ok) }}</span>
             </b-td>

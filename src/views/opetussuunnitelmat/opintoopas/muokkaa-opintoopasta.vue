@@ -9,7 +9,7 @@
           <opintoopas-form
             v-if="!loading"
             :opas="opas"
-            :erikoisalaId="$route.params.erikoisalaId"
+            :erikoisala-id="$route.params.erikoisalaId"
             :arviointiasteikot="arviointiasteikot"
             :editing="true"
             @submit="onSubmit"

@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <p>{{ $t('kayton-aloitus-ingressi') }}</p>
     <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.sahkoposti"
@@ -17,7 +17,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('vahvista-sahkopostiosoite')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.sahkopostiUudelleen"
@@ -50,7 +50,7 @@
       :label="$t('useampi-opinto-oikeus')"
       :required="true"
     >
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <p class="mb-4">{{ $t('useampi-opinto-oikeus-ingressi') }}</p>
         <b-form-radio-group
           :id="uid"

@@ -3,20 +3,18 @@
     <elsa-form-group :label="$t('poissaolon-syy')" :required="true">
       <template #label-help>
         <elsa-popover>
-          <template>
-            <elsa-poissaolon-syyt />
-          </template>
+          <elsa-poissaolon-syyt />
         </elsa-popover>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.poissaolonSyy"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="poissaolonSyytSorted"
           :state="validateState('poissaolonSyy')"
           label="nimi"
           track-by="id"
+          @input="$emit('skipRouteExitConfirm', false)"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -28,15 +26,15 @@
       :required="true"
       @submit="onTyoskentelyjaksoSubmit"
     >
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-multiselect
           :id="uid"
           v-model="form.tyoskentelyjakso"
-          @input="$emit('skipRouteExitConfirm', false)"
           :options="tyoskentelyjaksotFormatted"
           :state="validateState('tyoskentelyjakso')"
           label="label"
           track-by="id"
+          @input="$emit('skipRouteExitConfirm', false)"
           @select="onTyoskentelyjaksoSelect"
         />
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -50,20 +48,20 @@
         class="col-xs-12 col-sm-6 pr-sm-3"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="alkamispaiva"
             v-if="childDataReceived"
             :id="uid"
+            ref="alkamispaiva"
             :value.sync="form.alkamispaiva"
-            @input="$emit('skipRouteExitConfirm', false)"
             :initial-date="alkamispaivaInitialDate"
             :min="minAlkamispaiva"
-            :minErrorText="
+            :min-error-text="
               $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
             "
             :max="maxAlkamispaiva"
-            :maxErrorText="$t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')"
+            :max-error-text="$t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></elsa-form-datepicker>
         </template>
       </elsa-form-group>
@@ -72,21 +70,21 @@
         class="col-xs-12 col-sm-6 pl-sm-3"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="paattymispaiva"
             v-if="childDataReceived"
             :id="uid"
+            ref="paattymispaiva"
             :value.sync="form.paattymispaiva"
-            @input="$emit('skipRouteExitConfirm', false)"
             :initial-date="paattymispaivaInitialDate"
             :min="minPaattymispaiva"
-            :minErrorText="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
+            :min-error-text="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
             :max="maxPaattymispaiva"
-            :maxErrorText="
+            :max-error-text="
               $t('poissaolon-paattymispaivan-taytyy-olla-ennen-tyoskentelyjakson-paattymista')
             "
             class="datepicker-range"
+            @input="$emit('skipRouteExitConfirm', false)"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -96,8 +94,8 @@
     </b-form-row>
     <b-form-checkbox
       v-model="form.kokoTyoajanPoissaolo"
-      @change="$emit('skipRouteExitConfirm', false)"
       :class="{ 'mb-3': !form.kokoTyoajanPoissaolo }"
+      @change="$emit('skipRouteExitConfirm', false)"
     >
       {{ $t('koko-tyoajan-poissaolo') }}
     </b-form-checkbox>
@@ -110,20 +108,18 @@
       >
         <template #label-help>
           <elsa-popover>
-            <template>
-              {{ $t('poissaoloprosentti-tooltip') }}
-            </template>
+            {{ $t('poissaoloprosentti-tooltip') }}
           </elsa-popover>
         </template>
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div class="d-flex align-items-center">
             <b-form-input
               :id="uid"
               v-model.number="form.poissaoloprosentti"
-              @input="$emit('skipRouteExitConfirm', false)"
               :state="validateState('poissaoloprosentti')"
               type="number"
               step="any"
+              @input="$emit('skipRouteExitConfirm', false)"
             />
             <span class="mx-3">%</span>
           </div>
@@ -156,7 +152,7 @@
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>

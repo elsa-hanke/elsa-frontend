@@ -75,7 +75,7 @@
           :display-name="value.arvioinninAntaja.nimi"
         />
       </elsa-form-group>
-      <elsa-form-group :label="$t('lisatiedot')" v-if="value.lisatiedot">
+      <elsa-form-group v-if="value.lisatiedot" :label="$t('lisatiedot')">
         <span class="text-preline">{{ value.lisatiedot }}</span>
       </elsa-form-group>
     </div>

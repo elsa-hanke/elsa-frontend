@@ -202,7 +202,7 @@
                 :enable-search="false"
                 :enable-delete="false"
                 :no-results-info-text="$t('ei-liitetiedostoja')"
-                :asiakirjaDataEndpointUrl="asiakirjaDataEndpointUrl"
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
                 :loading="loading"
               />
             </b-col>
@@ -465,21 +465,21 @@
                 {{ $t('peruuta') }}
               </elsa-button>
               <elsa-button
+                v-b-modal.return-to-sender
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 :disabled="buttonStates.primaryButtonLoading"
                 :loading="buttonStates.secondaryButtonLoading"
                 variant="outline-primary"
-                v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onValidateAndConfirm('confirm-sign')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="px-6"
+                @click="onValidateAndConfirm('confirm-sign')"
               >
                 {{ $t('hyvaksy-laheta') }}
               </elsa-button>
@@ -495,12 +495,12 @@
       id="confirm-sign"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-vastuuhenkilo-hyvaksynta')"
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSend"
     >
       <template #modal-content>
         <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolle')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="vastuuhenkilonArvio.lisatiedotVirkailijalta"

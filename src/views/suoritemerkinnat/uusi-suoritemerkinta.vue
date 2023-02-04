@@ -10,7 +10,7 @@
           <suoritemerkinta-form
             v-if="!loading"
             :tyoskentelyjaksot="tyoskentelyjaksot"
-            :suoritteenKategoriat="suoritemerkintaLomake.suoritteenKategoriat"
+            :suoritteen-kategoriat="suoritemerkintaLomake.suoritteenKategoriat"
             :arviointiasteikko="suoritemerkintaLomake.arviointiasteikko"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"

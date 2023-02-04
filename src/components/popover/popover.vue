@@ -4,7 +4,7 @@
       <font-awesome-icon class="text-primary" icon="info-circle" fixed-width />
     </elsa-button>
     <b-popover :target="uid" triggers="click blur" placement="auto">
-      <template v-for="(index, name) in $slots" v-slot:[name]><slot :name="name" /></template>
+      <template v-for="(index, name) in $slots" #[name]><slot :name="name" /></template>
     </b-popover>
   </span>
 </template>

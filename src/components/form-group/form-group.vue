@@ -1,6 +1,6 @@
 <template>
   <b-form-group :label-for="uid" v-bind="$attrs">
-    <template v-slot:label>
+    <template #label>
       <div class="d-flex justify-content-between align-items-center flex-wrap">
         <div :class="{ 'mr-3': addNewEnabled }">
           {{ label }}
@@ -35,7 +35,7 @@
             @hide="onHide"
             @show="onShow"
           >
-            <template v-slot:modal-title>
+            <template #modal-title>
               {{ addNewLabelText }}
             </template>
             <slot

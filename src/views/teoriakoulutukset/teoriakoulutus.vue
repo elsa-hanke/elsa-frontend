@@ -8,18 +8,18 @@
           <hr />
           <div v-if="teoriakoulutus">
             <elsa-form-group v-if="teoriakoulutus.koulutuksenNimi" :label="$t('koulutuksen-nimi')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ teoriakoulutus.koulutuksenNimi }}</span>
               </template>
             </elsa-form-group>
             <elsa-form-group v-if="teoriakoulutus.koulutuksenPaikka" :label="$t('paikka')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ teoriakoulutus.koulutuksenPaikka }}</span>
               </template>
             </elsa-form-group>
             <b-form-row>
               <elsa-form-group :label="$t('alkamispaiva')" class="col-sm-12 col-md-6 pr-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">{{ $date(teoriakoulutus.alkamispaiva) }}</span>
                 </template>
               </elsa-form-group>
@@ -28,7 +28,7 @@
                 :label="$t('paattymispaiva')"
                 class="col-sm-12 col-md-6 pl-md-3"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid" class="datepicker-range">
                     {{ $date(teoriakoulutus.paattymispaiva) }}
                   </span>
@@ -39,14 +39,14 @@
               v-if="teoriakoulutus.erikoistumiseenHyvaksyttavaTuntimaara"
               :label="$t('erikoistumiseen-hyvaksyttava-tuntimaara')"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">
                   {{ teoriakoulutus.erikoistumiseenHyvaksyttavaTuntimaara }} {{ $t('t') }}
                 </span>
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('todistus')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <asiakirjat-content
                   :id="uid"
                   :asiakirjat="teoriakoulutus.todistukset"
@@ -54,7 +54,7 @@
                   :pagination-enabled="false"
                   :enable-search="false"
                   :enable-delete="false"
-                  :noResultsInfoText="$t('ei-liitetiedostoja')"
+                  :no-results-info-text="$t('ei-liitetiedostoja')"
                   :loading="loading"
                 />
               </template>
@@ -73,8 +73,8 @@
                 v-if="muokkausoikeudet"
                 :loading="deleting"
                 variant="outline-danger"
-                @click="onTeoriakoulutusDelete"
                 class="mb-3"
+                @click="onTeoriakoulutusDelete"
               >
                 {{ $t('poista-teoriakoulutus') }}
               </elsa-button>

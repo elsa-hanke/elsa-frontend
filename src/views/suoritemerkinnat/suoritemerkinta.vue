@@ -25,8 +25,8 @@
                 :disabled="suoritemerkinta.lukittu"
                 :loading="deleting"
                 variant="outline-danger"
-                @click="onSuoritemerkintaDelete"
                 class="mb-3"
+                @click="onSuoritemerkintaDelete"
               >
                 {{ $t('poista-merkinta') }}
               </elsa-button>

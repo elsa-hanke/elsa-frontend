@@ -1,26 +1,26 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('paivamaara')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <elsa-form-datepicker
-          ref="paivamaara"
           v-if="childDataReceived"
           :id="uid"
+          ref="paivamaara"
           :value.sync="form.paivamaara"
           @input="$emit('skipRouteExitConfirm', false)"
         ></elsa-form-datepicker>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('aihe')" :required="true">
-      <template v-slot="{ uid, ariaDescribedby }">
+      <template #default="{ uid, ariaDescribedby }">
         <b-form-checkbox-group
           :id="uid"
           v-model="form.aihekategoriat"
-          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('aihekategoriat')"
           :aria-describedby="ariaDescribedby"
           name="paivakirja-merkinta-aihe"
           stacked
+          @input="$emit('skipRouteExitConfirm', false)"
           @change="onAihekategoriatChanged"
         >
           <div v-for="aihekategoria in aihekategoriatSorted" :key="aihekategoria.id">
@@ -36,18 +36,18 @@
               </div>
               <elsa-form-multiselect
                 v-model="form.teoriakoulutus"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :options="teoriakoulutukset"
                 label="koulutuksenNimi"
                 track-by="id"
+                @input="$emit('skipRouteExitConfirm', false)"
               />
             </div>
             <div v-if="aihekategoria.muunAiheenNimi && muuAiheSelected" class="pl-4">
               <b-form-input
                 v-model="form.muunAiheenNimi"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState('muunAiheenNimi')"
                 :aria-describedby="`${uid}-feedback`"
+                @input="$emit('skipRouteExitConfirm', false)"
               ></b-form-input>
               <b-form-invalid-feedback>
                 {{ $t('pakollinen-tieto') }}
@@ -61,13 +61,13 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('oppimistapahtuma')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.oppimistapahtumanNimi"
-          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('oppimistapahtumanNimi')"
           :aria-describedby="`${uid}-feedback`"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -77,25 +77,23 @@
     <elsa-form-group :label="$t('ajatuksia-opitusta-ja-sen-soveltamisesta')">
       <template #label-help>
         <elsa-popover>
-          <template>
-            <p>{{ $t('ajatuksia-opitusta-ja-sen-soveltamisesta-ohje1') }}</p>
-            <p class="mb-0">{{ $t('ajatuksia-opitusta-ja-sen-soveltamisesta-ohje2') }}</p>
-          </template>
+          <p>{{ $t('ajatuksia-opitusta-ja-sen-soveltamisesta-ohje1') }}</p>
+          <p class="mb-0">{{ $t('ajatuksia-opitusta-ja-sen-soveltamisesta-ohje2') }}</p>
         </elsa-popover>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-textarea
           :id="uid"
           v-model="form.reflektio"
-          @input="$emit('skipRouteExitConfirm', false)"
           rows="5"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-textarea>
       </template>
     </elsa-form-group>
     <b-form-checkbox
       v-model="form.yksityinen"
-      @input="$emit('skipRouteExitConfirm', false)"
       class="py-0"
+      @input="$emit('skipRouteExitConfirm', false)"
     >
       {{ $t('piilota-kouluttajilta-kuvaus') }}
     </b-form-checkbox>
@@ -104,12 +102,12 @@
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('tallenna-merkinta') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+      <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>

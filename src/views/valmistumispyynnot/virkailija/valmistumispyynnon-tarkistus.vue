@@ -11,7 +11,7 @@
                 {{ $t('valmistumispyynto-virkailijan-ingressi') }}
               </p>
             </div>
-            <div class="mt-3" v-else>
+            <div v-else class="mt-3">
               <b-alert :show="!allekirjoitettu" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
@@ -93,11 +93,11 @@
                 :yliopisto="valmistumispyynto.erikoistujanYliopisto"
                 :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
                 :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
-                :laillistamistodistusNimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
-                :laillistamistodistusTyyppi="
+                :laillistamistodistus-nimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
+                :laillistamistodistus-tyyppi="
                   valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                 "
-                :opintooikeudenMyontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
+                :opintooikeuden-myontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
                 :asetus="valmistumispyynto.erikoistujanAsetus"
               ></erikoistuva-details>
             </div>
@@ -111,7 +111,7 @@
                 {{ $t('kylla') }}
               </p>
             </div>
-            <div class="mt-3" v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika">
+            <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
               <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
               <b-row>
                 <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
@@ -139,7 +139,7 @@
                 {{ $t('nayta-erikoistujan-suoritustiedot') }}
               </elsa-button>
               <h5>{{ $t('muut-koulutukset-ja-tutkinnot') }}</h5>
-              <div class="mb-3" v-if="yekSuorituspaivaTila">
+              <div v-if="yekSuorituspaivaTila" class="mb-3">
                 <p v-if="form.yekSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('yek-suoritettu') }}
@@ -149,7 +149,7 @@
                   {{ $t('yek-ei-suoritettu') }}
                 </p>
               </div>
-              <div class="my-3" v-if="editable && !yekSuorituspaivaTila">
+              <div v-if="editable && !yekSuorituspaivaTila" class="my-3">
                 <b-form-checkbox
                   v-model="form.yekSuoritettu"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -157,11 +157,11 @@
                   {{ $t('yek-suoritettu') }}
                 </b-form-checkbox>
                 <elsa-form-group
+                  v-if="form.yekSuoritettu"
                   :label="$t('suorituspaiva')"
                   class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                  v-if="form.yekSuoritettu"
                 >
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.yekSuorituspaiva"
@@ -170,7 +170,7 @@
                   </template>
                 </elsa-form-group>
               </div>
-              <div class="mb-3" v-if="ptlSuorituspaivaTila">
+              <div v-if="ptlSuorituspaivaTila" class="mb-3">
                 <p v-if="form.ptlSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('ptl-suoritettu') }}
@@ -180,7 +180,7 @@
                   {{ $t('ptl-ei-suoritettu') }}
                 </p>
               </div>
-              <div class="my-3" v-if="editable && !ptlSuorituspaivaTila">
+              <div v-if="editable && !ptlSuorituspaivaTila" class="my-3">
                 <b-form-checkbox
                   v-model="form.ptlSuoritettu"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -188,11 +188,11 @@
                   {{ $t('ptl-suoritettu') }}
                 </b-form-checkbox>
                 <elsa-form-group
+                  v-if="form.ptlSuoritettu"
                   :label="$t('suorituspaiva')"
                   class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                  v-if="form.ptlSuoritettu"
                 >
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.ptlSuorituspaiva"
@@ -201,7 +201,7 @@
                   </template>
                 </elsa-form-group>
               </div>
-              <div class="mb-3" v-if="aiempiElKoulutusSuorituspaivaTila">
+              <div v-if="aiempiElKoulutusSuorituspaivaTila" class="mb-3">
                 <p v-if="form.aiempiElKoulutusSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('aiempi-el-koulutus-suoritettu') }}
@@ -211,7 +211,7 @@
                   {{ $t('aiempi-el-koulutus-ei-suoritettu') }}
                 </p>
               </div>
-              <div class="my-3" v-if="editable && !aiempiElKoulutusSuorituspaivaTila">
+              <div v-if="editable && !aiempiElKoulutusSuorituspaivaTila" class="my-3">
                 <b-form-checkbox
                   v-model="form.aiempiElKoulutusSuoritettu"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -219,11 +219,11 @@
                   {{ $t('aiempi-el-koulutus-suoritettu') }}
                 </b-form-checkbox>
                 <elsa-form-group
+                  v-if="form.aiempiElKoulutusSuoritettu"
                   :label="$t('suorituspaiva')"
                   class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                  v-if="form.aiempiElKoulutusSuoritettu"
                 >
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.aiempiElKoulutusSuorituspaiva"
@@ -232,7 +232,7 @@
                   </template>
                 </elsa-form-group>
               </div>
-              <div class="mb-3" v-if="ltTutkintoSuorituspaivaTila">
+              <div v-if="ltTutkintoSuorituspaivaTila" class="mb-3">
                 <p v-if="form.ltTutkintoSuorituspaiva" class="mb-0">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('lt-tutkinto-suoritettu') }}
@@ -242,7 +242,7 @@
                   {{ $t('lt-tutkinto-ei-suoritettu') }}
                 </p>
               </div>
-              <div class="my-3" v-if="editable && !ltTutkintoSuorituspaivaTila">
+              <div v-if="editable && !ltTutkintoSuorituspaivaTila" class="my-3">
                 <b-form-checkbox
                   v-model="form.ltTutkintoSuoritettu"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -250,11 +250,11 @@
                   {{ $t('lt-tutkinto-suoritettu') }}
                 </b-form-checkbox>
                 <elsa-form-group
+                  v-if="form.ltTutkintoSuoritettu"
                   :label="$t('suorituspaiva')"
                   class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                  v-if="form.ltTutkintoSuoritettu"
                 >
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.ltTutkintoSuorituspaiva"
@@ -286,12 +286,12 @@
                 </span>
               </div>
               <elsa-form-group
+                v-if="editable"
                 :label="$t('yliopistosairaalan-ulkopuolinen-tyo')"
                 class="mt-3"
                 :required="true"
-                v-if="editable"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
                     {{
@@ -302,8 +302,8 @@
                   </p>
                   <b-form-checkbox
                     :id="uid"
-                    :state="validateState('yliopistosairaalanUlkopuolinenTyoTarkistettu')"
                     v-model="form.yliopistosairaalanUlkopuolinenTyoTarkistettu"
+                    :state="validateState('yliopistosairaalanUlkopuolinenTyoTarkistettu')"
                     @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
@@ -311,8 +311,8 @@
                 </template>
               </elsa-form-group>
               <div
-                class="my-3"
                 v-if="!editable && form.yliopistosairaalanUlkopuolinenTyoTarkistettu"
+                class="my-3"
               >
                 <h5>
                   {{ $t('yliopistosairaalatyo') }}
@@ -331,27 +331,27 @@
                 </p>
               </div>
               <elsa-form-group
+                v-if="editable"
                 :label="$t('yliopistosairaalatyo')"
                 class="mt-3"
                 :required="true"
-                v-if="editable"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
                     {{ $duration(form.tyoskentelyjaksotTilastot.yliopistosairaalaSuoritettu) }}
                   </p>
                   <b-form-checkbox
                     :id="uid"
-                    :state="validateState('yliopistosairaalatyoTarkistettu')"
                     v-model="form.yliopistosairaalatyoTarkistettu"
+                    :state="validateState('yliopistosairaalatyoTarkistettu')"
                     @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>
-              <div class="my-3" v-if="!editable && form.yliopistosairaalatyoTarkistettu">
+              <div v-if="!editable && form.yliopistosairaalatyoTarkistettu" class="my-3">
                 <h5>
                   {{ $t('yliopistosairaalatyo') }}
                 </h5>
@@ -365,27 +365,27 @@
                 </p>
               </div>
               <elsa-form-group
+                v-if="editable"
                 :label="$t('kokonaistyoaika')"
                 class="mt-3"
                 :required="true"
-                v-if="editable"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
                     {{ $duration(form.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
                   </p>
                   <b-form-checkbox
                     :id="uid"
-                    :state="validateState('kokonaistyoaikaTarkistettu')"
                     v-model="form.kokonaistyoaikaTarkistettu"
+                    :state="validateState('kokonaistyoaikaTarkistettu')"
                     @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('kesto-tarkistettu-tyotodistuksista') }}
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>
-              <div class="my-3" v-if="!editable && form.kokonaistyoaikaTarkistettu">
+              <div v-if="!editable && form.kokonaistyoaikaTarkistettu" class="my-3">
                 <h5>
                   {{ $t('kokonaistyoaika') }}
                 </h5>
@@ -401,12 +401,12 @@
               <hr />
               <h2 class="mb-3">{{ $t('koulutukset') }}</h2>
               <elsa-form-group
+                v-if="editable"
                 :label="$t('teoriakoulutus')"
                 class="mt-3"
                 :required="true"
-                v-if="editable"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
                     {{ Math.round(form.teoriakoulutusSuoritettu) }} /
@@ -423,7 +423,7 @@
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>
-              <div class="my-3" v-if="!editable && form.teoriakoulutusTarkistettu">
+              <div v-if="!editable && form.teoriakoulutusTarkistettu" class="my-3">
                 <h5>
                   {{ $t('teoriakoulutus') }}
                 </h5>
@@ -438,7 +438,7 @@
                   {{ $t('todistukset-tarkistettu') }}
                 </p>
               </div>
-              <div class="my-3" v-if="form.sateilusuojakoulutusVaadittu > 0">
+              <div v-if="form.sateilusuojakoulutusVaadittu > 0" class="my-3">
                 <h5>
                   {{ $t('sateilysuojelukoulutus') }}
                 </h5>
@@ -473,25 +473,25 @@
                 <h5>
                   {{ $t('koejakso') }}
                 </h5>
-                <p class="mb-1" v-if="form.koejaksoHyvaksyttyPvm">
+                <p v-if="form.koejaksoHyvaksyttyPvm" class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('hyvaksytty') }}
                   {{ $date(form.koejaksoHyvaksyttyPvm) }}
                 </p>
-                <p class="mb-1" v-if="!form.koejaksoHyvaksyttyPvm && editable">
+                <p v-if="!form.koejaksoHyvaksyttyPvm && editable" class="mb-1">
                   {{ $t('koejakso-ei-hyvaksytty') }}
                   <b-form-checkbox
-                    class="mt-3"
                     v-model="form.koejaksoEiVaadittu"
+                    class="mt-3"
                     @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('koejaksoa-ei-vaadita') }}
                   </b-form-checkbox>
                 </p>
-                <p class="mb-1" v-if="!form.koejaksoHyvaksyttyPvm && !editable">
+                <p v-if="!form.koejaksoHyvaksyttyPvm && !editable" class="mb-1">
                   {{ $t('koejakso-ei-hyvaksytty') }}
                 </p>
-                <p class="mb-1" v-if="form.koejaksoEiVaadittu && !editable">
+                <p v-if="form.koejaksoEiVaadittu && !editable" class="mb-1">
                   {{ $t('koejaksoa-ei-vaadita') }}
                 </p>
               </div>
@@ -499,14 +499,14 @@
                 <h5>
                   {{ $t('vanhat-suoritukset') }}
                 </h5>
-                <p class="mb-1" v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista">
+                <p v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
                   {{ $t('erikoistuvalla-on-vanhoja-yli-10v-suorituksia') }}
                 </p>
-                <p class="mb-1" v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista">
+                <p v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
                   {{ $t('erikoistuvalla-ei-vanhoja-yli-10v-suorituksia') }}
                 </p>
               </div>
-              <div class="my-3" v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista">
+              <div v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="my-3">
                 <h5>
                   {{ $t('selvitys-vanhentuneista-suorituksista-virkailija') }}
                 </h5>
@@ -517,10 +517,10 @@
               <hr />
               <h2 class="mb-3">{{ $t('huomiot') }}</h2>
               <elsa-form-group
-                :label="$t('kommentit-muille-virkailijoille-ei-nayteta-muille')"
                 v-if="editable"
+                :label="$t('kommentit-muille-virkailijoille-ei-nayteta-muille')"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-textarea
                     :id="uid"
                     v-model="form.kommentitVirkailijoille"
@@ -529,7 +529,7 @@
                   ></b-form-textarea>
                 </template>
               </elsa-form-group>
-              <div class="my-3" v-if="!editable">
+              <div v-if="!editable" class="my-3">
                 <h5>{{ $t('kommentit-muille-virkailijoille-ei-nayteta-muille') }}</h5>
                 <p v-if="form.kommentitVirkailijoille">
                   {{ form.kommentitVirkailijoille }}
@@ -594,29 +594,29 @@
                   <b-col>
                     <asiakirja-button
                       v-if="yhteenvetoAsiakirjaUrl"
-                      :asiakirjaDataEndpointUrl="yhteenvetoAsiakirjaUrl"
-                      :asiakirjaLabel="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
                       :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                      :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
+                      :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
                     />
                     <asiakirja-button
                       v-if="liitteetAsiakirjaUrl"
-                      :asiakirjaDataEndpointUrl="liitteetAsiakirjaUrl"
-                      :asiakirjaLabel="$t('valmistumispyynnon-liitteet')"
                       :id="valmistumispyynto.liitteetAsiakirjaId"
+                      :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
+                      :asiakirja-label="$t('valmistumispyynnon-liitteet')"
                     />
                   </b-col>
                 </b-row>
                 <hr />
               </div>
               <elsa-form-group
-                class="mt-3"
                 v-if="vastuuhenkiloOsaamisenArvioijaPalauttanut"
+                class="mt-3"
                 :label="$t('lisatiedot-erikoistujalle')"
               >
                 <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
               </elsa-form-group>
               <hr v-if="odottaaOsaamisenArviointia" />
-              <div class="text-right" v-if="editable">
+              <div v-if="editable" class="text-right">
                 <elsa-button
                   variant="back"
                   :to="{
@@ -625,22 +625,22 @@
                 >
                   {{ $t('peruuta') }}
                 </elsa-button>
-                <elsa-button variant="outline-primary" v-b-modal.return-to-sender class="ml-6">
+                <elsa-button v-b-modal.return-to-sender variant="outline-primary" class="ml-6">
                   {{ $t('palauta-erikoistujalle') }}
                 </elsa-button>
                 <elsa-button
+                  v-b-modal.confirm-save
                   style="min-width: 14rem"
                   variant="outline-primary"
                   class="ml-2"
-                  v-b-modal.confirm-save
                 >
                   {{ $t('tallenna-keskeneraisena') }}
                 </elsa-button>
                 <elsa-button
                   :loading="sending"
-                  @click="onValidateAndConfirmSend('confirm-send')"
                   variant="primary"
                   class="ml-2"
+                  @click="onValidateAndConfirmSend('confirm-send')"
                 >
                   {{ $t('hyvaksy-laheta') }}
                 </elsa-button>
@@ -653,19 +653,19 @@
         </b-col>
       </b-row>
       <b-row>
-        <elsa-form-error :active="this.$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError" />
       </b-row>
     </b-container>
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('lahetyksen-jalkeen-vastuuhenkilo-hyvaksynta')"
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSend"
     >
       <template #modal-content>
         <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolle')">
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
               v-model="form.lisatiedotVastuuhenkilolle"
@@ -684,7 +684,7 @@
       id="confirm-save"
       :title="$t('vahvista-tallennus-keskeneraisena-title')"
       :text="$t('vahvista-tallennus-keskeneraisena-body')"
-      :submitText="$t('tallenna-keskeneraisena')"
+      :submit-text="$t('tallenna-keskeneraisena')"
       @submit="saveAndExit"
     />
   </div>

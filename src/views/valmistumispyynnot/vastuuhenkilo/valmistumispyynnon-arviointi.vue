@@ -13,7 +13,7 @@
               <p class="mb-3">{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-2') }}</p>
               <p>{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-3') }}</p>
             </div>
-            <div class="mt-3" v-else>
+            <div v-else class="mt-3">
               <b-alert :show="!allekirjoitettu" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
@@ -96,11 +96,11 @@
                 :yliopisto="valmistumispyynto.erikoistujanYliopisto"
                 :laillistamispaiva="valmistumispyynto.erikoistujanLaillistamispaiva"
                 :laillistamistodistus="valmistumispyynto.erikoistujanLaillistamistodistus"
-                :laillistamistodistusNimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
-                :laillistamistodistusTyyppi="
+                :laillistamistodistus-nimi="valmistumispyynto.erikoistujanLaillistamistodistusNimi"
+                :laillistamistodistus-tyyppi="
                   valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                 "
-                :opintooikeudenMyontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
+                :opintooikeuden-myontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
                 :asetus="valmistumispyynto.erikoistujanAsetus"
               ></erikoistuva-details>
             </div>
@@ -125,18 +125,18 @@
                 </em>
                 <div class="mb-4">
                   <p
-                    class="m-0"
                     v-if="
                       valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithArviointiLowerThanFour
                     "
+                    class="m-0"
                   >
                     {{ $t('valmistumispyynto-arviointeja-ei-yhtaan-vahintaan-tasolla-nelja') }}
                   </p>
                   <p
-                    class="m-0"
                     v-if="
                       valmistumispyyntoArviointienTila.hasArvioitaviaKokonaisuuksiaWithoutArviointi
                     "
+                    class="m-0"
                   >
                     {{ $t('valmistumispyynto-arvioitavia-kokonaisuuksia-ilman-arviointia') }}
                   </p>
@@ -156,7 +156,7 @@
                 :label="$t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen')"
                 :required="odottaaOsaamisenArviointia"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <div v-if="odottaaOsaamisenArviointia">
                     <b-form-radio-group
                       :id="uid"
@@ -164,10 +164,10 @@
                       :state="validateState('osaaminenRiittavaValmistumiseen')"
                       stacked
                     >
-                      <b-form-radio @input="$emit('skipRouteExitConfirm', false)" :value="true">
+                      <b-form-radio :value="true" @input="$emit('skipRouteExitConfirm', false)">
                         <span>{{ $t('kylla') }}</span>
                       </b-form-radio>
-                      <b-form-radio @input="$emit('skipRouteExitConfirm', false)" :value="false">
+                      <b-form-radio :value="false" @input="$emit('skipRouteExitConfirm', false)">
                         <span>{{ $t('ei-osaaminen-ei-riita-valmistumiseen') }}</span>
                       </b-form-radio>
                     </b-form-radio-group>
@@ -197,7 +197,7 @@
                   :label="$t('lisatiedot-erikoistujalle')"
                   :required="true"
                 >
-                  <template v-slot="{ uid }">
+                  <template #default="{ uid }">
                     <b-form-textarea
                       :id="uid"
                       v-model="form.korjausehdotus"
@@ -214,18 +214,18 @@
                 </elsa-form-group>
               </div>
               <elsa-form-group
-                class="mt-3"
                 v-if="vastuuhenkiloOsaamisenArvioijaPalauttanut"
+                class="mt-3"
                 :label="$t('lisatiedot-erikoistujalle')"
               >
                 <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
               </elsa-form-group>
               <div
-                class="mt-5"
                 v-if="
                   !odottaaOsaamisenArviointia &&
                   vastuuhenkiloOsaamisenArvioijaKuittausOrPalautusaika
                 "
+                class="mt-5"
               >
                 <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
                 <b-row>
@@ -255,9 +255,9 @@
                 </elsa-button>
                 <elsa-button
                   :loading="sending"
-                  @click="onValidateAndConfirmSend('confirm-send')"
                   variant="primary"
                   class="ml-2"
+                  @click="onValidateAndConfirmSend('confirm-send')"
                 >
                   {{ $t('tallenna-ja-laheta') }}
                 </elsa-button>
@@ -270,14 +270,14 @@
         </b-col>
       </b-row>
       <b-row>
-        <elsa-form-error :active="this.$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError" />
       </b-row>
     </b-container>
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('valmistumispyynto-osaamisen-arviointi-vahvistus')"
-      :submitText="$t('tallenna-ja-laheta')"
+      :submit-text="$t('tallenna-ja-laheta')"
       @submit="onSend"
     />
   </div>

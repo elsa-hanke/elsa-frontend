@@ -7,22 +7,22 @@
           :label="$t('kouluttaja')"
           :add-new-enabled="true"
           :add-new-label="$t('lisaa-kouluttaja')"
-          @submit="onKouluttajaSubmit"
           class="mb-2"
+          @submit="onKouluttajaSubmit"
         >
-          <template v-slot:modal-content="{ submit, cancel }">
+          <template #modal-content="{ submit, cancel }">
             <kouluttaja-form @submit="submit" @cancel="cancel" />
           </template>
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-multiselect
-              v-model="valittuKouluttaja"
               :id="uid"
+              v-model="valittuKouluttaja"
               :options="filteredKouluttajat"
               :loading="isLoading"
               label="nimi"
               track-by="nimi"
             >
-              <template v-slot:option="{ option }">
+              <template #option="{ option }">
                 <div v-if="option.nimi">{{ optionDisplayName(option) }}</div>
               </template>
             </elsa-form-multiselect>
@@ -47,8 +47,8 @@
       </b-col>
     </b-row>
     <div v-if="valtuutukset.length > 0">
-      <b-card-group class="mt-4" v-if="!$screen.sm" deck>
-        <b-card class="mt-2 border" v-for="(valtuutus, index) in valtuutukset" :key="index">
+      <b-card-group v-if="!$screen.sm" class="mt-4" deck>
+        <b-card v-for="(valtuutus, index) in valtuutukset" :key="index" class="mt-2 border">
           <b-card-text>
             <h4>{{ valtuutus.valtuutettu.nimi }}</h4>
             <dl class="mb-0">
@@ -71,7 +71,7 @@
           </b-card-text>
         </b-card>
       </b-card-group>
-      <b-table-simple class="katseluoikeusTable mt-4" v-else responsive>
+      <b-table-simple v-else class="katseluoikeusTable mt-4" responsive>
         <b-thead>
           <b-tr>
             <b-th style="width: 33%">{{ $t('nimi') }}</b-th>
@@ -115,14 +115,14 @@
           :label="$t('katseluoikeuden-viimeinen-voimassaolopaiva')"
           :required="true"
         >
-          <template v-slot="{ uid }">
+          <template #default="{ uid }">
             <elsa-form-datepicker
-              ref="paattymispaiva"
               :id="uid"
+              ref="paattymispaiva"
               class="col-sm-6 pl-0"
               :value.sync="valittuValtuutus.paattymispaiva"
               :min="minPaattymispaiva"
-              :minErrorText="$t('paivamaara-ei-voi-olla-menneisyydessa')"
+              :min-error-text="$t('paivamaara-ei-voi-olla-menneisyydessa')"
             ></elsa-form-datepicker>
           </template>
         </elsa-form-group>

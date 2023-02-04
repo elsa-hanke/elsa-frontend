@@ -11,9 +11,9 @@
             />
           </b-col>
           <b-col cols="12" lg="3">
-            <div class="filter" v-if="rajaimet.erikoisalat.length > 1">
+            <div v-if="rajaimet.erikoisalat.length > 1" class="filter">
               <elsa-form-group :label="$t('erikoisala')" class="mb-4">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
                     v-model="filtered.erikoisala"
@@ -27,9 +27,9 @@
             </div>
           </b-col>
           <b-col cols="12" lg="2">
-            <div class="filter" v-if="rajaimet.asetukset.length > 1">
+            <div v-if="rajaimet.asetukset.length > 1" class="filter">
               <elsa-form-group :label="$t('asetus')" class="mb-4">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
                     v-model="filtered.asetus"
@@ -45,7 +45,7 @@
           <b-col cols="12" lg="3" class="">
             <div class="filter">
               <elsa-form-group :label="$t('jarjestys')" class="mb-4">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
                     v-model="sortBy"
@@ -54,7 +54,7 @@
                     :taggable="true"
                     @select="onSortBySelect"
                   >
-                    <template v-slot:option="{ option }">
+                    <template #option="{ option }">
                       <div v-if="option.name">{{ option.name }}</div>
                     </template>
                   </elsa-form-multiselect>
@@ -139,8 +139,8 @@
                               "
                               :color="'#41b257'"
                               :background-color="'#b3e1bc'"
-                              :textColor="'black'"
-                              :showRequiredDuration="true"
+                              :text-color="'black'"
+                              :show-required-duration="true"
                             />
                           </b-col>
                           <b-col cols="1" class="pl-0 pr-0">
@@ -157,8 +157,10 @@
                         <b-row>
                           <b-col cols="11" class="pr-2">
                             <span
-                              v-for="(row, index) in barValues(eteneminen.tyoskentelyjaksoTilastot)"
-                              :key="index"
+                              v-for="(row, tilastotIndex) in barValues(
+                                eteneminen.tyoskentelyjaksoTilastot
+                              )"
+                              :key="tilastotIndex"
                             >
                               <div class="text-size-sm mt-1">{{ row.text }}</div>
                               <elsa-progress-bar
@@ -166,7 +168,7 @@
                                 :min-required="row.minRequired"
                                 :color="row.color"
                                 :background-color="row.backgroundColor"
-                                :showRequiredDuration="true"
+                                :show-required-duration="true"
                               />
                             </span>
                           </b-col>
@@ -227,10 +229,10 @@
                 </b-list-group-item>
               </b-list-group>
               <elsa-pagination
-                @update:currentPage="onPageInput"
                 :current-page="currentPage"
                 :per-page="perPage"
                 :rows="rows"
+                @update:currentPage="onPageInput"
               />
             </b-col>
           </b-row>

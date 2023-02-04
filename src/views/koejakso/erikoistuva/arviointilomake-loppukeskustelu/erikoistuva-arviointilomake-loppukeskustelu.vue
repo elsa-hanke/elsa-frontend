@@ -67,10 +67,10 @@
           ref="koulutuspaikanArvioijat"
           :lahikouluttaja="loppukeskusteluLomake.lahikouluttaja"
           :lahiesimies="loppukeskusteluLomake.lahiesimies"
-          :isReadonly="!editable"
+          :is-readonly="!editable"
+          :allow-duplicates="true"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
-          :allowDuplicates="true"
         />
         <hr />
 
@@ -91,17 +91,17 @@
               </elsa-button>
               <elsa-button
                 v-if="!loading"
-                @click="onValidateAndConfirm('confirm-send')"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
                 class="ml-4 px-6"
+                @click="onValidateAndConfirm('confirm-send')"
               >
                 {{ $t('laheta') }}
               </elsa-button>
             </b-col>
           </b-row>
           <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </b-row>
         </div>
       </div>
@@ -114,7 +114,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
-      :submitText="$t('laheta')"
+      :submit-text="$t('laheta')"
       @submit="onSend"
     />
   </div>

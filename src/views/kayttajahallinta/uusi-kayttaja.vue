@@ -7,7 +7,7 @@
           <h1>{{ $t('lisaa-uusi-kayttaja') }}</h1>
           <hr />
           <elsa-form-group :label="$t('rooli')" :required="true">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-radio-group :id="uid" v-model="form.rooli" :options="roolit" stacked />
             </template>
           </elsa-form-group>
@@ -33,7 +33,7 @@
         <elsa-button :disabled="true" variant="primary" class="ml-2 mb-2">
           {{ $t('tallenna') }}
         </elsa-button>
-        <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+        <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
           {{ $t('peruuta') }}
         </elsa-button>
       </div>

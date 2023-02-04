@@ -23,8 +23,8 @@
                 v-if="!account.impersonated"
                 :loading="deleting"
                 variant="outline-danger"
-                @click="onPaivakirjamerkintaDelete"
                 class="mb-3"
+                @click="onPaivakirjamerkintaDelete"
               >
                 {{ $t('poista-merkinta') }}
               </elsa-button>

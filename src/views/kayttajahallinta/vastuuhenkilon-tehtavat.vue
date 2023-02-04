@@ -9,7 +9,7 @@
         :label="$t('erikoisala')"
         :required="allowEditing && !yliopistoErikoisala.id"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div :class="[allowEditing && !yliopistoErikoisala.id ? 'd-flex' : 'd-inline-flex']">
             <div v-if="allowEditing && !yliopistoErikoisala.id" class="mr-2 w-100">
               <elsa-form-multiselect
@@ -17,21 +17,24 @@
                 v-model="yliopistoErikoisala.erikoisala"
                 :options="erikoisalatOptions"
                 :set="(v = $v.form.yliopistotAndErikoisalat.$each[yliopistoErikoisalaIndex])"
-                @select="onErikoisalaSelect($event, yliopistoErikoisalaIndex, yliopistoErikoisala)"
                 label="nimi"
-                @input="$emit('skipRouteExitConfirm', false)"
                 :state="validateState(v, 'erikoisala')"
                 track-by="id"
+                @select="onErikoisalaSelect($event, yliopistoErikoisalaIndex, yliopistoErikoisala)"
+                @input="$emit('skipRouteExitConfirm', false)"
               ></elsa-form-multiselect>
               <b-form-invalid-feedback :state="validateState(v, 'erikoisala')">
                 {{ $t('pakollinen-tieto') }}
               </b-form-invalid-feedback>
             </div>
             <div v-else>
-              <span class="mr-1" :id="uid">{{ yliopistoErikoisala.erikoisala.nimi }}</span>
+              <span :id="uid" class="mr-1">{{ yliopistoErikoisala.erikoisala.nimi }}</span>
             </div>
             <elsa-button
               v-if="allowEditing && form.yliopistotAndErikoisalat.length > 1"
+              variant="outline-primary"
+              class="border-0 p-0"
+              :disabled="!allowErikoisalaDelete(yliopistoErikoisala.erikoisala)"
               @click="
                 onDeleteErikoisala(
                   yliopistoErikoisalaIndex,
@@ -39,9 +42,6 @@
                   yliopistoErikoisala.vastuuhenkilonTehtavat
                 )
               "
-              variant="outline-primary"
-              class="border-0 p-0"
-              :disabled="!allowErikoisalaDelete(yliopistoErikoisala.erikoisala)"
             >
               <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="lg" />
             </elsa-button>
@@ -84,12 +84,10 @@
           #label-help
         >
           <elsa-popover class="align-top">
-            <template>
-              <p class="mb-0">{{ $t('taman-erikoisalan-tehtavia-ei-voi-muokata') }}</p>
-            </template>
+            <p class="mb-0">{{ $t('taman-erikoisalan-tehtavia-ei-voi-muokata') }}</p>
           </elsa-popover>
         </template>
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div
             v-if="
               !allowEditing ||
@@ -101,11 +99,11 @@
               {{ $t('ei-vastuualueita') }}
             </div>
             <div
+              v-for="(tehtava, index) in yliopistoErikoisala.vastuuhenkilonTehtavat"
               v-else
               :id="uid"
-              class="mb-1"
-              v-for="(tehtava, index) in yliopistoErikoisala.vastuuhenkilonTehtavat"
               :key="index"
+              class="mb-1"
             >
               <div v-if="tehtava">
                 {{ $t(`vastuualue.${tehtava.nimi}`) }}
@@ -120,8 +118,8 @@
               :key="tehtava.id"
             >
               <b-form-checkbox
-                :value="tehtava"
                 v-model="yliopistoErikoisala.vastuuhenkilonTehtavat[tehtavaIndex]"
+                :value="tehtava"
                 class="mb-1"
                 :disabled="disabled"
                 @input="$emit('skipRouteExitConfirm', false)"
@@ -166,11 +164,11 @@
                         tehtava.id
                       )
                     "
-                    @input="$emit('skipRouteExitConfirm', false)"
                     :state="validateState(v)"
                     :disabled="disabled"
                     label="label"
                     :track-by="this"
+                    @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback :state="validateState(v)">
                     {{ $t('lisaa-vastuualue-ensin-toiselle-kayttajalle') }}
@@ -199,10 +197,10 @@
     </div>
     <elsa-button
       v-if="allowEditing"
-      @click="addErikoisala(false)"
       variant="link"
       size="md"
       class="text-decoration-none shadow-none p-0"
+      @click="addErikoisala(false)"
     >
       <font-awesome-icon icon="plus" fixed-width size="sm" />
       {{ $t('useampi-erikoisala') }}

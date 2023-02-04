@@ -6,7 +6,7 @@
       :add-new-label="$t('lisaa-koulutusjakso')"
       @submit="onKoulutusjaksoSubmit"
     >
-      <template v-slot:modal-content="{ submit, cancel }">
+      <template #modal-content="{ submit, cancel }">
         <koulutusjakso-form
           :tyoskentelyjaksot="tyoskentelyjaksot"
           :kunnat="kunnat"
@@ -15,28 +15,28 @@
           @cancel="cancel"
         />
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <div
-          :id="uid"
           v-for="(koulutusjakso, index) in form.koulutusjaksot"
+          :id="uid"
           :key="koulutusjakso.id"
           class="mb-1"
         >
           <elsa-form-multiselect
             :id="uid"
-            :value="form.koulutusjaksot"
             v-model="form.koulutusjaksot[index]"
+            :value="form.koulutusjaksot"
             :options="koulutusjaksotFiltered"
-            :customLabel="koulutusjaksoLabel"
+            :custom-label="koulutusjaksoLabel"
             label="label"
             track-by="id"
           />
           <elsa-button
             v-if="index !== 0"
-            @click="deleteKoulutusjakso(index)"
             variant="link"
             size="sm"
             class="text-decoration-none shadow-none p-0"
+            @click="deleteKoulutusjakso(index)"
           >
             <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
             {{ $t('poista-koulutusjakso') }}
@@ -46,10 +46,10 @@
           {{ $t('seurantajakso-koulutusjakso-help') }}
         </small>
         <elsa-button
-          @click="addKoulutusjakso"
           variant="link"
           size="sm"
           class="text-decoration-none shadow-none p-0"
+          @click="addKoulutusjakso"
         >
           <font-awesome-icon icon="plus" fixed-width size="sm" />
           {{ $t('useampi-koulutusjakso') | lowercase }}
@@ -65,14 +65,14 @@
         class="col-xs-12 col-sm-6 pr-sm-3 mb-0"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="alkamispaiva"
             v-if="childDataReceived"
             :id="uid"
+            ref="alkamispaiva"
             :value.sync="form.alkamispaiva"
             :max="maxAlkamispaiva"
-            :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
+            :max-error-text="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
           ></elsa-form-datepicker>
         </template>
       </elsa-form-group>
@@ -81,14 +81,14 @@
         class="col-xs-12 col-sm-6 pl-sm-3 mb-0"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="paattymispaiva"
-            :id="uid"
             v-if="childDataReceived"
+            :id="uid"
+            ref="paattymispaiva"
             :value.sync="form.paattymispaiva"
             :min="minPaattymispaiva"
-            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+            :min-error-text="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
           />
@@ -102,7 +102,7 @@
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('hae-tiedot') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+      <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>

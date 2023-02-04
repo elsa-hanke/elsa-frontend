@@ -5,6 +5,7 @@
       <b-row lg>
         <b-col lg="8">
           <h1>{{ $t('koejakso-tavoitteet') }}</h1>
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <p v-html="$t('koejakso-tavoitteet-sisalto.kuvaus1')" />
           <h3>{{ $t('koejakso-tavoitteet-sisalto.lista1.otsikko') }}</h3>
           <ul>

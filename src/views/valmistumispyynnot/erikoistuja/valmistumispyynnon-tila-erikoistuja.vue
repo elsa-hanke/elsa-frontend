@@ -127,21 +127,21 @@
                 <h3>{{ $t('lataa-dokumentit') }}</h3>
                 <asiakirja-button
                   v-if="yhteenvetoAsiakirjaUrl"
-                  :asiakirjaDataEndpointUrl="yhteenvetoAsiakirjaUrl"
-                  :asiakirjaLabel="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
                   :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                  :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
+                  :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
                 />
                 <asiakirja-button
                   v-if="liitteetAsiakirjaUrl"
-                  :asiakirjaDataEndpointUrl="liitteetAsiakirjaUrl"
-                  :asiakirjaLabel="$t('valmistumispyynnon-liitteet')"
                   :id="valmistumispyynto.liitteetAsiakirjaId"
+                  :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
+                  :asiakirja-label="$t('valmistumispyynnon-liitteet')"
                 />
                 <asiakirja-button
                   v-if="koulutussuunnitelmaAsiakirjaUrl"
-                  :asiakirjaDataEndpointUrl="koulutussuunnitelmaAsiakirjaUrl"
-                  :asiakirjaLabel="$t('koulutussuunnitelma-ja-osaaminen')"
                   :id="valmistumispyynto.erikoistujanTiedotAsiakirjaId"
+                  :asiakirja-data-endpoint-url="koulutussuunnitelmaAsiakirjaUrl"
+                  :asiakirja-label="$t('koulutussuunnitelma-ja-osaaminen')"
                 />
               </div>
             </div>

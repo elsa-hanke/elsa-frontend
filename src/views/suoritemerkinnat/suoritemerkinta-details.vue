@@ -1,12 +1,12 @@
 <template>
   <div v-if="suoritemerkintaWrapper">
     <elsa-form-group :label="$t('tyoskentelyjakso')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <span :id="uid">{{ suoritemerkintaWrapper.tyoskentelyjakso.label }}</span>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('suorite')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <span :id="uid">{{ suoritemerkintaWrapper.suorite.nimi }}</span>
       </template>
     </elsa-form-group>
@@ -14,12 +14,12 @@
       <template #label-help>
         <elsa-popover>
           <elsa-arviointiasteikon-taso-tooltip-content
-            :arviointiasteikonNimi="arviointiAsteikonNimi"
-            :arviointiasteikonTasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
+            :arviointiasteikon-nimi="arviointiAsteikonNimi"
+            :arviointiasteikon-tasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
           />
         </elsa-popover>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <span :id="uid">
           <elsa-arviointiasteikon-taso
             v-if="suoritemerkintaWrapper.arviointiasteikonTaso"
@@ -35,7 +35,7 @@
           <elsa-vaativuustaso-tooltip-content />
         </elsa-popover>
       </template>
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <span :id="uid">
           <elsa-vaativuustaso
             v-if="value.vaativuustaso"
@@ -45,7 +45,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('suorituspaiva')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <span :id="uid">
           {{
             suoritemerkintaWrapper.suorituspaiva ? $date(suoritemerkintaWrapper.suorituspaiva) : ''
@@ -54,7 +54,7 @@
       </template>
     </elsa-form-group>
     <elsa-form-group v-if="suoritemerkintaWrapper.lisatiedot" :label="$t('lisatiedot')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <span :id="uid" class="text-preline">{{ suoritemerkintaWrapper.lisatiedot }}</span>
       </template>
     </elsa-form-group>

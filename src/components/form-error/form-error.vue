@@ -1,5 +1,5 @@
 <template>
-  <div class="text-danger text-right w-100 my-2" v-if="active">
+  <div v-if="active" class="text-danger text-right w-100 my-2">
     <font-awesome-icon icon="info-circle" fixed-width class="text-size-lg mr-1" />
     {{ $t('lomake-sisaltaa-virheita') }}
   </div>

@@ -2,12 +2,12 @@
   <b-row>
     <b-col lg="4">
       <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.sahkoposti"
-            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('sahkoposti')"
+            @input="$emit('skipRouteExitConfirm', false)"
           />
           <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
@@ -20,12 +20,12 @@
     </b-col>
     <b-col lg="4">
       <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="form.puhelin"
-            @input="$emit('skipRouteExitConfirm', false)"
             :state="validateState('puhelin')"
+            @input="$emit('skipRouteExitConfirm', false)"
           />
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}

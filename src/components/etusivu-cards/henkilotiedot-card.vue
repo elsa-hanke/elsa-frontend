@@ -4,7 +4,7 @@
       <div class="flex-fill">
         <user-avatar
           :src-base64="account.avatar"
-          :imageSize="56"
+          :image-size="56"
           src-content-type="image/jpeg"
           :title="title"
         />

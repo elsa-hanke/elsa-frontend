@@ -8,7 +8,7 @@
             :required="true"
             class="col-12 pr-md-3 pl-0"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <elsa-form-multiselect
                 v-if="kategoriaEditable"
                 :id="uid"
@@ -26,7 +26,7 @@
             :required="true"
             class="col-12 pr-md-3 pl-0"
           >
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-input-group class="mb-2">
                 <b-input-group-prepend>
                   <b-input-group-text class="input-group-fi">{{ 'FI' }}</b-input-group-text>
@@ -51,10 +51,10 @@
               class="col-xs-12 col-sm-6 col-md-4 pr-sm-3"
               :required="true"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-datepicker
-                  ref="voimassaoloAlkaa"
                   :id="uid"
+                  ref="voimassaoloAlkaa"
                   v-model="kokonaisuus.voimassaoloAlkaa"
                   :state="validateState('voimassaoloAlkaa')"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -65,20 +65,20 @@
               :label="$t('voimassaolon-paattymispaiva')"
               class="col-xs-12 col-sm-6 col-md-4 pl-sm-3"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <elsa-form-datepicker
-                  ref="voimassaoloPaattyy"
                   :id="uid"
+                  ref="voimassaoloPaattyy"
                   v-model="kokonaisuus.voimassaoloLoppuu"
-                  @input="$emit('skipRouteExitConfirm', false)"
                   :required="false"
                   class="datepicker-range"
+                  @input="$emit('skipRouteExitConfirm', false)"
                 ></elsa-form-datepicker>
               </template>
             </elsa-form-group>
           </b-form-row>
           <elsa-form-group :label="$t('kuvaus')" class="col-12 pr-md-3 pl-0 kuvaus">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-input-group :id="uid" class="mb-2">
                 <b-input-group-prepend>
                   <b-input-group-text class="input-group-fi">{{ 'FI' }}</b-input-group-text>
@@ -110,7 +110,7 @@
             </elsa-button>
           </div>
           <div class="row">
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </div>
         </b-form>
         <div v-else>
@@ -125,6 +125,7 @@
             {{ kokonaisuus.voimassaoloLoppuu != null ? $date(kokonaisuus.voimassaoloLoppuu) : '' }}
           </p>
           <h5>{{ $t('kuvaus') }}</h5>
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <p v-html="kokonaisuus.kuvaus"></p>
           <hr />
         </div>

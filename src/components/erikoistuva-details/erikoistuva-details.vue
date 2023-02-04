@@ -57,7 +57,7 @@
         <td class="pl-6">
           <span class="align-middle">{{ $date(laillistamispaiva) }}</span>
           -
-          <elsa-button variant="link" @click="onDownloadLaillistamistodistus" class="pl-0">
+          <elsa-button variant="link" class="pl-0" @click="onDownloadLaillistamistodistus">
             {{ laillistamistodistusNimi }}
           </elsa-button>
         </td>

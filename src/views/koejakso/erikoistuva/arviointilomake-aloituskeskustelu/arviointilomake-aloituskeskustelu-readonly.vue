@@ -35,7 +35,7 @@
     <koulutuspaikan-arvioijat
       :lahikouluttaja="data.lahikouluttaja"
       :lahiesimies="data.lahiesimies"
-      :isReadonly="true"
+      :is-readonly="true"
     />
     <hr />
     <b-row>

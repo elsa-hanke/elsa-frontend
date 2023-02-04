@@ -102,7 +102,7 @@
           <b-col lg="8">
             <div v-if="editable">
               <b-form-group>
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <b-form-radio-group
                     :id="uid"
                     v-model="kehittamistoimenpiteet.kehittamistoimenpiteetRiittavat"
@@ -131,7 +131,7 @@
         <koulutuspaikan-arvioijat
           :lahikouluttaja="kehittamistoimenpiteet.lahikouluttaja"
           :lahiesimies="kehittamistoimenpiteet.lahiesimies"
-          :isReadonly="true"
+          :is-readonly="true"
         />
         <hr />
         <div v-if="allekirjoitukset.length > 0">
@@ -157,12 +157,12 @@
                   isCurrentUserLahiesimies &&
                   kehittamistoimenpiteet.lahiesimies.id != kehittamistoimenpiteet.lahikouluttaja.id
                 "
+                v-b-modal.return-to-sender
                 class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 style="min-width: 14rem"
                 variant="outline-primary"
                 :disabled="buttonStates.primaryButtonLoading"
                 :loading="buttonStates.secondaryButtonLoading"
-                v-b-modal.return-to-sender
               >
                 {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
@@ -179,7 +179,7 @@
             </b-col>
           </b-row>
           <b-row>
-            <elsa-form-error :active="this.$v.$anyError" />
+            <elsa-form-error :active="$v.$anyError" />
           </b-row>
         </div>
       </div>
@@ -196,7 +196,7 @@
           ? $t('vahvista-koejakson-vaihe-erikoistuvalle')
           : $t('vahvista-koejakson-vaihe-esimiehelle')
       "
-      :submitText="$t('hyvaksy-laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSign"
     />
     <elsa-return-to-sender-modal

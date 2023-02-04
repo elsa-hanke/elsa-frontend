@@ -33,7 +33,7 @@
       <div v-else>
         <b-form @submit.stop.prevent="onSubmit">
           <elsa-form-group :label="$t('muokkaa-kommenttia')">
-            <template v-slot="{ uid }">
+            <template #default="{ uid }">
               <b-form-textarea
                 :id="uid"
                 v-model="kommentti.teksti"

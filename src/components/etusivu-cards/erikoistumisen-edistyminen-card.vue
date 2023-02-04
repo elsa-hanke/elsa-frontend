@@ -26,9 +26,9 @@
                     {{ $t('arviointien-ka') }}
                     <elsa-popover>
                       <elsa-arviointiasteikon-taso-tooltip-content
-                        :arviointiasteikonNimi="arviointiAsteikonNimi"
+                        :arviointiasteikon-nimi="arviointiAsteikonNimi"
                         :selite="arviointiAsteikonSelite"
-                        :arviointiasteikonTasot="edistyminen.arviointiasteikko.tasot"
+                        :arviointiasteikon-tasot="edistyminen.arviointiasteikko.tasot"
                       />
                     </elsa-popover>
                   </span>
@@ -149,10 +149,10 @@
                 :min-required="edistyminen.teoriakoulutuksetVaadittu"
                 :show-required-text="true"
                 color="#41b257"
-                backgroundColor="#b3e1bc"
-                textColor="#000"
+                background-color="#b3e1bc"
+                text-color="#000"
                 class="mb-3"
-                :customUnit="$t('t')"
+                :custom-unit="$t('t')"
               />
               <elsa-button
                 :to="{ name: 'opintosuoritukset', hash: '#johtamisopinnot' }"
@@ -168,10 +168,10 @@
                 :min-required="edistyminen.johtamisopinnotVaadittu"
                 :show-required-text="true"
                 color="#41b257"
-                backgroundColor="#b3e1bc"
-                textColor="#000"
+                background-color="#b3e1bc"
+                text-color="#000"
                 class="mb-3"
-                :customUnit="$t('opintopistetta-lyhenne')"
+                :custom-unit="$t('opintopistetta-lyhenne')"
               />
               <div v-if="edistyminen.sateilysuojakoulutuksetVaadittu > 0">
                 <elsa-button
@@ -188,10 +188,10 @@
                   :min-required="edistyminen.sateilysuojakoulutuksetVaadittu"
                   :show-required-text="true"
                   color="#41b257"
-                  backgroundColor="#b3e1bc"
-                  textColor="#000"
+                  background-color="#b3e1bc"
+                  text-color="#000"
                   class="mb-3"
-                  :customUnit="$t('opintopistetta-lyhenne')"
+                  :custom-unit="$t('opintopistetta-lyhenne')"
                 />
               </div>
             </div>

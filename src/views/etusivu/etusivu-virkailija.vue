@@ -6,7 +6,7 @@
         <b-col xxl="9">
           <div v-if="!loading">
             <terveyskeskuskoulutusjaksot-card />
-            <koejaksot-card :showVaihe="false" />
+            <koejaksot-card :show-vaihe="false" />
             <valmistumispyynnot-card />
           </div>
           <div v-else class="text-center">

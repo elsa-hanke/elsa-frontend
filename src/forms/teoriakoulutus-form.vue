@@ -1,12 +1,12 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('koulutuksen-nimi')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.koulutuksenNimi"
-          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('koulutuksenNimi')"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -14,12 +14,12 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('paikka')" :required="true">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <b-form-input
           :id="uid"
           v-model="form.koulutuksenPaikka"
-          @input="$emit('skipRouteExitConfirm', false)"
           :state="validateState('koulutuksenPaikka')"
+          @input="$emit('skipRouteExitConfirm', false)"
         ></b-form-input>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -32,39 +32,39 @@
         class="col-xs-12 col-sm-6 pr-sm-3"
         :required="true"
       >
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <div>
             <elsa-form-datepicker
-              ref="alkamispaiva"
               v-if="childDataReceived"
               :id="uid"
+              ref="alkamispaiva"
               :value.sync="form.alkamispaiva"
-              @input="$emit('skipRouteExitConfirm', false)"
               :max="form.paattymispaiva"
-              :maxErrorText="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
+              :max-error-text="$t('alkamispaiva-ei-voi-olla-paattymispaivan-jalkeen')"
+              @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
           </div>
         </template>
       </elsa-form-group>
       <elsa-form-group :label="$t('paattymispaiva')" class="col-xs-12 col-sm-6 pl-sm-3">
-        <template v-slot="{ uid }">
+        <template #default="{ uid }">
           <elsa-form-datepicker
-            ref="paattymispaiva"
-            :id="uid"
             v-if="childDataReceived"
+            :id="uid"
+            ref="paattymispaiva"
             :value.sync="form.paattymispaiva"
-            @input="$emit('skipRouteExitConfirm', false)"
             :min="form.alkamispaiva"
-            :minErrorText="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
+            :min-error-text="$t('paattymispaiva-ei-voi-olla-ennen-alkamispaivaa')"
             :required="false"
             :aria-describedby="`${uid}-help`"
             class="datepicker-range"
+            @input="$emit('skipRouteExitConfirm', false)"
           />
         </template>
       </elsa-form-group>
     </b-form-row>
     <elsa-form-group :label="$t('erikoistumiseen-hyvaksyttava-tuntimaara')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <div>
           <div class="d-flex align-items-center">
             <b-form-input
@@ -81,23 +81,23 @@
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('todistus')">
-      <template v-slot="{ uid }">
+      <template #default="{ uid }">
         <div :id="uid">
           <p>{{ $t('teoriakoulutus-todistus-kuvaus') }}</p>
           <asiakirjat-upload
-            :isPrimaryButton="false"
-            :buttonText="$t('lisaa-liitetiedosto')"
-            :existingFileNamesInCurrentView="existingFileNamesInCurrentView"
-            :existingFileNamesInOtherViews="existingFileNamesInOtherViews"
+            :is-primary-button="false"
+            :button-text="$t('lisaa-liitetiedosto')"
+            :existing-file-names-in-current-view="existingFileNamesInCurrentView"
+            :existing-file-names-in-other-views="existingFileNamesInOtherViews"
             :disabled="reservedAsiakirjaNimetMutable === undefined"
             @selectedFiles="onFilesAdded"
           />
           <asiakirjat-content
             :asiakirjat="asiakirjatTableItems"
-            :sortingEnabled="false"
-            :paginationEnabled="false"
-            :enableSearch="false"
-            :showInfoIfEmpty="false"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :show-info-if-empty="false"
             @deleteAsiakirja="onDeleteLiitetiedosto"
           />
         </div>
@@ -108,12 +108,12 @@
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ $t('tallenna-teoriakoulutus') }}
       </elsa-button>
-      <elsa-button variant="back" @click.stop.prevent="onCancel" class="mb-2">
+      <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
     </div>
     <div class="row">
-      <elsa-form-error :active="this.$v.$anyError" />
+      <elsa-form-error :active="$v.$anyError" />
     </div>
   </b-form>
 </template>

@@ -3,7 +3,7 @@
     <b-row>
       <b-col lg="5">
         <h1 class="text-primary">{{ $t('valitse-yliopisto') }}</h1>
-        <haka-yliopisto-form @submit="onSubmit" class="mb-3" />
+        <haka-yliopisto-form class="mb-3" @submit="onSubmit" />
       </b-col>
       <b-col>
         <img src="@/assets/elsa-kirjautuminen.svg" :alt="$t('elsa-palvelu')" class="img-fluid" />

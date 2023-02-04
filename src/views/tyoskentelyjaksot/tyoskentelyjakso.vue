@@ -8,7 +8,7 @@
           <hr />
           <div v-if="tyoskentelyjakso">
             <elsa-form-group :label="$t('tyyppi')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ tyyppiLabel }}</span>
                 <span v-if="tyoskentelyjakso.tyoskentelypaikka.muuTyyppi">
                   : {{ tyoskentelyjakso.tyoskentelypaikka.muuTyyppi }}
@@ -16,25 +16,25 @@
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('tyoskentelypaikka')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ tyoskentelyjakso.tyoskentelypaikka.nimi }}</span>
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('kunta')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">
                   {{ tyoskentelyjakso.tyoskentelypaikka.kunta.abbreviation }}
                 </span>
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ tyoskentelyjakso.osaaikaprosentti }} %</span>
               </template>
             </elsa-form-group>
             <b-form-row>
               <elsa-form-group :label="$t('alkamispaiva')" class="col-sm-12 col-md-6 pr-md-3">
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid">{{ $date(tyoskentelyjakso.alkamispaiva) }}</span>
                 </template>
               </elsa-form-group>
@@ -43,7 +43,7 @@
                 :label="$t('paattymispaiva')"
                 class="col-sm-12 col-md-6 pl-md-3"
               >
-                <template v-slot="{ uid }">
+                <template #default="{ uid }">
                   <span :id="uid" class="datepicker-range">
                     {{ $date(tyoskentelyjakso.paattymispaiva) }}
                   </span>
@@ -51,7 +51,7 @@
               </elsa-form-group>
             </b-form-row>
             <elsa-form-group :label="$t('kaytannon-koulutus')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">{{ kaytannonKoulutusLabel }}</span>
                 <span v-if="tyoskentelyjakso.omaaErikoisalaaTukeva">
                   : {{ tyoskentelyjakso.omaaErikoisalaaTukeva.nimi | lowercase }}
@@ -70,14 +70,14 @@
               v-if="tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan"
               :label="$t('lisatiedot')"
             >
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <span :id="uid">
                   {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
                 </span>
               </template>
             </elsa-form-group>
             <elsa-form-group :label="$t('liitetiedostot')">
-              <template v-slot="{ uid }">
+              <template #default="{ uid }">
                 <asiakirjat-content
                   :id="uid"
                   :asiakirjat="tyoskentelyjakso.asiakirjat"
@@ -91,8 +91,8 @@
               </template>
             </elsa-form-group>
             <elsa-button
-              variant="outline-primary"
               v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan && !account.impersonated"
+              variant="outline-primary"
               :to="{ name: 'uusi-poissaolo', params: { tyoskentelyjaksoId: tyoskentelyjakso.id } }"
               :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
               class="mt-3"
@@ -117,12 +117,12 @@
                 v-if="!tyoskentelyjakso.suoritusarvioinnit && muokkausoikeudet"
                 :loading="deleting"
                 :variant="tyoskentelyjakso.tapahtumia ? 'outline-primary' : 'outline-danger'"
-                @click="onTyoskentelyjaksoDelete"
                 :disabled="
                   tyoskentelyjakso.tapahtumia ||
                   tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon
                 "
                 class="mb-3"
+                @click="onTyoskentelyjaksoDelete"
               >
                 {{ $t('poista-jakso') }}
               </elsa-button>

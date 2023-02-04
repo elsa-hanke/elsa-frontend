@@ -7,10 +7,10 @@
       </h2>
 
       <koejakso-card-content v-if="tila === lomaketilat.EI_AKTIIVINEN || tila === lomaketilat.UUSI">
-        <template v-slot:content>
+        <template #content>
           <p class="mb-2">{{ $t('arviointi-ei-viela-pyydetty') }}</p>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button
             v-if="!account.impersonated"
             variant="primary"
@@ -24,10 +24,10 @@
       </koejakso-card-content>
 
       <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_HYVAKSYNTAA">
-        <template v-slot:content>
+        <template #content>
           <p class="pr-6 mb-2">{{ $t('valiarviointi-tila-odottaa-hyvaksyntaa') }}</p>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
             {{ $t('nayta-arviointipyynto') }}
           </elsa-button>
@@ -35,7 +35,7 @@
       </koejakso-card-content>
 
       <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
-        <template v-slot:content>
+        <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
@@ -43,7 +43,7 @@
             <span class="pr-6">{{ $t('valiarviointi-tila-hyvaksytty') }}</span>
           </div>
         </template>
-        <template v-slot:button>
+        <template #button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
             {{ $t('nayta-arviointi') }}
           </elsa-button>
