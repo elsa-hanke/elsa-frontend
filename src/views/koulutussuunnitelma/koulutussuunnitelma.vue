@@ -79,7 +79,8 @@
             </section>
             <section>
               <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-              <p>{{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki }) }}</p>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
               <div class="d-flex flex-wrap justify-content-between d-print-none">
                 <elsa-button
                   v-if="!account.impersonated"

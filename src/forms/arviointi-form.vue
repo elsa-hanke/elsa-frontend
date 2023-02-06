@@ -387,7 +387,8 @@
           :label="$t('liitetiedostot')"
           :help="$t('arviointi-liite-tooltip')"
         >
-          <span>{{ $t('arviointi-liitetiedostot-kuvaus', { linkki }) }}</span>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="$t('arviointi-liitetiedostot-kuvaus', { linkki })"></span>
           <asiakirjat-upload
             class="mt-3"
             :is-primary-button="false"

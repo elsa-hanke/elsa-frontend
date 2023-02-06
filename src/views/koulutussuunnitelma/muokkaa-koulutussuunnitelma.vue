@@ -6,7 +6,8 @@
         <b-col>
           <div v-if="!loading" class="mb-4">
             <h2>{{ $t('henkilokohtainen-koulutussuunnitelma') }}</h2>
-            <p>{{ $t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki }) }}</p>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <p v-html="$t('henkilokohtainen-koulutussuunnitelma-kuvaus', { linkki })" />
             <hr />
             <koulutussuunnitelma-form
               :value="koulutussuunnitelma"

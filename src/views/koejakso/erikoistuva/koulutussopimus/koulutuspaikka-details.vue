@@ -12,7 +12,8 @@
       <template #label-help>
         <elsa-popover>
           <h3>{{ $t('toimipaikan-koulutussopimukset') }}</h3>
-          <p class="mb-0">{{ $t('toimipaikan-koulutussopimukset-tooltip', { linkki }) }}</p>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <p class="mb-0" v-html="$t('toimipaikan-koulutussopimukset-tooltip', { linkki })" />
         </elsa-popover>
       </template>
       <template #default="{ uid }">
