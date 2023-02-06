@@ -65,8 +65,10 @@
       <div class="text-size-lg font-weight-500 mb-3">
         {{ value.arvioitavaTapahtuma }}
       </div>
-      <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
-        {{ value.arvioitavaKokonaisuus.nimi }}
+      <elsa-form-group :label="$t('arvioitavat-kokonaisuudet')">
+        <div v-for="kokonaisuus in value.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
+          {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
+        </div>
       </elsa-form-group>
       <elsa-form-group :label="$t('arvioija')">
         <user-avatar
