@@ -162,10 +162,9 @@
                     @click="row.toggleDetails"
                   >
                     {{ row.item.keskeytyksetLength }}
-                    {{
-                      (row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa'))
-                        | lowercase
-                    }}
+                    <span class="text-lowercase">
+                      {{ row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa') }}
+                    </span>
                     <font-awesome-icon
                       :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
                       fixed-width
@@ -491,7 +490,7 @@
 
     get tyoskentelyjaksotFormatted() {
       const keskeytyksetGroupByTyoskentelyjakso = this.keskeytykset.reduce(
-        (result: { [key: number]: Keskeytysaika[] }, keskeytysaika: Keskeytysaika) => {
+        (result: { [key: number]: Partial<Keskeytysaika>[] }, keskeytysaika: Keskeytysaika) => {
           const tyoskentelyjaksoId = keskeytysaika?.tyoskentelyjakso?.id
           if (tyoskentelyjaksoId) {
             if (tyoskentelyjaksoId in result) {

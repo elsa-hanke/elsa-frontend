@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('poissaolo') }}</h1>
           <hr />
-          <div v-if="poissaoloWrapper">
+          <div v-if="poissaoloWrapper && poissaoloWrapper.poissaolonSyy">
             <elsa-form-group :label="$t('poissaolon-syy')">
               <template #default="{ uid }">
                 <span :id="uid">{{ poissaoloWrapper.poissaolonSyy.nimi }}</span>

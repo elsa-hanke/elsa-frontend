@@ -51,7 +51,7 @@
       </b-col>
     </b-row>
     <hr />
-    <b-row>
+    <b-row v-if="data.vastuuhenkilo">
       <b-col lg="8">
         <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
         <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>

@@ -33,6 +33,7 @@ export type Opintooikeus = {
   erikoisalaLiittynytElsaan: boolean | null
   asetus: Asetus
   tila: OpintooikeusTila
+  opintoopasNimi: string
 }
 
 export type ErikoistuvaLaakari = {
@@ -79,11 +80,13 @@ export interface SuoritemerkintaLomake {
   kunnat: Kunta[]
   erikoisalat: Erikoisala[]
   suoritteenKategoriat: SuoritteenKategoria[]
+  arviointiasteikko: Arviointiasteikko
 }
 
 export interface TyoskentelyjaksoLomake {
   kunnat: Kunta[]
   erikoisalat: Erikoisala[]
+  reservedAsiakirjaNimet: string[]
 }
 
 export interface Koulutussuunnitelma {
@@ -106,16 +109,29 @@ export interface Koulutussuunnitelma {
   koulutussuunnitelmaAsiakirjaUpdated: boolean
   motivaatiokirjeFile?: File | null
   motivaatiokirjeAsiakirjaUpdated: boolean
+  muokkauspaiva: string | null
 }
 
 export interface Koulutusjakso {
+  id: number
+  nimi: string
+  muutOsaamistavoitteet: string | null
+  luotu: string | null
+  tallennettu: string | null
+  lukittu: boolean | null
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  osaamistavoitteet: ArvioitavaKokonaisuus[]
+  koulutussuunnitelma: Koulutussuunnitelma
+}
+
+export interface KoulutusjaksoForm {
   id: number | null
   nimi: string | null
   muutOsaamistavoitteet: string | null
   luotu: string | null
   tallennettu: string | null
   lukittu: boolean | null
-  tyoskentelyjaksot: Tyoskentelyjakso[]
+  tyoskentelyjaksot: Partial<Tyoskentelyjakso>[]
   osaamistavoitteet: ArvioitavaKokonaisuus[]
   koulutussuunnitelma: Koulutussuunnitelma | null
 }
@@ -128,12 +144,12 @@ export interface KoulutusjaksoLomake {
 
 export interface Tyoskentelyjakso {
   id?: number | null
-  alkamispaiva: string | null
+  alkamispaiva: string
   paattymispaiva: string | null
   minPaattymispaiva: string | null
   maxAlkamispaiva: string | null
   osaaikaprosentti: number | null
-  kaytannonKoulutus: KaytannonKoulutusTyyppi | null
+  kaytannonKoulutus: KaytannonKoulutusTyyppi
   hyvaksyttyAiempaanErikoisalaan: boolean | null
   tyoskentelypaikka: Tyoskentelypaikka
   omaaErikoisalaaTukevaId?: number
@@ -146,12 +162,34 @@ export interface Tyoskentelyjakso {
   liitettyTerveyskeskuskoulutusjaksoon?: boolean
 }
 
-export interface Tyoskentelypaikka {
+export interface TyoskentelyjaksoForm {
   id?: number | null
+  alkamispaiva: string | null
+  paattymispaiva: string | null
+  minPaattymispaiva: string | null
+  maxAlkamispaiva: string | null
+  osaaikaprosentti: number | null
+  kaytannonKoulutus: KaytannonKoulutusTyyppi | null
+  hyvaksyttyAiempaanErikoisalaan: boolean | null
+  tyoskentelypaikka: TyoskentelypaikkaForm
+  omaaErikoisalaaTukeva: Erikoisala | null
+  asiakirjat?: Asiakirja[]
+  label?: string
+}
+
+export interface Tyoskentelypaikka {
+  id: number
+  nimi: string
+  tyyppi: TyoskentelyjaksoTyyppi
+  muuTyyppi: string | null
+  kuntaId: string
+  kunta: Kunta
+}
+
+export interface TyoskentelypaikkaForm {
   nimi: string | null
   tyyppi: TyoskentelyjaksoTyyppi | null
   muuTyyppi: string | null
-  kuntaId?: string
   kunta: Kunta | null
 }
 
@@ -169,7 +207,7 @@ export interface Kunta {
 }
 
 export interface Erikoisala {
-  id?: number | null
+  id: number
   nimi: string | null
   tyyppi: ErikoisalaTyyppi | null
   vastuuhenkilonTehtavatyypit: VastuuhenkilonTehtava[]
@@ -243,7 +281,7 @@ export interface Opintosuoritus {
   nimi_sv: string | null
   kurssikoodi: string | null
   tyyppi: OpintosuoritusTyyppi | null
-  suorituspaiva: string | null
+  suorituspaiva: string
   opintopisteet: number | null
   hyvaksytty: boolean | null
   arvio_fi: string | null
@@ -263,7 +301,7 @@ export interface OpintosuoritusOsakokonaisuus {
   nimi_fi: string | null
   nimi_sv: string | null
   kurssikoodi: string | null
-  suorituspaiva: string | null
+  suorituspaiva: string
   opintopisteet: number | null
   hyvaksytty: boolean | null
   arvio_fi: string | null
@@ -277,6 +315,7 @@ export type Koulutuspaikka = {
   id: number | null
   koulutussopimusOmanYliopistonKanssa: boolean | null
   yliopisto: string
+  yliopistoId: number | null
 }
 
 export type Kouluttaja = {
@@ -332,6 +371,7 @@ export type KoejaksonVaiheHyvaksyja = {
   kayttajaUserId: string | null
   kuittausaika: string
   nimi: string
+  nimike: string | null
   sopimusHyvaksytty: boolean
 }
 
@@ -382,6 +422,7 @@ export interface ValiarviointiLomake {
   muokkauspaiva: string
   muuKategoria: string | null
   vahvuudet: string
+  koejaksonOsaamistavoitteet: string
 }
 
 export interface KehittamistoimenpiteetLomake {
@@ -398,6 +439,9 @@ export interface KehittamistoimenpiteetLomake {
   lahiesimies: KoejaksonVaiheHyvaksyja
   lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
+  kehittamistoimenpideKategoriat: KehittamistoimenpideKategoria[]
+  muuKategoria: string | null
+  kehittamistoimenpiteetKuvaus: string | null
 }
 
 export interface LoppukeskusteluLomake {
@@ -415,6 +459,13 @@ export interface LoppukeskusteluLomake {
   lahiesimies: KoejaksonVaiheHyvaksyja
   lahikouluttaja: KoejaksonVaiheHyvaksyja
   muokkauspaiva: string
+  koejaksonOsaamistavoitteet: string
+  edistyminenTavoitteidenMukaista: boolean
+  kehittamistoimenpideKategoriat: []
+  muuKategoria: string | null
+  vahvuudet: string
+  kehittamistoimenpiteet: string
+  kehittamistoimenpiteetRiittavat: boolean
 }
 
 export interface VastuuhenkilonArvioLomake {
@@ -448,6 +499,7 @@ export interface VastuuhenkilonArvioLomake {
   kehittamistoimenpiteet?: KehittamistoimenpiteetLomake
   loppukeskustelu?: LoppukeskusteluLomake
   tila?: string
+  perusteluHylkaamiselle?: string | null
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
@@ -563,7 +615,7 @@ export interface KayttajaYliopistoErikoisala {
   id?: number
   kayttajaId?: number
   yliopisto: Yliopisto
-  erikoisala?: Erikoisala
+  erikoisala: Erikoisala
   vastuuhenkilonTehtavat: VastuuhenkilonTehtava[]
 }
 
@@ -637,7 +689,7 @@ export type AvoinAsia = {
 
 export type Suoritusarviointi = {
   id?: number
-  tapahtumanAjankohta: string | null | Date
+  tapahtumanAjankohta: string
   arvioitavaTapahtuma: string | null
   pyynnonAika: string
   lisatiedot: string | null
@@ -653,9 +705,9 @@ export type Suoritusarviointi = {
   arviointiasteikko: Arviointiasteikko
   tyoskentelyjaksoId: number
   arvioinninSaaja: Kayttaja
-  arvioinninAntaja: Kayttaja | null
+  arvioinninAntaja: Kayttaja
   arvioitavatKokonaisuudet: SuoritusarvioinninArvioitavaKokonaisuus[]
-  tyoskentelyjakso: Tyoskentelyjakso | null
+  tyoskentelyjakso: Tyoskentelyjakso
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
   muuPeruste: string
@@ -665,7 +717,7 @@ export type Suoritusarviointi = {
 
 export type SuoritusarviointiByKokonaisuus = {
   id?: number
-  tapahtumanAjankohta: string | null | Date
+  tapahtumanAjankohta: string
   arvioitavaTapahtuma: string | null
   pyynnonAika: string
   lisatiedot: string | null
@@ -684,8 +736,8 @@ export type SuoritusarviointiByKokonaisuus = {
   arviointiasteikko: Arviointiasteikko
   tyoskentelyjaksoId: number
   arvioinninSaaja: Kayttaja
-  arvioinninAntaja: Kayttaja | null
-  tyoskentelyjakso: Tyoskentelyjakso | null
+  arvioinninAntaja: Kayttaja
+  tyoskentelyjakso: Tyoskentelyjakso
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
   muuPeruste: string
@@ -698,7 +750,7 @@ export type SuoritusarvioinninArvioitavaKokonaisuus = {
   itsearviointiArviointiasteikonTaso: number | ArviointiasteikonTaso
   arviointiasteikonTaso: number | ArviointiasteikonTaso | undefined
   arvioitavaKokonaisuusId: number
-  arvioitavaKokonaisuus: ArvioitavaKokonaisuus | null
+  arvioitavaKokonaisuus: ArvioitavaKokonaisuus
   suoritusarviointiId: number
 }
 
@@ -909,6 +961,10 @@ export type SuoritemerkintaRow = {
   details: boolean
   suorite?: Suorite
   hasDetails?: boolean
+  lastDetails?: boolean
+  nimi?: string
+  vaadittulkm?: number
+  suoritettulkm?: number
 }
 
 export type SuoritemerkintaWithDetails = {
@@ -942,7 +998,7 @@ export interface Teoriakoulutus {
   id?: number
   koulutuksenNimi: string | null
   koulutuksenPaikka: string | null
-  alkamispaiva: string | null
+  alkamispaiva: string
   paattymispaiva: string | null
   erikoistumiseenHyvaksyttavaTuntimaara: number | null
   todistukset: Asiakirja[]
@@ -958,6 +1014,17 @@ export interface PaivakirjaAihekategoria {
 }
 
 export interface Paivakirjamerkinta {
+  id?: number
+  paivamaara: string
+  oppimistapahtumanNimi: string | null
+  muunAiheenNimi: string | null
+  reflektio: string | null
+  yksityinen: boolean
+  aihekategoriat: PaivakirjaAihekategoria[]
+  teoriakoulutus: Teoriakoulutus | null
+}
+
+export interface PaivakirjamerkintaForm {
   id?: number
   paivamaara: string | null
   oppimistapahtumanNimi: string | null
@@ -1052,8 +1119,8 @@ export interface ErikoistuvaLaakariLomake {
 
 export type Seurantajakso = {
   id?: number
-  alkamispaiva: string | null
-  paattymispaiva: string | null
+  alkamispaiva: string
+  paattymispaiva: string
   koulutusjaksot: Koulutusjakso[]
   omaArviointi?: string | null
   lisahuomioita?: string | null
@@ -1076,6 +1143,12 @@ export type Seurantajakso = {
   tallennettu?: string | null
   tila?: SeurantajaksoTila | null
   aiemmatJaksot?: Seurantajakso[]
+}
+
+export type SeurantajaksoHakuForm = {
+  alkamispaiva: string | null
+  paattymispaiva: string | null
+  koulutusjaksot: Partial<Koulutusjakso>[]
 }
 
 export type SeurantajaksonArviointiKategoria = {
@@ -1145,8 +1218,8 @@ export type Keskeytysaika = {
   poissaoloprosentti: number
   poissaolonSyyId?: number
   tyoskentelyjaksoId?: number
-  poissaolonSyy?: PoissaolonSyy | null
-  tyoskentelyjakso?: Tyoskentelyjakso | null
+  poissaolonSyy: PoissaolonSyy
+  tyoskentelyjakso: Tyoskentelyjakso
 }
 
 export type TyoskentelyjaksotTilastotKoulutustyypit = {
@@ -1208,12 +1281,13 @@ export interface ErikoistujanEteneminen {
   seurantajaksonHuoletLkm: number
   suoritemerkinnatLkm: number
   vaaditutSuoritemerkinnatLkm: number
-  koejaksoTila: string
+  koejaksoTila: LomakeTilat
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
   asetus: string
   erikoisala: string
   terveyskeskuskoulutusjaksoSuoritettu: boolean
+  opintooikeusId: number
 }
 
 export interface ErikoistujienSeuranta {
@@ -1240,7 +1314,7 @@ export interface ErikoistujanEteneminenVirkailija {
   syntymaaika: string
   erikoisala: string
   asetus: string
-  koejaksoTila: string
+  koejaksoTila: LomakeTilat
   opintooikeudenMyontamispaiva: string
   opintooikeudenPaattymispaiva: string
   tyoskentelyjaksoTilastot: TyoskentelyjaksotTilastot
@@ -1252,6 +1326,7 @@ export interface ErikoistujanEteneminenVirkailija {
   sateilysuojakoulutuksetVaadittu: number
   valtakunnallisetKuulustelutSuoritettuLkm: number
   terveyskeskuskoulutusjaksoSuoritettu: boolean
+  opintooikeusId: number
 }
 
 export type SortByEnum = {
@@ -1300,7 +1375,7 @@ export interface KoejaksonVaihe {
 }
 
 export interface VastuuhenkilonTehtava {
-  id?: number
+  id: number
   nimi: string
 }
 
@@ -1326,7 +1401,7 @@ export interface ErikoisalaForVastuuhenkilonTehtavat {
 }
 
 export interface VastuuhenkilonTehtavatLomake {
-  yliopistotAndErikoisalat: KayttajaYliopistoErikoisala[]
+  yliopistotAndErikoisalat: Partial<KayttajaYliopistoErikoisala>[]
   erikoisalatForTehtavat: ErikoisalaForVastuuhenkilonTehtavat[]
 }
 
@@ -1433,6 +1508,7 @@ export interface Valmistumispyynto {
   yhteenvetoAsiakirjaId?: number | null
   liitteetAsiakirjaId?: number | null
   erikoistujanTiedotAsiakirjaId?: number | null
+  selvitysVanhentuneistaSuorituksista: string | null
 }
 
 export interface ValmistumispyyntoArviointienTila {
@@ -1479,20 +1555,20 @@ export interface ValmistumispyyntoVirkailijanTarkistus {
   ltTutkintoSuoritettu: boolean
   ltTutkintoSuorituspaiva: string | null
   virkailijanSaate: string | null
-  tyoskentelyjaksotTilastot: TyoskentelyjaksotTilastotKoulutustyypit | null
+  tyoskentelyjaksotTilastot: TyoskentelyjaksotTilastotKoulutustyypit
   terveyskeskustyoHyvaksyttyPvm: string | null
   terveyskeskustyoHyvaksyntaId: number | null
   terveyskeskustyoOpintosuoritusId: number | null
   yliopistosairaalanUlkopuolinenTyoTarkistettu: boolean
   yliopistosairaalatyoTarkistettu: boolean
   kokonaistyoaikaTarkistettu: boolean
-  teoriakoulutusSuoritettu: number | null
-  teoriakoulutusVaadittu: number | null
+  teoriakoulutusSuoritettu: number
+  teoriakoulutusVaadittu: number
   teoriakoulutusTarkistettu: boolean
-  sateilusuojakoulutusSuoritettu: number | null
-  sateilusuojakoulutusVaadittu: number | null
-  johtamiskoulutusSuoritettu: number | null
-  johtamiskoulutusVaadittu: number | null
+  sateilusuojakoulutusSuoritettu: number
+  sateilusuojakoulutusVaadittu: number
+  johtamiskoulutusSuoritettu: number
+  johtamiskoulutusVaadittu: number
   kuulustelut: Opintosuoritus[] | null
   koejaksoHyvaksyttyPvm: string | null
   koejaksoEiVaadittu?: boolean

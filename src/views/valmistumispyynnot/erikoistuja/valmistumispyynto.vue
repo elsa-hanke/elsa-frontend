@@ -142,13 +142,19 @@
                             @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <b-form-invalid-feedback
-                            v-if="!$v.valmistumispyyntoLomake.erikoistujanSahkoposti.required"
+                            v-if="
+                              $v.valmistumispyyntoLomake.erikoistujanSahkoposti &&
+                              !$v.valmistumispyyntoLomake.erikoistujanSahkoposti.required
+                            "
                             :id="`${uid}-feedback`"
                           >
                             {{ $t('pakollinen-tieto') }}
                           </b-form-invalid-feedback>
                           <b-form-invalid-feedback
-                            v-if="!$v.valmistumispyyntoLomake.erikoistujanSahkoposti.email"
+                            v-if="
+                              $v.valmistumispyyntoLomake.erikoistujanSahkoposti &&
+                              !$v.valmistumispyyntoLomake.erikoistujanSahkoposti.email
+                            "
                             :id="`${uid}-feedback`"
                             :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
                           >

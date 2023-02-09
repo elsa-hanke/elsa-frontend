@@ -3,7 +3,7 @@
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <h1 class="mb-3">{{ $t('kehittamistoimenpiteet-otsikko') }}</h1>
-      <div v-if="!loading">
+      <div v-if="!loading && kehittamistoimenpiteet">
         <div v-if="editableForEsimies">
           <p>{{ $t('kehittamistoimenpiteet-esimies-ingressi') }}</p>
         </div>
@@ -424,7 +424,7 @@
       }
     }
 
-    naytaKehittamistoimenpideKategoria(kategoria: string, muuKategoria: string) {
+    naytaKehittamistoimenpideKategoria(kategoria: string, muuKategoria: string | null) {
       if (kategoria === 'MUU') return muuKategoria
       return this.$t('kehittamistoimenpidekategoria-' + kategoria)
     }

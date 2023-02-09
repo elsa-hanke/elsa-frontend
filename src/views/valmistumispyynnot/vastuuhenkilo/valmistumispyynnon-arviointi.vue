@@ -253,12 +253,7 @@
                 >
                   {{ $t('peruuta') }}
                 </elsa-button>
-                <elsa-button
-                  :loading="sending"
-                  variant="primary"
-                  class="ml-2"
-                  @click="onValidateAndConfirmSend('confirm-send')"
-                >
+                <elsa-button :loading="sending" type="submit" variant="primary" class="ml-2">
                   {{ $t('tallenna-ja-laheta') }}
                 </elsa-button>
               </div>
@@ -383,7 +378,7 @@
       }
     }
 
-    vaihdaRooli(id: number) {
+    vaihdaRooli(id: number | undefined) {
       window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
@@ -397,9 +392,9 @@
       return !this.$v.$anyError
     }
 
-    onValidateAndConfirmSend(modalId: string) {
+    onSubmit() {
       if (!this.validateForm()) return
-      return this.$bvModal.show(modalId)
+      return this.$bvModal.show('confirm-send')
     }
 
     async onSend() {

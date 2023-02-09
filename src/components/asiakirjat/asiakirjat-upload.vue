@@ -113,12 +113,12 @@
 
   @Component
   export default class AsiakirjatUpload extends Vue {
-    private maxFilesTotalSizeExceeded = false
-    private filesExceedingMaxSize: File[] = []
-    private filesOfWrongType: File[] = []
-    private duplicateFilesInCurrentView: File[] = []
-    private duplicateFilesInOtherViews: File[] = []
-    private selectedFilesCount = 0
+    maxFilesTotalSizeExceeded = false
+    filesExceedingMaxSize: File[] = []
+    filesOfWrongType: File[] = []
+    duplicateFilesInCurrentView: File[] = []
+    duplicateFilesInOtherViews: File[] = []
+    selectedFilesCount = 0
 
     @Prop({ required: false })
     uploading?: boolean

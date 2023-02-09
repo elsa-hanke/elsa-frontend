@@ -15,7 +15,7 @@
               :arvioitavan-kokonaisuuden-kategoriat="arvioitavanKokonaisuudenKategoriat"
               @submit="onSubmit"
               @cancel="onCancel"
-              @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+              @skipRouteExitConfirm="skipRouteExitConfirm"
             />
           </div>
           <div v-else class="text-center">
@@ -113,6 +113,10 @@
 
     get arvioitavanKokonaisuudenKategoriat() {
       return this.koulutusjaksoLomake?.arvioitavanKokonaisuudenKategoriat ?? []
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

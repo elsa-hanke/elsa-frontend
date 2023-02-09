@@ -18,7 +18,7 @@
             :editing="editing"
             @submit="onSubmit"
             @delete="onDelete"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -230,6 +230,10 @@
 
     get editing() {
       return this.arviointipyyntoWrapper ? true : false
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

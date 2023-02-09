@@ -52,7 +52,7 @@
           track-by="id"
           @input="$emit('skipRouteExitConfirm', false)"
         >
-          <template slot="option" slot-scope="props">
+          <template #option="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
             <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
           </template>
@@ -176,7 +176,6 @@
   import { BModal } from 'bootstrap-vue'
   import Component from 'vue-class-component'
   import { Prop, Mixins } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
   import { postLahikouluttaja } from '@/api/erikoistuva'
@@ -196,7 +195,6 @@
     Kayttaja,
     Kunta,
     Suoritusarviointi,
-    Tyoskentelyjakso,
     ElsaError,
     ArvioitavaKokonaisuus
   } from '@/types'
@@ -229,13 +227,10 @@
       }
     }
   })
-  export default class ArviointipyyntoForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+  export default class ArviointipyyntoForm extends Mixins(TyoskentelyjaksoMixin) {
     $refs!: {
       tapahtumanAjankohta: ElsaFormDatepicker
     }
-
-    @Prop({ required: false, default: () => [] })
-    tyoskentelyjaksot!: Tyoskentelyjakso[]
 
     @Prop({ required: false, default: () => [] })
     kunnat!: Kunta[]
@@ -267,15 +262,13 @@
     value?: Suoritusarviointi
 
     form: Partial<Suoritusarviointi> = {
-      tyoskentelyjakso: null,
       arvioitavatKokonaisuudet: [],
       arvioitavaTapahtuma: null,
-      arvioinninAntaja: null,
-      tapahtumanAjankohta: null,
-      lisatiedot: null
+      lisatiedot: null,
+      arvioinninAntaja: undefined
     }
 
-    arvioitavatKokonaisuudet: (ArvioitavaKokonaisuus | null)[] | undefined = []
+    arvioitavatKokonaisuudet: (ArvioitavaKokonaisuus | null)[] = []
 
     params = {
       saving: false,
@@ -289,9 +282,11 @@
         this.form.tyoskentelyjakso.label = tyoskentelyjaksoLabel(this, this.value?.tyoskentelyjakso)
       }
       this.form.arvioitavatKokonaisuudet = this.value?.arvioitavatKokonaisuudet
-      this.arvioitavatKokonaisuudet = this.form.arvioitavatKokonaisuudet?.map(
-        (k) => k.arvioitavaKokonaisuus
-      )
+      if (this.form.arvioitavatKokonaisuudet) {
+        this.arvioitavatKokonaisuudet = this.form.arvioitavatKokonaisuudet?.map(
+          (k) => k.arvioitavaKokonaisuus
+        )
+      }
       this.form.arvioitavaTapahtuma = this.value?.arvioitavaTapahtuma
       this.form.arvioinninAntaja = this.value?.arvioinninAntaja
       this.form.lisatiedot = this.value?.lisatiedot
@@ -311,6 +306,7 @@
 
     validateForm(): boolean {
       this.$v.form.$touch()
+      this.$v.arvioitavatKokonaisuudet.$touch()
       return !this.$v.$anyError
     }
 

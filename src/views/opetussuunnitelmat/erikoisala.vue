@@ -4,7 +4,7 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <div v-if="!loading">
+          <div v-if="!loading && erikoisala">
             <h1>{{ erikoisala.nimi }}</h1>
             <p>{{ $t('opetussuunnitelmat-kuvaus') }}</p>
             <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">

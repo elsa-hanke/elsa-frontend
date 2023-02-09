@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { BModal } from 'bootstrap-vue'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
-import { ElsaError } from '@/types'
+import { ElsaError, Tyoskentelyjakso } from '@/types'
 import { dateBetween } from '@/utils/date'
 import { toastSuccess, toastFail } from '@/utils/toast'
 import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
@@ -10,14 +10,14 @@ import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 @Component({})
 export default class TyoskentelyjaksoMixin extends Vue {
   @Prop({ required: false, default: () => [] })
-  tyoskentelyjaksot!: any[]
+  tyoskentelyjaksot!: Tyoskentelyjakso[]
 
   form = {
     tyoskentelyjakso: null,
     tapahtumanAjankohta: null
   } as any
 
-  onTyoskentelyjaksoSelect(value: any) {
+  onTyoskentelyjaksoSelect(value: Tyoskentelyjakso) {
     if (!dateBetween(this.form.tapahtumanAjankohta, value.alkamispaiva, value.paattymispaiva)) {
       this.form.tapahtumanAjankohta = null
     }

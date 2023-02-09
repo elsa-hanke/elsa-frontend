@@ -8,14 +8,14 @@
           <p class="mb-0">{{ $t('suoritteet-kuitataan-seurantakeskusteluissa') }}</p>
           <hr />
           <suoritemerkinta-form
-            v-if="!loading"
+            v-if="!loading && suoritemerkintaLomake"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :suoritteen-kategoriat="suoritemerkintaLomake.suoritteenKategoriat"
             :arviointiasteikko="suoritemerkintaLomake.arviointiasteikko"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             @submit="onSubmit"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -132,6 +132,10 @@
       } else {
         return []
       }
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

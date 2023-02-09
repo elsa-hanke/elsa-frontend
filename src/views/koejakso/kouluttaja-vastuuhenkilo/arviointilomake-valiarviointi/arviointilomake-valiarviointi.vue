@@ -3,7 +3,7 @@
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <h1 class="mb-3">{{ $t('valiarviointi-kouluttaja') }}</h1>
-      <div v-if="!loading">
+      <div v-if="!loading && valiarviointi">
         <div v-if="editableForEsimies">
           <p>{{ $t('valiarviointi-esimies-ingressi') }}</p>
         </div>

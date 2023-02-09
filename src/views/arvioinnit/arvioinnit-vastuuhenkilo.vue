@@ -8,6 +8,7 @@
 
   import ArvioinnitList from '@/components/arvioinnit-list/arvioinnit-list.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import { Suoritusarviointi } from '@/types'
 
   @Component({
     components: {
@@ -16,7 +17,7 @@
     }
   })
   export default class Arvioinnit extends Vue {
-    private arvioinnit: null | any[] = null
+    arvioinnit: null | Suoritusarviointi[] = null
 
     async mounted() {
       await this.fetch()

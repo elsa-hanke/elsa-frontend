@@ -87,11 +87,14 @@
               :value="account.email"
               @input="$emit('skipRouteExitConfirm', false)"
             />
-            <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
+            <b-form-invalid-feedback
+              v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
+              :id="`${uid}-feedback`"
+            >
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-if="!$v.form.sahkoposti.email"
+              v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
               :id="`${uid}-feedback`"
               :state="validateState('sahkoposti')"
             >

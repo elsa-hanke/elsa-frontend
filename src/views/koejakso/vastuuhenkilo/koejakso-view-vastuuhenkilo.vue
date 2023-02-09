@@ -21,8 +21,8 @@
     }
   })
   export default class KoejaksoViewVastuuhenkilo extends Vue {
-    private loading = true
-    private componentLinks = new Map([
+    loading = true
+    componentLinks = new Map([
       [LomakeTyypit.KOULUTUSSOPIMUS, 'koulutussopimus'],
       [LomakeTyypit.ALOITUSKESKUSTELU, 'aloituskeskustelu-kouluttaja'],
       [LomakeTyypit.VALIARVIOINTI, 'valiarviointi-kouluttaja'],

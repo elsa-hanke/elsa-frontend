@@ -55,10 +55,16 @@
             :state="validateState('sahkoposti')"
             @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
-          <b-form-invalid-feedback v-if="!$v.form.sahkoposti.required" :id="`${uid}-feedback`">
+          <b-form-invalid-feedback
+            v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
+            :id="`${uid}-feedback`"
+          >
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
-          <b-form-invalid-feedback v-if="!$v.form.sahkoposti.email" :id="`${uid}-feedback`">
+          <b-form-invalid-feedback
+            v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
+            :id="`${uid}-feedback`"
+          >
             {{ $t('sahkopostiosoite-ei-kelvollinen') }}
           </b-form-invalid-feedback>
         </template>
@@ -72,19 +78,20 @@
             @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
           <b-form-invalid-feedback
-            v-if="!$v.form.sahkopostiUudelleen.required"
+            v-if="$v.form.sahkopostiUudelleen && !$v.form.sahkopostiUudelleen.required"
             :id="`${uid}-feedback`"
           >
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
           <b-form-invalid-feedback
-            v-if="!$v.form.sahkopostiUudelleen.email"
+            v-if="$v.form.sahkopostiUudelleen && !$v.form.sahkopostiUudelleen.email"
             :id="`${uid}-feedback`"
           >
             {{ $t('sahkopostiosoite-ei-kelvollinen') }}
           </b-form-invalid-feedback>
           <b-form-invalid-feedback
             v-if="
+              $v.form.sahkopostiUudelleen &&
               $v.form.sahkopostiUudelleen.required &&
               $v.form.sahkopostiUudelleen.email &&
               !$v.form.sahkopostiUudelleen.sameAsSahkoposti
@@ -97,7 +104,7 @@
       </elsa-form-group>
       <hr />
       <div class="d-flex flex-row-reverse flex-wrap">
-        <elsa-button variant="primary" :loading="saving" class="mb-3 ml-3" @click="onSave">
+        <elsa-button variant="primary" type="submit" :loading="saving" class="mb-3 ml-3">
           {{ $t('tallenna') }}
         </elsa-button>
         <elsa-button
@@ -168,7 +175,7 @@
     }
     saving = false
 
-    async onSave() {
+    async onSubmit() {
       if (!this.validateForm()) {
         return
       }

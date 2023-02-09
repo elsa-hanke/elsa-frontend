@@ -7,7 +7,7 @@
           <h1>{{ $t('muokkaa-tyoskentelyjaksoa') }}</h1>
           <hr />
           <tyoskentelyjakso-form
-            v-if="!loading && tyoskentelyjakso"
+            v-if="!loading && tyoskentelyjakso && tyoskentelyjaksoLomake"
             :value="tyoskentelyjakso"
             :editing="true"
             :kunnat="tyoskentelyjaksoLomake.kunnat"
@@ -15,7 +15,7 @@
             :asiakirjat="tyoskentelyjakso.asiakirjat"
             @submit="onSubmit"
             @cancel="onCancel"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -133,6 +133,10 @@
       this.$router.push({
         name: 'tyoskentelyjaksot'
       })
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

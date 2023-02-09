@@ -2,7 +2,7 @@
   <div class="seurantajakso">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-row v-if="!loading" lg>
+      <b-row v-if="!loading && seurantajakso" lg>
         <b-col>
           <h1>{{ $t('seurantajakso') }}</h1>
           <b-alert :show="showOdottaaKeskustelua" variant="dark" class="mt-3">

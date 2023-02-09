@@ -45,7 +45,7 @@
     </div>
 
     <b-table
-      v-if="!loading && rows > 0"
+      v-if="!loading && kayttajat && rows > 0"
       class="kayttajat-table"
       :items="kayttajat.content"
       :fields="fields"

@@ -12,7 +12,7 @@
     </elsa-form-group>
     <elsa-form-group class="template-placeholder" :label="arviointiAsteikonNimi">
       <template #label-help>
-        <elsa-popover>
+        <elsa-popover v-if="suoritemerkintaWrapper.arviointiasteikko">
           <elsa-arviointiasteikon-taso-tooltip-content
             :arviointiasteikon-nimi="arviointiAsteikonNimi"
             :arviointiasteikon-tasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
@@ -22,7 +22,10 @@
       <template #default="{ uid }">
         <span :id="uid">
           <elsa-arviointiasteikon-taso
-            v-if="suoritemerkintaWrapper.arviointiasteikonTaso"
+            v-if="
+              suoritemerkintaWrapper.arviointiasteikonTaso &&
+              suoritemerkintaWrapper.arviointiasteikko
+            "
             :value="suoritemerkintaWrapper.arviointiasteikonTaso"
             :tasot="suoritemerkintaWrapper.arviointiasteikko.tasot"
           />

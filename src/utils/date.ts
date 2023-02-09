@@ -8,7 +8,7 @@ import isDate from 'date-fns/isDate'
 export function dateBetween(
   date: string | Date | undefined,
   startDate: string | Date | undefined,
-  endDate: string | Date | undefined
+  endDate: string | Date | null | undefined
 ) {
   if (date) {
     if (

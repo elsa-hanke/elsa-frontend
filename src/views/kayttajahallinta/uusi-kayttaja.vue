@@ -13,19 +13,19 @@
           </elsa-form-group>
           <erikoistuva-laakari-form
             v-if="form.rooli === erikoistuvaLaakariRole"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <vastuuhenkilo-form
             v-if="form.rooli === vastuuhenkiloRole"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <virkailija-form
             v-if="form.rooli === virkailijaRole"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <paakayttaja-form
             v-if="form.rooli === paakayttajaRole"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
         </b-col>
       </b-row>
@@ -121,6 +121,10 @@
 
     get paakayttajaRole() {
       return ELSA_ROLE.TekninenPaakayttaja
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

@@ -7,7 +7,8 @@
             {{ $t('elsa') }}
           </div>
           <div class="brand-text d-inline-block text-size-sm align-top pt-2">
-            -{{ $t('palvelu') | lowercase }}
+            -
+            <span class="text-lowercase">{{ $t('palvelu') }}</span>
           </div>
         </b-navbar-brand>
       </router-link>

@@ -114,8 +114,7 @@
 
 <script lang="ts">
   import Component from 'vue-class-component'
-  import { Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
+  import { Prop, Vue } from 'vue-property-decorator'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -124,7 +123,12 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { PaivakirjaAihekategoria, Paivakirjamerkinta, Teoriakoulutus } from '@/types'
+  import {
+    PaivakirjaAihekategoria,
+    Paivakirjamerkinta,
+    PaivakirjamerkintaForm,
+    Teoriakoulutus
+  } from '@/types'
   import { paivakirjamerkintaMuuAiheId } from '@/utils/constants'
 
   @Component({
@@ -152,7 +156,7 @@
       }
     }
   })
-  export default class PaivittainenMerkintaForm extends Mixins(validationMixin) {
+  export default class PaivittainenMerkintaFormClass extends Vue {
     $refs!: {
       paivamaara: ElsaFormDatepicker
     }
@@ -169,7 +173,7 @@
     })
     value!: Paivakirjamerkinta
 
-    form: Paivakirjamerkinta = {
+    form: PaivakirjamerkintaForm = {
       paivamaara: null,
       oppimistapahtumanNimi: null,
       muunAiheenNimi: null,

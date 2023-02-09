@@ -190,6 +190,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
@@ -197,9 +198,13 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
-      muokkauspaiva: ''
+      muokkauspaiva: '',
+      kehittamistoimenpideKategoriat: [],
+      muuKategoria: null,
+      kehittamistoimenpiteetKuvaus: null
     }
 
     get account() {

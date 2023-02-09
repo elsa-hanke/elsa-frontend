@@ -5,7 +5,7 @@
     :loading="loading"
     class="h-100"
   >
-    <div v-if="!loading">
+    <div v-if="!loading && koulutussuunnitelma">
       <div>
         <b-row v-if="koulutussuunnitelma.muokkauspaiva">
           <b-col>
@@ -86,11 +86,13 @@
                         tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
                       }}
                       -
-                      {{
-                        tyoskentelyjakso.paattymispaiva
-                          ? $date(tyoskentelyjakso.paattymispaiva)
-                          : $t('kesken') | lowercase
-                      }}
+                      <span :class="tyoskentelyjakso.paattymispaiva ? '' : 'text-lowercase'">
+                        {{
+                          tyoskentelyjakso.paattymispaiva
+                            ? $date(tyoskentelyjakso.paattymispaiva)
+                            : $t('kesken')
+                        }}
+                      </span>
                     </span>
                     <span class="tyoskentelypaikka">
                       {{ tyoskentelyjakso.tyoskentelypaikka.nimi }}

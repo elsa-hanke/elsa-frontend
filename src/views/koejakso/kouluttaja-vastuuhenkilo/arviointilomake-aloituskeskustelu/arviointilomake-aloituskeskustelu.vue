@@ -1,7 +1,7 @@
 <template>
   <div class="col-lg-8 px-0">
     <b-breadcrumb :items="items" class="mb-0" />
-    <b-container v-if="!loading" fluid>
+    <b-container v-if="!loading && aloituskeskustelu" fluid>
       <h1 class="mb-3">{{ $t('aloituskeskustelu-kouluttaja') }}</h1>
 
       <div v-if="editable && isCurrentUserLahiesimies">

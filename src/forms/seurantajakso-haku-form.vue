@@ -51,8 +51,8 @@
           class="text-decoration-none shadow-none p-0"
           @click="addKoulutusjakso"
         >
-          <font-awesome-icon icon="plus" fixed-width size="sm" />
-          {{ $t('useampi-koulutusjakso') | lowercase }}
+          <font-awesome-icon icon="plus" fixed-width size="sm" class="text-lowercase" />
+          {{ $t('useampi-koulutusjakso') }}
         </elsa-button>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
           {{ $t('pakollinen-tieto') }}
@@ -126,7 +126,8 @@
     Erikoisala,
     Koulutusjakso,
     Kunta,
-    Seurantajakso
+    Seurantajakso,
+    SeurantajaksoHakuForm
   } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -139,7 +140,7 @@
       KoulutusjaksoForm
     }
   })
-  export default class SeurantajaksoHakuForm extends Mixins(TyoskentelyjaksoMixin) {
+  export default class SeurantajaksoHakuFormClass extends Mixins(TyoskentelyjaksoMixin) {
     $refs!: {
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
@@ -163,22 +164,10 @@
     })
     seurantajakso!: Seurantajakso | null
 
-    form: Partial<Seurantajakso> = {
+    form: SeurantajaksoHakuForm = {
       alkamispaiva: null,
       paattymispaiva: null,
-      koulutusjaksot: [
-        {
-          id: null,
-          nimi: null,
-          muutOsaamistavoitteet: null,
-          luotu: null,
-          tallennettu: null,
-          lukittu: null,
-          tyoskentelyjaksot: [],
-          osaamistavoitteet: [],
-          koulutussuunnitelma: null
-        }
-      ]
+      koulutusjaksot: [{}]
     }
 
     params = {
@@ -191,21 +180,7 @@
         this.form = {
           ...this.seurantajakso,
           koulutusjaksot:
-            this.seurantajakso.koulutusjaksot.length > 0
-              ? this.seurantajakso.koulutusjaksot
-              : [
-                  {
-                    id: null,
-                    nimi: null,
-                    muutOsaamistavoitteet: null,
-                    luotu: null,
-                    tallennettu: null,
-                    lukittu: null,
-                    tyoskentelyjaksot: [],
-                    osaamistavoitteet: [],
-                    koulutussuunnitelma: null
-                  }
-                ]
+            this.seurantajakso.koulutusjaksot.length > 0 ? this.seurantajakso.koulutusjaksot : [{}]
         }
       }
       this.childDataReceived = true
@@ -235,17 +210,7 @@
     }
 
     addKoulutusjakso() {
-      this.form.koulutusjaksot?.push({
-        id: null,
-        nimi: null,
-        muutOsaamistavoitteet: null,
-        luotu: null,
-        tallennettu: null,
-        lukittu: null,
-        tyoskentelyjaksot: [],
-        osaamistavoitteet: [],
-        koulutussuunnitelma: null
-      })
+      this.form.koulutusjaksot?.push({})
     }
 
     deleteKoulutusjakso(index: number) {
@@ -259,6 +224,7 @@
       try {
         const koulutusjakso = (await postKoulutusjakso(data)).data
         this.koulutusjaksot.push(koulutusjakso)
+        this.form.koulutusjaksot[this.form.koulutusjaksot.length - 1] = koulutusjakso
         modal.hide('confirm')
         toastSuccess(this, this.$t('koulutusjakso-lisatty'))
       } catch (err) {

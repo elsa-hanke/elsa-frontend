@@ -4,7 +4,7 @@
 
     <b-container fluid>
       <h1 class="mb-0">{{ $t('virkailijan-tarkistus') }}</h1>
-      <div v-if="!loading">
+      <div v-if="!loading && vastuuhenkilonArvio">
         <b-row lg>
           <b-col>
             <div v-if="editable" class="mt-3">
@@ -142,95 +142,97 @@
           </b-row>
         </div>
         <hr />
-        <div
-          v-for="(sp, index) in vastuuhenkilonArvio.koejaksonSuorituspaikat.tyoskentelyjaksot"
-          :key="index"
-        >
-          <b-row>
-            <b-col>
-              <h3>{{ $t('koejakson-suorituspaikka') }}</h3>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('tyyppi') }}</h5>
-              <p>
-                {{
-                  displayTyoskentelypaikkaTyyppiLabel(
-                    sp.tyoskentelypaikka.muuTyyppi,
-                    sp.tyoskentelypaikka.tyyppi
-                  )
-                }}
-              </p>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('tyoskentelypaikka') }}</h5>
-              <p>{{ sp.tyoskentelypaikka.nimi }}</p>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('kunta') }}</h5>
-              <p>{{ sp.tyoskentelypaikka.kunta.abbreviation }}</p>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('tyoaika-taydesta-tyopaivasta-prosentti') }}</h5>
-              <p>{{ sp.osaaikaprosentti }}%</p>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col lg="4">
-              <h5>{{ $t('alkamispaiva') }}</h5>
-              <p>{{ $date(sp.alkamispaiva) }}</p>
-            </b-col>
-            <b-col lg="4">
-              <h5>{{ $t('paattymispaiva') }}</h5>
-              <p>{{ sp.paattymispaiva ? $date(sp.paattymispaiva) : '-' }}</p>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('liitetiedostot') }}</h5>
-              <asiakirjat-content
-                :asiakirjat="sp.asiakirjat"
-                :sorting-enabled="false"
-                :pagination-enabled="false"
-                :enable-search="false"
-                :enable-delete="false"
-                :no-results-info-text="$t('ei-liitetiedostoja')"
-                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
-                :loading="loading"
-              />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <h5>{{ $t('kaytannon-koulutus') }}</h5>
-              <p>
-                {{ displayKaytannonKoulutus(sp.kaytannonKoulutus) }}
-                {{ sp.omaaErikoisalaaTukeva ? ': ' + sp.omaaErikoisalaaTukeva.nimi : '' }}
-              </p>
-            </b-col>
-          </b-row>
-          <b-row v-if="sp.hyvaksyttyAiempaanErikoisalaan">
-            <b-col>
-              <h5>{{ $t('lisatiedot') }}</h5>
-              <p>{{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}</p>
-            </b-col>
-          </b-row>
-          <b-row v-if="sp.poissaolot.length > 0">
-            <b-col>
-              <h5>{{ $t('poissaolot') }}</h5>
-              <elsa-poissaolot-display :poissaolot="sp.poissaolot" />
-            </b-col>
-          </b-row>
-          <hr />
+        <div v-if="vastuuhenkilonArvio.koejaksonSuorituspaikat">
+          <div
+            v-for="(sp, index) in vastuuhenkilonArvio.koejaksonSuorituspaikat.tyoskentelyjaksot"
+            :key="index"
+          >
+            <b-row>
+              <b-col>
+                <h3>{{ $t('koejakson-suorituspaikka') }}</h3>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <h5>{{ $t('tyyppi') }}</h5>
+                <p>
+                  {{
+                    displayTyoskentelypaikkaTyyppiLabel(
+                      sp.tyoskentelypaikka.muuTyyppi,
+                      sp.tyoskentelypaikka.tyyppi
+                    )
+                  }}
+                </p>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <h5>{{ $t('tyoskentelypaikka') }}</h5>
+                <p>{{ sp.tyoskentelypaikka.nimi }}</p>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <h5>{{ $t('kunta') }}</h5>
+                <p>{{ sp.tyoskentelypaikka.kunta.abbreviation }}</p>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <h5>{{ $t('tyoaika-taydesta-tyopaivasta-prosentti') }}</h5>
+                <p>{{ sp.osaaikaprosentti }}%</p>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col lg="4">
+                <h5>{{ $t('alkamispaiva') }}</h5>
+                <p>{{ $date(sp.alkamispaiva) }}</p>
+              </b-col>
+              <b-col lg="4">
+                <h5>{{ $t('paattymispaiva') }}</h5>
+                <p>{{ sp.paattymispaiva ? $date(sp.paattymispaiva) : '-' }}</p>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <h5>{{ $t('liitetiedostot') }}</h5>
+                <asiakirjat-content
+                  :asiakirjat="sp.asiakirjat"
+                  :sorting-enabled="false"
+                  :pagination-enabled="false"
+                  :enable-search="false"
+                  :enable-delete="false"
+                  :no-results-info-text="$t('ei-liitetiedostoja')"
+                  :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                  :loading="loading"
+                />
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <h5>{{ $t('kaytannon-koulutus') }}</h5>
+                <p>
+                  {{ displayKaytannonKoulutus(sp.kaytannonKoulutus) }}
+                  {{ sp.omaaErikoisalaaTukeva ? ': ' + sp.omaaErikoisalaaTukeva.nimi : '' }}
+                </p>
+              </b-col>
+            </b-row>
+            <b-row v-if="sp.hyvaksyttyAiempaanErikoisalaan">
+              <b-col>
+                <h5>{{ $t('lisatiedot') }}</h5>
+                <p>{{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}</p>
+              </b-col>
+            </b-row>
+            <b-row v-if="sp.poissaolot && sp.poissaolot.length > 0">
+              <b-col>
+                <h5>{{ $t('poissaolot') }}</h5>
+                <elsa-poissaolot-display :poissaolot="sp.poissaolot" />
+              </b-col>
+            </b-row>
+            <hr />
+          </div>
         </div>
-        <div>
+        <div v-if="vastuuhenkilonArvio.aloituskeskustelu">
           <b-row>
             <b-col>
               <h3>{{ $t('aloituskeskustelu-kouluttaja') }}</h3>
@@ -301,7 +303,7 @@
           </b-row>
         </div>
         <hr />
-        <div>
+        <div v-if="vastuuhenkilonArvio.valiarviointi">
           <b-row>
             <b-col>
               <h3>{{ $t('soveltuvuus-erikoisalalle-valiarvioinnin-perusteella') }}</h3>
@@ -331,7 +333,13 @@
           </b-row>
         </div>
         <hr />
-        <div v-if="!vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista">
+        <div
+          v-if="
+            vastuuhenkilonArvio.valiarviointi &&
+            vastuuhenkilonArvio.kehittamistoimenpiteet &&
+            !vastuuhenkilonArvio.valiarviointi.edistyminenTavoitteidenMukaista
+          "
+        >
           <b-row>
             <b-col>
               <h3>{{ $t('kehittamistoimenpiteet-otsikko') }}</h3>
@@ -361,7 +369,7 @@
           </b-row>
           <hr />
         </div>
-        <div>
+        <div v-if="vastuuhenkilonArvio.loppukeskustelu">
           <b-row>
             <b-col>
               <h3>{{ $t('loppukeskustelu') }}</h3>
@@ -391,7 +399,7 @@
           </b-row>
         </div>
         <hr />
-        <div>
+        <div v-if="vastuuhenkilonArvio.vastuuhenkilo">
           <b-row>
             <b-col>
               <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
@@ -412,7 +420,7 @@
           </b-row>
         </div>
         <hr />
-        <div v-if="vastuuhenkilonArvio.virkailija.kuittausaika">
+        <div v-if="vastuuhenkilonArvio.virkailija && vastuuhenkilonArvio.virkailija.kuittausaika">
           <b-row>
             <b-col>
               <h3>{{ $t('tarkistanut') }}</h3>
@@ -499,7 +507,7 @@
       @submit="onSend"
     >
       <template #modal-content>
-        <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolle')">
+        <elsa-form-group v-if="vastuuhenkilonArvio" :label="$t('lisatiedot-vastuuhenkilolle')">
           <template #default="{ uid }">
             <b-form-textarea
               :id="uid"
@@ -654,7 +662,7 @@
       return this.$bvModal.show(modalId)
     }
 
-    displayTyoskentelypaikkaTyyppiLabel(muu: string, tyyppi: TyoskentelyjaksoTyyppi) {
+    displayTyoskentelypaikkaTyyppiLabel(muu: string | null, tyyppi: TyoskentelyjaksoTyyppi) {
       return muu ? muu : tyoskentelypaikkaTyyppiLabel(this, tyyppi)
     }
 

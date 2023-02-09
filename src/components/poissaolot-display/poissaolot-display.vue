@@ -7,7 +7,9 @@
       @click="toggleIsOpen"
     >
       {{ poissaolot.length }}
-      {{ (poissaolot.length == 1 ? $t('poissaolo') : $t('poissaoloa')) | lowercase }}
+      <span class="text-lowercase">
+        {{ poissaolot.length == 1 ? $t('poissaolo') : $t('poissaoloa') }}
+      </span>
       <font-awesome-icon
         :icon="isOpen ? 'chevron-up' : 'chevron-down'"
         fixed-width
@@ -64,7 +66,7 @@
     }
   })
   export default class ElsaPoissaolotDisplay extends Vue {
-    private isOpen = false
+    isOpen = false
 
     @Prop({ required: true, default: () => [] })
     poissaolot!: Keskeytysaika[]

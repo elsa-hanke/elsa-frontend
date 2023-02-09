@@ -4,7 +4,7 @@
     <b-container fluid>
       <h1 class="mb-3">{{ $t('loppukeskustelu-kouluttaja') }}</h1>
 
-      <div v-if="!loading">
+      <div v-if="!loading && loppukeskustelu">
         <div v-if="editableForEsimies">
           <p>{{ $t('loppukeskustelu-esimies-ingressi') }}</p>
         </div>
@@ -508,7 +508,7 @@
       }
     }
 
-    naytaKehittamistoimenpideKategoria(kategoria: string, muuKategoria: string) {
+    naytaKehittamistoimenpideKategoria(kategoria: string, muuKategoria: string | null) {
       if (kategoria === 'MUU') return muuKategoria
       return this.$t('kehittamistoimenpidekategoria-' + kategoria)
     }

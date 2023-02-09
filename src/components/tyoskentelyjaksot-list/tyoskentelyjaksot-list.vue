@@ -106,7 +106,7 @@
     @Prop({ required: true, type: Array, default: () => [] })
     tyoskentelyjaksot!: Tyoskentelyjakso[]
 
-    displayTyoskentelypaikkaTyyppiLabel(muu: string, tyyppi: TyoskentelyjaksoTyyppi) {
+    displayTyoskentelypaikkaTyyppiLabel(muu: string | null, tyyppi: TyoskentelyjaksoTyyppi) {
       return muu ? muu : tyoskentelypaikkaTyyppiLabel(this, tyyppi)
     }
 

@@ -13,7 +13,8 @@
           {{ $t('elsa') }}
         </span>
         <span class="brand-text d-inline-block align-text-top">
-          -{{ $t('palvelu') | lowercase }}
+          -
+          <span class="text-lowercase">{{ $t('palvelu') }}</span>
         </span>
       </b-navbar-brand>
     </router-link>
@@ -54,32 +55,36 @@
             <div class="dropdown-item dropdown-item__header mt-1 pb-1">
               <span class="font-weight-500">{{ $t('valitse-opinto-oikeus') }}</span>
             </div>
-            <template v-for="opintooikeus in opintooikeudet">
-              <b-dropdown-item :key="opintooikeus.id" @click="changeOpintooikeus(opintooikeus)">
-                <div
-                  class="d-flex"
-                  :class="{
-                    'dropdown-item__disabled': opintooikeus.id === opintooikeusKaytossa.id
-                  }"
-                >
-                  <div class="flex-column icon-col-min-width">
-                    <font-awesome-icon
-                      v-if="opintooikeus.id === opintooikeusKaytossa.id"
-                      :icon="['far', 'check-circle']"
-                      fixed-width
-                      size="lg"
-                      class="text-success"
-                    />
-                  </div>
-                  <div class="flex-column">
-                    {{ opintooikeus.erikoisalaNimi }}
-                    <div class="text-size-sm">
-                      {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
-                    </div>
+            <b-dropdown-item
+              v-for="opintooikeus in opintooikeudet"
+              :key="opintooikeus.id"
+              @click="changeOpintooikeus(opintooikeus)"
+            >
+              <div
+                class="d-flex"
+                :class="{
+                  'dropdown-item__disabled': opintooikeusKaytossa
+                    ? opintooikeus.id === opintooikeusKaytossa.id
+                    : false
+                }"
+              >
+                <div class="flex-column icon-col-min-width">
+                  <font-awesome-icon
+                    v-if="opintooikeusKaytossa && opintooikeus.id === opintooikeusKaytossa.id"
+                    :icon="['far', 'check-circle']"
+                    fixed-width
+                    size="lg"
+                    class="text-success"
+                  />
+                </div>
+                <div class="flex-column">
+                  {{ opintooikeus.erikoisalaNimi }}
+                  <div class="text-size-sm">
+                    {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
                   </div>
                 </div>
-              </b-dropdown-item>
-            </template>
+              </div>
+            </b-dropdown-item>
           </div>
         </div>
       </b-nav-item-dropdown>

@@ -85,7 +85,8 @@ export const defaultKoulutuspaikka: Koulutuspaikka = {
   koulutussopimusOmanYliopistonKanssa: null,
   erikoisala: '',
   nimi: '',
-  yliopisto: ''
+  yliopisto: '',
+  yliopistoId: null
 }
 
 export const defaultKouluttaja: Kouluttaja = {

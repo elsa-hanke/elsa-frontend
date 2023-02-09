@@ -53,16 +53,17 @@
             <elsa-form-group :label="$t('kaytannon-koulutus')">
               <template #default="{ uid }">
                 <span :id="uid">{{ kaytannonKoulutusLabel }}</span>
-                <span v-if="tyoskentelyjakso.omaaErikoisalaaTukeva">
-                  : {{ tyoskentelyjakso.omaaErikoisalaaTukeva.nimi | lowercase }}
+                <span v-if="tyoskentelyjakso.omaaErikoisalaaTukeva" class="text-lowercase">
+                  : {{ tyoskentelyjakso.omaaErikoisalaaTukeva.nimi }}
                 </span>
                 <span
                   v-if="
                     tyoskentelyjakso.kaytannonKoulutus === omaaErikoisalaaTukeva &&
                     !tyoskentelyjakso.omaaErikoisalaaTukeva
                   "
+                  class="text-lowercase"
                 >
-                  : {{ $t('muu') | lowercase }}
+                  : {{ $t('muu') }}
                 </span>
               </template>
             </elsa-form-group>
@@ -100,10 +101,7 @@
               {{ $t('lisaa-poissaolo') }}
             </elsa-button>
             <hr v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan" />
-            <div
-              :class="{ 'mt-4': tyoskentelyjakso.asiakirjat.length > 0 }"
-              class="d-flex flex-row-reverse flex-wrap"
-            >
+            <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 v-if="muokkausoikeudet"
                 :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
@@ -114,7 +112,7 @@
                 {{ $t('muokkaa-jaksoa') }}
               </elsa-button>
               <elsa-button
-                v-if="!tyoskentelyjakso.suoritusarvioinnit && muokkausoikeudet"
+                v-if="muokkausoikeudet"
                 :loading="deleting"
                 :variant="tyoskentelyjakso.tapahtumia ? 'outline-primary' : 'outline-danger'"
                 :disabled="

@@ -177,7 +177,7 @@
                 :button-text="$t('lisaa-liitetiedosto')"
                 :existing-file-names-in-current-view="existingFileNamesInCurrentView"
                 :existing-file-names-in-other-views="existingFileNamesInOtherViews"
-                @selectedFiles="onFilesAdded(sp, ...arguments)"
+                @selectedFiles="onFilesAdded(sp, $event)"
               />
             </div>
             <asiakirjat-content
@@ -189,7 +189,7 @@
               :no-results-info-text="$t('ei-liitetiedostoja')"
               :state="validateTyoskentelyjaksoState(index)"
               :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
-              @deleteAsiakirja="onDeleteLiitetiedosto(sp, ...arguments)"
+              @deleteAsiakirja="onDeleteLiitetiedosto(sp, $event)"
             />
             <b-form-invalid-feedback :state="validateTyoskentelyjaksoState(index)">
               {{ $t('pakollinen-tieto') }}

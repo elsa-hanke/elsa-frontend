@@ -1,6 +1,6 @@
 <template>
   <b-card-skeleton :header="$t('erikoistumisen-edistyminen')" :loading="initializing" class="mb-4">
-    <b-container v-if="!initializing" fluid class="p-0">
+    <b-container v-if="!initializing && edistyminen" fluid class="p-0">
       <b-row>
         <b-col xl="8">
           <div class="border rounded pt-3 pb-2 mb-4">

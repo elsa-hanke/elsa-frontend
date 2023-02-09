@@ -16,7 +16,7 @@
               {{ $t('lisaa-merkinta') }}
             </elsa-button>
             <hr />
-            <div v-if="!loading">
+            <div v-if="!loading && merkinnat">
               <small class="text-uppercase">{{ $t('rajaa-merkintoja') }}</small>
               <b-container fluid class="px-0 mt-2" :class="{ 'mb-md-5': !anyFilterSelected }">
                 <b-row>
@@ -199,10 +199,12 @@
       aihekategoriaId: number | null
       ajankohtaAlkaa: string | null
       ajankohtaPaattyy: string | null
+      aihe: PaivakirjaAihekategoria | null
     } = {
       aihekategoriaId: null,
       ajankohtaAlkaa: null,
-      ajankohtaPaattyy: null
+      ajankohtaPaattyy: null,
+      aihe: null
     }
     currentPage = 1
     perPage = 20
@@ -294,7 +296,8 @@
       this.selected = {
         aihekategoriaId: null,
         ajankohtaAlkaa: null,
-        ajankohtaPaattyy: null
+        ajankohtaPaattyy: null,
+        aihe: null
       }
       this.$refs.ajankohtaAlkaa.resetValue()
       this.$refs.ajankohtaPaattyy.resetValue()

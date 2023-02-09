@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('arvioitavan-kokonaisuuden-kategoria') }}</h1>
           <hr />
-          <div v-if="!loading">
+          <div v-if="!loading && kategoria">
             <arvioitavan-kokonaisuuden-kategoria-form :kategoria="kategoria" />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button

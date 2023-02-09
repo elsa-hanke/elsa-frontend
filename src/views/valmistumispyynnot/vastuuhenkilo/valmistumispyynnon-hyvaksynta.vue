@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('valmistumispyynnon-hyvaksynta') }}</h1>
-          <div v-if="!loading">
+          <div v-if="!loading && virkailijanTarkistus">
             <div class="mt-3">
               <b-alert :show="odottaaHyvaksyntaa || odottaaAllekirjoituksia" variant="dark">
                 <div class="d-flex flex-row">
@@ -86,13 +86,13 @@
                         @input="$emit('skipRouteExitConfirm', false)"
                       />
                       <b-form-invalid-feedback
-                        v-if="!$v.form.sahkoposti.required"
+                        v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
                         :id="`${uid}-feedback`"
                       >
                         {{ $t('pakollinen-tieto') }}
                       </b-form-invalid-feedback>
                       <b-form-invalid-feedback
-                        v-if="!$v.form.sahkoposti.email"
+                        v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
                         :id="`${uid}-feedback`"
                         :state="validateState('sahkoposti')"
                       >
@@ -452,12 +452,7 @@
                 <elsa-button v-b-modal.return-to-sender variant="outline-primary" class="ml-6">
                   {{ $t('palauta-erikoistujalle') }}
                 </elsa-button>
-                <elsa-button
-                  :loading="sending"
-                  variant="primary"
-                  class="ml-2"
-                  @click="openConfirmationModal('confirm-send')"
-                >
+                <elsa-button :loading="sending" variant="primary" type="submit" class="ml-2">
                   {{ $t('laheta-allekirjoitettavaksi') }}
                 </elsa-button>
               </div>
@@ -547,38 +542,7 @@
       puhelinnumero: null
     }
 
-    virkailijanTarkistus: ValmistumispyyntoVirkailijanTarkistus = {
-      id: null,
-      yekSuoritettu: false,
-      yekSuorituspaiva: null,
-      ptlSuoritettu: false,
-      ptlSuorituspaiva: null,
-      aiempiElKoulutusSuoritettu: false,
-      aiempiElKoulutusSuorituspaiva: null,
-      ltTutkintoSuoritettu: false,
-      ltTutkintoSuorituspaiva: null,
-      virkailijanSaate: null,
-      tyoskentelyjaksotTilastot: null,
-      terveyskeskustyoHyvaksyttyPvm: null,
-      terveyskeskustyoHyvaksyntaId: null,
-      terveyskeskustyoOpintosuoritusId: null,
-      yliopistosairaalanUlkopuolinenTyoTarkistettu: false,
-      yliopistosairaalatyoTarkistettu: false,
-      kokonaistyoaikaTarkistettu: false,
-      teoriakoulutusSuoritettu: null,
-      teoriakoulutusVaadittu: null,
-      teoriakoulutusTarkistettu: false,
-      sateilusuojakoulutusSuoritettu: null,
-      sateilusuojakoulutusVaadittu: null,
-      johtamiskoulutusSuoritettu: null,
-      johtamiskoulutusVaadittu: null,
-      kuulustelut: null,
-      koejaksoHyvaksyttyPvm: null,
-      suoritustenTila: null,
-      kommentitVirkailijoille: null,
-      lisatiedotVastuuhenkilolle: null,
-      keskenerainen: false
-    }
+    virkailijanTarkistus: ValmistumispyyntoVirkailijanTarkistus | null = null
 
     valmistumispyyntoArviointienTila: ValmistumispyyntoArviointienTila | null = null
     loading = true
@@ -635,12 +599,12 @@
       return $dirty ? !$error : null
     }
 
-    vaihdaRooli(id: number) {
+    vaihdaRooli(id: number | undefined) {
       window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
-    openConfirmationModal(modalId: string) {
-      return this.$bvModal.show(modalId)
+    onSubmit() {
+      return this.$bvModal.show('confirm-send')
     }
 
     async onSend() {
