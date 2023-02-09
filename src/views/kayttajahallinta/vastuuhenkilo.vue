@@ -39,12 +39,15 @@
                     @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.sahkoposti.required"
+                    v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
-                  <b-form-invalid-feedback v-if="!$v.form.sahkoposti.email" :id="`${uid}-feedback`">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
+                    :id="`${uid}-feedback`"
+                  >
                     {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                   </b-form-invalid-feedback>
                 </template>
@@ -58,19 +61,20 @@
                     @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.sahkopostiUudelleen.required"
+                    v-if="$v.form.sahkopostiUudelleen && !$v.form.sahkopostiUudelleen.required"
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.sahkopostiUudelleen.email"
+                    v-if="$v.form.sahkopostiUudelleen && !$v.form.sahkopostiUudelleen.email"
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
                     v-if="
+                      $v.form.sahkopostiUudelleen &&
                       $v.form.sahkopostiUudelleen.required &&
                       $v.form.sahkopostiUudelleen.email &&
                       !$v.form.sahkopostiUudelleen.sameAsSahkoposti
@@ -93,7 +97,7 @@
             </div>
             <hr />
             <h2 class="mb-3">{{ $t('yliopisto-ja-erikoisalat') }}</h2>
-            <elsa-form-group :label="$t('yliopisto')">
+            <elsa-form-group v-if="yliopisto" :label="$t('yliopisto')">
               <template #default="{ uid }">
                 <span :id="uid">{{ $t(`yliopisto-nimi.${yliopisto.nimi}`) }}</span>
               </template>
@@ -127,7 +131,7 @@
               :yliopistot-and-erikoisalat="yliopistotAndErikoisalat"
               :editing="editing"
               :disabled="updatingKayttaja"
-              @skipRouteExitConfirm="(value) => (skipRouteExitConfirm = value)"
+              @skipRouteExitConfirm="onSkipRouteExitConfirm"
             />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
@@ -359,6 +363,10 @@
       this.editing = false
       this.updatingKayttaja = false
       this.skipRouteExitConfirm = true
+    }
+
+    onSkipRouteExitConfirm(value: boolean) {
+      this.skipRouteExitConfirm = value
     }
   }
 </script>

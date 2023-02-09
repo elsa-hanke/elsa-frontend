@@ -222,7 +222,8 @@
       koulutussuunnitelmaFile: null,
       koulutussuunnitelmaAsiakirjaUpdated: false,
       motivaatiokirjeFile: null,
-      motivaatiokirjeAsiakirjaUpdated: false
+      motivaatiokirjeAsiakirjaUpdated: false,
+      muokkauspaiva: null
     }
 
     params = {

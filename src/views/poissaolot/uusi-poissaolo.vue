@@ -13,7 +13,7 @@
             :poissaolon-syyt="poissaolonSyyt"
             :tyoskentelyjakso-id="tyoskentelyjaksoId"
             @submit="onSubmit"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -118,6 +118,10 @@
       } else {
         return []
       }
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

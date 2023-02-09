@@ -45,7 +45,7 @@
           track-by="id"
           @input="$emit('skipRouteExitConfirm', false)"
         >
-          <template slot="option" slot-scope="props">
+          <template #option="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
             <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
           </template>
@@ -69,17 +69,17 @@
           :id="uid"
           v-model="form.arviointiasteikonTaso"
           :options="arviointiasteikko.tasot"
-          :custom-label="(value) => `${value.taso} ${value.nimi}`"
+          :custom-label="arviointiasteikonTasoLabel"
           track-by="taso"
           @input="$emit('skipRouteExitConfirm', false)"
         >
-          <template slot="singleLabel" slot-scope="{ option }">
-            <span class="font-weight-700">{{ option.taso }}</span>
-            {{ $t('arviointiasteikon-taso-' + option.nimi) }}
+          <template #singleLabel="props">
+            <span class="font-weight-700">{{ props.option.taso }}</span>
+            {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
           </template>
-          <template slot="option" slot-scope="{ option }">
-            <span class="font-weight-700">{{ option.taso }}</span>
-            {{ $t('arviointiasteikon-taso-' + option.nimi) }}
+          <template #option="props">
+            <span class="font-weight-700">{{ props.option.taso }}</span>
+            {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
           </template>
         </elsa-form-multiselect>
         <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -99,17 +99,17 @@
             :id="uid"
             v-model="form.vaativuustaso"
             :options="vaativuustasot"
-            :custom-label="(value) => `${value.arvo} ${value.nimi}`"
+            :custom-label="vaativuustasoLabel"
             track-by="arvo"
             @input="$emit('skipRouteExitConfirm', false)"
           >
-            <template slot="singleLabel" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.nimi) }}
+            <template #singleLabel="props">
+              <span class="font-weight-700">{{ props.option.arvo }}</span>
+              {{ $t(props.option.nimi) }}
             </template>
-            <template slot="option" slot-scope="{ option }">
-              <span class="font-weight-700">{{ option.arvo }}</span>
-              {{ $t(option.nimi) }}
+            <template #option="props">
+              <span class="font-weight-700">{{ props.option.arvo }}</span>
+              {{ $t(props.option.nimi) }}
             </template>
           </elsa-form-multiselect>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -168,7 +168,6 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
@@ -215,7 +214,7 @@
       }
     }
   })
-  export default class SuoritemerkintaForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+  export default class SuoritemerkintaForm extends Mixins(TyoskentelyjaksoMixin) {
     $refs!: {
       suorituspaiva: ElsaFormDatepicker
     }
@@ -248,7 +247,7 @@
     })
     value!: Suoritemerkinta
 
-    form!: Suoritemerkinta
+    form: Partial<Suoritemerkinta> = {}
     vaativuustasot = vaativuustasot
     params = {
       saving: false,
@@ -293,8 +292,8 @@
       this.$emit(
         'submit',
         {
-          tyoskentelyjaksoId: this.form?.tyoskentelyjakso.id,
-          suoriteId: this.form?.suorite.id,
+          tyoskentelyjaksoId: this.form?.tyoskentelyjakso?.id,
+          suoriteId: this.form?.suorite?.id,
           vaativuustaso: (this.form?.vaativuustaso as Vaativuustaso)?.arvo,
           arviointiasteikonTaso: (this.form?.arviointiasteikonTaso as ArviointiasteikonTaso)?.taso,
           suorituspaiva: this.form?.suorituspaiva,
@@ -306,6 +305,14 @@
 
     onSuoritemerkintaDelete() {
       this.$emit('delete', this.params)
+    }
+
+    arviointiasteikonTasoLabel(value: ArviointiasteikonTaso) {
+      return `${value.taso} ${value.nimi}`
+    }
+
+    vaativuustasoLabel(value: Vaativuustaso) {
+      return `${value.arvo} ${value.nimi}`
     }
   }
 </script>

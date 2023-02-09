@@ -13,7 +13,6 @@ import Arvioinnit from '@/views/arvioinnit/arvioinnit.vue'
 import Arviointi from '@/views/arvioinnit/arviointi.vue'
 import ArviointipyyntoLahetetty from '@/views/arvioinnit/arviointipyynto-lahetetty.vue'
 import Arviointipyynto from '@/views/arvioinnit/arviointipyynto.vue'
-import ItsearviointiValmis from '@/views/arvioinnit/itsearviointi-valmis.vue'
 import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import ArvioitavatKokonaisuudet from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet.vue'
@@ -383,16 +382,6 @@ const routes: Array<RouteConfig> = [
           routeComponent: Itsearviointi,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
-        }
-      },
-      {
-        path: '/arvioinnit/itsearviointi-valmis',
-        name: 'itsearviointi-valmis',
-        beforeEnter: impersonatedErikoistuvaGuard,
-        component: RoleSpecificRoute,
-        props: {
-          routeComponent: ItsearviointiValmis,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
         }
       },
       {

@@ -25,9 +25,10 @@
         <div v-if="addNewEnabled" class="form-group-help font-weight-400">
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
           &nbsp;
-          <b-link @click="$refs[modalRef].show()">{{ addNewLabelText }}</b-link>
+          <b-link @click="showModal">{{ addNewLabelText }}</b-link>
           <span>{{ $t('tai-valitse-alta') }}</span>
           <b-modal
+            :id="modalRef"
             :ref="modalRef"
             centered
             size="lg"
@@ -53,6 +54,7 @@
 </template>
 
 <script lang="ts">
+  import { BvModalEvent } from 'bootstrap-vue'
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
@@ -82,19 +84,18 @@
       this.skipConfirm = true
     }
 
-    async onHide(event: any) {
+    async onHide(event: BvModalEvent) {
       // Tarkista, onko poistuminen jo vahvistettu
-      if (event.trigger !== 'confirm' && !this.skipConfirm) {
+      if (!this.skipConfirm) {
         event.preventDefault()
       } else {
         return
       }
 
       // Pyydä poistumisen vahvistus
-      if (this.skipConfirm) {
-        if (await confirmExit(this)) {
-          ;(this.$refs[this.modalRef] as any).hide('confirm')
-        }
+      if (await confirmExit(this)) {
+        this.skipConfirm = true
+        this.$bvModal.hide(this.modalRef)
       }
     }
 
@@ -109,10 +110,11 @@
 
     async onCancel() {
       if (this.skipConfirm) {
-        ;(this.$refs[this.modalRef] as any).hide('confirm')
+        this.$bvModal.hide(this.modalRef)
       } else {
         if (await confirmExit(this)) {
-          ;(this.$refs[this.modalRef] as any).hide('confirm')
+          this.skipConfirm = true
+          this.$bvModal.hide(this.modalRef)
         }
       }
     }
@@ -127,6 +129,10 @@
 
     get uid() {
       return `elsa-form-group-${(this as any)._uid}`
+    }
+
+    showModal() {
+      this.$bvModal.show(this.modalRef)
     }
   }
 </script>

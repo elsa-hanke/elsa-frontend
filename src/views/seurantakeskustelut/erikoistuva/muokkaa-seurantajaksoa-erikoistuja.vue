@@ -43,7 +43,7 @@
             @submit="onSubmit"
             @cancel="onCancel"
             @delete="onDelete"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
         </div>
       </div>
@@ -174,6 +174,10 @@
           seurantajaksoId: `${this.seurantajakso?.id}`
         }
       })
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

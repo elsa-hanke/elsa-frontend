@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('arviointi') }}</h1>
           <hr />
-          <div v-if="value">
+          <div v-if="value != null">
             <arviointi-form :value="value" :editing="false" />
             <h4>{{ $t('kommentit') }}</h4>
             <p v-if="!value.lukittu">{{ $t('kommentit-kuvaus') }}</p>
@@ -78,6 +78,7 @@
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ArviointiForm from '@/forms/arviointi-form.vue'
   import store from '@/store'
+  import { Suoritusarviointi } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { sortByDateAsc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
@@ -92,7 +93,7 @@
     }
   })
   export default class Arviointi extends Vue {
-    value: any = null
+    value: Suoritusarviointi | null = null
     items = [
       {
         text: this.$t('etusivu'),
@@ -127,7 +128,7 @@
     }
 
     onKommenttiUpdated(kommentti: any) {
-      const updatedKommentti = this.value.kommentit.find((k: any) => k.id === kommentti.id)
+      const updatedKommentti = this.value?.kommentit.find((k: any) => k.id === kommentti.id)
       if (updatedKommentti) {
         updatedKommentti.teksti = kommentti.teksti
         updatedKommentti.muokkausaika = kommentti.muokkausaika
@@ -138,10 +139,10 @@
       this.saving = true
       try {
         const kommentti = (
-          await axios.post(`suoritusarvioinnit/${this.value.id}/kommentti`, this.kommentti)
+          await axios.post(`suoritusarvioinnit/${this.value?.id}/kommentti`, this.kommentti)
         ).data
         kommentti.kommentoija.nimi = `${this.account.firstName} ${this.account.lastName}`
-        this.value.kommentit.push(kommentti)
+        this.value?.kommentit.push(kommentti)
         this.kommentti = {
           teksti: null
         }

@@ -77,7 +77,7 @@
               :yliopistot="yliopistot"
               @saveAndExit="onSaveDraftAndExit"
               @submit="onSubmit"
-              @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+              @skipRouteExitConfirm="skipRouteExitConfirm"
             ></koulutussopimus-form>
 
             <koulutussopimus-readonly
@@ -289,6 +289,10 @@
       if (!this.editable) {
         this.$emit('skipRouteExitConfirm', true)
       }
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

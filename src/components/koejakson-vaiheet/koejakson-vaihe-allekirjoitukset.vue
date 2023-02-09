@@ -33,7 +33,7 @@
     allekirjoitukset!: KoejaksonVaiheAllekirjoitus[] | null
 
     @Prop({ required: false, default: 'muokkauspaivamaarat' })
-    title?: string
+    title!: string
 
     get showAllekirjoitukset() {
       return this.allekirjoitukset ? this.allekirjoitukset.length > 0 : false

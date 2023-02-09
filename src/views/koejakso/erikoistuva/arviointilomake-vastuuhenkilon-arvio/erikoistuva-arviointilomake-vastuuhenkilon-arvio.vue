@@ -122,13 +122,15 @@
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback
-                    v-if="!$v.form.erikoistuvanSahkoposti.required"
+                    v-if="
+                      $v.form.erikoistuvanSahkoposti && !$v.form.erikoistuvanSahkoposti.required
+                    "
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.erikoistuvanSahkoposti.email"
+                    v-if="$v.form.erikoistuvanSahkoposti && !$v.form.erikoistuvanSahkoposti.email"
                     :id="`${uid}-feedback`"
                     :state="validateState('erikoistuvanSahkoposti')"
                   >
@@ -179,9 +181,6 @@
                       </span>
                     </label>
                   </b-form-checkbox>
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
                 </template>
               </elsa-form-group>
             </b-col>
@@ -200,9 +199,6 @@
                   >
                     {{ $t('vastuuhenkilon-arvio-koulutussopimus-varmistus') }}
                   </b-form-checkbox>
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
                 </template>
               </elsa-form-group>
             </b-col>
@@ -213,16 +209,13 @@
                 <template #default="{ uid }">
                   <b-form-checkbox
                     :id="uid"
-                    v-model="form.koulutussuunnitelmaHyvaksytty"
-                    :state="validateState('koulutussuunnitelmaHyvaksytty')"
+                    v-model="koulutussuunnitelmaHyvaksytty"
+                    :state="validateKoulutussuunnitelmaHyvaksytty()"
                     class="py-0"
                     @input="$emit('skipRouteExitConfirm', false)"
                   >
                     {{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}
                   </b-form-checkbox>
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
                 </template>
               </elsa-form-group>
             </b-col>
@@ -291,7 +284,7 @@
               {{ $t('kylla') }}
             </elsa-form-group>
           </b-col>
-          <b-col v-else>
+          <b-col v-else-if="formData.vastuuhenkilo">
             <h3 class="mb-3">{{ $t('erikoisala-vastuuhenkilö') }}</h3>
             <elsa-form-group :label="$t('erikoisala-vastuuhenkilö-label')">
               <p>
@@ -438,6 +431,7 @@
     muutOpintooikeudet: Opintooikeus[] = []
     muutOpintooikeudetEnabled = false
     koulutussopimuksenHyvaksynta = false
+    koulutussuunnitelmaHyvaksytty = false
 
     validations() {
       return {
@@ -464,10 +458,10 @@
             required: requiredIf(() => {
               return !this.koulutussopimuksenHyvaksynta
             })
-          },
-          koulutussuunnitelmaHyvaksytty: {
-            checked: (value: boolean) => value === true
           }
+        },
+        koulutussuunnitelmaHyvaksytty: {
+          checked: (value: boolean) => value === true
         }
       }
     }
@@ -500,6 +494,11 @@
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? !$error : null
+    }
+
+    validateKoulutussuunnitelmaHyvaksytty() {
+      const { $dirty, $error } = this.$v.koulutussuunnitelmaHyvaksytty as any
       return $dirty ? !$error : null
     }
 
@@ -557,10 +556,14 @@
       return this.$bvModal.hide(id)
     }
 
-    onConfirm(modalId: string) {
+    validateForm(): boolean {
       this.$v.form.$touch()
+      this.$v.koulutussuunnitelmaHyvaksytty.$touch()
+      return !this.$v.$anyError
+    }
 
-      if (this.$v.form.$anyError) {
+    onConfirm(modalId: string) {
+      if (!this.validateForm()) {
         return
       }
       return this.$bvModal.show(modalId)

@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group
-      v-if="form.koulutusjaksot.length > 0 && uusiJakso"
+      v-if="form.koulutusjaksot && form.koulutusjaksot.length > 0 && uusiJakso"
       :label="$t('koulutusjakso')"
     >
       <template #default="{ uid }">
@@ -34,7 +34,7 @@
             class="align-items-center mb-md-0 ml-md-0 kouluttaja-form-input"
           >
             <template #default="{ uid }">
-              <span v-if="form.alkamispaiva != null" :id="uid">
+              <span v-if="form.alkamispaiva && form.paattymispaiva" :id="uid">
                 {{ $date(form.alkamispaiva) }} - {{ $date(form.paattymispaiva) }}
               </span>
             </template>
@@ -47,7 +47,7 @@
         <elsa-form-group :label="$t('seurantajakso')" class="mb-0">
           <template #default="{ uid }">
             <div :id="uid" class="mb-1">
-              <span v-if="form.alkamispaiva != null">
+              <span v-if="form.alkamispaiva && form.paattymispaiva">
                 {{ $date(form.alkamispaiva) }} - {{ $date(form.paattymispaiva) }}
               </span>
             </div>
@@ -238,7 +238,9 @@
                 </dt>
                 <dd class="mb-4">
                   <elsa-arviointiasteikon-taso
-                    v-if="suoritemerkinta.arviointiasteikonTaso"
+                    v-if="
+                      suoritemerkinta.arviointiasteikonTaso && suoritemerkinta.arviointiasteikko
+                    "
                     :value="suoritemerkinta.arviointiasteikonTaso"
                     :tasot="suoritemerkinta.arviointiasteikko.tasot"
                   />
@@ -301,7 +303,7 @@
 
               <b-td :stacked-heading="$t('luottamuksen-taso')">
                 <elsa-arviointiasteikon-taso
-                  v-if="suoritemerkinta.arviointiasteikonTaso"
+                  v-if="suoritemerkinta.arviointiasteikonTaso && suoritemerkinta.arviointiasteikko"
                   :value="suoritemerkinta.arviointiasteikonTaso"
                   :tasot="suoritemerkinta.arviointiasteikko.tasot"
                 />
@@ -972,8 +974,6 @@
     editing!: boolean
 
     form: Partial<Seurantajakso> = {
-      alkamispaiva: null,
-      paattymispaiva: null,
       koulutusjaksot: [],
       omaArviointi: null,
       lisahuomioita: null,

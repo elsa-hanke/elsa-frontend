@@ -11,7 +11,7 @@
             />
           </b-col>
           <b-col cols="12" lg="3">
-            <div v-if="rajaimet.erikoisalat.length > 1" class="filter">
+            <div v-if="rajaimet && rajaimet.erikoisalat.length > 1" class="filter">
               <elsa-form-group :label="$t('erikoisala')" class="mb-4">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
@@ -27,7 +27,7 @@
             </div>
           </b-col>
           <b-col cols="12" lg="2">
-            <div v-if="rajaimet.asetukset.length > 1" class="filter">
+            <div v-if="rajaimet && rajaimet.asetukset.length > 1" class="filter">
               <elsa-form-group :label="$t('asetus')" class="mb-4">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
@@ -63,12 +63,12 @@
             </div>
           </b-col>
         </b-row>
-        <div v-if="!loadingResults">
+        <div v-if="!loadingResults && erikoistujat">
           <b-row>
             <b-col>
               <b-alert v-if="rows === 0" variant="dark" show>
                 <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-                <span v-if="hakutermi.length > 0 || filtered.erikoisalaId || filtered.asetusId">
+                <span v-if="hakutermi.length > 0 || filtered.erikoisala || filtered.asetus">
                   {{ $t('ei-hakutuloksia') }}
                 </span>
                 <span v-else>

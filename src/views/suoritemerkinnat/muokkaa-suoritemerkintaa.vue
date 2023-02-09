@@ -7,7 +7,7 @@
           <h1>{{ $t('muokkaa-suoritemerkintaa') }}</h1>
           <hr />
           <suoritemerkinta-form
-            v-if="!loading"
+            v-if="!loading && suoritemerkinta"
             :value="suoritemerkintaWrapper"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :kunnat="kunnat"
@@ -16,7 +16,7 @@
             :arviointiasteikon-taso="arviointiasteikonTaso"
             @submit="onSubmit"
             @delete="onDelete"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -218,6 +218,10 @@
       } else {
         return undefined
       }
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

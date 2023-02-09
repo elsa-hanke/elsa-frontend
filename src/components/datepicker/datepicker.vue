@@ -36,25 +36,25 @@
         </b-form-datepicker>
       </b-input-group-append>
       <b-form-invalid-feedback
-        v-if="!$v.form.dateStr.required && !form.dateStr"
+        v-if="$v.form.dateStr && !$v.form.dateStr.required && !form.dateStr"
         :id="`feedback-required-${id}`"
       >
         {{ $t('pakollinen-tieto') }}
       </b-form-invalid-feedback>
       <b-form-invalid-feedback
-        v-else-if="!$v.form.dateStr.isValidLocalDate"
+        v-else-if="$v.form.dateStr && !$v.form.dateStr.isValidLocalDate"
         :id="`feedback-invalid-date-${id}`"
       >
         {{ $t('anna-paivamaara-muodossa') }}
       </b-form-invalid-feedback>
       <b-form-invalid-feedback
-        v-else-if="!$v.form.dateStr.minValue"
+        v-else-if="$v.form.dateStr && !$v.form.dateStr.minValue"
         :id="`feedback-min-date-${id}`"
       >
         {{ formattedMinErrorText }}
       </b-form-invalid-feedback>
       <b-form-invalid-feedback
-        v-else-if="!$v.form.dateStr.maxValue"
+        v-else-if="$v.form.dateStr && !$v.form.dateStr.maxValue"
         :id="`feedback-max-date-${id}`"
       >
         {{ formattedMaxErrorText }}

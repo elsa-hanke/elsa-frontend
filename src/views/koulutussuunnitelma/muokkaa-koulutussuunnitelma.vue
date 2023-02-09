@@ -14,7 +14,7 @@
               :reserved-asiakirja-nimet="reservedAsiakirjaNimet"
               @submit="onSubmit"
               @cancel="onCancel"
-              @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+              @skipRouteExitConfirm="skipRouteExitConfirm"
             />
           </div>
           <div v-else class="text-center">
@@ -112,6 +112,10 @@
                 target="_blank"
                 rel="noopener noreferrer"
               >${this.$t('henkilokohtainen-koulutussuunnitelma-linkki')}</a>`
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

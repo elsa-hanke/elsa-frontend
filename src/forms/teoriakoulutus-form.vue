@@ -166,10 +166,9 @@
     })
     value!: Teoriakoulutus
 
-    form: Teoriakoulutus = {
+    form: Partial<Teoriakoulutus> = {
       koulutuksenNimi: null,
       koulutuksenPaikka: null,
-      alkamispaiva: null,
       paattymispaiva: null,
       erikoistumiseenHyvaksyttavaTuntimaara: null,
       todistukset: []
@@ -193,7 +192,6 @@
         this.form = {
           koulutuksenNimi: null,
           koulutuksenPaikka: null,
-          alkamispaiva: null,
           paattymispaiva: null,
           erikoistumiseenHyvaksyttavaTuntimaara: null,
           todistukset: []

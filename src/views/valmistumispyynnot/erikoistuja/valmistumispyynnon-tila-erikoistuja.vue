@@ -28,9 +28,9 @@
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon
-                :icon="tilaIcon(vastuuhenkiloOsaamisenArvioijaKuittausaika)"
+                :icon="tilaIcon(vastuuhenkiloOsaamisenArvioijaKuittausaika != null)"
                 class="justify-content-center text-size-md mr-2"
-                :class="tilaIconClass(vastuuhenkiloOsaamisenArvioijaKuittausaika)"
+                :class="tilaIconClass(vastuuhenkiloOsaamisenArvioijaKuittausaika != null)"
               />
             </em>
             <div>
@@ -51,9 +51,9 @@
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon
-                :icon="tilaIcon(virkailijanKuittausaika)"
+                :icon="tilaIcon(virkailijanKuittausaika != null)"
                 class="justify-content-center text-size-md mr-2"
-                :class="tilaIconClass(virkailijanKuittausaika)"
+                :class="tilaIconClass(virkailijanKuittausaika != null)"
               />
             </em>
             <div>
@@ -77,9 +77,9 @@
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon
-                :icon="tilaIcon(vastuuhenkiloHyvaksyjaKuittausaika)"
+                :icon="tilaIcon(vastuuhenkiloHyvaksyjaKuittausaika != null)"
                 class="justify-content-center text-size-md mr-2"
-                :class="tilaIconClass(vastuuhenkiloHyvaksyjaKuittausaika)"
+                :class="tilaIconClass(vastuuhenkiloHyvaksyjaKuittausaika != null)"
               />
             </em>
             <div>
@@ -100,9 +100,9 @@
           <div class="d-flex flex-row">
             <em class="align-middle">
               <font-awesome-icon
-                :icon="allekirjoitettuTilaIcon(allekirjoitusaika)"
+                :icon="allekirjoitettuTilaIcon(allekirjoitusaika != null)"
                 class="justify-content-center text-size-md mr-2"
-                :class="tilaIconClass(allekirjoitusaika)"
+                :class="tilaIconClass(allekirjoitusaika != null)"
               />
             </em>
             <div>

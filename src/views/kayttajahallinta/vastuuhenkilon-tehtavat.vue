@@ -16,22 +16,25 @@
                 :id="uid"
                 v-model="yliopistoErikoisala.erikoisala"
                 :options="erikoisalatOptions"
-                :set="(v = $v.form.yliopistotAndErikoisalat.$each[yliopistoErikoisalaIndex])"
                 label="nimi"
-                :state="validateState(v, 'erikoisala')"
+                :state="validateErikoisala(yliopistoErikoisalaIndex)"
                 track-by="id"
                 @select="onErikoisalaSelect($event, yliopistoErikoisalaIndex, yliopistoErikoisala)"
                 @input="$emit('skipRouteExitConfirm', false)"
               ></elsa-form-multiselect>
-              <b-form-invalid-feedback :state="validateState(v, 'erikoisala')">
+              <b-form-invalid-feedback :state="validateErikoisala(yliopistoErikoisalaIndex)">
                 {{ $t('pakollinen-tieto') }}
               </b-form-invalid-feedback>
             </div>
-            <div v-else>
+            <div v-else-if="yliopistoErikoisala.erikoisala">
               <span :id="uid" class="mr-1">{{ yliopistoErikoisala.erikoisala.nimi }}</span>
             </div>
             <elsa-button
-              v-if="allowEditing && form.yliopistotAndErikoisalat.length > 1"
+              v-if="
+                allowEditing &&
+                form.yliopistotAndErikoisalat.length > 1 &&
+                yliopistoErikoisala.erikoisala
+              "
               variant="outline-primary"
               class="border-0 p-0"
               :disabled="!allowErikoisalaDelete(yliopistoErikoisala.erikoisala)"
@@ -39,7 +42,7 @@
                 onDeleteErikoisala(
                   yliopistoErikoisalaIndex,
                   yliopistoErikoisala.erikoisala,
-                  yliopistoErikoisala.vastuuhenkilonTehtavat
+                  yliopistoErikoisala.vastuuhenkilonTehtavat || []
                 )
               "
             >
@@ -74,11 +77,13 @@
           </div>
         </template>
       </elsa-form-group>
-      <elsa-form-group v-if="yliopistoErikoisala.erikoisala" :label="$t('vastuualueet-elsassa')">
+      <elsa-form-group
+        v-if="yliopistoErikoisala && yliopistoErikoisala.erikoisala"
+        :label="$t('vastuualueet-elsassa')"
+      >
         <template
           v-if="
             allowEditing &&
-            yliopistoErikoisala.erikoisala &&
             getVastuuhenkilotByErikoisala(yliopistoErikoisala.erikoisala.id).length === 0
           "
           #label-help
@@ -90,8 +95,8 @@
         <template #default="{ uid }">
           <div
             v-if="
-              !allowEditing ||
-              (yliopistoErikoisala.erikoisala &&
+              yliopistoErikoisala.vastuuhenkilonTehtavat &&
+              (!allowEditing ||
                 getVastuuhenkilotByErikoisala(yliopistoErikoisala.erikoisala.id).length === 0)
             "
           >
@@ -110,7 +115,9 @@
               </div>
             </div>
           </div>
-          <div v-else-if="yliopistoErikoisala.erikoisala">
+          <div
+            v-else-if="yliopistoErikoisala.erikoisala && yliopistoErikoisala.vastuuhenkilonTehtavat"
+          >
             <div
               v-for="(tehtava, tehtavaIndex) in getVastuuhenkilonTehtavatyypit(
                 yliopistoErikoisala.erikoisala.id
@@ -140,12 +147,6 @@
                   !tehtavatContains(yliopistoErikoisala, tehtava.id) &&
                   existingTehtavaRemoved(yliopistoErikoisala, tehtava.id)
                 "
-                :set="
-                  (v = $v.form.erikoisalatForTehtavat.$each[yliopistoErikoisalaIndex]
-                    ? $v.form.erikoisalatForTehtavat.$each[yliopistoErikoisalaIndex]
-                        .reassignedTehtavat.$each[tehtavaIndex]
-                    : undefined)
-                "
                 class="pl-4"
               >
                 <div class="font-weight-500 mt-2">
@@ -164,13 +165,15 @@
                         tehtava.id
                       )
                     "
-                    :state="validateState(v)"
+                    :state="validateTehtavat(yliopistoErikoisalaIndex, tehtavaIndex)"
                     :disabled="disabled"
                     label="label"
-                    :track-by="this"
+                    :track-by="tehtava.id"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
-                  <b-form-invalid-feedback :state="validateState(v)">
+                  <b-form-invalid-feedback
+                    :state="validateTehtavat(yliopistoErikoisalaIndex, tehtavaIndex)"
+                  >
                     {{ $t('lisaa-vastuualue-ensin-toiselle-kayttajalle') }}
                   </b-form-invalid-feedback>
                 </elsa-form-group>
@@ -348,7 +351,7 @@
 
     onTehtavaChanged(
       vastuuhenkilonTehtava: VastuuhenkilonTehtava,
-      yliopistoErikoisala: KayttajaYliopistoErikoisala,
+      yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>,
       tehtavaId: number,
       yliopistoErikoisalaIndex: number,
       tehtavaIndex: number
@@ -376,7 +379,7 @@
     }
 
     setRemovedTehtava(
-      yliopistoErikoisala: KayttajaYliopistoErikoisala,
+      yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>,
       tehtavaId: number,
       yliopistoErikoisalaIndex: number,
       tehtavaIndex: number
@@ -420,20 +423,20 @@
       this.form.yliopistotAndErikoisalat.push({
         yliopisto: this.yliopisto,
         vastuuhenkilonTehtavat: []
-      } as KayttajaYliopistoErikoisala)
+      } as Partial<KayttajaYliopistoErikoisala>)
     }
 
     onErikoisalaSelect(
       erikoisala: Erikoisala,
       yliopistoErikoisalaIndex: number,
-      yliopistoErikoisala: KayttajaYliopistoErikoisala
+      yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>
     ) {
       if (erikoisala.id) {
         yliopistoErikoisala.vastuuhenkilonTehtavat = []
 
         if (this.getVastuuhenkilotByErikoisala(erikoisala.id)?.length === 0) {
           erikoisala.vastuuhenkilonTehtavatyypit.forEach((vt) =>
-            yliopistoErikoisala.vastuuhenkilonTehtavat.push(Object.assign({}, vt))
+            yliopistoErikoisala.vastuuhenkilonTehtavat?.push(Object.assign({}, vt))
           )
         } else {
           this.form.erikoisalatForTehtavat[yliopistoErikoisalaIndex] = {
@@ -446,7 +449,7 @@
 
     onDeleteErikoisala(
       yliopistoErikoisalaIndex: number,
-      erikoisala: Erikoisala,
+      erikoisala: Erikoisala | undefined,
       tehtavat: VastuuhenkilonTehtava[]
     ) {
       if (
@@ -490,7 +493,10 @@
       )
     }
 
-    existingTehtavaRemoved(yliopistoErikoisala: KayttajaYliopistoErikoisala, tehtavaId: number) {
+    existingTehtavaRemoved(
+      yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>,
+      tehtavaId: number
+    ) {
       const originalYliopistoErikoisala = this.getOriginalYliopistoErikoisala(
         yliopistoErikoisala.id
       )
@@ -499,7 +505,7 @@
       )
     }
 
-    newTehtavaAdded(yliopistoErikoisala: KayttajaYliopistoErikoisala, tehtavaId: number) {
+    newTehtavaAdded(yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>, tehtavaId: number) {
       const originalYliopistoErikoisala = this.getOriginalYliopistoErikoisala(
         yliopistoErikoisala.id
       )
@@ -510,7 +516,7 @@
     }
 
     showTehtavaRemovedFromVastuuhenkiloText(
-      yliopistoErikoisala: KayttajaYliopistoErikoisala,
+      yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>,
       tehtavaId: number
     ) {
       return (
@@ -521,9 +527,9 @@
       )
     }
 
-    tehtavatContains(yliopistoErikoisala: KayttajaYliopistoErikoisala, tehtavaId: number) {
+    tehtavatContains(yliopistoErikoisala: Partial<KayttajaYliopistoErikoisala>, tehtavaId: number) {
       return (
-        yliopistoErikoisala.vastuuhenkilonTehtavat.find((vt) => vt && vt.id === tehtavaId) !==
+        yliopistoErikoisala.vastuuhenkilonTehtavat?.find((vt) => vt && vt.id === tehtavaId) !==
         undefined
       )
     }
@@ -550,8 +556,10 @@
     }
 
     getVastuuhenkilotByErikoisala(erikoisalaId: number) {
-      return this.vastuuhenkilot?.filter((v) =>
-        v.yliopistotAndErikoisalat.find((ye) => ye.erikoisala?.id === erikoisalaId)
+      return (
+        this.vastuuhenkilot?.filter((v) =>
+          v.yliopistotAndErikoisalat.find((ye) => ye.erikoisala?.id === erikoisalaId)
+        ) || []
       )
     }
 
@@ -587,6 +595,19 @@
     validateState(v: any, name?: string) {
       const { $dirty, $error } = name ? v[name] : v ?? true
       return $dirty ? ($error ? false : null) : null
+    }
+
+    validateErikoisala(index: number) {
+      const { $dirty, $error } = this.$v.form.yliopistotAndErikoisalat?.$each[index]
+        ?.erikoisala as any
+      return $dirty ? !$error : null
+    }
+
+    validateTehtavat(yliopistoErikoisalaIndex: number, tehtavaIndex: number) {
+      const { $dirty, $error } = this.$v.form.erikoisalatForTehtavat?.$each[
+        yliopistoErikoisalaIndex
+      ]?.reassignedTehtavat.$each[tehtavaIndex] as any
+      return $dirty ? !$error : null
     }
 
     getFormIfValid() {

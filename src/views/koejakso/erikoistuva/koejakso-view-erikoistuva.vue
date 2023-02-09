@@ -155,7 +155,6 @@
   import Vue from 'vue'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -191,15 +190,8 @@
       TyoskentelyjaksoForm
     }
   })
-  export default class KoejaksoViewErikoistuva extends Mixins(
-    validationMixin,
-    TyoskentelyjaksoMixin
-  ) {
-    form = {
-      tyoskentelyjakso: null
-    } as any
-    tyoskentelyjaksot: any
-    tyoskentelyjaksotMutable = []
+  export default class KoejaksoViewErikoistuva extends Mixins(TyoskentelyjaksoMixin) {
+    tyoskentelyjaksotMutable: Tyoskentelyjakso[] = []
     tyoskentelyjaksotKoejakso: KoejaksonTyoskentelyjakso[] = []
     items = [
       {
@@ -216,7 +208,7 @@
     sortBy = 'paattymispaiva'
     sortDesc = true
 
-    private fields = [
+    fields = [
       {
         key: 'formattedNimi',
         label: '',

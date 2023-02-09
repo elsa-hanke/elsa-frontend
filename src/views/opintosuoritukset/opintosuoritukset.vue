@@ -28,7 +28,8 @@
             <b-tab
               v-if="
                 sateilysuojelukoulutukset.length > 0 ||
-                opintosuorituksetWrapper.sateilysuojakoulutuksetVaadittu > 0
+                (opintosuorituksetWrapper.sateilysuojakoulutuksetVaadittu &&
+                  opintosuorituksetWrapper.sateilysuojakoulutuksetVaadittu > 0)
               "
               :title="$t('sateilysuojelukoulutukset')"
               href="#sateilysuojakoulutukset"
@@ -81,14 +82,14 @@
     }
   })
   export default class Opintosuoritukset extends Vue {
-    private endpointUrl = 'erikoistuva-laakari/opintosuoritukset'
-    private opintosuorituksetWrapper: OpintosuorituksetWrapper | null = null
-    private johtamisopinnot: Opintosuoritus[] = []
-    private sateilysuojelukoulutukset: Opintosuoritus[] = []
-    private kuulustelut: Opintosuoritus[] = []
-    private muut: Opintosuoritus[] = []
-    private loading = false
-    private items = [
+    endpointUrl = 'erikoistuva-laakari/opintosuoritukset'
+    opintosuorituksetWrapper: OpintosuorituksetWrapper | null = null
+    johtamisopinnot: Opintosuoritus[] = []
+    sateilysuojelukoulutukset: Opintosuoritus[] = []
+    kuulustelut: Opintosuoritus[] = []
+    muut: Opintosuoritus[] = []
+    loading = false
+    items = [
       {
         text: this.$t('etusivu'),
         to: { name: 'etusivu' }

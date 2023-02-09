@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-tsc --noEmit && vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint --no-fix --max-errors 0 --max-warnings 0",
@@ -88,7 +88,8 @@
     "typescript": "~4.5.5",
     "vue-cli-plugin-bootstrap-vue": "~0.8.2",
     "vue-cli-plugin-i18n": "~2.3.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "vue-tsc": "^1.0.24"
   },
   "license": "EUPL-1.2"
 }

@@ -20,7 +20,7 @@
             @submit="onSubmit"
             @cancel="onCancel"
             @uusiHaku="onUusiHaku"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
         </div>
         <div v-else>
@@ -170,6 +170,10 @@
       this.$router.push({
         name: 'seurantakeskustelut'
       })
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

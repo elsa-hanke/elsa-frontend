@@ -20,11 +20,13 @@
             value.tyoskentelyjakso.alkamispaiva ? $date(value.tyoskentelyjakso.alkamispaiva) : ''
           }}
           –
-          {{
-            value.tyoskentelyjakso.paattymispaiva
-              ? $date(value.tyoskentelyjakso.paattymispaiva)
-              : $t('kesken') | lowercase
-          }})
+          <span :class="value.tyoskentelyjakso.paattymispaiva ? '' : 'text-lowercase'">
+            {{
+              value.tyoskentelyjakso.paattymispaiva
+                ? $date(value.tyoskentelyjakso.paattymispaiva)
+                : $t('kesken')
+            }})
+          </span>
         </b-td>
       </b-tr>
       <b-tr>
@@ -35,10 +37,10 @@
             <span>(</span>
             <elsa-button
               variant="link"
-              class="text-decoration-none shadow-none d-table-row border-0 m-0 p-0"
+              class="text-decoration-none shadow-none d-table-row border-0 m-0 p-0 text-lowercase"
               :to="{ name: 'arviointipyynto-muokkaus', params: { arviointiId: value.id } }"
             >
-              {{ $t('muokkaa-arviointipyyntoa') | lowercase }}
+              {{ $t('muokkaa-arviointipyyntoa') }}
             </elsa-button>
             <span>)</span>
           </span>
@@ -192,7 +194,7 @@
               </b-td>
               <b-td style="width: 30%">
                 <elsa-vaativuustaso
-                  v-if="value.itsearviointiAika"
+                  v-if="value.itsearviointiVaativuustaso"
                   :value="value.itsearviointiVaativuustaso"
                 />
               </b-td>
@@ -306,19 +308,11 @@
                   v-model="kokonaisuus.arviointiasteikonTaso"
                   :options="arviointiasteikonTasot"
                   :state="validateArvioitavaKokonaisuusState(index)"
-                  :custom-label="(value) => `${value.taso} ${value.nimi}`"
+                  label="name"
+                  :custom-label="arviointiasteikonTasoLabel"
                   track-by="taso"
                   @input="$emit('skipRouteExitConfirm', false)"
-                >
-                  <template slot="singleLabel" slot-scope="{ option }">
-                    <span class="font-weight-700">{{ option.taso }}</span>
-                    {{ $t('arviointiasteikon-taso-' + option.nimi) }}
-                  </template>
-                  <template slot="option" slot-scope="{ option }">
-                    <span class="font-weight-700">{{ option.taso }}</span>
-                    {{ $t('arviointiasteikon-taso-' + option.nimi) }}
-                  </template>
-                </elsa-form-multiselect>
+                ></elsa-form-multiselect>
                 <b-form-invalid-feedback :id="`${uid}-feedback`">
                   {{ $t('pakollinen-tieto') }}
                 </b-form-invalid-feedback>
@@ -343,19 +337,10 @@
                 :id="uid"
                 v-model="form.vaativuustaso"
                 :options="vaativuustasot"
-                :custom-label="(value) => `${value.arvo} ${value.nimi}`"
+                :custom-label="vaativuustasoLabel"
                 track-by="arvo"
                 @input="$emit('skipRouteExitConfirm', false)"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <span class="font-weight-700">{{ option.arvo }}</span>
-                  {{ $t(option.nimi) }}
-                </template>
-                <template slot="option" slot-scope="{ option }">
-                  <span class="font-weight-700">{{ option.arvo }}</span>
-                  {{ $t(option.nimi) }}
-                </template>
-              </elsa-form-multiselect>
+              ></elsa-form-multiselect>
               <b-form-invalid-feedback :id="`${uid}-feedback`">
                 {{ $t('pakollinen-tieto') }}
               </b-form-invalid-feedback>
@@ -369,16 +354,12 @@
                 :id="uid"
                 v-model="form.arviointityokalut"
                 :options="arviointityokalut"
-                :custom-label="(value) => `${value.nimi}`"
+                label="nimi"
                 :multiple="true"
                 :allow-empty="true"
                 track-by="nimi"
                 @input="$emit('skipRouteExitConfirm', false)"
-              >
-                <template slot="option" slot-scope="{ option }">
-                  {{ option.nimi }}
-                </template>
-              </elsa-form-multiselect>
+              ></elsa-form-multiselect>
             </template>
           </elsa-form-group>
         </b-form-row>
@@ -522,7 +503,8 @@
     ArviointiasteikonTaso,
     Arviointityokalu,
     Suoritusarviointi,
-    SuoritusarviointiForm
+    SuoritusarviointiForm,
+    Vaativuustaso
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import {
@@ -779,6 +761,14 @@
                 target="_blank"
                 rel="noopener noreferrer"
               >${this.$t('arviointi-liitetiedostot-kuvaus-linkki')}</a>`
+    }
+
+    arviointiasteikonTasoLabel(value: ArviointiasteikonTaso) {
+      return `${value.taso} ${this.$t('arviointiasteikon-taso-' + value.nimi)}`
+    }
+
+    vaativuustasoLabel(value: Vaativuustaso) {
+      return `${value.arvo} ${this.$t(value.nimi)}`
     }
   }
 </script>

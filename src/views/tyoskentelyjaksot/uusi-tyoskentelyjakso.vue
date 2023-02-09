@@ -7,14 +7,14 @@
           <h1>{{ $t('lisaa-tyoskentelyjakso') }}</h1>
           <hr />
           <tyoskentelyjakso-form
-            v-if="!loading"
+            v-if="!loading && tyoskentelyjaksoLomake"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
             :reserved-asiakirja-nimet="tyoskentelyjaksoLomake.reservedAsiakirjaNimet"
             :allow-hyvaksytty-aiemmin-toiselle-erikoisalalle-option="true"
             @submit="onSubmit"
             @cancel="onCancel"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -136,6 +136,10 @@
       } else {
         return []
       }
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

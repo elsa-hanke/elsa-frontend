@@ -167,14 +167,14 @@
               <span class="ml-2">({{ $t('tuntia-viikossa') }})</span>
             </div>
             <b-form-invalid-feedback
-              v-if="!$v.form.tyotunnitViikossa.required"
+              v-if="$v.form.tyotunnitViikossa && !$v.form.tyotunnitViikossa.required"
               :id="`${uid}-feedback`"
               :state="validateState('tyotunnitViikossa')"
             >
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-if="!$v.form.tyotunnitViikossa.between"
+              v-if="$v.form.tyotunnitViikossa && !$v.form.tyotunnitViikossa.between"
               :id="`${uid}-feedback`"
               :state="validateState('tyotunnitViikossa')"
             >
@@ -394,6 +394,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
@@ -401,6 +402,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       muokkauspaiva: '',

@@ -39,12 +39,15 @@
                     @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.sahkoposti.required"
+                    v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
-                  <b-form-invalid-feedback v-if="!$v.form.sahkoposti.email" :id="`${uid}-feedback`">
+                  <b-form-invalid-feedback
+                    v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
+                    :id="`${uid}-feedback`"
+                  >
                     {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                   </b-form-invalid-feedback>
                 </template>
@@ -58,19 +61,20 @@
                     @input="skipRouteExitConfirm = false"
                   ></b-form-input>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.sahkopostiUudelleen.required"
+                    v-if="$v.form.sahkopostiUudelleen && !$v.form.sahkopostiUudelleen.required"
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('pakollinen-tieto') }}
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
-                    v-if="!$v.form.sahkopostiUudelleen.email"
+                    v-if="$v.form.sahkopostiUudelleen && !$v.form.sahkopostiUudelleen.email"
                     :id="`${uid}-feedback`"
                   >
                     {{ $t('sahkopostiosoite-ei-kelvollinen') }}
                   </b-form-invalid-feedback>
                   <b-form-invalid-feedback
                     v-if="
+                      $v.form.sahkopostiUudelleen &&
                       $v.form.sahkopostiUudelleen.required &&
                       $v.form.sahkopostiUudelleen.email &&
                       !$v.form.sahkopostiUudelleen.sameAsSahkoposti

@@ -16,6 +16,9 @@
           </elsa-button>
           <div v-if="suoritteetTable">
             <div v-for="(kategoria, index) in suoritteenKategoriat" :key="index" class="mb-2">
+              <div v-if="!$screen.md" :key="`header-${index}`" class="text-uppercase text-size-sm">
+                {{ `${$t('suorite')}: ${kategoria.nimi}` }}
+              </div>
               <b-table-simple fixed responsive stacked="md">
                 <b-thead>
                   <b-tr>
@@ -39,101 +42,94 @@
                   </b-tr>
                 </b-thead>
                 <b-tbody>
-                  <template v-for="(row, kategoriaIndex) in kategoria.rows">
-                    <div
-                      v-if="kategoriaIndex === 0 && !$screen.md"
-                      :key="`header-${kategoriaIndex}`"
-                      class="text-uppercase text-size-sm"
-                    >
-                      {{ `${$t('suorite')}: ${kategoria.nimi}` }}
-                    </div>
-                    <b-tr
-                      :key="kategoriaIndex"
+                  <b-tr
+                    v-for="(row, kategoriaIndex) in kategoria.rows"
+                    :key="kategoriaIndex"
+                    :class="{
+                      'row-details': row.details,
+                      'details-showing': row.suoritemerkinta && row.suoritemerkinta.showDetails,
+                      'mt-1': index === 0,
+                      last: row.lastDetails
+                    }"
+                  >
+                    <b-td>
+                      <div v-if="!row.details" class="d-flex align-items-center">
+                        {{ row.nimi }}
+                      </div>
+                    </b-td>
+                    <b-td
+                      :stacked-heading="arviointiAsteikonNimi(suoritteetTable.arviointiasteikko)"
                       :class="{
-                        'row-details': row.details,
-                        'details-showing': row.suoritemerkinta && row.suoritemerkinta.showDetails,
-                        'mt-1': index === 0,
-                        last: row.lastDetails
+                        empty: !row.suoritemerkinta || !row.suoritemerkinta.arviointiasteikonTaso
                       }"
                     >
-                      <b-td>
-                        <div v-if="!row.details" class="d-flex align-items-center">
-                          {{ row.nimi }}
-                        </div>
-                      </b-td>
-                      <b-td
-                        :stacked-heading="$t('luottamuksen-taso')"
-                        :class="{
-                          empty: !row.suoritemerkinta || !row.suoritemerkinta.arviointiasteikonTaso
-                        }"
-                      >
-                        <div class="d-flex align-items-center">
-                          <elsa-arviointiasteikon-taso
-                            v-if="row.suoritemerkinta && row.suoritemerkinta.arviointiasteikonTaso"
-                            :value="row.suoritemerkinta.arviointiasteikonTaso"
-                            :tasot="suoritteetTable.arviointiasteikko.tasot"
+                      <div class="d-flex align-items-center">
+                        <elsa-arviointiasteikon-taso
+                          v-if="row.suoritemerkinta && row.suoritemerkinta.arviointiasteikonTaso"
+                          :value="row.suoritemerkinta.arviointiasteikonTaso"
+                          :tasot="suoritteetTable.arviointiasteikko.tasot"
+                        />
+                      </div>
+                    </b-td>
+                    <b-td :stacked-heading="$t('pvm')" :class="{ empty: !row.suoritemerkinta }">
+                      <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
+                        <elsa-button
+                          :to="{
+                            name: 'suoritemerkinta',
+                            params: {
+                              suoritemerkintaId: row.suoritemerkinta.id
+                            }
+                          }"
+                          variant="link"
+                          class="shadow-none p-0"
+                        >
+                          {{
+                            row.suoritemerkinta.suorituspaiva
+                              ? $date(row.suoritemerkinta.suorituspaiva)
+                              : ''
+                          }}
+                        </elsa-button>
+                      </div>
+                    </b-td>
+                    <b-td
+                      :stacked-heading="$t('maara')"
+                      :class="{ last: !(row.hasDetails && row.suoritemerkinta) }"
+                    >
+                      <div v-if="!row.details" class="suoritettu-text">
+                        <span
+                          class="pr-1"
+                          :class="{
+                            success:
+                              row.vaadittulkm &&
+                              row.suoritettulkm &&
+                              row.suoritettulkm >= row.vaadittulkm
+                          }"
+                        >
+                          {{ row.suoritettulkm }}
+                        </span>
+                        <span>{{ row.vaadittulkm ? `/ ${row.vaadittulkm}` : '' }}</span>
+                      </div>
+                    </b-td>
+                    <b-td
+                      class="details-icon"
+                      :class="{ 'has-details': row.hasDetails && row.suoritemerkinta }"
+                    >
+                      <div class="d-flex align-items-center">
+                        <elsa-button
+                          v-if="row.hasDetails && row.suoritemerkinta"
+                          variant="link"
+                          class="shadow-none text-dark p-0"
+                          @click="toggleDetails(row)"
+                        >
+                          <font-awesome-icon
+                            :icon="row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'"
+                            fixed-width
+                            size="lg"
                           />
-                        </div>
-                      </b-td>
-                      <b-td :stacked-heading="$t('pvm')" :class="{ empty: !row.suoritemerkinta }">
-                        <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
-                          <elsa-button
-                            :to="{
-                              name: 'suoritemerkinta',
-                              params: {
-                                suoritemerkintaId: row.suoritemerkinta.id
-                              }
-                            }"
-                            variant="link"
-                            class="shadow-none p-0"
-                          >
-                            {{
-                              row.suoritemerkinta.suorituspaiva
-                                ? $date(row.suoritemerkinta.suorituspaiva)
-                                : ''
-                            }}
-                          </elsa-button>
-                        </div>
-                      </b-td>
-                      <b-td
-                        :stacked-heading="$t('maara')"
-                        :class="{ last: !(row.hasDetails && row.suoritemerkinta) }"
-                      >
-                        <div v-if="!row.details" class="suoritettu-text">
-                          <span
-                            class="pr-1"
-                            :class="{
-                              success: row.vaadittulkm && row.suoritettulkm >= row.vaadittulkm
-                            }"
-                          >
-                            {{ row.suoritettulkm }}
-                          </span>
-                          <span>{{ row.vaadittulkm ? `/ ${row.vaadittulkm}` : '' }}</span>
-                        </div>
-                      </b-td>
-                      <b-td
-                        class="details-icon"
-                        :class="{ 'has-details': row.hasDetails && row.suoritemerkinta }"
-                      >
-                        <div class="d-flex align-items-center">
-                          <elsa-button
-                            v-if="row.hasDetails && row.suoritemerkinta"
-                            variant="link"
-                            class="shadow-none text-dark p-0"
-                            @click="toggleDetails(row)"
-                          >
-                            <font-awesome-icon
-                              :icon="
-                                row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'
-                              "
-                              fixed-width
-                              size="lg"
-                            />
-                          </elsa-button>
-                        </div>
-                      </b-td>
-                    </b-tr>
-                  </template>
+                        </elsa-button>
+                      </div>
+                    </b-td>
+                  </b-tr>
                 </b-tbody>
               </b-table-simple>
             </div>

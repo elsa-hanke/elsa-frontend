@@ -46,12 +46,12 @@
     }
   })
   export default class Asiakirjat extends Vue {
-    private endpointUrl = 'erikoistuva-laakari/asiakirjat/'
-    private asiakirjat: Asiakirja[] = []
-    private loading = false
-    private uploading = false
-    private sortBy = 'lisattypvm'
-    private items = [
+    endpointUrl = 'erikoistuva-laakari/asiakirjat/'
+    asiakirjat: Asiakirja[] = []
+    loading = false
+    uploading = false
+    sortBy = 'lisattypvm'
+    items = [
       {
         text: this.$t('etusivu'),
         to: { name: 'etusivu' }

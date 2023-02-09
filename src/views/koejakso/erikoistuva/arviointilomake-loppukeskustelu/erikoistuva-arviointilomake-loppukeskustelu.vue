@@ -205,7 +205,7 @@
 
     koejaksonVaihe = 'väliarviointi'
 
-    loppukeskusteluLomake: LoppukeskusteluLomake = {
+    loppukeskusteluLomake: Partial<LoppukeskusteluLomake> = {
       erikoistuvaAllekirjoittanut: false,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
       erikoistuvanNimi: `${this.account.firstName} ${this.account.lastName}`,
@@ -220,6 +220,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
@@ -227,6 +228,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       muokkauspaiva: ''

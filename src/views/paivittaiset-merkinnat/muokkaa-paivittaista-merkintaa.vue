@@ -13,7 +13,7 @@
             :teoriakoulutukset="teoriakoulutukset"
             @submit="onSubmit"
             @cancel="onCancel"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="skipRouteExitConfirm"
           />
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -120,6 +120,10 @@
 
     get teoriakoulutukset() {
       return this.paivakirjamerkintaLomake?.teoriakoulutukset ?? []
+    }
+
+    skipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('valmistumispyynto') }}</h1>
-          <div v-if="!loading">
+          <div v-if="!loading && valmistumispyynnonTarkistus">
             <div v-if="editable">
               <p class="mt-1 mb-3">
                 {{ $t('valmistumispyynto-virkailijan-ingressi') }}
@@ -274,11 +274,20 @@
               <div class="my-3">
                 <h5>
                   {{ $t('terveyskeskustyo') }}
-                  {{ $duration(form.tyoskentelyjaksotTilastot.terveyskeskusVaadittuVahintaan) }}
+                  {{
+                    $duration(
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                        .terveyskeskusVaadittuVahintaan
+                    )
+                  }}
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
-                  {{ $duration(form.tyoskentelyjaksotTilastot.terveyskeskusSuoritettu) }}
+                  {{
+                    $duration(
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot.terveyskeskusSuoritettu
+                    )
+                  }}
                 </p>
                 <span>
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
@@ -296,7 +305,8 @@
                     {{ $t('suoritettu') }}
                     {{
                       $duration(
-                        form.tyoskentelyjaksotTilastot.yliopistosairaaloidenUlkopuolinenSuoritettu
+                        valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                          .yliopistosairaaloidenUlkopuolinenSuoritettu
                       )
                     }}
                   </p>
@@ -321,7 +331,8 @@
                   {{ $t('suoritettu') }}
                   {{
                     $duration(
-                      form.tyoskentelyjaksotTilastot.yliopistosairaaloidenUlkopuolinenSuoritettu
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                        .yliopistosairaaloidenUlkopuolinenSuoritettu
                     )
                   }}
                 </p>
@@ -339,7 +350,12 @@
                 <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
-                    {{ $duration(form.tyoskentelyjaksotTilastot.yliopistosairaalaSuoritettu) }}
+                    {{
+                      $duration(
+                        valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                          .yliopistosairaalaSuoritettu
+                      )
+                    }}
                   </p>
                   <b-form-checkbox
                     :id="uid"
@@ -357,7 +373,11 @@
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
-                  {{ $duration(form.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
+                  {{
+                    $duration(
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu
+                    )
+                  }}
                 </p>
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
@@ -373,7 +393,11 @@
                 <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
-                    {{ $duration(form.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
+                    {{
+                      $duration(
+                        valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu
+                      )
+                    }}
                   </p>
                   <b-form-checkbox
                     :id="uid"
@@ -391,7 +415,11 @@
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
-                  {{ $duration(form.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
+                  {{
+                    $duration(
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu
+                    )
+                  }}
                 </p>
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
@@ -409,8 +437,8 @@
                 <template #default="{ uid }">
                   <p class="mb-1">
                     {{ $t('suoritettu') }}
-                    {{ Math.round(form.teoriakoulutusSuoritettu) }} /
-                    {{ Math.round(form.teoriakoulutusVaadittu) }}
+                    {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusSuoritettu) }} /
+                    {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusVaadittu) }}
                     {{ $t('tuntia-lyhenne') }}
                   </p>
                   <b-form-checkbox
@@ -429,8 +457,8 @@
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
-                  {{ Math.round(form.teoriakoulutusSuoritettu) }} /
-                  {{ Math.round(form.teoriakoulutusVaadittu) }}
+                  {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusSuoritettu) }} /
+                  {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusVaadittu) }}
                   {{ $t('tuntia-lyhenne') }}
                 </p>
                 <p class="mb-1">
@@ -438,15 +466,15 @@
                   {{ $t('todistukset-tarkistettu') }}
                 </p>
               </div>
-              <div v-if="form.sateilusuojakoulutusVaadittu > 0" class="my-3">
+              <div v-if="valmistumispyynnonTarkistus.sateilusuojakoulutusVaadittu > 0" class="my-3">
                 <h5>
                   {{ $t('sateilysuojelukoulutus') }}
                 </h5>
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('suoritettu') }}
-                  {{ Math.round(form.sateilusuojakoulutusSuoritettu) }} /
-                  {{ Math.round(form.sateilusuojakoulutusVaadittu) }}
+                  {{ Math.round(valmistumispyynnonTarkistus.sateilusuojakoulutusSuoritettu) }} /
+                  {{ Math.round(valmistumispyynnonTarkistus.sateilusuojakoulutusVaadittu) }}
                   {{ $t('opintopistetta-lyhenne') }}
                 </p>
               </div>
@@ -457,8 +485,8 @@
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('suoritettu') }}
-                  {{ Math.round(form.johtamiskoulutusSuoritettu) }} /
-                  {{ Math.round(form.johtamiskoulutusVaadittu) }}
+                  {{ Math.round(valmistumispyynnonTarkistus.johtamiskoulutusSuoritettu) }} /
+                  {{ Math.round(valmistumispyynnonTarkistus.johtamiskoulutusVaadittu) }}
                   {{ $t('opintopistetta-lyhenne') }}
                 </p>
               </div>
@@ -467,18 +495,21 @@
               <opintosuoritus-tab
                 class="mx-2"
                 variant="kuulustelu"
-                :suoritukset="form.kuulustelut"
+                :suoritukset="valmistumispyynnonTarkistus.kuulustelut"
               />
               <div class="my-3">
                 <h5>
                   {{ $t('koejakso') }}
                 </h5>
-                <p v-if="form.koejaksoHyvaksyttyPvm" class="mb-1">
+                <p v-if="valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm" class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('hyvaksytty') }}
-                  {{ $date(form.koejaksoHyvaksyttyPvm) }}
+                  {{ $date(valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm) }}
                 </p>
-                <p v-if="!form.koejaksoHyvaksyttyPvm && editable" class="mb-1">
+                <p
+                  v-if="!valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm && editable"
+                  class="mb-1"
+                >
                   {{ $t('koejakso-ei-hyvaksytty') }}
                   <b-form-checkbox
                     v-model="form.koejaksoEiVaadittu"
@@ -488,7 +519,10 @@
                     {{ $t('koejaksoa-ei-vaadita') }}
                   </b-form-checkbox>
                 </p>
-                <p v-if="!form.koejaksoHyvaksyttyPvm && !editable" class="mb-1">
+                <p
+                  v-if="!valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm && !editable"
+                  class="mb-1"
+                >
                   {{ $t('koejakso-ei-hyvaksytty') }}
                 </p>
                 <p v-if="form.koejaksoEiVaadittu && !editable" class="mb-1">
@@ -636,12 +670,7 @@
                 >
                   {{ $t('tallenna-keskeneraisena') }}
                 </elsa-button>
-                <elsa-button
-                  :loading="sending"
-                  variant="primary"
-                  class="ml-2"
-                  @click="onValidateAndConfirmSend('confirm-send')"
-                >
+                <elsa-button :loading="sending" type="submit" variant="primary" class="ml-2">
                   {{ $t('hyvaksy-laheta') }}
                 </elsa-button>
               </div>
@@ -759,7 +788,7 @@
       }
     ]
 
-    form: ValmistumispyyntoVirkailijanTarkistus = {
+    form: ValmistumispyynnonVirkailijanTarkistusLomake = {
       id: null,
       yekSuoritettu: false,
       yekSuorituspaiva: null,
@@ -769,30 +798,17 @@
       aiempiElKoulutusSuorituspaiva: null,
       ltTutkintoSuoritettu: false,
       ltTutkintoSuorituspaiva: null,
-      virkailijanSaate: null,
-      tyoskentelyjaksotTilastot: null,
-      terveyskeskustyoHyvaksyttyPvm: null,
-      terveyskeskustyoHyvaksyntaId: null,
-      terveyskeskustyoOpintosuoritusId: null,
       yliopistosairaalanUlkopuolinenTyoTarkistettu: false,
       yliopistosairaalatyoTarkistettu: false,
       kokonaistyoaikaTarkistettu: false,
-      teoriakoulutusSuoritettu: null,
-      teoriakoulutusVaadittu: null,
       teoriakoulutusTarkistettu: false,
-      sateilusuojakoulutusSuoritettu: null,
-      sateilusuojakoulutusVaadittu: null,
-      johtamiskoulutusSuoritettu: null,
-      johtamiskoulutusVaadittu: null,
-      kuulustelut: null,
-      koejaksoHyvaksyttyPvm: null,
       koejaksoEiVaadittu: false,
-      suoritustenTila: null,
       kommentitVirkailijoille: null,
       lisatiedotVastuuhenkilolle: null,
       keskenerainen: false
     }
 
+    valmistumispyynnonTarkistus: ValmistumispyyntoVirkailijanTarkistus | null = null
     valmistumispyyntoArviointienTila: ValmistumispyyntoArviointienTila | null = null
     response: ValmistumispyynnonVirkailijanTarkistusLomake | null = null
     loading = true
@@ -811,7 +827,8 @@
       if (valmistumispyyntoId) {
         try {
           await getValmistumispyyntoTarkistus(parseInt(valmistumispyyntoId)).then((response) => {
-            this.form = response.data
+            this.valmistumispyynnonTarkistus = response.data
+            this.form = { ...this.valmistumispyynnonTarkistus }
             if (response.data.valmistumispyynto) {
               this.valmistumispyynto = response.data.valmistumispyynto
             }
@@ -862,7 +879,7 @@
       }
     }
 
-    vaihdaRooli(id: number) {
+    vaihdaRooli(id: number | undefined) {
       window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}`
     }
 
@@ -876,9 +893,9 @@
       return !this.$v.$anyError
     }
 
-    onValidateAndConfirmSend(modalId: string) {
+    onSubmit() {
       if (!this.validateForm()) return
-      return this.$bvModal.show(modalId)
+      return this.$bvModal.show('confirm-send')
     }
 
     saveAndExit() {

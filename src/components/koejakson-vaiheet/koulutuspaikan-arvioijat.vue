@@ -130,11 +130,11 @@
       }
     }
 
-    @Prop({ required: true, default: null })
-    lahikouluttaja!: KoejaksonVaiheHyvaksyja | null
+    @Prop({ required: true })
+    lahikouluttaja!: KoejaksonVaiheHyvaksyja
 
-    @Prop({ required: true, default: null })
-    lahiesimies!: KoejaksonVaiheHyvaksyja | null
+    @Prop({ required: true })
+    lahiesimies!: KoejaksonVaiheHyvaksyja
 
     @Prop({ required: false, default: false })
     isReadonly!: boolean

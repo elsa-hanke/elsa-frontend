@@ -4,7 +4,7 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <div v-if="!loading" class="mb-4">
+          <div v-if="!loading && koulutussuunnitelma" class="mb-4">
             <h1 class="d-print-none">{{ $t('koulutussuunnitelma') }}</h1>
             <p class="d-print-none">{{ $t('koulutussuunnitelma-kuvaus') }}</p>
             <hr class="d-print-none" />
@@ -53,11 +53,13 @@
                               : ''
                           }}
                           –
-                          {{
-                            tyoskentelyjakso.paattymispaiva
-                              ? $date(tyoskentelyjakso.paattymispaiva)
-                              : $t('kesken') | lowercase
-                          }})
+                          <span :class="tyoskentelyjakso.paattymispaiva ? '' : 'text-lowercase'">
+                            {{
+                              tyoskentelyjakso.paattymispaiva
+                                ? $date(tyoskentelyjakso.paattymispaiva)
+                                : $t('kesken')
+                            }})
+                          </span>
                         </div>
                       </b-td>
                       <b-td :stacked-heading="$t('osaamistavoitteet-omalta-erikoisalalta')">
@@ -124,7 +126,7 @@
                     v-if="koulutussuunnitelma.motivaatiokirjeYksityinen"
                     class="text-size-sm font-weight-400"
                   >
-                    ({{ $t('yksityinen') | lowercase }})
+                    <span class="text-lowercase">({{ $t('yksityinen') }})</span>
                   </span>
                 </template>
                 <asiakirjat-content
@@ -148,7 +150,7 @@
                     v-if="koulutussuunnitelma.opiskeluJaTyohistoriaYksityinen"
                     class="text-size-sm font-weight-400"
                   >
-                    ({{ $t('yksityinen') | lowercase }})
+                    <span class="text-lowercase">({{ $t('yksityinen') }})</span>
                   </span>
                 </template>
                 <div v-if="koulutussuunnitelma.opiskeluJaTyohistoria" class="text-preline">
@@ -162,7 +164,7 @@
                     v-if="koulutussuunnitelma.vahvuudetYksityinen"
                     class="text-size-sm font-weight-400"
                   >
-                    ({{ $t('yksityinen') | lowercase }})
+                    <span class="text-lowercase">({{ $t('yksityinen') }})</span>
                   </span>
                 </template>
                 <div v-if="koulutussuunnitelma.vahvuudet" class="text-preline">
@@ -179,7 +181,7 @@
                     v-if="koulutussuunnitelma.tulevaisuudenVisiointiYksityinen"
                     class="text-size-sm font-weight-400"
                   >
-                    ({{ $t('yksityinen') | lowercase }})
+                    <span class="text-lowercase">({{ $t('yksityinen') }})</span>
                   </span>
                 </template>
                 <div v-if="koulutussuunnitelma.tulevaisuudenVisiointi" class="text-preline">
@@ -193,7 +195,7 @@
                     v-if="koulutussuunnitelma.osaamisenKartuttaminenYksityinen"
                     class="text-size-sm font-weight-400"
                   >
-                    ({{ $t('yksityinen') | lowercase }})
+                    <span class="text-lowercase">({{ $t('yksityinen') }})</span>
                   </span>
                 </template>
                 <div v-if="koulutussuunnitelma.osaamisenKartuttaminen" class="text-preline">
@@ -207,7 +209,7 @@
                     v-if="koulutussuunnitelma.elamankenttaYksityinen"
                     class="text-size-sm font-weight-400"
                   >
-                    ({{ $t('yksityinen') | lowercase }})
+                    <span class="text-lowercase">({{ $t('yksityinen') }})</span>
                   </span>
                 </template>
                 <div v-if="koulutussuunnitelma.elamankentta" class="text-preline">

@@ -136,7 +136,7 @@
                   :kouluttaja="kouluttaja"
                   :index="index"
                   @ready="onChildKouluttajaFormValid"
-                  @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+                  @skipRouteExitConfirm="onSkipRouteExitConfirm"
                 ></kouluttaja-koulutussopimus-form>
 
                 <koulutussopimus-readonly
@@ -148,7 +148,7 @@
           </b-row>
           <hr />
 
-          <b-row>
+          <b-row v-if="form.vastuuhenkilo">
             <b-col lg="8">
               <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
               <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
@@ -175,7 +175,7 @@
             v-model="form.vastuuhenkilo"
             :vastuuhenkilo="form.vastuuhenkilo"
             @ready="onChildVastuuhenkiloFormValid"
-            @skipRouteExitConfirm="(value) => $emit('skipRouteExitConfirm', value)"
+            @skipRouteExitConfirm="onSkipRouteExitConfirm"
           ></vastuuhenkilo-koulutussopimus-form>
           <hr />
           <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
@@ -550,6 +550,10 @@
         ...allekirjoituksetKouluttajat,
         allekirjoitusVastuuhenkilo
       ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+    }
+
+    onSkipRouteExitConfirm(value: boolean) {
+      this.$emit('skipRouteExitConfirm', value)
     }
   }
 </script>

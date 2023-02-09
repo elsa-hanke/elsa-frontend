@@ -26,11 +26,13 @@
                       tyoskentelyjakso.alkamispaiva ? $date(tyoskentelyjakso.alkamispaiva) : ''
                     }}
                     –
-                    {{
-                      tyoskentelyjakso.paattymispaiva
-                        ? $date(tyoskentelyjakso.paattymispaiva)
-                        : $t('kesken') | lowercase
-                    }})
+                    <span :class="tyoskentelyjakso.paattymispaiva ? '' : 'text-lowercase'">
+                      {{
+                        tyoskentelyjakso.paattymispaiva
+                          ? $date(tyoskentelyjakso.paattymispaiva)
+                          : $t('kesken')
+                      }})
+                    </span>
                   </div>
                 </div>
               </template>

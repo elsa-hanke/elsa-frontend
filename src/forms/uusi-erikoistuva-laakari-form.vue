@@ -74,7 +74,7 @@
                 v-model="form.yliopisto"
                 :options="yliopistot"
                 :state="validateState('yliopisto')"
-                :custom-label="(value) => $t(`yliopisto-nimi.${value.nimi}`)"
+                :custom-label="yliopistoLabel"
                 track-by="id"
                 @input="$emit('skipRouteExitConfirm', false)"
               />
@@ -83,7 +83,7 @@
               </b-form-invalid-feedback>
             </template>
           </elsa-form-group>
-          <elsa-form-group v-else :label="$t('yliopisto')">
+          <elsa-form-group v-else-if="form.yliopisto" :label="$t('yliopisto')">
             <template #default="{ uid }">
               <span :id="uid">{{ $t(`yliopisto-nimi.${form.yliopisto.nimi}`) }}</span>
             </template>
@@ -230,7 +230,8 @@
     ElsaError,
     ErikoistuvaLaakariLomake,
     UusiErikoistuvaLaakari,
-    OpintoopasSimple
+    OpintoopasSimple,
+    Yliopisto
   } from '@/types'
   import { dateBetween } from '@/utils/date'
   import { sortByAsc } from '@/utils/sort'
@@ -440,6 +441,10 @@
 
     get erikoisalatSorted() {
       return this.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
+    }
+
+    yliopistoLabel(value: Yliopisto) {
+      return this.$t(`yliopisto-nimi.${value.nimi}`)
     }
   }
 </script>

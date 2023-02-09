@@ -536,7 +536,12 @@
               {{ opas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet }} {{ 'kk' }}
             </span>
             <span v-if="showTerveyskeskuskoulutusjaksonMaksimipituus">
-              <span v-if="opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet > 0">
+              <span
+                v-if="
+                  opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet &&
+                  opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet > 0
+                "
+              >
                 {{ opas.terveyskeskuskoulutusjaksonVahimmaispituusVuodet }} {{ 'v' }}
               </span>
               <span

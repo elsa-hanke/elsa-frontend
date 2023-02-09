@@ -13,7 +13,7 @@
             @input="$emit('skipRouteExitConfirm', false)"
           >
             <span>
-              {{ $t(tyyppi.text) }}
+              {{ tyyppi.text }}
             </span>
           </b-form-radio>
           <b-form-radio
@@ -24,7 +24,8 @@
             @input="$emit('skipRouteExitConfirm', false)"
           >
             <span v-if="form.tyoskentelypaikka.tyyppi === 'MUU'">
-              {{ $t('muu') }}, {{ $t('kerro-mika') | lowercase }}
+              {{ $t('muu') }},
+              <span class="text-lowercase">{{ $t('kerro-mika') }}</span>
               <span class="text-primary">*</span>
             </span>
             <span v-else>
@@ -194,7 +195,8 @@
           >
             {{ $t('omaa-erikoisalaa-tukeva-tai-taydentava-koulutus') }}
             <span v-if="form.kaytannonKoulutus === omaaErikoisalaaTukeva">
-              , {{ $t('valitse-erikoisala') | lowercase }}
+              ,
+              <span class="text-lowercase">{{ $t('valitse-erikoisala') }}</span>
               <span class="text-primary">*</span>
             </span>
           </b-form-radio>
@@ -290,8 +292,7 @@
 <script lang="ts">
   import axios from 'axios'
   import Component from 'vue-class-component'
-  import { Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
+  import { Prop, Vue } from 'vue-property-decorator'
   import { required, between, requiredIf, integer } from 'vuelidate/lib/validators'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
@@ -301,7 +302,7 @@
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import { Asiakirja, Tyoskentelyjakso } from '@/types'
+  import { Asiakirja, Tyoskentelyjakso, TyoskentelyjaksoForm } from '@/types'
   import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
   import { sortByAsc } from '@/utils/sort'
@@ -357,7 +358,7 @@
       }
     }
   })
-  export default class TyoskentelyjaksoForm extends Mixins(validationMixin) {
+  export default class TyoskentelyjaksoFormClass extends Vue {
     $refs!: {
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
@@ -406,7 +407,7 @@
     deletedAsiakirjat: Asiakirja[] = []
     reservedAsiakirjaNimetMutable: string[] | undefined = []
 
-    form: Tyoskentelyjakso = {
+    form: TyoskentelyjaksoForm = {
       alkamispaiva: null,
       paattymispaiva: null,
       minPaattymispaiva: null,
@@ -556,7 +557,7 @@
     }
 
     get maxAlkamispaiva() {
-      if (this.form.tapahtumia) {
+      if (this.value.tapahtumia) {
         return this.form.maxAlkamispaiva
       } else {
         return this.form.paattymispaiva
@@ -564,7 +565,7 @@
     }
 
     get minPaattymispaiva() {
-      if (this.form.tapahtumia) {
+      if (this.value.tapahtumia) {
         return this.form.minPaattymispaiva
       } else {
         return this.form.alkamispaiva

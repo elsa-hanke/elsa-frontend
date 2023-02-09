@@ -50,13 +50,13 @@
               @input="$emit('skipRouteExitConfirm', false)"
             />
             <b-form-invalid-feedback
-              v-if="!$v.form.erikoistuvanSahkoposti.required"
+              v-if="$v.form.erikoistuvanSahkoposti && !$v.form.erikoistuvanSahkoposti.required"
               :id="`${uid}-feedback`"
             >
               {{ $t('pakollinen-tieto') }}
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-if="!$v.form.erikoistuvanSahkoposti.email"
+              v-if="$v.form.erikoistuvanSahkoposti && !$v.form.erikoistuvanSahkoposti.email"
               :id="`${uid}-feedback`"
               :state="validateState('erikoistuvanSahkoposti')"
             >

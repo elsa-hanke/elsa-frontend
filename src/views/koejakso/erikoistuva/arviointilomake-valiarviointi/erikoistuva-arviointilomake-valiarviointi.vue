@@ -209,7 +209,7 @@
 
     koejaksonVaihe = this.$t('valiarviointi')
 
-    valiarviointiLomake: ValiarviointiLomake = {
+    valiarviointiLomake: Partial<ValiarviointiLomake> = {
       edistyminenTavoitteidenMukaista: null,
       erikoistuvaAllekirjoittanut: false,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
@@ -225,6 +225,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       lahikouluttaja: {
@@ -232,6 +233,7 @@
         kayttajaUserId: null,
         kuittausaika: '',
         nimi: '',
+        nimike: null,
         sopimusHyvaksytty: false
       },
       muokkauspaiva: '',

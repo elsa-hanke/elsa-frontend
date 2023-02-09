@@ -61,8 +61,8 @@
           class="text-decoration-none shadow-none p-0"
           @click="addTyoskentelyjakso"
         >
-          <font-awesome-icon icon="plus" fixed-width size="sm" />
-          {{ $t('useampi-jakso') | lowercase }}
+          <font-awesome-icon icon="plus" fixed-width size="sm" class="text-lowercase" />
+          {{ $t('useampi-jakso') }}
         </elsa-button>
       </template>
     </elsa-form-group>
@@ -71,6 +71,7 @@
         <elsa-form-multiselect
           :id="uid"
           v-model="form.osaamistavoitteet"
+          class="osaamistavoitteetSelect"
           :options="arvioitavanKokonaisuudenKategoriatSorted"
           group-values="arvioitavatKokonaisuudet"
           group-label="nimi"
@@ -82,7 +83,7 @@
           :taggable="true"
           @input="$emit('skipRouteExitConfirm', false)"
         >
-          <template slot="option" slot-scope="props">
+          <template #option="props">
             <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
             <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
           </template>
@@ -117,7 +118,6 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -130,6 +130,7 @@
     ArvioitavanKokonaisuudenKategoria,
     Erikoisala,
     Koulutusjakso,
+    KoulutusjaksoForm,
     Kunta,
     Tyoskentelyjakso
   } from '@/types'
@@ -152,7 +153,7 @@
       }
     }
   })
-  export default class KoulutusjaksoForm extends Mixins(validationMixin, TyoskentelyjaksoMixin) {
+  export default class KoulutusjaksoFormClass extends Mixins(TyoskentelyjaksoMixin) {
     @Prop({ required: false, default: () => [] })
     arvioitavanKokonaisuudenKategoriat!: ArvioitavanKokonaisuudenKategoria[]
 
@@ -194,7 +195,17 @@
       })
     })
     value!: Koulutusjakso
-    form!: Koulutusjakso
+    form: KoulutusjaksoForm = {
+      id: null,
+      nimi: null,
+      muutOsaamistavoitteet: null,
+      luotu: null,
+      tallennettu: null,
+      lukittu: null,
+      tyoskentelyjaksot: [],
+      osaamistavoitteet: [],
+      koulutussuunnitelma: null
+    }
     params = {
       saving: false
     }
@@ -211,24 +222,7 @@
             }))
         }
         if (this.form.tyoskentelyjaksot.length === 0) {
-          this.form.tyoskentelyjaksot = [
-            {
-              alkamispaiva: null,
-              paattymispaiva: null,
-              minPaattymispaiva: null,
-              maxAlkamispaiva: null,
-              osaaikaprosentti: 100,
-              tyoskentelypaikka: {
-                nimi: null,
-                kunta: { abbreviation: null },
-                tyyppi: null,
-                muuTyyppi: null
-              },
-              kaytannonKoulutus: null,
-              omaaErikoisalaaTukeva: null,
-              hyvaksyttyAiempaanErikoisalaan: null
-            }
-          ]
+          this.form.tyoskentelyjaksot.push({})
         }
       } else {
         this.form = this.value
@@ -236,8 +230,8 @@
     }
 
     validateState(name: string) {
-      const { $dirty, $error } = this.$v.form[name] as any
-      return $dirty ? ($error ? false : null) : null
+      const validation = this.$v.form[name]
+      return validation?.$dirty ? (validation.$error ? false : null) : null
     }
 
     onInput(value: Tyoskentelyjakso, index: number) {
@@ -245,22 +239,7 @@
     }
 
     addTyoskentelyjakso() {
-      this.form.tyoskentelyjaksot.push({
-        alkamispaiva: null,
-        paattymispaiva: null,
-        minPaattymispaiva: null,
-        maxAlkamispaiva: null,
-        osaaikaprosentti: 100,
-        tyoskentelypaikka: {
-          nimi: null,
-          kunta: { abbreviation: null },
-          tyyppi: null,
-          muuTyyppi: null
-        },
-        kaytannonKoulutus: null,
-        omaaErikoisalaaTukeva: null,
-        hyvaksyttyAiempaanErikoisalaan: null
-      })
+      this.form.tyoskentelyjaksot.push({})
       this.$emit('skipRouteExitConfirm', false)
     }
 
@@ -296,7 +275,7 @@
     }
 
     get tyoskentelyjaksotFiltered() {
-      return ((this as any).tyoskentelyjaksotFormatted as Tyoskentelyjakso[]).filter(
+      return this.tyoskentelyjaksotFormatted.filter(
         (tyoskentelyjakso) =>
           !this.form.tyoskentelyjaksot?.find((t) => t?.id === tyoskentelyjakso.id)
       )

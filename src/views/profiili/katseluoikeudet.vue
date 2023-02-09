@@ -107,7 +107,7 @@
       </b-alert>
     </div>
     <b-modal id="muokkaaKatseluoikeuttaModal" :title="$t('katseluoikeuden-voimassaoloaika')">
-      <div v-if="valittuValtuutus !== null" class="d-block">
+      <div v-if="valittuValtuutus !== null && valittuValtuutus.valtuutettu" class="d-block">
         <h5 class="mt-2">{{ $t('kouluttajan-nimi') }}</h5>
         <p class="mb-4">{{ valittuValtuutus.valtuutettu.nimi }}</p>
         <elsa-form-group

@@ -72,7 +72,7 @@
     </div>
 
     <b-table
-      v-if="!loading && rows > 0"
+      v-if="!loading && kayttajat && rows > 0"
       class="kayttajat-table"
       :items="kayttajat.content"
       :fields="fields"
@@ -93,11 +93,9 @@
         </elsa-button>
       </template>
       <template #cell(opintooikeus)="row">
-        <template v-for="(item, index) in row.item.yliopistotAndErikoisalat">
-          <div :key="index">
-            {{ `${$t(`yliopisto-nimi.${item.yliopisto}`)}: ${item.erikoisala}` }}
-          </div>
-        </template>
+        <div v-for="(item, index) in row.item.yliopistotAndErikoisalat" :key="index">
+          {{ `${$t(`yliopisto-nimi.${item.yliopisto}`)}: ${item.erikoisala}` }}
+        </div>
       </template>
       <template #cell(tila)="row">
         <span :class="getTilaColor(row.item.kayttajatilinTila)">
