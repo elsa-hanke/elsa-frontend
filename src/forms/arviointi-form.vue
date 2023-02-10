@@ -147,11 +147,9 @@
                 />
               </b-td>
               <b-td>
-                <div v-if="!value.itsearviointiAika" class="d-inline-flex">
+                <div v-if="!value.itsearviointiAika && index === 0" class="d-inline-flex">
                   <elsa-button
-                    v-if="
-                      $isErikoistuva() && !value.lukittu && !account.impersonated && index === 0
-                    "
+                    v-if="$isErikoistuva() && !value.lukittu && !account.impersonated"
                     variant="primary"
                     class="d-flex align-items-center text-decoration-none"
                     :to="{
