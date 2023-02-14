@@ -196,7 +196,7 @@
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
       :text="$t('vahvista-koulutussopimus-lahetys')"
-      :submit-text="$t('laheta')"
+      :submit-text="$t('hyvaksy-laheta')"
       @submit="onSubmit"
     />
     <elsa-confirmation-modal

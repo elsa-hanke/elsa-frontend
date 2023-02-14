@@ -41,10 +41,7 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="mr-2" />
             </em>
             <div>
-              {{ $t('koulutussopimus-tila-allekirjoitettu') }}
-              <span class="d-block">
-                {{ $t('koulutussopimus-tila-allekirjoitettu-lisatiedot') }}
-              </span>
+              {{ $t('koulutussopimus-tila-hyvaksytty') }}
             </div>
           </div>
         </b-alert>
@@ -420,7 +417,7 @@
     }
 
     get showSigned() {
-      return this.koulutussopimusData.tila === LomakeTilat.ALLEKIRJOITETTU
+      return this.koulutussopimusData.tila === LomakeTilat.HYVAKSYTTY
     }
 
     get erikoistuvanAvatar() {
