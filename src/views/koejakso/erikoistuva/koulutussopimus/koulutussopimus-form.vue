@@ -188,7 +188,7 @@
           variant="primary"
           @click="validateAndConfirmSend"
         >
-          {{ $t('laheta') }}
+          {{ $t('hyvaksy-laheta') }}
         </elsa-button>
       </b-col>
     </b-row>

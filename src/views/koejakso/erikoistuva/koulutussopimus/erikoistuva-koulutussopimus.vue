@@ -37,16 +37,13 @@
                 <div>{{ $t('koulutussopimus-tila-odottaa-hyvaksyntaa') }}</div>
               </div>
             </b-alert>
-            <b-alert variant="success" :show="showSignedByEveryone">
+            <b-alert variant="success" :show="showAcceptedByEveryone">
               <div class="d-flex flex-row">
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                 </em>
                 <div>
-                  {{ $t('koulutussopimus-tila-allekirjoitettu') }}
-                  <span class="d-block">
-                    {{ $t('koulutussopimus-tila-allekirjoitettu-lisatiedot') }}
-                  </span>
+                  {{ $t('koulutussopimus-tila-hyvaksytty') }}
                 </div>
               </div>
             </b-alert>
@@ -165,9 +162,7 @@
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
         this.koejaksoData.koulutusSopimuksenTila ===
           LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
-        this.koejaksoData.koulutusSopimuksenTila ===
-          LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
-        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+        this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
     }
 
@@ -175,8 +170,8 @@
       return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
-    get showSignedByEveryone() {
-      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ALLEKIRJOITETTU
+    get showAcceptedByEveryone() {
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.HYVAKSYTTY
     }
 
     get kouluttajat() {
