@@ -42,8 +42,7 @@
         v-if="
           tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
           tila === lomaketilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
-          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
-          tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA
+          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
         "
       >
         <template #content>
@@ -80,15 +79,14 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ALLEKIRJOITETTU">
+      <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <div>
             <span class="pr-6">
-              {{ $t('koulutussopimus-tila-allekirjoitettu') }}
-              {{ $t('koulutussopimus-tila-allekirjoitettu-lisatiedot') }}
+              {{ $t('koulutussopimus-tila-hyvaksytty') }}
             </span>
           </div>
         </template>

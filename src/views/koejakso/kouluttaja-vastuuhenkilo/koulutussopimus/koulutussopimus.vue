@@ -24,17 +24,6 @@
             <div>{{ $t('koulutussopimus-tila-odottaa-toisen-kouluttajan-hyvaksyntaa') }}</div>
           </div>
         </b-alert>
-        <b-alert :show="showWaitingForSignature" variant="dark" class="mt-3">
-          <div class="d-flex flex-row">
-            <em class="align-middle">
-              <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-            </em>
-            <div v-if="$isKouluttaja()">
-              {{ $t('koulutussopimus-tila-odottaa-vastuuhenkilon-hyvaksyntaa') }}
-            </div>
-            <div v-else>{{ $t('koulutussopimus-tila-odottaa-allekirjoitusta') }}</div>
-          </div>
-        </b-alert>
         <b-alert :show="showSigned" variant="success" class="mt-3">
           <div class="d-flex flex-row">
             <em class="align-middle">
@@ -217,7 +206,7 @@
                 type="submit"
                 variant="primary"
               >
-                {{ $t('laheta-allekirjoitettavaksi') }}
+                {{ $t('hyvaksy') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -225,12 +214,6 @@
       </div>
       <div v-else class="text-center">
         <b-spinner variant="primary" :label="$t('ladataan')" />
-      </div>
-      <div v-if="$isVastuuhenkilo()" class="text-left mt-2">
-        <p>
-          <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-          {{ $t('koejakso-vastuuhenkilo-submit-tooltip') }}
-        </p>
       </div>
     </b-container>
 
@@ -247,9 +230,9 @@
     />
     <elsa-confirmation-modal
       id="confirm-send-vastuuhenkilo"
-      :title="$t('vahvista-lomakkeen-lahetys')"
+      :title="$t('vahvista-lomakkeen-hyvaksynta')"
       :text="$t('vahvista-koulutussopimus-hyvaksytty')"
-      :submit-text="$t('laheta-allekirjoitettavaksi')"
+      :submit-text="$t('hyvaksy')"
       @submit="updateSentForm"
     />
     <elsa-return-to-sender-modal
@@ -410,10 +393,6 @@
 
     get showWaitingForAnotherKouluttaja() {
       return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA
-    }
-
-    get showWaitingForSignature() {
-      return this.koulutussopimusData.tila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
     }
 
     get showSigned() {
