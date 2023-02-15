@@ -45,14 +45,14 @@
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia-virkailija') }}
+                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-vastuuhenkilon-allekirjoitusta') }}
                 </div>
               </div>
             </b-alert>
             <b-alert variant="success" :show="acceptedByEveryone">
               <div class="d-flex flex-row">
                 <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                 </em>
                 {{ $t('koejakso-on-hyvaksytty-allekirjoitettu-vastuuhenkilo-erikoistuja') }}
               </div>
@@ -617,7 +617,7 @@
     }
 
     get waitingForSignatures() {
-      return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA
     }
 
     get acceptedByEveryone() {

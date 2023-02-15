@@ -79,13 +79,13 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA">
+      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA">
         <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <p class="pr-6 mb-2">
-            {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia-erikoistuja') }}
+            {{ $t('vastuuhenkilon-arvio-tila-odottaa-vastuuhenkilon-allekirjoitusta') }}
           </p>
         </template>
         <template #button>
