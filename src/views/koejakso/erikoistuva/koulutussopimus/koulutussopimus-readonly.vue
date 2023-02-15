@@ -62,7 +62,10 @@
       </b-col>
     </b-row>
     <hr />
-    <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+    <koejakson-vaihe-allekirjoitukset
+      :allekirjoitukset="allekirjoitukset"
+      title="hyvaksymispaivamaarat"
+    />
   </div>
 </template>
 
