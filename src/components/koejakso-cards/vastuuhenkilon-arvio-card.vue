@@ -66,12 +66,27 @@
       <koejakso-card-content
         v-if="
           tila === lomaketilat.ODOTTAA_HYVAKSYNTAA ||
-          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
-          tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA
+          tila === lomaketilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
         "
       >
         <template #content>
           <p class="pr-6 mb-2">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
+        </template>
+        <template #button>
+          <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
+            {{ $t('nayta-arviointipyynto') }}
+          </elsa-button>
+        </template>
+      </koejakso-card-content>
+
+      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_ALLEKIRJOITUKSIA">
+        <template #content>
+          <div>
+            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+          </div>
+          <p class="pr-6 mb-2">
+            {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia-erikoistuja') }}
+          </p>
         </template>
         <template #button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">

@@ -27,7 +27,7 @@
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia') }}
+                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia-erikoistuja') }}
                 </div>
               </div>
             </b-alert>
@@ -506,8 +506,7 @@
       return (
         this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
         this.koejaksoData.vastuuhenkilonArvionTila ===
-          LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
-        this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+          LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
     }
 
