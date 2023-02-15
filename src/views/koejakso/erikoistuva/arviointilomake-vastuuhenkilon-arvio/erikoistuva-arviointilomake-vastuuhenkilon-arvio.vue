@@ -27,7 +27,7 @@
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoituksia-erikoistuja') }}
+                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-vastuuhenkilon-allekirjoitusta') }}
                 </div>
               </div>
             </b-alert>
@@ -485,7 +485,10 @@
     }
 
     get waitingForSignatures() {
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUKSIA
+      return (
+        this.koejaksoData.vastuuhenkilonArvionTila ===
+        LomakeTilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA
+      )
     }
 
     get korjausehdotus() {
