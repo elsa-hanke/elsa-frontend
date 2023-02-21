@@ -46,7 +46,7 @@
                       }}
                     </span>
                     <span v-else-if="odottaaAllekirjoituksia">
-                      {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-allekirjoituksia') }}
+                      {{ $t('valmistumispyynto-tarkistettu-odottaa-allekirjoituksia') }}
                     </span>
                     <span
                       v-if="virkailijaPalauttanut || vastuuhenkiloHyvaksyjaPalauttanut"
