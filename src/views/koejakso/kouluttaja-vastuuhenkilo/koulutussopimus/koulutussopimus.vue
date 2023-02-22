@@ -164,7 +164,10 @@
             @skipRouteExitConfirm="onSkipRouteExitConfirm"
           ></vastuuhenkilo-koulutussopimus-form>
           <hr />
-          <koejakson-vaihe-allekirjoitukset :allekirjoitukset="allekirjoitukset" />
+          <koejakson-vaihe-allekirjoitukset
+            :allekirjoitukset="allekirjoitukset"
+            title="hyvaksymispaivamaarat"
+          />
           <hr v-if="allekirjoitukset.length > 0" />
           <b-row v-if="editable && !signed">
             <b-col class="text-right">
