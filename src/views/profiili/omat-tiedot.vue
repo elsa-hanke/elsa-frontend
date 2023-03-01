@@ -503,15 +503,15 @@
       return undefined
     }
 
-    get authorities() {
+    get activeAuthority() {
       if (this.account) {
-        return this.account.authorities
+        return this.account.activeAuthority
       }
-      return []
+      return ''
     }
 
     get title() {
-      return getTitleFromAuthorities(this, this.authorities)
+      return getTitleFromAuthorities(this, this.activeAuthority)
     }
 
     get avatar() {

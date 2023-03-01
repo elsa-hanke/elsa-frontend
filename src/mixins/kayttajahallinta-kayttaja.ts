@@ -114,10 +114,7 @@ export default class KayttajahallintaKayttajaMixin extends Mixins(
   }
 
   get rooli() {
-    return getTitleFromAuthorities(
-      this,
-      this.kayttajaWrapper?.kayttaja?.authorities?.map((a) => a.name) ?? []
-    )
+    return getTitleFromAuthorities(this, this.kayttajaWrapper?.kayttaja?.activeAuthority ?? '')
   }
 
   get etunimi() {
