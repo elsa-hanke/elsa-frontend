@@ -605,6 +605,7 @@ export interface Kayttaja {
   avatar: string
   userId: string
   authorities: KayttajaAuthority[]
+  activeAuthority: string
   nimike: string
   yliopistotAndErikoisalat: KayttajaYliopistoErikoisala[]
   yliopistot: Yliopisto[]
