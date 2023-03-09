@@ -322,7 +322,7 @@
     async mounted() {
       try {
         const laillistamistiedot: Laillistamistiedot = (
-          await axios.get('/erikoistuva-laakari/laillistamispaiva/')
+          await axios.get('/erikoistuva-laakari/laillistamispaiva')
         ).data
         this.form.laillistamispaiva = laillistamistiedot.laillistamispaiva
 

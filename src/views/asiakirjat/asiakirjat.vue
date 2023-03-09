@@ -46,7 +46,7 @@
     }
   })
   export default class Asiakirjat extends Vue {
-    endpointUrl = 'erikoistuva-laakari/asiakirjat/'
+    endpointUrl = 'erikoistuva-laakari/asiakirjat'
     asiakirjat: Asiakirja[] = []
     loading = false
     uploading = false
@@ -125,7 +125,7 @@
     async onDeleteAsiakirja(asiakirja: Asiakirja) {
       Vue.set(asiakirja, 'disableDelete', true)
       try {
-        await axios.delete(this.endpointUrl + asiakirja.id)
+        await axios.delete(this.endpointUrl + '/' + asiakirja.id)
         toastSuccess(this, this.$t('asiakirjan-poistaminen-onnistui'))
         this.asiakirjat = this.asiakirjat.filter((a) => a.id !== asiakirja.id)
       } catch {
