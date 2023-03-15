@@ -119,11 +119,13 @@ export default class NavbarMixin extends Vue {
   }
 
   async changeToErikoistuja() {
+    if (this.$isErikoistuva()) return
     await vaihdaRooli(ELSA_ROLE.ErikoistuvaLaakari)
     this.$router.go(0)
   }
 
   async changeToKouluttaja() {
+    if (this.$isKouluttaja()) return
     await vaihdaRooli(ELSA_ROLE.Kouluttaja)
     this.$router.go(0)
   }
