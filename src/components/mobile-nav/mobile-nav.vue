@@ -142,7 +142,7 @@
       <b-nav-item class="ml-6" link-classes="p-0 pt-1 pb-3" @click="logout()">
         {{ $t('kirjaudu-ulos') }}
       </b-nav-item>
-      <div v-if="opintooikeudet && opintooikeudet.length > 1" class="pb-2">
+      <div v-if="$isErikoistuva() && opintooikeudet && opintooikeudet.length > 1" class="pb-2">
         <hr class="p-0 m-0" />
         <div class="pl-2">
           <div class="dropdown-item dropdown-item__header mt-1 pb-1">
@@ -179,6 +179,54 @@
             </div>
           </b-nav-item>
         </div>
+      </div>
+      <div v-if="authorities && authorities.length > 1">
+        <hr class="p-0 m-0" />
+        <div class="dropdown-item dropdown-item__header mt-1 pb-1">
+          <span class="font-weight-500">{{ $t('valitse-rooli') }}</span>
+        </div>
+        <b-nav-item @click="changeToErikoistuja">
+          <div
+            class="d-flex"
+            :class="{
+              'dropdown-item__disabled': $isErikoistuva()
+            }"
+          >
+            <div class="flex-column icon-col-min-width">
+              <font-awesome-icon
+                v-if="$isErikoistuva()"
+                :icon="['far', 'check-circle']"
+                fixed-width
+                size="lg"
+                class="text-success"
+              />
+            </div>
+            <div class="flex-column">
+              {{ $t('erikoistuva-laakari') }}
+            </div>
+          </div>
+        </b-nav-item>
+        <b-nav-item @click="changeToKouluttaja">
+          <div
+            class="d-flex"
+            :class="{
+              'dropdown-item__disabled': $isKouluttaja()
+            }"
+          >
+            <div class="flex-column icon-col-min-width">
+              <font-awesome-icon
+                v-if="$isKouluttaja()"
+                :icon="['far', 'check-circle']"
+                fixed-width
+                size="lg"
+                class="text-success"
+              />
+            </div>
+            <div class="flex-column">
+              {{ $t('kouluttaja') }}
+            </div>
+          </div>
+        </b-nav-item>
       </div>
       <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
     </b-nav>
