@@ -33,8 +33,11 @@
             :state="validateState('puhelin')"
             @input="$emit('skipRouteExitConfirm', false)"
           />
+          <small class="form-text text-muted">
+            {{ $t('syota-puhelinnumero-muodossa') }}
+          </small>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
+            {{ $t('tarkista-puhelinnumeron-muoto') }}
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
@@ -52,7 +55,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
   import { Vastuuhenkilo } from '@/types'
-  import { defaultVastuuhenkilo } from '@/utils/constants'
+  import { defaultVastuuhenkilo, phoneNumber } from '@/utils/constants'
 
   @Component({
     components: {
@@ -65,7 +68,8 @@
           email
         },
         puhelin: {
-          required
+          required,
+          phoneNumber
         }
       }
     }

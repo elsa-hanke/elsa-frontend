@@ -150,8 +150,11 @@
                     :value="account.erikoistuvaLaakari.puhelinnumero"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
+                  <small class="form-text text-muted">
+                    {{ $t('syota-puhelinnumero-muodossa') }}
+                  </small>
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
+                    {{ $t('tarkista-puhelinnumeron-muoto') }}
                   </b-form-invalid-feedback>
                 </template>
               </elsa-form-group>
@@ -362,7 +365,7 @@
     VastuuhenkilonArvioLomake,
     VastuuhenkilonArvioLomakeErikoistuva
   } from '@/types'
-  import { LomakeTilat } from '@/utils/constants'
+  import { LomakeTilat, phoneNumber } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -441,7 +444,8 @@
             email
           },
           erikoistuvanPuhelinnumero: {
-            required
+            required,
+            phoneNumber
           },
           paataOpintooikeudet: {
             checked: (value: boolean) => {
