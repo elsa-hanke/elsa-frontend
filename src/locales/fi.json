@@ -662,6 +662,8 @@
   "lisaa-kategoria": "Lisää kategoria",
   "lisaa-kommentti": "Lisää kommentti",
   "lisaa-kouluttaja": "Lisää kouluttaja",
+  "lisaa-kouluttaja-info-1": "Mikäli et löytänyt kouluttajaa listasta, voit lisätä uuden kouluttajan.",
+  "lisaa-kouluttaja-info-2": "Kouluttajan nimen tulee olla virallinen nimi, joka löytyy esimerkiksi kouluttajan varmennekortista. Tarkista että tiedot ovat oikein, jotta kouluttajan kirjautuminen onnistuu.",
   "lisaa-koulutusjakso": "Lisää koulutusjakso",
   "lisaa-lahikouluttaja": "Lisää lähikouluttaja",
   "lisaa-liite-joka-todistaa-laillistamispaivan": "Lisää liite joka todistaa laillistamispäivän oikeaksi",
