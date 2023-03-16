@@ -107,7 +107,7 @@ export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
 
 export async function getKouluttajat() {
   const path = '/kouluttajat'
-  return await axios.get(path)
+  return await axios.get<Kayttaja[]>(path)
 }
 
 export async function getTyoskentelyjakso(id: number | string) {

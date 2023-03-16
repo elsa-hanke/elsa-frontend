@@ -1,6 +1,7 @@
 import { Module } from 'vuex'
 
 import * as api from '@/api/erikoistuva'
+import { sortByAsc } from '@/utils/sort'
 
 const erikoistuva: Module<any, any> = {
   namespaced: true,
@@ -187,7 +188,10 @@ const erikoistuva: Module<any, any> = {
       commit('kouluttajatRequest')
       try {
         const { data } = await api.getKouluttajat()
-        commit('kouluttajatSuccess', data)
+        commit(
+          'kouluttajatSuccess',
+          data.sort((a, b) => sortByAsc(a.sukunimi, b.sukunimi))
+        )
       } catch (err) {
         commit('kouluttajatError')
         throw err
