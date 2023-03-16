@@ -206,7 +206,9 @@
 
     get kouluttajatAndVastuuhenkilot() {
       if (this.arviointipyyntoLomake) {
-        return this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot
+        return this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot.sort((a, b) =>
+          sortByAsc(a.sukunimi, b.sukunimi)
+        )
       } else {
         return []
       }
