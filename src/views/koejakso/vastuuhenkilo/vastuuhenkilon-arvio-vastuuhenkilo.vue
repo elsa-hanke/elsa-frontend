@@ -451,8 +451,11 @@
                     :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
+                  <small class="form-text text-muted">
+                    {{ $t('syota-puhelinnumero-muodossa') }}
+                  </small>
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('pakollinen-tieto') }}
+                    {{ $t('tarkista-puhelinnumeron-muoto') }}
                   </b-form-invalid-feedback>
                 </template>
               </elsa-form-group>
@@ -625,7 +628,8 @@
     KaytannonKoulutusTyyppi,
     LomakeTilat,
     LomakeTyypit,
-    TyoskentelyjaksoTyyppi
+    TyoskentelyjaksoTyyppi,
+    phoneNumber
   } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
@@ -649,7 +653,8 @@
     validations: {
       vastuuhenkilonArvio: {
         vastuuhenkilonPuhelinnumero: {
-          required
+          required,
+          phoneNumber
         },
         vastuuhenkilonSahkoposti: {
           required,

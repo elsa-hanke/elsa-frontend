@@ -229,7 +229,17 @@
         </elsa-form-group>
         <elsa-form-group :label="$t('puhelinnumero')">
           <template #default="{ uid }">
-            <b-form-input :id="uid" v-model="form.phoneNumber"></b-form-input>
+            <b-form-input
+              :id="uid"
+              v-model="form.phoneNumber"
+              :state="validateState('phoneNumber')"
+            ></b-form-input>
+            <small class="form-text text-muted">
+              {{ $t('syota-puhelinnumero-muodossa') }}
+            </small>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('tarkista-puhelinnumeron-muoto') }}
+            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('profiilikuva')">
@@ -301,6 +311,7 @@
     KayttajaYliopistoErikoisalat
   } from '@/types'
   import { confirmExit } from '@/utils/confirm'
+  import { phoneNumber } from '@/utils/constants'
   import { getTitleFromAuthorities } from '@/utils/functions'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -322,6 +333,9 @@
         form: {
           email: {
             required
+          },
+          phoneNumber: {
+            phoneNumber
           },
           kayttajanYliopistotJaErikoisalat: {
             $each: {

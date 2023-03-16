@@ -111,8 +111,11 @@
                         :value="account.phoneNumber"
                         @input="$emit('skipRouteExitConfirm', false)"
                       />
+                      <small class="form-text text-muted">
+                        {{ $t('syota-puhelinnumero-muodossa') }}
+                      </small>
                       <b-form-invalid-feedback :id="`${uid}-feedback`">
-                        {{ $t('pakollinen-tieto') }}
+                        {{ $t('tarkista-puhelinnumeron-muoto') }}
                       </b-form-invalid-feedback>
                     </template>
                   </elsa-form-group>
@@ -502,6 +505,7 @@
     ValmistumispyyntoVirkailijanTarkistus,
     ValmistumispyyntoHyvaksynta
   } from '@/types'
+  import { phoneNumber } from '@/utils/constants'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import OpintosuoritusTab from '@/views/opintosuoritukset/opintosuoritus-tab.vue'
 
@@ -558,7 +562,8 @@
             email
           },
           puhelinnumero: {
-            required
+            required,
+            phoneNumber
           }
         }
       }

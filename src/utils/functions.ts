@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { helpers } from 'vuelidate/lib/validators'
 
 import { ELSA_ROLE } from './roles'
 
@@ -42,4 +43,8 @@ export function wrapToFormData(form: { [key: string]: any }): FormData {
     }
   }
   return formData
+}
+
+export function phoneNumberValidation() {
+  return helpers.regex('serial', RegExp('/^\\+[0-9]*$/'))
 }

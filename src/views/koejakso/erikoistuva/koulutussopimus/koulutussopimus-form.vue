@@ -75,8 +75,11 @@
               :value="account.phoneNumber"
               @input="$emit('skipRouteExitConfirm', false)"
             />
+            <small class="form-text text-muted">
+              {{ $t('syota-puhelinnumero-muodossa') }}
+            </small>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
+              {{ $t('tarkista-puhelinnumeron-muoto') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -230,7 +233,7 @@
     Opintooikeus,
     Vastuuhenkilo
   } from '@/types'
-  import { defaultKouluttaja, defaultKoulutuspaikka } from '@/utils/constants'
+  import { defaultKouluttaja, defaultKoulutuspaikka, phoneNumber } from '@/utils/constants'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeus'
   import KouluttajaDetails from '@/views/koejakso/erikoistuva/koulutussopimus/kouluttaja-details.vue'
@@ -253,7 +256,8 @@
           email
         },
         erikoistuvanPuhelinnumero: {
-          required
+          required,
+          phoneNumber
         }
       }
     }
