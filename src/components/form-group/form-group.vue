@@ -101,6 +101,7 @@
 
     // Välitä tapahtuma vanhemmalle
     onSubmit(value: any, params: any) {
+      this.skipConfirm = true
       this.$emit('submit', value, params, this.$refs[this.modalRef])
     }
 
