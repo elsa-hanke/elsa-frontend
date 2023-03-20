@@ -84,17 +84,20 @@
     }
 
     async onSubmit(
-      value: Suoritusarviointi,
-      params: { saving: boolean },
-      arviointiFile: File | null = null
+      value: {
+        suoritusarviointi: Suoritusarviointi
+        addedFiles: File[]
+        deletedAsiakirjaIds: number[]
+      },
+      params: { saving: boolean }
     ) {
       params.saving = true
       try {
         const formData = new FormData()
-        formData.append('suoritusarviointiJson', JSON.stringify(value))
-        if (arviointiFile) {
-          formData.append('arviointiFile', arviointiFile, arviointiFile.name)
-        }
+        formData.append('suoritusarviointiJson', JSON.stringify(value.suoritusarviointi))
+        value.addedFiles.forEach((file: File) => formData.append('arviointiFiles', file, file.name))
+        formData.append('deletedAsiakirjaIdsJson', JSON.stringify(value.deletedAsiakirjaIds))
+
         this.$isKouluttaja()
           ? await putSuoritusarviointiKouluttaja(formData)
           : await putSuoritusarviointiVastuuhenkilo(formData)

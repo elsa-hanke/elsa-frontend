@@ -231,11 +231,10 @@
             </b-col>
           </b-row>
         </div>
-        <hr />
-        <elsa-form-group v-if="value.arviointiAsiakirja.nimi" :label="$t('liitetiedosto')">
+        <elsa-form-group v-if="value.arviointiAsiakirjat.length > 0" :label="$t('liitetiedostot')">
           <asiakirjat-content
             class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
-            :asiakirjat="asiakirjatTableItems"
+            :asiakirjat="value.arviointiAsiakirjat"
             :sorting-enabled="false"
             :pagination-enabled="false"
             :enable-search="false"
@@ -244,13 +243,28 @@
             :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
           />
         </elsa-form-group>
-        <hr v-if="value.arviointiAsiakirja.nimi" />
+        <hr />
         <elsa-form-group :label="$t('sanallinen-itsearviointi')">
           <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">
               {{ value.sanallinenItsearviointi }}
             </p>
           </template>
+        </elsa-form-group>
+        <elsa-form-group
+          v-if="value.itsearviointiAsiakirjat.length > 0"
+          :label="$t('liitetiedostot')"
+        >
+          <asiakirjat-content
+            class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
+            :asiakirjat="value.itsearviointiAsiakirjat"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :show-info-if-empty="false"
+            :enable-delete="false"
+            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+          />
         </elsa-form-group>
         <div v-if="value.itsearviointiAika && $isErikoistuva()" class="text-right">
           <elsa-button
@@ -419,6 +433,33 @@
           </template>
         </elsa-form-group>
         <elsa-form-group
+          v-if="$isErikoistuva()"
+          :label="$t('liitetiedostot')"
+          :help="$t('arviointi-liite-tooltip')"
+        >
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span>{{ $t('arviointi-liitetiedostot-kuvaus-itsearviointi') }}</span>
+          <asiakirjat-upload
+            class="mt-3"
+            :is-primary-button="false"
+            :allow-multiples-files="false"
+            :button-text="$t('lisaa-liitetiedosto')"
+            :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
+            :allowed-file-types="['application/pdf']"
+            @selectedFiles="onArviointiFileAdded"
+          />
+          <asiakirjat-content
+            class="px-0 col-md-8 col-lg-12 col-xl-8"
+            :asiakirjat="asiakirjatTableItems"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :show-info-if-empty="false"
+            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+            @deleteAsiakirja="onArviointiFileDeleted"
+          />
+        </elsa-form-group>
+        <elsa-form-group
           v-if="editing && ($isKouluttaja() || $isVastuuhenkilo())"
           :label="$t('lisatiedot')"
         >
@@ -479,7 +520,7 @@
 <script lang="ts">
   import axios from 'axios'
   import Component from 'vue-class-component'
-  import { Mixins, Prop, Vue } from 'vue-property-decorator'
+  import { Mixins, Prop } from 'vue-property-decorator'
   import { Validation, validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
@@ -500,6 +541,7 @@
   import {
     ArviointiasteikonTaso,
     Arviointityokalu,
+    Asiakirja,
     Suoritusarviointi,
     SuoritusarviointiForm,
     Vaativuustaso
@@ -572,14 +614,14 @@
       arviointityokalut: [],
       arviointiPerustuu: null,
       muuPeruste: null,
-      perustuuMuuhun: false,
-      arviointiAsiakirja: null,
-      arviointiAsiakirjaUpdated: false,
-      arviointiFile: null
+      perustuuMuuhun: false
     }
     vaativuustasot = vaativuustasot
     arviointiasteikonTasot: ArviointiasteikonTaso[] = []
     arviointityokalut: Arviointityokalu[] = []
+    addedFiles: File[] = []
+    newAsiakirjatMapped: Asiakirja[] = []
+    deletedAsiakirjat: Asiakirja[] = []
     params = {
       saving: false
     }
@@ -613,8 +655,7 @@
               )
             }
           }),
-          sanallinenArviointi: this.value.sanallinenItsearviointi,
-          arviointiAsiakirjaUpdated: false
+          sanallinenArviointi: this.value.sanallinenItsearviointi
         }
       } else {
         this.form = {
@@ -666,7 +707,11 @@
     }
 
     get asiakirjatTableItems() {
-      return this.form.arviointiAsiakirja?.nimi ? [this.form.arviointiAsiakirja] : []
+      return (
+        this.itsearviointi ? this.value.itsearviointiAsiakirjat : this.value.arviointiAsiakirjat
+      )
+        .filter((a) => !this.deletedAsiakirjat.includes(a))
+        .concat(this.newAsiakirjatMapped)
     }
 
     validateState(name: string) {
@@ -682,15 +727,19 @@
 
     onArviointiFileAdded(files: File[]) {
       const file = files[0]
-      Vue.set(this.form, 'arviointiAsiakirja', mapFile(file))
-      this.form.arviointiAsiakirjaUpdated = true
-      this.form.arviointiFile = file
+      this.newAsiakirjatMapped.push(mapFile(file))
+      this.addedFiles.push(file)
     }
 
-    onArviointiFileDeleted() {
-      Vue.set(this.form, 'arviointiFile', null)
-      this.form.arviointiAsiakirjaUpdated = true
-      this.form.arviointiAsiakirja = null
+    onArviointiFileDeleted(asiakirja: Asiakirja) {
+      if (asiakirja.id) {
+        this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
+      } else {
+        this.addedFiles = this.addedFiles?.filter((file) => file.name !== asiakirja.nimi)
+        this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
+          (a) => a.nimi !== asiakirja.nimi
+        )
+      }
     }
 
     onSubmit() {
@@ -699,9 +748,8 @@
         return
       }
       if (this.itsearviointi) {
-        this.$emit(
-          'submit',
-          {
+        const submitData = {
+          suoritusarviointi: {
             ...this.value,
             arvioitavatKokonaisuudet: this.form.arvioitavatKokonaisuudet?.map((k) => {
               return {
@@ -714,14 +762,18 @@
             }),
             itsearviointiVaativuustaso: this.form.vaativuustaso?.arvo,
             sanallinenItsearviointi: this.form.sanallinenArviointi,
-            arviointiasteikko: null
+            arviointiasteikko: null,
+            arviointiAsiakirjat: null,
+            itsearviointiAsiakirjat: null
           },
-          this.params
-        )
+          addedFiles: this.addedFiles,
+          deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
+        }
+
+        this.$emit('submit', submitData, this.params)
       } else {
-        this.$emit(
-          'submit',
-          {
+        const submitData = {
+          suoritusarviointi: {
             ...this.value,
             arvioitavatKokonaisuudet: this.form.arvioitavatKokonaisuudet?.map((k) => {
               return {
@@ -737,13 +789,15 @@
               ? this.form.arviointiPerustuu
               : ArvioinninPerustuminen.LASNA,
             muuPeruste: this.muuValittu ? this.form.muuPeruste : null,
-            arviointiAsiakirja: null,
-            arviointiAsiakirjaUpdated: this.form.arviointiAsiakirjaUpdated,
+            arviointiAsiakirjat: null,
+            itsearviointiAsiakirjat: null,
             arviointiasteikko: null
           },
-          this.params,
-          this.form.arviointiFile
-        )
+          addedFiles: this.addedFiles,
+          deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
+        }
+
+        this.$emit('submit', submitData, this.params)
       }
     }
 
