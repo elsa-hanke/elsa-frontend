@@ -192,7 +192,7 @@
               @deleteAsiakirja="onDeleteLiitetiedosto(sp, $event)"
             />
             <b-form-invalid-feedback :state="validateTyoskentelyjaksoState(index)">
-              {{ $t('pakollinen-tieto') }}
+              {{ $t('pakollinen-tieto-tkjakso-liitetiedostot') }}
             </b-form-invalid-feedback>
           </elsa-form-group>
         </b-col>
@@ -412,7 +412,7 @@
             $each: {
               asiakirjat: {
                 required,
-                minLength: minLength(2)
+                minLength: minLength(3)
               }
             }
           }
