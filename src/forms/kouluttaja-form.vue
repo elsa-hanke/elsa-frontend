@@ -1,5 +1,7 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
+    <p>{{ $t('lisaa-kouluttaja-info-1') }}</p>
+    <p>{{ $t('lisaa-kouluttaja-info-2') }}</p>
     <b-form-row>
       <elsa-form-group
         :label="$t('kouluttajan-etunimi')"

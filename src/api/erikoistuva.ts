@@ -31,7 +31,8 @@ import {
   TerveyskeskuskoulutusjaksonHyvaksyntaForm,
   ValmistumispyyntoSuoritustenTila,
   ValmistumispyyntoLomakeErikoistuja,
-  Valmistumispyynto
+  Valmistumispyynto,
+  Suoritusarviointi
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -107,7 +108,7 @@ export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
 
 export async function getKouluttajat() {
   const path = '/kouluttajat'
-  return await axios.get(path)
+  return await axios.get<Kayttaja[]>(path)
 }
 
 export async function getTyoskentelyjakso(id: number | string) {
@@ -389,6 +390,14 @@ export async function postMuokkausoikeudet(muokkausoikeudet: boolean) {
   const path = 'erikoistuva-laakari/muokkausoikeudet'
   const formData = wrapToFormData({ muokkausoikeudet: muokkausoikeudet })
   return await axios.post(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
+}
+
+export async function putSuoritusarviointi(formData: FormData) {
+  const path = 'erikoistuva-laakari/suoritusarvioinnit'
+  return await axios.put<Suoritusarviointi>(path, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000
   })

@@ -28,6 +28,7 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { putSuoritusarviointi } from '@/api/erikoistuva'
   import ArviointiForm from '@/forms/arviointi-form.vue'
   import { Suoritusarviointi } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -78,10 +79,22 @@
       }
     }
 
-    async onSubmit(value: any, params: { saving: boolean }) {
+    async onSubmit(
+      value: {
+        suoritusarviointi: Suoritusarviointi
+        addedFiles: File[]
+        deletedAsiakirjaIds: number[]
+      },
+      params: { saving: boolean }
+    ) {
       params.saving = true
       try {
-        await axios.put('erikoistuva-laakari/suoritusarvioinnit', value)
+        const formData = new FormData()
+        formData.append('suoritusarviointiJson', JSON.stringify(value.suoritusarviointi))
+        value.addedFiles.forEach((file: File) => formData.append('arviointiFiles', file, file.name))
+        formData.append('deletedAsiakirjaIdsJson', JSON.stringify(value.deletedAsiakirjaIds))
+
+        await putSuoritusarviointi(formData)
         toastSuccess(this, this.$t('itsearvioinnin-tallentaminen-onnistui'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({

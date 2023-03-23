@@ -33,6 +33,7 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { putSuoritusarviointi } from '@/api/erikoistuva'
   import ArviointipyyntoForm from '@/forms/arviointipyynto-form.vue'
   import {
     ArviointipyyntoLomake,
@@ -103,15 +104,13 @@
       params.saving = true
       if (this.arviointipyynto) {
         try {
-          await axios.put('erikoistuva-laakari/suoritusarvioinnit', {
-            id: this.arviointipyynto.id,
-            tyoskentelyjaksoId: value.tyoskentelyjaksoId,
-            arvioitavatKokonaisuudet: value.arvioitavatKokonaisuudet,
-            arvioitavaTapahtuma: value.arvioitavaTapahtuma,
-            arvioinninAntajaId: value.arvioinninAntajaId,
-            tapahtumanAjankohta: value.tapahtumanAjankohta,
-            lisatiedot: value.lisatiedot
-          } as Partial<Suoritusarviointi>)
+          const formData = new FormData()
+          formData.append(
+            'suoritusarviointiJson',
+            JSON.stringify({ ...value, id: this.arviointipyynto.id })
+          )
+
+          await putSuoritusarviointi(formData)
           toastSuccess(this, this.$t('arviointipyynnon-tallentaminen-onnistui'))
           this.$emit('skipRouteExitConfirm', true)
           this.$router.push({
@@ -206,7 +205,9 @@
 
     get kouluttajatAndVastuuhenkilot() {
       if (this.arviointipyyntoLomake) {
-        return this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot
+        return this.arviointipyyntoLomake.kouluttajatAndVastuuhenkilot.sort((a, b) =>
+          sortByAsc(a.sukunimi, b.sukunimi)
+        )
       } else {
         return []
       }

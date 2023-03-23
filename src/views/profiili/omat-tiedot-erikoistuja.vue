@@ -199,7 +199,17 @@
         </elsa-form-group>
         <elsa-form-group :label="$t('puhelinnumero')">
           <template #default="{ uid }">
-            <b-form-input :id="uid" v-model="form.phoneNumber"></b-form-input>
+            <b-form-input
+              :id="uid"
+              v-model="form.phoneNumber"
+              :state="validateState('phoneNumber')"
+            ></b-form-input>
+            <small class="form-text text-muted">
+              {{ $t('syota-puhelinnumero-muodossa') }}
+            </small>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('tarkista-puhelinnumeron-muoto') }}
+            </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
         <elsa-form-group :label="$t('profiilikuva')">
@@ -272,6 +282,7 @@
   } from '@/types'
   import { saveBlob } from '@/utils/blobs'
   import { confirmExit } from '@/utils/confirm'
+  import { phoneNumber } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { getTitleFromAuthorities } from '@/utils/functions'
   import { sortByDesc } from '@/utils/sort'
@@ -291,6 +302,9 @@
       form: {
         email: {
           required
+        },
+        phoneNumber: {
+          phoneNumber
         }
       }
     }
@@ -498,15 +512,15 @@
       return undefined
     }
 
-    get authorities() {
+    get activeAuthority() {
       if (this.account) {
-        return this.account.authorities
+        return this.account.activeAuthority
       }
-      return []
+      return ''
     }
 
     get title() {
-      return getTitleFromAuthorities(this, this.authorities)
+      return getTitleFromAuthorities(this, this.activeAuthority)
     }
 
     get avatar() {

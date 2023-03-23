@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { helpers } from 'vuelidate/lib/validators'
 
 import { ELSA_ROLE } from './roles'
 
@@ -12,16 +13,16 @@ export function checkCurrentRouteAndRedirect(router: any, path: any) {
   if (curPath !== path) router.push({ path })
 }
 
-export function getTitleFromAuthorities(vue: Vue, authorities: string[]) {
-  if (authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
+export function getTitleFromAuthorities(vue: Vue, authority: string) {
+  if (authority === ELSA_ROLE.ErikoistuvaLaakari) {
     return vue.$t('erikoistuja')
-  } else if (authorities.includes(ELSA_ROLE.Kouluttaja)) {
+  } else if (authority === ELSA_ROLE.Kouluttaja) {
     return vue.$t('kouluttaja')
-  } else if (authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
+  } else if (authority === ELSA_ROLE.Vastuuhenkilo) {
     return vue.$t('vastuuhenkilo')
-  } else if (authorities.includes(ELSA_ROLE.TekninenPaakayttaja)) {
+  } else if (authority === ELSA_ROLE.TekninenPaakayttaja) {
     return vue.$t('tekninen-paakayttaja')
-  } else if (authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija)) {
+  } else if (authority === ELSA_ROLE.OpintohallinnonVirkailija) {
     return vue.$t('virkailija')
   }
 
@@ -42,4 +43,8 @@ export function wrapToFormData(form: { [key: string]: any }): FormData {
     }
   }
   return formData
+}
+
+export function phoneNumberValidation() {
+  return helpers.regex('serial', RegExp('/^\\+[0-9]*$/'))
 }

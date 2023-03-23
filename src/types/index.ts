@@ -605,6 +605,7 @@ export interface Kayttaja {
   avatar: string
   userId: string
   authorities: KayttajaAuthority[]
+  activeAuthority: string
   nimike: string
   yliopistotAndErikoisalat: KayttajaYliopistoErikoisala[]
   yliopistot: Yliopisto[]
@@ -711,8 +712,8 @@ export type Suoritusarviointi = {
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
   muuPeruste: string
-  arviointiAsiakirja: Asiakirja
-  arviointiAsiakirjaUpdated: boolean
+  arviointiAsiakirjat: Asiakirja[]
+  itsearviointiAsiakirjat: Asiakirja[]
 }
 
 export type SuoritusarviointiByKokonaisuus = {
@@ -741,8 +742,8 @@ export type SuoritusarviointiByKokonaisuus = {
   arviointityokalut: Arviointityokalu[]
   arviointiPerustuu: ArvioinninPerustuminen
   muuPeruste: string
-  arviointiAsiakirja: Asiakirja
-  arviointiAsiakirjaUpdated: boolean
+  arviointiAsiakirjat: Asiakirja[]
+  itsearviointiAsiakirjat: Asiakirja[]
 }
 
 export type SuoritusarvioinninArvioitavaKokonaisuus = {
@@ -855,9 +856,6 @@ export type SuoritusarviointiForm = {
   arviointiPerustuu?: ArvioinninPerustuminen | null
   muuPeruste?: string | null
   perustuuMuuhun?: boolean
-  arviointiAsiakirja?: Asiakirja | null
-  arviointiAsiakirjaUpdated: boolean
-  arviointiFile?: File | null
 }
 
 export type SuoritusarviointiFilter = {

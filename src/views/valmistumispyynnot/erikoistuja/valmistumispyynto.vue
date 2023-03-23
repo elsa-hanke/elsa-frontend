@@ -181,8 +181,11 @@
                             :value="account.erikoistuvaLaakari.puhelinnumero"
                             @input="$emit('skipRouteExitConfirm', false)"
                           />
+                          <small class="form-text text-muted">
+                            {{ $t('syota-puhelinnumero-muodossa') }}
+                          </small>
                           <b-form-invalid-feedback :id="`${uid}-feedback`">
-                            {{ $t('pakollinen-tieto') }}
+                            {{ $t('tarkista-puhelinnumeron-muoto') }}
                           </b-form-invalid-feedback>
                         </template>
                       </elsa-form-group>
@@ -375,7 +378,7 @@
     Asiakirja
   } from '@/types'
   import { confirmExit } from '@/utils/confirm'
-  import { ErikoisalaTyyppi, ValmistumispyynnonTila } from '@/utils/constants'
+  import { ErikoisalaTyyppi, ValmistumispyynnonTila, phoneNumber } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import ValmistumispyynnonTilaErikoistuja from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynnon-tila-erikoistuja.vue'
@@ -442,7 +445,8 @@
             email
           },
           erikoistujanPuhelinnumero: {
-            required
+            required,
+            phoneNumber
           },
           selvitysVanhentuneistaSuorituksista: {
             required: requiredIf(() => this.hasVanhentuneitaSuorituksia)

@@ -1,6 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 
-import { ELSA_API_LOCATION } from '@/api'
+import { ELSA_API_LOCATION, vaihdaRooli } from '@/api'
 import { patchOpintooikeusKaytossa, getErikoistuvaLaakari } from '@/api/erikoistuva'
 import store from '@/store'
 import { Opintooikeus } from '@/types'
@@ -27,7 +27,7 @@ export default class NavbarMixin extends Vue {
   }
 
   get isErikoistuvaLaakari() {
-    return this.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)
+    return this.activeRole === ELSA_ROLE.ErikoistuvaLaakari
   }
 
   get currentLocale() {
@@ -46,6 +46,13 @@ export default class NavbarMixin extends Vue {
       return this.account.authorities
     }
     return []
+  }
+
+  get activeRole(): string {
+    if (this.account) {
+      return this.account.activeAuthority
+    }
+    return ''
   }
 
   get erikoisalaNimi() {
@@ -84,7 +91,7 @@ export default class NavbarMixin extends Vue {
     if (this.isErikoistuvaLaakari) {
       return this.erikoisalaNimi
     }
-    return getTitleFromAuthorities(this, this.authorities)
+    return getTitleFromAuthorities(this, this.activeRole)
   }
 
   getOpintooikeusKaytossa(id: number) {
@@ -108,6 +115,18 @@ export default class NavbarMixin extends Vue {
     if (this.opintooikeusKaytossa === opintooikeus) return
     this.opintooikeusKaytossa = opintooikeus
     await patchOpintooikeusKaytossa(opintooikeus.id)
+    this.$router.go(0)
+  }
+
+  async changeToErikoistuja() {
+    if (this.$isErikoistuva()) return
+    await vaihdaRooli(ELSA_ROLE.ErikoistuvaLaakari)
+    this.$router.go(0)
+  }
+
+  async changeToKouluttaja() {
+    if (this.$isKouluttaja()) return
+    await vaihdaRooli(ELSA_ROLE.Kouluttaja)
     this.$router.go(0)
   }
 }

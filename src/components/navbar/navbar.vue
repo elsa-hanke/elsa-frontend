@@ -50,7 +50,7 @@
             {{ $t('kirjaudu-ulos') }}
             <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
           </b-dropdown-item>
-          <div v-if="opintooikeudet && opintooikeudet.length > 1">
+          <div v-if="$isErikoistuva() && opintooikeudet && opintooikeudet.length > 1">
             <hr class="p-0 m-0" />
             <div class="dropdown-item dropdown-item__header mt-1 pb-1">
               <span class="font-weight-500">{{ $t('valitse-opinto-oikeus') }}</span>
@@ -82,6 +82,54 @@
                   <div class="text-size-sm">
                     {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
                   </div>
+                </div>
+              </div>
+            </b-dropdown-item>
+          </div>
+          <div v-if="authorities && authorities.length > 1">
+            <hr class="p-0 m-0" />
+            <div class="dropdown-item dropdown-item__header mt-1 pb-1">
+              <span class="font-weight-500">{{ $t('valitse-rooli') }}</span>
+            </div>
+            <b-dropdown-item @click="changeToErikoistuja">
+              <div
+                class="d-flex"
+                :class="{
+                  'dropdown-item__disabled': $isErikoistuva()
+                }"
+              >
+                <div class="flex-column icon-col-min-width">
+                  <font-awesome-icon
+                    v-if="$isErikoistuva()"
+                    :icon="['far', 'check-circle']"
+                    fixed-width
+                    size="lg"
+                    class="text-success"
+                  />
+                </div>
+                <div class="flex-column">
+                  {{ $t('erikoistuva-laakari') }}
+                </div>
+              </div>
+            </b-dropdown-item>
+            <b-dropdown-item @click="changeToKouluttaja">
+              <div
+                class="d-flex"
+                :class="{
+                  'dropdown-item__disabled': $isKouluttaja()
+                }"
+              >
+                <div class="flex-column icon-col-min-width">
+                  <font-awesome-icon
+                    v-if="$isKouluttaja()"
+                    :icon="['far', 'check-circle']"
+                    fixed-width
+                    size="lg"
+                    class="text-success"
+                  />
+                </div>
+                <div class="flex-column">
+                  {{ $t('kouluttaja') }}
                 </div>
               </div>
             </b-dropdown-item>

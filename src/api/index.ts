@@ -75,3 +75,7 @@ export async function localLogout() {
 export async function sloKaytossa() {
   return await axios.get('slo-kaytossa')
 }
+
+export async function vaihdaRooli(rooli: string) {
+  return await axios.post('vaihda-rooli', wrapToFormData({ rooli: rooli }))
+}
