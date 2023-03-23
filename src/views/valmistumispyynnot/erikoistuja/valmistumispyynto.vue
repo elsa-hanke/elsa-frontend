@@ -100,12 +100,12 @@
                   >
                     {{ $t('valmistumispyynto-osaamisen-arvioinnit') }}
                     <a
-                     href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     >
-                     {{ $t('Osaamisen arviointi -oppaasta') }}.
-                     </a>
+                      href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ $t('Osaamisen arviointi -oppaasta') }}.
+                    </a>
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>

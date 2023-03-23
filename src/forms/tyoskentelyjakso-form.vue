@@ -108,7 +108,6 @@
             <small v-if="value.tapahtumia" class="form-text text-muted">
               {{ $t('tyoskentelyjakso-paattymispaiva-help') }}
             </small>
-
           </div>
         </template>
       </elsa-form-group>
