@@ -55,11 +55,19 @@
           {{ $t('laillistamispaiva') }}
         </th>
         <td class="pl-6">
-          <span v-if="laillistamispaiva" class="align-middle">{{ $date(laillistamispaiva) }}</span>
+          <span v-if="laillistamispaiva" class="align-middle">
+            {{ $date(laillistamispaiva) }}
+          </span>
           -
           <elsa-button variant="link" class="pl-0" @click="onDownloadLaillistamistodistus">
             {{ laillistamistodistusNimi }}
           </elsa-button>
+          <div v-if="laillistamisenMuokkausSallittu">
+            <b-link @click="muokkaaLaillistamista">
+              <font-awesome-icon class="feedback-icon" :icon="['fa', 'edit']" fixed-width />
+              {{ $t('muokkaa') }}
+            </b-link>
+          </div>
         </td>
       </tr>
       <tr v-if="asetus">
@@ -135,8 +143,13 @@
     @Prop({ required: false, type: String })
     laillistamistodistusTyyppi?: string
 
+    @Prop({ required: false, type: Boolean, default: false })
+    laillistamisenMuokkausSallittu?: boolean
+
     @Prop({ required: false, type: String })
     asetus?: string
+
+    laillistaminenMuokattavissa = false
 
     get displayName() {
       return this.name
@@ -151,7 +164,8 @@
         this.laillistamispaiva &&
         this.laillistamistodistus &&
         this.laillistamistodistusNimi &&
-        this.laillistamistodistusTyyppi
+        this.laillistamistodistusTyyppi &&
+        !this.laillistaminenMuokattavissa
       )
     }
 
@@ -164,6 +178,11 @@
         const data = Uint8Array.from(atob(this.laillistamistodistus), (c) => c.charCodeAt(0))
         saveBlob(this.laillistamistodistusNimi, data, this.laillistamistodistusTyyppi)
       }
+    }
+
+    muokkaaLaillistamista() {
+      this.laillistaminenMuokattavissa = true
+      this.$emit('muokkaaLaillistamista')
     }
   }
 </script>

@@ -134,7 +134,57 @@
                   :laillistamistodistus-tyyppi="
                     valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                   "
+                  :laillistamisen-muokkaus-sallittu="true"
+                  @muokkaaLaillistamista="muokkaaLaillistamista"
                 />
+                <div v-if="laillistaminenMuokattavissa">
+                  <elsa-form-group
+                    class="col-xs-12 col-sm-3 pl-0"
+                    :label="$t('laillistamispaiva')"
+                    :required="true"
+                  >
+                    <template #default="{ uid }">
+                      <elsa-form-datepicker
+                        :id="uid"
+                        ref="laillistamispaiva"
+                        :value.sync="valmistumispyyntoLomake.laillistamispaiva"
+                        @input="$emit('skipRouteExitConfirm', false)"
+                      ></elsa-form-datepicker>
+                      <b-form-invalid-feedback>
+                        {{ $t('pakollinen-tieto') }}
+                      </b-form-invalid-feedback>
+                    </template>
+                  </elsa-form-group>
+                  <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
+                    <span>
+                      {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
+                    </span>
+                    <asiakirjat-upload
+                      class="mt-3"
+                      :is-primary-button="false"
+                      :allow-multiples-files="false"
+                      :button-text="$t('lisaa-liitetiedosto')"
+                      :disabled="laillistamispaivaAsiakirjat.length > 0"
+                      @selectedFiles="onLaillistamistodistusFilesAdded"
+                    />
+                    <asiakirjat-content
+                      :asiakirjat="laillistamispaivaAsiakirjat"
+                      :sorting-enabled="false"
+                      :pagination-enabled="false"
+                      :enable-search="false"
+                      :enable-delete="true"
+                      :no-results-info-text="$t('ei-liitetiedostoja')"
+                      :state="validateValmistumispyyntoState('laillistamistodistus')"
+                      @deleteAsiakirja="onDeletelaillistamistodistus"
+                    />
+                    <b-form-invalid-feedback
+                      :state="validateValmistumispyyntoState('laillistamistodistus')"
+                    >
+                      {{ $t('pakollinen-tieto') }}
+                    </b-form-invalid-feedback>
+                  </elsa-form-group>
+                  <hr />
+                </div>
                 <hr />
                 <div>
                   <b-row>
@@ -429,6 +479,7 @@
     loading = true
     sending = false
     laillistamispaivaAsiakirjat: Asiakirja[] = []
+    laillistaminenMuokattavissa = false
 
     validations() {
       return {
@@ -452,9 +503,7 @@
             required: requiredIf(() => this.hasVanhentuneitaSuorituksia)
           },
           laillistamispaiva: {
-            required: requiredIf(() => {
-              return this.valmistumispyynto?.erikoistujanLaillistamispaiva == null
-            })
+            required
           },
           laillistamistodistus: {
             required: requiredIf(() => {
@@ -625,6 +674,10 @@
         this.account.erikoistuvaLaakari.puhelinnumero
       this.vaatimuksetHyvaksytty = false
       this.initLaillistamispaivaAndTodistus()
+    }
+
+    muokkaaLaillistamista() {
+      this.laillistaminenMuokattavissa = true
     }
   }
 </script>
