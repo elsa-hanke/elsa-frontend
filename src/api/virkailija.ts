@@ -12,8 +12,10 @@ import {
   ValmistumispyyntoListItem,
   ValmistumispyyntoVirkailijanTarkistus,
   ValmistumispyynnonVirkailijanTarkistusLomake,
-  Asiakirja
+  Asiakirja,
+  TerveyskeskuskoulutusjaksonHyvaksyntaForm
 } from '@/types'
+import { wrapToFormData } from '@/utils/functions'
 
 export async function getErikoistujienSeurantaRajaimet() {
   const path = '/virkailija/etusivu/erikoistujien-seuranta-rajaimet'
@@ -123,12 +125,24 @@ export async function getTerveyskeskuskoulutusjakso(id: string) {
 export async function putTerveyskeskuskoulutusjakso(
   id: string,
   korjausehdotus: string,
-  lisatiedotVirkailijalta: string
+  lisatiedotVirkailijalta: string,
+  form: TerveyskeskuskoulutusjaksonHyvaksyntaForm
 ) {
-  const path = `virkailija/terveyskeskuskoulutusjakson-hyvaksynta/${id}`
-  return await axios.put<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, {
+  const formData = wrapToFormData({
     korjausehdotus: korjausehdotus,
     lisatiedotVirkailijalta: lisatiedotVirkailijalta
+  })
+  if (form.laillistamispaiva != null) formData.append('laillistamispaiva', form.laillistamispaiva)
+  if (form.laillistamispaivanLiite != null)
+    formData.append(
+      'laillistamispaivanLiite',
+      form.laillistamispaivanLiite,
+      form.laillistamispaivanLiite?.name
+    )
+  const path = `virkailija/terveyskeskuskoulutusjakson-hyvaksynta/${id}`
+  return await axios.put<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
   })
 }
 
@@ -138,8 +152,15 @@ export async function getValmistumispyyntoTarkistus(id: number) {
 }
 
 export async function putValmistumispyynto(form: ValmistumispyynnonVirkailijanTarkistusLomake) {
+  const formData = wrapToFormData(form)
+  if (form.laillistamistodistus) {
+    formData.append('laillistamistodistus', form.laillistamistodistus)
+  }
   const path = `/virkailija/valmistumispyynnon-tarkistus/${form.id}`
-  return await axios.put<ValmistumispyynnonVirkailijanTarkistusLomake>(path, form)
+  return await axios.put<ValmistumispyynnonVirkailijanTarkistusLomake>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
 
 export async function getValmistumispyyntoAsiakirja(

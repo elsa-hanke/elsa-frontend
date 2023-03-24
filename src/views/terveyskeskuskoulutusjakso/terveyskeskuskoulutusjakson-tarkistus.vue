@@ -75,7 +75,11 @@
   import { getTerveyskeskuskoulutusjakso, putTerveyskeskuskoulutusjakso } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import TerveyskeskuskoulutusjaksoForm from '@/forms/terveyskeskuskoulutusjakso-form.vue'
-  import { ElsaError, TerveyskeskuskoulutusjaksonHyvaksyminen } from '@/types'
+  import {
+    ElsaError,
+    TerveyskeskuskoulutusjaksonHyvaksyminen,
+    TerveyskeskuskoulutusjaksonHyvaksyntaForm
+  } from '@/types'
   import { TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -151,14 +155,18 @@
       return `virkailija/terveyskeskuskoulutusjakso/tyoskentelyjakso-liite`
     }
 
-    async onSubmit(formData: { hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen }) {
+    async onSubmit(formData: {
+      hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen
+      form: TerveyskeskuskoulutusjaksonHyvaksyntaForm
+    }) {
       this.params.saving = true
 
       try {
         await putTerveyskeskuskoulutusjakso(
           this.$route.params.terveyskeskuskoulutusjaksoId,
           formData.hyvaksynta?.korjausehdotus,
-          formData?.hyvaksynta?.lisatiedotVirkailijalta
+          formData?.hyvaksynta?.lisatiedotVirkailijalta,
+          formData.form
         )
 
         toastSuccess(

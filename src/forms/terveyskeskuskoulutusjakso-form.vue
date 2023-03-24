@@ -27,7 +27,11 @@
           </td>
         </tr>
         <tr
-          v-if="hyvaksynta.laillistamispaiva != null && hyvaksynta.laillistamispaivanLiite != null"
+          v-if="
+            hyvaksynta.laillistamispaiva != null &&
+            hyvaksynta.laillistamispaivanLiite != null &&
+            !laillistaminenMuokattavissa
+          "
         >
           <th scope="row" class="align-middle font-weight-500">
             {{ $t('laillistamispaiva') }}
@@ -37,6 +41,12 @@
             <elsa-button variant="link" class="pl-0" @click="onDownloadLaillistamistodistus">
               {{ hyvaksynta.laillistamispaivanLiitteenNimi }}
             </elsa-button>
+            <div v-if="editable && ($isErikoistuva() || $isVirkailija())">
+              <b-link @click="muokkaaLaillistamista">
+                <font-awesome-icon class="feedback-icon" :icon="['fa', 'edit']" fixed-width />
+                {{ $t('muokkaa') }}
+              </b-link>
+            </div>
           </td>
         </tr>
         <tr v-if="!$isErikoistuva() && hyvaksynta.asetus != null">
@@ -48,6 +58,51 @@
           </td>
         </tr>
       </table>
+    </div>
+    <div v-if="laillistaminenMuokattavissa">
+      <elsa-form-group
+        class="col-xs-12 col-sm-3 pl-0"
+        :label="$t('laillistamispaiva')"
+        :required="true"
+      >
+        <template #default="{ uid }">
+          <elsa-form-datepicker
+            :id="uid"
+            ref="laillistamispaiva"
+            :value.sync="form.laillistamispaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
+          ></elsa-form-datepicker>
+          <b-form-invalid-feedback>
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
+        </template>
+      </elsa-form-group>
+      <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
+        <span>
+          {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
+        </span>
+        <asiakirjat-upload
+          class="mt-3"
+          :is-primary-button="false"
+          :allow-multiples-files="false"
+          :button-text="$t('lisaa-liitetiedosto')"
+          :disabled="laillistamispaivaAsiakirjat.length > 0"
+          @selectedFiles="onLaillistamispaivaFilesAdded"
+        />
+        <asiakirjat-content
+          :asiakirjat="laillistamispaivaAsiakirjat"
+          :sorting-enabled="false"
+          :pagination-enabled="false"
+          :enable-search="false"
+          :enable-delete="true"
+          :no-results-info-text="$t('ei-liitetiedostoja')"
+          :state="validateState('laillistamispaivanLiite')"
+          @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
+        />
+        <b-form-invalid-feedback :state="validateState('laillistamispaivanLiite')">
+          {{ $t('pakollinen-tieto') }}
+        </b-form-invalid-feedback>
+      </elsa-form-group>
     </div>
     <hr />
     <div
@@ -451,6 +506,7 @@
     }
 
     laillistamispaivaAsiakirjat: Asiakirja[] = []
+    laillistaminenMuokattavissa = false
 
     params = {
       saving: false
@@ -534,6 +590,11 @@
       const submitData = {
         hyvaksynta: this.hyvaksynta,
         form: this.form
+      }
+
+      if (this.$isVirkailija() && !this.laillistaminenMuokattavissa) {
+        this.form.laillistamispaiva = null
+        this.form.laillistamispaivanLiite = null
       }
 
       this.$emit('submit', submitData, this.params)
@@ -647,6 +708,10 @@
           this.hyvaksynta?.laillistamispaivanLiitteenTyyppi || ''
         )
       }
+    }
+
+    muokkaaLaillistamista() {
+      this.laillistaminenMuokattavissa = true
     }
   }
 </script>

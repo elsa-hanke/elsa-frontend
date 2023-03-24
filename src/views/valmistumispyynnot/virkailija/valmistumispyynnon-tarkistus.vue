@@ -97,9 +97,56 @@
                 :laillistamistodistus-tyyppi="
                   valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                 "
+                :laillistamisen-muokkaus-sallittu="editable"
                 :opintooikeuden-myontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
                 :asetus="valmistumispyynto.erikoistujanAsetus"
-              ></erikoistuva-details>
+                @muokkaaLaillistamista="muokkaaLaillistamista"
+              />
+              <div v-if="laillistaminenMuokattavissa">
+                <elsa-form-group
+                  class="col-xs-12 col-sm-3 pl-0"
+                  :label="$t('laillistamispaiva')"
+                  :required="true"
+                >
+                  <template #default="{ uid }">
+                    <elsa-form-datepicker
+                      :id="uid"
+                      ref="laillistamispaiva"
+                      :value.sync="form.laillistamispaiva"
+                      @input="$emit('skipRouteExitConfirm', false)"
+                    ></elsa-form-datepicker>
+                    <b-form-invalid-feedback>
+                      {{ $t('pakollinen-tieto') }}
+                    </b-form-invalid-feedback>
+                  </template>
+                </elsa-form-group>
+                <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
+                  <span>
+                    {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
+                  </span>
+                  <asiakirjat-upload
+                    class="mt-3"
+                    :is-primary-button="false"
+                    :allow-multiples-files="false"
+                    :button-text="$t('lisaa-liitetiedosto')"
+                    :disabled="laillistamispaivaAsiakirjat.length > 0"
+                    @selectedFiles="onLaillistamistodistusFilesAdded"
+                  />
+                  <asiakirjat-content
+                    :asiakirjat="laillistamispaivaAsiakirjat"
+                    :sorting-enabled="false"
+                    :pagination-enabled="false"
+                    :enable-search="false"
+                    :enable-delete="true"
+                    :no-results-info-text="$t('ei-liitetiedostoja')"
+                    :state="validateState('laillistamistodistus')"
+                    @deleteAsiakirja="onDeletelaillistamistodistus"
+                  />
+                  <b-form-invalid-feedback :state="validateState('laillistamistodistus')">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </elsa-form-group>
+              </div>
             </div>
             <hr />
             <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
@@ -722,10 +769,13 @@
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
+  import { required, requiredIf } from 'vuelidate/lib/validators'
 
   import { ELSA_API_LOCATION } from '@/api'
   import { getValmistumispyyntoTarkistus, putValmistumispyynto } from '@/api/virkailija'
   import AsiakirjaButton from '@/components/asiakirjat/asiakirja-button.vue'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
+  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
@@ -737,14 +787,18 @@
   import {
     ValmistumispyyntoArviointienTila,
     ValmistumispyyntoVirkailijanTarkistus,
-    ValmistumispyynnonVirkailijanTarkistusLomake
+    ValmistumispyynnonVirkailijanTarkistusLomake,
+    Asiakirja
   } from '@/types'
   import { ValmistumispyynnonTila } from '@/utils/constants'
+  import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import OpintosuoritusTab from '@/views/opintosuoritukset/opintosuoritus-tab.vue'
 
   @Component({
     components: {
+      AsiakirjatContent,
+      AsiakirjatUpload,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormDatepicker,
@@ -760,6 +814,9 @@
     validationMixin,
     ValmistumispyyntoMixin
   ) {
+    $refs!: {
+      laillistamispaiva: ElsaFormDatepicker
+    }
     validations() {
       return {
         form: {
@@ -768,7 +825,15 @@
           },
           yliopistosairaalatyoTarkistettu: { checked: (value: boolean) => value === true },
           kokonaistyoaikaTarkistettu: { checked: (value: boolean) => value === true },
-          teoriakoulutusTarkistettu: { checked: (value: boolean) => value === true }
+          teoriakoulutusTarkistettu: { checked: (value: boolean) => value === true },
+          laillistamispaiva: {
+            required
+          },
+          laillistamistodistus: {
+            required: requiredIf(() => {
+              return this.laillistamispaivaAsiakirjat.length === 0
+            })
+          }
         }
       }
     }
@@ -805,7 +870,9 @@
       koejaksoEiVaadittu: false,
       kommentitVirkailijoille: null,
       lisatiedotVastuuhenkilolle: null,
-      keskenerainen: false
+      keskenerainen: false,
+      laillistamispaiva: null,
+      laillistamistodistus: null
     }
 
     valmistumispyynnonTarkistus: ValmistumispyyntoVirkailijanTarkistus | null = null
@@ -821,6 +888,8 @@
     ltTutkintoSuorituspaivaTila = false
     yhteenvetoAsiakirjaUrl: string | null = null
     liitteetAsiakirjaUrl: string | null = null
+    laillistamispaivaAsiakirjat: Asiakirja[] = []
+    laillistaminenMuokattavissa = false
 
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
@@ -828,7 +897,12 @@
         try {
           await getValmistumispyyntoTarkistus(parseInt(valmistumispyyntoId)).then((response) => {
             this.valmistumispyynnonTarkistus = response.data
-            this.form = { ...this.valmistumispyynnonTarkistus }
+            this.form = {
+              ...this.valmistumispyynnonTarkistus,
+              laillistamispaiva: null,
+              laillistamistodistus: null,
+              keskenerainen: false
+            }
             if (response.data.valmistumispyynto) {
               this.valmistumispyynto = response.data.valmistumispyynto
             }
@@ -870,6 +944,26 @@
               this.liitteetAsiakirjaUrl = `/virkailija/valmistumispyynto/${this.valmistumispyynto.id}/asiakirja/`
             }
           })
+          if (this.valmistumispyynto.erikoistujanLaillistamistodistus) {
+            const data = Uint8Array.from(
+              atob(this.valmistumispyynto.erikoistujanLaillistamistodistus),
+              (c) => c.charCodeAt(0)
+            )
+            this.laillistamispaivaAsiakirjat.push(
+              mapFile(
+                new File(
+                  [data],
+                  this.valmistumispyynto?.erikoistujanLaillistamistodistusNimi || '',
+                  {
+                    type: this.valmistumispyynto?.erikoistujanLaillistamistodistusTyyppi
+                  }
+                )
+              )
+            )
+          }
+          if (this.valmistumispyynto.erikoistujanLaillistamispaiva) {
+            this.form.laillistamispaiva = this.valmistumispyynto.erikoistujanLaillistamispaiva
+          }
           this.loading = false
         } catch {
           toastFail(this, this.$t('valmistumispyynnon-hakeminen-epaonnistui'))
@@ -894,7 +988,11 @@
     }
 
     onSubmit() {
-      if (!this.validateForm()) return
+      const validations = [
+        this.validateForm(),
+        this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
+      ]
+      if (validations.includes(false)) return
       return this.$bvModal.show('confirm-send')
     }
 
@@ -927,7 +1025,11 @@
           kommentitVirkailijoille: this.form.kommentitVirkailijoille,
           koejaksoEiVaadittu: this.form.koejaksoEiVaadittu,
           lisatiedotVastuuhenkilolle: this.form.lisatiedotVastuuhenkilolle,
-          keskenerainen: this.form.keskenerainen
+          keskenerainen: this.form.keskenerainen,
+          laillistamispaiva: this.laillistaminenMuokattavissa ? this.form.laillistamispaiva : null,
+          laillistamistodistus: this.laillistaminenMuokattavissa
+            ? this.form.laillistamistodistus
+            : null
         }
         this.response = (await putValmistumispyynto(form)).data
         this.$emit('skipRouteExitConfirm', true)
@@ -965,7 +1067,9 @@
         koejaksoEiVaadittu: this.form.koejaksoEiVaadittu,
         kommentitVirkailijoille: this.form.kommentitVirkailijoille,
         keskenerainen: false,
-        korjausehdotus: korjausehdotus
+        korjausehdotus: korjausehdotus,
+        laillistamispaiva: null,
+        laillistamistodistus: null
       }
       try {
         this.sending = true
@@ -977,6 +1081,21 @@
         toastFail(this, this.$t('virkailijan-tarkistus-palautus-epaonnistui'))
       }
       this.sending = false
+    }
+
+    muokkaaLaillistamista() {
+      this.laillistaminenMuokattavissa = true
+    }
+
+    onLaillistamistodistusFilesAdded(files: File[]) {
+      this.form.laillistamistodistus = files[0]
+      this.laillistamispaivaAsiakirjat.push(...mapFiles(files))
+    }
+
+    async onDeletelaillistamistodistus() {
+      this.form.laillistamistodistus = null
+      this.laillistamispaivaAsiakirjat = []
+      this.$emit('skipRouteExitConfirm', false)
     }
   }
 </script>

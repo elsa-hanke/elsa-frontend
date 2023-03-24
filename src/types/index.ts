@@ -1597,6 +1597,8 @@ export interface ValmistumispyynnonVirkailijanTarkistusLomake {
   lisatiedotVastuuhenkilolle?: string | null
   keskenerainen?: boolean
   korjausehdotus?: string | null
+  laillistamispaiva: string | null
+  laillistamistodistus: File | null
 }
 
 export interface ValmistumispyyntoHyvaksynta {
