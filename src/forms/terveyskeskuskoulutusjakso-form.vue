@@ -608,10 +608,15 @@
       if (this.hyvaksynta != null) {
         this.hyvaksynta.korjausehdotus = korjausehdotus
       }
+
+      this.form.laillistamispaiva = null
+      this.form.laillistamispaivanLiite = null
+
       this.$emit(
         'submit',
         {
-          hyvaksynta: this.hyvaksynta
+          hyvaksynta: this.hyvaksynta,
+          form: this.form
         },
         this.params
       )
