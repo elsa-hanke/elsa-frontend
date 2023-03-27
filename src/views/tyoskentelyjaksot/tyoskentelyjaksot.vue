@@ -414,7 +414,7 @@
           `${this.$t('tutkimustyo')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[2].suoritettu
           )}`,
-          `${this.$t('terveyskeskustyo')}: ${this.$duration(
+          `${this.$t('terveyskeskustyo-lyh')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[3].suoritettu
           )}`
         ],
@@ -426,7 +426,8 @@
           },
           onItemHover: {
             highlightDataSeries: false
-          }
+          },
+          offsetY: '1px'
         },
         chart: {
           type: 'donut',
