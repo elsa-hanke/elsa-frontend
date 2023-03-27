@@ -1466,6 +1466,7 @@ export interface ValmistumispyyntoVaatimuksetLomake {
   kuulusteluJaJohtamisopinnot?: boolean
   teoriakoulutus?: boolean
   osaamisenArvioinnit?: boolean
+  palautekysely?: boolean
 }
 
 export interface Valmistumispyynto {
