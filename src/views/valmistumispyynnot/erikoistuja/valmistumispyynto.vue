@@ -104,7 +104,23 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {{ $t('Osaamisen arviointi -oppaasta') }}.
+                      {{ $t('osaamisen-arviointi-oppaasta') }}.
+                    </a>
+                  </b-form-checkbox>
+                  <b-form-checkbox
+                    v-model="valmistumispyyntoVaatimuksetLomake.palautekysely"
+                    :state="validateVaatimuksetState('palautekysely')"
+                    :disabled="vaatimuksetHyvaksytty"
+                    class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                  >
+                    {{ $t('valmistumispyynto-palautekysely') }}
+                    <a
+                      href="https://link.webropol.com/s/valtakunnallinenpalautekysely "
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ $t('valtakunnallisen-palautekyselyn') }}.
                     </a>
                   </b-form-checkbox>
                 </template>
@@ -488,7 +504,8 @@
           tyotodistukset: { checked: (value: boolean) => value === true },
           kuulusteluJaJohtamisopinnot: { checked: (value: boolean) => value === true },
           teoriakoulutus: { checked: (value: boolean) => value === true },
-          osaamisenArvioinnit: { checked: (value: boolean) => value === true }
+          osaamisenArvioinnit: { checked: (value: boolean) => value === true },
+          palautekysely: { checked: (value: boolean) => value === true }
         },
         valmistumispyyntoLomake: {
           erikoistujanSahkoposti: {
