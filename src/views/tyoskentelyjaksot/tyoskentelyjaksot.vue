@@ -475,7 +475,8 @@
             breakpoint: 768,
             options: {
               legend: {
-                position: 'bottom'
+                position: 'bottom',
+                offsetY: 0
               }
             }
           }
