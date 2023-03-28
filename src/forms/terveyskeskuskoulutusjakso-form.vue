@@ -603,8 +603,10 @@
         this.hyvaksynta.korjausehdotus = korjausehdotus
       }
 
-      this.form.laillistamispaiva = null
-      this.form.laillistamispaivanLiite = null
+      if (this.$isVirkailija() && !this.laillistaminenMuokattavissa) {
+        this.form.laillistamispaiva = null
+        this.form.laillistamispaivanLiite = null
+      }
 
       this.$emit(
         'submit',

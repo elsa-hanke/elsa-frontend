@@ -1068,8 +1068,10 @@
         kommentitVirkailijoille: this.form.kommentitVirkailijoille,
         keskenerainen: false,
         korjausehdotus: korjausehdotus,
-        laillistamispaiva: null,
-        laillistamistodistus: null
+        laillistamispaiva: this.laillistaminenMuokattavissa ? this.form.laillistamispaiva : null,
+        laillistamistodistus: this.laillistaminenMuokattavissa
+          ? this.form.laillistamistodistus
+          : null
       }
       try {
         this.sending = true
