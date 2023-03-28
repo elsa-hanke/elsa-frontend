@@ -231,7 +231,7 @@
                 :allow-multiples-files="false"
                 :button-text="$t('lisaa-liitetiedosto')"
                 :existing-file-names-in-current-view="existingFileNamesInCurrentView"
-                :existing-file-names-in-other-views="existingFileNamesInOtherViews"
+                :existing-file-names-in-other-views="reservedAsiakirjaNimetMutable"
                 @selectedFiles="onFilesAdded(sp, $event)"
               />
             </div>
@@ -536,12 +536,6 @@
             item.asiakirjat?.map((asiakirja) => asiakirja.nimi)
           )
         : []
-    }
-
-    get existingFileNamesInOtherViews() {
-      return this.reservedAsiakirjaNimetMutable?.filter(
-        (nimi) => !this.existingFileNamesInCurrentView.includes(nimi)
-      )
     }
 
     get showVirkailijaKuittaus() {

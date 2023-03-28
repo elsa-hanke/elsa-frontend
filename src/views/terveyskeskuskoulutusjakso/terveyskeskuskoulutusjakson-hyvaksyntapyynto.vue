@@ -110,9 +110,14 @@
     async mounted() {
       try {
         this.hyvaksynta = (await getTerveyskeskuskoulutusjakso()).data
+        const existingFileNamesInCurrentView = this.hyvaksynta
+          ? this.hyvaksynta.tyoskentelyjaksot?.flatMap((item) =>
+              item.asiakirjat?.map((asiakirja) => asiakirja.nimi)
+            )
+          : []
         this.reservedAsiakirjaNimetMutable = (
           await axios.get('erikoistuva-laakari/asiakirjat/nimet')
-        ).data
+        ).data?.filter((nimi: string) => !existingFileNamesInCurrentView.includes(nimi))
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
         const message = axiosError?.response?.data?.message
