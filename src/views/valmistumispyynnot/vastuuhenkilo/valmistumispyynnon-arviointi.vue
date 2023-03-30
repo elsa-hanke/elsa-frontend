@@ -143,14 +143,14 @@
                 </div>
               </div>
             </div>
-            <elsa-button
-              variant="outline-primary"
-              class="mt-2 mb-4"
-              @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
-            >
-              {{ $t('nayta-erikoistujan-suoritustiedot') }}
-            </elsa-button>
             <b-form @submit.stop.prevent="onSubmit">
+              <elsa-button
+                variant="outline-primary"
+                class="mt-2 mb-4"
+                @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
+              >
+                {{ $t('nayta-erikoistujan-suoritustiedot') }}
+              </elsa-button>
               <elsa-form-group
                 class="mb-2"
                 :label="$t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen')"
@@ -164,10 +164,10 @@
                       :state="validateState('osaaminenRiittavaValmistumiseen')"
                       stacked
                     >
-                      <b-form-radio :value="true" @input="$emit('skipRouteExitConfirm', false)">
+                      <b-form-radio :value="true" @input="onSkipRouteExitConfirm">
                         <span>{{ $t('kylla') }}</span>
                       </b-form-radio>
-                      <b-form-radio :value="false" @input="$emit('skipRouteExitConfirm', false)">
+                      <b-form-radio :value="false" @input="onSkipRouteExitConfirm">
                         <span>{{ $t('ei-osaaminen-ei-riita-valmistumiseen') }}</span>
                       </b-form-radio>
                     </b-form-radio-group>
@@ -299,6 +299,7 @@
     ValmistumispyyntoArviointienTila,
     ValmistumispyyntoLomakeOsaamisenArviointi
   } from '@/types'
+  import { confirmExit } from '@/utils/confirm'
   import { toastSuccess, toastFail } from '@/utils/toast'
 
   @Component({
@@ -353,6 +354,7 @@
     valmistumispyyntoArviointienTila: ValmistumispyyntoArviointienTila | null = null
     loading = true
     sending = false
+    skipRouteExitConfirm = true
 
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
@@ -378,7 +380,14 @@
       }
     }
 
-    vaihdaRooli(id: number | undefined) {
+    async vaihdaRooli(id: number | undefined) {
+      if (this.odottaaOsaamisenArviointia && !this.skipRouteExitConfirm) {
+        if (!(await confirmExit(this))) {
+          return
+        }
+      }
+
+      this.$emit('skipRouteExitConfirm', true)
       window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
@@ -410,6 +419,11 @@
         toastFail(this, this.$t('osaamisen-arvioinnin-tallentaminen-epaonnistui'))
       }
       this.sending = false
+    }
+
+    onSkipRouteExitConfirm() {
+      this.skipRouteExitConfirm = false
+      this.$emit('skipRouteExitConfirm', false)
     }
   }
 </script>

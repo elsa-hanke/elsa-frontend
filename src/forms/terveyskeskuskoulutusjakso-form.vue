@@ -70,7 +70,7 @@
             :id="uid"
             ref="laillistamispaiva"
             :value.sync="form.laillistamispaiva"
-            @input="$emit('skipRouteExitConfirm', false)"
+            @input="onSkipRouteExitConfirm"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback>
             {{ $t('pakollinen-tieto') }}
@@ -104,6 +104,14 @@
         </b-form-invalid-feedback>
       </elsa-form-group>
     </div>
+    <elsa-button
+      v-if="$isVirkailija()"
+      variant="outline-primary"
+      class="mt-2 mb-4"
+      @click="vaihdaRooli(hyvaksynta ? hyvaksynta.opintooikeusId : null)"
+    >
+      {{ $t('nayta-erikoistujan-suoritustiedot') }}
+    </elsa-button>
     <hr />
     <div
       v-if="
@@ -125,7 +133,7 @@
             :id="uid"
             ref="laillistamispaiva"
             :value.sync="form.laillistamispaiva"
-            @input="$emit('skipRouteExitConfirm', false)"
+            @input="onSkipRouteExitConfirm"
           ></elsa-form-datepicker>
           <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
         </template>
@@ -413,6 +421,7 @@
   import { Validation, validationMixin } from 'vuelidate'
   import { required, requiredIf, minLength } from 'vuelidate/lib/validators'
 
+  import { ELSA_API_LOCATION } from '@/api'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -430,6 +439,7 @@
     Tyoskentelyjakso
   } from '@/types'
   import { saveBlob } from '@/utils/blobs'
+  import { confirmExit } from '@/utils/confirm'
   import {
     KaytannonKoulutusTyyppi,
     TerveyskeskuskoulutusjaksonTila,
@@ -507,6 +517,7 @@
 
     laillistamispaivaAsiakirjat: Asiakirja[] = []
     laillistaminenMuokattavissa = false
+    skipRouteExitConfirm = true
 
     params = {
       saving: false
@@ -684,7 +695,7 @@
           (a) => a.nimi !== asiakirja.nimi
         )
       }
-      this.$emit('skipRouteExitConfirm', false)
+      this.onSkipRouteExitConfirm()
     }
 
     onLaillistamispaivaFilesAdded(files: File[]) {
@@ -695,7 +706,7 @@
     async onDeleteLaillistamispaivanLiite() {
       this.form.laillistamispaivanLiite = null
       this.laillistamispaivaAsiakirjat = []
-      this.$emit('skipRouteExitConfirm', false)
+      this.onSkipRouteExitConfirm()
     }
 
     async onDownloadLaillistamistodistus() {
@@ -713,6 +724,22 @@
 
     muokkaaLaillistamista() {
       this.laillistaminenMuokattavissa = true
+    }
+
+    async vaihdaRooli(id: number | undefined | null) {
+      if (this.editable && !this.skipRouteExitConfirm) {
+        if (!(await confirmExit(this))) {
+          return
+        }
+      }
+
+      this.$emit('skipRouteExitConfirm', true)
+      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
+    }
+
+    onSkipRouteExitConfirm() {
+      this.skipRouteExitConfirm = false
+      this.$emit('skipRouteExitConfirm', false)
     }
   }
 </script>

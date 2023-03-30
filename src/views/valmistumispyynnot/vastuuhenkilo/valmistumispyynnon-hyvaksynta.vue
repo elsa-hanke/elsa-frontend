@@ -83,7 +83,7 @@
                         v-model="form.sahkoposti"
                         :state="validateState('sahkoposti')"
                         :value="account.email"
-                        @input="$emit('skipRouteExitConfirm', false)"
+                        @input="onSkipRouteExitConfirm"
                       />
                       <b-form-invalid-feedback
                         v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
@@ -109,7 +109,7 @@
                         v-model="form.puhelinnumero"
                         :state="validateState('puhelinnumero')"
                         :value="account.phoneNumber"
-                        @input="$emit('skipRouteExitConfirm', false)"
+                        @input="onSkipRouteExitConfirm"
                       />
                       <small class="form-text text-muted">
                         {{ $t('syota-puhelinnumero-muodossa') }}
@@ -505,6 +505,7 @@
     ValmistumispyyntoVirkailijanTarkistus,
     ValmistumispyyntoHyvaksynta
   } from '@/types'
+  import { confirmExit } from '@/utils/confirm'
   import { phoneNumber } from '@/utils/constants'
   import { toastSuccess, toastFail } from '@/utils/toast'
   import OpintosuoritusTab from '@/views/opintosuoritukset/opintosuoritus-tab.vue'
@@ -553,6 +554,7 @@
     sending = false
     yhteenvetoAsiakirjaUrl: string | null = null
     liitteetAsiakirjaUrl: string | null = null
+    skipRouteExitConfirm = true
 
     validations() {
       return {
@@ -604,7 +606,14 @@
       return $dirty ? !$error : null
     }
 
-    vaihdaRooli(id: number | undefined) {
+    async vaihdaRooli(id: number | undefined) {
+      if (this.odottaaHyvaksyntaa && !this.skipRouteExitConfirm) {
+        if (!(await confirmExit(this))) {
+          return
+        }
+      }
+
+      this.$emit('skipRouteExitConfirm', true)
       window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
@@ -654,6 +663,11 @@
         toastFail(this, this.$t('valmistumispyynto-hyvaksynta-palautus-epaonnistui'))
       }
       this.sending = false
+    }
+
+    onSkipRouteExitConfirm() {
+      this.skipRouteExitConfirm = false
+      this.$emit('skipRouteExitConfirm', false)
     }
   }
 </script>
