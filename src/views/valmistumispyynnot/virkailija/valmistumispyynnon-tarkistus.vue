@@ -113,7 +113,7 @@
                       :id="uid"
                       ref="laillistamispaiva"
                       :value.sync="form.laillistamispaiva"
-                      @input="$emit('skipRouteExitConfirm', false)"
+                      @input="onSkipRouteExitConfirm"
                     ></elsa-form-datepicker>
                     <b-form-invalid-feedback>
                       {{ $t('pakollinen-tieto') }}
@@ -197,10 +197,7 @@
                 </p>
               </div>
               <div v-if="editable && !yekSuorituspaivaTila" class="my-3">
-                <b-form-checkbox
-                  v-model="form.yekSuoritettu"
-                  @input="$emit('skipRouteExitConfirm', false)"
-                >
+                <b-form-checkbox v-model="form.yekSuoritettu" @input="onSkipRouteExitConfirm">
                   {{ $t('yek-suoritettu') }}
                 </b-form-checkbox>
                 <elsa-form-group
@@ -212,7 +209,7 @@
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.yekSuorituspaiva"
-                      @input="$emit('skipRouteExitConfirm', false)"
+                      @input="onSkipRouteExitConfirm"
                     ></elsa-form-datepicker>
                   </template>
                 </elsa-form-group>
@@ -228,10 +225,7 @@
                 </p>
               </div>
               <div v-if="editable && !ptlSuorituspaivaTila" class="my-3">
-                <b-form-checkbox
-                  v-model="form.ptlSuoritettu"
-                  @input="$emit('skipRouteExitConfirm', false)"
-                >
+                <b-form-checkbox v-model="form.ptlSuoritettu" @input="onSkipRouteExitConfirm">
                   {{ $t('ptl-suoritettu') }}
                 </b-form-checkbox>
                 <elsa-form-group
@@ -243,7 +237,7 @@
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.ptlSuorituspaiva"
-                      @input="$emit('skipRouteExitConfirm', false)"
+                      @input="onSkipRouteExitConfirm"
                     ></elsa-form-datepicker>
                   </template>
                 </elsa-form-group>
@@ -261,7 +255,7 @@
               <div v-if="editable && !aiempiElKoulutusSuorituspaivaTila" class="my-3">
                 <b-form-checkbox
                   v-model="form.aiempiElKoulutusSuoritettu"
-                  @input="$emit('skipRouteExitConfirm', false)"
+                  @input="onSkipRouteExitConfirm"
                 >
                   {{ $t('aiempi-el-koulutus-suoritettu') }}
                 </b-form-checkbox>
@@ -274,7 +268,7 @@
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.aiempiElKoulutusSuorituspaiva"
-                      @input="$emit('skipRouteExitConfirm', false)"
+                      @input="onSkipRouteExitConfirm"
                     ></elsa-form-datepicker>
                   </template>
                 </elsa-form-group>
@@ -292,7 +286,7 @@
               <div v-if="editable && !ltTutkintoSuorituspaivaTila" class="my-3">
                 <b-form-checkbox
                   v-model="form.ltTutkintoSuoritettu"
-                  @input="$emit('skipRouteExitConfirm', false)"
+                  @input="onSkipRouteExitConfirm"
                 >
                   {{ $t('lt-tutkinto-suoritettu') }}
                 </b-form-checkbox>
@@ -305,7 +299,7 @@
                     <elsa-form-datepicker
                       :id="uid"
                       v-model="form.ltTutkintoSuorituspaiva"
-                      @input="$emit('skipRouteExitConfirm', false)"
+                      @input="onSkipRouteExitConfirm"
                     ></elsa-form-datepicker>
                   </template>
                 </elsa-form-group>
@@ -361,7 +355,7 @@
                     :id="uid"
                     v-model="form.yliopistosairaalanUlkopuolinenTyoTarkistettu"
                     :state="validateState('yliopistosairaalanUlkopuolinenTyoTarkistettu')"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="onSkipRouteExitConfirm"
                   >
                     {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
                   </b-form-checkbox>
@@ -408,7 +402,7 @@
                     :id="uid"
                     v-model="form.yliopistosairaalatyoTarkistettu"
                     :state="validateState('yliopistosairaalatyoTarkistettu')"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="onSkipRouteExitConfirm"
                   >
                     {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
                   </b-form-checkbox>
@@ -450,7 +444,7 @@
                     :id="uid"
                     v-model="form.kokonaistyoaikaTarkistettu"
                     :state="validateState('kokonaistyoaikaTarkistettu')"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="onSkipRouteExitConfirm"
                   >
                     {{ $t('kesto-tarkistettu-tyotodistuksista') }}
                   </b-form-checkbox>
@@ -492,7 +486,7 @@
                     :id="uid"
                     v-model="form.teoriakoulutusTarkistettu"
                     :state="validateState('teoriakoulutusTarkistettu')"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="onSkipRouteExitConfirm"
                   >
                     {{ $t('todistukset-tarkistettu') }}
                   </b-form-checkbox>
@@ -561,7 +555,7 @@
                   <b-form-checkbox
                     v-model="form.koejaksoEiVaadittu"
                     class="mt-3"
-                    @input="$emit('skipRouteExitConfirm', false)"
+                    @input="onSkipRouteExitConfirm"
                   >
                     {{ $t('koejaksoa-ei-vaadita') }}
                   </b-form-checkbox>
@@ -790,6 +784,7 @@
     ValmistumispyynnonVirkailijanTarkistusLomake,
     Asiakirja
   } from '@/types'
+  import { confirmExit } from '@/utils/confirm'
   import { ValmistumispyynnonTila } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastSuccess, toastFail } from '@/utils/toast'
@@ -890,6 +885,7 @@
     liitteetAsiakirjaUrl: string | null = null
     laillistamispaivaAsiakirjat: Asiakirja[] = []
     laillistaminenMuokattavissa = false
+    skipRouteExitConfirm = true
 
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
@@ -973,8 +969,15 @@
       }
     }
 
-    vaihdaRooli(id: number | undefined) {
-      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}`
+    async vaihdaRooli(id: number | undefined) {
+      if (this.editable && !this.skipRouteExitConfirm) {
+        if (!(await confirmExit(this))) {
+          return
+        }
+      }
+
+      this.$emit('skipRouteExitConfirm', true)
+      window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
     validateState(name: string) {
@@ -1097,6 +1100,11 @@
     async onDeletelaillistamistodistus() {
       this.form.laillistamistodistus = null
       this.laillistamispaivaAsiakirjat = []
+      this.onSkipRouteExitConfirm()
+    }
+
+    onSkipRouteExitConfirm() {
+      this.skipRouteExitConfirm = false
       this.$emit('skipRouteExitConfirm', false)
     }
   }
