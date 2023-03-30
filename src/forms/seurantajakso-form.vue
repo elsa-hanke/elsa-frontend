@@ -1,20 +1,5 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group
-      v-if="form.koulutusjaksot && form.koulutusjaksot.length > 0 && uusiJakso"
-      :label="$t('koulutusjakso')"
-    >
-      <template #default="{ uid }">
-        <div
-          v-for="koulutusjakso in form.koulutusjaksot"
-          :id="uid"
-          :key="koulutusjakso.id"
-          class="mb-1"
-        >
-          <span>{{ koulutusjakso.nimi }}</span>
-        </div>
-      </template>
-    </elsa-form-group>
     <b-row v-if="!uusiJakso">
       <b-col>
         <div class="seurantajakso-erikoistuva-details">
@@ -67,38 +52,58 @@
 
     <hr />
 
-    <div v-if="seurantajaksonTiedot.osaamistavoitteet.length > 0">
-      <h3 class="mb-3">{{ $t('suunnitellut-tavoitteet') }}</h3>
-      <elsa-form-group :label="$t('osaamistavoitteet-omalla-erikoisalalla')">
-        <template #default="{ uid }">
-          <b-badge
-            v-for="osaamistavoite in seurantajaksonTiedot.osaamistavoitteet"
-            :id="uid"
-            :key="osaamistavoite"
-            pill
-            variant="light"
-            class="font-weight-400 mr-2 mb-1 osaamistavoitteet"
+    <div v-if="seurantajaksonTiedot.koulutusjaksot.length > 0">
+      <h3 v-b-toggle.tavoitteet-toggle class="mb-3">
+        <span class="closed">
+          <font-awesome-icon icon="caret-down" class="text-muted" />
+        </span>
+        <span class="open">
+          <font-awesome-icon icon="caret-up" class="text-muted" />
+        </span>
+        {{ $t('suunnitellut-tavoitteet') }}
+      </h3>
+      <b-collapse id="tavoitteet-toggle" visible class="mb-4">
+        <div v-for="koulutusjakso in seurantajaksonTiedot.koulutusjaksot" :key="koulutusjakso.id">
+          <h4>{{ koulutusjakso.nimi }}</h4>
+          <elsa-form-group :label="$t('tyoskentelyjaksot')">
+            <template #default="{ uid }">
+              <div
+                v-for="tyoskentelyjakso in koulutusjakso.tyoskentelyjaksot"
+                :id="uid"
+                :key="tyoskentelyjakso.id"
+              >
+                <span class="mr-1">{{ tyoskentelyjakso.tyoskentelypaikka.nimi }}</span>
+                <span>{{ ajankohtaLabel(tyoskentelyjakso) }}</span>
+              </div>
+            </template>
+          </elsa-form-group>
+          <elsa-form-group :label="$t('osaamistavoitteet-omalla-erikoisalalla')">
+            <template #default="{ uid }">
+              <b-badge
+                v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
+                :id="uid"
+                :key="osaamistavoite.id"
+                pill
+                variant="light"
+                class="font-weight-400 mr-2 mb-1 osaamistavoitteet"
+              >
+                {{ $i18n.locale == 'sv' ? osaamistavoite.nimiSv : osaamistavoite.nimi }}
+              </b-badge>
+            </template>
+          </elsa-form-group>
+          <elsa-form-group
+            v-if="koulutusjakso.muutOsaamistavoitteet != null"
+            :label="$t('muut-osaamistavoitteet')"
           >
-            {{ osaamistavoite }}
-          </b-badge>
-        </template>
-      </elsa-form-group>
-      <elsa-form-group
-        v-if="seurantajaksonTiedot.muutOsaamistavoitteet.length > 0"
-        :label="$t('muut-osaamistavoitteet')"
-      >
-        <template #default="{ uid }">
-          <div
-            v-for="muutavoite in seurantajaksonTiedot.muutOsaamistavoitteet"
-            :id="uid"
-            :key="muutavoite"
-            class="mb-1"
-          >
-            <span>{{ muutavoite }}</span>
-          </div>
-        </template>
-      </elsa-form-group>
-      <hr />
+            <template #default="{ uid }">
+              <div :id="uid" class="mb-1">
+                {{ koulutusjakso.muutOsaamistavoitteet }}
+              </div>
+            </template>
+          </elsa-form-group>
+          <hr />
+        </div>
+      </b-collapse>
     </div>
 
     <h3 v-b-toggle.arvioinnit-toggle class="mb-4">
@@ -883,11 +888,13 @@
     Seurantajakso,
     SeurantajaksonTiedot,
     Suoritemerkinta,
-    Suoritusarviointi
+    Suoritusarviointi,
+    Tyoskentelyjakso
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastFail, toastSuccess } from '@/utils/toast'
+  import { ajankohtaLabel } from '@/utils/tyoskentelyjakso'
   import SuoritemerkintaDetails from '@/views/suoritemerkinnat/suoritemerkinta-details.vue'
 
   @Component({
@@ -1119,6 +1126,10 @@
     returnToSender(korjausehdotus: string) {
       this.form.korjausehdotus = korjausehdotus
       this.$emit('submit', this.form, this.params)
+    }
+
+    ajankohtaLabel(tyoskentelyjakso: Tyoskentelyjakso) {
+      return `(${ajankohtaLabel(this, tyoskentelyjakso)})`
     }
   }
 </script>
