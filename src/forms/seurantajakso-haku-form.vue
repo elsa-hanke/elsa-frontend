@@ -16,12 +16,7 @@
         />
       </template>
       <template #default="{ uid }">
-        <div
-          v-for="(koulutusjakso, index) in form.koulutusjaksot"
-          :id="uid"
-          :key="koulutusjakso.id"
-          class="mb-1"
-        >
+        <div v-for="(_, index) in form.koulutusjaksot" :id="uid" :key="index" class="mb-1">
           <elsa-form-multiselect
             :id="uid"
             v-model="form.koulutusjaksot[index]"
@@ -201,7 +196,7 @@
 
     get koulutusjaksotFiltered() {
       return this.koulutusjaksot?.filter(
-        (koulutusjakso) => !this.form.koulutusjaksot?.find((t) => t.id === koulutusjakso.id)
+        (koulutusjakso) => !this.form.koulutusjaksot?.find((t) => t?.id === koulutusjakso.id)
       )
     }
 
@@ -247,7 +242,7 @@
         'submit',
         {
           ...this.form,
-          koulutusjaksot: this.form.koulutusjaksot?.filter((koulutusjakso) => koulutusjakso.id)
+          koulutusjaksot: this.form.koulutusjaksot?.filter((koulutusjakso) => koulutusjakso?.id)
         },
         this.params
       )

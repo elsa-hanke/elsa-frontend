@@ -51,6 +51,12 @@
                       </span>
                     </h3>
                   </elsa-button>
+                  <p v-if="seurantajakso.koulutusjaksot.length > 0" class="mb-2">
+                    <span class="font-weight-bold">{{ $t('koulutusjaksot') }}:</span>
+                    <span>
+                      {{ koulutusjaksotLabel(seurantajakso) }}
+                    </span>
+                  </p>
                   <p class="mb-2">
                     <font-awesome-icon
                       v-if="showHyvaksytty(seurantajakso)"
@@ -217,6 +223,10 @@
 
     showOdottaaHyvaksyntaa(seurantajakso: Seurantajakso) {
       return seurantajakso.tila === SeurantajaksoTila.ODOTTAA_HYVAKSYNTAA
+    }
+
+    koulutusjaksotLabel(seurantajakso: Seurantajakso) {
+      return seurantajakso.koulutusjaksot.map((k) => k.nimi).join(', ')
     }
   }
 </script>

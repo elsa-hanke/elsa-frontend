@@ -1169,8 +1169,7 @@ export type SeurantajaksonArviointi = {
 }
 
 export type SeurantajaksonTiedot = {
-  osaamistavoitteet: string[]
-  muutOsaamistavoitteet: string[]
+  koulutusjaksot: Koulutusjakso[]
   arvioinnit: SeurantajaksonArviointiKategoria[]
   arviointienMaara: number
   suoritemerkinnat: SeurantajaksonSuoritemerkinta[]
