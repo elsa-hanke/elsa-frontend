@@ -90,7 +90,7 @@
             <b-td class="col1">
               <span class="bold">{{ localizeName(o) }}</span>
             </b-td>
-            <b-td class="col2"></b-td>
+            <b-td class="col2">{{ $date(o.suorituspaiva) }}</b-td>
             <b-td class="col3">
               <span class="bold">
                 {{ o.opintopisteet }}
