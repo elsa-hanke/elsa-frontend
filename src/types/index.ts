@@ -483,7 +483,8 @@ export interface VastuuhenkilonArvioLomake {
   paataOpintooikeudet: boolean
   vastuuhenkilo: Vastuuhenkilo | null
   vastuuhenkiloAllekirjoittanut: boolean | null
-  korjausehdotus: string | null
+  virkailijanKorjausehdotus?: string | null
+  vastuuhenkilonKorjausehdotus?: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
   vastuuhenkilonKuittausaika?: string
   koulutussopimusHyvaksytty?: boolean

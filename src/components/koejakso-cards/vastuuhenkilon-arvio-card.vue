@@ -46,7 +46,13 @@
           </div>
           <div class="d-inline-flex">
             <div class="pr-6">
-              <p class="mb-1">{{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi') }}</p>
+              <p class="mb-1">
+                {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi') }}
+                <span v-if="koejakso.vastuuhenkilonArvio.virkailijanKorjausehdotus != null">
+                  {{ $t('virkailijan-toimesta') }}
+                </span>
+                <span v-else>{{ $t('vastuuhenkilon-toimesta') }}</span>
+              </p>
               <p class="mb-2">
                 <span>{{ $t('syy') }}</span>
                 <span>&nbsp;{{ korjausehdotus }}</span>
@@ -141,7 +147,9 @@
 
     get korjausehdotus() {
       if (this.koejakso.vastuuhenkilonArvio) {
-        return this.koejakso.vastuuhenkilonArvio.korjausehdotus
+        return this.koejakso.vastuuhenkilonArvio.virkailijanKorjausehdotus != null
+          ? this.koejakso.vastuuhenkilonArvio.virkailijanKorjausehdotus
+          : this.koejakso.vastuuhenkilonArvio.vastuuhenkilonKorjausehdotus
       }
       return null
     }

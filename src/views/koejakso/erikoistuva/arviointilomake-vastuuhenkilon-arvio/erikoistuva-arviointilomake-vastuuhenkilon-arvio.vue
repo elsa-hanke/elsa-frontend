@@ -14,6 +14,10 @@
                 </em>
                 <div>
                   {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi') }}
+                  <span v-if="koejaksoData.vastuuhenkilonArvio.virkailijanKorjausehdotus != null">
+                    {{ $t('virkailijan-toimesta') }}
+                  </span>
+                  <span v-else>{{ $t('vastuuhenkilon-toimesta') }}</span>
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
                     <span class="font-weight-500">{{ korjausehdotus }}</span>
@@ -417,7 +421,6 @@
       koejaksoHyvaksytty: null,
       vastuuhenkilo: null,
       vastuuhenkiloAllekirjoittanut: null,
-      korjausehdotus: null,
       hylattyArviointiKaytyLapiKeskustellen: null,
       vastuuhenkilonKuittausaika: undefined
     }
@@ -496,7 +499,9 @@
     }
 
     get korjausehdotus() {
-      return this.koejaksoData.vastuuhenkilonArvio?.korjausehdotus
+      return this.koejaksoData.vastuuhenkilonArvio?.virkailijanKorjausehdotus != null
+        ? this.koejaksoData.vastuuhenkilonArvio?.virkailijanKorjausehdotus
+        : this.koejaksoData.vastuuhenkilonArvio?.vastuuhenkilonKorjausehdotus
     }
 
     validateState(name: string) {

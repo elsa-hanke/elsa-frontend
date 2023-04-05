@@ -9,6 +9,24 @@
           <b-col>
             <div v-if="editable" class="mt-3">
               {{ $t('vastuuhenkilon-arvio-ingressi-virkailija') }}
+              <b-alert :show="korjausehdotus != null" variant="danger" class="mt-3">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                  </em>
+                  <div>
+                    {{ $t('vastuuhenkilon-arvio-palautettu-aiemmin-korjattavaksi') }}
+                    <span v-if="vastuuhenkilonArvio.virkailijanKorjausehdotus != null">
+                      {{ $t('virkailijan-toimesta') }}
+                    </span>
+                    <span v-else>{{ $t('vastuuhenkilon-toimesta') }}</span>
+                    <span class="d-block">
+                      {{ $t('syy') }}&nbsp;
+                      <span class="font-weight-500">{{ korjausehdotus }}</span>
+                    </span>
+                  </div>
+                </div>
+              </b-alert>
             </div>
             <b-alert :show="waitingForVastuuhenkilo" variant="dark" class="mt-3">
               <div class="d-flex flex-row">
@@ -33,9 +51,7 @@
                 </em>
                 <div>
                   {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi-virkailija') }}
-                  <span class="d-block">
-                    {{ $t('syy') }} {{ vastuuhenkilonArvio.korjausehdotus }}
-                  </span>
+                  <span class="d-block">{{ $t('syy') }} {{ korjausehdotus }}</span>
                 </div>
               </div>
             </b-alert>
@@ -469,7 +485,11 @@
         <div v-if="editable">
           <b-row>
             <b-col class="text-right">
-              <elsa-button variant="back" :to="{ name: 'koejakso' }">
+              <elsa-button
+                variant="back"
+                class="ml-1 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block text-left"
+                :to="{ name: 'koejakso' }"
+              >
                 {{ $t('peruuta') }}
               </elsa-button>
               <elsa-button
@@ -486,7 +506,7 @@
                 v-if="!loading"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
-                class="px-6"
+                class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 @click="onValidateAndConfirm('confirm-sign')"
               >
                 {{ $t('hyvaksy-laheta') }}
@@ -724,6 +744,7 @@
       try {
         this.buttonStates.primaryButtonLoading = true
         if (this.vastuuhenkilonArvio != null) {
+          this.vastuuhenkilonArvio.virkailijanKorjausehdotus = null
           await putVastuuhenkilonArvio(this.vastuuhenkilonArvio)
           this.buttonStates.primaryButtonLoading = false
           checkCurrentRouteAndRedirect(this.$router, '/koejakso')
@@ -737,7 +758,7 @@
     async onReturnToSender(korjausehdotus: string) {
       const form: VastuuhenkilonArvioLomake = {
         ...(this.vastuuhenkilonArvio as VastuuhenkilonArvioLomake),
-        korjausehdotus: korjausehdotus
+        virkailijanKorjausehdotus: korjausehdotus
       }
 
       try {
@@ -763,6 +784,12 @@
         toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'koejakso' })
       }
+    }
+
+    get korjausehdotus() {
+      return this.vastuuhenkilonArvio?.virkailijanKorjausehdotus != null
+        ? this.vastuuhenkilonArvio?.virkailijanKorjausehdotus
+        : this.vastuuhenkilonArvio?.vastuuhenkilonKorjausehdotus
     }
   }
 </script>
