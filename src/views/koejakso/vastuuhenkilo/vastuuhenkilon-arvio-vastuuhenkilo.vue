@@ -23,6 +23,19 @@
                 </div>
               </div>
             </b-alert>
+            <b-alert :show="returned" variant="dark" class="mt-3">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi-virkailija') }}
+                  <span class="d-block">
+                    {{ $t('syy') }} {{ vastuuhenkilonArvio.vastuuhenkilonKorjausehdotus }}
+                  </span>
+                </div>
+              </div>
+            </b-alert>
             <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
               <div class="d-flex flex-row">
                 <em class="align-middle">
@@ -407,60 +420,75 @@
               </p>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col lg="4">
-              <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                <template #default="{ uid }">
-                  <b-form-input
-                    :id="uid"
-                    v-model="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
-                    :state="validateState('vastuuhenkilonSahkoposti')"
-                    :value="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                  />
-                  <b-form-invalid-feedback
-                    v-if="
-                      $v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti &&
-                      !$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.required
-                    "
-                    :id="`${uid}-feedback`"
-                  >
-                    {{ $t('pakollinen-tieto') }}
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback
-                    v-if="
-                      $v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti &&
-                      !$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.email
-                    "
-                    :id="`${uid}-feedback`"
-                    :state="validateState('vastuuhenkilonSahkoposti')"
-                  >
-                    {{ $t('sahkopostiosoite-ei-kelvollinen') }}
-                  </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </b-col>
+          <div v-if="editable">
+            <b-row>
+              <b-col lg="4">
+                <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                  <template #default="{ uid }">
+                    <b-form-input
+                      :id="uid"
+                      v-model="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
+                      :state="validateState('vastuuhenkilonSahkoposti')"
+                      :value="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
+                      @input="$emit('skipRouteExitConfirm', false)"
+                    />
+                    <b-form-invalid-feedback
+                      v-if="
+                        $v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti &&
+                        !$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.required
+                      "
+                      :id="`${uid}-feedback`"
+                    >
+                      {{ $t('pakollinen-tieto') }}
+                    </b-form-invalid-feedback>
+                    <b-form-invalid-feedback
+                      v-if="
+                        $v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti &&
+                        !$v.vastuuhenkilonArvio.vastuuhenkilonSahkoposti.email
+                      "
+                      :id="`${uid}-feedback`"
+                      :state="validateState('vastuuhenkilonSahkoposti')"
+                    >
+                      {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                    </b-form-invalid-feedback>
+                  </template>
+                </elsa-form-group>
+              </b-col>
 
-            <b-col lg="4">
-              <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                <template #default="{ uid }">
-                  <b-form-input
-                    :id="uid"
-                    v-model="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
-                    :state="validateState('vastuuhenkilonPuhelinnumero')"
-                    :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                  />
-                  <small class="form-text text-muted">
-                    {{ $t('syota-puhelinnumero-muodossa') }}
-                  </small>
-                  <b-form-invalid-feedback :id="`${uid}-feedback`">
-                    {{ $t('tarkista-puhelinnumeron-muoto') }}
-                  </b-form-invalid-feedback>
-                </template>
-              </elsa-form-group>
-            </b-col>
-          </b-row>
+              <b-col lg="4">
+                <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
+                  <template #default="{ uid }">
+                    <b-form-input
+                      :id="uid"
+                      v-model="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
+                      :state="validateState('vastuuhenkilonPuhelinnumero')"
+                      :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
+                      @input="$emit('skipRouteExitConfirm', false)"
+                    />
+                    <small class="form-text text-muted">
+                      {{ $t('syota-puhelinnumero-muodossa') }}
+                    </small>
+                    <b-form-invalid-feedback :id="`${uid}-feedback`">
+                      {{ $t('tarkista-puhelinnumeron-muoto') }}
+                    </b-form-invalid-feedback>
+                  </template>
+                </elsa-form-group>
+              </b-col>
+            </b-row>
+          </div>
+          <div v-else>
+            <b-row>
+              <b-col lg="4">
+                <h5>{{ $t('sahkopostiosoite') }}</h5>
+                <p>{{ vastuuhenkilonArvio.vastuuhenkilonSahkoposti }}</p>
+              </b-col>
+
+              <b-col lg="4">
+                <h5>{{ $t('matkapuhelinnumero') }}</h5>
+                <p>{{ vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero }}</p>
+              </b-col>
+            </b-row>
+          </div>
         </div>
         <hr />
         <div v-if="vastuuhenkilonArvio.virkailija && vastuuhenkilonArvio.virkailija.kuittausaika">
@@ -488,7 +516,11 @@
           </b-row>
           <hr />
         </div>
-        <elsa-form-group :label="$t('koejakso-on')" :required="editable">
+        <elsa-form-group
+          v-if="editable || vastuuhenkilonArvio.koejaksoHyvaksytty != null"
+          :label="$t('koejakso-on')"
+          :required="editable"
+        >
           <template #default="{ uid }">
             <div v-if="editable">
               <b-form-radio-group
@@ -569,14 +601,28 @@
           <hr />
           <b-row>
             <b-col class="text-right">
-              <elsa-button variant="back" :to="{ name: 'koejakso' }">
+              <elsa-button
+                variant="back"
+                class="ml-1 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block text-left"
+                :to="{ name: 'koejakso' }"
+              >
                 {{ $t('peruuta') }}
+              </elsa-button>
+              <elsa-button
+                v-b-modal.return-to-sender
+                class="my-2 mr-3 d-block d-md-inline-block d-lg-block d-xl-inline-block"
+                style="min-width: 14rem"
+                :disabled="buttonStates.primaryButtonLoading"
+                :loading="buttonStates.secondaryButtonLoading"
+                variant="outline-primary"
+              >
+                {{ $t('palauta-muokattavaksi') }}
               </elsa-button>
               <elsa-button
                 v-if="!loading"
                 :loading="buttonStates.primaryButtonLoading"
                 variant="primary"
-                class="ml-4 px-6"
+                class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 @click="onValidateAndConfirm('confirm-sign')"
               >
                 {{ $t('laheta-allekirjoitettavaksi') }}
@@ -597,6 +643,11 @@
       :submit-text="$t('laheta-allekirjoitettavaksi')"
       @submit="onSign"
     />
+    <elsa-return-to-sender-modal
+      id="return-to-sender"
+      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+      @submit="onReturnToSender"
+    />
   </div>
 </template>
 
@@ -614,6 +665,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolotDisplay from '@/components/poissaolot-display/poissaolot-display.vue'
   import store from '@/store'
@@ -647,6 +699,7 @@
       ElsaButton,
       ElsaPoissaolotDisplay,
       ElsaConfirmationModal,
+      ElsaReturnToSenderModal,
       KoejaksonVaiheAllekirjoitukset,
       AsiakirjatContent
     },
@@ -725,6 +778,10 @@
         this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
         this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
+    }
+
+    get returned() {
+      return this.vastuuhenkilonArvio?.vastuuhenkilonKorjausehdotus != null
     }
 
     get waitingForSignatures() {
@@ -824,6 +881,21 @@
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
       } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
+      }
+    }
+
+    async onReturnToSender(korjausehdotus: string) {
+      try {
+        this.buttonStates.secondaryButtonLoading = true
+        if (this.vastuuhenkilonArvio != null) {
+          this.vastuuhenkilonArvio.vastuuhenkilonKorjausehdotus = korjausehdotus
+        }
+        await store.dispatch('vastuuhenkilo/putVastuuhenkilonArvio', this.vastuuhenkilonArvio)
+        this.buttonStates.primaryButtonLoading = false
+        checkCurrentRouteAndRedirect(this.$router, '/koejakso')
+        toastSuccess(this, this.$t('koejakso-palautettu-muokattavaksi'))
+      } catch {
+        toastFail(this, this.$t('koejakso-palautus-epaonnistui'))
       }
     }
 
