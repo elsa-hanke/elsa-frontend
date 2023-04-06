@@ -43,6 +43,31 @@
                   </div>
                 </div>
               </b-alert>
+              <b-alert :show="vastuuhenkiloHyvaksyjaPalauttanut" variant="dark">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      class="text-muted text-size-md mr-2"
+                    />
+                  </em>
+                  <div>
+                    <span>
+                      {{
+                        $t(
+                          'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-hyvaksyjan-toimesta'
+                        )
+                      }}
+                    </span>
+                    <span class="d-block">
+                      {{ $t('syy') }}&nbsp;
+                      <span>
+                        {{ korjausehdotus }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </b-alert>
               <elsa-button
                 variant="primary"
                 class="mt-2 mb-1"
