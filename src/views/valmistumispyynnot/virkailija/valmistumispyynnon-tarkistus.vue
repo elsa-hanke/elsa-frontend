@@ -10,6 +10,37 @@
               <p class="mt-1 mb-3">
                 {{ $t('valmistumispyynto-virkailijan-ingressi') }}
               </p>
+              <b-alert
+                :show="
+                  valmistumispyynto.virkailijanKorjausehdotus != null ||
+                  valmistumispyynto.vastuuhenkiloHyvaksyjaKorjausehdotus != null
+                "
+                variant="danger"
+                class="mt-3"
+              >
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                  </em>
+                  <div>
+                    {{ $t('valmistumispyynto-palautettu-aiemmin-korjattavaksi') }}
+                    <span v-if="valmistumispyynto.virkailijanKorjausehdotus != null">
+                      {{ $t('virkailijan-toimesta') }}
+                    </span>
+                    <span v-else>{{ $t('vastuuhenkilon-toimesta') }}</span>
+                    <span class="d-block">
+                      {{ $t('syy') }}&nbsp;
+                      <span class="font-weight-500">
+                        {{
+                          valmistumispyynto.virkailijanKorjausehdotus != null
+                            ? valmistumispyynto.virkailijanKorjausehdotus
+                            : valmistumispyynto.vastuuhenkiloHyvaksyjaKorjausehdotus
+                        }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </b-alert>
             </div>
             <div v-else class="mt-3">
               <b-alert :show="!allekirjoitettu" variant="dark">
@@ -908,7 +939,9 @@
               this.valmistumispyynto.tila ==
                 ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU ||
               this.valmistumispyynto.tila == ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA ||
-              this.valmistumispyynto.tila == ValmistumispyynnonTila.ALLEKIRJOITETTU
+              this.valmistumispyynto.tila == ValmistumispyynnonTila.ALLEKIRJOITETTU ||
+              this.valmistumispyynto.tila ==
+                ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU
             ) {
               this.editable = false
             }
