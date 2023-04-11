@@ -1431,7 +1431,8 @@ export type TerveyskeskuskoulutusjaksonHyvaksyminen = {
   yleislaaketieteenVastuuhenkilonNimi: string
   yleislaaketieteenVastuuhenkilonNimike: string
   tila: TerveyskeskuskoulutusjaksonTila
-  korjausehdotus: string
+  virkailijanKorjausehdotus: string
+  vastuuhenkilonKorjausehdotus: string
   lisatiedotVirkailijalta: string
   virkailijanNimi: string
   virkailijanNimike: string

@@ -15,7 +15,13 @@
                   {{ $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi') }}
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
-                    <span class="font-weight-500">{{ hyvaksynta.korjausehdotus }}</span>
+                    <span class="font-weight-500">
+                      {{
+                        hyvaksynta.virkailijanKorjausehdotus != null
+                          ? hyvaksynta.virkailijanKorjausehdotus
+                          : hyvaksynta.vastuuhenkilonKorjausehdotus
+                      }}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -42,7 +48,40 @@
                 <span>{{ $t('terveyskeskuskoulutusjakso-on-hyvaksytty') }}</span>
               </div>
             </b-alert>
-            <p v-if="editable">{{ $t('terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}</p>
+            <p v-if="editable">
+              {{ $t('terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}
+              <b-alert
+                :show="
+                  hyvaksynta.virkailijanKorjausehdotus != null ||
+                  hyvaksynta.vastuuhenkilonKorjausehdotus != null
+                "
+                variant="danger"
+                class="mt-3"
+              >
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
+                  </em>
+                  <div>
+                    {{ $t('valmistumispyynto-palautettu-aiemmin-korjattavaksi') }}
+                    <span v-if="hyvaksynta.virkailijanKorjausehdotus != null">
+                      {{ $t('virkailijan-toimesta') }}
+                    </span>
+                    <span v-else>{{ $t('vastuuhenkilon-toimesta') }}</span>
+                    <span class="d-block">
+                      {{ $t('syy') }}&nbsp;
+                      <span class="font-weight-500">
+                        {{
+                          hyvaksynta.virkailijanKorjausehdotus != null
+                            ? hyvaksynta.virkailijanKorjausehdotus
+                            : hyvaksynta.vastuuhenkilonKorjausehdotus
+                        }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </b-alert>
+            </p>
             <elsa-button
               v-if="!editable"
               :to="{ name: 'terveyskeskuskoulutusjaksot' }"
@@ -156,7 +195,8 @@
     }
 
     async onSubmit(formData: {
-      hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen
+      korjausehdotus?: string
+      lisatiedotVirkailijalta: string
       form: TerveyskeskuskoulutusjaksonHyvaksyntaForm
     }) {
       this.params.saving = true
@@ -164,14 +204,14 @@
       try {
         await putTerveyskeskuskoulutusjakso(
           this.$route.params.terveyskeskuskoulutusjaksoId,
-          formData.hyvaksynta?.korjausehdotus,
-          formData?.hyvaksynta?.lisatiedotVirkailijalta,
-          formData.form
+          formData.form,
+          formData?.korjausehdotus,
+          formData?.lisatiedotVirkailijalta
         )
 
         toastSuccess(
           this,
-          formData.hyvaksynta?.korjausehdotus != null
+          formData.korjausehdotus != null
             ? this.$t('terveyskeskuskoulutusjakso-palautettu-muokattavaksi')
             : this.$t('terveyskeskuskoulutusjakso-tarkistettu')
         )

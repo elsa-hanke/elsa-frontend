@@ -124,13 +124,13 @@ export async function getTerveyskeskuskoulutusjakso(id: string) {
 
 export async function putTerveyskeskuskoulutusjakso(
   id: string,
-  korjausehdotus: string,
-  lisatiedotVirkailijalta: string,
-  form: TerveyskeskuskoulutusjaksonHyvaksyntaForm
+  form: TerveyskeskuskoulutusjaksonHyvaksyntaForm,
+  korjausehdotus?: string,
+  lisatiedotVirkailijalta?: string
 ) {
   const formData = wrapToFormData({
-    korjausehdotus: korjausehdotus,
-    lisatiedotVirkailijalta: lisatiedotVirkailijalta
+    korjausehdotus: korjausehdotus || null,
+    lisatiedotVirkailijalta: lisatiedotVirkailijalta || null
   })
   if (form.laillistamispaiva != null) formData.append('laillistamispaiva', form.laillistamispaiva)
   if (form.laillistamispaivanLiite != null)
