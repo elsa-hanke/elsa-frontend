@@ -593,7 +593,7 @@
       this.params.saving = true
 
       const submitData = {
-        hyvaksynta: this.hyvaksynta,
+        lisatiedotVirkailijalta: this.hyvaksynta?.lisatiedotVirkailijalta,
         form: this.form
       }
 
@@ -610,10 +610,6 @@
     }
 
     returnToSender(korjausehdotus: string) {
-      if (this.hyvaksynta != null) {
-        this.hyvaksynta.korjausehdotus = korjausehdotus
-      }
-
       if (this.$isVirkailija() && !this.laillistaminenMuokattavissa) {
         this.form.laillistamispaiva = null
         this.form.laillistamispaivanLiite = null
@@ -622,7 +618,7 @@
       this.$emit(
         'submit',
         {
-          hyvaksynta: this.hyvaksynta,
+          korjausehdotus: korjausehdotus,
           form: this.form
         },
         this.params

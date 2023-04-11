@@ -677,7 +677,9 @@
           this.form = (
             await putValmistumispyyntoHyvaksynta({
               id: this.valmistumispyynto.id,
-              korjausehdotus: korjausehdotus
+              korjausehdotus: korjausehdotus,
+              puhelinnumero: this.form.puhelinnumero,
+              sahkoposti: this.form.sahkoposti
             })
           ).data
           this.$emit('skipRouteExitConfirm', true)

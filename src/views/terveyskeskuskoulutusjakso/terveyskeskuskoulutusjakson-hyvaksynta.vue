@@ -15,7 +15,9 @@
                   {{ $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi') }}
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
-                    <span class="font-weight-500">{{ hyvaksynta.korjausehdotus }}</span>
+                    <span class="font-weight-500">
+                      {{ hyvaksynta.vastuuhenkilonKorjausehdotus }}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -139,18 +141,18 @@
       return 'vastuuhenkilo/terveyskeskuskoulutusjakso/tyoskentelyjakso-liite'
     }
 
-    async onSubmit(formData: { hyvaksynta: TerveyskeskuskoulutusjaksonHyvaksyminen }) {
+    async onSubmit(formData: { korjausehdotus: string }) {
       this.params.saving = true
 
       try {
         await putTerveyskeskuskoulutusjakso(
           this.$route.params.terveyskeskuskoulutusjaksoId,
-          formData.hyvaksynta?.korjausehdotus
+          formData.korjausehdotus
         )
 
         toastSuccess(
           this,
-          formData.hyvaksynta?.korjausehdotus != null
+          formData.korjausehdotus != null
             ? this.$t('terveyskeskuskoulutusjakso-palautettu-muokattavaksi')
             : this.$t('terveyskeskuskoulutusjakso-hyvaksytty')
         )

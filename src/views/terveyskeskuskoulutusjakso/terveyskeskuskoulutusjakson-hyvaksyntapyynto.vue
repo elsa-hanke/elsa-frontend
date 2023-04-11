@@ -21,7 +21,13 @@
                   {{ $t('terveyskeskuskoulutusjakso-on-palautettu-muokattavaksi') }}
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
-                    <span class="font-weight-500">{{ hyvaksynta.korjausehdotus }}</span>
+                    <span class="font-weight-500">
+                      {{
+                        hyvaksynta.virkailijanKorjausehdotus != null
+                          ? hyvaksynta.virkailijanKorjausehdotus
+                          : hyvaksynta.vastuuhenkilonKorjausehdotus
+                      }}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -139,7 +145,7 @@
 
     get editable() {
       return (
-        (this.hyvaksynta?.id == null || this.hyvaksynta?.korjausehdotus != null) &&
+        (this.hyvaksynta?.id == null || this.hyvaksynta?.virkailijanKuittausaika == null) &&
         !this.account.impersonated
       )
     }
