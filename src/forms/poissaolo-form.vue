@@ -176,6 +176,7 @@
   import { Poissaolo, PoissaolonSyy, Tyoskentelyjakso } from '@/types'
   import { dateBetween } from '@/utils/date'
   import { sortByAsc } from '@/utils/sort'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -356,6 +357,13 @@
 
     get account() {
       return store.getters['auth/account']
+    }
+
+    get tyoskentelyjaksotFormatted() {
+      return this.tyoskentelyjaksot.map((tj) => ({
+        ...tj,
+        label: tyoskentelyjaksoLabel(this, tj)
+      }))
     }
   }
 </script>

@@ -92,7 +92,7 @@
               </template>
             </elsa-form-group>
             <elsa-button
-              v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan && !account.impersonated"
+              v-if="!account.impersonated"
               variant="outline-primary"
               :to="{ name: 'uusi-poissaolo', params: { tyoskentelyjaksoId: tyoskentelyjakso.id } }"
               :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
@@ -100,7 +100,7 @@
             >
               {{ $t('lisaa-poissaolo') }}
             </elsa-button>
-            <hr v-if="!tyoskentelyjakso.hyvaksyttyAiempaanErikoisalaan" />
+            <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 v-if="muokkausoikeudet"
