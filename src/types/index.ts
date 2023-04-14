@@ -945,6 +945,12 @@ export type Suoritemerkinta = {
   arviointiasteikko?: Arviointiasteikko
 }
 
+export type SuoritemerkinnanSuorite = {
+  arviointiasteikonTaso?: number | ArviointiasteikonTaso | null
+  vaativuustaso?: number | Vaativuustaso | null
+  suorite: Suorite | null
+}
+
 export interface ToggleableSuoritemerkinta extends Suoritemerkinta {
   showDetails: boolean
 }

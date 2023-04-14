@@ -31,7 +31,13 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import SuoritemerkintaForm from '@/forms/suoritemerkinta-form.vue'
-  import { Suoritemerkinta, SuoritemerkintaLomake } from '@/types'
+  import {
+    ArviointiasteikonTaso,
+    SuoritemerkinnanSuorite,
+    Suoritemerkinta,
+    SuoritemerkintaLomake,
+    Vaativuustaso
+  } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -78,20 +84,29 @@
       params: {
         saving: boolean
         deleting: boolean
-      }
+      },
+      uudetSuoritteet: SuoritemerkinnanSuorite[]
     ) {
       params.saving = true
       try {
         this.suoritemerkinta = (
-          await axios.post('erikoistuva-laakari/suoritemerkinnat', value)
+          await axios.post('erikoistuva-laakari/suoritemerkinnat', {
+            suorituspaiva: value.suorituspaiva,
+            lisatiedot: value.lisatiedot,
+            tyoskentelyjaksoId: value.tyoskentelyjaksoId,
+            suoritteet: uudetSuoritteet.map((s) => {
+              return {
+                vaativuustaso: (s.vaativuustaso as Vaativuustaso)?.arvo,
+                arviointiasteikonTaso: (s.arviointiasteikonTaso as ArviointiasteikonTaso)?.taso,
+                suoriteId: s.suorite?.id
+              }
+            })
+          })
         ).data
-        toastSuccess(this, this.$t('suoritusmerkinta-lisatty-onnistuneesti'))
+        toastSuccess(this, this.$t('suoritusmerkinnat-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
-          name: 'suoritemerkinta',
-          params: {
-            suoritemerkintaId: `${this.suoritemerkinta?.id}`
-          }
+          name: 'suoritemerkinnat'
         })
       } catch {
         toastFail(this, this.$t('uuden-suoritemerkinnan-lisaaminen-epaonnistui'))

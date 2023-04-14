@@ -31,85 +31,134 @@
         </b-form-invalid-feedback>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('suorite')" :required="true">
-      <template #default="{ uid }">
-        <elsa-form-multiselect
-          :id="uid"
-          v-model="form.suorite"
-          :options="suoritteenKategoriat"
-          :state="validateState('suorite')"
-          group-values="suoritteet"
-          group-label="nimi"
-          :group-select="false"
-          label="nimi"
-          track-by="id"
-          @input="$emit('skipRouteExitConfirm', false)"
+    <hr />
+    <div v-if="value.id == null">
+      <div v-for="(uusiSuorite, index) in uudetSuoritteet" :key="index">
+        <elsa-form-group :label="$t('suorite')" :required="true">
+          <template #default="{ uid }">
+            <elsa-form-multiselect
+              :id="uid"
+              v-model="uusiSuorite.suorite"
+              :options="suoritteenKategoriat"
+              :state="validateSuoriteState(index)"
+              group-values="suoritteet"
+              group-label="nimi"
+              :group-select="false"
+              label="nimi"
+              track-by="id"
+              @input="$emit('skipRouteExitConfirm', false)"
+            >
+              <template #option="props">
+                <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
+                <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
+              </template>
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+        <b-form-row>
+          <elsa-form-group :label="arviointiAsteikonNimi" class="col-md-6 mb-2">
+            <template #label-help>
+              <elsa-popover>
+                <elsa-arviointiasteikon-taso-tooltip-content
+                  :arviointiasteikon-nimi="arviointiAsteikonNimi"
+                  :arviointiasteikon-tasot="arviointiasteikko.tasot"
+                />
+              </elsa-popover>
+            </template>
+            <template #default="{ uid }">
+              <elsa-form-multiselect
+                :id="uid"
+                v-model="uusiSuorite.arviointiasteikonTaso"
+                :options="arviointiasteikko.tasot"
+                :custom-label="arviointiasteikonTasoLabel"
+                track-by="taso"
+                @input="$emit('skipRouteExitConfirm', false)"
+              >
+                <template #singleLabel="props">
+                  <span class="font-weight-700">{{ props.option.taso }}</span>
+                  {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
+                </template>
+                <template #option="props">
+                  <span class="font-weight-700">{{ props.option.taso }}</span>
+                  {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
+                </template>
+              </elsa-form-multiselect>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
+            </template>
+          </elsa-form-group>
+          <elsa-form-group :label="$t('vaativuustaso')" class="col-md-6 mb-2">
+            <template #label-help>
+              <elsa-popover>
+                <elsa-vaativuustaso-tooltip-content />
+              </elsa-popover>
+            </template>
+            <template #default="{ uid }">
+              <elsa-form-multiselect
+                :id="uid"
+                v-model="uusiSuorite.vaativuustaso"
+                :options="vaativuustasot"
+                :custom-label="vaativuustasoLabel"
+                track-by="arvo"
+                @input="$emit('skipRouteExitConfirm', false)"
+              >
+                <template #singleLabel="props">
+                  <span class="font-weight-700">{{ props.option.arvo }}</span>
+                  {{ $t(props.option.nimi) }}
+                </template>
+                <template #option="props">
+                  <span class="font-weight-700">{{ props.option.arvo }}</span>
+                  {{ $t(props.option.nimi) }}
+                </template>
+              </elsa-form-multiselect>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
+            </template>
+          </elsa-form-group>
+        </b-form-row>
+        <elsa-button
+          v-if="index !== 0"
+          variant="link"
+          class="text-decoration-none shadow-none p-0"
+          @click="deleteSuorite(index)"
         >
-          <template #option="props">
-            <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
-            <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
-          </template>
-        </elsa-form-multiselect>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">
-          {{ $t('pakollinen-tieto') }}
-        </b-form-invalid-feedback>
-      </template>
-    </elsa-form-group>
-    <elsa-form-group :label="arviointiAsteikonNimi">
-      <template #label-help>
-        <elsa-popover>
-          <elsa-arviointiasteikon-taso-tooltip-content
-            :arviointiasteikon-nimi="arviointiAsteikonNimi"
-            :arviointiasteikon-tasot="arviointiasteikko.tasot"
-          />
-        </elsa-popover>
-      </template>
-      <template #default="{ uid }">
-        <elsa-form-multiselect
-          :id="uid"
-          v-model="form.arviointiasteikonTaso"
-          :options="arviointiasteikko.tasot"
-          :custom-label="arviointiasteikonTasoLabel"
-          track-by="taso"
-          @input="$emit('skipRouteExitConfirm', false)"
-        >
-          <template #singleLabel="props">
-            <span class="font-weight-700">{{ props.option.taso }}</span>
-            {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
-          </template>
-          <template #option="props">
-            <span class="font-weight-700">{{ props.option.taso }}</span>
-            {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
-          </template>
-        </elsa-form-multiselect>
-        <b-form-invalid-feedback :id="`${uid}-feedback`">
-          {{ $t('pakollinen-tieto') }}
-        </b-form-invalid-feedback>
-      </template>
-    </elsa-form-group>
-    <b-form-row>
-      <elsa-form-group :label="$t('vaativuustaso')" class="col-md-8">
-        <template #label-help>
-          <elsa-popover>
-            <elsa-vaativuustaso-tooltip-content />
-          </elsa-popover>
-        </template>
+          <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
+          {{ $t('poista-suorite') }}
+        </elsa-button>
+        <hr v-if="uudetSuoritteet.length > 1" />
+      </div>
+      <elsa-button
+        variant="outline-primary"
+        :class="uudetSuoritteet.length > 1 ? '' : 'mt-3'"
+        class="lisaa-suorite"
+        @click.stop.prevent="onLisaaSuorite"
+      >
+        {{ $t('lisaa-suorite') }}
+      </elsa-button>
+    </div>
+    <div v-else>
+      <elsa-form-group :label="$t('suorite')" :required="true">
         <template #default="{ uid }">
           <elsa-form-multiselect
             :id="uid"
-            v-model="form.vaativuustaso"
-            :options="vaativuustasot"
-            :custom-label="vaativuustasoLabel"
-            track-by="arvo"
+            v-model="form.suorite"
+            :options="suoritteenKategoriat"
+            :state="validateState('suorite')"
+            group-values="suoritteet"
+            group-label="nimi"
+            :group-select="false"
+            label="nimi"
+            track-by="id"
             @input="$emit('skipRouteExitConfirm', false)"
           >
-            <template #singleLabel="props">
-              <span class="font-weight-700">{{ props.option.arvo }}</span>
-              {{ $t(props.option.nimi) }}
-            </template>
             <template #option="props">
-              <span class="font-weight-700">{{ props.option.arvo }}</span>
-              {{ $t(props.option.nimi) }}
+              <span v-if="props.option.$isLabel">{{ props.option.$groupLabel }}</span>
+              <span v-else class="d-inline-block ml-3">{{ props.option.nimi }}</span>
             </template>
           </elsa-form-multiselect>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -117,22 +166,87 @@
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('suorituspaiva')" class="col-md-4" :required="true">
-        <template #default="{ uid }">
-          <elsa-form-datepicker
-            v-if="childDataReceived"
-            :id="uid"
-            ref="suorituspaiva"
-            :value.sync="form.suorituspaiva"
-            :min="tyoskentelyjaksonAlkamispaiva"
-            :min-error-text="$t('suorituspaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
-            :max="tyoskentelyjaksonPaattymispaiva"
-            :max-error-text="$t('suorituspaiva-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')"
-            @input="$emit('skipRouteExitConfirm', false)"
-          ></elsa-form-datepicker>
-        </template>
-      </elsa-form-group>
-    </b-form-row>
+      <b-form-row>
+        <elsa-form-group :label="arviointiAsteikonNimi" class="col-md-6">
+          <template #label-help>
+            <elsa-popover>
+              <elsa-arviointiasteikon-taso-tooltip-content
+                :arviointiasteikon-nimi="arviointiAsteikonNimi"
+                :arviointiasteikon-tasot="arviointiasteikko.tasot"
+              />
+            </elsa-popover>
+          </template>
+          <template #default="{ uid }">
+            <elsa-form-multiselect
+              :id="uid"
+              v-model="form.arviointiasteikonTaso"
+              :options="arviointiasteikko.tasot"
+              :custom-label="arviointiasteikonTasoLabel"
+              track-by="taso"
+              @input="$emit('skipRouteExitConfirm', false)"
+            >
+              <template #singleLabel="props">
+                <span class="font-weight-700">{{ props.option.taso }}</span>
+                {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
+              </template>
+              <template #option="props">
+                <span class="font-weight-700">{{ props.option.taso }}</span>
+                {{ $t('arviointiasteikon-taso-' + props.option.nimi) }}
+              </template>
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group :label="$t('vaativuustaso')" class="col-md-6">
+          <template #label-help>
+            <elsa-popover>
+              <elsa-vaativuustaso-tooltip-content />
+            </elsa-popover>
+          </template>
+          <template #default="{ uid }">
+            <elsa-form-multiselect
+              :id="uid"
+              v-model="form.vaativuustaso"
+              :options="vaativuustasot"
+              :custom-label="vaativuustasoLabel"
+              track-by="arvo"
+              @input="$emit('skipRouteExitConfirm', false)"
+            >
+              <template #singleLabel="props">
+                <span class="font-weight-700">{{ props.option.arvo }}</span>
+                {{ $t(props.option.nimi) }}
+              </template>
+              <template #option="props">
+                <span class="font-weight-700">{{ props.option.arvo }}</span>
+                {{ $t(props.option.nimi) }}
+              </template>
+            </elsa-form-multiselect>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-form-row>
+    </div>
+    <hr />
+    <elsa-form-group :label="$t('suorituspaiva')" :required="true">
+      <template #default="{ uid }">
+        <elsa-form-datepicker
+          v-if="childDataReceived"
+          :id="uid"
+          ref="suorituspaiva"
+          :value.sync="form.suorituspaiva"
+          :min="tyoskentelyjaksonAlkamispaiva"
+          :min-error-text="$t('suorituspaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')"
+          :max="tyoskentelyjaksonPaattymispaiva"
+          :max-error-text="$t('suorituspaiva-ei-voi-olla-tyoskentelyjakson-paattymisen-jalkeen')"
+          class="col-md-4 pl-0"
+          @input="$emit('skipRouteExitConfirm', false)"
+        ></elsa-form-datepicker>
+      </template>
+    </elsa-form-group>
     <elsa-form-group :label="$t('lisatiedot')">
       <template #default="{ uid }">
         <b-form-textarea
@@ -168,7 +282,8 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
+  import { Validation } from 'vuelidate'
+  import { required, requiredIf } from 'vuelidate/lib/validators'
 
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -185,6 +300,7 @@
     ArviointiasteikonTaso,
     Erikoisala,
     Kunta,
+    SuoritemerkinnanSuorite,
     Suoritemerkinta,
     SuoritteenKategoria,
     Vaativuustaso
@@ -202,21 +318,35 @@
       ElsaButton,
       ElsaVaativuustasoTooltipContent,
       ElsaArviointiasteikonTasoTooltipContent
-    },
-    validations: {
-      form: {
-        tyoskentelyjakso: {
-          required
-        },
-        suorite: {
-          required
-        }
-      }
     }
   })
   export default class SuoritemerkintaForm extends Mixins(TyoskentelyjaksoMixin) {
     $refs!: {
       suorituspaiva: ElsaFormDatepicker
+    }
+
+    validations() {
+      return {
+        form: {
+          tyoskentelyjakso: {
+            required
+          },
+          suorite: {
+            required: requiredIf(() => {
+              return this.value.id
+            })
+          }
+        },
+        uudetSuoritteet: {
+          $each: {
+            suorite: {
+              required: requiredIf(() => {
+                return !this.value.id
+              })
+            }
+          }
+        }
+      }
     }
 
     @Prop({ required: false, default: () => [] })
@@ -254,6 +384,7 @@
       deleting: false
     }
     childDataReceived = false
+    uudetSuoritteet: Partial<SuoritemerkinnanSuorite>[] = [{}]
 
     mounted() {
       this.form = {
@@ -269,11 +400,18 @@
 
     validateForm(): boolean {
       this.$v.form.$touch()
+      this.$v.uudetSuoritteet.$touch()
       return !this.$v.$anyError
     }
 
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    validateSuoriteState(index: number) {
+      if (!this.$v.uudetSuoritteet?.$each) return
+      const { $dirty, $error } = this.$v.uudetSuoritteet?.$each[index]?.suorite as Validation
       return $dirty ? ($error ? false : null) : null
     }
 
@@ -299,7 +437,8 @@
           suorituspaiva: this.form?.suorituspaiva,
           lisatiedot: this.form?.lisatiedot
         },
-        this.params
+        this.params,
+        this.uudetSuoritteet
       )
     }
 
@@ -314,5 +453,20 @@
     vaativuustasoLabel(value: Vaativuustaso) {
       return `${value.arvo} ${value.nimi}`
     }
+
+    onLisaaSuorite() {
+      this.uudetSuoritteet.push({})
+    }
+
+    deleteSuorite(index: number) {
+      this.uudetSuoritteet.splice(index, 1)
+    }
   }
 </script>
+
+<style scoped>
+  .lisaa-suorite:before {
+    content: '+';
+    margin-right: 6px;
+  }
+</style>
