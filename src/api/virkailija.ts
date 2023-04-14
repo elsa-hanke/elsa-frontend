@@ -139,9 +139,16 @@ export async function putTerveyskeskuskoulutusjakso(
       form.laillistamispaivanLiite,
       form.laillistamispaivanLiite?.name
     )
+  const emptyBody =
+    !korjausehdotus &&
+    !lisatiedotVirkailijalta &&
+    form.laillistamispaiva == null &&
+    form.laillistamispaivanLiite == null
   const path = `virkailija/terveyskeskuskoulutusjakson-hyvaksynta/${id}`
-  return await axios.put<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+  return await axios.put<TerveyskeskuskoulutusjaksonHyvaksyminen>(path, emptyBody ? {} : formData, {
+    headers: {
+      'Content-Type': emptyBody ? 'application/json' : 'multipart/form-data'
+    },
     timeout: 120000
   })
 }
