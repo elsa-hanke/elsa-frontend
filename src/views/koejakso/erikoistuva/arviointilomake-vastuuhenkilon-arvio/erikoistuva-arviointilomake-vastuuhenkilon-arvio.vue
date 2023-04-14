@@ -14,7 +14,12 @@
                 </em>
                 <div>
                   {{ $t('vastuuhenkilon-arvio-tila-palautettu-korjattavaksi') }}
-                  <span v-if="koejaksoData.vastuuhenkilonArvio.virkailijanKorjausehdotus != null">
+                  <span
+                    v-if="
+                      koejaksoData.vastuuhenkilonArvio &&
+                      koejaksoData.vastuuhenkilonArvio.virkailijanKorjausehdotus != null
+                    "
+                  >
                     {{ $t('virkailijan-toimesta') }}
                   </span>
                   <span v-else>{{ $t('vastuuhenkilon-toimesta') }}</span>
