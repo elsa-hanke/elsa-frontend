@@ -33,7 +33,7 @@
                 </em>
                 <div>
                   {{ $t('terveyskeskuskoulutusjakso-on-tarkistettu') }}
-                  <span class="d-block">
+                  <span v-if="hyvaksynta.lisatiedotVirkailijalta" class="d-block">
                     {{ $t('lisatiedot-vastuuhenkilolle') }}:&nbsp;
                     <span class="font-weight-500">{{ hyvaksynta.lisatiedotVirkailijalta }}</span>
                   </span>

@@ -1060,7 +1060,7 @@
           teoriakoulutusTarkistettu: this.form.teoriakoulutusTarkistettu,
           kommentitVirkailijoille: this.form.kommentitVirkailijoille,
           koejaksoEiVaadittu: this.form.koejaksoEiVaadittu,
-          lisatiedotVastuuhenkilolle: this.form.lisatiedotVastuuhenkilolle,
+          lisatiedotVastuuhenkilolle: this.form.lisatiedotVastuuhenkilolle || null,
           keskenerainen: this.form.keskenerainen,
           laillistamispaiva: this.laillistaminenMuokattavissa ? this.form.laillistamispaiva : null,
           laillistamistodistus: this.laillistaminenMuokattavissa
