@@ -77,7 +77,10 @@
               </div>
             </template>
           </elsa-form-group>
-          <elsa-form-group :label="$t('osaamistavoitteet-omalla-erikoisalalla')">
+          <elsa-form-group
+            v-if="koulutusjakso.osaamistavoitteet.length > 0"
+            :label="$t('osaamistavoitteet-omalla-erikoisalalla')"
+          >
             <template #default="{ uid }">
               <b-badge
                 v-for="osaamistavoite in koulutusjakso.osaamistavoitteet"
