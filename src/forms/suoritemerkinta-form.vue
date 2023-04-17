@@ -306,6 +306,7 @@
     Vaativuustaso
   } from '@/types'
   import { vaativuustasot, ArviointiasteikkoTyyppi } from '@/utils/constants'
+  import { dateBetween } from '@/utils/date'
 
   @Component({
     components: {
@@ -387,8 +388,15 @@
     uudetSuoritteet: Partial<SuoritemerkinnanSuorite>[] = [{}]
 
     mounted() {
+      const currentTyoskentelyjaksot = this.tyoskentelyjaksotFormatted.filter((jakso) =>
+        dateBetween(new Date(), jakso.alkamispaiva, jakso.paattymispaiva)
+      )
       this.form = {
-        tyoskentelyjakso: this.value.tyoskentelyjakso,
+        tyoskentelyjakso: this.value.tyoskentelyjakso
+          ? this.value.tyoskentelyjakso
+          : currentTyoskentelyjaksot.length === 1
+          ? currentTyoskentelyjaksot[0]
+          : undefined,
         suorite: this.value.suorite,
         vaativuustaso: vaativuustasot.find((taso) => taso.arvo === this.value.vaativuustaso),
         arviointiasteikonTaso: this.arviointiasteikonTaso,
