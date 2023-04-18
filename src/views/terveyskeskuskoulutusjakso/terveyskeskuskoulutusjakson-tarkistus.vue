@@ -63,7 +63,7 @@
                     <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
                   </em>
                   <div>
-                    {{ $t('valmistumispyynto-palautettu-aiemmin-korjattavaksi') }}
+                    {{ $t('terveyskeskuskoulutusjakso-palautettu-aiemmin-korjattavaksi') }}
                     <span v-if="hyvaksynta.virkailijanKorjausehdotus != null">
                       {{ $t('virkailijan-toimesta') }}
                     </span>
