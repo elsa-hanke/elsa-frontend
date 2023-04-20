@@ -11,7 +11,8 @@ import {
   KayttajahallintaUpdateKayttaja,
   KayttajahallintaVastuuhenkilonTehtavatLomake,
   KayttajahallintaNewKayttaja,
-  Yliopisto
+  Yliopisto,
+  OpintoopasSimple
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -102,6 +103,11 @@ export async function getKayttaja(kayttajaId: number | string) {
 export async function getErikoistuvaLaakariLomake() {
   const path = `${resolveRolePath()}/erikoistuva-laakari-lomake`
   return await axios.get<ErikoistuvaLaakariLomake>(path)
+}
+
+export async function getOpintooppaat() {
+  const path = `${resolveRolePath()}/opintooppaat`
+  return await axios.get<OpintoopasSimple[]>(path)
 }
 
 export async function getYliopistot() {
