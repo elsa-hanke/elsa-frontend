@@ -33,6 +33,7 @@ export type Opintooikeus = {
   erikoisalaLiittynytElsaan: boolean | null
   asetus: Asetus
   tila: OpintooikeusTila
+  opintoopasId: number
   opintoopasNimi: string
 }
 
@@ -1067,9 +1068,15 @@ export interface KayttajahallintaKayttajaWrapper {
 export interface KayttajahallintaUpdateKayttaja {
   sahkoposti?: string | null
   sahkopostiUudelleen?: string | null
+  opintooikeudet?: KayttajahallintaUpdateOpintooikeus[]
   eppn?: string | null
   yliopistotAndErikoisalat?: KayttajaYliopistoErikoisala[]
   reassignedTehtavat?: ReassignedVastuuhenkilonTehtava[]
+}
+
+export interface KayttajahallintaUpdateOpintooikeus {
+  id?: number
+  osaamisenArvioinninOppaanPvm?: string
 }
 
 export interface KayttajahallintaNewKayttaja {

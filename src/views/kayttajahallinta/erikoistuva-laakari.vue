@@ -105,7 +105,7 @@
             <hr />
             <h2>{{ $t('opintooikeudet') }}</h2>
             <div
-              v-for="opintooikeus in opintooikeudet"
+              v-for="(opintooikeus, index) in opintooikeudet"
               :key="opintooikeus.id"
               class="border rounded p-3 mb-4"
             >
@@ -143,7 +143,22 @@
                   <span :id="uid">{{ opintooikeus.opintoopasNimi }}</span>
                 </template>
               </elsa-form-group>
-              <elsa-form-group :label="$t('osaamisen-arvioinnin-oppaan-paivamaara')">
+              <elsa-form-group
+                v-if="editing && form.opintooikeudet"
+                class="col-xs-12 col-sm-6 pl-0"
+                :label="$t('osaamisen-arvioinnin-oppaan-paivamaara')"
+                :required="true"
+              >
+                <template #default="{ uid }">
+                  <elsa-form-datepicker
+                    :id="uid"
+                    :ref="`osaamisenArvioinninOppaanPvm${opintooikeus.id}`"
+                    :value.sync="form.opintooikeudet[index].osaamisenArvioinninOppaanPvm"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                  ></elsa-form-datepicker>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group v-else :label="$t('osaamisen-arvioinnin-oppaan-paivamaara')">
                 <template #default="{ uid }">
                   <span :id="uid">
                     {{ $date(opintooikeus.osaamisenArvioinninOppaanPvm) }}
@@ -241,6 +256,7 @@
     patchErikoistuvaLaakari
   } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
@@ -252,6 +268,7 @@
   @Component({
     components: {
       ElsaButton,
+      ElsaFormDatepicker,
       ElsaFormError,
       ElsaFormGroup
     },
@@ -265,6 +282,13 @@
           required,
           email,
           sameAsSahkoposti: sameAs('sahkoposti')
+        },
+        opintooikeudet: {
+          $each: {
+            osaamisenArvioinninOppaanPvm: {
+              required
+            }
+          }
         }
       }
     }
@@ -284,7 +308,8 @@
 
     form: KayttajahallintaUpdateKayttaja = {
       sahkoposti: null,
-      sahkopostiUudelleen: null
+      sahkopostiUudelleen: null,
+      opintooikeudet: []
     }
 
     async mounted() {
@@ -306,6 +331,10 @@
       const sahkoposti = this.sahkoposti
       this.form.sahkoposti = sahkoposti
       this.form.sahkopostiUudelleen = sahkoposti
+      this.form.opintooikeudet = this.opintooikeudet.map((o) => ({
+        id: o.id,
+        osaamisenArvioinninOppaanPvm: o.osaamisenArvioinninOppaanPvm
+      }))
     }
 
     async onInvitationResend() {
@@ -342,14 +371,24 @@
     }
 
     async onSave() {
-      if (!this.kayttajaWrapper?.kayttaja?.userId || !this.validateForm()) {
+      const pvmValidations = this.opintooikeudet.map((o) =>
+        (
+          this.$refs[`osaamisenArvioinninOppaanPvm${o.id}`] as ElsaFormDatepicker[]
+        )[0].validateForm()
+      )
+      if (
+        !this.validateForm() ||
+        pvmValidations.includes(false) ||
+        !this.kayttajaWrapper?.kayttaja
+      ) {
         return
       }
       this.updatingKayttaja = true
 
       try {
         await patchErikoistuvaLaakari(this.kayttajaWrapper.kayttaja.userId, {
-          sahkoposti: this.form.sahkoposti
+          sahkoposti: this.form.sahkoposti,
+          opintooikeudet: this.form.opintooikeudet
         })
         toastSuccess(this, this.$t('kayttajan-tiedot-paivitetty'))
       } catch (err) {
@@ -363,6 +402,7 @@
         )
       }
 
+      await this.fetchKayttaja()
       this.editing = false
       this.updatingKayttaja = false
       this.skipRouteExitConfirm = true
