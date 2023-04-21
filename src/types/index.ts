@@ -1076,6 +1076,7 @@ export interface KayttajahallintaUpdateKayttaja {
 
 export interface KayttajahallintaUpdateOpintooikeus {
   id?: number
+  opintoopas?: OpintoopasSimple | number | null
   osaamisenArvioinninOppaanPvm?: string
 }
 
