@@ -138,7 +138,28 @@
                   <span :id="uid">{{ opintooikeus.asetus.nimi }}</span>
                 </template>
               </elsa-form-group>
-              <elsa-form-group :label="$t('kaytossa-oleva-opintoopas')">
+              <elsa-form-group
+                v-if="editing && form.opintooikeudet"
+                :label="$t('kaytossa-oleva-opintoopas')"
+                :required="true"
+              >
+                <template #default="{ uid }">
+                  <elsa-form-multiselect
+                    :id="uid"
+                    v-model="form.opintooikeudet[index].opintoopas"
+                    :options="opintooppaatFilteredAndSorted(opintooikeus.erikoisalaId)"
+                    :state="validateOpintoopas(index)"
+                    label="nimi"
+                    value-field="id"
+                    track-by="id"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                  />
+                  <b-form-invalid-feedback :id="`${uid}-feedback`">
+                    {{ $t('pakollinen-tieto') }}
+                  </b-form-invalid-feedback>
+                </template>
+              </elsa-form-group>
+              <elsa-form-group v-else :label="$t('kaytossa-oleva-opintoopas')">
                 <template #default="{ uid }">
                   <span :id="uid">{{ opintooikeus.opintoopasNimi }}</span>
                 </template>
@@ -248,21 +269,25 @@
 <script lang="ts">
   import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
+  import { Validation } from 'vuelidate'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
   import {
     getErikoistuvaLaakari,
     putErikoistuvaLaakariInvitation,
-    patchErikoistuvaLaakari
+    patchErikoistuvaLaakari,
+    getOpintooppaat
   } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
-  import { KayttajahallintaUpdateKayttaja, ElsaError } from '@/types/index'
+  import { KayttajahallintaUpdateKayttaja, ElsaError, OpintoopasSimple } from '@/types/index'
   import { confirmExit } from '@/utils/confirm'
   import { isInPast } from '@/utils/date'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -270,7 +295,8 @@
       ElsaButton,
       ElsaFormDatepicker,
       ElsaFormError,
-      ElsaFormGroup
+      ElsaFormGroup,
+      ElsaFormMultiselect
     },
     validations: {
       form: {
@@ -286,6 +312,9 @@
         opintooikeudet: {
           $each: {
             osaamisenArvioinninOppaanPvm: {
+              required
+            },
+            opintoopas: {
               required
             }
           }
@@ -305,6 +334,7 @@
       }
     ]
     resending = false
+    opintooppaat: OpintoopasSimple[] = []
 
     form: KayttajahallintaUpdateKayttaja = {
       sahkoposti: null,
@@ -313,6 +343,7 @@
     }
 
     async mounted() {
+      await this.fetchOpintooppaat()
       await this.fetchKayttaja()
       this.loading = false
     }
@@ -327,12 +358,22 @@
       }
     }
 
+    async fetchOpintooppaat() {
+      try {
+        this.opintooppaat = (await getOpintooppaat()).data
+      } catch (err) {
+        toastFail(this, this.$t('opintooppaiden-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'kayttajahallinta' })
+      }
+    }
+
     initForm() {
       const sahkoposti = this.sahkoposti
       this.form.sahkoposti = sahkoposti
       this.form.sahkopostiUudelleen = sahkoposti
       this.form.opintooikeudet = this.opintooikeudet.map((o) => ({
         id: o.id,
+        opintoopas: this.opintooppaat.find((o2) => o2.id === o.opintoopasId),
         osaamisenArvioinninOppaanPvm: o.osaamisenArvioinninOppaanPvm
       }))
     }
@@ -388,7 +429,11 @@
       try {
         await patchErikoistuvaLaakari(this.kayttajaWrapper.kayttaja.userId, {
           sahkoposti: this.form.sahkoposti,
-          opintooikeudet: this.form.opintooikeudet
+          opintooikeudet: this.form.opintooikeudet?.map((o) => ({
+            id: o.id,
+            opintoopas: (o.opintoopas as OpintoopasSimple)?.id,
+            osaamisenArvioinninOppaanPvm: o.osaamisenArvioinninOppaanPvm
+          }))
         })
         toastSuccess(this, this.$t('kayttajan-tiedot-paivitetty'))
       } catch (err) {
@@ -420,6 +465,18 @@
 
     get opintooikeudet() {
       return this.kayttajaWrapper?.erikoistuvaLaakari?.opintooikeudet ?? []
+    }
+
+    opintooppaatFilteredAndSorted(erikoisalaId: number) {
+      return this.opintooppaat
+        .filter((o) => o.erikoisalaId === erikoisalaId)
+        .sort((a, b) => sortByAsc(a.nimi, b.nimi))
+    }
+
+    validateOpintoopas(index: number) {
+      const { $dirty, $error } = this.$v.form?.opintooikeudet?.$each[index]
+        ?.opintoopas as Validation
+      return $dirty ? ($error ? false : null) : null
     }
   }
 </script>
