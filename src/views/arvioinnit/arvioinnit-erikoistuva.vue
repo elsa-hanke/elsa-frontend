@@ -86,141 +86,17 @@
               </b-container>
               <div class="arvioinnit">
                 <div v-if="kategoriat">
-                  <div v-for="(kategoria, index) in kategoriat" :key="index" class="mt-3">
-                    <elsa-button
-                      variant="link"
-                      class="text-decoration-none shadow-none border-0 text-dark p-0 w-100"
-                      @click="kategoria.visible = !kategoria.visible"
-                    >
-                      <div class="kategoria-collapse text-left p-2 mt-2 font-weight-500 d-flex">
-                        <font-awesome-icon
-                          :icon="kategoria.visible ? 'caret-up' : 'caret-down'"
-                          fixed-width
-                          size="lg"
-                          class="text-muted mr-2"
-                        />
-                        {{
-                          `${kategoria.nimi} (${arvioinnitCountByKategoria(kategoria)} ${$t(
-                            'arviointia'
-                          )})`
-                        }}
-                      </div>
-                    </elsa-button>
-                    <div v-if="kategoria.visible">
-                      <div
-                        v-for="(a, kokonaisuusIndex) in kategoria.arvioitavatKokonaisuudet"
-                        :key="kokonaisuusIndex"
-                        :class="{ 'mb-3': a.arvioinnit.length === 0 }"
-                      >
-                        <hr v-if="index !== 0" class="mt-1 mb-2" />
-                        <p class="font-weight-500 p-2 mb-0 mt-2">{{ a.nimi }}</p>
-                        <div v-if="a.arvioinnit.length > 0">
-                          <b-table-simple small fixed class="mb-0" stacked="md" responsive>
-                            <b-thead>
-                              <b-tr class="text-size-sm">
-                                <b-th scope="col" style="width: 12%" class="text-uppercase">
-                                  {{ $t('pvm') }}
-                                </b-th>
-                                <b-th scope="col" style="width: 15%" class="text-uppercase">
-                                  {{ $t('tapahtuma') }}
-                                </b-th>
-                                <b-th scope="col" style="width: 13%" class="text-uppercase">
-                                  {{ $t('arviointi') }}
-                                </b-th>
-                                <b-th scope="col" style="width: 18%" class="text-uppercase">
-                                  {{ $t('itsearviointi') }}
-                                </b-th>
-                                <b-th scope="col" style="width: 22%" class="text-uppercase">
-                                  {{ $t('tyoskentelypaikka') }}
-                                </b-th>
-                                <b-th scope="col" style="width: 20%" class="text-uppercase">
-                                  {{ $t('arvioinnin-antaja') }}
-                                </b-th>
-                              </b-tr>
-                            </b-thead>
-                            <b-tbody>
-                              <b-tr
-                                v-for="(arviointi, arviointiIndex) in a.visible
-                                  ? a.arvioinnit
-                                  : a.arvioinnit.slice(0, 1)"
-                                :key="`arviointi-${arviointiIndex}`"
-                              >
-                                <b-td :stacked-heading="$t('pvm')">
-                                  <elsa-button
-                                    variant="link"
-                                    :to="{
-                                      name: 'arviointi',
-                                      params: { arviointiId: arviointi.id }
-                                    }"
-                                    class="shadow-none p-0"
-                                  >
-                                    {{ $date(arviointi.tapahtumanAjankohta) }}
-                                  </elsa-button>
-                                </b-td>
-                                <b-td :stacked-heading="$t('tapahtuma')">
-                                  {{ arviointi.arvioitavaTapahtuma }}
-                                </b-td>
-                                <b-td :stacked-heading="$t('arviointi')">
-                                  <elsa-badge
-                                    v-if="arviointi.arviointiasteikonTaso"
-                                    :value="arviointi.arviointiasteikonTaso"
-                                    :variant="
-                                      arviointi.arviointiasteikonTaso > 3 ? 'success' : 'light'
-                                    "
-                                  />
-                                  <span v-else class="text-size-sm text-light-muted">
-                                    {{ $t('ei-tehty-viela') }}
-                                  </span>
-                                </b-td>
-                                <b-td :stacked-heading="$t('itsearviointi')">
-                                  <elsa-badge
-                                    v-if="arviointi.itsearviointiArviointiasteikonTaso"
-                                    :value="arviointi.itsearviointiArviointiasteikonTaso"
-                                  />
-                                  <elsa-button
-                                    v-else-if="!arviointi.lukittu && !account.impersonated"
-                                    variant="primary"
-                                    :to="{
-                                      name: 'itsearviointi',
-                                      params: { arviointiId: arviointi.id }
-                                    }"
-                                  >
-                                    {{ $t('tee-itsearviointi') }}
-                                  </elsa-button>
-                                  <span v-else class="text-size-sm text-light-muted">
-                                    {{ $t('ei-tehty') }}
-                                  </span>
-                                </b-td>
-                                <b-td :stacked-heading="$t('tyoskentelypaikka')">
-                                  {{ arviointi.tyoskentelyjakso.tyoskentelypaikka.nimi }}
-                                </b-td>
-                                <b-td :stacked-heading="$t('arvioinnin-antaja')">
-                                  {{ arviointi.arvioinninAntaja.nimi }}
-                                </b-td>
-                              </b-tr>
-                            </b-tbody>
-                          </b-table-simple>
-                          <div class="text-right">
-                            <elsa-button
-                              v-if="a.arvioinnit.length > 1"
-                              variant="link"
-                              class="shadow-none font-weight-500"
-                              @click="a.visible = !a.visible"
-                            >
-                              {{ `${$t('kaikki-arvioinnit')} (${a.arvioinnit.length})` }}
-                              <font-awesome-icon
-                                :icon="a.visible ? 'chevron-up' : 'chevron-down'"
-                                fixed-width
-                                class="ml-1 text-dark"
-                              />
-                            </elsa-button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <arvioinnin-kategoriat :kategoriat="kategoriat" />
                 </div>
-                <div v-else class="text-center mt-3">
+                <div v-if="aiemmatKategoriat && aiemmatKategoriat.length > 0">
+                  <h2 class="mt-6">{{ $t('aiemmat-arvioinnit') }}</h2>
+                  <div>
+                    <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+                    {{ $t('aiemmat-arvioinnit-kuvaus') }}
+                  </div>
+                  <arvioinnin-kategoriat :kategoriat="aiemmatKategoriat" />
+                </div>
+                <div v-if="!kategoriat || !aiemmatKategoriat" class="text-center mt-3">
                   <b-spinner variant="primary" :label="$t('ladataan')" />
                 </div>
               </div>
@@ -250,8 +126,8 @@
   import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ArvioinninKategoriat from '@/components/arvioinnin-kategoriat/arvioinnin-kategoriat.vue'
   import ArviointipyyntoCard from '@/components/arviointipyynto-card/arviointipyynto-card.vue'
-  import ElsaBadge from '@/components/badge/badge.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -273,11 +149,11 @@
 
   @Component({
     components: {
+      ArvioinninKategoriat,
       ArviointipyyntoCard,
       ElsaFormGroup,
       ElsaFormMultiselect,
-      ElsaButton,
-      ElsaBadge
+      ElsaButton
     }
   })
   export default class ArvioinnitErikoistuva extends Vue {
@@ -304,6 +180,7 @@
       }
     ]
     kategoriat: null | ArvioitavanKokonaisuudenKategoria[] = null
+    aiemmatKategoriat: null | ArvioitavanKokonaisuudenKategoria[] = null
 
     async mounted() {
       await this.fetchOptions()
@@ -449,6 +326,8 @@
         ).values()
       ]
 
+      const aiemmatKokonaisuudet: ArvioitavaKokonaisuus[] = []
+
       // Liitetään arvioinnit arvioitaviin kokonaisuuksiin
       if (this.arvioinnit) {
         this.arvioinnit.forEach((arviointi) => {
@@ -464,10 +343,55 @@
                   kokonaisuus.itsearviointiArviointiasteikonTaso as number,
                 arvioitavaKokonaisuusId: kokonaisuus.arvioitavaKokonaisuusId
               })
+            } else {
+              // Aiemmat arvioinnit
+              let aiempiKokonaisuus = aiemmatKokonaisuudet.find(
+                (a) => a.id === kokonaisuus.arvioitavaKokonaisuusId
+              )
+              if (!aiempiKokonaisuus) {
+                aiempiKokonaisuus = {
+                  ...kokonaisuus.arvioitavaKokonaisuus,
+                  arvioinnit: [],
+                  visible: false
+                }
+                aiemmatKokonaisuudet.push(aiempiKokonaisuus)
+              }
+              aiempiKokonaisuus.arvioinnit.push({
+                ...arviointi,
+                arviointiasteikonTaso: kokonaisuus.arviointiasteikonTaso as number,
+                itsearviointiArviointiasteikonTaso:
+                  kokonaisuus.itsearviointiArviointiasteikonTaso as number,
+                arvioitavaKokonaisuusId: kokonaisuus.arvioitavaKokonaisuusId
+              })
             }
           })
         })
       }
+
+      const aiemmatKategoriat = new Map<number, ArvioitavanKokonaisuudenKategoria>()
+      aiemmatKokonaisuudet.forEach((k) => {
+        if (k.kategoria.id) {
+          if (!aiemmatKategoriat.get(k.kategoria.id)) {
+            aiemmatKategoriat.set(k.kategoria.id, {
+              ...k.kategoria,
+              arvioitavatKokonaisuudet: [],
+              visible: true
+            })
+          }
+          aiemmatKategoriat.get(k.kategoria.id)?.arvioitavatKokonaisuudet.push(k)
+        }
+      })
+      this.aiemmatKategoriat = [...aiemmatKategoriat.values()]
+        .map((kategoria) => ({
+          ...kategoria,
+          arvioitavatKokonaisuudet: kategoria.arvioitavatKokonaisuudet.sort(
+            (a: ArvioitavaKokonaisuus, b: ArvioitavaKokonaisuus) => sortByAsc(a.nimi, b.nimi)
+          )
+        }))
+        .sort(
+          (a: ArvioitavanKokonaisuudenKategoria, b: ArvioitavanKokonaisuudenKategoria) =>
+            sortByAsc(a.jarjestysnumero, b.jarjestysnumero) || sortByAsc(a.nimi, b.nimi)
+        )
 
       // Liitetään arvioitavat kokonaisuudet kategorioihin
       arvioitavatKokonaisuudetMap?.forEach((a: ArvioitavaKokonaisuus) => {
@@ -514,12 +438,6 @@
         (a: ArvioitavaKokonaisuus, b: ArvioitavaKokonaisuus) => sortByAsc(a.nimi, b.nimi)
       )
     }
-
-    arvioinnitCountByKategoria(kategoria: ArvioitavanKokonaisuudenKategoria) {
-      return kategoria.arvioitavatKokonaisuudet
-        .map((a: ArvioitavaKokonaisuus) => a.arvioinnit.length)
-        .reduce((a, b) => a + b)
-    }
   }
 </script>
 
@@ -531,73 +449,9 @@
     max-width: 1024px;
   }
 
-  .kategoria-collapse {
-    background: #f5f5f6;
-  }
-
   ::v-deep .multiselect {
     .multiselect__option::after {
       display: none;
     }
-  }
-
-  ::v-deep table {
-    border-bottom: none;
-
-    thead tr th {
-      border-top: none;
-      border-bottom: none;
-    }
-    tbody tr:first-child td {
-      border-top: none;
-    }
-    td {
-      vertical-align: middle;
-    }
-    td,
-    th {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-    th {
-      font-weight: 400;
-    }
-  }
-
-  @include media-breakpoint-down(sm) {
-    ::v-deep table {
-      tr {
-        border: $table-border-width solid $table-border-color;
-        border-radius: $border-radius;
-        margin-top: 0.5rem;
-        padding-top: $table-cell-padding;
-        padding-bottom: $table-cell-padding;
-      }
-
-      td {
-        border: none;
-        padding: 0 $table-cell-padding;
-
-        & > div {
-          width: 100% !important;
-          padding: 0 0 0.5rem 0 !important;
-        }
-
-        &::before {
-          text-align: left !important;
-          font-weight: 400 !important;
-          width: 100% !important;
-          padding-right: 0 !important;
-        }
-
-        &:last-child > div {
-          padding-bottom: 0 !important;
-        }
-      }
-    }
-  }
-
-  .text-light-muted {
-    color: #b1b1b1;
   }
 </style>
