@@ -10,131 +10,102 @@
             v-if="!account.impersonated"
             variant="primary"
             :to="{ name: 'uusi-suoritemerkinta' }"
-            class="mb-5"
           >
             {{ $t('lisaa-suoritemerkinta') }}
           </elsa-button>
-          <div v-if="suoritteetTable">
-            <div v-for="(kategoria, index) in suoritteenKategoriat" :key="index" class="mb-2">
-              <div v-if="!$screen.md" :key="`header-${index}`" class="text-uppercase text-size-sm">
-                {{ `${$t('suorite')}: ${kategoria.nimi}` }}
-              </div>
-              <b-table-simple fixed responsive stacked="md">
-                <b-thead>
-                  <b-tr>
-                    <b-th>
-                      {{ `${$t('suorite')}${kategoria.nimi ? ':' : ''} ${kategoria.nimi}` }}
-                    </b-th>
-                    <b-th>
-                      {{ arviointiAsteikonNimi(suoritteetTable.arviointiasteikko) }}
-                      <elsa-popover>
-                        <elsa-arviointiasteikon-taso-tooltip-content
-                          :arviointiasteikon-nimi="
-                            arviointiAsteikonNimi(suoritteetTable.arviointiasteikko)
-                          "
-                          :arviointiasteikon-tasot="suoritteetTable.arviointiasteikko.tasot"
-                        />
-                      </elsa-popover>
-                    </b-th>
-                    <b-th>{{ $t('pvm') }}</b-th>
-                    <b-th>{{ $t('maara') }}</b-th>
-                    <b-th></b-th>
-                  </b-tr>
-                </b-thead>
-                <b-tbody>
-                  <b-tr
-                    v-for="(row, kategoriaIndex) in kategoria.rows"
-                    :key="kategoriaIndex"
-                    :class="{
-                      'row-details': row.details,
-                      'details-showing': row.suoritemerkinta && row.suoritemerkinta.showDetails,
-                      'mt-1': index === 0,
-                      last: row.lastDetails
-                    }"
+          <hr />
+          <small class="text-uppercase">{{ $t('rajaa-suoritteita') }}</small>
+          <b-container fluid class="px-0 mt-2">
+            <b-row :class="{ 'mb-3': !isFiltered }">
+              <b-col md="4">
+                <elsa-form-group :label="$t('tyoskentelyjakso')" class="mb-md-0">
+                  <template #default="{ uid }">
+                    <elsa-form-multiselect
+                      :id="uid"
+                      v-model="selected.tyoskentelyjakso"
+                      :options="tyoskentelyjaksotFormatted"
+                      label="label"
+                      track-by="id"
+                      @select="onTyoskentelyjaksoSelect"
+                      @clearMultiselect="onTyoskentelyjaksoReset"
+                    ></elsa-form-multiselect>
+                  </template>
+                </elsa-form-group>
+              </b-col>
+              <b-col md="4">
+                <elsa-form-group :label="$t('suorite')" class="mb-md-0">
+                  <template #default="{ uid }">
+                    <elsa-form-multiselect
+                      :id="uid"
+                      v-model="selected.suorite"
+                      :options="suoritteetSorted"
+                      label="nimi"
+                      track-by="id"
+                      @select="onSuoriteSelect"
+                      @clearMultiselect="onSuoriteReset"
+                    ></elsa-form-multiselect>
+                  </template>
+                </elsa-form-group>
+              </b-col>
+              <b-col md="4">
+                <elsa-form-group :label="$t('suorituspaiva')" class="mb-0">
+                  <template #default="{ uid }">
+                    <div class="d-flex">
+                      <elsa-form-datepicker
+                        :id="uid"
+                        ref="suorituspaivaAlkaa"
+                        :value="selected.suorituspaivaAlkaa"
+                        class="flex-nowrap"
+                        :required="false"
+                        @input="onSuorituspaivaAlkaaSelect"
+                      ></elsa-form-datepicker>
+                      <span class="mr-2 mt-1">-</span>
+                      <elsa-form-datepicker
+                        :id="uid"
+                        ref="suorituspaivaPaattyy"
+                        :value="selected.suorituspaivaPaattyy"
+                        class="flex-nowrap"
+                        :required="false"
+                        @input="onSuorituspaivaPaattyySelect"
+                      ></elsa-form-datepicker>
+                    </div>
+                  </template>
+                </elsa-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <div class="d-flex flex-row-reverse">
+                  <elsa-button
+                    v-if="isFiltered"
+                    variant="link"
+                    class="shadow-none text-size-sm font-weight-500"
+                    @click="resetFilters"
                   >
-                    <b-td>
-                      <div v-if="!row.details" class="d-flex align-items-center">
-                        {{ row.nimi }}
-                      </div>
-                    </b-td>
-                    <b-td
-                      :stacked-heading="arviointiAsteikonNimi(suoritteetTable.arviointiasteikko)"
-                      :class="{
-                        empty: !row.suoritemerkinta || !row.suoritemerkinta.arviointiasteikonTaso
-                      }"
-                    >
-                      <div class="d-flex align-items-center">
-                        <elsa-arviointiasteikon-taso
-                          v-if="row.suoritemerkinta && row.suoritemerkinta.arviointiasteikonTaso"
-                          :value="row.suoritemerkinta.arviointiasteikonTaso"
-                          :tasot="suoritteetTable.arviointiasteikko.tasot"
-                        />
-                      </div>
-                    </b-td>
-                    <b-td :stacked-heading="$t('pvm')" :class="{ empty: !row.suoritemerkinta }">
-                      <div v-if="row.suoritemerkinta" class="d-flex align-items-center">
-                        <elsa-button
-                          :to="{
-                            name: 'suoritemerkinta',
-                            params: {
-                              suoritemerkintaId: row.suoritemerkinta.id
-                            }
-                          }"
-                          variant="link"
-                          class="shadow-none p-0"
-                        >
-                          {{
-                            row.suoritemerkinta.suorituspaiva
-                              ? $date(row.suoritemerkinta.suorituspaiva)
-                              : ''
-                          }}
-                        </elsa-button>
-                      </div>
-                    </b-td>
-                    <b-td
-                      :stacked-heading="$t('maara')"
-                      :class="{ last: !(row.hasDetails && row.suoritemerkinta) }"
-                    >
-                      <div v-if="!row.details" class="suoritettu-text">
-                        <span
-                          class="pr-1"
-                          :class="{
-                            success:
-                              row.vaadittulkm &&
-                              row.suoritettulkm &&
-                              row.suoritettulkm >= row.vaadittulkm
-                          }"
-                        >
-                          {{ row.suoritettulkm }}
-                        </span>
-                        <span>{{ row.vaadittulkm ? `/ ${row.vaadittulkm}` : '' }}</span>
-                      </div>
-                    </b-td>
-                    <b-td
-                      class="details-icon"
-                      :class="{ 'has-details': row.hasDetails && row.suoritemerkinta }"
-                    >
-                      <div class="d-flex align-items-center">
-                        <elsa-button
-                          v-if="row.hasDetails && row.suoritemerkinta"
-                          variant="link"
-                          class="shadow-none text-dark p-0"
-                          @click="toggleDetails(row)"
-                        >
-                          <font-awesome-icon
-                            :icon="row.suoritemerkinta.showDetails ? 'chevron-up' : 'chevron-down'"
-                            fixed-width
-                            size="lg"
-                          />
-                        </elsa-button>
-                      </div>
-                    </b-td>
-                  </b-tr>
-                </b-tbody>
-              </b-table-simple>
-            </div>
+                    {{ $t('tyhjenna-valinnat') }}
+                  </elsa-button>
+                </div>
+              </b-col>
+            </b-row>
+          </b-container>
+          <div v-if="suoritteetTable && !loading">
+            <suoritemerkintojen-kategoriat
+              :kategoriat="suoritteenKategoriat"
+              :arviointiasteikko="suoritteetTable.arviointiasteikko"
+            />
           </div>
-          <div v-else class="text-center">
+          <div v-if="suoritteetTable && aiemmatKategoriat && aiemmatKategoriat.length > 0">
+            <h2 class="mt-6">{{ $t('aiemmat-suoritemerkinnat') }}</h2>
+            <div>
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+              {{ $t('aiemmat-suoritemerkinnat-kuvaus') }}
+            </div>
+            <suoritemerkintojen-kategoriat
+              :kategoriat="aiemmatKategoriat"
+              :arviointiasteikko="suoritteetTable.arviointiasteikko"
+            />
+          </div>
+          <div v-if="!suoritteenKategoriat || !aiemmatKategoriat" class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
@@ -150,7 +121,11 @@
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import SuoritemerkintojenKategoriat from '@/components/suoritemerkintojen-kategoriat/suoritemerkintojen-kategoriat.vue'
   import store from '@/store'
   import {
     Arviointiasteikko,
@@ -158,21 +133,36 @@
     SuoritteenKategoria,
     SuoritteetTable,
     SuoritemerkintaRow,
-    SuoritemerkintaWithDetails,
-    ToggleableSuoritemerkinta
+    SuoritemerkintaFilter,
+    SuoritemerkinnatOptions,
+    Tyoskentelyjakso,
+    SuoriteRow,
+    SuoritteenKategoriaRow,
+    Suoritemerkinta
   } from '@/types'
   import { ArviointiasteikkoTyyppi } from '@/utils/constants'
-  import { sortByDateDesc } from '@/utils/date'
+  import { dateBetween, sortByDateDesc } from '@/utils/date'
+  import { sortByAsc } from '@/utils/sort'
+  import { tyoskentelyjaksoLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
       ElsaButton,
+      ElsaFormDatepicker,
+      ElsaFormGroup,
+      ElsaFormMultiselect,
       ElsaPopover,
       ElsaArviointiasteikonTaso,
-      ElsaArviointiasteikonTasoTooltipContent
+      ElsaArviointiasteikonTasoTooltipContent,
+      SuoritemerkintojenKategoriat
     }
   })
   export default class Suoritemerkinnat extends Vue {
+    $refs!: {
+      suorituspaivaAlkaa: ElsaFormDatepicker
+      suorituspaivaPaattyy: ElsaFormDatepicker
+    }
+
     items = [
       {
         text: this.$t('etusivu'),
@@ -183,23 +173,116 @@
         active: true
       }
     ]
+    selected: SuoritemerkintaFilter = {
+      tyoskentelyjakso: null,
+      suorite: null,
+      suorituspaivaAlkaa: null,
+      suorituspaivaPaattyy: null
+    }
+    suoritemerkinnatOptions: SuoritemerkinnatOptions = {
+      tyoskentelyjaksot: [],
+      suoritteet: []
+    }
     suoritteetTable: SuoritteetTable | null = null
+    suoritemerkinnat: Record<number, Suoritemerkinta[]> | null = null
+    suoritteenKategoriat: SuoritteenKategoriaRow[] = []
+    aiemmatKategoriat: SuoritteenKategoriaRow[] = []
+    loading = true
 
     async mounted() {
-      const suoritteetTable: SuoritteetTable = (
-        await axios.get('erikoistuva-laakari/suoritteet-taulukko')
+      this.loading = true
+      await this.fetchOptions()
+      await this.fetch()
+      this.loading = false
+    }
+
+    async fetchOptions() {
+      this.suoritemerkinnatOptions = (
+        await axios.get('erikoistuva-laakari/suoritemerkinnat-rajaimet')
       ).data
-      this.suoritteetTable = {
-        ...suoritteetTable,
-        suoritemerkinnat: suoritteetTable.suoritemerkinnat.map((suoritemerkinta) => ({
-          ...suoritemerkinta,
-          showDetails: false
-        }))
+    }
+
+    async fetch() {
+      this.loading = true
+      this.suoritteetTable = (await axios.get('erikoistuva-laakari/suoritteet-taulukko')).data
+
+      if (this.suoritteetTable) {
+        this.suoritemerkinnat = this.suoritteetTable.suoritemerkinnat.reduce(
+          (result: Record<number, Suoritemerkinta[]>, suoritemerkinta: Suoritemerkinta) => {
+            const suoriteId = suoritemerkinta.suorite.id
+            if (suoriteId in result) {
+              result[suoriteId].push({
+                ...suoritemerkinta
+              })
+            } else {
+              result[suoriteId] = [
+                {
+                  ...suoritemerkinta
+                }
+              ]
+            }
+            return result
+          },
+          {}
+        )
       }
+      this.solveKategoriat()
+      this.solveAiemmatKategoriat()
+      this.loading = false
     }
 
     get account() {
       return store.getters['auth/account']
+    }
+
+    async onTyoskentelyjaksoSelect(selected: Tyoskentelyjakso) {
+      this.selected.tyoskentelyjakso = selected
+      this.solveKategoriat()
+    }
+
+    async onTyoskentelyjaksoReset() {
+      this.selected.tyoskentelyjakso = null
+      this.solveKategoriat()
+    }
+
+    async onSuoriteSelect(selected: Suorite) {
+      this.selected.suorite = selected
+      this.solveKategoriat()
+    }
+
+    async onSuoriteReset() {
+      this.selected.suorite = null
+      this.solveKategoriat()
+    }
+
+    onSuorituspaivaAlkaaSelect(value: string) {
+      this.selected.suorituspaivaAlkaa = value
+
+      if (!this.$refs.suorituspaivaAlkaa.validateForm()) {
+        return
+      }
+      this.solveKategoriat()
+    }
+
+    onSuorituspaivaPaattyySelect(value: string) {
+      this.selected.suorituspaivaPaattyy = value
+
+      if (!this.$refs.suorituspaivaPaattyy.validateForm()) {
+        return
+      }
+      this.solveKategoriat()
+    }
+
+    async resetFilters() {
+      this.selected = {
+        tyoskentelyjakso: null,
+        suorite: null,
+        suorituspaivaAlkaa: null,
+        suorituspaivaPaattyy: null
+      }
+      this.$refs.suorituspaivaAlkaa.resetValue()
+      this.$refs.suorituspaivaPaattyy.resetValue()
+      this.solveKategoriat()
     }
 
     toggleDetails(row: SuoritemerkintaRow) {
@@ -214,75 +297,108 @@
         : this.$t('etappi')
     }
 
-    get suoritteenKategoriat() {
+    solveKategoriat() {
       if (this.suoritteetTable) {
-        const suoritemerkinnatGroupBySuorite = this.suoritteetTable.suoritemerkinnat.reduce(
-          (
-            result: Record<number, SuoritemerkintaWithDetails[]>,
-            suoritemerkinta: ToggleableSuoritemerkinta
-          ) => {
-            const suoriteId = suoritemerkinta.suorite.id
-            if (suoriteId in result) {
-              result[suoriteId].push({
-                suoritemerkinta,
-                details: true
-              })
-            } else {
-              result[suoriteId] = [
-                {
-                  suoritemerkinta,
-                  details: true
-                }
-              ]
-            }
-            return result
-          },
-          {}
-        )
-
-        return this.suoritteetTable.suoritteenKategoriat.map((kategoria: SuoritteenKategoria) => {
-          const rows: SuoritemerkintaRow[] = kategoria.suoritteet.reduce(
-            (result: SuoritemerkintaRow[], suorite: Suorite) => {
+        this.suoritteenKategoriat = this.suoritteetTable.suoritteenKategoriat
+          .map((kategoria: SuoritteenKategoria) => {
+            const rows: SuoriteRow[] = kategoria.suoritteet.map((suorite) => {
               // Kerätään suoritteen suoritemerkinnät ja järjestetään ne aikajärjestykseen
-              const suoritemerkinnat = (suoritemerkinnatGroupBySuorite[suorite.id] || []).sort(
-                (a: any, b: any) =>
-                  sortByDateDesc(a.suoritemerkinta.suorituspaiva, b.suoritemerkinta.suorituspaiva)
+              const suoritemerkinnat = (
+                this.suoritemerkinnat ? this.suoritemerkinnat[suorite.id] || [] : []
               )
-
-              // Ensimmäinen suoritemerkintä esitetään suoritteen rivillä
-              const suoritemerkinta = suoritemerkinnat.length > 0 ? suoritemerkinnat[0] : undefined
-              const suoritemerkinnatWithoutFirst = suoritemerkinnat.slice(1)
+                .filter(
+                  (s) =>
+                    (this.selected.tyoskentelyjakso == null ||
+                      s.tyoskentelyjaksoId === this.selected.tyoskentelyjakso.id) &&
+                    (this.selected.suorite == null || s.suoriteId === this.selected.suorite.id) &&
+                    ((this.selected.suorituspaivaAlkaa == null &&
+                      this.selected.suorituspaivaPaattyy == null) ||
+                      dateBetween(
+                        s.suorituspaiva,
+                        this.selected.suorituspaivaAlkaa || undefined,
+                        this.selected.suorituspaivaPaattyy
+                      ))
+                )
+                .sort((a: Suoritemerkinta, b: Suoritemerkinta) =>
+                  sortByDateDesc(a.suorituspaiva, b.suorituspaiva)
+                )
               suorite.suoritettulkm = suoritemerkinnat.length
 
-              if (suoritemerkinnatWithoutFirst.length > 0) {
-                suoritemerkinnatWithoutFirst[suoritemerkinnatWithoutFirst.length - 1].lastDetails =
-                  true
-              }
-
-              result.push({
+              return {
                 ...suorite,
-                details: false,
-                suoritemerkinta: suoritemerkinta?.suoritemerkinta,
-                hasDetails: suoritemerkinnatWithoutFirst.length > 0
-              })
-
-              // Näytetään muut suoritemerkinnät vain jos rivi on avattu
-              if (suoritemerkinta?.suoritemerkinta?.showDetails) {
-                return result.concat(suoritemerkinnatWithoutFirst)
-              } else {
-                return result
+                visible: false,
+                merkinnat: suoritemerkinnat
               }
-            },
-            []
-          )
+            }, [])
 
-          return {
-            ...kategoria,
-            rows
+            return {
+              ...kategoria,
+              visible: true,
+              suoritteet: rows.filter((s) => s.merkinnat.length > 0 || !this.isFiltered)
+            }
+          })
+          .filter((k) => k.suoritteet.length > 0 || !this.isFiltered)
+      }
+    }
+
+    solveAiemmatKategoriat() {
+      if (this.suoritteetTable && this.suoritemerkinnat) {
+        const aiemmatKategoriat: Map<number, SuoriteRow[]> = new Map()
+        const suoriteIds = this.suoritteetTable.suoritteenKategoriat.flatMap((k) =>
+          k.suoritteet.map((s) => s.id)
+        )
+        for (const suoriteId in this.suoritemerkinnat) {
+          const suoritemerkinnat = this.suoritemerkinnat[suoriteId].sort(
+            (a: Suoritemerkinta, b: Suoritemerkinta) =>
+              sortByDateDesc(a.suorituspaiva, b.suorituspaiva)
+          )
+          if (!suoriteIds.find((id) => id === parseInt(suoriteId))) {
+            const suoritemerkinta = suoritemerkinnat[0]
+            const suorite = suoritemerkinta.suorite
+            suorite.suoritettulkm = suoritemerkinnat.length
+
+            if (!aiemmatKategoriat.get(suorite.kategoriaId)) {
+              aiemmatKategoriat.set(suorite.kategoriaId, [])
+            }
+            aiemmatKategoriat.get(suorite.kategoriaId)?.push({
+              ...suorite,
+              visible: true,
+              merkinnat: suoritemerkinnat
+            })
           }
+        }
+
+        aiemmatKategoriat.forEach((suoritteet: SuoriteRow[], kategoriaId: number) => {
+          this.aiemmatKategoriat.push({
+            nimi:
+              this.suoritteetTable?.aiemmatKategoriat.find((k) => k.id === kategoriaId)?.nimi || '',
+            visible: true,
+            suoritteet: suoritteet
+          })
         })
       }
-      return []
+    }
+
+    get isFiltered() {
+      return (
+        this.selected.tyoskentelyjakso ||
+        this.selected.suorite ||
+        this.selected.suorituspaivaAlkaa ||
+        this.selected.suorituspaivaPaattyy
+      )
+    }
+
+    get tyoskentelyjaksotFormatted() {
+      return this.suoritemerkinnatOptions?.tyoskentelyjaksot.map((tj: Tyoskentelyjakso) => ({
+        ...tj,
+        label: tyoskentelyjaksoLabel(this, tj)
+      }))
+    }
+
+    get suoritteetSorted() {
+      return this.suoritemerkinnatOptions.suoritteet.sort((a: Suorite, b: Suorite) =>
+        sortByAsc(a.nimi, b.nimi)
+      )
     }
   }
 </script>
@@ -293,127 +409,5 @@
 
   .suoritemerkinnat {
     max-width: 1024px;
-  }
-
-  .success {
-    color: $green;
-    font-weight: 500;
-  }
-
-  .suoritettu-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  ::v-deep table {
-    thead th {
-      font-size: $font-size-sm;
-      font-weight: 400;
-      text-transform: uppercase;
-      border-top: none;
-      &:nth-of-type(3) {
-        width: 5rem;
-      }
-      &:nth-of-type(4) {
-        width: 5rem;
-        text-align: center;
-      }
-      &:nth-of-type(5) {
-        width: 3rem;
-      }
-    }
-    td {
-      padding-top: 0;
-      padding-bottom: 0;
-      vertical-align: middle;
-      div {
-        min-height: $font-size-base * 2.5;
-      }
-    }
-  }
-
-  @include media-breakpoint-down(sm) {
-    .suoritettu-text {
-      justify-content: flex-start;
-    }
-    ::v-deep table {
-      border-bottom: 0;
-
-      tr {
-        border: $table-border-width solid $table-border-color;
-        border-radius: $border-radius;
-        margin-top: 0.5rem;
-        padding-top: $table-cell-padding;
-        padding-bottom: $table-cell-padding;
-
-        &.details-showing {
-          border-radius: $border-radius $border-radius 0 0;
-        }
-
-        & > td.last > div {
-          padding-bottom: 0 !important;
-        }
-
-        &.row-details {
-          margin: 0;
-          padding-bottom: 0;
-          border-top: 0;
-          border-radius: unset;
-
-          &.last {
-            border-radius: 0 0 $border-radius $border-radius;
-          }
-          & > td:first-child,
-          & > td.last {
-            display: none;
-          }
-        }
-      }
-
-      td {
-        border: none;
-        div {
-          min-height: $font-size-base;
-        }
-
-        &.empty {
-          display: none !important;
-        }
-        &:first-of-type {
-          font-size: $font-size-md;
-        }
-
-        &.details-icon {
-          &:not(.has-details) {
-            display: none !important;
-          }
-          > div {
-            padding-bottom: 0 !important;
-          }
-        }
-
-        & > div {
-          width: 100% !important;
-          padding: 0 0 0.5rem 0 !important;
-        }
-
-        &::before {
-          text-align: left !important;
-          text-transform: uppercase;
-          font-size: $font-size-sm;
-          font-weight: 400 !important;
-          width: 100% !important;
-          padding-right: 0 !important;
-        }
-      }
-    }
-  }
-
-  .row-details {
-    background: #f5f5f6;
-    td {
-      border-top: none;
-    }
   }
 </style>
