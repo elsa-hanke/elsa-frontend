@@ -958,8 +958,20 @@ export interface ToggleableSuoritemerkinta extends Suoritemerkinta {
 
 export type SuoritteetTable = {
   suoritteenKategoriat: SuoritteenKategoria[]
-  suoritemerkinnat: ToggleableSuoritemerkinta[]
+  aiemmatKategoriat: SuoritteenKategoria[]
+  suoritemerkinnat: Suoritemerkinta[]
   arviointiasteikko: Arviointiasteikko
+}
+
+export interface SuoritteenKategoriaRow {
+  nimi: string
+  visible: boolean
+  suoritteet: SuoriteRow[]
+}
+
+export interface SuoriteRow extends Suorite {
+  visible: boolean
+  merkinnat: Suoritemerkinta[]
 }
 
 export type SuoritemerkintaRow = {
@@ -1634,4 +1646,16 @@ export interface UusiKouluttaja {
 export type Ilmoitus = {
   id?: number
   teksti: string | null
+}
+
+export type SuoritemerkintaFilter = {
+  tyoskentelyjakso?: Tyoskentelyjakso | null
+  suorite?: Suorite | null
+  suorituspaivaAlkaa?: string | null
+  suorituspaivaPaattyy?: string | null
+}
+
+export type SuoritemerkinnatOptions = {
+  tyoskentelyjaksot: Tyoskentelyjakso[]
+  suoritteet: Suorite[]
 }
