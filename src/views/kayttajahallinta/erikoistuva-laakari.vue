@@ -451,6 +451,7 @@
       this.editing = false
       this.updatingKayttaja = false
       this.skipRouteExitConfirm = true
+      this.$emit('skipRouteExitConfirm', true)
     }
 
     isInPast(date: string) {
