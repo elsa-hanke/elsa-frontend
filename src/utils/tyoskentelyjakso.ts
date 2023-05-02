@@ -36,7 +36,7 @@ export function tyoskentelyjaksoKaytannonKoulutusLabel(vue: Vue, value: Kaytanno
     case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
       return vue.$t('oman-erikoisalan-koulutus')
     case KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO:
-      return vue.$t('terveyskeskustyo')
+      return vue.$t('pakollinen-terveyskeskuskoulutusjakso')
     case KaytannonKoulutusTyyppi.TUTKIMUSTYO:
       return vue.$t('tutkimustyo')
   }
