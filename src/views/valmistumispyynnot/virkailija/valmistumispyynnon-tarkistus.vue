@@ -337,7 +337,7 @@
               </div>
               <hr />
               <h2 class="mb-3">{{ $t('tyoskentelyjaksot') }}</h2>
-              <b-alert variant="dark" show>
+              <b-alert variant="dark" :show="valmistumispyynnonTarkistus.tutkimustyotaTehty">
                 <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
                 <span>
                   {{ $t('valmistumispyynto-virkailija-tyoskentelyjaksot-huomio') }}

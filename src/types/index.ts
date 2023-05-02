@@ -1604,6 +1604,7 @@ export interface ValmistumispyyntoVirkailijanTarkistus {
   kommentitVirkailijoille: string | null
   keskenerainen: boolean
   korjausehdotus?: string | null
+  tutkimustyotaTehty: boolean
   valmistumispyynto?: Valmistumispyynto
 }
 
