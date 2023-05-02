@@ -414,7 +414,7 @@
           `${this.$t('tutkimustyo')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[2].suoritettu
           )}`,
-          `${this.$t('terveyskeskustyo-lyh')}: ${this.$duration(
+          `${this.$t('pakollinen-terveyskeskuskoulutusjakso-lyh')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[3].suoritettu
           )}`
         ],

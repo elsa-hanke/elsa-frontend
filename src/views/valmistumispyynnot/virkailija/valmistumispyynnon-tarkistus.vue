@@ -343,7 +343,33 @@
                   {{ $t('valmistumispyynto-virkailija-tyoskentelyjaksot-huomio') }}
                 </span>
               </b-alert>
-              <div class="my-3">
+              <elsa-form-group
+                v-if="editable"
+                :label="$t('terveyskeskustyo')"
+                class="mt-3"
+                :required="true"
+              >
+                <template #default="{ uid }">
+                  <p class="mb-1">
+                    {{ $t('suoritettu') }}
+                    {{
+                      $duration(
+                        valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                          .terveyskeskusSuoritettu
+                      )
+                    }}
+                  </p>
+                  <b-form-checkbox
+                    :id="uid"
+                    v-model="form.terveyskeskustyoTarkistettu"
+                    :state="validateState('terveyskeskustyoTarkistettu')"
+                    @input="onSkipRouteExitConfirm"
+                  >
+                    {{ $t('kesto-ja-todistukset') }} {{ $t('tarkistettu') }}
+                  </b-form-checkbox>
+                </template>
+              </elsa-form-group>
+              <div v-if="!editable && form.terveyskeskustyoTarkistettu" class="my-3">
                 <h5>
                   {{ $t('terveyskeskustyo') }}
                   {{
@@ -846,6 +872,7 @@
     validations() {
       return {
         form: {
+          terveyskeskustyoTarkistettu: { checked: (value: boolean) => value === true },
           yliopistosairaalanUlkopuolinenTyoTarkistettu: {
             checked: (value: boolean) => value === true
           },
@@ -889,6 +916,7 @@
       aiempiElKoulutusSuorituspaiva: null,
       ltTutkintoSuoritettu: false,
       ltTutkintoSuorituspaiva: null,
+      terveyskeskustyoTarkistettu: false,
       yliopistosairaalanUlkopuolinenTyoTarkistettu: false,
       yliopistosairaalatyoTarkistettu: false,
       kokonaistyoaikaTarkistettu: false,
@@ -1053,6 +1081,7 @@
           aiempiElKoulutusSuorituspaiva: this.form.aiempiElKoulutusSuorituspaiva,
           ltTutkintoSuoritettu: this.form.ltTutkintoSuoritettu,
           ltTutkintoSuorituspaiva: this.form.ltTutkintoSuorituspaiva,
+          terveyskeskustyoTarkistettu: this.form.terveyskeskustyoTarkistettu,
           yliopistosairaalanUlkopuolinenTyoTarkistettu:
             this.form.yliopistosairaalanUlkopuolinenTyoTarkistettu,
           yliopistosairaalatyoTarkistettu: this.form.yliopistosairaalatyoTarkistettu,
@@ -1095,6 +1124,7 @@
         aiempiElKoulutusSuorituspaiva: this.form.aiempiElKoulutusSuorituspaiva,
         ltTutkintoSuoritettu: this.form.ltTutkintoSuoritettu,
         ltTutkintoSuorituspaiva: this.form.ltTutkintoSuorituspaiva,
+        terveyskeskustyoTarkistettu: this.form.terveyskeskustyoTarkistettu,
         yliopistosairaalanUlkopuolinenTyoTarkistettu:
           this.form.yliopistosairaalanUlkopuolinenTyoTarkistettu,
         yliopistosairaalatyoTarkistettu: this.form.yliopistosairaalatyoTarkistettu,

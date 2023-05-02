@@ -224,7 +224,7 @@
             :value="terveyskeskustyo"
             @input="$emit('skipRouteExitConfirm', false)"
           >
-            {{ $t('terveyskeskustyo') }}
+            {{ $t('pakollinen-terveyskeskuskoulutusjakso') }}
           </b-form-radio>
           <b-form-invalid-feedback :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}

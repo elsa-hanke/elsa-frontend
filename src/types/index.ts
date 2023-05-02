@@ -1586,6 +1586,7 @@ export interface ValmistumispyyntoVirkailijanTarkistus {
   terveyskeskustyoHyvaksyttyPvm: string | null
   terveyskeskustyoHyvaksyntaId: number | null
   terveyskeskustyoOpintosuoritusId: number | null
+  terveyskeskustyoTarkistettu: boolean
   yliopistosairaalanUlkopuolinenTyoTarkistettu: boolean
   yliopistosairaalatyoTarkistettu: boolean
   kokonaistyoaikaTarkistettu: boolean
@@ -1618,6 +1619,7 @@ export interface ValmistumispyynnonVirkailijanTarkistusLomake {
   aiempiElKoulutusSuorituspaiva: string | null
   ltTutkintoSuoritettu: boolean
   ltTutkintoSuorituspaiva: string | null
+  terveyskeskustyoTarkistettu: boolean
   yliopistosairaalanUlkopuolinenTyoTarkistettu: boolean
   yliopistosairaalatyoTarkistettu: boolean
   kokonaistyoaikaTarkistettu: boolean
