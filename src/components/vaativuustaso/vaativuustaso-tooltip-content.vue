@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>{{ $t('vaativuustaso') }}</h3>
     <p>{{ $t('vaativuustaso-tooltip.ingressi') }}</p>
     <div v-for="(taso, index) in vaativuustasot" :key="index">
       <h4>{{ taso.arvo }} {{ $t(taso.nimi) }}</h4>

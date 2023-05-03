@@ -10,8 +10,7 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('toimipaikalla-koulutussopimus.header')" :required="true">
       <template #label-help>
-        <elsa-popover>
-          <h3>{{ $t('toimipaikan-koulutussopimukset') }}</h3>
+        <elsa-popover :title="$t('toimipaikan-koulutussopimukset')">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <p class="mb-0" v-html="$t('toimipaikan-koulutussopimukset-tooltip', { linkki })" />
         </elsa-popover>

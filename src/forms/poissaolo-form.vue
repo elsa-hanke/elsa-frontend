@@ -2,7 +2,7 @@
   <b-form @submit.stop.prevent="onSubmit">
     <elsa-form-group :label="$t('poissaolon-syy')" :required="true">
       <template #label-help>
-        <elsa-popover>
+        <elsa-popover :title="$t('poissaolon-syy')">
           <elsa-poissaolon-syyt />
         </elsa-popover>
       </template>
@@ -107,7 +107,7 @@
         class="col-sm-5"
       >
         <template #label-help>
-          <elsa-popover>
+          <elsa-popover :title="$t('poissaoloprosentti')">
             {{ $t('poissaoloprosentti-tooltip') }}
           </elsa-popover>
         </template>

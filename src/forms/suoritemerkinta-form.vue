@@ -61,9 +61,8 @@
         <b-form-row>
           <elsa-form-group :label="arviointiAsteikonNimi" class="col-md-6 mb-2">
             <template #label-help>
-              <elsa-popover>
+              <elsa-popover :title="arviointiAsteikonNimi">
                 <elsa-arviointiasteikon-taso-tooltip-content
-                  :arviointiasteikon-nimi="arviointiAsteikonNimi"
                   :arviointiasteikon-tasot="arviointiasteikko.tasot"
                 />
               </elsa-popover>
@@ -93,7 +92,7 @@
           </elsa-form-group>
           <elsa-form-group :label="$t('vaativuustaso')" class="col-md-6 mb-2">
             <template #label-help>
-              <elsa-popover>
+              <elsa-popover :title="$t('vaativuustaso')">
                 <elsa-vaativuustaso-tooltip-content />
               </elsa-popover>
             </template>
@@ -169,9 +168,8 @@
       <b-form-row>
         <elsa-form-group :label="arviointiAsteikonNimi" class="col-md-6">
           <template #label-help>
-            <elsa-popover>
+            <elsa-popover :title="arviointiAsteikonNimi">
               <elsa-arviointiasteikon-taso-tooltip-content
-                :arviointiasteikon-nimi="arviointiAsteikonNimi"
                 :arviointiasteikon-tasot="arviointiasteikko.tasot"
               />
             </elsa-popover>
@@ -201,7 +199,7 @@
         </elsa-form-group>
         <elsa-form-group :label="$t('vaativuustaso')" class="col-md-6">
           <template #label-help>
-            <elsa-popover>
+            <elsa-popover :title="$t('vaativuustaso')">
               <elsa-vaativuustaso-tooltip-content />
             </elsa-popover>
           </template>

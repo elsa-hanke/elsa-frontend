@@ -12,8 +12,7 @@
       <b-col lg="4">
         <elsa-form-group :label="$t('koejakson-alkamispäivä')" :required="true">
           <template #label-help>
-            <elsa-popover>
-              <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
+            <elsa-popover :title="$t('koejakson-alkamispäivä')">
               <p class="mb-0">{{ $t('koejakson-alkamis-tooltip') }}</p>
             </elsa-popover>
           </template>
