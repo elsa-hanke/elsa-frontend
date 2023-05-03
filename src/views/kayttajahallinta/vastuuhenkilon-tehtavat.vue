@@ -295,7 +295,7 @@
     erikoisalatWithTehtavatWhichShouldBeReassigned: number[] = []
 
     async mounted() {
-      this.fetch(this.yliopisto.id)
+      await this.fetch(this.yliopisto.id)
     }
 
     async fetch(yliopistoId?: number) {
@@ -316,8 +316,8 @@
     }
 
     @Watch('yliopisto')
-    onPropertyChanged(yliopisto: Yliopisto) {
-      this.fetch(yliopisto.id)
+    async onPropertyChanged(yliopisto: Yliopisto) {
+      await this.fetch(yliopisto.id)
     }
 
     initForm() {
