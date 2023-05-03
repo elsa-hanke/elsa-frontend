@@ -89,7 +89,7 @@
               <b-th scope="col" style="width: 40%">
                 {{ $t('arvioitava-kokonaisuus') }},
                 {{ arviointiAsteikonNimi }}
-                <elsa-popover>
+                <elsa-popover :title="arviointiAsteikonNimi">
                   <elsa-arviointiasteikon-taso-tooltip-content
                     :arviointiasteikon-nimi="arviointiAsteikonNimi"
                     :arviointiasteikon-tasot="arviointiasteikonTasot"
@@ -118,7 +118,7 @@
               <b-td>
                 {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
                 {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
-                <elsa-popover>
+                <elsa-popover :title="kokonaisuus.arvioitavaKokonaisuus.nimi">
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
                 </elsa-popover>
@@ -183,7 +183,7 @@
             <b-tr>
               <b-th scope="row" style="width: 40%">
                 {{ $t('vaativuustaso') }}
-                <elsa-popover>
+                <elsa-popover :title="$t('vaativuustaso')">
                   <elsa-vaativuustaso-tooltip-content />
                 </elsa-popover>
               </b-th>
@@ -299,7 +299,7 @@
           <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
             {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
             {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
-            <elsa-popover>
+            <elsa-popover :title="kokonaisuus.arvioitavaKokonaisuus.nimi">
               <!-- eslint-disable-next-line vue/no-v-html -->
               <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
             </elsa-popover>
@@ -307,9 +307,8 @@
           <b-form-row>
             <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
               <template #label-help>
-                <elsa-popover>
+                <elsa-popover :title="arviointiAsteikonNimi">
                   <elsa-arviointiasteikon-taso-tooltip-content
-                    :arviointiasteikon-nimi="arviointiAsteikonNimi"
                     :arviointiasteikon-tasot="arviointiasteikonTasot"
                   />
                 </elsa-popover>
@@ -340,7 +339,7 @@
         <b-form-row>
           <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-6">
             <template #label-help>
-              <elsa-popover>
+              <elsa-popover :title="$t('vaativuustaso')">
                 <elsa-vaativuustaso-tooltip-content />
               </elsa-popover>
             </template>
@@ -404,8 +403,7 @@
         </elsa-form-group>
         <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
           <template #label-help>
-            <elsa-popover>
-              <h3>{{ $t('arvioinnin-osa-alueita') }}</h3>
+            <elsa-popover :title="$t('arvioinnin-osa-alueita')">
               <div class="d-flex flex-column canmeds-container">
                 <img src="@/assets/canmeds.svg" class="m-2" alt="canmeds" />
                 <a href="#" class="text-size-normal" rel="noreferrer noopener" target="_blank">

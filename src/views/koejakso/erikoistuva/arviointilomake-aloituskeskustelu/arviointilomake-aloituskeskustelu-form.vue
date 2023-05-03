@@ -74,8 +74,7 @@
       <b-col xl="4" lg="8">
         <elsa-form-group :label="$t('koejakson-alkamispäivä')" :required="true">
           <template #label-help>
-            <elsa-popover>
-              <h3>{{ $t('koejakson-alkamispäivä') }}</h3>
+            <elsa-popover :title="$t('koejakson-alkamispäivä')">
               <p>{{ $t('koejakson-alkamis-tooltip') }}</p>
             </elsa-popover>
           </template>
@@ -126,8 +125,7 @@
           class="mb-1"
         >
           <template #label-help>
-            <elsa-popover>
-              <h3>{{ $t('koejakso-suoritettu-kokoaikatyössä-tooltip-header') }}</h3>
+            <elsa-popover :title="$t('koejakso-suoritettu-kokoaikatyössä-tooltip-header')">
               <p>{{ $t('koejakso-suoritettu-kokoaikatyössä-tooltip-content') }}</p>
             </elsa-popover>
           </template>

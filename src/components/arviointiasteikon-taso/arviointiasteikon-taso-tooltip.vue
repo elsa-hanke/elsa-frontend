@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3 class="mb-3">{{ arviointiasteikonNimi }}</h3>
     <p v-if="selite" class="mb-3">{{ selite }}</p>
     <div v-for="(asteikonTaso, index) in arviointiasteikonTasot" :key="index">
       <h4 class="mb-1">
@@ -22,9 +21,6 @@
 
   @Component({})
   export default class ElsaArviointiasteikonTasoTooltipContent extends Vue {
-    @Prop({ required: true })
-    arviointiasteikonNimi!: string
-
     @Prop({ required: false, type: String, default: undefined })
     selite?: string
 

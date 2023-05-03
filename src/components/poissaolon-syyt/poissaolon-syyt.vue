@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>{{ $t('poissaolon-syy') }}</h3>
     <p class="mb-3">
       {{ $t('valitse-listasta-poissaolon-syy') }}
     </p>

@@ -24,9 +24,8 @@
                   <span v-else class="text-size-lg">- / 5</span>
                   <span class="text-size-sm">
                     {{ $t('arviointien-ka') }}
-                    <elsa-popover>
+                    <elsa-popover :title="arviointiAsteikonNimi">
                       <elsa-arviointiasteikon-taso-tooltip-content
-                        :arviointiasteikon-nimi="arviointiAsteikonNimi"
                         :selite="arviointiAsteikonSelite"
                         :arviointiasteikon-tasot="edistyminen.arviointiasteikko.tasot"
                       />

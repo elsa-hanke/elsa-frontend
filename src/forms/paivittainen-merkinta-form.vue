@@ -76,7 +76,7 @@
     </elsa-form-group>
     <elsa-form-group :label="$t('ajatuksia-opitusta-ja-sen-soveltamisesta')">
       <template #label-help>
-        <elsa-popover>
+        <elsa-popover :title="$t('ajatuksia-opitusta-ja-sen-soveltamisesta')">
           <p>{{ $t('ajatuksia-opitusta-ja-sen-soveltamisesta-ohje1') }}</p>
           <p class="mb-0">{{ $t('ajatuksia-opitusta-ja-sen-soveltamisesta-ohje2') }}</p>
         </elsa-popover>

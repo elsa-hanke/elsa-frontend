@@ -183,7 +183,7 @@
                         <b-tr>
                           <b-th style="width: 60%">
                             {{ $t('poissaolon-syy') }}
-                            <elsa-popover>
+                            <elsa-popover :title="$t('poissaolon-syy')">
                               <elsa-poissaolon-syyt />
                             </elsa-popover>
                           </b-th>
