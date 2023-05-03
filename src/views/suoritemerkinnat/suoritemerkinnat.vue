@@ -105,7 +105,7 @@
               :arviointiasteikko="suoritteetTable.arviointiasteikko"
             />
           </div>
-          <div v-if="!suoritteenKategoriat || !aiemmatKategoriat" class="text-center">
+          <div v-if="loading" class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
