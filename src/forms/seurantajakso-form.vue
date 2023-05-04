@@ -446,7 +446,7 @@
           </b-form-invalid-feedback>
         </template>
         <template #label-help>
-          <elsa-popover :title="$t('oma-arviointi-seurantajaksolta')">
+          <elsa-popover>
             {{ $t('oma-arviointi-seurantajaksolta-ohje') }}
           </elsa-popover>
         </template>
@@ -461,7 +461,7 @@
           />
         </template>
         <template #label-help>
-          <elsa-popover :title="$t('lisahuomioita')">
+          <elsa-popover>
             {{ $t('lisahuomioita-ohje') }}
           </elsa-popover>
         </template>
@@ -476,7 +476,7 @@
           />
         </template>
         <template #label-help>
-          <elsa-popover :title="$t('seuraavan-jakson-tavoitteet')">
+          <elsa-popover>
             {{ $t('seuraavan-jakson-tavoitteet-ohje') }}
           </elsa-popover>
         </template>
@@ -624,7 +624,7 @@
             </b-form-invalid-feedback>
           </template>
           <template #label-help>
-            <elsa-popover :title="$t('lahikouluttajan-arviointi-jaksosta')">
+            <elsa-popover>
               {{ $t('lahikouluttajan-arviointi-jaksosta-ohje') }}
             </elsa-popover>
           </template>
@@ -639,7 +639,7 @@
             />
           </template>
           <template #label-help>
-            <elsa-popover :title="$t('erikoisalan-tyoskentelyvalmiudet')">
+            <elsa-popover>
               {{ $t('erikoisalan-tyoskentelyvalmiudet-ohje') }}
             </elsa-popover>
           </template>
@@ -654,7 +654,7 @@
             />
           </template>
           <template #label-help>
-            <elsa-popover :title="$t('jatkotoimet-ja-raportointi')">
+            <elsa-popover>
               {{ $t('jatkotoimet-ja-raportointi-ohje') }}
             </elsa-popover>
           </template>

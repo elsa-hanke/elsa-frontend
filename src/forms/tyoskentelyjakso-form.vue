@@ -246,7 +246,12 @@
         </b-form-checkbox>
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('liitetiedostot')" :help="$t('sallitut-tiedostoformaatit-default')">
+    <elsa-form-group :label="$t('liitetiedostot')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('sallitut-tiedostoformaatit-default') }}
+        </elsa-popover>
+      </template>
       <span>
         {{ $t('tyoskentelyjakson-liitetiedostot-kuvaus') }}
       </span>
@@ -299,6 +304,7 @@
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import { Asiakirja, Tyoskentelyjakso, TyoskentelyjaksoForm } from '@/types'
   import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
@@ -310,13 +316,14 @@
 
   @Component({
     components: {
+      AsiakirjatContent,
+      AsiakirjatUpload,
+      ElsaButton,
       ElsaFormGroup,
       ElsaFormError,
       ElsaFormMultiselect,
       ElsaFormDatepicker,
-      ElsaButton,
-      AsiakirjatContent,
-      AsiakirjatUpload
+      ElsaPopover
     },
     validations: {
       form: {

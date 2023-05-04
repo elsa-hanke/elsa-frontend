@@ -88,7 +88,7 @@
           "
           #label-help
         >
-          <elsa-popover :title="$t('vastuualueet-elsassa')" class="align-top">
+          <elsa-popover class="align-top">
             <p class="mb-0">{{ $t('taman-erikoisalan-tehtavia-ei-voi-muokata') }}</p>
           </elsa-popover>
         </template>

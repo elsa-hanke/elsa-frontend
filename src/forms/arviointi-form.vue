@@ -374,11 +374,12 @@
             </template>
           </elsa-form-group>
         </b-form-row>
-        <elsa-form-group
-          v-if="$isKouluttaja() || $isVastuuhenkilo()"
-          :label="$t('liitetiedostot')"
-          :help="$t('arviointi-liite-tooltip')"
-        >
+        <elsa-form-group v-if="$isKouluttaja() || $isVastuuhenkilo()" :label="$t('liitetiedostot')">
+          <template #label-help>
+            <elsa-popover>
+              {{ $t('arviointi-liite-tooltip') }}
+            </elsa-popover>
+          </template>
           <!-- eslint-disable-next-line vue/no-v-html -->
           <span v-html="$t('arviointi-liitetiedostot-kuvaus', { linkki })"></span>
           <asiakirjat-upload
@@ -430,11 +431,12 @@
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
-        <elsa-form-group
-          v-if="$isErikoistuva()"
-          :label="$t('liitetiedostot')"
-          :help="$t('arviointi-liite-tooltip')"
-        >
+        <elsa-form-group v-if="$isErikoistuva()" :label="$t('liitetiedostot')">
+          <template #label-help>
+            <elsa-popover>
+              {{ $t('arviointi-liite-tooltip') }}
+            </elsa-popover>
+          </template>
           <!-- eslint-disable-next-line vue/no-v-html -->
           <span>{{ $t('arviointi-liitetiedostot-kuvaus-itsearviointi') }}</span>
           <asiakirjat-upload

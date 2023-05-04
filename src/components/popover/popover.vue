@@ -8,10 +8,17 @@
         <slot :name="name" />
       </template>
       <template #title>
-        <b-button class="close popover-close" aria-label="Close" @click="onClose">
-          <font-awesome-icon icon="times" class="times" transform="shrink-4" />
-        </b-button>
-        <h3 class="mb-0">{{ title }}</h3>
+        <div v-if="title">
+          <b-button
+            variant="outline-primary"
+            class="close popover-close"
+            aria-label="Close"
+            @click="onClose"
+          >
+            <font-awesome-icon icon="times" class="times" transform="shrink-4" />
+          </b-button>
+          <h3 class="mb-0">{{ title }}</h3>
+        </div>
       </template>
     </b-popover>
   </span>
@@ -30,8 +37,8 @@
     }
   })
   export default class ElsaPopover extends Vue {
-    @Prop({ required: true, type: String })
-    title!: string
+    @Prop({ required: false, type: String })
+    title?: string
 
     popoverShow = false
 
