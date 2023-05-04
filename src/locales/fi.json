@@ -1007,7 +1007,6 @@
   "poissaolon-tallentaminen-epaonnistui": "Poissaolon tallentaminen epäonnistui",
   "poissaolon-tallentaminen-onnistui": "Poissaolon tallentaminen onnistui",
   "poissaolon-taytyy-alkaa-ennen-paattymispaivaa": "Alkamispäivän täytyy olla ennen poissaolon ja työskentelyjakson päättymispäivää",
-  "poissaoloprosentti": "Poissaoloprosentti",
   "poissaoloprosentti-tooltip": "Jos teet esimerkiksi puolikasta päivää nykyisestä työajastasi, kirjaa tähän 50%.",
   "poissaoloprosentti-validointivirhe": "Tiedon oltava väliltä",
   "poissaolot": "Poissaolot",

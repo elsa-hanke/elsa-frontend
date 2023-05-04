@@ -55,10 +55,12 @@
         />
       </template>
     </elsa-form-group>
-    <elsa-form-group
-      :label="$t('opiskelu-ja-tyohistoria')"
-      :help="$t('opiskelu-ja-tyohistoria-tooltip')"
-    >
+    <elsa-form-group :label="$t('opiskelu-ja-tyohistoria')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('opiskelu-ja-tyohistoria-tooltip') }}
+        </elsa-popover>
+      </template>
       <template #label-right>
         <b-form-checkbox
           v-model="form.opiskeluJaTyohistoriaYksityinen"
@@ -77,7 +79,12 @@
         />
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('vahvuudet')" :help="$t('vahvuudet-tooltip')">
+    <elsa-form-group :label="$t('vahvuudet')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('vahvuudet-tooltip') }}
+        </elsa-popover>
+      </template>
       <template #label-right>
         <b-form-checkbox v-model="form.vahvuudetYksityinen" class="py-0">
           {{ $t('piilota-kouluttajilta-kuvaus') }}
@@ -92,10 +99,12 @@
         />
       </template>
     </elsa-form-group>
-    <elsa-form-group
-      :label="$t('tulevaisuuden-visiointi')"
-      :help="$t('tulevaisuuden-visiointi-tooltip')"
-    >
+    <elsa-form-group :label="$t('tulevaisuuden-visiointi')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('tulevaisuuden-visiointi-tooltip') }}
+        </elsa-popover>
+      </template>
       <template #label-right>
         <b-form-checkbox
           v-model="form.tulevaisuudenVisiointiYksityinen"
@@ -114,10 +123,12 @@
         />
       </template>
     </elsa-form-group>
-    <elsa-form-group
-      :label="$t('osaamisen-kartuttaminen')"
-      :help="$t('osaamisen-kartuttaminen-tooltip')"
-    >
+    <elsa-form-group :label="$t('osaamisen-kartuttaminen')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('osaamisen-kartuttaminen-tooltip') }}
+        </elsa-popover>
+      </template>
       <template #label-right>
         <b-form-checkbox
           v-model="form.osaamisenKartuttaminenYksityinen"
@@ -136,7 +147,12 @@
         />
       </template>
     </elsa-form-group>
-    <elsa-form-group :label="$t('elamankentta')" :help="$t('elamankentta-tooltip')">
+    <elsa-form-group :label="$t('elamankentta')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('elamankentta-tooltip') }}
+        </elsa-popover>
+      </template>
       <template #label-right>
         <b-form-checkbox
           v-model="form.elamankenttaYksityinen"
@@ -179,16 +195,18 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import { Koulutussuunnitelma } from '@/types'
   import { mapFile } from '@/utils/fileMapper'
 
   @Component({
     components: {
+      AsiakirjatUpload,
+      AsiakirjatContent,
+      ElsaButton,
       ElsaFormGroup,
       ElsaFormError,
-      ElsaButton,
-      AsiakirjatUpload,
-      AsiakirjatContent
+      ElsaPopover
     },
     validations: {
       form: {}

@@ -107,7 +107,7 @@
         class="col-sm-5"
       >
         <template #label-help>
-          <elsa-popover :title="$t('poissaoloprosentti')">
+          <elsa-popover>
             {{ $t('poissaoloprosentti-tooltip') }}
           </elsa-popover>
         </template>
