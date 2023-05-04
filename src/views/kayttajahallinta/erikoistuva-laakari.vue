@@ -408,6 +408,7 @@
         this.$v.form.$reset()
         this.skipRouteExitConfirm = true
         this.editing = false
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
