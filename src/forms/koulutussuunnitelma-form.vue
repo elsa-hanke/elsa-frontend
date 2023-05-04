@@ -24,6 +24,11 @@
     />
     <hr class="mt-0" />
     <elsa-form-group :label="$t('motivaatiokirje')">
+      <template #label-help>
+        <elsa-popover>
+          {{ $t('sallitut-tiedostoformaatit-pdf') }}
+        </elsa-popover>
+      </template>
       <template #default="{ uid }">
         <p class="mb-3">{{ $t('motivaatiokirje-kuvas') }}</p>
         <asiakirjat-upload
