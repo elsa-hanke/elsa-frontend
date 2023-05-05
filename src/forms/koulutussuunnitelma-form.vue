@@ -2,6 +2,9 @@
   <b-form @submit.stop.prevent="onSubmit">
     <p class="mb-3">
       {{ $t('henkilokohtainen-koulutussuunnitelma-liitteena-kuvaus') }}
+      <elsa-popover>
+        {{ $t('sallitut-tiedostoformaatit-pdf') }}
+      </elsa-popover>
     </p>
     <asiakirjat-upload
       :is-primary-button="false"
