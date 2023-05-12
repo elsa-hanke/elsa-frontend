@@ -5,14 +5,14 @@
         <b-row lg>
           <b-col cols="12" lg="4">
             <elsa-search-input
-              class="mt-lg-3 mb-4 hakutermi"
+              class="mt-lg-3 hakutermi mb-0"
               :hakutermi.sync="hakutermi"
               :placeholder="$t('hae-erikoistujan-nimella')"
             />
           </b-col>
           <b-col cols="12" lg="3">
             <div v-if="rajaimet && rajaimet.erikoisalat.length > 1" class="filter">
-              <elsa-form-group :label="$t('erikoisala')" class="mb-4">
+              <elsa-form-group :label="$t('erikoisala')" class="mb-0">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
@@ -28,7 +28,7 @@
           </b-col>
           <b-col cols="12" lg="2">
             <div v-if="rajaimet && rajaimet.asetukset.length > 1" class="filter">
-              <elsa-form-group :label="$t('asetus')" class="mb-4">
+              <elsa-form-group :label="$t('asetus')" class="mb-0">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
@@ -44,7 +44,7 @@
           </b-col>
           <b-col cols="12" lg="3" class="">
             <div class="filter">
-              <elsa-form-group :label="$t('jarjestys')" class="mb-4">
+              <elsa-form-group :label="$t('jarjestys')" class="mb-0">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
@@ -61,6 +61,17 @@
                 </template>
               </elsa-form-group>
             </div>
+          </b-col>
+        </b-row>
+        <b-row lg>
+          <b-col cols="12" lg="4">
+            <b-form-checkbox
+              v-model="filtered.naytaPaattyneet"
+              class="mb-4"
+              @input="onNaytaPaattyneetSelect"
+            >
+              {{ $t('nayta-paattyneet-opintooikeudet') }}
+            </b-form-checkbox>
           </b-col>
         </b-row>
         <div v-if="!loadingResults && erikoistujat">
@@ -311,11 +322,13 @@
       nimi: string | null
       erikoisala: Erikoisala | null
       asetus: Asetus | null
+      naytaPaattyneet: boolean | null
       sortBy: string | null
     } = {
       nimi: null,
       erikoisala: null,
       asetus: null,
+      naytaPaattyneet: null,
       sortBy: null
     }
     currentPage = 1
@@ -349,7 +362,10 @@
           ...(this.filtered.erikoisala?.id
             ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
             : {}),
-          ...(this.filtered.asetus?.id ? { 'asetusId.equals': this.filtered.asetus.id } : {})
+          ...(this.filtered.asetus?.id ? { 'asetusId.equals': this.filtered.asetus.id } : {}),
+          ...(this.filtered.naytaPaattyneet
+            ? { naytaPaattyneet: this.filtered.naytaPaattyneet }
+            : {})
         })
       ).data
     }
@@ -379,27 +395,31 @@
       }, 400)
     }
 
-    onErikoisalaSelect(erikoisala: Erikoisala) {
+    async onErikoisalaSelect(erikoisala: Erikoisala) {
       this.filtered.erikoisala = erikoisala
-      this.onResultsFiltered()
+      await this.onResultsFiltered()
     }
 
-    onErikoisalaReset() {
+    async onErikoisalaReset() {
       this.filtered.erikoisala = null
-      this.onResultsFiltered()
+      await this.onResultsFiltered()
     }
 
-    onAsetusSelect(asetus: Asetus) {
+    async onAsetusSelect(asetus: Asetus) {
       this.filtered.asetus = asetus
-      this.onResultsFiltered()
+      await this.onResultsFiltered()
     }
 
-    onAsetusReset() {
+    async onAsetusReset() {
       this.filtered.asetus = null
-      this.onResultsFiltered()
+      await this.onResultsFiltered()
     }
 
-    onSortBySelect(sortByEnum: SortByEnum) {
+    async onNaytaPaattyneetSelect() {
+      await this.onResultsFiltered()
+    }
+
+    async onSortBySelect(sortByEnum: SortByEnum) {
       switch (sortByEnum.value) {
         case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA:
           this.filtered.sortBy = 'opintooikeudenPaattymispaiva,asc'
