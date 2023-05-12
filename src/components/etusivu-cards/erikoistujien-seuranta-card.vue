@@ -8,14 +8,14 @@
         <b-row lg>
           <b-col cols="12" lg="4">
             <elsa-search-input
-              class="mt-lg-3 mb-4 hakutermi"
+              class="mt-lg-3 mb-3 hakutermi"
               :hakutermi.sync="hakutermi"
               :placeholder="$t('hae-erikoistujan-nimella')"
             />
           </b-col>
           <b-col cols="12" lg="4">
             <div v-if="seuranta.erikoisalat.length > 1" class="erikoisalat">
-              <elsa-form-group :label="$t('erikoisala')" class="mb-4">
+              <elsa-form-group :label="$t('erikoisala')" class="mb-3">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
@@ -28,7 +28,7 @@
           </b-col>
           <b-col cols="12" lg="4">
             <div class="jarjestys">
-              <elsa-form-group :label="$t('jarjestys')" class="mb-4">
+              <elsa-form-group :label="$t('jarjestys')" class="mb-3">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
@@ -45,6 +45,13 @@
                 </template>
               </elsa-form-group>
             </div>
+          </b-col>
+        </b-row>
+        <b-row lg>
+          <b-col cols="12" lg="4">
+            <b-form-checkbox v-model="naytaPaattyneet" class="mb-4">
+              {{ $t('nayta-paattyneet-opintooikeudet') }}
+            </b-form-checkbox>
           </b-col>
         </b-row>
         <b-row>
@@ -219,6 +226,7 @@
 </template>
 
 <script lang="ts">
+  import { isBefore, parseISO } from 'date-fns'
   import { Component, Mixins, Prop } from 'vue-property-decorator'
 
   import { getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja } from '@/api/kouluttaja'
@@ -284,6 +292,7 @@
 
     hakutermi = ''
     erikoisala = ''
+    naytaPaattyneet = false
     loading = true
 
     async mounted() {
@@ -328,6 +337,13 @@
       }
       if (this.erikoisala) {
         result = result?.filter((item) => item.erikoisala === this.erikoisala)
+      }
+
+      if (!this.naytaPaattyneet) {
+        const now = new Date()
+        result = result?.filter(
+          (item) => !isBefore(parseISO(item.opintooikeudenPaattymispaiva), now)
+        )
       }
 
       switch (this.sortBy.value) {
