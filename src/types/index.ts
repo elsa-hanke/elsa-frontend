@@ -1078,6 +1078,8 @@ export interface KayttajahallintaKayttajaWrapper {
 }
 
 export interface KayttajahallintaUpdateKayttaja {
+  etunimi?: string | null
+  sukunimi?: string | null
   sahkoposti?: string | null
   sahkopostiUudelleen?: string | null
   opintooikeudet?: KayttajahallintaUpdateOpintooikeus[]
