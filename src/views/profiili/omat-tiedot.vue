@@ -441,10 +441,6 @@
       return yliopisto.nimi === '' ? '' : this.$t(`yliopisto-nimi.${yliopisto.nimi}`)
     }
 
-    onSelectYliopisto(event: any) {
-      console.log(typeof event)
-    }
-
     async onSubmit() {
       this.$v.form.$touch()
       if (this.$v.form.$anyError) {

@@ -148,6 +148,16 @@ export async function patchErikoistuvaLaakari(
   return await axios.patch(path, form)
 }
 
+export async function patchKouluttaja(kayttajaId: number, form: KayttajahallintaUpdateKayttaja) {
+  const path = `${resolveRolePath()}/kouluttajat/${kayttajaId}`
+  return await axios.patch(path, form)
+}
+
+export async function putKouluttajaInvitation(kayttajaId: number) {
+  const path = `${resolveRolePath()}/kouluttajat/${kayttajaId}/kutsu`
+  return await axios.put(path)
+}
+
 export async function patchVirkailija(kayttajaId: number, form: KayttajahallintaUpdateKayttaja) {
   const path = `${resolveRolePath()}/virkailijat/${kayttajaId}`
   return await axios.patch(path, form)
