@@ -324,7 +324,19 @@
                   {{ $t('sateilysuojelukoulutus') }}
                 </h5>
                 <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  <font-awesome-icon
+                    v-if="
+                      virkailijanTarkistus.sateilusuojakoulutusSuoritettu >=
+                      virkailijanTarkistus.sateilusuojakoulutusVaadittu
+                    "
+                    :icon="['fas', 'check-circle']"
+                    class="text-success mr-2"
+                  />
+                  <font-awesome-icon
+                    v-else
+                    :icon="['fas', 'exclamation-circle']"
+                    class="text-error mr-2"
+                  />
                   {{ $t('suoritettu') }}
                   {{ Math.round(virkailijanTarkistus.sateilusuojakoulutusSuoritettu) }} /
                   {{ Math.round(virkailijanTarkistus.sateilusuojakoulutusVaadittu) }}
@@ -336,7 +348,19 @@
                   {{ $t('johtamiskoulutus') }}
                 </h5>
                 <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  <font-awesome-icon
+                    v-if="
+                      virkailijanTarkistus.johtamiskoulutusSuoritettu >=
+                      virkailijanTarkistus.johtamiskoulutusVaadittu
+                    "
+                    :icon="['fas', 'check-circle']"
+                    class="text-success mr-2"
+                  />
+                  <font-awesome-icon
+                    v-else
+                    :icon="['fas', 'exclamation-circle']"
+                    class="text-error mr-2"
+                  />
                   {{ $t('suoritettu') }}
                   {{ Math.round(virkailijanTarkistus.johtamiskoulutusSuoritettu) }} /
                   {{ Math.round(virkailijanTarkistus.johtamiskoulutusVaadittu) }}
