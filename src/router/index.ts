@@ -50,6 +50,10 @@ import MuokkaaKoulutusjaksoa from '@/views/koulutussuunnitelma/koulutusjakso/muo
 import UusiKoulutusjakso from '@/views/koulutussuunnitelma/koulutusjakso/uusi-koulutusjakso.vue'
 import Koulutussuunnitelma from '@/views/koulutussuunnitelma/koulutussuunnitelma.vue'
 import MuokkaaKoulutussuunnitelma from '@/views/koulutussuunnitelma/muokkaa-koulutussuunnitelma.vue'
+import Kurssikoodi from '@/views/kurssikoodit/kurssikoodi.vue'
+import Kurssikoodit from '@/views/kurssikoodit/kurssikoodit.vue'
+import LisaaKurssikoodi from '@/views/kurssikoodit/lisaa-kurssikoodi.vue'
+import MuokkaaKurssikoodia from '@/views/kurssikoodit/muokkaa-kurssikoodia.vue'
 import HakaYliopisto from '@/views/login/haka-yliopisto.vue'
 import LoginView from '@/views/login/login-view.vue'
 import Login from '@/views/login/login.vue'
@@ -1157,6 +1161,42 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: MuokkaaIlmoitusta,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/kurssikoodit',
+        name: 'kurssikoodit',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Kurssikoodit,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/kurssikoodit/uusi',
+        name: 'lisaa-kurssikoodi',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaKurssikoodi,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/kurssikoodit/:kurssikoodiId',
+        name: 'kurssikoodi',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Kurssikoodi,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/kurssikoodit/:kurssikoodiId/muokkaa',
+        name: 'muokkaa-kurssikoodia',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaKurssikoodia,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
         }
       }
     ]

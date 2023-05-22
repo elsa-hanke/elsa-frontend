@@ -1664,3 +1664,9 @@ export type SuoritemerkinnatOptions = {
   tyoskentelyjaksot: Tyoskentelyjakso[]
   suoritteet: Suorite[]
 }
+
+export interface Kurssikoodi {
+  id: number | null
+  tunniste: string | null
+  tyyppi: OpintosuoritusTyyppi | null
+}

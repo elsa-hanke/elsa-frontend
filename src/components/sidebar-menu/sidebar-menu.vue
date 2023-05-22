@@ -154,6 +154,14 @@
           <font-awesome-icon icon="info-circle" fixed-width size="lg" />
           {{ $t('julkiset-ilmoitukset') }}
         </b-nav-item>
+        <b-nav-item
+          v-if="$isVirkailija()"
+          class="border-top border-bottom"
+          :to="{ name: 'kurssikoodit' }"
+        >
+          <font-awesome-icon icon="university" fixed-width size="lg" />
+          {{ $t('kurssikoodien-yllapito') }}
+        </b-nav-item>
       </b-nav>
     </nav>
     <b-toaster class="toaster" :style="{ top: paddingTop + 'px' }" name="b-toaster-top-right" />
