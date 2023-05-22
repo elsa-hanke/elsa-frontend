@@ -13,7 +13,9 @@ import {
   ValmistumispyyntoVirkailijanTarkistus,
   ValmistumispyynnonVirkailijanTarkistusLomake,
   Asiakirja,
-  TerveyskeskuskoulutusjaksonHyvaksyntaForm
+  TerveyskeskuskoulutusjaksonHyvaksyntaForm,
+  Kurssikoodi,
+  OpintosuoritusTyyppi
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -176,4 +178,34 @@ export async function getValmistumispyyntoAsiakirja(
 ) {
   const path = `/virkailija/valmistumispyynto/${valmistumispyyntoId}/asiakirja/${asiakirjaId}`
   return await axios.get<Asiakirja>(path)
+}
+
+export async function getKurssikoodit() {
+  const path = `/virkailija/kurssikoodit`
+  return await axios.get<Kurssikoodi[]>(path)
+}
+
+export async function getKurssikoodi(id: string) {
+  const path = `/virkailija/kurssikoodit/${id}`
+  return await axios.get<Kurssikoodi>(path)
+}
+
+export async function getOpintosuoritusTyypit() {
+  const path = `/virkailija/kurssikoodit/tyypit`
+  return await axios.get<OpintosuoritusTyyppi[]>(path)
+}
+
+export async function postKurssikoodi(form: Kurssikoodi) {
+  const path = 'virkailija/kurssikoodit'
+  return await axios.post<Kurssikoodi>(path, form)
+}
+
+export async function putKurssikoodi(form: Kurssikoodi) {
+  const path = `virkailija/kurssikoodit`
+  return await axios.put<Kurssikoodi>(path, form)
+}
+
+export async function deleteKurssikoodi(id: string) {
+  const path = `/virkailija/kurssikoodit/${id}`
+  return await axios.delete<Kurssikoodi>(path)
 }
