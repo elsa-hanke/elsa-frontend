@@ -53,6 +53,7 @@ export async function getKouluttajat(params: {
   sort: string | null
   'nimi.contains'?: string
   'erikoisalaId.equals'?: number
+  findAll?: boolean
 }) {
   const path = `${resolveRolePath()}/kouluttajat`
   return await axios.get<Page<KayttajahallintaKayttajaListItem>>(path, {
@@ -133,6 +134,11 @@ export async function activateKayttaja(kayttajaId: number) {
 export async function passivateKayttaja(kayttajaId: number) {
   const path = `${resolveRolePath()}/kayttajat/${kayttajaId}/passivoi`
   return await axios.patch(path)
+}
+
+export async function deleteKayttaja(kayttajaId: number, reassignedKayttajaId?: number) {
+  const path = `${resolveRolePath()}/kayttajat/${kayttajaId}`
+  return await axios.delete(path, { data: { reassignedKayttajaId: reassignedKayttajaId } })
 }
 
 export async function getKayttajahallintaRajaimet() {

@@ -189,7 +189,17 @@
                 {{ $t('aktivoi-kayttaja') }}
               </elsa-button>
               <elsa-button
-                v-else-if="isAktiivinen || isKutsuttu"
+                v-else-if="isKutsuttu"
+                variant="outline-danger"
+                :loading="deleting"
+                :disabled="deleting"
+                class="mb-3 ml-3"
+                @click="showDeleteConfirm"
+              >
+                {{ $t('poista-kayttaja') }}
+              </elsa-button>
+              <elsa-button
+                v-else-if="isAktiivinen"
                 variant="outline-danger"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
@@ -223,6 +233,51 @@
           </div>
         </b-col>
       </b-row>
+
+      <elsa-confirmation-modal
+        id="confirm-delete"
+        :title="$t('poista-kayttaja')"
+        :submit-text="$t('poista-kayttaja')"
+        submit-variant="outline-danger"
+        :hide-on-submit="false"
+        @submit="onDeleteKayttaja"
+        @cancel="onCancelDelete"
+      >
+        <template #modal-content>
+          <div v-if="kayttajaWrapper && kayttajaWrapper.voiPoistaa" class="d-block">
+            {{ $t('poista-kayttaja-varmistus') }}
+          </div>
+          <div v-else>
+            <p class="mb-1">{{ $t('poista-kayttaja-varmistus-avoimia-tehtavia') }}</p>
+            <ul>
+              <li>{{ $t('arviointipyynto') }}</li>
+              <li>{{ $t('seurantajakso') }}</li>
+              <li>{{ $t('koejakson-vaiheen-hyvaksynta') }}</li>
+            </ul>
+            <elsa-form-group :label="$t('kouluttaja')" :required="true" class="col-md-12">
+              <template #default="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="reassignedKouluttaja"
+                  :options="kouluttajat"
+                  :disabled="editing"
+                  :custom-label="kouluttajaLabel"
+                  :state="validateDelete()"
+                  track-by="kayttajaId"
+                  @input="$emit('skipRouteExitConfirm', false)"
+                >
+                  <template #option="{ option }">
+                    <div>{{ option.etunimi }} {{ option.sukunimi }}</div>
+                  </template>
+                </elsa-form-multiselect>
+                <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateDelete()">
+                  {{ $t('pakollinen-tieto') }}
+                </b-form-invalid-feedback>
+              </template>
+            </elsa-form-group>
+          </div>
+        </template>
+      </elsa-confirmation-modal>
     </b-container>
   </div>
 </template>
@@ -230,20 +285,36 @@
 <script lang="ts">
   import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
+  import { Validation } from 'vuelidate'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
-  import { getKayttaja, patchKouluttaja, putKouluttajaInvitation } from '@/api/kayttajahallinta'
+  import {
+    deleteKayttaja,
+    getKayttaja,
+    getKouluttajat,
+    patchKouluttaja,
+    putKouluttajaInvitation
+  } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
-  import { ElsaError, KayttajahallintaUpdateKayttaja } from '@/types'
+  import {
+    ElsaError,
+    KayttajahallintaKayttajaListItem,
+    KayttajahallintaUpdateKayttaja
+  } from '@/types'
   import { confirmExit } from '@/utils/confirm'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
       ElsaButton,
-      ElsaFormGroup
+      ElsaConfirmationModal,
+      ElsaFormGroup,
+      ElsaFormMultiselect
     },
     validations: {
       form: {
@@ -262,14 +333,13 @@
         sukunimi: {
           required
         }
+      },
+      reassignedKouluttaja: {
+        required
       }
     }
   })
   export default class KouluttajaView extends Mixins(KayttajahallintaKayttajaMixin) {
-    $refs!: {
-      vastuuhenkilonTehtavat: any
-    }
-
     items = [
       {
         text: this.$t('kayttajahallinta'),
@@ -288,13 +358,37 @@
       sahkopostiUudelleen: null
     }
 
+    deleting = false
+    reassignedKouluttaja: KayttajahallintaKayttajaListItem | null = null
+    kouluttajat: KayttajahallintaKayttajaListItem[] = []
+
     async mounted() {
       await this.fetchKayttaja()
+      await this.fetchKouluttajat()
     }
 
     async fetchKayttaja() {
       try {
         this.kayttajaWrapper = (await getKayttaja(this.$route?.params?.kayttajaId)).data
+        this.initForm()
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'kayttajahallinta' })
+
+        this.loading = false
+      }
+    }
+
+    async fetchKouluttajat() {
+      try {
+        this.kouluttajat = (
+          await getKouluttajat({
+            sort: 'user.lastName,asc',
+            findAll: true
+          })
+        ).data.content
+          .filter((k) => k.kayttajaId !== this.kayttajaWrapper?.kayttaja?.id)
+          .sort((a, b) => sortByAsc(a.sukunimi, b.sukunimi))
         this.initForm()
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
@@ -373,6 +467,47 @@
           toastFail(this, this.$t('kutsulinkin-lahettaminen-epaonnistui'))
         }
       }
+    }
+
+    showDeleteConfirm() {
+      this.$bvModal.show('confirm-delete')
+    }
+
+    async onDeleteKayttaja() {
+      this.$v.reassignedKouluttaja.$touch()
+      if (
+        (!this.kayttajaWrapper?.voiPoistaa && this.reassignedKouluttaja == null) ||
+        !this.kayttajaWrapper?.kayttaja?.id
+      ) {
+        return
+      }
+      this.$bvModal.hide('confirm-delete')
+      this.deleting = true
+      try {
+        await deleteKayttaja(
+          this.kayttajaWrapper.kayttaja.id,
+          this.reassignedKouluttaja?.kayttajaId
+        )
+        toastSuccess(this, this.$t('kayttajan-poisto-onnistui'))
+        this.$emit('skipRouteExitConfirm', true)
+        this.$router.replace({ name: 'kayttajahallinta' })
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-poisto-epaonnistui'))
+      }
+      this.deleting = false
+    }
+
+    onCancelDelete() {
+      this.$emit('skipRouteExitConfirm', true)
+    }
+
+    kouluttajaLabel(kouluttaja: KayttajahallintaKayttajaListItem) {
+      return `${kouluttaja.etunimi} ${kouluttaja.sukunimi}`
+    }
+
+    validateDelete() {
+      const { $dirty, $error } = this.$v.reassignedKouluttaja as Validation
+      return $dirty ? ($error ? false : null) : null
     }
   }
 </script>

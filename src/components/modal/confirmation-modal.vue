@@ -5,11 +5,11 @@
     </div>
 
     <template #modal-footer>
-      <elsa-button variant="back" @click="hideModal">
+      <elsa-button variant="back" @click="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
 
-      <elsa-button variant="primary" @click="onSubmit">
+      <elsa-button :variant="submitVariant" @click="onSubmit">
         {{ submitText }}
       </elsa-button>
     </template>
@@ -48,14 +48,27 @@
     @Prop({ required: true, type: String })
     submitText!: string
 
+    @Prop({ required: false, type: String, default: 'primary' })
+    submitVariant?: string
+
+    @Prop({ required: false, type: Boolean, default: true })
+    hideOnSubmit?: boolean
+
     hideModal() {
       return this.$bvModal.hide(this.id)
     }
 
     // Välitä tapahtuma vanhemmalle
     onSubmit(value: any, params: any) {
-      this.hideModal()
+      if (this.hideOnSubmit) {
+        this.hideModal()
+      }
       this.$emit('submit', value, params)
+    }
+
+    onCancel(value: any, params: any) {
+      this.hideModal()
+      this.$emit('cancel', value, params)
     }
   }
 </script>
