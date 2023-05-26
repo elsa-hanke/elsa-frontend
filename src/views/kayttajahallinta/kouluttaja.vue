@@ -248,13 +248,8 @@
             {{ $t('poista-kayttaja-varmistus') }}
           </div>
           <div v-else>
-            <p class="mb-1">{{ $t('poista-kayttaja-varmistus-avoimia-tehtavia') }}</p>
-            <ul>
-              <li>{{ $t('arviointipyynto') }}</li>
-              <li>{{ $t('seurantajakso') }}</li>
-              <li>{{ $t('koejakson-vaiheen-hyvaksynta') }}</li>
-            </ul>
-            <elsa-form-group :label="$t('kouluttaja')" :required="true" class="col-md-12">
+            <p class="mb-3">{{ $t('poista-kayttaja-varmistus-avoimia-tehtavia') }}</p>
+            <elsa-form-group :label="$t('kouluttaja')" :required="true" class="col-md-12 pl-0 mb-2">
               <template #default="{ uid }">
                 <elsa-form-multiselect
                   :id="uid"
