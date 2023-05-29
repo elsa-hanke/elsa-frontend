@@ -244,9 +244,6 @@
         >
           {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
         </b-form-checkbox>
-        <small class="d-flex form-text text-muted ml-4">
-          {{ $t('aiemmin-toiselle-erikoisalalle-help') }}
-        </small>
       </template>
     </elsa-form-group>
     <elsa-form-group :label="$t('liitetiedostot')">
