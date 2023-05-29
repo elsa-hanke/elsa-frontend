@@ -193,7 +193,7 @@
                 variant="outline-danger"
                 :loading="deleting"
                 :disabled="deleting"
-                class="mb-3 ml-3"
+                class="mb-3"
                 @click="showDeleteConfirm"
               >
                 {{ $t('poista-kayttaja') }}
@@ -212,7 +212,7 @@
                 v-if="editing"
                 variant="back"
                 :disabled="updatingKayttaja"
-                class="mb-3 mr-3"
+                class="mb-3"
                 @click.stop.prevent="onCancel"
               >
                 {{ $t('peruuta') }}
@@ -255,7 +255,6 @@
                   :id="uid"
                   v-model="reassignedKouluttaja"
                   :options="kouluttajat"
-                  :disabled="editing"
                   :custom-label="kouluttajaLabel"
                   :state="validateDelete()"
                   track-by="kayttajaId"
@@ -384,7 +383,6 @@
         ).data.content
           .filter((k) => k.kayttajaId !== this.kayttajaWrapper?.kayttaja?.id)
           .sort((a, b) => sortByAsc(a.sukunimi, b.sukunimi))
-        this.initForm()
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'kayttajahallinta' })
