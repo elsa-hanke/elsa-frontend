@@ -40,6 +40,7 @@
             :editing="true"
             :seurantajakso="seurantajakso"
             :seurantajakson-tiedot="seurantajaksonTiedot"
+            :kouluttajat="kouluttajat"
             @submit="onSubmit"
             @cancel="onCancel"
             @delete="onDelete"
@@ -65,6 +66,7 @@
     putSeurantajakso
   } from '@/api/erikoistuva'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
+  import store from '@/store'
   import { Seurantajakso, SeurantajaksonTiedot } from '@/types'
   import { confirmDelete } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -112,6 +114,7 @@
               .filter((k): k is number => k !== null)
           )
         ).data
+        await store.dispatch('erikoistuva/getKouluttajatJaVastuuhenkilot')
       } catch {
         toastFail(this, this.$t('seurantajakson-tietojen-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'seurantakeskustelut' })
@@ -124,6 +127,10 @@
         this.seurantajakso?.seurantakeskustelunYhteisetMerkinnat === null &&
         this.seurantajakso.kouluttajanArvio === null
       )
+    }
+
+    get kouluttajat() {
+      return store.getters['erikoistuva/kouluttajatJaVastuuhenkilot'] || []
     }
 
     async onSubmit(value: Seurantajakso, params: { saving: boolean }) {

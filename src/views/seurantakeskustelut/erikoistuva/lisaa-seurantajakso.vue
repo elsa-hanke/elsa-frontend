@@ -17,6 +17,7 @@
             :editing="true"
             :seurantajakso="seurantajakso"
             :seurantajakson-tiedot="seurantajaksonTiedot"
+            :kouluttajat="kouluttajat"
             @submit="onSubmit"
             @cancel="onCancel"
             @uusiHaku="onUusiHaku"
@@ -54,6 +55,7 @@
   } from '@/api/erikoistuva'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
   import SeurantajaksoHakuForm from '@/forms/seurantajakso-haku-form.vue'
+  import store from '@/store'
   import { Koulutusjakso, KoulutusjaksoLomake, Seurantajakso, SeurantajaksonTiedot } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -94,6 +96,7 @@
       this.loading = true
       await this.fetchKoulutusjaksot()
       await this.fetchKoulutusjaksoLomake()
+      await store.dispatch('erikoistuva/getKouluttajatJaVastuuhenkilot')
       this.loading = false
     }
 
@@ -123,6 +126,10 @@
 
     get arvioitavanKokonaisuudenKategoriat() {
       return this.koulutusjaksoLomake?.arvioitavanKokonaisuudenKategoriat ?? []
+    }
+
+    get kouluttajat() {
+      return store.getters['erikoistuva/kouluttajatJaVastuuhenkilot'] || []
     }
 
     async onHakuSubmit(value: Seurantajakso, params: { saving: boolean }) {

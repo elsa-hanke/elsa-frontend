@@ -8,7 +8,8 @@ const erikoistuva: Module<any, any> = {
   state: {
     status: '',
     koejakso: null,
-    kouluttajat: null
+    kouluttajat: null,
+    kouluttajatJaVastuuhenkilot: null
   },
   mutations: {
     koejaksoRequest(state) {
@@ -38,6 +39,16 @@ const erikoistuva: Module<any, any> = {
       state.kouluttajat = kouluttajat
     },
     kouluttajatError(state) {
+      state.status = 'error'
+    },
+    kouluttajatJaVastuuhenkilotRequest(state) {
+      state.status = 'loading'
+    },
+    kouluttajatJaVastuuhenkilotSuccess(state, kouluttajatJaVastuuhenkilot) {
+      state.status = 'success'
+      state.kouluttajatJaVastuuhenkilot = kouluttajatJaVastuuhenkilot
+    },
+    kouluttajatJaVastuuhenkilotError(state) {
       state.status = 'error'
     }
   },
@@ -196,12 +207,26 @@ const erikoistuva: Module<any, any> = {
         commit('kouluttajatError')
         throw err
       }
+    },
+    async getKouluttajatJaVastuuhenkilot({ commit }) {
+      commit('kouluttajatJaVastuuhenkilotRequest')
+      try {
+        const { data } = await api.getKouluttajatJaVastuuhenkilot()
+        commit(
+          'kouluttajatJaVastuuhenkilotSuccess',
+          data.sort((a, b) => sortByAsc(a.sukunimi, b.sukunimi))
+        )
+      } catch (err) {
+        commit('kouluttajatJaVastuuhenkilotError')
+        throw err
+      }
     }
   },
   getters: {
     status: (state) => state.status,
     koejakso: (state) => state.koejakso,
-    kouluttajat: (state) => state.kouluttajat
+    kouluttajat: (state) => state.kouluttajat,
+    kouluttajatJaVastuuhenkilot: (state) => state.kouluttajatJaVastuuhenkilot
   }
 }
 

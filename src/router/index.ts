@@ -1101,7 +1101,11 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Seurantakeskustelut,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja]
+          allowedRoles: [
+            ELSA_ROLE.ErikoistuvaLaakari,
+            ELSA_ROLE.Kouluttaja,
+            ELSA_ROLE.Vastuuhenkilo
+          ]
         }
       },
       {
@@ -1122,7 +1126,11 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Seurantajakso,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja]
+          allowedRoles: [
+            ELSA_ROLE.ErikoistuvaLaakari,
+            ELSA_ROLE.Kouluttaja,
+            ELSA_ROLE.Vastuuhenkilo
+          ]
         }
       },
       {
@@ -1132,7 +1140,11 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: MuokkaaSeurantajaksoa,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari, ELSA_ROLE.Kouluttaja],
+          allowedRoles: [
+            ELSA_ROLE.ErikoistuvaLaakari,
+            ELSA_ROLE.Kouluttaja,
+            ELSA_ROLE.Vastuuhenkilo
+          ],
           confirmRouteExit: true
         }
       },

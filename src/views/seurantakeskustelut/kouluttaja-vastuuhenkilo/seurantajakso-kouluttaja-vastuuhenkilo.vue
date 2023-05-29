@@ -5,7 +5,11 @@
       <b-row v-if="!loading && seurantajakso" lg>
         <b-col>
           <h1>{{ $t('seurantajakso') }}</h1>
-          <b-alert :show="showOdottaaKeskustelua" variant="dark" class="mt-3">
+          <b-alert
+            :show="showOdottaaKeskustelua && !showOdottaaArviointia"
+            variant="dark"
+            class="mt-3"
+          >
             <div class="d-flex flex-row">
               <em class="align-middle">
                 <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
