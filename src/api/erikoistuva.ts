@@ -111,6 +111,11 @@ export async function getKouluttajat() {
   return await axios.get<Kayttaja[]>(path)
 }
 
+export async function getKouluttajatJaVastuuhenkilot() {
+  const path = '/erikoistuva-laakari/kouluttajat-vastuuhenkilot'
+  return await axios.get<Kayttaja[]>(path)
+}
+
 export async function getTyoskentelyjakso(id: number | string) {
   const path = `erikoistuva-laakari/tyoskentelyjaksot/${id}`
   return await axios.get<Tyoskentelyjakso>(path)

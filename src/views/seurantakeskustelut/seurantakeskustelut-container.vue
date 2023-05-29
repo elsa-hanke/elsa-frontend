@@ -3,9 +3,9 @@
     <seurantakeskustelut-view-erikoistuva
       v-if="$isErikoistuva()"
     ></seurantakeskustelut-view-erikoistuva>
-    <seurantakeskustelut-view-kouluttaja
-      v-if="$isKouluttaja()"
-    ></seurantakeskustelut-view-kouluttaja>
+    <seurantakeskustelut-view-kouluttaja-vastuuhenkilo
+      v-if="$isKouluttaja() || $isVastuuhenkilo()"
+    ></seurantakeskustelut-view-kouluttaja-vastuuhenkilo>
   </div>
 </template>
 
@@ -14,19 +14,15 @@
   import Component from 'vue-class-component'
 
   import SeurantakeskustelutViewErikoistuva from '@/views/seurantakeskustelut/erikoistuva/seurantakeskustelut-erikoistuja.vue'
-  import SeurantakeskustelutViewKouluttaja from '@/views/seurantakeskustelut/kouluttaja/seurantakeskustelut-kouluttaja.vue'
+  import SeurantakeskustelutViewKouluttajaVastuuhenkilo from '@/views/seurantakeskustelut/kouluttaja-vastuuhenkilo/seurantakeskustelut-kouluttaja-vastuuhenkilo.vue'
 
   @Component({
     components: {
       SeurantakeskustelutViewErikoistuva,
-      SeurantakeskustelutViewKouluttaja
+      SeurantakeskustelutViewKouluttajaVastuuhenkilo
     }
   })
-  export default class SeurantakeskustelutContainer extends Vue {
-    get notFound() {
-      return !(this.$isErikoistuva() || this.$isKouluttaja())
-    }
-  }
+  export default class SeurantakeskustelutContainer extends Vue {}
 </script>
 
 <style lang="scss" scoped>

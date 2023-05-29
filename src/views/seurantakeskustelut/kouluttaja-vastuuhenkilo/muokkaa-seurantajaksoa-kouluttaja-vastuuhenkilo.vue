@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('seurantajakson-yhteenveto') }}</h1>
-          <p class="mb-1 pt-1">
+          <p v-if="!loading" class="mb-1 pt-1">
             <template v-if="showKouluttajanArvio">
               {{ $t('seurantajakson-yhteenveto-kuvaus') }}
             </template>
@@ -45,6 +45,7 @@
   import { getSeurantajakso, getSeurantajaksonTiedot, putSeurantajakso } from '@/api/kouluttaja'
   import SeurantajaksoForm from '@/forms/seurantajakso-form.vue'
   import { Seurantajakso, SeurantajaksonTiedot } from '@/types'
+  import { SeurantajaksoTila } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -116,12 +117,20 @@
     }
 
     onCancel() {
-      this.$router.push({
-        name: 'seurantajakso',
-        params: {
-          seurantajaksoId: `${this.seurantajakso?.id}`
-        }
-      })
+      if (
+        this.seurantajakso?.tila == SeurantajaksoTila.ODOTTAA_ARVIOINTIA ||
+        this.seurantajakso?.tila == SeurantajaksoTila.ODOTTAA_ARVIOINTIA_JA_YHTEISIA_MERKINTOJA ||
+        this.seurantajakso?.tila == SeurantajaksoTila.ODOTTAA_HYVAKSYNTAA
+      ) {
+        this.$router.push({ name: 'seurantakeskustelut' })
+      } else {
+        this.$router.push({
+          name: 'seurantajakso',
+          params: {
+            seurantajaksoId: `${this.seurantajakso?.id}`
+          }
+        })
+      }
     }
 
     get showKouluttajanArvio() {

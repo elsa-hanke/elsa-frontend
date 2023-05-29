@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'vue'
 
 import {
   AloituskeskusteluLomake,
@@ -79,22 +80,22 @@ export async function putSuoritusarviointi(formData: FormData) {
 }
 
 export async function getSeurantajaksot() {
-  const path = 'kouluttaja/seurantakeskustelut/seurantajaksot'
+  const path = `${resolveRolePath()}/seurantakeskustelut/seurantajaksot`
   return await axios.get(path)
 }
 
 export async function getSeurantajakso(seurantajaksoId: string) {
-  const path = `kouluttaja/seurantakeskustelut/seurantajakso/${seurantajaksoId}`
+  const path = `${resolveRolePath()}/seurantakeskustelut/seurantajakso/${seurantajaksoId}`
   return await axios.get<Seurantajakso>(path)
 }
 
 export async function getSeurantajaksonTiedot(id: number) {
-  const path = `kouluttaja/seurantakeskustelut/seurantajaksontiedot?id=${id}`
+  const path = `${resolveRolePath()}/seurantakeskustelut/seurantajaksontiedot?id=${id}`
   return await axios.get<SeurantajaksonTiedot>(path)
 }
 
 export async function putSeurantajakso(form: Seurantajakso) {
-  const path = `kouluttaja/seurantakeskustelut/seurantajakso/${form.id}`
+  const path = `${resolveRolePath()}/seurantakeskustelut/seurantajakso/${form.id}`
   return await axios.put<Seurantajakso>(path, form)
 }
 
@@ -121,4 +122,12 @@ export async function getEtusivuSeurantajaksot() {
 export async function getEtusivuVanhenevatKatseluoikeudet() {
   const path = `/kouluttaja/etusivu/vanhenevat-katseluoikeudet`
   return await axios.get<Katseluoikeus[]>(path)
+}
+
+function resolveRolePath() {
+  if (Vue.prototype.$isVastuuhenkilo()) {
+    return 'vastuuhenkilo'
+  } else {
+    return 'kouluttaja'
+  }
 }

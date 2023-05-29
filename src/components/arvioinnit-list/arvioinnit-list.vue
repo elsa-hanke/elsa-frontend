@@ -203,7 +203,7 @@
       return this.tulokset?.length || 0
     }
 
-    sortCompare(a: any, b: any, key: string): any {
+    sortCompare(a: Suoritusarviointi, b: Suoritusarviointi, key: string): number {
       if (key == 'tila') {
         if (a.lukittu) {
           return 1
@@ -219,7 +219,7 @@
         }
         return 0
       }
-      return false
+      return -1
     }
   }
 </script>

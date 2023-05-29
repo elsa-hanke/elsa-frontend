@@ -58,7 +58,7 @@
         {{ $t('arvioinnit') }}
       </b-nav-item>
       <b-nav-item
-        v-if="$isKouluttaja()"
+        v-if="$isKouluttaja() || $isVastuuhenkilo()"
         class="border-bottom"
         :to="{ name: 'seurantakeskustelut' }"
       >

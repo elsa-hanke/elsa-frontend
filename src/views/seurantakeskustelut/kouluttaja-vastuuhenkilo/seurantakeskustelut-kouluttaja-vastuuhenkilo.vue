@@ -169,7 +169,7 @@
       Pagination
     }
   })
-  export default class SeurantakeskustelutViewKouluttaja extends Vue {
+  export default class SeurantakeskustelutViewKouluttajaVastuuhenkilo extends Vue {
     seurantajaksot: Seurantajakso[] = []
 
     loading = true

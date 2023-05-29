@@ -4,10 +4,10 @@
       v-if="$isErikoistuva()"
       @skipRouteExitConfirm="skipRouteExitConfirm()"
     ></muokkaa-seurantajaksoa-erikoistuja>
-    <muokkaa-seurantajaksoa-kouluttaja
-      v-if="$isKouluttaja()"
+    <muokkaa-seurantajaksoa-kouluttaja-vastuuhenkilo
+      v-if="$isKouluttaja() || $isVastuuhenkilo()"
       @skipRouteExitConfirm="skipRouteExitConfirm()"
-    ></muokkaa-seurantajaksoa-kouluttaja>
+    ></muokkaa-seurantajaksoa-kouluttaja-vastuuhenkilo>
   </div>
 </template>
 
@@ -16,12 +16,12 @@
   import Component from 'vue-class-component'
 
   import MuokkaaSeurantajaksoaErikoistuja from '@/views/seurantakeskustelut/erikoistuva/muokkaa-seurantajaksoa-erikoistuja.vue'
-  import MuokkaaSeurantajaksoaKouluttaja from '@/views/seurantakeskustelut/kouluttaja/muokkaa-seurantajaksoa-kouluttaja.vue'
+  import MuokkaaSeurantajaksoaKouluttajaVastuuhenkilo from '@/views/seurantakeskustelut/kouluttaja-vastuuhenkilo/muokkaa-seurantajaksoa-kouluttaja-vastuuhenkilo.vue'
 
   @Component({
     components: {
       MuokkaaSeurantajaksoaErikoistuja,
-      MuokkaaSeurantajaksoaKouluttaja
+      MuokkaaSeurantajaksoaKouluttajaVastuuhenkilo
     }
   })
   export default class SeurantajaksoContainer extends Vue {

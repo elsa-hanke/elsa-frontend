@@ -562,9 +562,9 @@
 
     <hr />
 
-    <div v-if="form.kouluttajanArvio != null || (editing && $isKouluttaja())">
+    <div v-if="form.kouluttajanArvio != null || (editing && !$isErikoistuva())">
       <h3 class="mb-3">{{ $t('lahikouluttajan-arviointi') }}</h3>
-      <div v-if="editing && $isKouluttaja()">
+      <div v-if="editing && !$isErikoistuva()">
         <elsa-form-group
           :label="$t('edistyminen-osaamistavoitteiden-mukaista')"
           :required="true"
@@ -793,7 +793,7 @@
         {{ $t('poista-seurantajakso') }}
       </elsa-button>
       <elsa-button
-        v-if="$isKouluttaja() && form.seurantakeskustelunYhteisetMerkinnat != null"
+        v-if="!$isErikoistuva() && form.seurantakeskustelunYhteisetMerkinnat != null"
         v-b-modal.return-to-sender
         variant="outline-primary"
         class="mb-2"
@@ -867,7 +867,7 @@
   import { BModal } from 'bootstrap-vue'
   import Component from 'vue-class-component'
   import { Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
+  import { Validation, validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
   import { postLahikouluttaja } from '@/api/erikoistuva'
@@ -933,17 +933,17 @@
           },
           edistyminenTavoitteidenMukaista: {
             required: requiredIf(function () {
-              return vm.$isKouluttaja()
+              return !vm.$isErikoistuva()
             })
           },
           huolenaiheet: {
             required: requiredIf(function () {
-              return vm.$isKouluttaja() && vm.form.edistyminenTavoitteidenMukaista === false
+              return !vm.$isErikoistuva() && vm.form.edistyminenTavoitteidenMukaista === false
             })
           },
           kouluttajanArvio: {
             required: requiredIf(function () {
-              return vm.$isKouluttaja()
+              return !vm.$isErikoistuva()
             })
           }
         }
@@ -983,6 +983,9 @@
     @Prop({ required: false, default: false })
     editing!: boolean
 
+    @Prop({ required: false, default: () => [] })
+    kouluttajat?: Kayttaja[]
+
     form: Partial<Seurantajakso> = {
       koulutusjaksot: [],
       omaArviointi: null,
@@ -1018,17 +1021,15 @@
         ...this.seurantajakso
       }
       this.childDataReceived = true
-      await store.dispatch('erikoistuva/getKouluttajat')
     }
 
     validateState(name: string) {
-      const { $dirty, $error } = this.$v.form[name] as any
+      const { $dirty, $error } = this.$v.form[name] as Validation
       return $dirty ? ($error ? false : null) : null
     }
 
     get formattedKouluttajat(): Kayttaja[] {
-      const kouluttajat = store.getters['erikoistuva/kouluttajat'] || []
-      return formatList(this, kouluttajat)
+      return formatList(this, this.kouluttajat)
     }
 
     get uusiJakso() {
