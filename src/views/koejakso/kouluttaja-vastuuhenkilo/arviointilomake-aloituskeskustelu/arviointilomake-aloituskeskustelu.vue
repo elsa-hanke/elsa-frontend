@@ -172,7 +172,6 @@
 
 <script lang="ts">
   import { format } from 'date-fns'
-  import _get from 'lodash/get'
   import Component from 'vue-class-component'
   import { Vue } from 'vue-property-decorator'
 
@@ -232,16 +231,6 @@
     aloituskeskustelu: null | AloituskeskusteluLomake = null
     koejaksonVaihe = this.$t('aloituskeskustelu')
 
-    validateState(value: string) {
-      const form = this.$v
-      const { $dirty, $error } = _get(form, value) as any
-      return $dirty ? ($error ? false : null) : null
-    }
-
-    hideModal(id: string) {
-      return this.$bvModal.hide(id)
-    }
-
     get aloituskeskusteluId() {
       return Number(this.$route.params.id)
     }
@@ -272,7 +261,7 @@
 
     get editable() {
       return (
-        this.$isKouluttaja() &&
+        (this.$isKouluttaja() || this.$isVastuuhenkilo()) &&
         this.aloituskeskustelunTila !== LomakeTilat.PALAUTETTU_KORJATTAVAKSI &&
         ((this.isCurrentUserLahiesimies &&
           !this.aloituskeskustelu?.lahiesimies.sopimusHyvaksytty) ||
@@ -399,9 +388,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .textarea-min-height {
-    min-height: 100px;
-  }
-</style>

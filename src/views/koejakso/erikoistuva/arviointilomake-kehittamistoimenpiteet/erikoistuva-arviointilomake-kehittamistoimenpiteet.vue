@@ -67,6 +67,7 @@
           :lahiesimies="kehittamistoimenpiteetLomake.lahiesimies"
           :is-readonly="!editable"
           :allow-duplicates="true"
+          :kouluttajat="kouluttajat"
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
         />
@@ -211,6 +212,10 @@
       return store.getters['auth/account']
     }
 
+    get kouluttajat() {
+      return store.getters['erikoistuva/kouluttajatJaVastuuhenkilot'] || []
+    }
+
     get editable() {
       if (this.account.impersonated) {
         return false
@@ -308,6 +313,7 @@
       if (!this.koejaksoData) {
         await store.dispatch('erikoistuva/getKoejakso')
       }
+      await store.dispatch('erikoistuva/getKouluttajatJaVastuuhenkilot')
       this.setKoejaksoData()
       this.loading = false
     }

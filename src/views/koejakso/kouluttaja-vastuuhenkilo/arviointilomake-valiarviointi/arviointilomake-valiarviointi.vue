@@ -431,7 +431,7 @@
         return true
       }
       return (
-        this.$isKouluttaja() &&
+        (this.$isKouluttaja() || this.$isVastuuhenkilo()) &&
         !this.isCurrentUserLahiesimies &&
         !this.valiarviointi?.lahikouluttaja.sopimusHyvaksytty
       )

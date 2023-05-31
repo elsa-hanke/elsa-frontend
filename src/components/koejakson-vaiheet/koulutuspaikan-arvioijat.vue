@@ -101,7 +101,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
-  import { Kayttaja, KoejaksonVaiheHyvaksyja, ElsaError } from '@/types'
+  import { Kayttaja, KoejaksonVaiheHyvaksyja, ElsaError, Kouluttaja } from '@/types'
   import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -142,16 +142,15 @@
     @Prop({ required: false, default: false })
     allowDuplicates!: boolean
 
+    @Prop({ required: false, default: () => [] })
+    kouluttajat!: Kouluttaja[]
+
     form = {
       lahikouluttaja: null,
       lahiesimies: null
     } as any
 
     loading = true
-
-    get kouluttajat() {
-      return store.getters['erikoistuva/kouluttajat']
-    }
 
     get lahikouluttajatList() {
       const lahikouluttajat = this.kouluttajat?.map((k: any) => {
@@ -211,7 +210,7 @@
         } as KoejaksonVaiheHyvaksyja
         modal.hide('confirm')
         toastSuccess(this, this.$t('uusi-kouluttaja-lisatty'))
-        await store.dispatch('erikoistuva/getKouluttajat')
+        await store.dispatch('erikoistuva/getKouluttajatJaVastuuhenkilot')
         if (isLahiesimies) {
           this.onLahiesimiesSelect(koejaksonVaiheHyvaksyja)
         } else {
@@ -244,7 +243,6 @@
     }
 
     async mounted() {
-      await store.dispatch('erikoistuva/getKouluttajat')
       this.form.lahikouluttaja = this.lahikouluttaja?.id ? this.lahikouluttaja : null
       this.form.lahiesimies = this.lahiesimies?.id ? this.lahiesimies : null
       this.loading = false

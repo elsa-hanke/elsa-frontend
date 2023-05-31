@@ -17,7 +17,7 @@ import {
 } from '@/types'
 
 export async function getKoejaksot() {
-  const path = 'kouluttaja/koejaksot'
+  const path = `${resolveRolePath()}/koejaksot`
   return await axios.get(path)
 }
 
@@ -37,7 +37,7 @@ export async function getAloituskeskustelu(id: number) {
 }
 
 export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
-  const path = 'kouluttaja/koejakso/aloituskeskustelu'
+  const path = `${resolveRolePath()}/koejakso/aloituskeskustelu`
   return await axios.put<AloituskeskusteluLomake>(path, form)
 }
 
@@ -47,7 +47,7 @@ export async function getValiarviointi(id: number) {
 }
 
 export async function putValiarviointi(form: ValiarviointiLomake) {
-  const path = 'kouluttaja/koejakso/valiarviointi'
+  const path = `${resolveRolePath()}/koejakso/valiarviointi`
   return await axios.put<ValiarviointiLomake>(path, form)
 }
 
@@ -57,7 +57,7 @@ export async function getKehittamistoimenpiteet(id: number) {
 }
 
 export async function putKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
-  const path = 'kouluttaja/koejakso/kehittamistoimenpiteet'
+  const path = `${resolveRolePath()}/koejakso/kehittamistoimenpiteet`
   return await axios.put<KehittamistoimenpiteetLomake>(path, form)
 }
 
@@ -67,7 +67,7 @@ export async function getLoppukeskustelu(id: number) {
 }
 
 export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
-  const path = 'kouluttaja/koejakso/loppukeskustelu'
+  const path = `${resolveRolePath()}/koejakso/loppukeskustelu`
   return await axios.put<LoppukeskusteluLomake>(path, form)
 }
 
