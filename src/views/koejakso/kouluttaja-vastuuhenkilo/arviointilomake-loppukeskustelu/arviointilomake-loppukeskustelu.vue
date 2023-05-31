@@ -400,7 +400,7 @@
         return true
       }
       return (
-        this.$isKouluttaja() &&
+        (this.$isKouluttaja() || this.$isVastuuhenkilo()) &&
         !this.isCurrentUserLahiesimies &&
         !this.loppukeskustelu?.lahikouluttaja.sopimusHyvaksytty
       )

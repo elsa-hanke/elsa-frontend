@@ -158,7 +158,7 @@
     }
 
     get kouluttajat() {
-      return store.getters['erikoistuva/kouluttajat']
+      return store.getters['erikoistuva/kouluttajatJaVastuuhenkilot'] || []
     }
 
     get koejaksoData(): Koejakso {
@@ -249,7 +249,7 @@
       if (!this.koejaksoData) {
         await store.dispatch('erikoistuva/getKoejakso')
       }
-      await store.dispatch('erikoistuva/getKouluttajat')
+      await store.dispatch('erikoistuva/getKouluttajatJaVastuuhenkilot')
       this.setKoejaksoData()
       this.loading = false
       if (!this.editable) {

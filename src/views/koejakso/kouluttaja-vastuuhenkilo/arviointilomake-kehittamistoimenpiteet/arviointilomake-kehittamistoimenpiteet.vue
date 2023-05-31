@@ -320,7 +320,7 @@
         return true
       }
       return (
-        this.$isKouluttaja() &&
+        (this.$isKouluttaja() || this.$isVastuuhenkilo()) &&
         !this.isCurrentUserLahiesimies &&
         !this.kehittamistoimenpiteet?.lahikouluttaja.sopimusHyvaksytty
       )

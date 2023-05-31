@@ -189,6 +189,7 @@
       :lahiesimies="form.lahiesimies"
       :button-states="buttonStates"
       :allow-duplicates="true"
+      :kouluttajat="kouluttajat"
       @lahikouluttajaSelect="onLahikouluttajaSelect"
       @lahiesimiesSelect="onLahiesimiesSelect"
     />

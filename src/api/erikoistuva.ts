@@ -107,7 +107,7 @@ export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
 }
 
 export async function getKouluttajat() {
-  const path = '/kouluttajat'
+  const path = '/erikoistuva-laakari/kouluttajat'
   return await axios.get<Kayttaja[]>(path)
 }
 
