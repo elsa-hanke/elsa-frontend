@@ -243,6 +243,9 @@
           @input="$emit('skipRouteExitConfirm', false)"
         >
           {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle') }}
+          <small class="form-text text-muted">
+            {{ $t('tyoskentelyjakso-on-aiemmin-hyvaksytty-toiselle-erikoisalalle-help') }}
+          </small>
         </b-form-checkbox>
       </template>
     </elsa-form-group>
