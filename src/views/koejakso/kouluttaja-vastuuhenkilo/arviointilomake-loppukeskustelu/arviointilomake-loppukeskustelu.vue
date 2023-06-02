@@ -131,7 +131,7 @@
           <hr />
         </div>
 
-        <div>
+        <div v-if="loppukeskustelu.kehittamistoimenpiteet">
           <h3 class="mb-3">{{ $t('kehittamistoimenpiteiden-arviointi') }}</h3>
           <p v-if="loppukeskustelu.kehittamistoimenpiteetRiittavat">
             {{ $t('kehittamistoimenpiteet-riittavat') }}
