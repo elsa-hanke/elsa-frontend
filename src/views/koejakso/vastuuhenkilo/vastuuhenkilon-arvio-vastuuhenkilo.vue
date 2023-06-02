@@ -291,7 +291,7 @@
             </b-col>
           </b-row>
         </div>
-        <hr />
+        <hr v-if="vastuuhenkilonArvio.kehittamistoimenpiteet" />
         <div
           v-if="
             vastuuhenkilonArvio.valiarviointi &&
