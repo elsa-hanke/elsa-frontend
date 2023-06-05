@@ -47,7 +47,8 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getEtusivuSeurantajaksot } from '@/api/kouluttaja'
+  import { getEtusivuSeurantajaksot as getEtusivuSeurantajaksotKouluttaja } from '@/api/kouluttaja'
+  import { getEtusivuSeurantajaksot as getEtusivuSeurantajaksotVastuuhenkilo } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import { Seurantajakso } from '@/types'
@@ -66,7 +67,11 @@
 
     async mounted() {
       try {
-        this.seurantajaksot = (await getEtusivuSeurantajaksot()).data
+        if (this.$isVastuuhenkilo()) {
+          this.seurantajaksot = (await getEtusivuSeurantajaksotVastuuhenkilo()).data
+        } else {
+          this.seurantajaksot = (await getEtusivuSeurantajaksotKouluttaja()).data
+        }
       } catch (err) {
         toastFail(this, this.$t('seurantajaksojen-hakeminen-epaonnistui'))
       }

@@ -20,7 +20,8 @@ import {
   ValmistumispyyntoLomakeOsaamisenArviointi,
   ValmistumispyyntoVirkailijanTarkistus,
   ValmistumispyyntoHyvaksynta,
-  Asiakirja
+  Asiakirja,
+  Seurantajakso
 } from '@/types'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -95,6 +96,11 @@ export async function getEtusivuArviointipyynnot() {
 export async function getEtusivuValmistumispyynnot() {
   const path = `/vastuuhenkilo/etusivu/valmistumispyynnot`
   return await axios.get<ValmistumispyyntoListItem[]>(path)
+}
+
+export async function getEtusivuSeurantajaksot() {
+  const path = `/vastuuhenkilo/etusivu/seurantajaksot`
+  return await axios.get<Seurantajakso[]>(path)
 }
 
 export async function getTerveyskeskuskoulutusjaksot(params: {

@@ -5,6 +5,7 @@
       <b-row>
         <b-col xxl="9">
           <arviointipyynnot-card />
+          <seurantajaksot-card />
           <koejaksot-card />
           <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
           <valmistumispyynnot-card />
@@ -39,6 +40,7 @@
   import ErikoistujienSeurantaCard from '@/components/etusivu-cards/erikoistujien-seuranta-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
+  import SeurantajaksotCard from '@/components/etusivu-cards/seurantajaksot-card.vue'
   import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
 
@@ -46,13 +48,14 @@
     components: {
       ArvioinninTyokalutCard,
       ArviointipyynnotCard,
+      ArvioitavatKokonaisuudetCard,
       BCardSkeleton,
       ErikoistujienSeurantaCard,
       HenkilotiedotCard,
       KoejaksotCard,
+      SeurantajaksotCard,
       TerveyskeskuskoulutusjaksotCard,
-      ValmistumispyynnotCard,
-      ArvioitavatKokonaisuudetCard
+      ValmistumispyynnotCard
     }
   })
   export default class EtusivuVastuuhenkilo extends Vue {}
