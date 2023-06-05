@@ -1075,7 +1075,7 @@ export type HakaYliopisto = {
 export interface KayttajahallintaKayttajaWrapper {
   kayttaja?: Kayttaja
   erikoistuvaLaakari?: ErikoistuvaLaakari
-  voiPoistaa?: boolean
+  avoimiaTehtavia?: boolean
 }
 
 export interface KayttajahallintaUpdateKayttaja {
