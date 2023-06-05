@@ -189,24 +189,14 @@
                 {{ $t('aktivoi-kayttaja') }}
               </elsa-button>
               <elsa-button
-                v-else-if="isKutsuttu"
-                variant="outline-danger"
-                :loading="deleting"
-                :disabled="deleting"
-                class="mb-3"
-                @click="showDeleteConfirm"
-              >
-                {{ $t('poista-kayttaja') }}
-              </elsa-button>
-              <elsa-button
-                v-else-if="isAktiivinen"
+                v-else-if="isKutsuttu || isAktiivinen"
                 variant="outline-danger"
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
                 class="mb-3"
-                @click="onPassivateKayttaja"
+                @click="showDeleteConfirm"
               >
-                {{ $t('passivoi-kayttaja') }}
+                {{ isAktiivinen ? $t('passivoi-kayttaja') : $t('poista-kayttaja') }}
               </elsa-button>
               <elsa-button
                 v-if="editing"
@@ -235,20 +225,26 @@
       </b-row>
 
       <elsa-confirmation-modal
-        id="confirm-delete"
-        :title="$t('poista-kayttaja')"
-        :submit-text="$t('poista-kayttaja')"
+        id="confirm-dialog"
+        :title="isAktiivinen ? $t('passivoi-kayttaja') : $t('poista-kayttaja')"
+        :submit-text="isAktiivinen ? $t('passivoi-kayttaja') : $t('poista-kayttaja')"
         submit-variant="outline-danger"
         :hide-on-submit="false"
-        @submit="onDeleteKayttaja"
-        @cancel="onCancelDelete"
+        @submit="onPassivateDeleteKayttaja"
+        @cancel="onCancelConfirm"
       >
         <template #modal-content>
-          <div v-if="kayttajaWrapper && kayttajaWrapper.voiPoistaa" class="d-block">
-            {{ $t('poista-kayttaja-varmistus') }}
+          <div v-if="kayttajaWrapper && !kayttajaWrapper.avoimiaTehtavia" class="d-block">
+            {{ isAktiivinen ? $t('passivoi-kayttaja-varmistus') : $t('poista-kayttaja-varmistus') }}
           </div>
           <div v-else>
-            <p class="mb-3">{{ $t('poista-kayttaja-varmistus-avoimia-tehtavia') }}</p>
+            <p class="mb-3">
+              {{
+                isAktiivinen
+                  ? $t('passivoi-kayttaja-varmistus-avoimia-tehtavia')
+                  : $t('poista-kayttaja-varmistus-avoimia-tehtavia')
+              }}
+            </p>
             <elsa-form-group :label="$t('kouluttaja')" :required="true" class="col-md-12 pl-0 mb-2">
               <template #default="{ uid }">
                 <elsa-form-multiselect
@@ -256,7 +252,7 @@
                   v-model="reassignedKouluttaja"
                   :options="kouluttajat"
                   :custom-label="kouluttajaLabel"
-                  :state="validateDelete()"
+                  :state="validateConfirm()"
                   track-by="kayttajaId"
                   @input="$emit('skipRouteExitConfirm', false)"
                 >
@@ -264,7 +260,7 @@
                     <div>{{ option.etunimi }} {{ option.sukunimi }}</div>
                   </template>
                 </elsa-form-multiselect>
-                <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateDelete()">
+                <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateConfirm()">
                   {{ $t('pakollinen-tieto') }}
                 </b-form-invalid-feedback>
               </template>
@@ -286,6 +282,7 @@
     deleteKayttaja,
     getKayttaja,
     getKouluttajat,
+    passivateKayttaja,
     patchKouluttaja,
     putKouluttajaInvitation
   } from '@/api/kayttajahallinta'
@@ -300,6 +297,7 @@
     KayttajahallintaUpdateKayttaja
   } from '@/types'
   import { confirmExit } from '@/utils/confirm'
+  import { KayttajatiliTila } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -463,34 +461,48 @@
     }
 
     showDeleteConfirm() {
-      this.$bvModal.show('confirm-delete')
+      this.$bvModal.show('confirm-dialog')
     }
 
-    async onDeleteKayttaja() {
+    async onPassivateDeleteKayttaja() {
       this.$v.reassignedKouluttaja.$touch()
       if (
-        (!this.kayttajaWrapper?.voiPoistaa && this.reassignedKouluttaja == null) ||
+        (this.kayttajaWrapper?.avoimiaTehtavia && this.reassignedKouluttaja == null) ||
         !this.kayttajaWrapper?.kayttaja?.id
       ) {
         return
       }
-      this.$bvModal.hide('confirm-delete')
-      this.deleting = true
-      try {
-        await deleteKayttaja(
-          this.kayttajaWrapper.kayttaja.id,
-          this.reassignedKouluttaja?.kayttajaId
-        )
-        toastSuccess(this, this.$t('kayttajan-poisto-onnistui'))
-        this.$emit('skipRouteExitConfirm', true)
-        this.$router.replace({ name: 'kayttajahallinta' })
-      } catch (err) {
-        toastFail(this, this.$t('kayttajan-poisto-epaonnistui'))
+      this.$bvModal.hide('confirm-dialog')
+      this.updatingTila = true
+      if (this.isAktiivinen) {
+        try {
+          await passivateKayttaja(
+            this.kayttajaWrapper.kayttaja.id,
+            this.reassignedKouluttaja?.kayttajaId
+          )
+          this.kayttajaWrapper.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
+          this.kayttajaWrapper.avoimiaTehtavia = false
+          toastSuccess(this, this.$t('kayttajan-passivointi-onnistui'))
+        } catch (err) {
+          toastFail(this, this.$t('kayttajan-passivointi-epaonnistui'))
+        }
+      } else {
+        try {
+          await deleteKayttaja(
+            this.kayttajaWrapper.kayttaja.id,
+            this.reassignedKouluttaja?.kayttajaId
+          )
+          toastSuccess(this, this.$t('kayttajan-poisto-onnistui'))
+          this.$emit('skipRouteExitConfirm', true)
+          this.$router.replace({ name: 'kayttajahallinta' })
+        } catch (err) {
+          toastFail(this, this.$t('kayttajan-poisto-epaonnistui'))
+        }
       }
-      this.deleting = false
+      this.updatingTila = false
     }
 
-    onCancelDelete() {
+    onCancelConfirm() {
       this.$emit('skipRouteExitConfirm', true)
     }
 
@@ -498,7 +510,7 @@
       return `${kouluttaja.etunimi} ${kouluttaja.sukunimi}`
     }
 
-    validateDelete() {
+    validateConfirm() {
       const { $dirty, $error } = this.$v.reassignedKouluttaja as Validation
       return $dirty ? ($error ? false : null) : null
     }

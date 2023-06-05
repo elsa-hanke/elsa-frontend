@@ -999,6 +999,7 @@
   "palvelu-erikoistuville-laakareille": "Palvelu erikoistuville lääkäreille ja hammaslääkäreille",
   "passivoi-kayttaja": "Passivoi käyttäjä",
   "passivoi-kayttaja-varmistus": "Haluatko varmasti passivoida käyttäjän? Passiivisen käyttäjän tiedot säilytetään, mutta hän ei voi enää kirjautua palveluun.",
+  "passivoi-kayttaja-varmistus-avoimia-tehtavia": "Käyttäjältä löytyi avoimia tehtäviä. Valitse kenelle avoimet tehtävät siirretään ennen kuin käyttäjä passivoidaan.",
   "perustelu-hylkaamiselle": "Perustelu hylkäämiselle",
   "peruuta": "Peruuta",
   "piilota": "Piilota",

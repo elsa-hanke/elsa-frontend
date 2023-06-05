@@ -131,9 +131,9 @@ export async function activateKayttaja(kayttajaId: number) {
   return await axios.patch(path)
 }
 
-export async function passivateKayttaja(kayttajaId: number) {
+export async function passivateKayttaja(kayttajaId: number, reassignedKayttajaId?: number) {
   const path = `${resolveRolePath()}/kayttajat/${kayttajaId}/passivoi`
-  return await axios.patch(path)
+  return await axios.patch(path, { reassignedKayttajaId: reassignedKayttajaId })
 }
 
 export async function deleteKayttaja(kayttajaId: number, reassignedKayttajaId?: number) {
