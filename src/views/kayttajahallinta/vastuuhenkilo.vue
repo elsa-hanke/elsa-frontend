@@ -166,7 +166,7 @@
                 v-else-if="isAktiivinen || isKutsuttu"
                 variant="outline-danger"
                 :loading="updatingTila"
-                :disabled="updatingKayttaja"
+                :disabled="updatingKayttaja || hasVastuualueita"
                 class="mb-3"
                 @click="showPassivateConfirm"
               >
@@ -487,6 +487,16 @@
 
     onSkipRouteExitConfirm(value: boolean) {
       this.skipRouteExitConfirm = value
+    }
+
+    get hasVastuualueita() {
+      return (
+        (
+          this.kayttajaWrapper?.kayttaja?.yliopistotAndErikoisalat.filter(
+            (ye) => ye.vastuuhenkilonTehtavat.length > 0
+          ) || []
+        ).length > 0
+      )
     }
   }
 </script>
