@@ -168,7 +168,7 @@
                 :loading="updatingTila"
                 :disabled="updatingKayttaja"
                 class="mb-3"
-                @click="onPassivateKayttaja"
+                @click="showPassivateConfirm"
               >
                 {{ $t('passivoi-kayttaja') }}
               </elsa-button>
@@ -198,8 +198,53 @@
         </b-col>
       </b-row>
       <b-row>
-        <elsa-form-error :active="$v.$anyError" />
+        <elsa-form-error :active="$v.form.$anyError" />
       </b-row>
+
+      <elsa-confirmation-modal
+        id="confirm-dialog"
+        :title="$t('passivoi-kayttaja')"
+        :submit-text="$t('passivoi-kayttaja')"
+        submit-variant="outline-danger"
+        :hide-on-submit="false"
+        @submit="onPassivateKayttaja"
+        @cancel="onCancelConfirm"
+      >
+        <template #modal-content>
+          <div v-if="kayttajaWrapper && !kayttajaWrapper.avoimiaTehtavia" class="d-block">
+            {{ $t('passivoi-kayttaja-varmistus') }}
+          </div>
+          <div v-else>
+            <p class="mb-3">
+              {{ $t('passivoi-kayttaja-varmistus-avoimia-tehtavia') }}
+            </p>
+            <elsa-form-group
+              :label="$t('kouluttaja-tai-vastuuhenkilo')"
+              :required="true"
+              class="col-md-12 pl-0 mb-2"
+            >
+              <template #default="{ uid }">
+                <elsa-form-multiselect
+                  :id="uid"
+                  v-model="reassignedKouluttaja"
+                  :options="kouluttajat"
+                  :custom-label="kouluttajaLabel"
+                  :state="validateConfirm()"
+                  track-by="kayttajaId"
+                  @input="$emit('skipRouteExitConfirm', false)"
+                >
+                  <template #option="{ option }">
+                    <div>{{ option.etunimi }} {{ option.sukunimi }}</div>
+                  </template>
+                </elsa-form-multiselect>
+                <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateConfirm()">
+                  {{ $t('pakollinen-tieto') }}
+                </b-form-invalid-feedback>
+              </template>
+            </elsa-form-group>
+          </div>
+        </template>
+      </elsa-confirmation-modal>
     </b-container>
   </div>
 </template>
@@ -207,12 +252,20 @@
 <script lang="ts">
   import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
+  import { Validation } from 'vuelidate'
   import { required, email, sameAs } from 'vuelidate/lib/validators'
 
-  import { getKayttaja, putVastuuhenkilo } from '@/api/kayttajahallinta'
+  import {
+    getKayttaja,
+    getKorvaavatKouluttajat,
+    passivateKayttaja,
+    putVastuuhenkilo
+  } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
+  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
   import {
     KayttajahallintaUpdateKayttaja,
@@ -220,17 +273,23 @@
     ElsaError,
     KayttajaYliopistoErikoisala,
     VastuuhenkilonTehtava,
-    ReassignedVastuuhenkilonTehtava
+    ReassignedVastuuhenkilonTehtava,
+    KayttajahallintaKayttajaListItem,
+    Kayttaja
   } from '@/types'
   import { confirmExit } from '@/utils/confirm'
+  import { KayttajatiliTila } from '@/utils/constants'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import VastuuhenkilonTehtavat from '@/views/kayttajahallinta/vastuuhenkilon-tehtavat.vue'
 
   @Component({
     components: {
       ElsaButton,
+      ElsaConfirmationModal,
       ElsaFormError,
       ElsaFormGroup,
+      ElsaFormMultiselect,
       VastuuhenkilonTehtavat
     },
     validations: {
@@ -247,6 +306,9 @@
         eppn: {
           required
         }
+      },
+      reassignedKouluttaja: {
+        required
       }
     }
   })
@@ -274,8 +336,12 @@
       reassignedTehtavat: []
     }
 
+    reassignedKouluttaja: Kayttaja | null = null
+    kouluttajat: Kayttaja[] = []
+
     async mounted() {
       await this.fetchKayttaja()
+      await this.fetchKouluttajat()
       this.loading = false
     }
 
@@ -286,6 +352,19 @@
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'kayttajahallinta' })
+      }
+    }
+
+    async fetchKouluttajat() {
+      try {
+        this.kouluttajat = (await getKorvaavatKouluttajat(this.$route?.params?.kayttajaId)).data
+          .filter((k) => k.id !== this.kayttajaWrapper?.kayttaja?.id)
+          .sort((a, b) => sortByAsc(a.sukunimi, b.sukunimi))
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'kayttajahallinta' })
+
+        this.loading = false
       }
     }
 
@@ -310,6 +389,7 @@
         this.$refs.vastuuhenkilonTehtavat.initForm()
         this.skipRouteExitConfirm = true
         this.editing = false
+        this.$emit('skipRouteExitConfirm', true)
       }
     }
 
@@ -363,6 +443,46 @@
       this.editing = false
       this.updatingKayttaja = false
       this.skipRouteExitConfirm = true
+      this.$emit('skipRouteExitConfirm', true)
+    }
+
+    showPassivateConfirm() {
+      this.$bvModal.show('confirm-dialog')
+    }
+
+    async onPassivateKayttaja() {
+      this.$v.reassignedKouluttaja.$touch()
+      if (
+        (this.kayttajaWrapper?.avoimiaTehtavia && this.reassignedKouluttaja == null) ||
+        !this.kayttajaWrapper?.kayttaja?.id
+      ) {
+        return
+      }
+      this.$bvModal.hide('confirm-dialog')
+      this.updatingTila = true
+      try {
+        await passivateKayttaja(this.kayttajaWrapper.kayttaja.id, this.reassignedKouluttaja?.id)
+        this.kayttajaWrapper.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
+        this.kayttajaWrapper.avoimiaTehtavia = false
+        toastSuccess(this, this.$t('kayttajan-passivointi-onnistui'))
+      } catch (err) {
+        toastFail(this, this.$t('kayttajan-passivointi-epaonnistui'))
+      }
+      this.updatingTila = false
+      this.$emit('skipRouteExitConfirm', true)
+    }
+
+    onCancelConfirm() {
+      this.$emit('skipRouteExitConfirm', true)
+    }
+
+    kouluttajaLabel(kouluttaja: KayttajahallintaKayttajaListItem) {
+      return `${kouluttaja.etunimi} ${kouluttaja.sukunimi}`
+    }
+
+    validateConfirm() {
+      const { $dirty, $error } = this.$v.reassignedKouluttaja as Validation
+      return $dirty ? ($error ? false : null) : null
     }
 
     onSkipRouteExitConfirm(value: boolean) {

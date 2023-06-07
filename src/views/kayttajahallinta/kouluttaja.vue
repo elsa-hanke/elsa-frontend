@@ -281,7 +281,7 @@
   import {
     deleteKayttaja,
     getKayttaja,
-    getKouluttajat,
+    getKorvaavatKouluttajat,
     passivateKayttaja,
     patchKouluttaja,
     putKouluttajaInvitation
@@ -293,6 +293,7 @@
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
   import {
     ElsaError,
+    Kayttaja,
     KayttajahallintaKayttajaListItem,
     KayttajahallintaUpdateKayttaja
   } from '@/types'
@@ -351,8 +352,8 @@
     }
 
     deleting = false
-    reassignedKouluttaja: KayttajahallintaKayttajaListItem | null = null
-    kouluttajat: KayttajahallintaKayttajaListItem[] = []
+    reassignedKouluttaja: Kayttaja | null = null
+    kouluttajat: Kayttaja[] = []
 
     async mounted() {
       await this.fetchKayttaja()
@@ -373,13 +374,8 @@
 
     async fetchKouluttajat() {
       try {
-        this.kouluttajat = (
-          await getKouluttajat({
-            sort: 'user.lastName,asc',
-            findAll: true
-          })
-        ).data.content
-          .filter((k) => k.kayttajaId !== this.kayttajaWrapper?.kayttaja?.id)
+        this.kouluttajat = (await getKorvaavatKouluttajat(this.$route?.params?.kayttajaId)).data
+          .filter((k) => k.id !== this.kayttajaWrapper?.kayttaja?.id)
           .sort((a, b) => sortByAsc(a.sukunimi, b.sukunimi))
       } catch (err) {
         toastFail(this, this.$t('kayttajan-hakeminen-epaonnistui'))
@@ -476,10 +472,7 @@
       this.updatingTila = true
       if (this.isAktiivinen) {
         try {
-          await passivateKayttaja(
-            this.kayttajaWrapper.kayttaja.id,
-            this.reassignedKouluttaja?.kayttajaId
-          )
+          await passivateKayttaja(this.kayttajaWrapper.kayttaja.id, this.reassignedKouluttaja?.id)
           this.kayttajaWrapper.kayttaja.tila = KayttajatiliTila.PASSIIVINEN
           this.kayttajaWrapper.avoimiaTehtavia = false
           toastSuccess(this, this.$t('kayttajan-passivointi-onnistui'))
@@ -488,10 +481,7 @@
         }
       } else {
         try {
-          await deleteKayttaja(
-            this.kayttajaWrapper.kayttaja.id,
-            this.reassignedKouluttaja?.kayttajaId
-          )
+          await deleteKayttaja(this.kayttajaWrapper.kayttaja.id, this.reassignedKouluttaja?.id)
           toastSuccess(this, this.$t('kayttajan-poisto-onnistui'))
           this.$emit('skipRouteExitConfirm', true)
           this.$router.replace({ name: 'kayttajahallinta' })
@@ -500,6 +490,7 @@
         }
       }
       this.updatingTila = false
+      this.$emit('skipRouteExitConfirm', true)
     }
 
     onCancelConfirm() {

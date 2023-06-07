@@ -12,7 +12,8 @@ import {
   KayttajahallintaVastuuhenkilonTehtavatLomake,
   KayttajahallintaNewKayttaja,
   Yliopisto,
-  OpintoopasSimple
+  OpintoopasSimple,
+  Kayttaja
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -99,6 +100,11 @@ export async function getErikoistuvaLaakari(kayttajaId: number | string) {
 export async function getKayttaja(kayttajaId: number | string) {
   const path = `${resolveRolePath()}/kayttajat/${kayttajaId}`
   return await axios.get<KayttajahallintaKayttajaWrapper>(path)
+}
+
+export async function getKorvaavatKouluttajat(kayttajaId: number | string) {
+  const path = `${resolveRolePath()}/kayttajat/${kayttajaId}/korvaavat`
+  return await axios.get<Kayttaja[]>(path)
 }
 
 export async function getErikoistuvaLaakariLomake() {
