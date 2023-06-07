@@ -250,14 +250,14 @@
                 <elsa-form-multiselect
                   :id="uid"
                   v-model="reassignedKouluttaja"
-                  :options="kouluttajat"
-                  :custom-label="kouluttajaLabel"
+                  :options="formattedKouluttajat"
                   :state="validateConfirm()"
-                  track-by="kayttajaId"
+                  track-by="id"
+                  label="nimi"
                   @input="$emit('skipRouteExitConfirm', false)"
                 >
                   <template #option="{ option }">
-                    <div>{{ option.etunimi }} {{ option.sukunimi }}</div>
+                    <div v-if="option.nimi != null">{{ option.nimi }}</div>
                   </template>
                 </elsa-form-multiselect>
                 <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateConfirm()">
@@ -291,14 +291,10 @@
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import KayttajahallintaKayttajaMixin from '@/mixins/kayttajahallinta-kayttaja'
-  import {
-    ElsaError,
-    Kayttaja,
-    KayttajahallintaKayttajaListItem,
-    KayttajahallintaUpdateKayttaja
-  } from '@/types'
+  import { ElsaError, Kayttaja, KayttajahallintaUpdateKayttaja } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { KayttajatiliTila } from '@/utils/constants'
+  import { formatList } from '@/utils/kouluttajaAndVastuuhenkiloListFormatter'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -497,8 +493,8 @@
       this.$emit('skipRouteExitConfirm', true)
     }
 
-    kouluttajaLabel(kouluttaja: KayttajahallintaKayttajaListItem) {
-      return `${kouluttaja.etunimi} ${kouluttaja.sukunimi}`
+    get formattedKouluttajat() {
+      return formatList(this, this.kouluttajat)
     }
 
     validateConfirm() {
