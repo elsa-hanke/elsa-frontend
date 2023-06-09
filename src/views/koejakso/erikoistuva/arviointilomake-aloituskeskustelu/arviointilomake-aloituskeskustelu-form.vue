@@ -287,7 +287,6 @@
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import {
     AloituskeskusteluLomake,
     Kouluttaja,
@@ -307,7 +306,6 @@
       ElsaButton,
       ElsaPopover,
       ElsaFormMultiselect,
-      KouluttajaForm,
       ElsaConfirmationModal,
       KoulutuspaikanArvioijat
     }

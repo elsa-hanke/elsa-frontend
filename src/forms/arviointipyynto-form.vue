@@ -110,6 +110,7 @@
       >
         <template #modal-content="{ submit, cancel, skipRouteExitConfirm }">
           <kouluttaja-form
+            :kouluttajat="kouluttajatAndVastuuhenkilot"
             @submit="submit"
             @cancel="cancel"
             @skipRouteExitConfirm="skipRouteExitConfirm"
