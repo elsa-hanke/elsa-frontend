@@ -15,7 +15,7 @@
           @submit="onLahikouluttajaSubmit"
         >
           <template #modal-content="{ submit, cancel }">
-            <kouluttaja-form @submit="submit" @cancel="cancel" />
+            <kouluttaja-form :kouluttajat="kouluttajat" @submit="submit" @cancel="cancel" />
           </template>
           <template #default="{ uid }">
             <elsa-form-multiselect
@@ -45,7 +45,7 @@
           @submit="onLahiesimiesSubmit"
         >
           <template #modal-content="{ submit, cancel }">
-            <kouluttaja-form @submit="submit" @cancel="cancel" />
+            <kouluttaja-form :kouluttajat="kouluttajat" @submit="submit" @cancel="cancel" />
           </template>
           <template #default="{ uid }">
             <elsa-form-multiselect

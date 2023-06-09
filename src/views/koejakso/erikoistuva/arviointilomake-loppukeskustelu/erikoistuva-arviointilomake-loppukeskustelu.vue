@@ -136,7 +136,6 @@
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import KouluttajaForm from '@/forms/kouluttaja-form.vue'
   import store from '@/store'
   import {
     LoppukeskusteluLomake,
@@ -152,7 +151,6 @@
   @Component({
     components: {
       ErikoistuvaDetails,
-      KouluttajaForm,
       ElsaFormGroup,
       ElsaFormError,
       ElsaFormMultiselect,
