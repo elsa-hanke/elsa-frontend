@@ -112,6 +112,11 @@ export async function putArvioitavaKokonaisuus(form: ArvioitavaKokonaisuusWithEr
   return await axios.put<ArvioitavaKokonaisuusWithErikoisala>(path, form)
 }
 
+export async function deleteArvioitavaKokonaisuus(id: string) {
+  const path = `/tekninen-paakayttaja/arvioitavatkokonaisuudet/${id}`
+  return await axios.delete<SuoriteWithErikoisala>(path)
+}
+
 export async function getSuoritteenKategoriat(erikoisalaId: string) {
   const path = `/tekninen-paakayttaja/erikoisalat/${erikoisalaId}/suoritteenkategoriat`
   return await axios.get<SuoritteenKategoria[]>(path)
@@ -150,6 +155,11 @@ export async function postSuorite(form: SuoriteWithErikoisala) {
 export async function putSuorite(form: SuoriteWithErikoisala) {
   const path = `/tekninen-paakayttaja/suorite`
   return await axios.put<SuoriteWithErikoisala>(path, form)
+}
+
+export async function deleteSuorite(id: string) {
+  const path = `/tekninen-paakayttaja/suoritteet/${id}`
+  return await axios.delete<SuoriteWithErikoisala>(path)
 }
 
 export async function postIlmoitus(ilmoitus: Ilmoitus) {

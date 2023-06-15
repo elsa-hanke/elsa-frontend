@@ -12,7 +12,7 @@
               <elsa-form-multiselect
                 v-if="kategoriaEditable"
                 :id="uid"
-                v-model="kokonaisuus.kategoria"
+                v-model="form.kategoria"
                 :options="sortedKategoriat"
                 label="nimi"
                 track-by="nimi"
@@ -33,7 +33,7 @@
                 </b-input-group-prepend>
                 <b-form-input
                   :id="uid"
-                  v-model="kokonaisuus.nimi"
+                  v-model="form.nimi"
                   :state="validateState('nimi')"
                 ></b-form-input>
                 <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateState('nimi')">
@@ -41,7 +41,7 @@
                 </b-form-invalid-feedback>
               </b-input-group>
               <b-input-group prepend="SV">
-                <b-form-input :id="uid" v-model="kokonaisuus.nimiSv"></b-form-input>
+                <b-form-input :id="uid" v-model="form.nimiSv"></b-form-input>
               </b-input-group>
             </template>
           </elsa-form-group>
@@ -55,7 +55,7 @@
                 <elsa-form-datepicker
                   :id="uid"
                   ref="voimassaoloAlkaa"
-                  v-model="kokonaisuus.voimassaoloAlkaa"
+                  v-model="form.voimassaoloAlkaa"
                   :state="validateState('voimassaoloAlkaa')"
                   @input="$emit('skipRouteExitConfirm', false)"
                 ></elsa-form-datepicker>
@@ -69,7 +69,7 @@
                 <elsa-form-datepicker
                   :id="uid"
                   ref="voimassaoloPaattyy"
-                  v-model="kokonaisuus.voimassaoloLoppuu"
+                  v-model="form.voimassaoloLoppuu"
                   :required="false"
                   class="datepicker-range"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -84,12 +84,12 @@
                   <b-input-group-text class="input-group-fi">{{ 'FI' }}</b-input-group-text>
                 </b-input-group-prepend>
                 <b-col class="pl-0 pr-0">
-                  <elsa-text-editor v-model="kokonaisuus.kuvaus" />
+                  <elsa-text-editor v-model="form.kuvaus" />
                 </b-col>
               </b-input-group>
               <b-input-group prepend="SV">
                 <b-col class="pl-0 pr-0">
-                  <elsa-text-editor v-model="kokonaisuus.kuvausSv" />
+                  <elsa-text-editor v-model="form.kuvausSv" />
                 </b-col>
               </b-input-group>
             </template>
@@ -135,7 +135,6 @@
 </template>
 
 <script lang="ts">
-  import Editor from '@tinymce/tinymce-vue'
   import { Component, Mixins, Prop } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
@@ -151,7 +150,6 @@
 
   @Component({
     components: {
-      Editor,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormError,
@@ -182,13 +180,19 @@
       saving: false
     }
 
+    form: Partial<ArvioitavaKokonaisuus> = {}
+
+    mounted() {
+      this.form = { ...this.kokonaisuus }
+    }
+
     get sortedKategoriat() {
       return this.kategoriat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
     }
 
     validations() {
       return {
-        kokonaisuus: {
+        form: {
           kategoria: {
             required
           },
@@ -203,12 +207,12 @@
     }
 
     validateState(name: string) {
-      const { $dirty, $error } = this.$v.kokonaisuus[name] as any
+      const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
     }
 
     validateForm(): boolean {
-      this.$v.kokonaisuus.$touch()
+      this.$v.form.$touch()
       return !this.$v.$anyError
     }
 
@@ -222,7 +226,7 @@
       this.$emit(
         'submit',
         {
-          ...this.kokonaisuus
+          ...this.form
         },
         this.params
       )

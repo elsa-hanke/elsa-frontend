@@ -12,7 +12,7 @@
               <elsa-form-multiselect
                 v-if="kategoriaEditable"
                 :id="uid"
-                v-model="suorite.kategoria"
+                v-model="form.kategoria"
                 :options="sortedKategoriat"
                 label="nimi"
                 track-by="nimi"
@@ -33,7 +33,7 @@
                 </b-input-group-prepend>
                 <b-form-input
                   :id="uid"
-                  v-model="suorite.nimi"
+                  v-model="form.nimi"
                   :state="validateState('nimi')"
                 ></b-form-input>
                 <b-form-invalid-feedback :id="`${uid}-feedback`" :state="validateState('nimi')">
@@ -41,7 +41,7 @@
                 </b-form-invalid-feedback>
               </b-input-group>
               <b-input-group prepend="SV">
-                <b-form-input :id="uid" v-model="suorite.nimiSv"></b-form-input>
+                <b-form-input :id="uid" v-model="form.nimiSv"></b-form-input>
               </b-input-group>
             </template>
           </elsa-form-group>
@@ -55,7 +55,7 @@
                 <elsa-form-datepicker
                   :id="uid"
                   ref="voimassaolonAlkamispaiva"
-                  v-model="suorite.voimassaolonAlkamispaiva"
+                  v-model="form.voimassaolonAlkamispaiva"
                   :state="validateState('voimassaolonAlkamispaiva')"
                   @input="$emit('skipRouteExitConfirm', false)"
                 ></elsa-form-datepicker>
@@ -69,7 +69,7 @@
                 <elsa-form-datepicker
                   :id="uid"
                   ref="voimassaolonPaattymispaiva"
-                  v-model="suorite.voimassaolonPaattymispaiva"
+                  v-model="form.voimassaolonPaattymispaiva"
                   :required="false"
                   class="datepicker-range"
                   @input="$emit('skipRouteExitConfirm', false)"
@@ -79,7 +79,7 @@
           </b-form-row>
           <elsa-form-group :label="$t('vaadittu-lukumaara')" class="col-12 pr-md-3 pl-0">
             <template #default="{ uid }">
-              <b-form-input :id="uid" v-model="suorite.vaadittulkm"></b-form-input>
+              <b-form-input :id="uid" v-model="form.vaadittulkm"></b-form-input>
             </template>
           </elsa-form-group>
           <hr class="mt-6" />
@@ -128,7 +128,7 @@
 <script lang="ts">
   import Editor from '@tinymce/tinymce-vue'
   import { Component, Mixins, Prop } from 'vue-property-decorator'
-  import { validationMixin } from 'vuelidate'
+  import { Validation, validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -173,13 +173,19 @@
       saving: false
     }
 
+    form: Partial<SuoriteWithErikoisala> = {}
+
+    mounted() {
+      this.form = { ...this.suorite }
+    }
+
     get sortedKategoriat() {
       return this.kategoriat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
     }
 
     validations() {
       return {
-        suorite: {
+        form: {
           kategoria: {
             required
           },
@@ -194,12 +200,12 @@
     }
 
     validateState(name: string) {
-      const { $dirty, $error } = this.$v.suorite[name] as any
+      const { $dirty, $error } = this.$v.form[name] as Validation
       return $dirty ? ($error ? false : null) : null
     }
 
     validateForm(): boolean {
-      this.$v.suorite.$touch()
+      this.$v.form.$touch()
       return !this.$v.$anyError
     }
 
@@ -213,7 +219,7 @@
       this.$emit(
         'submit',
         {
-          ...this.suorite
+          ...this.form
         },
         this.params
       )

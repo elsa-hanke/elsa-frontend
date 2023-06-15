@@ -20,6 +20,15 @@
                 {{ $t('muokkaa') }}
               </elsa-button>
               <elsa-button
+                v-if="suorite && suorite.voiPoistaa"
+                :loading="deleting"
+                variant="outline-danger"
+                class="ml-2 mb-3 pl-3 pr-3"
+                @click="onDelete"
+              >
+                {{ $t('poista') }}
+              </elsa-button>
+              <elsa-button
                 :to="{ name: 'erikoisala', hash: '#suoritteet' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 suorite-link"
@@ -40,11 +49,12 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getSuorite } from '@/api/tekninen-paakayttaja'
+  import { deleteSuorite, getSuorite } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import SuoriteForm from '@/forms/suorite-form.vue'
   import { SuoriteWithErikoisala } from '@/types'
-  import { toastFail } from '@/utils/toast'
+  import { confirmDelete } from '@/utils/confirm'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
@@ -56,6 +66,7 @@
     suorite: SuoriteWithErikoisala | null = null
 
     loading = true
+    deleting = false
 
     get items() {
       return [
@@ -88,7 +99,27 @@
         this.suorite = (await getSuorite(this.$route?.params?.suoriteId)).data
       } catch (err) {
         toastFail(this, this.$t('suoritteen-hakeminen-epaonnistui'))
-        this.$router.replace({ name: 'opetussuunnitelmat', hash: '#suoritteet' })
+        this.$router.replace({ name: 'erikoisala', hash: '#suoritteet' })
+      }
+    }
+
+    async onDelete() {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-suorite') as string,
+          (this.$t('suoritteen') as string).toLowerCase()
+        )
+      ) {
+        this.deleting = true
+        try {
+          await deleteSuorite(this.$route?.params?.suoriteId)
+          toastSuccess(this, this.$t('suoritteen-poistaminen-onnistui'))
+          this.$router.replace({ name: 'erikoisala', hash: '#suoritteet' })
+        } catch (err) {
+          toastFail(this, this.$t('suoritteen-poistaminen-epaonnistui'))
+        }
+        this.deleting = false
       }
     }
   }

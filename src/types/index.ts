@@ -808,6 +808,7 @@ export type ArvioitavaKokonaisuusWithErikoisala = {
   voimassaoloAlkaa: string
   voimassaoloLoppuu: string
   kategoria: ArvioitavanKokonaisuudenKategoriaWithErikoisala
+  voiPoistaa: boolean
 }
 
 export type ArvioitavanKokonaisuudenKategoria = {
@@ -930,6 +931,7 @@ export type SuoriteWithErikoisala = {
   voimassaolonPaattymispaiva: string
   vaadittulkm?: number
   kategoria: SuoritteenKategoriaWithErikoisala
+  voiPoistaa: boolean
 }
 
 export type Suoritemerkinta = {

@@ -13,7 +13,6 @@
           <suorite-form
             v-if="!loading"
             :editing="true"
-            :kategoria-editable="false"
             :suorite="suorite"
             :kategoriat="kategoriat"
             @submit="onSubmit"
@@ -31,7 +30,7 @@
   import { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getSuorite, getSuoritteet, putSuorite } from '@/api/tekninen-paakayttaja'
+  import { getSuorite, getSuoritteenKategoriat, putSuorite } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import SuoriteForm from '@/forms/suorite-form.vue'
   import { ElsaError, SuoriteWithErikoisala, SuoritteenKategoria } from '@/types'
@@ -87,7 +86,7 @@
 
     async fetchKategoriat() {
       try {
-        this.kategoriat = (await getSuoritteet(this.$route.params.suoriteId)).data
+        this.kategoriat = (await getSuoritteenKategoriat(this.$route.params.erikoisalaId)).data
       } catch (err) {
         toastFail(this, this.$t('kategorioiden-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'opetussuunnitelmat', hash: '#suoritteet' })
