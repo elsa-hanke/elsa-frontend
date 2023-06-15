@@ -219,7 +219,7 @@
               {{ $t('passivoi-kayttaja-varmistus-avoimia-tehtavia') }}
             </p>
             <elsa-form-group
-              :label="$t('kouluttaja-tai-vastuuhenkilo')"
+              :label="$t('vastuuhenkilo')"
               :required="true"
               class="col-md-12 pl-0 mb-2"
             >
