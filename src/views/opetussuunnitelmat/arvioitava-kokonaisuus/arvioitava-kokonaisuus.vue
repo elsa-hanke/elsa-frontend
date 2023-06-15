@@ -24,6 +24,15 @@
                 {{ $t('muokkaa') }}
               </elsa-button>
               <elsa-button
+                v-if="kokonaisuus && kokonaisuus.voiPoistaa"
+                :loading="deleting"
+                variant="outline-danger"
+                class="ml-2 mb-3 pl-3 pr-3"
+                @click="onDelete"
+              >
+                {{ $t('poista') }}
+              </elsa-button>
+              <elsa-button
                 :to="{ name: 'erikoisala', hash: '#arvioitavat-kokonaisuudet' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 arvioitava-kokonaisuus-link"
@@ -44,11 +53,12 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getArvioitavaKokonaisuus } from '@/api/tekninen-paakayttaja'
+  import { deleteArvioitavaKokonaisuus, getArvioitavaKokonaisuus } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import ArvioitavaKokonaisuusForm from '@/forms/arvioitava-kokonaisuus-form.vue'
   import { ArvioitavaKokonaisuusWithErikoisala } from '@/types'
-  import { toastFail } from '@/utils/toast'
+  import { confirmDelete } from '@/utils/confirm'
+  import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
@@ -60,6 +70,7 @@
     kokonaisuus: ArvioitavaKokonaisuusWithErikoisala | null = null
 
     loading = true
+    deleting = false
 
     get items() {
       return [
@@ -93,6 +104,26 @@
       } catch (err) {
         toastFail(this, this.$t('arvioitavan-kokonaisuuden-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'opetussuunnitelmat', hash: '#arvioitavat-kokonaisuudet' })
+      }
+    }
+
+    async onDelete() {
+      if (
+        await confirmDelete(
+          this,
+          this.$t('poista-arvioitava-kokonaisuus') as string,
+          (this.$t('arvioitavan-kokonaisuuden') as string).toLowerCase()
+        )
+      ) {
+        this.deleting = true
+        try {
+          await deleteArvioitavaKokonaisuus(this.$route?.params?.kokonaisuusId)
+          toastSuccess(this, this.$t('arvioitavan-kokonaisuuden-poistaminen-onnistui'))
+          this.$router.replace({ name: 'erikoisala', hash: '#arvioitavat-kokonaisuudet' })
+        } catch (err) {
+          toastFail(this, this.$t('arvioitavan-kokonaisuuden-poistaminen-epaonnistui'))
+        }
+        this.deleting = false
       }
     }
   }

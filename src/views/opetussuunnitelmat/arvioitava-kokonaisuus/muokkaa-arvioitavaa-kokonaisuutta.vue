@@ -13,7 +13,6 @@
           <arvioitava-kokonaisuus-form
             v-if="!loading"
             :editing="true"
-            :kategoria-editable="false"
             :kokonaisuus="kokonaisuus"
             :kategoriat="kategoriat"
             @submit="onSubmit"
