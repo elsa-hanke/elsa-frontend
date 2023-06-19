@@ -423,7 +423,7 @@
                 class="my-3"
               >
                 <h5>
-                  {{ $t('yliopistosairaalatyo') }}
+                  {{ $t('yliopistosairaalan-ulkopuolinen-tyo') }}
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
@@ -473,7 +473,8 @@
                   {{ $t('suoritettu') }}
                   {{
                     $duration(
-                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                        .yliopistosairaalaSuoritettu
                     )
                   }}
                 </p>
