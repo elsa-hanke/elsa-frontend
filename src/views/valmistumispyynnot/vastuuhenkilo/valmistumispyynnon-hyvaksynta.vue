@@ -260,7 +260,7 @@
                 class="my-3"
               >
                 <h5>
-                  {{ $t('yliopistosairaalatyo') }}
+                  {{ $t('yliopistosairaalan-ulkopuolinen-tyo') }}
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
@@ -282,7 +282,11 @@
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
-                  {{ $duration(virkailijanTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
+                  {{
+                    $duration(
+                      virkailijanTarkistus.tyoskentelyjaksotTilastot.yliopistosairaalaSuoritettu
+                    )
+                  }}
                 </p>
                 <p class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
