@@ -41,7 +41,9 @@
             </em>
             <div>
               {{ $t('koulutussopimus-kouluttaja-palautettu') }}
-              <span class="d-block">{{ $t('syy') }}&nbsp;{{ form.korjausehdotus }}</span>
+              <span class="d-block">
+                {{ $t('syy') }}&nbsp;{{ form.korjausehdotus || form.vastuuhenkilonKorjausehdotus }}
+              </span>
             </div>
           </div>
         </b-alert>
@@ -324,6 +326,7 @@
       erikoistuvanYliopisto: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
+      vastuuhenkilonKorjausehdotus: '',
       kouluttajat: [],
       koulutuspaikat: [defaultKoulutuspaikka],
       lahetetty: false,

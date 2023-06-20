@@ -296,6 +296,7 @@
       erikoistuvanSyntymaaika: '',
       koejaksonAlkamispaiva: '',
       korjausehdotus: '',
+      vastuuhenkilonKorjausehdotus: '',
       kouluttajat: [],
       koulutuspaikat: [],
       lahetetty: false,

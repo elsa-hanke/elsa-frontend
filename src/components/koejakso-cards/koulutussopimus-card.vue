@@ -131,7 +131,10 @@
 
     get korjausehdotus() {
       if (this.koejakso.koulutussopimus) {
-        return this.koejakso.koulutussopimus.korjausehdotus
+        return (
+          this.koejakso.koulutussopimus.korjausehdotus ||
+          this.koejakso.koulutussopimus.vastuuhenkilonKorjausehdotus
+        )
       }
       return null
     }

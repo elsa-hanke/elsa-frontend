@@ -906,6 +906,8 @@
       try {
         const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
         this.vastuuhenkilonArvio = data
+        this.vastuuhenkilonArvio.vastuuhenkilonSahkoposti = this.account.email
+        this.vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero = this.account.phoneNumber
         this.vastuuhenkilonArvio = this.yhdistaPoissaolot(this.vastuuhenkilonArvio)
         this.loading = false
       } catch {

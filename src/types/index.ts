@@ -356,6 +356,7 @@ export interface KoulutussopimusLomake {
   id: number | null
   koejaksonAlkamispaiva: string
   korjausehdotus: string
+  vastuuhenkilonKorjausehdotus: string
   kouluttajat: Kouluttaja[]
   koulutuspaikat: Koulutuspaikka[]
   lahetetty: boolean

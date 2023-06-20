@@ -12,7 +12,12 @@
                   <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-2" />
                 </em>
                 <div>
-                  {{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}
+                  <span v-if="kouluttajanKorjausehdotus">
+                    {{ $t('koulutussopimus-tila-palautettu-korjattavaksi') }}
+                  </span>
+                  <span v-else>
+                    {{ $t('koulutussopimus-tila-palautettu-korjattavaksi-vastuuhenkilo') }}
+                  </span>
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
                     <span class="font-weight-500">{{ korjausehdotus }}</span>
@@ -183,6 +188,13 @@
     }
 
     get korjausehdotus() {
+      return (
+        this.koejaksoData.koulutussopimus?.korjausehdotus ||
+        this.koejaksoData.koulutussopimus?.vastuuhenkilonKorjausehdotus
+      )
+    }
+
+    get kouluttajanKorjausehdotus() {
       return this.koejaksoData.koulutussopimus?.korjausehdotus
     }
 
