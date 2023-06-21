@@ -20,16 +20,6 @@
             </div>
           </div>
         </b-alert>
-        <b-alert :show="waitingForErikoistuva" variant="dark" class="mt-3">
-          <div class="d-flex flex-row">
-            <em class="align-middle">
-              <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-            </em>
-            <div>
-              {{ $t('kehittamistoimenpiteet-esimies-allekirjoitettu') }}
-            </div>
-          </div>
-        </b-alert>
         <b-alert
           :show="returned"
           :variant="isCurrentUserLahiesimies ? 'dark' : 'danger'"
@@ -351,20 +341,12 @@
       return (
         !this.isCurrentUserLahiesimies &&
         this.kehittamistoimenpiteet?.lahikouluttaja.sopimusHyvaksytty &&
-        !this.kehittamistoimenpiteet?.erikoistuvaAllekirjoittanut
-      )
-    }
-
-    get waitingForErikoistuva() {
-      return (
-        this.isCurrentUserLahiesimies &&
-        this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty &&
-        !this.kehittamistoimenpiteet?.erikoistuvaAllekirjoittanut
+        !this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty
       )
     }
 
     get acceptedByEveryone() {
-      return this.kehittamistoimenpiteet?.erikoistuvaAllekirjoittanut
+      return this.kehittamistoimenpiteet?.lahiesimies.sopimusHyvaksytty
     }
 
     get returned() {
