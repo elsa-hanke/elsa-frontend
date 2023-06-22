@@ -144,7 +144,8 @@
     get samanNimiset() {
       return this.kouluttajat.filter(
         (k) =>
-          k.nimi.toLowerCase() === `${this.form.etunimi?.toLowerCase()} ${this.form.sukunimi?.toLowerCase()}` &&
+          k.nimi.toLowerCase() ===
+            `${this.form.etunimi?.toLowerCase()} ${this.form.sukunimi?.toLowerCase()}` &&
           k.sahkoposti !== this.form.sahkoposti
       )
     }
