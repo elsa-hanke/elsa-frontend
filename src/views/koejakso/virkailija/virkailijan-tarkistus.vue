@@ -715,7 +715,7 @@
           end: new Date(koejaksonLoppumispaiva)
         }),
         {
-          format: ['months', 'days'],
+          format: ['years', 'months', 'days'],
           locale: this.getLocaleObj()
         }
       )
