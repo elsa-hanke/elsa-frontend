@@ -127,7 +127,7 @@
                   :enable-search="false"
                   :enable-delete="false"
                   :no-results-info-text="$t('ei-liitetiedostoja')"
-                  :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                  :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrlTyoskentelyjakso"
                   :loading="loading"
                 />
               </b-col>
@@ -401,6 +401,25 @@
           </b-row>
         </div>
         <hr />
+        <elsa-form-group :label="$t('liitetiedostot')">
+          <asiakirjat-content
+            v-if="vastuuhenkilonArvio.asiakirjat && vastuuhenkilonArvio.asiakirjat.length > 0"
+            :asiakirjat="vastuuhenkilonArvio.asiakirjat"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :show-info-if-empty="false"
+            :enable-delete="false"
+            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+          />
+          <b-alert v-else variant="dark" show>
+            <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+            <span>
+              {{ $t('ei-liitetiedostoja') }}
+            </span>
+          </b-alert>
+        </elsa-form-group>
+        <hr />
         <div>
           <b-row>
             <b-col>
@@ -429,7 +448,6 @@
                       :id="uid"
                       v-model="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
                       :state="validateState('vastuuhenkilonSahkoposti')"
-                      :value="vastuuhenkilonArvio.vastuuhenkilonSahkoposti"
                       @input="$emit('skipRouteExitConfirm', false)"
                     />
                     <b-form-invalid-feedback
@@ -462,7 +480,6 @@
                       :id="uid"
                       v-model="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
                       :state="validateState('vastuuhenkilonPuhelinnumero')"
-                      :value="vastuuhenkilonArvio.vastuuhenkilonPuhelinnumero"
                       @input="$emit('skipRouteExitConfirm', false)"
                     />
                     <small class="form-text text-muted">
@@ -830,8 +847,12 @@
       )
     }
 
-    get asiakirjaDataEndpointUrl() {
+    get asiakirjaDataEndpointUrlTyoskentelyjakso() {
       return `/vastuuhenkilo/koejakso/vastuuhenkilonarvio/${this.vastuuhenkilonArvio?.id}/tyoskentelyjakso-liite`
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return `/vastuuhenkilo/koejakso/vastuuhenkilonarvio/${this.vastuuhenkilonArvio?.id}/liite`
     }
 
     hideModal(id: string) {
