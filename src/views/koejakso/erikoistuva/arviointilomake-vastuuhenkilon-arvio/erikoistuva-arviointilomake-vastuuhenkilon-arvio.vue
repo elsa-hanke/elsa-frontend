@@ -127,7 +127,6 @@
                     :id="uid"
                     v-model="form.erikoistuvanSahkoposti"
                     :state="validateState('erikoistuvanSahkoposti')"
-                    :value="account.erikoistuvaLaakari.sahkoposti"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <b-form-invalid-feedback
@@ -156,7 +155,6 @@
                     :id="uid"
                     v-model="form.erikoistuvanPuhelinnumero"
                     :state="validateState('erikoistuvanPuhelinnumero')"
-                    :value="account.erikoistuvaLaakari.puhelinnumero"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
                   <small class="form-text text-muted">
@@ -233,6 +231,44 @@
             </b-col>
           </b-row>
           <hr />
+          <elsa-form-group :label="$t('liitetiedostot')">
+            <template #label-help>
+              <elsa-popover>
+                {{ $t('sallitut-tiedostoformaatit-default') }}
+              </elsa-popover>
+            </template>
+            <span>
+              {{ $t('koejakson-liitetiedostot-kuvaus-1') }}
+              <ul>
+                <li>{{ $t('koejakson-liitetiedostot-kuvaus-2') }}</li>
+                <li>
+                  <a href="https://tthvyo.fi/erikoistujat/oppaat/">
+                    {{ $t('tyoterveyshuollossa') }}
+                  </a>
+                  {{ $t('koejakson-liitetiedostot-kuvaus-3') }}
+                </li>
+                <li>{{ $t('koejakson-liitetiedostot-kuvaus-4') }}</li>
+              </ul>
+            </span>
+            <asiakirjat-upload
+              class="mt-3"
+              :is-primary-button="false"
+              :button-text="$t('lisaa-liitetiedosto')"
+              :existing-file-names-in-current-view="existingFileNamesInCurrentView"
+              :existing-file-names-in-other-views="existingFileNamesInOtherViews"
+              :disabled="reservedAsiakirjaNimetMutable === undefined"
+              @selectedFiles="onFilesAdded"
+            />
+            <asiakirjat-content
+              :asiakirjat="asiakirjatTableItems"
+              :sorting-enabled="false"
+              :pagination-enabled="false"
+              :enable-search="false"
+              :show-info-if-empty="false"
+              @deleteAsiakirja="onDeleteLiitetiedosto"
+            />
+          </elsa-form-group>
+          <hr />
         </div>
         <div v-else>
           <b-row>
@@ -271,6 +307,27 @@
           <p>
             {{ $t('vastuuhenkilon-arvio-koulutussuunnitelma-varmistus') }}
           </p>
+          <hr />
+          <elsa-form-group :label="$t('liitetiedostot')">
+            <asiakirjat-content
+              v-if="
+                koejaksoData.vastuuhenkilonArvio.asiakirjat &&
+                koejaksoData.vastuuhenkilonArvio.asiakirjat.length > 0
+              "
+              :asiakirjat="koejaksoData.vastuuhenkilonArvio.asiakirjat"
+              :sorting-enabled="false"
+              :pagination-enabled="false"
+              :enable-search="false"
+              :show-info-if-empty="false"
+              :enable-delete="false"
+            />
+            <b-alert v-else variant="dark" show>
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+              <span>
+                {{ $t('ei-liitetiedostoja') }}
+              </span>
+            </b-alert>
+          </elsa-form-group>
           <hr />
         </div>
         <b-row>
@@ -353,11 +410,14 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { email, required, requiredIf } from 'vuelidate/lib/validators'
 
   import { getVastuuhenkilonArvioLomake } from '@/api/erikoistuva'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
+  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
@@ -365,8 +425,10 @@
   import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import store from '@/store'
   import {
+    Asiakirja,
     Koejakso,
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
@@ -375,6 +437,7 @@
     VastuuhenkilonArvioLomakeErikoistuva
   } from '@/types'
   import { LomakeTilat, phoneNumber } from '@/utils/constants'
+  import { mapFiles } from '@/utils/fileMapper'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -382,12 +445,15 @@
   @Component({
     mixins: [validationMixin],
     components: {
+      AsiakirjatContent,
+      AsiakirjatUpload,
       ErikoistuvaDetails,
       ElsaFormGroup,
       ElsaFormError,
       ElsaFormMultiselect,
       ElsaButton,
       ElsaConfirmationModal,
+      ElsaPopover,
       KoejaksonVaiheAllekirjoitukset
     }
   })
@@ -443,6 +509,10 @@
     muutOpintooikeudetEnabled = false
     koulutussopimuksenHyvaksynta = false
     koulutussuunnitelmaHyvaksytty = false
+    reservedAsiakirjaNimetMutable: string[] = []
+    addedFiles: File[] = []
+    newAsiakirjatMapped: Asiakirja[] = []
+    deletedAsiakirjat: Asiakirja[] = []
 
     validations() {
       return {
@@ -588,10 +658,17 @@
     async onSend() {
       try {
         this.buttonStates.primaryButtonLoading = true
+        const formData = new FormData()
+        formData.append('vastuuhenkilonArvioJson', JSON.stringify(this.form))
+        this.addedFiles.forEach((file: File) => formData.append('asiakirjaFiles', file, file.name))
         if (this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI) {
-          await store.dispatch('erikoistuva/putVastuuhenkilonArvio', this.form)
+          formData.append(
+            'deletedAsiakirjaIdsJson',
+            JSON.stringify(this.deletedAsiakirjat.map((a) => a.id))
+          )
+          await store.dispatch('erikoistuva/putVastuuhenkilonArvio', formData)
         } else {
-          await store.dispatch('erikoistuva/postVastuuhenkilonArvio', this.form)
+          await store.dispatch('erikoistuva/postVastuuhenkilonArvio', formData)
         }
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('vastuuhenkilon-arvio-lahetetty-onnistuneesti'))
@@ -618,9 +695,54 @@
         this.form.vastuuhenkilo = this.formData.vastuuhenkilo
         this.form.erikoistuvanSahkoposti = this.account.erikoistuvaLaakari.sahkoposti
         this.form.erikoistuvanPuhelinnumero = this.account.erikoistuvaLaakari.puhelinnumero
+
+        this.reservedAsiakirjaNimetMutable = (
+          await axios.get('erikoistuva-laakari/asiakirjat/nimet')
+        ).data
       }
 
       this.loading = false
+    }
+
+    get existingFileNamesInCurrentView() {
+      return this.asiakirjatTableItems?.map((item) => item.nimi)
+    }
+
+    get existingFileNamesInOtherViews() {
+      return this.reservedAsiakirjaNimetMutable?.filter(
+        (nimi) =>
+          !this.existingFileNamesInCurrentView.includes(nimi) &&
+          !this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(nimi)
+      )
+    }
+
+    get asiakirjatTableItems() {
+      return [...this.newAsiakirjatMapped, ...this.asiakirjatExcludingDeleted()]
+    }
+
+    private asiakirjatExcludingDeleted(): Asiakirja[] {
+      return (this.koejaksoData.vastuuhenkilonArvio.asiakirjat ?? []).filter(
+        (asiakirja) =>
+          !this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(asiakirja.nimi)
+      )
+    }
+
+    onFilesAdded(files: File[]) {
+      this.addedFiles = [...files, ...this.addedFiles]
+      this.newAsiakirjatMapped?.push(...mapFiles(files))
+      this.$emit('skipRouteExitConfirm', false)
+    }
+
+    async onDeleteLiitetiedosto(asiakirja: Asiakirja) {
+      if (asiakirja.id) {
+        this.deletedAsiakirjat = [asiakirja, ...this.deletedAsiakirjat]
+      } else {
+        this.newAsiakirjatMapped = this.newAsiakirjatMapped?.filter(
+          (a) => a.nimi !== asiakirja.nimi
+        )
+        this.addedFiles = this.addedFiles?.filter((a) => a.name !== asiakirja.nimi)
+      }
+      this.$emit('skipRouteExitConfirm', false)
     }
   }
 </script>

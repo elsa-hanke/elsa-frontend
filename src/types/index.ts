@@ -503,6 +503,7 @@ export interface VastuuhenkilonArvioLomake {
   loppukeskustelu?: LoppukeskusteluLomake
   tila?: string
   perusteluHylkaamiselle?: string | null
+  asiakirjat?: Asiakirja[] | null
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {

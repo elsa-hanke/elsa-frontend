@@ -96,14 +96,26 @@ export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
   return await axios.put<LoppukeskusteluLomake>(path, form)
 }
 
-export async function postVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
-  const path = 'erikoistuva-laakari/koejakso/vastuuhenkilonarvio'
-  return await axios.post<VastuuhenkilonArvioLomake>(path, form)
+export async function postVastuuhenkilonArvio(formData: FormData) {
+  return await axios.post<VastuuhenkilonArvioLomake>(
+    'erikoistuva-laakari/koejakso/vastuuhenkilonarvio',
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000
+    }
+  )
 }
 
-export async function putVastuuhenkilonArvio(form: VastuuhenkilonArvioLomake) {
-  const path = 'erikoistuva-laakari/koejakso/vastuuhenkilonarvio'
-  return await axios.put<VastuuhenkilonArvioLomake>(path, form)
+export async function putVastuuhenkilonArvio(formData: FormData) {
+  return await axios.put<VastuuhenkilonArvioLomake>(
+    'erikoistuva-laakari/koejakso/vastuuhenkilonarvio',
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 120000
+    }
+  )
 }
 
 export async function getKouluttajat() {
