@@ -721,7 +721,7 @@
     }
 
     private asiakirjatExcludingDeleted(): Asiakirja[] {
-      return (this.koejaksoData.vastuuhenkilonArvio.asiakirjat ?? []).filter(
+      return (this.koejaksoData.vastuuhenkilonArvio?.asiakirjat ?? []).filter(
         (asiakirja) =>
           !this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(asiakirja.nimi)
       )
