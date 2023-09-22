@@ -61,3 +61,10 @@ export function sortByDateAsc(
 export function isInPast(date: string | Date | null | undefined) {
   return isBefore(isDate(date) ? (date as Date) : parseISO(date as string), new Date())
 }
+
+export function daysBetweenDates(date1: Date, date2: Date): number {
+  const utcDate1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate())
+  const utcDate2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate())
+  const timeDifference = Math.abs(utcDate2 - utcDate1)
+  return Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+}

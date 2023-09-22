@@ -566,7 +566,7 @@
 </template>
 
 <script lang="ts">
-  import { intervalToDuration, formatDuration } from 'date-fns'
+  import { intervalToDuration, formatDuration, isBefore, isAfter } from 'date-fns'
   import { fi, sv, enUS } from 'date-fns/locale'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
@@ -588,6 +588,7 @@
     VastuuhenkilonArvioLomake
   } from '@/types'
   import { KaytannonKoulutusTyyppi, LomakeTilat, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import { daysBetweenDates } from '@/utils/date'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
@@ -732,10 +733,41 @@
       if (!koejaksonAlkamispaiva || !koejaksonLoppumispaiva) {
         return null
       }
+
+      const koejaksoAlku = new Date(koejaksonAlkamispaiva)
+      const koejaksoLoppu = new Date(koejaksonLoppumispaiva)
+      const keskeytykset = this.vastuuhenkilonArvio?.koejaksonSuorituspaikat?.keskeytykset
+      const tyoskentelyjaksot = this.vastuuhenkilonArvio?.koejaksonSuorituspaikat?.tyoskentelyjaksot
+      let keskeytyksetDays = 0
+      let tyojaksoDays = 0
+      for (const keskeytys of keskeytykset !== undefined ? keskeytykset : []) {
+        keskeytyksetDays += daysBetweenDates(
+          new Date(keskeytys.alkamispaiva) < koejaksoAlku
+            ? koejaksoAlku
+            : new Date(keskeytys.alkamispaiva),
+          new Date(keskeytys.paattymispaiva) > koejaksoLoppu
+            ? koejaksoLoppu
+            : new Date(keskeytys.paattymispaiva)
+        )
+      }
+      for (const tyoskentelyjakso of tyoskentelyjaksot !== undefined ? tyoskentelyjaksot : []) {
+        const osaaika =
+          (tyoskentelyjakso.osaaikaprosentti != null ? tyoskentelyjakso.osaaikaprosentti : 100) /
+          100
+        const alku = new Date(tyoskentelyjakso.alkamispaiva)
+        const loppu = new Date(
+          tyoskentelyjakso.paattymispaiva != null ? tyoskentelyjakso.paattymispaiva : new Date()
+        )
+        if (isBefore(alku, koejaksoLoppu) && isAfter(loppu, koejaksoAlku)) {
+          const d1 = alku < koejaksoAlku ? koejaksoAlku : alku
+          const d2 = loppu > koejaksoLoppu ? koejaksoLoppu : loppu
+          tyojaksoDays += daysBetweenDates(d1, d2) * osaaika
+        }
+      }
       return formatDuration(
         intervalToDuration({
-          start: new Date(koejaksonAlkamispaiva),
-          end: new Date(koejaksonLoppumispaiva)
+          start: new Date(),
+          end: new Date().setDate(new Date().getDate() + (tyojaksoDays - keskeytyksetDays))
         }),
         {
           format: ['years', 'months', 'days'],
