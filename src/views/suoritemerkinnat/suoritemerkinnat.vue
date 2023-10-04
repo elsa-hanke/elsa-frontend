@@ -396,9 +396,8 @@
     }
 
     get suoritteetSorted() {
-      return this.suoritemerkinnatOptions.suoritteet.sort((a: Suorite, b: Suorite) =>
-        sortByAsc(a.nimi, b.nimi)
-      )
+      const suoritteet = this.suoritteetTable?.suoritteenKategoriat.flatMap((s) => s.suoritteet)
+      return suoritteet?.sort((a: Suorite, b: Suorite) => sortByAsc(a.nimi, b.nimi))
     }
   }
 </script>
