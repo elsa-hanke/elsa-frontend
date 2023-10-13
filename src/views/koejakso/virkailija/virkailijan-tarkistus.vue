@@ -750,6 +750,8 @@
             : new Date(keskeytys.paattymispaiva)
         )
       }
+
+      const tyoskentelyjaksojenOsaAjat = []
       for (const tyoskentelyjakso of tyoskentelyjaksot !== undefined ? tyoskentelyjaksot : []) {
         const osaaika =
           (tyoskentelyjakso.osaaikaprosentti != null ? tyoskentelyjakso.osaaikaprosentti : 100) /
@@ -759,11 +761,17 @@
           tyoskentelyjakso.paattymispaiva != null ? tyoskentelyjakso.paattymispaiva : new Date()
         )
         if (isBefore(alku, koejaksoLoppu) && isAfter(loppu, koejaksoAlku)) {
-          const d1 = alku < koejaksoAlku ? koejaksoAlku : alku
-          const d2 = loppu > koejaksoLoppu ? koejaksoLoppu : loppu
-          tyojaksoDays += daysBetweenDates(d1, d2) * osaaika
+          tyoskentelyjaksojenOsaAjat.push(osaaika)
         }
       }
+
+      const osaAikaProsentti =
+        tyoskentelyjaksojenOsaAjat.length > 0
+          ? tyoskentelyjaksojenOsaAjat.reduce((pv, cv) => pv + cv, 0) /
+            tyoskentelyjaksojenOsaAjat.length
+          : 1.0
+      tyojaksoDays = daysBetweenDates(koejaksoAlku, koejaksoLoppu) * osaAikaProsentti
+
       return formatDuration(
         intervalToDuration({
           start: new Date(),
