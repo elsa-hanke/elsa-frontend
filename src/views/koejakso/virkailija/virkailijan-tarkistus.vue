@@ -741,14 +741,19 @@
       let keskeytyksetDays = 0
       let tyojaksoDays = 0
       for (const keskeytys of keskeytykset !== undefined ? keskeytykset : []) {
-        keskeytyksetDays += daysBetweenDates(
-          new Date(keskeytys.alkamispaiva) < koejaksoAlku
-            ? koejaksoAlku
-            : new Date(keskeytys.alkamispaiva),
-          new Date(keskeytys.paattymispaiva) > koejaksoLoppu
-            ? koejaksoLoppu
-            : new Date(keskeytys.paattymispaiva)
-        )
+        if (
+          isBefore(new Date(keskeytys.alkamispaiva), koejaksoLoppu) &&
+          isAfter(new Date(keskeytys.paattymispaiva), koejaksoAlku)
+        ) {
+          keskeytyksetDays += daysBetweenDates(
+            new Date(keskeytys.alkamispaiva) < koejaksoAlku
+              ? koejaksoAlku
+              : new Date(keskeytys.alkamispaiva),
+            new Date(keskeytys.paattymispaiva) > koejaksoLoppu
+              ? koejaksoLoppu
+              : new Date(keskeytys.paattymispaiva)
+          )
+        }
       }
 
       const tyoskentelyjaksojenOsaAjat = []
