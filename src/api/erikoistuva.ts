@@ -76,6 +76,11 @@ export async function putValiarviointi(form: ValiarviointiLomake) {
   return await axios.put<ValiarviointiLomake>(path, form)
 }
 
+export async function deleteValiarviointi(form: ValiarviointiLomake) {
+  const path = `erikoistuva-laakari/koejakso/valiarviointi/${form.id}`
+  return await axios.delete<ValiarviointiLomake>(path)
+}
+
 export async function postKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
   const path = 'erikoistuva-laakari/koejakso/kehittamistoimenpiteet'
   return await axios.post<KehittamistoimenpiteetLomake>(path, form)
@@ -84,6 +89,11 @@ export async function postKehittamistoimenpiteet(form: KehittamistoimenpiteetLom
 export async function putKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
   const path = 'erikoistuva-laakari/koejakso/kehittamistoimenpiteet'
   return await axios.put<KehittamistoimenpiteetLomake>(path, form)
+}
+
+export async function deleteKehittamistoimenpiteet(form: KehittamistoimenpiteetLomake) {
+  const path = `erikoistuva-laakari/koejakso/kehittamistoimenpiteet/${form.id}`
+  return await axios.delete<KehittamistoimenpiteetLomake>(path)
 }
 
 export async function postLoppukeskustelu(form: LoppukeskusteluLomake) {
@@ -120,6 +130,12 @@ export async function putVastuuhenkilonArvio(formData: FormData) {
       headers: { 'Content-Type': 'multipart/form-data' },
       timeout: 120000
     }
+  )
+}
+
+export async function deleteVastuuhenkilonArvio(id: number) {
+  return await axios.delete<VastuuhenkilonArvioLomake>(
+    `erikoistuva-laakari/koejakso/vastuuhenkilonarvio/${id}`
   )
 }
 
