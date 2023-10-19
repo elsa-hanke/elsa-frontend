@@ -173,6 +173,17 @@ const erikoistuva: Module<any, any> = {
         throw err
       }
     },
+    async deleteLoppukeskustelu({ dispatch, commit }, loppukeskusteluLomake) {
+      commit('formRequest')
+      try {
+        await api.deleteLoppukeskustelu(loppukeskusteluLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+        throw err
+      }
+    },
     async postVastuuhenkilonArvio({ dispatch, commit }, vastuuhenkilonArvioLomake) {
       commit('formRequest')
       try {
