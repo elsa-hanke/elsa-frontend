@@ -78,18 +78,43 @@
           v-if="!editable"
           :data="koejaksoData.aloituskeskustelu"
         ></arviointilomake-aloituskeskustelu-readonly>
+
+        <div v-if="deletable">
+          <b-row>
+            <b-col class="text-right">
+              <elsa-button
+                :loading="false"
+                variant="outline-danger"
+                class="ml-4 px-6"
+                @click="onValidateAndConfirm('confirm-form-delete')"
+              >
+                {{ $t('tyhjenna-lomake') }}
+              </elsa-button>
+            </b-col>
+          </b-row>
+        </div>
       </div>
       <div v-else class="text-center">
         <b-spinner variant="primary" :label="$t('ladataan')" />
       </div>
     </b-container>
+
+    <elsa-confirmation-modal
+      id="confirm-form-delete"
+      :title="$t('vahvista-lomakkeen-tyhjennys')"
+      :text="$t('vahvista-lomakkeen-tyhjennys-selite')"
+      :submit-text="$t('tyhjenna-lomake')"
+      @submit="onFormDelete"
+    />
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import store from '@/store'
   import { AloituskeskusteluLomake, Koejakso, KoejaksonVaiheButtonStates } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
@@ -100,6 +125,8 @@
 
   @Component({
     components: {
+      ElsaConfirmationModal,
+      ElsaButton,
       ErikoistuvaDetails,
       ArviointilomakeAloituskeskusteluForm,
       ArviointilomakeAloituskeskusteluReadonly
@@ -242,6 +269,23 @@
       if (!this.editable) {
         this.$emit('skipRouteExitConfirm', true)
       }
+    }
+
+    get deletable() {
+      return this.koejaksoData.aloituskeskustelunTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+    }
+
+    async onFormDelete() {
+      try {
+        await store.dispatch('erikoistuva/deleteAloituskeskustelu', this.aloituskeskusteluLomake)
+        toastSuccess(this, this.$t('lomake-tyhjennetty-onnistuneesti'))
+      } catch {
+        toastFail(this, this.$t('lomakkeen-tyhjennys-epaonnistui'))
+      }
+    }
+
+    onValidateAndConfirm(modalId: string) {
+      return this.$bvModal.show(modalId)
     }
 
     async mounted() {

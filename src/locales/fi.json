@@ -46,7 +46,7 @@
   "aloituskeskustelu-tallennus-epaonnistui": "Aloituskeskustelun tallennus epäonnistui",
   "aloituskeskustelu-tavoitteet": "Aloituskeskustelu ja osaamistavoitteiden määrittely",
   "aloituskeskustelu-tila-hyvaksytty": "Aloituskeskustelu on hyväksytty kaikkien osapuolten toimesta.",
-  "aloituskeskustelu-tila-odottaa-hyvaksyntaa": "Aloituskeskustelu lähetetty lähikouluttajan ja lähiesimiehen hyväksyttäväksi. Saat ilmoituksen, kun aloituskeskustelu on käsitelty. Et voi enää muokata lomaketta.",
+  "aloituskeskustelu-tila-odottaa-hyvaksyntaa": "Aloituskeskustelu lähetetty lähikouluttajan ja lähiesimiehen hyväksyttäväksi. Saat ilmoituksen, kun aloituskeskustelu on käsitelty. Lomaketta ei voi tyhjentää, jos lähikouluttaja ja lähiesimies ovat sen hyväksyneet.",
   "aloituskeskustelu-tila-palautettu-korjattavaksi": "Aloituskeskustelu on palautettu takaisin muokattavaksi lähikouluttajan tai esimiehen toimesta.",
   "aloituskeskustelu-tila-palautettu-korjattavaksi-syy": "Aloituskeskustelu on palautettu takaisin muokattavaksi lähikouluttajan tai esimiehen toimesta. Syy: {korjausehdotus}",
   "aloituskeskustelu-tila-tallennettu-keskeneraisena": "Aloituskeskustelu tallennettu keskeneräisenä.",
