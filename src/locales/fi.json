@@ -790,7 +790,7 @@
   "loppukeskustelu-tallennus-epaonnistui": "Loppukeskustelun arviointipyynnön tallennus epäonnistui",
   "loppukeskustelu-tila-hyvaksytty": "Loppukeskustelu on hyväksytty kaikkien osapuolten toimesta.",
   "loppukeskustelu-tila-odottaa-erikoistuvan-hyvaksyntaa": "Loppukeskustelu on käsitelty lähikouluttajan ja lähiesimiehen toimesta. Sinun tulee vielä hyväksyä arviointi.",
-  "loppukeskustelu-tila-odottaa-hyvaksyntaa": "Loppukeskustelu odottaa lähikouluttajan ja lähiesimiehen käsittelyä. Saat ilmoituksen, kun loppukeskustelu on käsitelty. Et voi enää muokata lomaketta.",
+  "loppukeskustelu-tila-odottaa-hyvaksyntaa": "Loppukeskustelu odottaa lähikouluttajan ja lähiesimiehen käsittelyä. Saat ilmoituksen, kun loppukeskustelu on käsitelty. Lomaketta ei voi tyhjentää, jos lähikouluttaja ja lähiesimies ovat sen hyväksyneet.",
   "loppukeskustelun-hakeminen-epaonnistui": "Loppukeskustelun hakeminen epäonnistui",
   "lorem-ipsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
   "lt-tutkinto-ei-suoritettu": "LT-tutkinto ei suoritettu",
@@ -1704,5 +1704,10 @@
   "yliopistosairaalatyo": "Yliopistosairaalatyö",
   "yliopistosairaalan-ulkop-tyoskentelyjakson-vahimmaispituus": "Yliopistosairaalan ulkop. työskentelyjakson vähimmäispituus",
   "yliopistosairaalan-ulkopuolinen-tyo": "Yliopistosairaalan ulkopuolinen työ",
-  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"
+  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
+  "tyhjenna-lomake": "Tyhjennä lomake",
+  "vahvista-lomakkeen-tyhjennys": "Vahvista lomakkeen tyhjennys",
+  "vahvista-lomakkeen-tyhjennys-selite": "Tyhjennyksen jälkeen lomake pitää täyttää uudelleen.",
+  "lomake-tyhjennetty-onnistuneesti": "Lomakkeen tyhjennys onnistui",
+  "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui"
 }

@@ -96,6 +96,11 @@ export async function putLoppukeskustelu(form: LoppukeskusteluLomake) {
   return await axios.put<LoppukeskusteluLomake>(path, form)
 }
 
+export async function deleteLoppukeskustelu(form: LoppukeskusteluLomake) {
+  const path = `erikoistuva-laakari/koejakso/loppukeskustelu/${form.id}`
+  return await axios.delete<LoppukeskusteluLomake>(path)
+}
+
 export async function postVastuuhenkilonArvio(formData: FormData) {
   return await axios.post<VastuuhenkilonArvioLomake>(
     'erikoistuva-laakari/koejakso/vastuuhenkilonarvio',
