@@ -129,6 +129,19 @@ const erikoistuva: Module<any, any> = {
         throw err
       }
     },
+
+    async deleteValiarviointi({ dispatch, commit }, valiarviointiLomake) {
+      commit('formRequest')
+      try {
+        await api.deleteValiarviointi(valiarviointiLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+        throw err
+      }
+    },
+
     async postKehittamistoimenpiteet({ dispatch, commit }, kehittamistoimenpiteetLomake) {
       commit('formRequest')
       try {

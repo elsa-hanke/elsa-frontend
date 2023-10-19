@@ -113,6 +113,22 @@
           />
         </div>
 
+        <div v-if="deletable">
+          <b-row>
+            <b-col class="text-right">
+              <elsa-button
+                v-if="!loading"
+                :loading="buttonStates.primaryButtonLoading"
+                variant="outline-danger"
+                class="ml-4 px-6"
+                @click="onValidateAndConfirm('confirm-form-delete')"
+              >
+                {{ $t('tyhjenna-lomake') }}
+              </elsa-button>
+            </b-col>
+          </b-row>
+        </div>
+
         <div v-if="!account.impersonated && editable">
           <hr v-if="allekirjoitukset.length > 0" />
           <b-row>
@@ -144,6 +160,14 @@
       :text="$t('vahvista-koejakson-vaihe-lahetys')"
       :submit-text="$t('laheta')"
       @submit="onSend"
+    />
+
+    <elsa-confirmation-modal
+      id="confirm-form-delete"
+      :title="$t('vahvista-lomakkeen-tyhjennys')"
+      :text="$t('vahvista-lomakkeen-tyhjennys-selite')"
+      :submit-text="$t('tyhjenna-lomake')"
+      @submit="onFormDelete"
     />
   </div>
 </template>
@@ -270,6 +294,10 @@
       return this.koejaksoData.valiarvioinninTila === LomakeTilat.UUSI
     }
 
+    get deletable() {
+      return this.koejaksoData.valiarvioinninTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+    }
+
     get showWaitingForAcceptance() {
       return this.koejaksoData.valiarvioinninTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
     }
@@ -356,6 +384,17 @@
         toastSuccess(this, this.$t('valiarviointi-lahetetty-onnistuneesti'))
       } catch {
         toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
+      }
+    }
+
+    async onFormDelete() {
+      try {
+        this.buttonStates.primaryButtonLoading = true
+        await store.dispatch('erikoistuva/deleteValiarviointi', this.valiarviointiLomake)
+        this.buttonStates.primaryButtonLoading = false
+        toastSuccess(this, this.$t('lomake-tyhjennetty-onnistuneesti'))
+      } catch {
+        toastFail(this, this.$t('lomakkeen-tyhjennys-epaonnistui'))
       }
     }
 
