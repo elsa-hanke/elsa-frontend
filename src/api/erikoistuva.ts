@@ -66,6 +66,11 @@ export async function putAloituskeskustelu(form: AloituskeskusteluLomake) {
   return await axios.put<AloituskeskusteluLomake>(path, form)
 }
 
+export async function deleteAloituskeskustelu(form: AloituskeskusteluLomake) {
+  const path = `erikoistuva-laakari/koejakso/aloituskeskustelu/${form.id}`
+  return await axios.delete<AloituskeskusteluLomake>(path)
+}
+
 export async function postValiarviointi(form: ValiarviointiLomake) {
   const path = 'erikoistuva-laakari/koejakso/valiarviointi'
   return await axios.post<ValiarviointiLomake>(path, form)
