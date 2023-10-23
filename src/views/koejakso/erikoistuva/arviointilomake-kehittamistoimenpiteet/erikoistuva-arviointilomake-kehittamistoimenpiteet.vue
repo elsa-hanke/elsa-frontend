@@ -332,6 +332,7 @@
         )
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-onnistui'))
+        this.setKoejaksoData()
       } catch {
         toastFail(this, this.$t('kehittamistoimenpiteet-arviointipyynnon-lahetys-epaonnistui'))
       }
@@ -346,6 +347,7 @@
         )
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('lomake-tyhjennetty-onnistuneesti'))
+        this.kehittamistoimenpiteetLomake.id = null
       } catch {
         toastFail(this, this.$t('lomakkeen-tyhjennys-epaonnistui'))
       }
