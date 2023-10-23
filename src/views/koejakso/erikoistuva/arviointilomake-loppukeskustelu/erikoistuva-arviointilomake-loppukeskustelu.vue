@@ -354,6 +354,7 @@
         await store.dispatch('erikoistuva/postLoppukeskustelu', this.loppukeskusteluLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('loppukeskustelu-lahetetty-onnistuneesti'))
+        this.setKoejaksoData()
       } catch {
         toastFail(this, this.$t('loppukeskustelu-tallennus-epaonnistui'))
       }
@@ -365,6 +366,7 @@
         await store.dispatch('erikoistuva/deleteLoppukeskustelu', this.loppukeskusteluLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('lomake-tyhjennetty-onnistuneesti'))
+        this.loppukeskusteluLomake.id = null
       } catch {
         toastFail(this, this.$t('lomakkeen-tyhjennys-epaonnistui'))
       }

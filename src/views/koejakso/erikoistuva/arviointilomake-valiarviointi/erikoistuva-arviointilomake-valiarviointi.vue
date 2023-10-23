@@ -382,6 +382,7 @@
         await store.dispatch('erikoistuva/postValiarviointi', this.valiarviointiLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('valiarviointi-lahetetty-onnistuneesti'))
+        this.setKoejaksoData()
       } catch {
         toastFail(this, this.$t('valiarviointi-tallennus-epaonnistui'))
       }
@@ -393,6 +394,7 @@
         await store.dispatch('erikoistuva/deleteValiarviointi', this.valiarviointiLomake)
         this.buttonStates.primaryButtonLoading = false
         toastSuccess(this, this.$t('lomake-tyhjennetty-onnistuneesti'))
+        this.valiarviointiLomake.id = null
       } catch {
         toastFail(this, this.$t('lomakkeen-tyhjennys-epaonnistui'))
       }
