@@ -93,6 +93,27 @@
         <b-spinner variant="primary" :label="$t('ladataan')" />
       </div>
     </b-container>
+    <b-row>
+      <b-col class="text-right">
+        <div v-if="deletable">
+          <elsa-button
+            v-if="!loading"
+            variant="outline-danger"
+            class="ml-4 px-6"
+            @click="onValidateAndConfirm('confirm-form-delete')"
+          >
+            {{ $t('tyhjenna-lomake') }}
+          </elsa-button>
+        </div>
+      </b-col>
+    </b-row>
+    <elsa-confirmation-modal
+      id="confirm-form-delete"
+      :title="$t('vahvista-lomakkeen-tyhjennys')"
+      :text="$t('vahvista-lomakkeen-tyhjennys-selite')"
+      :submit-text="$t('tyhjenna-lomake')"
+      @submit="onFormDelete"
+    />
   </div>
 </template>
 
@@ -101,7 +122,9 @@
   import { Vue } from 'vue-property-decorator'
 
   import { getKoulutussopimusLomake } from '@/api/erikoistuva'
+  import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import store from '@/store'
   import {
     KoulutussopimusLomake,
@@ -118,6 +141,8 @@
 
   @Component({
     components: {
+      ElsaConfirmationModal,
+      ElsaButton,
       ErikoistuvaDetails,
       KoulutussopimusForm,
       KoulutussopimusReadonly
@@ -162,6 +187,13 @@
       return false
     }
 
+    get deletable() {
+      if (this.koejaksoData === null) {
+        return false
+      }
+      return this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA
+    }
+
     get showWaitingForAcceptance() {
       return (
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_HYVAKSYNTAA ||
@@ -169,6 +201,10 @@
           LomakeTilat.ODOTTAA_TOISEN_KOULUTTAJAN_HYVAKSYNTAA ||
         this.koejaksoData.koulutusSopimuksenTila === LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
       )
+    }
+
+    onValidateAndConfirm(modalId: string) {
+      return this.$bvModal.show(modalId)
     }
 
     get showReturned() {
@@ -248,6 +284,7 @@
         await store.dispatch('erikoistuva/putKoulutussopimus', this.koulutussopimusLomake)
         toastSuccess(this, this.$t('koulutussopimus-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
+        this.setKoejaksoData()
       } catch {
         toastFail(this, this.$t('koulutussopimuksen-lisaaminen-epaonnistui'))
       }
@@ -272,6 +309,18 @@
     watch() {
       if (!this.editable) {
         this.$emit('skipRouteExitConfirm', true)
+      }
+    }
+
+    async onFormDelete() {
+      try {
+        await store.dispatch('erikoistuva/deleteKoulutussopimus', this.koulutussopimusLomake)
+        toastSuccess(this, this.$t('lomake-tyhjennetty-onnistuneesti'))
+        if (this.koulutussopimusLomake?.id) {
+          this.koulutussopimusLomake.id = null
+        }
+      } catch {
+        toastFail(this, this.$t('lomakkeen-tyhjennys-epaonnistui'))
       }
     }
 

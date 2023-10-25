@@ -56,6 +56,11 @@ export async function putKoulutussopimus(form: KoulutussopimusLomake) {
   return await axios.put<KoulutussopimusLomake>(path, form)
 }
 
+export async function deleteKoulutussopimus(form: KoulutussopimusLomake) {
+  const path = `erikoistuva-laakari/koejakso/koulutussopimus/${form.id}`
+  return await axios.delete<KoulutussopimusLomake>(path)
+}
+
 export async function postAloituskeskustelu(form: AloituskeskusteluLomake) {
   const path = 'erikoistuva-laakari/koejakso/aloituskeskustelu'
   return await axios.post<AloituskeskusteluLomake>(path, form)
