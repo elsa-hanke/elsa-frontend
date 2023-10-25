@@ -85,6 +85,17 @@ const erikoistuva: Module<any, any> = {
         throw err
       }
     },
+    async deleteKoulutussopimus({ dispatch, commit }, koulutussopimusLomake) {
+      commit('formRequest')
+      try {
+        await api.deleteKoulutussopimus(koulutussopimusLomake)
+        commit('formSuccess')
+        await dispatch('getKoejakso')
+      } catch (err) {
+        commit('formError')
+        throw err
+      }
+    },
     async postAloituskeskustelu({ dispatch, commit }, aloituskeskusteluLomake) {
       commit('formRequest')
       try {
