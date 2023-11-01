@@ -371,7 +371,7 @@
       paattymispaiva: ElsaFormDatepicker
     }
 
-    @Prop({ required: false, default: false })
+    @Prop({ required: false, default: true })
     allowHyvaksyttyAiemminToiselleErikoisalalleOption!: boolean
 
     @Prop({ required: false, default: false })
