@@ -49,7 +49,11 @@
         </b-row>
         <b-row lg>
           <b-col cols="12" lg="4">
-            <b-form-checkbox v-model="naytaPaattyneet" class="mb-4">
+            <b-form-checkbox
+              v-model="filtered.naytaPaattyneet"
+              class="mb-4"
+              @input="onNaytaPaattyneetSelect"
+            >
               {{ $t('nayta-paattyneet-opintooikeudet') }}
             </b-form-checkbox>
           </b-col>
@@ -239,7 +243,7 @@
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import ErikoistujienSeurantaMixin from '@/mixins/erikoistujien-seuranta'
-  import { ErikoistujienSeuranta, SortByEnum } from '@/types'
+  import { Asetus, Erikoisala, ErikoistujienSeuranta, SortByEnum } from '@/types'
   import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
   import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
   import { sortByAsc, sortByDesc } from '@/utils/sort'
@@ -290,15 +294,48 @@
     ]
     sortBy = this.sortFields[0]
 
+    filtered: {
+      nimi: string | null
+      erikoisala: Erikoisala | null
+      asetus: Asetus | null
+      naytaPaattyneet: boolean | null
+      sortBy: string | null
+    } = {
+      nimi: null,
+      erikoisala: null,
+      asetus: null,
+      naytaPaattyneet: null,
+      sortBy: null
+    }
+    currentPage = 1
+    perPage = 20
+
     hakutermi = ''
     erikoisala = ''
-    naytaPaattyneet = false
     loading = true
 
     async mounted() {
+      await this.fetch()
+    }
+
+    async fetch() {
       try {
         this.seuranta = this.$isVastuuhenkilo()
-          ? (await getErikoistujienSeurantaVastuuhenkilo()).data
+          ? (
+              await getErikoistujienSeurantaVastuuhenkilo({
+                page: this.currentPage - 1,
+                size: this.perPage,
+                sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
+                ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+                ...(this.filtered.erikoisala?.id
+                  ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
+                  : {}),
+                ...(this.filtered.asetus?.id ? { 'asetusId.equals': this.filtered.asetus.id } : {}),
+                ...(this.filtered.naytaPaattyneet
+                  ? { naytaPaattyneet: this.filtered.naytaPaattyneet }
+                  : {})
+              })
+            ).data
           : (await getErikoistujienSeurantaKouluttaja()).data
       } catch (err) {
         toastFail(this, this.$t('erikoistujien-seurannan-hakeminen-epaonnistui'))
@@ -326,6 +363,17 @@
       return this.tulokset?.slice(current, current + this.perPage)
     }
 
+    async onNaytaPaattyneetSelect() {
+      await this.onResultsFiltered()
+    }
+
+    private async onResultsFiltered() {
+      this.loading = true
+      this.currentPage = 1
+      await this.fetch()
+      this.loading = false
+    }
+
     get tulokset() {
       let result = this.seuranta?.erikoistujienEteneminen
       if (this.hakutermi) {
@@ -339,7 +387,7 @@
         result = result?.filter((item) => item.erikoisala === this.erikoisala)
       }
 
-      if (!this.naytaPaattyneet) {
+      if (!this.filtered.naytaPaattyneet) {
         const now = new Date()
         result = result?.filter(
           (item) => !isBefore(parseISO(item.opintooikeudenPaattymispaiva), now)
