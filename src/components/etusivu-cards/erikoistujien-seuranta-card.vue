@@ -39,6 +39,7 @@
                     label="name"
                     track-by="name"
                     :taggable="true"
+                    @select="onSortBySelect"
                   >
                     <template #option="{ option }">
                       <div v-if="option.name">{{ option.name }}</div>
@@ -223,6 +224,7 @@
               :per-page="perPage"
               :rows="rows"
               :style="{ 'max-width': '1420px' }"
+              @update:currentPage="onPageInput"
             />
           </b-col>
         </b-row>
@@ -232,7 +234,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator'
+  import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 
   import { getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja } from '@/api/kouluttaja'
   import {
@@ -255,8 +257,8 @@ import { Component, Mixins, Prop } from 'vue-property-decorator'
   } from '@/types'
   import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
   import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
-import {sortByAsc} from "@/utils/sort";
 
   @Component({
     components: {
@@ -315,6 +317,7 @@ import {sortByAsc} from "@/utils/sort";
     }
     currentPage = 1
     perPage = 20
+    debounce?: number
 
     hakutermi = ''
     loading = true
@@ -372,8 +375,37 @@ import {sortByAsc} from "@/utils/sort";
       await this.onResultsFiltered()
     }
 
+    async onSortBySelect(sortByEnum: SortByEnum) {
+      switch (sortByEnum.value) {
+        case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA:
+          this.filtered.sortBy = 'opintooikeudenPaattymispaiva,asc'
+          break
+        case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN:
+          this.filtered.sortBy = 'opintooikeudenMyontamispaiva,asc'
+          break
+        case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN:
+          // this.filtered.sortBy = 'tyoskentelyaikaYhteensa,asc' todo
+          break
+        case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN:
+          // this.filtered.sortBy = 'tyoskentelyaikaYhteensa,desc' todo
+          break
+        case ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC:
+          this.filtered.sortBy = 'erikoistuvaLaakari.kayttaja.user.lastName,asc'
+          break
+        case ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC:
+          this.filtered.sortBy = 'erikoistuvaLaakari.kayttaja.user.lastName,desc'
+          break
+      }
+      this.onResultsFiltered()
+    }
+
     get erikoisalatSorted() {
       return this.rajaimet?.erikoisalat.sort((a, b) => sortByAsc(a, b))
+    }
+
+    onPageInput(value: number) {
+      this.currentPage = value
+      this.fetch()
     }
 
     private async onResultsFiltered() {
@@ -389,6 +421,19 @@ import {sortByAsc} from "@/utils/sort";
 
     keskiarvoFormatted(keskiarvo: number) {
       return getKeskiarvoFormatted(keskiarvo)
+    }
+
+    @Watch('hakutermi')
+    onPropertyChanged(value: string) {
+      this.debounceSearch(value)
+    }
+
+    debounceSearch(value: string) {
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.filtered.nimi = value
+        this.onResultsFiltered()
+      }, 400)
     }
   }
 </script>
