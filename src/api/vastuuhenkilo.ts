@@ -21,7 +21,10 @@ import {
   ValmistumispyyntoVirkailijanTarkistus,
   ValmistumispyyntoHyvaksynta,
   Asiakirja,
-  Seurantajakso
+  Seurantajakso,
+  ErikoistujanEteneminen,
+  ErikoistujienSeurantaVirkailijaRajaimet,
+  ErikoistujienSeurantaVastuuhenkiloRajaimet
 } from '@/types'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -78,6 +81,11 @@ export async function putSuoritusarviointi(formData: FormData) {
   })
 }
 
+export async function getErikoistujienSeurantaVastuuhenkiloRajaimet() {
+  const path = '/vastuuhenkilo/etusivu/erikoistujien-seuranta-rajaimet'
+  return await axios.get<ErikoistujienSeurantaVastuuhenkiloRajaimet>(path)
+}
+
 export async function getErikoistujienSeuranta(params: {
   page?: number
   size?: number
@@ -87,7 +95,7 @@ export async function getErikoistujienSeuranta(params: {
   'asetusId.equals'?: number
 }) {
   const path = `/vastuuhenkilo/etusivu/erikoistujien-seuranta`
-  return await axios.get<ErikoistujienSeuranta>(path, {
+  return await axios.get<Page<ErikoistujanEteneminen>>(path, {
     params: {
       ...params
     }

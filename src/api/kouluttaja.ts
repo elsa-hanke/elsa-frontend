@@ -13,7 +13,7 @@ import {
   ErikoistujienSeuranta,
   KoejaksonVaihe,
   Arviointipyynto,
-  Katseluoikeus
+  Katseluoikeus, ErikoistujanEteneminen, Page
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -101,7 +101,7 @@ export async function putSeurantajakso(form: Seurantajakso) {
 
 export async function getErikoistujienSeuranta() {
   const path = `/kouluttaja/etusivu/erikoistujien-seuranta`
-  return await axios.get<ErikoistujienSeuranta>(path)
+  return await axios.get<Page<ErikoistujanEteneminen>>(path)
 }
 
 export async function getEtusivuKoejaksot() {

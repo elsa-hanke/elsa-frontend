@@ -1321,6 +1321,11 @@ export interface ErikoistujanEteneminen {
   opintooikeusId: number
 }
 
+export interface ErikoistujienSeurantaVastuuhenkiloRajaimet {
+  kayttajaYliopistoErikoisalat: KayttajaErikoisalaPerYliopisto[]
+  erikoisalat: string[]
+}
+
 export interface ErikoistujienSeuranta {
   kayttajaYliopistoErikoisalat: KayttajaErikoisalaPerYliopisto[]
   erikoisalat: string[]
