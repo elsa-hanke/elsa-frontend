@@ -290,14 +290,14 @@
         name: this.$t('opintooikeus-alkaen'),
         value: ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN
       } as SortByEnum,
-      {
-        name: this.$t('tyoskentelyaikaa-vahiten'),
-        value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN
-      } as SortByEnum,
-      {
-        name: this.$t('tyoskentelyaikaa-eniten'),
-        value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN
-      } as SortByEnum,
+      // {
+      //   name: this.$t('tyoskentelyaikaa-vahiten'),
+      //   value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN
+      // } as SortByEnum,
+      // {
+      //   name: this.$t('tyoskentelyaikaa-eniten'),
+      //   value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN
+      // } as SortByEnum,
       {
         name: this.$t('sukunimi-a-o'),
         value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC
