@@ -73,7 +73,7 @@
               </span>
             </b-alert>
             <b-list-group>
-              <b-list-group-item v-for="(eteneminen, index) in erikoistujat.content" :key="index">
+              <b-list-group-item v-for="(eteneminen, index) in erikoistujat?.content" :key="index">
                 <b-row>
                   <b-col cols="12" lg="6">
                     <elsa-button
