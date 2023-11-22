@@ -73,7 +73,7 @@
               </span>
             </b-alert>
             <b-list-group>
-              <b-list-group-item v-for="(eteneminen, index) in eteneminen.content" :key="index">
+              <b-list-group-item v-for="(eteneminen, index) in erikoistujat.content" :key="index">
                 <b-row>
                   <b-col cols="12" lg="6">
                     <elsa-button
@@ -276,7 +276,7 @@
   })
   export default class ErikoistujienSeurantaCard extends Mixins(ErikoistujienSeurantaMixin) {
     rajaimet: ErikoistujienSeurantaVastuuhenkiloRajaimet | null = null
-    eteneminen: Page<ErikoistujanEteneminen> | null = null
+    erikoistujat: Page<ErikoistujanEteneminen> | null = null
 
     @Prop({ required: false, default: false })
     showKouluttajaKuvaus!: boolean
@@ -342,7 +342,7 @@
 
     async fetch() {
       try {
-        this.eteneminen = this.$isVastuuhenkilo()
+        this.erikoistujat = this.$isVastuuhenkilo()
           ? (
               await getErikoistujienSeurantaVastuuhenkilo({
                 page: this.currentPage - 1,
@@ -431,7 +431,7 @@
     }
 
     get rows() {
-      return this.eteneminen?.totalElements ?? 0
+      return this.erikoistujat?.totalElements ?? 0
     }
 
     keskiarvoFormatted(keskiarvo: number) {
