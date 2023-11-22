@@ -399,10 +399,10 @@
           this.filtered.sortBy = 'opintooikeudenMyontamispaiva,asc'
           break
         case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN:
-          // this.filtered.sortBy = 'tyoskentelyaikaYhteensa,asc' todo
+          this.filtered.sortBy = 'tyoskentelyaikaYhteensa,asc'
           break
         case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN:
-          // this.filtered.sortBy = 'tyoskentelyaikaYhteensa,desc' todo
+          this.filtered.sortBy = 'tyoskentelyaikaYhteensa,desc'
           break
         case ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC:
           this.filtered.sortBy = 'erikoistuvaLaakari.kayttaja.user.lastName,asc'
