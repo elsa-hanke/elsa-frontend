@@ -10,13 +10,11 @@ import {
   Seurantajakso,
   SeurantajaksonTiedot,
   ValiarviointiLomake,
-  ErikoistujienSeuranta,
   KoejaksonVaihe,
   Arviointipyynto,
   Katseluoikeus,
   ErikoistujanEteneminen,
   Page,
-  ErikoistujienSeurantaVastuuhenkiloRajaimet,
   ErikoistujienSeurantaKouluttajaRajaimet
 } from '@/types'
 

@@ -8,7 +8,6 @@ import {
   KehittamistoimenpiteetLomake,
   LoppukeskusteluLomake,
   Suoritusarviointi,
-  ErikoistujienSeuranta,
   KoejaksonVaihe,
   Arviointipyynto,
   Page,
@@ -23,7 +22,6 @@ import {
   Asiakirja,
   Seurantajakso,
   ErikoistujanEteneminen,
-  ErikoistujienSeurantaVirkailijaRajaimet,
   ErikoistujienSeurantaVastuuhenkiloRajaimet
 } from '@/types'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
