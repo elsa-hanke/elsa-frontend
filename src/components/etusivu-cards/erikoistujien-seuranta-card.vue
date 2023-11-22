@@ -236,7 +236,10 @@
 <script lang="ts">
   import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 
-  import { getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja } from '@/api/kouluttaja'
+  import {
+    getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja,
+    getErikoistujienSeurantaKouluttajaRajaimet
+  } from '@/api/kouluttaja'
   import {
     getErikoistujienSeuranta as getErikoistujienSeurantaVastuuhenkilo,
     getErikoistujienSeurantaVastuuhenkiloRajaimet
@@ -332,7 +335,9 @@
     }
 
     async fetchRajaimet() {
-      this.rajaimet = (await getErikoistujienSeurantaVastuuhenkiloRajaimet()).data
+      this.rajaimet = this.$isVastuuhenkilo()
+        ? (await getErikoistujienSeurantaVastuuhenkiloRajaimet()).data
+        : (await getErikoistujienSeurantaKouluttajaRajaimet()).data
     }
 
     async fetch() {
@@ -349,7 +354,17 @@
                   : {})
               })
             ).data
-          : (await getErikoistujienSeurantaKouluttaja()).data
+          : (
+              await getErikoistujienSeurantaKouluttaja({
+                page: this.currentPage - 1,
+                size: this.perPage,
+                sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
+                ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+                ...(this.filtered.naytaPaattyneet
+                  ? { naytaPaattyneet: this.filtered.naytaPaattyneet }
+                  : {})
+              })
+            ).data
       } catch (err) {
         toastFail(this, this.$t('erikoistujien-seurannan-hakeminen-epaonnistui'))
       }
