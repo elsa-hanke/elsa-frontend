@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card-skeleton :header="seurantaTitle" :loading="loading">
-      <div v-if="rajaimet != null">
+      <div v-if="rajaimet != null && erikoistujat">
         <div v-if="showKouluttajaKuvaus" class="mb-4 mb-lg-3">
           {{ $t('erikoistujien-seuranta-kouluttaja-kuvaus') }}
         </div>
@@ -73,7 +73,7 @@
               </span>
             </b-alert>
             <b-list-group>
-              <b-list-group-item v-for="(eteneminen, index) in erikoistujat?.content" :key="index">
+              <b-list-group-item v-for="(eteneminen, index) in erikoistujat.content" :key="index">
                 <b-row>
                   <b-col cols="12" lg="6">
                     <elsa-button
