@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card-skeleton :header="seurantaTitle" :loading="loading">
-      <div v-if="seuranta != null">
+      <div v-if="rajaimet != null && erikoistujat">
         <div v-if="showKouluttajaKuvaus" class="mb-4 mb-lg-3">
           {{ $t('erikoistujien-seuranta-kouluttaja-kuvaus') }}
         </div>
@@ -14,17 +14,19 @@
             />
           </b-col>
           <b-col cols="12" lg="4">
-            <div v-if="seuranta.erikoisalat.length > 1" class="erikoisalat">
+            <!--
+            <div v-if="rajaimet?.erikoisalat.length > 1" class="erikoisalat">
               <elsa-form-group :label="$t('erikoisala')" class="mb-3">
                 <template #default="{ uid }">
                   <elsa-form-multiselect
                     :id="uid"
-                    v-model="erikoisala"
-                    :options="seuranta.erikoisalat"
+                    v-model="filtered.erikoisala"
+                    :options="erikoisalatSorted"
                   ></elsa-form-multiselect>
                 </template>
               </elsa-form-group>
             </div>
+            -->
           </b-col>
           <b-col cols="12" lg="4">
             <div class="jarjestys">
@@ -37,6 +39,7 @@
                     label="name"
                     track-by="name"
                     :taggable="true"
+                    @select="onSortBySelect"
                   >
                     <template #option="{ option }">
                       <div v-if="option.name">{{ option.name }}</div>
@@ -49,7 +52,11 @@
         </b-row>
         <b-row lg>
           <b-col cols="12" lg="4">
-            <b-form-checkbox v-model="naytaPaattyneet" class="mb-4">
+            <b-form-checkbox
+              v-model="filtered.naytaPaattyneet"
+              class="mb-4"
+              @input="onNaytaPaattyneetSelect"
+            >
               {{ $t('nayta-paattyneet-opintooikeudet') }}
             </b-form-checkbox>
           </b-col>
@@ -58,7 +65,7 @@
           <b-col>
             <b-alert v-if="rows === 0" variant="dark" show>
               <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-              <span v-if="hakutermi.length > 0 || erikoisala.length > 0">
+              <span v-if="hakutermi.length > 0">
                 {{ $t('ei-hakutuloksia') }}
               </span>
               <span v-else>
@@ -66,7 +73,7 @@
               </span>
             </b-alert>
             <b-list-group>
-              <b-list-group-item v-for="(eteneminen, index) in pagedTulokset" :key="index">
+              <b-list-group-item v-for="(eteneminen, index) in erikoistujat.content" :key="index">
                 <b-row>
                   <b-col cols="12" lg="6">
                     <elsa-button
@@ -217,6 +224,7 @@
               :per-page="perPage"
               :rows="rows"
               :style="{ 'max-width': '1420px' }"
+              @update:currentPage="onPageInput"
             />
           </b-col>
         </b-row>
@@ -226,11 +234,16 @@
 </template>
 
 <script lang="ts">
-  import { isBefore, parseISO } from 'date-fns'
-  import { Component, Mixins, Prop } from 'vue-property-decorator'
+  import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 
-  import { getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja } from '@/api/kouluttaja'
-  import { getErikoistujienSeuranta as getErikoistujienSeurantaVastuuhenkilo } from '@/api/vastuuhenkilo'
+  import {
+    getErikoistujienSeuranta as getErikoistujienSeurantaKouluttaja,
+    getErikoistujienSeurantaKouluttajaRajaimet
+  } from '@/api/kouluttaja'
+  import {
+    getErikoistujienSeuranta as getErikoistujienSeurantaVastuuhenkilo,
+    getErikoistujienSeurantaVastuuhenkiloRajaimet
+  } from '@/api/vastuuhenkilo'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -239,10 +252,15 @@
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import ErikoistujienSeurantaMixin from '@/mixins/erikoistujien-seuranta'
-  import { ErikoistujienSeuranta, SortByEnum } from '@/types'
+  import {
+    ErikoistujanEteneminen,
+    ErikoistujienSeurantaVastuuhenkiloRajaimet,
+    Page,
+    SortByEnum
+  } from '@/types'
   import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
   import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
-  import { sortByAsc, sortByDesc } from '@/utils/sort'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -257,7 +275,8 @@
     }
   })
   export default class ErikoistujienSeurantaCard extends Mixins(ErikoistujienSeurantaMixin) {
-    seuranta: ErikoistujienSeuranta | null = null
+    rajaimet: ErikoistujienSeurantaVastuuhenkiloRajaimet | null = null
+    erikoistujat: Page<ErikoistujanEteneminen> | null = null
 
     @Prop({ required: false, default: false })
     showKouluttajaKuvaus!: boolean
@@ -271,14 +290,14 @@
         name: this.$t('opintooikeus-alkaen'),
         value: ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN
       } as SortByEnum,
-      {
-        name: this.$t('tyoskentelyaikaa-vahiten'),
-        value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN
-      } as SortByEnum,
-      {
-        name: this.$t('tyoskentelyaikaa-eniten'),
-        value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN
-      } as SortByEnum,
+      // {
+      //   name: this.$t('tyoskentelyaikaa-vahiten'),
+      //   value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN
+      // } as SortByEnum,
+      // {
+      //   name: this.$t('tyoskentelyaikaa-eniten'),
+      //   value: ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN
+      // } as SortByEnum,
       {
         name: this.$t('sukunimi-a-o'),
         value: ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC
@@ -290,16 +309,62 @@
     ]
     sortBy = this.sortFields[0]
 
+    filtered: {
+      nimi: string | null
+      naytaPaattyneet: boolean | null
+      sortBy: string | null
+    } = {
+      nimi: null,
+      naytaPaattyneet: null,
+      sortBy: null
+    }
+    currentPage = 1
+    perPage = 20
+    debounce?: number
+
     hakutermi = ''
-    erikoisala = ''
-    naytaPaattyneet = false
     loading = true
 
     async mounted() {
       try {
-        this.seuranta = this.$isVastuuhenkilo()
-          ? (await getErikoistujienSeurantaVastuuhenkilo()).data
-          : (await getErikoistujienSeurantaKouluttaja()).data
+        await Promise.all([this.fetchRajaimet(), this.fetch()])
+      } catch {
+        toastFail(this, this.$t('erikoistujien-seurannan-hakeminen-epaonnistui'))
+      }
+      this.loading = false
+    }
+
+    async fetchRajaimet() {
+      this.rajaimet = this.$isVastuuhenkilo()
+        ? (await getErikoistujienSeurantaVastuuhenkiloRajaimet()).data
+        : (await getErikoistujienSeurantaKouluttajaRajaimet()).data
+    }
+
+    async fetch() {
+      try {
+        this.erikoistujat = this.$isVastuuhenkilo()
+          ? (
+              await getErikoistujienSeurantaVastuuhenkilo({
+                page: this.currentPage - 1,
+                size: this.perPage,
+                sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
+                ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+                ...(this.filtered.naytaPaattyneet
+                  ? { naytaPaattyneet: this.filtered.naytaPaattyneet }
+                  : {})
+              })
+            ).data
+          : (
+              await getErikoistujienSeurantaKouluttaja({
+                page: this.currentPage - 1,
+                size: this.perPage,
+                sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
+                ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+                ...(this.filtered.naytaPaattyneet
+                  ? { naytaPaattyneet: this.filtered.naytaPaattyneet }
+                  : {})
+              })
+            ).data
       } catch (err) {
         toastFail(this, this.$t('erikoistujien-seurannan-hakeminen-epaonnistui'))
       }
@@ -307,11 +372,11 @@
     }
 
     get seurantaTitle() {
-      if (this.seuranta == null) {
+      if (this.rajaimet == null) {
         return ''
       }
       let result = ''
-      this.seuranta.kayttajaYliopistoErikoisalat.forEach((kayttajaErikoisala) => {
+      this.rajaimet.kayttajaYliopistoErikoisalat.forEach((kayttajaErikoisala) => {
         result +=
           this.$t(`yliopisto-nimi.${kayttajaErikoisala.yliopistoNimi}`) +
           ': ' +
@@ -321,79 +386,69 @@
       return result
     }
 
-    get pagedTulokset() {
-      const current = (this.currentPage - 1) * this.perPage
-      return this.tulokset?.slice(current, current + this.perPage)
+    async onNaytaPaattyneetSelect() {
+      await this.onResultsFiltered()
     }
 
-    get tulokset() {
-      let result = this.seuranta?.erikoistujienEteneminen
-      if (this.hakutermi) {
-        result = result?.filter((item) =>
-          (item.erikoistuvaLaakariEtuNimi + ' ' + item.erikoistuvaLaakariSukuNimi)
-            .toLowerCase()
-            .includes(this.hakutermi.toLowerCase())
-        )
-      }
-      if (this.erikoisala) {
-        result = result?.filter((item) => item.erikoisala === this.erikoisala)
-      }
-
-      if (!this.naytaPaattyneet) {
-        const now = new Date()
-        result = result?.filter(
-          (item) => !isBefore(parseISO(item.opintooikeudenPaattymispaiva), now)
-        )
-      }
-
-      switch (this.sortBy.value) {
+    async onSortBySelect(sortByEnum: SortByEnum) {
+      switch (sortByEnum.value) {
         case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_PAATTYMASSA:
-          result?.sort((a, b) =>
-            sortByAsc(a.opintooikeudenPaattymispaiva, b.opintooikeudenPaattymispaiva)
-          )
+          this.filtered.sortBy = 'opintooikeudenPaattymispaiva,asc'
           break
         case ErikoistuvanSeurantaJarjestys.OPINTOOIKEUS_ALKAEN:
-          result?.sort((a, b) =>
-            sortByAsc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
-          )
+          this.filtered.sortBy = 'opintooikeudenMyontamispaiva,asc'
           break
         case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_VAHITEN:
-          result?.sort((a, b) =>
-            sortByAsc(
-              a.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa,
-              b.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa
-            )
-          )
+          this.filtered.sortBy = 'tyoskentelyaikaYhteensa,asc'
           break
         case ErikoistuvanSeurantaJarjestys.TYOSKENTELYAIKAA_ENITEN:
-          result?.sort((a, b) =>
-            sortByDesc(
-              a.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa,
-              b.tyoskentelyjaksoTilastot.tyoskentelyaikaYhteensa
-            )
-          )
+          this.filtered.sortBy = 'tyoskentelyaikaYhteensa,desc'
           break
         case ErikoistuvanSeurantaJarjestys.SUKUNIMI_ASC:
-          result?.sort((a, b) =>
-            sortByAsc(a.erikoistuvaLaakariSukuNimi, b.erikoistuvaLaakariSukuNimi)
-          )
+          this.filtered.sortBy = 'erikoistuvaLaakari.kayttaja.user.lastName,asc'
           break
         case ErikoistuvanSeurantaJarjestys.SUKUNIMI_DESC:
-          result?.sort((a, b) =>
-            sortByDesc(a.erikoistuvaLaakariSukuNimi, b.erikoistuvaLaakariSukuNimi)
-          )
+          this.filtered.sortBy = 'erikoistuvaLaakari.kayttaja.user.lastName,desc'
           break
       }
+      this.onResultsFiltered()
+    }
 
-      return result
+    get erikoisalatSorted() {
+      return this.rajaimet?.erikoisalat.sort((a, b) => sortByAsc(a, b))
+    }
+
+    onPageInput(value: number) {
+      this.currentPage = value
+      this.fetch()
+    }
+
+    private async onResultsFiltered() {
+      this.loading = true
+      this.currentPage = 1
+      await this.fetch()
+      this.loading = false
     }
 
     get rows() {
-      return this.tulokset?.length
+      return this.erikoistujat?.totalElements ?? 0
     }
 
     keskiarvoFormatted(keskiarvo: number) {
       return getKeskiarvoFormatted(keskiarvo)
+    }
+
+    @Watch('hakutermi')
+    onPropertyChanged(value: string) {
+      this.debounceSearch(value)
+    }
+
+    debounceSearch(value: string) {
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.filtered.nimi = value
+        this.onResultsFiltered()
+      }, 400)
     }
   }
 </script>

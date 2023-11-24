@@ -10,10 +10,12 @@ import {
   Seurantajakso,
   SeurantajaksonTiedot,
   ValiarviointiLomake,
-  ErikoistujienSeuranta,
   KoejaksonVaihe,
   Arviointipyynto,
-  Katseluoikeus
+  Katseluoikeus,
+  ErikoistujanEteneminen,
+  Page,
+  ErikoistujienSeurantaKouluttajaRajaimet
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -99,9 +101,25 @@ export async function putSeurantajakso(form: Seurantajakso) {
   return await axios.put<Seurantajakso>(path, form)
 }
 
-export async function getErikoistujienSeuranta() {
+export async function getErikoistujienSeurantaKouluttajaRajaimet() {
+  const path = '/kouluttaja/etusivu/erikoistujien-seuranta-rajaimet'
+  return await axios.get<ErikoistujienSeurantaKouluttajaRajaimet>(path)
+}
+
+export async function getErikoistujienSeuranta(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  'asetusId.equals'?: number
+}) {
   const path = `/kouluttaja/etusivu/erikoistujien-seuranta`
-  return await axios.get<ErikoistujienSeuranta>(path)
+  return await axios.get<Page<ErikoistujanEteneminen>>(path, {
+    params: {
+      ...params
+    }
+  })
 }
 
 export async function getEtusivuKoejaksot() {
