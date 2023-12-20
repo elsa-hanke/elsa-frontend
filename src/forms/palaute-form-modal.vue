@@ -36,6 +36,29 @@
     </div>
     <div v-else>
       <p>{{ $t('palaute-ingressi') }}</p>
+      <p class="mb-2 mt-0">{{ $t('palaute-valiaikainen-ohje') }}</p>
+      <p class="mb-0 mt-0">
+        <b class="mr-1">Helsinki:</b>
+        <a href="mailto:meilahti-specialist@helsinki.fi">meilahti-specialist@helsinki.fi</a>
+      </p>
+      <p class="mb-0 mt-0">
+        <b class="mr-1">Itä-Suomi:</b>
+        <a href="mailto:erikoislaakarikoulutus@uef.fi">erikoislaakarikoulutus@uef.fi</a>
+      </p>
+      <p class="mb-0 mt-0">
+        <b class="mr-1">Oulu:</b>
+        <a href="mailto:study.medicine@oulu.fi">study.medicine@oulu.fi</a>
+      </p>
+      <p class="mb-0 mt-0">
+        <b class="mr-1">Tampere:</b>
+        <a href="mailto:met.ammatillinen.jatkokoulutus.tau@tuni.fi">
+          met.ammatillinen.jatkokoulutus.tau@tuni.fi
+        </a>
+      </p>
+      <p class="mb-4 mt-0">
+        <b class="mr-1">Turku:</b>
+        <a href="mailto:laak-ammatillinen@utu.fi">laak-ammatillinen@utu.fi</a>
+      </p>
       <elsa-form-group :label="$t('palautteen-aihe')" :required="true">
         <template #default="{ uid }">
           <b-form-radio
