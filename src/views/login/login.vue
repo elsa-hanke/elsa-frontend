@@ -29,9 +29,9 @@
             </p>
             <p class="mt-4 mb-0">
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
-              <a :href="`mailto:${contactMail}`">{{ contactMail }}</a>
+              <a v-bind:href="`mailto:${contactMail}`">{{ contactMail }}</a>
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys-yhteystiedot') }}
-              <a :href="contactUrl">laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot</a>
+              <a v-bind:href="contactUrl">{{ contactUrl }}</a>
             </p>
           </div>
         </b-alert>
