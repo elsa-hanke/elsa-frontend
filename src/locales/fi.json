@@ -484,8 +484,7 @@
     "erikoisalan-vastuuhenkilo": "Erikoisalan vastuuhenkilö:",
     "erikoisalan-vastuuhenkilo-ohje": "Kirjaudut oman yliopistosi tunnuksilla HAKA-tunnistautumisella.",
     "virheellinen-nimi-ohje": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Syynä saattaa olla käytössä oleva kutsumanimi tai kutsussa sattunut kirjoitusvirhe.",
-    "virheellinen-nimi-ota-yhteys": "Nimen muokkaamiseksi ota yhteys tekniseen pääkäyttäjään osoitteeseen ",
-    "virheellinen-nimi-ota-yhteys-yhteystiedot": " tai ohjaamasi erikoistujan yliopiston opintohallintoon, yhteystiedot: "
+    "virheellinen-nimi-ota-yhteys": "Nimen muokkaamiseksi ota yhteys tekniseen pääkäyttäjään osoitteeseen julia.sillanpaa@tuni.fi tai ohjaamasi erikoistujan yliopiston opintohallintoon, yhteystiedot:"
   },
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
   "kirjautuminen-huoltokatkoilmoitus": "Palvelussa 30 minuutin huoltokatko alkaen",

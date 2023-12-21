@@ -29,9 +29,9 @@
             </p>
             <p class="mt-4 mb-0">
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
-              <a v-bind:href="`mailto:${contactMail}`">{{ contactMail }}</a>
-              {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys-yhteystiedot') }}
-              <a v-bind:href="contactUrl">{{ contactUrl }}</a>
+            </p>
+            <p class="mt-4 mb-0">
+              {{ contactUrl }}
             </p>
           </div>
         </b-alert>
