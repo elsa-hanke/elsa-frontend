@@ -6,6 +6,39 @@
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
           {{ $t('kirjautuminen.' + virhe) }}
           <a v-if="showMail" :href="`mailto:${contactMail}`">{{ contactMail }}</a>
+          <div v-if="noUseRights" class="mt-2">
+            <p class="mt-4 mb-0">
+              {{ $t('kirjautuminen-virhe-lisatiedot.tarkista-seuraavat-tiedot') }}
+            </p>
+            <p class="mt-4 mb-2">
+              <b>{{ $t('kirjautuminen-virhe-lisatiedot.kouluttaja') }}</b>
+              {{ $t('kirjautuminen-virhe-lisatiedot.kouluttaja-ohje') }}
+            </p>
+            <p class="mt-4 mb-2">
+              <b>{{ $t('kirjautuminen-virhe-lisatiedot.erikoistuja') }}</b>
+              {{ $t('kirjautuminen-virhe-lisatiedot.erikoistuja-ohje') }}
+            </p>
+            <p class="mt-4 mb-2">
+              <b>{{ $t('kirjautuminen-virhe-lisatiedot.erikoisalan-vastuuhenkilo') }}</b>
+              {{ $t('kirjautuminen-virhe-lisatiedot.erikoisalan-vastuuhenkilo-ohje') }}
+            </p>
+          </div>
+          <div v-if="invalidName" class="mt-2">
+            <p class="mt-4 mb-0">
+              {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ohje') }}
+            </p>
+            <p class="mt-4 mb-0">
+              {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
+            </p>
+            <a
+              class="mt-4 mb-0"
+              href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ $t('kirjautuminen-virhe-lisatiedot.yhteystiedot') }}
+            </a>
+          </div>
         </b-alert>
         <b-alert variant="danger" :show="huoltokatkoNotification">
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
@@ -107,6 +140,14 @@
         this.$route.query.virhe === 'EI_KAYTTO_OIKEUTTA' ||
         this.$route.query.virhe === 'VIRHEELLINEN_NIMI'
       )
+    }
+
+    get noUseRights() {
+      return this.$route.query.virhe === 'EI_KAYTTO_OIKEUTTA'
+    }
+
+    get invalidName() {
+      return this.$route.query.virhe === 'VIRHEELLINEN_NIMI'
     }
 
     get contactMail() {

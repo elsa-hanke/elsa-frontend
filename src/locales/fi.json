@@ -475,6 +475,18 @@
     "TUNTEMATON": "Sisäänkirjautuminen epäonnistui.",
     "VIRHEELLINEN_NIMI": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Ota yhteys tekniseen pääkäyttäjään osoitteeseen "
   },
+  "kirjautuminen-virhe-lisatiedot": {
+    "tarkista-seuraavat-tiedot": "Tarkistathan seuraavat kohdat, ennen yhteydenottoa:",
+    "kouluttaja": "Kouluttaja: ",
+    "kouluttaja-ohje": "Jos kyseessä on ensimmäinen kirjautuminen, käytät kutsulinkkiä, joka on saapunut osoitteesta reply@mail.elsapalvelu.fi otsikolla ”[ELSA-palvelu] Olet saanut kutsun liittyä ELSA-järjestelmän käyttäjäksi”. Muu kirjautumistapa ei toimi tilin aktivointiin.",
+    "erikoistuja": "Erikoistuja:",
+    "erikoistuja-ohje": "Sinulla on opinto-oikeus erikoislääkäri- tai erikoishammaslääkärikoulutukseen ja se on aktiivinen yliopistosi tietojärjestelmässä.",
+    "erikoisalan-vastuuhenkilo": "Erikoisalan vastuuhenkilö:",
+    "erikoisalan-vastuuhenkilo-ohje": "Kirjaudut oman yliopistosi tunnuksilla HAKA-tunnistautumisella.",
+    "virheellinen-nimi-ohje": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Syynä saattaa olla käytössä oleva kutsumanimi tai kutsussa sattunut kirjoitusvirhe.",
+    "virheellinen-nimi-ota-yhteys": "Nimen muokkaamiseksi ota yhteys tekniseen pääkäyttäjään osoitteeseen julia.sillanpaa@tuni.fi tai ohjaamasi erikoistujan yliopiston opintohallintoon, yhteystiedot:",
+    "yhteystiedot": "https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot"
+  },
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
   "kirjautuminen-huoltokatkoilmoitus": "Palvelussa 30 minuutin huoltokatko alkaen",
   "kirjautumissivu-info-erikoistuja": "Osa suorituksista ei vielä siirry opintotietojärjestelmistä. Kliinisten ja diagnostisten hammaslääketieteen erikoisalojen kirjautuminen ei toimi Itä-Suomen ja Turun yliopistojen erikoistujilla.",
@@ -1000,6 +1012,7 @@
   "palauta-muokattavaksi": "Palauta muokattavaksi",
   "palaute": "Palaute",
   "palaute-ingressi": "Lähetä palautetta palvelusta. Voit lähettää palautteen myös anonyymisti, mutta ongelmatilanteiden selvittäminen saattaa silloin vaikeutua.",
+  "palaute-valiaikainen-ohje": "ELSA-palvelun tukisähköposti on ruuhkautunut, joten kiireellisen ongelman kohdalla olethan ensisijaisesti yhteydessä oman yliopistosi opintohallintoon.",
   "palaute-laheta": "Lähetä palaute",
   "palaute-otsikko": "Lähetä palautetta",
   "palautteen-aihe": "Palautteen aihe",
