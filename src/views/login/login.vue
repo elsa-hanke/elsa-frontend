@@ -31,8 +31,8 @@
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
               <a :href="`mailto:${contactMail}`">{{ contactMail }}</a>
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys-yhteystiedot') }}
-              <a :href="`https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot`">
-                https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot
+              <a :href="getContactUrl()">
+                {{ getContactUrl() }}
               </a>
             </p>
           </div>
@@ -149,6 +149,10 @@
 
     get contactMail() {
       return 'julia.sillanpaa@tuni.fi'
+    }
+
+    getContactUrl() {
+      return 'https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot'
     }
   }
 </script>
