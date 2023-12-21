@@ -29,14 +29,10 @@
             </p>
             <p class="mt-4 mb-0">
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
-            </p>
-            <a :href="`mailto:${contactMail}`">{{ contactMail }}</a>
-            <p class="mt-0 mb-0">
+              <a :href="`mailto:${contactMail}`">{{ contactMail }}</a>
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys-yhteystiedot') }}
+              <a :href="contactUrl">laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot</a>
             </p>
-            <a :href="contactUrl">
-              {{ contactUrl }}
-            </a>
           </div>
         </b-alert>
         <b-alert variant="danger" :show="huoltokatkoNotification">
