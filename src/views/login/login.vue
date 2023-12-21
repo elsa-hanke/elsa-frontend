@@ -30,10 +30,8 @@
             <p class="mt-4 mb-0">
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
             </p>
-            <p class="mt-4 mb-0">
-              {{ contactUrl }}
-            </p>
           </div>
+          <a v-if="invalidName" :href="`${contactUrl}`">{{ contactUrl }}</a>
         </b-alert>
         <b-alert variant="danger" :show="huoltokatkoNotification">
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
