@@ -475,6 +475,15 @@
     "TUNTEMATON": "Sisäänkirjautuminen epäonnistui.",
     "VIRHEELLINEN_NIMI": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Ota yhteys tekniseen pääkäyttäjään osoitteeseen "
   },
+  "kirjautuminen-virhe-lisatiedot": {
+    "tarkista-seuraavat-tiedot": "Tarkistathan seuraavat kohdat, ennen yhteydenottoa:",
+    "kouluttaja": "Kouluttaja: ",
+    "kouluttaja-ohje": "Jos kyseessä on ensimmäinen kirjautuminen, käytät kutsulinkkiä, joka on saapunut osoitteesta reply@mail.elsapalvelu.fi otsikolla ”[ELSA-palvelu] Olet saanut kutsun liittyä ELSA-järjestelmän käyttäjäksi”. Muu kirjautumistapa ei toimi tilin aktivointiin.",
+    "erikoistuja": "Erikoistuja:",
+    "erikoistuja-ohje": "Sinulla on opinto-oikeus erikoislääkäri- tai erikoishammaslääkärikoulutukseen ja se on aktiivinen yliopistosi tietojärjestelmässä.",
+    "erikoisalan-vastuuhenkilo": "Erikoisalan vastuuhenkilö:",
+    "erikoisalan-vastuuhenkilo-ohje": "Kirjaudut oman yliopistosi tunnuksilla HAKA-tunnistautumisella."
+  },
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
   "kirjautuminen-huoltokatkoilmoitus": "Palvelussa 30 minuutin huoltokatko alkaen",
   "kirjautumissivu-info-erikoistuja": "Osa suorituksista ei vielä siirry opintotietojärjestelmistä. Kliinisten ja diagnostisten hammaslääketieteen erikoisalojen kirjautuminen ei toimi Itä-Suomen ja Turun yliopistojen erikoistujilla.",
