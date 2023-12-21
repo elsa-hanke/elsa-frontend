@@ -30,8 +30,15 @@
             <p class="mt-4 mb-0">
               {{ $t('kirjautuminen-virhe-lisatiedot.virheellinen-nimi-ota-yhteys') }}
             </p>
+            <a
+              class="mt-4 mb-0"
+              href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ $t('kirjautuminen-virhe-lisatiedot.yhteystiedot') }}
+            </a>
           </div>
-          <a v-if="invalidName" :href="`${contactUrl}`">{{ contactUrl }}</a>
         </b-alert>
         <b-alert variant="danger" :show="huoltokatkoNotification">
           <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="mr-1" />
@@ -145,10 +152,6 @@
 
     get contactMail() {
       return 'julia.sillanpaa@tuni.fi'
-    }
-
-    get contactUrl() {
-      return 'https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/yhteystiedot'
     }
   }
 </script>
