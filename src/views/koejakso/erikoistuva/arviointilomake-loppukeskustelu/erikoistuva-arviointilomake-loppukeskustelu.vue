@@ -89,7 +89,7 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col lg="6">
+          <b-col v-if="editable" lg="6">
             <elsa-form-group :label="$t('koejakson-päättymispäivä')" :required="true">
               <template #default="{ uid }">
                 <elsa-form-datepicker
@@ -105,6 +105,16 @@
                 ></elsa-form-datepicker>
               </template>
             </elsa-form-group>
+          </b-col>
+          <b-col v-else lg="6">
+            <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
+            <p>
+              {{
+                loppukeskusteluLomake.koejaksonPaattymispaiva
+                  ? $date(loppukeskusteluLomake.koejaksonPaattymispaiva)
+                  : ''
+              }}
+            </p>
           </b-col>
         </b-row>
 
@@ -390,7 +400,10 @@
       ) {
         return
       }
-      if (!this.$refs.koejaksonPaattymispaiva.validateForm()) {
+      if (
+        this.$refs.koejaksonPaattymispaiva &&
+        !this.$refs.koejaksonPaattymispaiva.validateForm()
+      ) {
         return
       }
       return this.$bvModal.show(modalId)
