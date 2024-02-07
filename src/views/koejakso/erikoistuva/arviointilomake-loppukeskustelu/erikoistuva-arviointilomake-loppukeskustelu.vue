@@ -386,9 +386,11 @@
     onValidateAndConfirm(modalId: string) {
       if (
         this.$refs.koulutuspaikanArvioijat &&
-        !this.$refs.koulutuspaikanArvioijat.validateForm() &&
-        !this.$refs.koejaksonPaattymispaiva.validateForm()
+        !this.$refs.koulutuspaikanArvioijat.validateForm()
       ) {
+        return
+      }
+      if (!this.$refs.koejaksonPaattymispaiva.validateForm()) {
         return
       }
       return this.$bvModal.show(modalId)
