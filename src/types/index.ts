@@ -468,6 +468,7 @@ export interface LoppukeskusteluLomake {
   vahvuudet: string
   kehittamistoimenpiteet: string
   kehittamistoimenpiteetRiittavat: boolean
+  koejaksonPaattymispaiva: string
 }
 
 export interface VastuuhenkilonArvioLomake {
