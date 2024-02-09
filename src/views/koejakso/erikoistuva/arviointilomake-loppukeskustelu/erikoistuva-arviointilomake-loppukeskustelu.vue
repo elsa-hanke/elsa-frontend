@@ -73,6 +73,51 @@
           @lahikouluttajaSelect="onLahikouluttajaSelect"
           @lahiesimiesSelect="onLahiesimiesSelect"
         />
+
+        <hr />
+
+        <b-row>
+          <b-col lg="6">
+            <h5>{{ $t('koejakson-alkamispäivä') }}</h5>
+            <p>
+              {{
+                koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva
+                  ? $date(koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva)
+                  : ''
+              }}
+            </p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col v-if="editable" lg="6">
+            <elsa-form-group :label="$t('koejakson-päättymispäivä')" :required="true">
+              <template #default="{ uid }">
+                <elsa-form-datepicker
+                  v-if="!loading"
+                  :id="uid"
+                  ref="koejaksonPaattymispaiva"
+                  :value.sync="loppukeskusteluLomake.koejaksonPaattymispaiva"
+                  :min="minKoejaksonPaattymispaiva"
+                  :min-error-text="$t('koejakso-voi-paattya-aikaisintaan-6kk-alkamispaivasta')"
+                  :max="maxKoejaksonPaattymispaiva"
+                  :max-error-text="$t('koejakson-maksimi-paattymispaiva-kuvaus')"
+                  @input="$emit('skipRouteExitConfirm', false)"
+                ></elsa-form-datepicker>
+              </template>
+            </elsa-form-group>
+          </b-col>
+          <b-col v-else lg="6">
+            <h5>{{ $t('koejakson-päättymispäivä') }}</h5>
+            <p>
+              {{
+                loppukeskusteluLomake.koejaksonPaattymispaiva
+                  ? $date(loppukeskusteluLomake.koejaksonPaattymispaiva)
+                  : ''
+              }}
+            </p>
+          </b-col>
+        </b-row>
+
         <hr />
 
         <div v-if="acceptedByEveryone">
@@ -146,6 +191,7 @@
 </template>
 
 <script lang="ts">
+  import { format } from 'date-fns'
   import _get from 'lodash/get'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
@@ -153,6 +199,7 @@
   import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
+  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -160,20 +207,25 @@
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPopover from '@/components/popover/popover.vue'
   import store from '@/store'
   import {
     LoppukeskusteluLomake,
     KoejaksonVaiheHyvaksyja,
     Koejakso,
     KoejaksonVaiheButtonStates,
-    KoejaksonVaiheAllekirjoitus
+    KoejaksonVaiheAllekirjoitus,
+    Opintooikeus
   } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
   import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeus'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
+      ElsaPopover,
+      ElsaFormDatepicker,
       ErikoistuvaDetails,
       ElsaFormGroup,
       ElsaFormError,
@@ -187,6 +239,7 @@
   export default class ErikoistuvaArviointilomakeLoppukeskustelu extends Mixins(validationMixin) {
     $refs!: {
       koulutuspaikanArvioijat: KoulutuspaikanArvioijat
+      koejaksonPaattymispaiva: ElsaFormDatepicker
     }
     items = [
       {
@@ -214,7 +267,8 @@
             nimi: {
               required
             }
-          }
+          },
+          koejaksonPaattymispaiva: required
         }
       }
     }
@@ -254,7 +308,8 @@
         nimike: null,
         sopimusHyvaksytty: false
       },
-      muokkauspaiva: ''
+      muokkauspaiva: '',
+      koejaksonPaattymispaiva: ''
     }
 
     validateState(value: string) {
@@ -345,6 +400,12 @@
       ) {
         return
       }
+      if (
+        this.$refs.koejaksonPaattymispaiva &&
+        !this.$refs.koejaksonPaattymispaiva.validateForm()
+      ) {
+        return
+      }
       return this.$bvModal.show(modalId)
     }
 
@@ -380,6 +441,47 @@
       await store.dispatch('erikoistuva/getKouluttajatJaVastuuhenkilot')
       this.setKoejaksoData()
       this.loading = false
+    }
+
+    get opintooikeusKaytossa(): Opintooikeus | undefined {
+      return resolveOpintooikeusKaytossa(this.account.erikoistuvaLaakari)
+    }
+
+    get minKoejaksonPaattymispaiva() {
+      const dateFormat = 'yyyy-MM-dd'
+      const koejaksonAlkamispaiva = this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva
+      if (!koejaksonAlkamispaiva) {
+        return null
+      }
+
+      const koejaksonAlkamispaivaDate = new Date(koejaksonAlkamispaiva)
+      // Koejakson kesto on vähintään 6kk.
+      koejaksonAlkamispaivaDate.setMonth(koejaksonAlkamispaivaDate.getMonth() + 6)
+      return format(koejaksonAlkamispaivaDate, dateFormat)
+    }
+
+    get maxKoejaksonPaattymispaiva() {
+      const dateFormat = 'yyyy-MM-dd'
+      const koejaksonAlkamispaiva = this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva
+      if (!this.opintooikeusKaytossa?.opintooikeudenPaattymispaiva || !koejaksonAlkamispaiva) {
+        return null
+      }
+
+      const koejaksonAlkamispaivaMaxDate = new Date(
+        this.koejaksoData.aloituskeskustelu.koejaksonAlkamispaiva
+      )
+      // Koejakson kesto on maksimissaan 2 vuotta.
+      koejaksonAlkamispaivaMaxDate.setFullYear(koejaksonAlkamispaivaMaxDate.getFullYear() + 2)
+      const opintooikeudenPaattymispaivaDate = new Date(
+        this.opintooikeusKaytossa.opintooikeudenPaattymispaiva
+      )
+      // Mikäli maksimikesto 2 vuotta ylittää opinto-oikeuden päättymispäivän,
+      // on maksimi päättymispäivä opinto-oikeuden päättymispäivä.
+      if (koejaksonAlkamispaivaMaxDate > opintooikeudenPaattymispaivaDate) {
+        return format(opintooikeudenPaattymispaivaDate, dateFormat)
+      }
+
+      return format(koejaksonAlkamispaivaMaxDate, dateFormat)
     }
   }
 </script>

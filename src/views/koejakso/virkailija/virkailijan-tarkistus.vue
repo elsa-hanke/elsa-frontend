@@ -728,8 +728,11 @@
     koejaksonKesto() {
       const koejaksonAlkamispaiva =
         this.vastuuhenkilonArvio?.aloituskeskustelu?.koejaksonAlkamispaiva
-      const koejaksonLoppumispaiva =
-        this.vastuuhenkilonArvio?.aloituskeskustelu?.koejaksonPaattymispaiva
+      const koejaksonLoppumispaiva = this.vastuuhenkilonArvio?.loppukeskustelu
+        ?.koejaksonPaattymispaiva
+        ? this.vastuuhenkilonArvio?.loppukeskustelu?.koejaksonPaattymispaiva
+        : this.vastuuhenkilonArvio?.aloituskeskustelu?.koejaksonPaattymispaiva
+
       if (!koejaksonAlkamispaiva || !koejaksonLoppumispaiva) {
         return null
       }
