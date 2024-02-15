@@ -1722,5 +1722,9 @@
   "vahvista-lomakkeen-tyhjennys": "Vahvista lomakkeen tyhjennys",
   "vahvista-lomakkeen-tyhjennys-selite": "Tyhjennyksen jälkeen lomake pitää täyttää uudelleen.",
   "lomake-tyhjennetty-onnistuneesti": "Lomakkeen tyhjennys onnistui",
-  "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui"
+  "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui",
+  "yek": {
+    "koulutuksen-edistyminen": "YEK-koulutuksen edistyminen",
+    "sairaala": "Sairaala"
+  }
 }
