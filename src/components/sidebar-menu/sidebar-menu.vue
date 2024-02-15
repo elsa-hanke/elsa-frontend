@@ -23,7 +23,7 @@
           {{ $t('koulutussuunnitelma') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva()"
+          v-if="$isErikoistuva() || $isYekErikoistuva"
           class="border-bottom"
           :to="{ name: 'tyoskentelyjaksot' }"
         >
@@ -31,7 +31,7 @@
           {{ $t('tyoskentelyjaksot') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva()"
+          v-if="$isErikoistuva() || $isYekErikoistuva"
           class="border-bottom"
           :to="{ name: 'teoriakoulutukset' }"
         >
@@ -110,12 +110,16 @@
           <font-awesome-icon icon="clipboard-check" fixed-width size="lg" />
           {{ $t('koejakso') }}
         </b-nav-item>
-        <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'asiakirjat' }">
+        <b-nav-item
+          v-if="$isErikoistuva() || $isYekErikoistuva"
+          class="border-bottom"
+          :to="{ name: 'asiakirjat' }"
+        >
           <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() && !isImpersonated"
+          v-if="($isErikoistuva() || $isYekErikoistuva) && !isImpersonated"
           class="border-bottom"
           :to="{ name: 'valmistumispyynto' }"
         >
