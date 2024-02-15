@@ -24,7 +24,18 @@ export class RolesPlugin {
     }
 
     vue.prototype.$isYekErikoistuva = (): boolean => {
-      return store.getters['auth/account'].activeAuthority === ELSA_ROLE.ErikoistuvaLaakari
+      const data = store.getters['auth/account']
+      const { opintooikeudet, opintooikeusKaytossaId } = data.erikoistuvaLaakari
+      const opintooikeus = opintooikeudet.filter(
+        (oo: Opintooikeus) => oo.id === opintooikeusKaytossaId
+      )
+      if (opintooikeus.length === 0) {
+        return false
+      }
+      return (
+        store.getters['auth/account'].activeAuthority === ELSA_ROLE.ErikoistuvaLaakari &&
+        opintooikeus[0].erikoisalaId === ERIKOISALA_YEK_ID
+      )
     }
 
     vue.prototype.$isKouluttaja = (): boolean => {
@@ -56,6 +67,7 @@ export class RolesPlugin {
 declare module 'vue/types/vue' {
   interface Vue {
     $isErikoistuva: Function
+    $isYekErikoistuva: Function
     $isKouluttaja: Function
     $isVastuuhenkilo: Function
     $isTerveyskeskuskoulutusjaksoVastuuhenkilo: Function
