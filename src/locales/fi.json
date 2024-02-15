@@ -1725,6 +1725,7 @@
   "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui",
   "yek": {
     "koulutuksen-edistyminen": "YEK-koulutuksen edistyminen",
-    "sairaala": "Sairaala"
+    "sairaala": "Sairaala",
+    "koulutettava": "YEK-koulutettava"
   }
 }

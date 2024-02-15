@@ -23,7 +23,7 @@ export class RolesPlugin {
       )
     }
 
-    vue.prototype.$isYekErikoistuva = (): boolean => {
+    vue.prototype.$isYekKoulutettava = (): boolean => {
       const data = store.getters['auth/account']
       const { opintooikeudet, opintooikeusKaytossaId } = data.erikoistuvaLaakari
       const opintooikeus = opintooikeudet.filter(
@@ -67,7 +67,7 @@ export class RolesPlugin {
 declare module 'vue/types/vue' {
   interface Vue {
     $isErikoistuva: Function
-    $isYekErikoistuva: Function
+    $isYekKoulutettava: Function
     $isKouluttaja: Function
     $isVastuuhenkilo: Function
     $isTerveyskeskuskoulutusjaksoVastuuhenkilo: Function

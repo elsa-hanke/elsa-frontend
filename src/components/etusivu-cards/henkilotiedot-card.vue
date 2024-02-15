@@ -73,7 +73,7 @@
     }
 
     get title() {
-      return getTitleFromAuthorities(this, this.activeAuthority)
+      return getTitleFromAuthorities(this, this.activeAuthority, this.$isYekKoulutettava())
     }
   }
 </script>

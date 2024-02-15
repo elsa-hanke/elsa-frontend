@@ -1,7 +1,7 @@
 <template>
   <div class="etusivu">
     <EtusivuErikoistuja v-if="$isErikoistuva()" />
-    <EtusivuYekErikoistuja v-if="$isYekErikoistuva()" />
+    <EtusivuYekErikoistuja v-if="$isYekKoulutettava()" />
     <EtusivuKouluttaja v-else-if="$isKouluttaja()" />
     <EtusivuVastuuhenkilo v-else-if="$isVastuuhenkilo()" />
     <EtusivuVirkailija v-else-if="$isVirkailija()" />

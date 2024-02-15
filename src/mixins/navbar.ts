@@ -91,7 +91,7 @@ export default class NavbarMixin extends Vue {
     if (this.isErikoistuvaLaakari) {
       return this.erikoisalaNimi
     }
-    return getTitleFromAuthorities(this, this.activeRole)
+    return getTitleFromAuthorities(this, this.activeRole, this.$isYekKoulutettava())
   }
 
   getOpintooikeusKaytossa(id: number) {
