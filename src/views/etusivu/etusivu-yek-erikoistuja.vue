@@ -2,7 +2,7 @@
   <b-container fluid class="mt-3">
     <b-row class="mt-3">
       <b-col xxl="9">
-        <avoimet-asiat-card />
+        <avoimet-asiat-yek-card />
         <yek-koulutuksen-edistyminen-card />
       </b-col>
       <b-col xxl="3">
@@ -20,14 +20,14 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import BCardSkeleton from '@/components/card/card.vue'
-  import AvoimetAsiatCard from '@/components/etusivu-cards/avoimet-asiat-card.vue'
+  import AvoimetAsiatYekCard from '@/components/etusivu-cards/avoimet-asiat-yek-card.vue'
   import HenkilotiedotCard from '@/components/etusivu-cards/henkilotiedot-card.vue'
   import YekKoulutuksenEdistyminenCard from '@/components/etusivu-cards/yek-koulutuksen-edistyminen-card.vue'
 
   @Component({
     components: {
       BCardSkeleton,
-      AvoimetAsiatCard,
+      AvoimetAsiatYekCard,
       HenkilotiedotCard,
       YekKoulutuksenEdistyminenCard
     }

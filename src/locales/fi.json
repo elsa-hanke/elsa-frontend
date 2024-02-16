@@ -1726,6 +1726,14 @@
   "yek": {
     "koulutuksen-edistyminen": "YEK-koulutuksen edistyminen",
     "sairaala": "Sairaala",
-    "koulutettava": "YEK-koulutettava"
+    "koulutettava": "YEK-koulutettava",
+    "ei-avoimia-asioita-yek-koulutettava-info": {
+      "ja": "ja",
+      "voit": "Voit",
+      "lisata-tyoskentelyjaksoja": "lisätä työskentelyjaksoja",
+      "tarkistaa-opintosuorituksesi": "tarkistaa opintosuorituksesi",
+      "kun-olet-suorittanut": "Kun olet suorittanut vaaditun koulutuksen,",
+      "laheta-vamistusmispyyntö": "lähetä valmistumispyyntö"
+    }
   }
 }
