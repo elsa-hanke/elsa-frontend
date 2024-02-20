@@ -107,6 +107,7 @@ import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terv
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
+import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot/tyoskentelyjaksot-yek.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
@@ -432,6 +433,15 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: Tyoskentelyjaksot,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot',
+        name: 'yektyoskentelyjaksot',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TyoskentelyjaksotYek,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
         }
       },

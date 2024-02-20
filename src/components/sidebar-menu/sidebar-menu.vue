@@ -23,9 +23,17 @@
           {{ $t('koulutussuunnitelma') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() || $isYekKoulutettava"
+          v-if="$isErikoistuva()"
           class="border-bottom"
           :to="{ name: 'tyoskentelyjaksot' }"
+        >
+          <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
+          {{ $t('tyoskentelyjaksot') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isYekKoulutettava"
+          class="border-bottom"
+          :to="{ name: 'yektyoskentelyjaksot' }"
         >
           <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
           {{ $t('tyoskentelyjaksot') }}
