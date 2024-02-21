@@ -10,12 +10,16 @@
           <div v-if="muokkausoikeudet" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
               variant="primary"
-              :to="{ name: 'uusi-tyoskentelyjakso' }"
+              :to="{ name: 'uusi-yek-tyoskentelyjakso' }"
               class="mb-2 mr-2"
             >
               {{ $t('lisaa-tyoskentelyjakso') }}
             </elsa-button>
-            <elsa-button variant="outline-primary" :to="{ name: 'uusi-poissaolo' }" class="mb-2">
+            <elsa-button
+              variant="outline-primary"
+              :to="{ name: 'uusi-yek-poissaolo' }"
+              class="mb-2"
+            >
               {{ $t('lisaa-poissaolo') }}
             </elsa-button>
           </div>

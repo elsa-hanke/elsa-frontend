@@ -105,9 +105,9 @@ import TerveyskeskuskoulutusjaksonHyvaksyntaPyynto from '@/views/terveyskeskusko
 import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-tarkistus.vue'
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
+import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot-yek/tyoskentelyjaksot-yek.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
-import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot/tyoskentelyjaksot-yek.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
@@ -115,7 +115,6 @@ import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vu
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
 import ValmistumispyynnonHyvaksynta from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta.vue'
 import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
-// import Viestit from '@/views/viestit.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -437,15 +436,6 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/yektyoskentelyjaksot',
-        name: 'yektyoskentelyjaksot',
-        component: RoleSpecificRoute,
-        props: {
-          routeComponent: TyoskentelyjaksotYek,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
-        }
-      },
-      {
         path: '/tyoskentelyjaksot/uusi',
         name: 'uusi-tyoskentelyjakso',
         component: RoleSpecificRoute,
@@ -643,11 +633,6 @@ const routes: Array<RouteConfig> = [
           confirmRouteExit: true
         }
       },
-      /*{
-        path: '/viestit',
-        name: 'viestit',
-        component: Viestit
-      },*/
       {
         path: '/asiakirjat',
         name: 'asiakirjat',
@@ -1219,6 +1204,26 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: MuokkaaKurssikoodia,
           allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot',
+        name: 'yektyoskentelyjaksot',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TyoskentelyjaksotYek,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+        }
+      },
+      {
+        path: '/tyoskentelyjaksot/yek/uusi',
+        name: 'uusi-yek-tyoskentelyjakso',
+        component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        props: {
+          routeComponent: UusiTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
         }
       }
     ]
