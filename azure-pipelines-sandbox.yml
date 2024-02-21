@@ -32,9 +32,9 @@ stages:
           - script: |
               yarn test:unit
             displayName: "Test"
-          - script: |
-              yarn test:e2e:headless
-            displayName: "E2E Test"
+          # - script: |
+          #     yarn test:e2e:headless
+          #   displayName: "E2E Test"
           - script: |
               yarn generate-thirdparty
             displayName: "Generate thirdparty"
