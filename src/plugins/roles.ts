@@ -33,7 +33,7 @@ export class RolesPlugin {
         return false
       }
       return (
-        store.getters['auth/account'].activeAuthority === ELSA_ROLE.ErikoistuvaLaakari &&
+        store.getters['auth/account'].activeAuthority === ELSA_ROLE.YEKKoulutettava &&
         opintooikeus[0].erikoisalaId === ERIKOISALA_YEK_ID
       )
     }
