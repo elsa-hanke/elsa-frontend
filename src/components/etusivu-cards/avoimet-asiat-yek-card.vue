@@ -9,7 +9,7 @@
         />
         <span>
           {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.voit') }}
-          <b-link :to="{ path: '/tyoskentelyjaksot' }">
+          <b-link :to="{ path: '/yektyoskentelyjaksot' }">
             {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.lisata-tyoskentelyjaksoja') }}
           </b-link>
           <span>{{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.ja') }}</span>

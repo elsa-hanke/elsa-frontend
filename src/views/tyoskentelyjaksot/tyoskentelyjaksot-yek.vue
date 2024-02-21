@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <p v-html="$t('tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki })" />
+          <p v-html="$t('yek.tyoskentelyjaksot-kuvaus', { opintooppaastaLinkki })" />
           <elsa-vanha-asetus-varoitus />
           <div v-if="muokkausoikeudet" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
@@ -94,7 +94,7 @@
                 </elsa-form-group>
                 <b-row>
                   <elsa-form-group :label="$t('koulutustyypit')" class="col-xl-12 mb-0">
-                    <tyoskentelyjaksot-bar-chart :tilastot="tilastot" />
+                    <tyoskentelyjaksot-yek-bar-chart :tilastot="tilastot" />
                   </elsa-form-group>
                 </b-row>
                 <elsa-form-group
@@ -238,6 +238,7 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyoskentelyjaksotBarChart from '@/components/tyoskentelyjaksot-bar-chart.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
+  import TyoskentelyjaksotYekBarChart from '@/components/yek/tyoskentelyjaksot-yek-bar-chart.vue'
   import store from '@/store'
   import {
     Keskeytysaika,
@@ -253,6 +254,7 @@
 
   @Component({
     components: {
+      TyoskentelyjaksotYekBarChart,
       ElsaButton,
       ElsaFormGroup,
       ElsaPopover,
@@ -292,11 +294,6 @@
       {
         key: 'osaaikaprosenttiLabel',
         label: this.$t('tyoaika'),
-        sortable: true
-      },
-      {
-        key: 'hyvaksyttyAiempaanErikoisalaanLabel',
-        label: this.$t('hyvaksytty-toiselle-erikoisalalle'),
         sortable: true
       },
       {
@@ -690,7 +687,6 @@
   }
 
   .bar-chart {
-    max-width: 450px;
   }
 
   .donut-chart {
