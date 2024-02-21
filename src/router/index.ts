@@ -82,6 +82,7 @@ import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
 import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
 import UusiPaivittainenMerkinta from '@/views/paivittaiset-merkinnat/uusi-paivittainen-merkinta.vue'
+import UusiYekPoissaolo from '@/views/poissaolot-yek/uusi-yek-poissaolo.vue'
 import MuokkaaPoissaoloa from '@/views/poissaolot/muokkaa-poissaoloa.vue'
 import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
@@ -1217,12 +1218,23 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/tyoskentelyjaksot/yek/uusi',
+        path: '/yektyoskentelyjaksot/uusi',
         name: 'uusi-yek-tyoskentelyjakso',
         component: RoleSpecificRoute,
         beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         props: {
           routeComponent: UusiYekTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/poissaolot/uusi',
+        name: 'uusi-yek-poissaolo',
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiYekPoissaolo,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
         }
