@@ -1722,5 +1722,19 @@
   "vahvista-lomakkeen-tyhjennys": "Vahvista lomakkeen tyhjennys",
   "vahvista-lomakkeen-tyhjennys-selite": "Tyhjennyksen jälkeen lomake pitää täyttää uudelleen.",
   "lomake-tyhjennetty-onnistuneesti": "Lomakkeen tyhjennys onnistui",
-  "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui"
+  "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui",
+  "yek": {
+    "koulutuksen-edistyminen": "YEK-koulutuksen edistyminen",
+    "sairaala": "Sairaala",
+    "koulutettava": "YEK-koulutettava",
+    "ei-avoimia-asioita-yek-koulutettava-info": {
+      "ja": "ja",
+      "voit": "Voit",
+      "lisata-tyoskentelyjaksoja": "lisätä työskentelyjaksoja",
+      "tarkistaa-opintosuorituksesi": "tarkistaa opintosuorituksesi",
+      "kun-olet-suorittanut": "Kun olet suorittanut vaaditun koulutuksen,",
+      "laheta-vamistusmispyyntö": "lähetä valmistumispyyntö"
+    },
+    "tyoskentelyjaksot-kuvaus": "Lisää työskentelyjaksoja ja kerro poissaoloista jaksojen aikana. Tarkasta työskentelyajan tarkemmat vaatimukset opinto-oppaasta. Yli 10 vuotta vanhoja työskentelyjaksoja hyväksytään vain perustellusta syystä. Pakollinen 9 kuukauden terveyskeskustyö ei vanhene."
+  }
 }
