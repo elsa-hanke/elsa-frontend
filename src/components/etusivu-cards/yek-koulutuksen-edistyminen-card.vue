@@ -62,7 +62,7 @@
               </elsa-button>
               <div>
                 {{
-                  teoriakoulutukset > 0
+                  teoriakoulutukset.length > 0
                     ? `${teoriakoulutukset.length} ${$t('kpl')}`
                     : $t('ei-suoritettu')
                 }}
