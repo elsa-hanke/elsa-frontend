@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('lisaa-tyoskentelyjakso') }}</h1>
           <hr />
-          <tyoskentelyjakso-form
+          <yek-tyoskentelyjakso-form
             v-if="!loading && tyoskentelyjaksoLomake"
             :kunnat="kunnat"
             :erikoisalat="erikoisalat"
@@ -29,13 +29,13 @@
   import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import TyoskentelyjaksoForm from '@/forms/tyoskentelyjakso-form.vue'
+  import YekTyoskentelyjaksoForm from '@/forms/yek-tyoskentelyjakso-form.vue'
   import { TyoskentelyjaksoLomake, ElsaError, Tyoskentelyjakso } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
-      TyoskentelyjaksoForm
+      YekTyoskentelyjaksoForm
     }
   })
   export default class UusiYekTyoskentelyjakso extends Vue {

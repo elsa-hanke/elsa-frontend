@@ -106,6 +106,7 @@ import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusj
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
 import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot-yek/tyoskentelyjaksot-yek.vue'
+import UusiYekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/uusi-yek-tyoskentelyjakso.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
@@ -1221,7 +1222,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         props: {
-          routeComponent: UusiTyoskentelyjakso,
+          routeComponent: UusiYekTyoskentelyjakso,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
         }
