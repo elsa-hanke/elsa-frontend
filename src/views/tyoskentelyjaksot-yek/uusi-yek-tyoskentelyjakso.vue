@@ -65,7 +65,7 @@
     async fetchLomake() {
       try {
         this.tyoskentelyjaksoLomake = (
-          await axios.get(`erikoistuva-laakari/tyoskentelyjakso-lomake`)
+          await axios.get(`yek-koulutettava/tyoskentelyjakso-lomake`)
         ).data
       } catch {
         toastFail(this, this.$t('tyoskentelyjakson-lomakkeen-hakeminen-epaonnistui'))
@@ -87,7 +87,7 @@
         value.addedFiles.forEach((file: File) => formData.append('files', file, file.name))
 
         const tyoskentelyjakso = (
-          await axios.post('erikoistuva-laakari/tyoskentelyjaksot', formData, {
+          await axios.post('yek-koulutettava/tyoskentelyjaksot', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             },
