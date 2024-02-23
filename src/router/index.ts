@@ -108,6 +108,7 @@ import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terv
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
 import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot-yek/tyoskentelyjaksot-yek.vue'
 import UusiYekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/uusi-yek-tyoskentelyjakso.vue'
+import YekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/yek-tyoskentelyjakso.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
@@ -1228,6 +1229,26 @@ const routes: Array<RouteConfig> = [
           confirmRouteExit: true
         }
       },
+      {
+        path: '/yektyoskentelyjaksot/:tyoskentelyjaksoId',
+        name: 'yektyoskentelyjakso',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YekTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
+        }
+      },
+      // {
+      //   path: '/tyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus',
+      //   name: 'muokkaa-tyoskentelyjaksoa',
+      //   beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+      //   component: RoleSpecificRoute,
+      //   props: {
+      //     routeComponent: MuokkaaTyoskentelyjaksoa,
+      //     allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+      //     confirmRouteExit: true
+      //   }
+      // },
       {
         path: '/yektyoskentelyjaksot/poissaolot/uusi',
         name: 'uusi-yek-poissaolo',

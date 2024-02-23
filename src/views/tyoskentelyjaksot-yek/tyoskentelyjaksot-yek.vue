@@ -138,7 +138,7 @@
                 <template #cell(tyoskentelypaikkaLabel)="row">
                   <elsa-button
                     :to="{
-                      name: 'tyoskentelyjakso',
+                      name: 'yektyoskentelyjakso',
                       params: { tyoskentelyjaksoId: row.item.id }
                     }"
                     variant="link"
@@ -192,7 +192,7 @@
                           <b-td :stacked-heading="$t('poissaolon-syy')">
                             <elsa-button
                               :to="{
-                                name: 'poissaolo',
+                                name: 'yekpoissaolo',
                                 params: { poissaoloId: keskeytysaika.id }
                               }"
                               variant="link"
@@ -319,7 +319,7 @@
     async fetchTyoskentelyjaksot() {
       try {
         this.tyoskentelyjaksotTaulukko = (
-          await axios.get(`erikoistuva-laakari/tyoskentelyjaksot-taulukko`)
+          await axios.get(`yek-koulutettava/tyoskentelyjaksot-taulukko`)
         ).data
       } catch {
         toastFail(this, this.$t('tyoskentelyjaksojen-hakeminen-epaonnistui'))
