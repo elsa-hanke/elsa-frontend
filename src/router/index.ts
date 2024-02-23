@@ -1214,7 +1214,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: TyoskentelyjaksotYek,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
         }
       },
       {
@@ -1224,7 +1224,7 @@ const routes: Array<RouteConfig> = [
         beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         props: {
           routeComponent: UusiYekTyoskentelyjakso,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
         }
       },
@@ -1235,7 +1235,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiYekPoissaolo,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
         }
       }

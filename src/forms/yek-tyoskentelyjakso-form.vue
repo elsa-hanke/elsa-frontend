@@ -230,7 +230,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import { Asiakirja, Tyoskentelyjakso, TyoskentelyjaksoForm } from '@/types'
-  import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import { TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
   import { sortByAsc } from '@/utils/sort'
   import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
@@ -269,17 +269,14 @@
           required,
           integer,
           between: between(50, 100)
-        },
-        kaytannonKoulutus: {
-          required
-        },
-        omaaErikoisalaaTukeva: {
-          required: requiredIf((value) => {
-            return (
-              value.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
-            )
-          })
         }
+        // omaaErikoisalaaTukeva: {
+        //   required: requiredIf((value) => {
+        //     return (
+        //       value.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
+        //     )
+        //   })
+        // }
       }
     }
   })
