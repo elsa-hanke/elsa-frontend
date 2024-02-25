@@ -46,10 +46,10 @@
       },
       {
         text: this.$t('tyoskentelyjaksot'),
-        to: { name: 'tyoskentelyjaksot' }
+        to: { name: 'yektyoskentelyjaksot' }
       },
       {
-        text: this.$t('lisaa-tyoskentelyjakso'),
+        text: this.$t('lisaa-yek-tyoskentelyjakso'),
         active: true
       }
     ]

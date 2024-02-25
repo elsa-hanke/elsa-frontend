@@ -46,7 +46,7 @@
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 v-if="muokkausoikeudet"
-                :to="{ name: 'muokkaa-poissaoloa' }"
+                :to="{ name: 'muokkaa-yek-poissaoloa' }"
                 :disabled="poissaoloWrapper.tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
                 variant="primary"
                 class="ml-2 mb-3"
@@ -64,7 +64,7 @@
                 {{ $t('poista-poissaolo') }}
               </elsa-button>
               <elsa-button
-                :to="{ name: 'tyoskentelyjaksot' }"
+                :to="{ name: 'yektyoskentelyjaksot' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 tyoskentelyjaksot-link"
               >
@@ -131,7 +131,7 @@
       },
       {
         text: this.$t('tyoskentelyjaksot'),
-        to: { name: 'tyoskentelyjaksot' }
+        to: { name: 'yektyoskentelyjaksot' }
       },
       {
         text: this.$t('poissaolo'),
@@ -150,7 +150,7 @@
           ).data
         } catch {
           toastFail(this, this.$t('poissaolon-hakeminen-epaonnistui'))
-          this.$router.replace({ name: 'tyoskentelyjaksot' })
+          this.$router.replace({ name: 'yektyoskentelyjaksot' })
         }
       }
     }
@@ -172,7 +172,7 @@
           await axios.delete(`yek-koulutettava/tyoskentelyjaksot/poissaolot/${this.poissaolo?.id}`)
           toastSuccess(this, this.$t('poissaolo-poistettu-onnistuneesti'))
           this.$router.push({
-            name: 'tyoskentelyjaksot'
+            name: 'yektyoskentelyjaksot'
           })
         } catch (err) {
           const axiosError = err as AxiosError<ElsaError>

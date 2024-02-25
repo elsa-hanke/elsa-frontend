@@ -47,10 +47,10 @@
       },
       {
         text: this.$t('tyoskentelyjaksot'),
-        to: { name: 'tyoskentelyjaksot' }
+        to: { name: 'yektyoskentelyjaksot' }
       },
       {
-        text: this.$t('muokkaa-poissaoloa'),
+        text: this.$t('muokkaa-yek-poissaoloa'),
         active: true
       }
     ]

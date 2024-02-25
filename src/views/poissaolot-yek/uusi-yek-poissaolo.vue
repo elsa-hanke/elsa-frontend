@@ -45,7 +45,7 @@
       },
       {
         text: this.$t('tyoskentelyjaksot'),
-        to: { name: 'tyoskentelyjaksot' }
+        to: { name: 'yektyoskentelyjaksot' }
       },
       {
         text: this.$t('lisaa-poissaolo'),

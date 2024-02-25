@@ -1265,7 +1265,7 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: '/yektyoskentelyjaksot/poissaolot/:poissaoloId',
-        name: 'poissaolo',
+        name: 'yekpoissaolo',
         component: RoleSpecificRoute,
         props: {
           routeComponent: YekPoissaoloView,
@@ -1274,7 +1274,7 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: '/yektyoskentelyjaksot/poissaolot/:poissaoloId/muokkaus',
-        name: 'muokkaa-poissaoloa',
+        name: 'muokkaa-yek-poissaoloa',
         beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
         component: RoleSpecificRoute,
         props: {

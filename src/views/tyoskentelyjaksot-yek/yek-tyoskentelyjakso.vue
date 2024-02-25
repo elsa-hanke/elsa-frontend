@@ -184,10 +184,10 @@
       },
       {
         text: this.$t('tyoskentelyjaksot'),
-        to: { name: 'tyoskentelyjaksot' }
+        to: { name: 'yektyoskentelyjaksot' }
       },
       {
-        text: this.$t('tyoskentelyjakso'),
+        text: this.$t('yektyoskentelyjakso'),
         active: true
       }
     ]
@@ -205,7 +205,7 @@
           ).data
         } catch {
           toastFail(this, this.$t('tyoskentelyjakson-hakeminen-epaonnistui'))
-          this.$router.replace({ name: 'tyoskentelyjaksot' })
+          this.$router.replace({ name: 'yektyoskentelyjaksot' })
         }
         this.loading = false
       }
@@ -229,7 +229,7 @@
           await axios.delete(`yek-koulutettava/tyoskentelyjaksot/${this.tyoskentelyjakso.id}`)
           toastSuccess(this, this.$t('tyoskentelyjakso-poistettu-onnistuneesti'))
           this.$router.push({
-            name: 'tyoskentelyjaksot'
+            name: 'yektyoskentelyjaksot'
           })
         } catch {
           toastFail(this, this.$t('tyoskentelyjakson-poistaminen-epaonnistui'))
