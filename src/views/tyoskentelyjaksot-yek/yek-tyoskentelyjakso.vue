@@ -77,7 +77,10 @@
             <elsa-button
               v-if="!account.impersonated"
               variant="outline-primary"
-              :to="{ name: 'uusi-poissaolo', params: { tyoskentelyjaksoId: tyoskentelyjakso.id } }"
+              :to="{
+                name: 'uusi-yek-poissaolo',
+                params: { tyoskentelyjaksoId: tyoskentelyjakso.id }
+              }"
               :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
               class="mt-3"
             >
@@ -87,7 +90,7 @@
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
                 v-if="muokkausoikeudet"
-                :to="{ name: 'muokkaa-tyoskentelyjaksoa' }"
+                :to="{ name: 'muokkaa-yek-tyoskentelyjaksoa' }"
                 variant="primary"
                 :disabled="tyoskentelyjakso.liitettyTerveyskeskuskoulutusjaksoon"
                 class="ml-2 mb-3"
@@ -108,7 +111,7 @@
                 {{ $t('poista-jakso') }}
               </elsa-button>
               <elsa-button
-                :to="{ name: 'tyoskentelyjaksot' }"
+                :to="{ name: 'yektyoskentelyjaksot' }"
                 variant="link"
                 class="mb-3 mr-auto font-weight-500 tyoskentelyjaksot-link"
               >

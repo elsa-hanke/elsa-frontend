@@ -71,7 +71,7 @@
 
     async fetchLomake() {
       try {
-        this.poissaoloLomake = (await axios.get(`erikoistuva-laakari/poissaolo-lomake`)).data
+        this.poissaoloLomake = (await axios.get(`yek-koulutettava/poissaolo-lomake`)).data
       } catch {
         toastFail(this, this.$t('poissaolon-lomakkeen-hakeminen-epaonnistui'))
       }
@@ -81,12 +81,12 @@
       params.saving = true
       try {
         this.poissaolo = (
-          await axios.post('erikoistuva-laakari/tyoskentelyjaksot/poissaolot', poissaolo)
+          await axios.post('yek-koulutettava/tyoskentelyjaksot/poissaolot', poissaolo)
         ).data
         toastSuccess(this, this.$t('poissaolo-lisatty-onnistuneesti'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
-          name: 'poissaolo',
+          name: 'yekpoissaolo',
           params: {
             poissaoloId: `${this.poissaolo?.id}`
           }

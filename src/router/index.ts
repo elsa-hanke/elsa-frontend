@@ -82,7 +82,9 @@ import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
 import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
 import UusiPaivittainenMerkinta from '@/views/paivittaiset-merkinnat/uusi-paivittainen-merkinta.vue'
+import MuokkaaYekPoissaoloa from '@/views/poissaolot-yek/muokkaa-yek-poissaoloa.vue'
 import UusiYekPoissaolo from '@/views/poissaolot-yek/uusi-yek-poissaolo.vue'
+import YekPoissaoloView from '@/views/poissaolot-yek/yek-poissaolo-view.vue'
 import MuokkaaPoissaoloa from '@/views/poissaolot/muokkaa-poissaoloa.vue'
 import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
@@ -1256,6 +1258,26 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: UusiYekPoissaolo,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/poissaolot/:poissaoloId',
+        name: 'poissaolo',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YekPoissaoloView,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/poissaolot/:poissaoloId/muokkaus',
+        name: 'muokkaa-poissaoloa',
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaYekPoissaoloa,
           allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
         }
