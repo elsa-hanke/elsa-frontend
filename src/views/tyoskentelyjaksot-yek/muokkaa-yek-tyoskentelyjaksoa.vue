@@ -11,7 +11,6 @@
             :value="tyoskentelyjakso"
             :editing="true"
             :kunnat="tyoskentelyjaksoLomake.kunnat"
-            :erikoisalat="tyoskentelyjaksoLomake.erikoisalat"
             :asiakirjat="tyoskentelyjakso.asiakirjat"
             @submit="onSubmit"
             @cancel="onCancel"

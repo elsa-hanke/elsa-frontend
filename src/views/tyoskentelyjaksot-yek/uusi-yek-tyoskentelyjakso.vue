@@ -9,7 +9,6 @@
           <yek-tyoskentelyjakso-form
             v-if="!loading && tyoskentelyjaksoLomake"
             :kunnat="kunnat"
-            :erikoisalat="erikoisalat"
             :reserved-asiakirja-nimet="tyoskentelyjaksoLomake.reservedAsiakirjaNimet"
             :allow-hyvaksytty-aiemmin-toiselle-erikoisalalle-option="true"
             @submit="onSubmit"
@@ -98,7 +97,7 @@
         toastSuccess(this, this.$t('uusi-tyoskentelyjakso-lisatty'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
-          name: 'tyoskentelyjakso',
+          name: 'yektyoskentelyjakso',
           params: {
             tyoskentelyjaksoId: `${tyoskentelyjakso.id}`
           }
@@ -118,21 +117,13 @@
 
     onCancel() {
       this.$router.push({
-        name: 'tyoskentelyjaksot'
+        name: 'yektyoskentelyjaksot'
       })
     }
 
     get kunnat() {
       if (this.tyoskentelyjaksoLomake) {
         return this.tyoskentelyjaksoLomake.kunnat
-      } else {
-        return []
-      }
-    }
-
-    get erikoisalat() {
-      if (this.tyoskentelyjaksoLomake) {
-        return this.tyoskentelyjaksoLomake.erikoisalat
       } else {
         return []
       }

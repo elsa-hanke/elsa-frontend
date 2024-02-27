@@ -295,9 +295,6 @@
     @Prop({ required: false, default: () => [] })
     kunnat!: any[]
 
-    @Prop({ required: false, default: () => [] })
-    erikoisalat!: any[]
-
     @Prop({ required: false, default: undefined })
     asiakirjat?: Asiakirja[]
 
@@ -366,7 +363,7 @@
       this.reservedAsiakirjaNimetMutable = this.reservedAsiakirjaNimet
       if (!this.reservedAsiakirjaNimetMutable) {
         this.reservedAsiakirjaNimetMutable = (
-          await axios.get('erikoistuva-laakari/asiakirjat/nimet')
+          await axios.get('yek-koulutettava/asiakirjat/nimet')
         ).data
       }
 
@@ -374,7 +371,6 @@
     }
 
     validateState(name: string) {
-      // TODO: Vaatii refaktorointia
       const get = (obj: any, path: any, defaultValue = undefined) => {
         const travel = (regexp: any) =>
           String.prototype.split
@@ -494,15 +490,6 @@
         .filter((k) => !k.korvaavaKoodi) // Rajattu pois entiset kunnat
         .filter((k) => !['000', '198', '199'].includes(k.id)) // Rajattu pois muut kuin kunnat
         .sort((a, b) => sortByAsc(a.abbreviation, b.abbreviation))
-    }
-
-    get erikoisalatFormatted() {
-      return [
-        ...this.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi)),
-        {
-          nimi: this.$t('muu')
-        }
-      ]
     }
 
     get asiakirjatTableItems() {
