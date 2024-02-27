@@ -7,7 +7,7 @@
           <h1>{{ $t('lisaa-poissaolo') }}</h1>
           <p class="mb-2">{{ $t('uusi-poissaolo-ohjeteksti') }}</p>
           <hr />
-          <poissaolo-form
+          <yek-poissaolo-form
             v-if="!loading"
             :tyoskentelyjaksot="tyoskentelyjaksot"
             :poissaolon-syyt="poissaolonSyyt"
@@ -28,13 +28,13 @@
   import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
-  import PoissaoloForm from '@/forms/poissaolo-form.vue'
+  import YekPoissaoloForm from '@/forms/yek-poissaolo-form.vue'
   import { Poissaolo, PoissaoloLomake, ElsaError } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
-      PoissaoloForm
+      YekPoissaoloForm
     }
   })
   export default class UusiYekPoissaolo extends Vue {
