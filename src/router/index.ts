@@ -82,6 +82,9 @@ import MuokkaaPaivittaistaMerkintaa from '@/views/paivittaiset-merkinnat/muokkaa
 import PaivittainenMerkinta from '@/views/paivittaiset-merkinnat/paivittainen-merkinta.vue'
 import PaivittaisetMerkinnat from '@/views/paivittaiset-merkinnat/paivittaiset-merkinnat.vue'
 import UusiPaivittainenMerkinta from '@/views/paivittaiset-merkinnat/uusi-paivittainen-merkinta.vue'
+import MuokkaaYekPoissaoloa from '@/views/poissaolot-yek/muokkaa-yek-poissaoloa.vue'
+import UusiYekPoissaolo from '@/views/poissaolot-yek/uusi-yek-poissaolo.vue'
+import YekPoissaoloView from '@/views/poissaolot-yek/yek-poissaolo-view.vue'
 import MuokkaaPoissaoloa from '@/views/poissaolot/muokkaa-poissaoloa.vue'
 import PoissaoloView from '@/views/poissaolot/poissaolo-view.vue'
 import UusiPoissaolo from '@/views/poissaolot/uusi-poissaolo.vue'
@@ -105,9 +108,12 @@ import TerveyskeskuskoulutusjaksonHyvaksyntaPyynto from '@/views/terveyskeskusko
 import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-tarkistus.vue'
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
+import MuokkaaYekTyoskentelyjaksoa from '@/views/tyoskentelyjaksot-yek/muokkaa-yek-tyoskentelyjaksoa.vue'
+import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot-yek/tyoskentelyjaksot-yek.vue'
+import UusiYekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/uusi-yek-tyoskentelyjakso.vue'
+import YekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/yek-tyoskentelyjakso.vue'
 import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskentelyjaksoa.vue'
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
-import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot/tyoskentelyjaksot-yek.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
@@ -115,7 +121,6 @@ import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vu
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
 import ValmistumispyynnonHyvaksynta from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta.vue'
 import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
-// import Viestit from '@/views/viestit.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -437,15 +442,6 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
-        path: '/yektyoskentelyjaksot',
-        name: 'yektyoskentelyjaksot',
-        component: RoleSpecificRoute,
-        props: {
-          routeComponent: TyoskentelyjaksotYek,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari]
-        }
-      },
-      {
         path: '/tyoskentelyjaksot/uusi',
         name: 'uusi-tyoskentelyjakso',
         component: RoleSpecificRoute,
@@ -643,11 +639,6 @@ const routes: Array<RouteConfig> = [
           confirmRouteExit: true
         }
       },
-      /*{
-        path: '/viestit',
-        name: 'viestit',
-        component: Viestit
-      },*/
       {
         path: '/asiakirjat',
         name: 'asiakirjat',
@@ -1219,6 +1210,77 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: MuokkaaKurssikoodia,
           allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot',
+        name: 'yektyoskentelyjaksot',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TyoskentelyjaksotYek,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/uusi',
+        name: 'uusi-yek-tyoskentelyjakso',
+        component: RoleSpecificRoute,
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        props: {
+          routeComponent: UusiYekTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/:tyoskentelyjaksoId',
+        name: 'yektyoskentelyjakso',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YekTyoskentelyjakso,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/:tyoskentelyjaksoId/muokkaus',
+        name: 'muokkaa-yek-tyoskentelyjaksoa',
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaYekTyoskentelyjaksoa,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/poissaolot/uusi',
+        name: 'uusi-yek-poissaolo',
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiYekPoissaolo,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/poissaolot/:poissaoloId',
+        name: 'yekpoissaolo',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YekPoissaoloView,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/poissaolot/:poissaoloId/muokkaus',
+        name: 'muokkaa-yek-poissaoloa',
+        beforeEnter: impersonatedErikoistuvaWithMuokkausoikeudetGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: MuokkaaYekPoissaoloa,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
+          confirmRouteExit: true
         }
       }
     ]

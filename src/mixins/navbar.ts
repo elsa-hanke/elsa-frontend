@@ -16,10 +16,11 @@ export default class NavbarMixin extends Vue {
   async mounted() {
     if (this.isErikoistuvaLaakari) {
       const erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
-      this.opintooikeudet = erikoistuvaLaakari.opintooikeudet.sort(
-        (a: Opintooikeus, b: Opintooikeus) =>
+      this.opintooikeudet = erikoistuvaLaakari.opintooikeudet
+        .filter((o: Opintooikeus) => o.erikoisalaId !== 61)
+        .sort((a: Opintooikeus, b: Opintooikeus) =>
           sortByDateDesc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
-      )
+        )
       this.opintooikeusKaytossa = this.getOpintooikeusKaytossa(
         erikoistuvaLaakari.opintooikeusKaytossaId
       )
@@ -121,6 +122,12 @@ export default class NavbarMixin extends Vue {
   async changeToErikoistuja() {
     if (this.$isErikoistuva()) return
     await vaihdaRooli(ELSA_ROLE.ErikoistuvaLaakari)
+    this.$router.go(0)
+  }
+
+  async changeToYekKoulutettava() {
+    if (this.$isYekKoulutettava()) return
+    await vaihdaRooli(ELSA_ROLE.YEKKoulutettava)
     this.$router.go(0)
   }
 

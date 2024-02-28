@@ -112,6 +112,27 @@
                 </div>
               </div>
             </b-dropdown-item>
+            <b-dropdown-item @click="changeToYekKoulutettava">
+              <div
+                class="d-flex"
+                :class="{
+                  'dropdown-item__disabled': $isYekKoulutettava()
+                }"
+              >
+                <div class="flex-column icon-col-min-width">
+                  <font-awesome-icon
+                    v-if="$isYekKoulutettava()"
+                    :icon="['far', 'check-circle']"
+                    fixed-width
+                    size="lg"
+                    class="text-success"
+                  />
+                </div>
+                <div class="flex-column">
+                  {{ $t('yek.koulutettava') }}
+                </div>
+              </div>
+            </b-dropdown-item>
             <b-dropdown-item @click="changeToKouluttaja">
               <div
                 class="d-flex"

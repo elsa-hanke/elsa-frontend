@@ -10,12 +10,16 @@
           <div v-if="muokkausoikeudet" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
               variant="primary"
-              :to="{ name: 'uusi-tyoskentelyjakso' }"
+              :to="{ name: 'uusi-yek-tyoskentelyjakso' }"
               class="mb-2 mr-2"
             >
               {{ $t('lisaa-tyoskentelyjakso') }}
             </elsa-button>
-            <elsa-button variant="outline-primary" :to="{ name: 'uusi-poissaolo' }" class="mb-2">
+            <elsa-button
+              variant="outline-primary"
+              :to="{ name: 'uusi-yek-poissaolo' }"
+              class="mb-2"
+            >
               {{ $t('lisaa-poissaolo') }}
             </elsa-button>
           </div>
@@ -134,7 +138,7 @@
                 <template #cell(tyoskentelypaikkaLabel)="row">
                   <elsa-button
                     :to="{
-                      name: 'tyoskentelyjakso',
+                      name: 'yektyoskentelyjakso',
                       params: { tyoskentelyjaksoId: row.item.id }
                     }"
                     variant="link"
@@ -188,7 +192,7 @@
                           <b-td :stacked-heading="$t('poissaolon-syy')">
                             <elsa-button
                               :to="{
-                                name: 'poissaolo',
+                                name: 'yekpoissaolo',
                                 params: { poissaoloId: keskeytysaika.id }
                               }"
                               variant="link"
@@ -269,7 +273,7 @@
         to: { name: 'etusivu' }
       },
       {
-        text: this.$t('tyoskentelyjaksot'),
+        text: this.$t('yektyoskentelyjaksot'),
         active: true
       }
     ]
@@ -315,7 +319,7 @@
     async fetchTyoskentelyjaksot() {
       try {
         this.tyoskentelyjaksotTaulukko = (
-          await axios.get(`erikoistuva-laakari/tyoskentelyjaksot-taulukko`)
+          await axios.get(`yek-koulutettava/tyoskentelyjaksot-taulukko`)
         ).data
       } catch {
         toastFail(this, this.$t('tyoskentelyjaksojen-hakeminen-epaonnistui'))

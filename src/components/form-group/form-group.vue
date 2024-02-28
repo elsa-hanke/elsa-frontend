@@ -24,7 +24,6 @@
         </div>
         <div v-if="addNewEnabled" class="form-group-help font-weight-400">
           <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-          &nbsp;
           <b-link @click="showModal">{{ addNewLabelText }}</b-link>
           <span>{{ $t('tai-valitse-alta') }}</span>
           <b-modal
