@@ -16,6 +16,7 @@ import Arviointipyynto from '@/views/arvioinnit/arviointipyynto.vue'
 import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import ArvioitavatKokonaisuudet from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet.vue'
+import YekAsiakirjat from '@/views/asiakirjat-yek/yek-asiakirjat.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
 import Etusivu from '@/views/etusivu/etusivu.vue'
 import Ilmoitukset from '@/views/ilmoitukset/ilmoitukset.vue'
@@ -1281,6 +1282,15 @@ const routes: Array<RouteConfig> = [
           routeComponent: MuokkaaYekPoissaoloa,
           allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yekasiakirjat',
+        name: 'yekasiakirjat',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YekAsiakirjat,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
         }
       }
     ]
