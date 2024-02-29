@@ -3,7 +3,7 @@
     <div v-if="!editing">
       <div class="flex-fill">
         <elsa-form-group
-          :label="$t('laillistamispaiva')"
+          :label="$t('yek.valviran-laillistamispaiva')"
           label-cols-md="4"
           label-cols-xl="4"
           label-cols="12"
@@ -19,9 +19,11 @@
       </div>
     </div>
     <div v-else>
-      <b-form @submit.stop.prevent="onSubmit">
-        <hr />
-        <elsa-form-group class="col-xs-12 col-sm-3 pl-0" :label="$t('laillistamispaiva')">
+      <b-form>
+        <elsa-form-group
+          class="col-xs-12 col-sm-4 pl-0"
+          :label="$t('yek.valviran-laillistamispaiva')"
+        >
           <template #default="{ uid }">
             <elsa-form-datepicker
               :id="uid"
@@ -64,27 +66,18 @@
             </b-alert>
           </div>
         </elsa-form-group>
-        <hr />
-        <div class="text-right">
-          <elsa-button variant="back" @click="onCancel">
-            {{ $t('peruuta') }}
-          </elsa-button>
-          <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
-            {{ $t('tallenna') }}
-          </elsa-button>
-        </div>
         <div class="row">
           <elsa-form-error :active="$v.$anyError" />
         </div>
+        <hr />
       </b-form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import axios, { AxiosError } from 'axios'
   import Avatar from 'vue-avatar'
-  import { Component, Vue, Prop } from 'vue-property-decorator'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
   import { required } from 'vuelidate/lib/validators'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
@@ -94,20 +87,11 @@
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import store from '@/store'
-  import {
-    OmatTiedotLomakeErikoistuja,
-    ElsaError,
-    Laillistamistiedot,
-    Asiakirja,
-    Opintooikeus
-  } from '@/types'
+  import { Asiakirja, Laillistamistiedot, LaillistamistiedotLomakeKoulutettava } from '@/types'
   import { saveBlob } from '@/utils/blobs'
-  import { confirmExit } from '@/utils/confirm'
   import { phoneNumber } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
-  import { getTitleFromAuthorities } from '@/utils/functions'
-  import { sortByDesc } from '@/utils/sort'
-  import { toastFail, toastSuccess } from '@/utils/toast'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -131,19 +115,14 @@
     }
   })
   export default class Laillistamispaiva extends Vue {
-    @Prop({ required: false, default: false })
+    @Prop({ required: true, default: false })
     editing!: boolean
 
     $refs!: {
       laillistamispaiva: ElsaFormDatepicker
-      avatarFileInput: HTMLInputElement
     }
 
-    form: OmatTiedotLomakeErikoistuja = {
-      email: null,
-      phoneNumber: null,
-      avatar: null,
-      avatarUpdated: false,
+    form: LaillistamistiedotLomakeKoulutettava = {
       laillistamispaiva: null,
       laillistamispaivanLiite: null
     }
@@ -179,25 +158,6 @@
       this.form = this.initForm()
     }
 
-    selectAvatar() {
-      this.$refs.avatarFileInput.click()
-    }
-
-    removeAvatar() {
-      this.form.avatar = null
-      this.form.avatarUpdated = true
-      this.$refs.avatarFileInput.value = ''
-    }
-
-    avatarChange(e: Event) {
-      const inputElement = e.target as HTMLInputElement
-      if (inputElement.files && inputElement.files?.length > 0) {
-        const file = inputElement.files[0]
-        this.form.avatar = file
-        this.form.avatarUpdated = true
-      }
-    }
-
     async onDownloadLaillistamistodistus() {
       if (this.laillistamispaivaAsiakirjat.length > 0) {
         const file = this.laillistamispaivaAsiakirjat[0]
@@ -218,12 +178,8 @@
       this.laillistamispaivaAsiakirjat = []
     }
 
-    initForm(): OmatTiedotLomakeErikoistuja {
+    initForm(): LaillistamistiedotLomakeKoulutettava {
       return {
-        email: this.account?.email || null,
-        phoneNumber: this.account?.phoneNumber || null,
-        avatar: this.account?.avatar || null,
-        avatarUpdated: false,
         laillistamispaiva: this.form.laillistamispaiva
       }
     }
@@ -238,117 +194,66 @@
       return !this.$v.$anyError
     }
 
-    async onSubmit() {
-      const validations = [
-        this.validateForm(),
-        this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
-      ]
+    // async onSubmit() {
+    //   const validations = [
+    //     this.validateForm(),
+    //     this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
+    //   ]
+    //   if (validations.includes(false)) {
+    //     return
+    //   }
+    //   try {
+    //     this.params.saving = true
+    //     if (
+    //       this.form.laillistamispaivanLiite == null &&
+    //       this.laillistamispaivaAsiakirjat.length > 0
+    //     ) {
+    //       const file = this.laillistamispaivaAsiakirjat[0]
+    //       const data = await file.data
+    //       if (data) {
+    //         this.form.laillistamispaivanLiite = new File([data], file.nimi || '', {
+    //           type: file.contentType || ''
+    //         })
+    //       }
+    //     }
+    //     await store.dispatch(
+    //       'auth/putErikoistuvaLaakari',
+    //       // Ohitetaan olemassa olevan avatarin lähettäminen
+    //       !this.form.avatar?.name
+    //         ? {
+    //             ...this.form,
+    //             avatar: null
+    //           }
+    //         : this.form
+    //     )
+    //     toastSuccess(this, this.$t('omat-tiedot-paivitetty'))
+    //     this.$v.form.$reset()
+    //     this.form = this.initForm()
+    //     this.$emit('change', false)
+    //   } catch (err) {
+    //     const axiosError = err as AxiosError<ElsaError>
+    //     const message = axiosError?.response?.data?.message
+    //     toastFail(
+    //       this,
+    //       message
+    //         ? `${this.$t('omien-tietojen-paivittaminen-epaonnistui')}: ${this.$t(message)}`
+    //         : this.$t('omien-tietojen-paivittaminen-epaonnistui')
+    //     )
+    //   } finally {
+    //     this.params.saving = false
+    //   }
+    // }
 
-      if (validations.includes(false)) {
-        return
-      }
-
-      try {
-        this.params.saving = true
-        if (
-          this.form.laillistamispaivanLiite == null &&
-          this.laillistamispaivaAsiakirjat.length > 0
-        ) {
-          const file = this.laillistamispaivaAsiakirjat[0]
-          const data = await file.data
-          if (data) {
-            this.form.laillistamispaivanLiite = new File([data], file.nimi || '', {
-              type: file.contentType || ''
-            })
-          }
-        }
-
-        await store.dispatch(
-          'auth/putErikoistuvaLaakari',
-          // Ohitetaan olemassa olevan avatarin lähettäminen
-          !this.form.avatar?.name
-            ? {
-                ...this.form,
-                avatar: null
-              }
-            : this.form
-        )
-        toastSuccess(this, this.$t('omat-tiedot-paivitetty'))
-        this.$v.form.$reset()
-        this.form = this.initForm()
-        this.$emit('change', false)
-      } catch (err) {
-        const axiosError = err as AxiosError<ElsaError>
-        const message = axiosError?.response?.data?.message
-        toastFail(
-          this,
-          message
-            ? `${this.$t('omien-tietojen-paivittaminen-epaonnistui')}: ${this.$t(message)}`
-            : this.$t('omien-tietojen-paivittaminen-epaonnistui')
-        )
-      } finally {
-        this.params.saving = false
-      }
-    }
-
-    async onCancel() {
-      if (await confirmExit(this)) {
-        this.form = this.initForm()
-        this.$v.form.$reset()
-        this.$emit('change', false)
-      }
-    }
-
-    get previewSrc() {
-      if (this.form.avatar && this.form.avatar.name) {
-        return URL.createObjectURL(this.form.avatar)
-      } else if (this.form.avatar) {
-        return `data:image/jpeg;base64,${this.account.avatar}`
-      }
-      return undefined
-    }
+    // async onCancel() {
+    //   if (await confirmExit(this)) {
+    //     this.form = this.initForm()
+    //     this.$v.form.$reset()
+    //     this.$emit('change', false)
+    //   }
+    // }
 
     get account() {
       return store.getters['auth/account']
-    }
-
-    get displayName() {
-      if (this.account) {
-        return `${this.account.firstName} ${this.account.lastName}`
-      }
-      return ''
-    }
-
-    get syntymaaika() {
-      if (this.account) {
-        return this.$date(this.account.erikoistuvaLaakari.syntymaaika)
-      }
-      return ''
-    }
-
-    get avatarSrc() {
-      if (this.account) {
-        return `data:image/jpeg;base64,${this.account.avatar}`
-      }
-      return undefined
-    }
-
-    get activeAuthority() {
-      if (this.account) {
-        return this.account.activeAuthority
-      }
-      return ''
-    }
-
-    get title() {
-      return getTitleFromAuthorities(this, this.activeAuthority, this.$isYekKoulutettava())
-    }
-
-    get avatar() {
-      if (this.account) {
-        return this.account.avatar
-      }
-      return null
     }
 
     get laillistamistodistusNimi() {
@@ -356,13 +261,6 @@
         return this.laillistamispaivaAsiakirjat[0].nimi
       }
       return null
-    }
-
-    get opintooikeudet() {
-      return this.account.erikoistuvaLaakari.opintooikeudet.sort(
-        (a: Opintooikeus, b: Opintooikeus) =>
-          sortByDesc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
-      )
     }
   }
 </script>

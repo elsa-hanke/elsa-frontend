@@ -1,5 +1,6 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
+    <laillistamispaiva :editing="true"></laillistamispaiva>
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template #default="{ uid }">
         <div>
@@ -227,9 +228,10 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import Laillistamispaiva from '@/components/laillistamispaiva/laillistamispaiva.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { Asiakirja, Tyoskentelyjakso, TyoskentelyjaksoForm } from '@/types'
+  import {Asiakirja, LaillistamistiedotLomakeKoulutettava, Tyoskentelyjakso, TyoskentelyjaksoForm} from '@/types'
   import { TyoskentelyjaksoTyyppi } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
   import { sortByAsc } from '@/utils/sort'
@@ -237,6 +239,7 @@
 
   @Component({
     components: {
+      Laillistamispaiva,
       AsiakirjatContent,
       AsiakirjatUpload,
       ElsaButton,
@@ -270,13 +273,6 @@
           integer,
           between: between(50, 100)
         }
-        // omaaErikoisalaaTukeva: {
-        //   required: requiredIf((value) => {
-        //     return (
-        //       value.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
-        //     )
-        //   })
-        // }
       }
     }
   })
@@ -355,6 +351,11 @@
     }
     childDataReceived = false
 
+    laillistamisTiedotForm: LaillistamistiedotLomakeKoulutettava = {
+      laillistamispaiva: null,
+      laillistamispaivanLiite: null
+    }
+
     async mounted() {
       this.form = {
         ...this.value
@@ -410,7 +411,8 @@
           omaaErikoisalaaTukevaId: this.form.omaaErikoisalaaTukeva?.id
         },
         addedFiles: this.addedFiles,
-        deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
+        deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id),
+        laillistamistiedot: this.laillistamisTiedotForm
       }
 
       delete submitData.tyoskentelyjakso.asiakirjat
