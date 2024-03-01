@@ -15,6 +15,9 @@ export class RolesPlugin {
     vue.prototype.$isYekKoulutettava = (): boolean => {
       // return store.getters['auth/account'].activeAuthority === ELSA_ROLE.YEKKoulutettava
       const data = store.getters['auth/account']
+      if (!data.erikoistuvaLaakari) {
+        return false
+      }
       const { opintooikeudet, opintooikeusKaytossaId } = data.erikoistuvaLaakari
       const opintooikeus = opintooikeudet.filter(
         (oo: Opintooikeus) => oo.id === opintooikeusKaytossaId
