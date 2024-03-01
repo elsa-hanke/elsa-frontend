@@ -1,6 +1,49 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <laillistamispaiva :editing="true"></laillistamispaiva>
+    <elsa-form-group class="col-xs-12 col-sm-4 pl-0" :label="$t('yek.valviran-laillistamispaiva')">
+      <template #default="{ uid }">
+        <elsa-form-datepicker
+          :id="uid"
+          ref="laillistamispaiva"
+          :value.sync="laillistamisTiedotForm.laillistamispaiva"
+          @input="$emit('skipRouteExitConfirm', false)"
+        ></elsa-form-datepicker>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
+      <span>
+        {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
+      </span>
+      <asiakirjat-upload
+        class="mt-3"
+        :is-primary-button="false"
+        :allow-multiples-files="false"
+        :button-text="$t('lisaa-liitetiedosto')"
+        :disabled="laillistamispaivaAsiakirjat.length > 0"
+        @selectedFiles="onLaillistamispaivaFilesAdded"
+      />
+      <div v-if="laillistamispaivaAsiakirjat.length > 0">
+        <asiakirjat-content
+          :asiakirjat="laillistamispaivaAsiakirjat"
+          :sorting-enabled="false"
+          :pagination-enabled="false"
+          :enable-search="false"
+          :enable-delete="true"
+          :enable-lisatty="false"
+          :no-results-info-text="$t('ei-liitetiedostoja')"
+          @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
+        />
+      </div>
+      <div v-else>
+        <b-alert variant="dark" class="mt-3" show>
+          <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+          <span>
+            {{ $t('ei-asiakirjoja') }}
+          </span>
+        </b-alert>
+      </div>
+    </elsa-form-group>
+    <hr />
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template #default="{ uid }">
         <div>
@@ -228,18 +271,25 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import Laillistamispaiva from '@/components/laillistamispaiva/laillistamispaiva.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import {Asiakirja, LaillistamistiedotLomakeKoulutettava, Tyoskentelyjakso, TyoskentelyjaksoForm} from '@/types'
+  import {
+    Asiakirja,
+    Laillistamistiedot,
+    LaillistamistiedotLomakeKoulutettava,
+    Tyoskentelyjakso,
+    TyoskentelyjaksoForm
+  } from '@/types'
   import { TyoskentelyjaksoTyyppi } from '@/utils/constants'
-  import { mapFiles } from '@/utils/fileMapper'
+  import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { sortByAsc } from '@/utils/sort'
+  import { toastFail } from '@/utils/toast'
   import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
+  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
 
   @Component({
     components: {
-      Laillistamispaiva,
+      KouluttajaKoulutussopimusForm,
       AsiakirjatContent,
       AsiakirjatUpload,
       ElsaButton,
@@ -278,9 +328,11 @@
   })
   export default class YekTyoskentelyjaksoForm extends Vue {
     $refs!: {
+      laillistamispaiva: ElsaFormDatepicker
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
     }
+    laillistamispaivaAsiakirjat: Asiakirja[] = []
 
     @Prop({ required: false, default: true })
     allowHyvaksyttyAiemminToiselleErikoisalalleOption!: boolean
@@ -368,6 +420,8 @@
         ).data
       }
 
+      this.loadLaillistamisTiedot()
+
       this.childDataReceived = true
     }
 
@@ -394,7 +448,8 @@
       const validations = [
         this.validateForm(),
         this.$refs.alkamispaiva ? this.$refs.alkamispaiva.validateForm() : true,
-        this.$refs.paattymispaiva.validateForm()
+        this.$refs.paattymispaiva.validateForm(),
+        this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
       ]
 
       if (validations.includes(false)) {
@@ -520,6 +575,40 @@
         (asiakirja) =>
           !this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(asiakirja.nimi)
       )
+    }
+
+    async loadLaillistamisTiedot() {
+      try {
+        const laillistamistiedot: Laillistamistiedot = (
+          await axios.get('/erikoistuva-laakari/laillistamispaiva')
+        ).data
+        this.laillistamisTiedotForm.laillistamispaiva = laillistamistiedot.laillistamispaiva
+
+        if (laillistamistiedot.laillistamistodistus) {
+          const data = Uint8Array.from(atob(laillistamistiedot.laillistamistodistus), (c) =>
+            c.charCodeAt(0)
+          )
+          this.laillistamispaivaAsiakirjat.push(
+            mapFile(
+              new File([data], laillistamistiedot.laillistamistodistusNimi || '', {
+                type: laillistamistiedot.laillistamistodistusTyyppi || ''
+              })
+            )
+          )
+        }
+      } catch {
+        toastFail(this, this.$t('laillistamispaivan-hakeminen-epaonnistui'))
+      }
+    }
+
+    onLaillistamispaivaFilesAdded(files: File[]) {
+      this.laillistamisTiedotForm.laillistamispaivanLiite = files[0]
+      this.laillistamispaivaAsiakirjat.push(...mapFiles(files))
+    }
+
+    async onDeleteLaillistamispaivanLiite() {
+      this.laillistamisTiedotForm.laillistamispaivanLiite = null
+      this.laillistamispaivaAsiakirjat = []
     }
   }
 </script>

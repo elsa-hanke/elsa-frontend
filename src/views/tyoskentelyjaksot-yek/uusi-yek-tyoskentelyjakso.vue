@@ -29,7 +29,12 @@
   import { Component, Vue } from 'vue-property-decorator'
 
   import YekTyoskentelyjaksoForm from '@/forms/yek-tyoskentelyjakso-form.vue'
-  import { TyoskentelyjaksoLomake, ElsaError, Tyoskentelyjakso } from '@/types'
+  import {
+    TyoskentelyjaksoLomake,
+    ElsaError,
+    Tyoskentelyjakso,
+    LaillistamistiedotLomakeKoulutettava
+  } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -76,6 +81,7 @@
         tyoskentelyjakso: Tyoskentelyjakso
         addedFiles: File[]
         deletedAsiakirjaIds: number[]
+        laillistamistiedot: LaillistamistiedotLomakeKoulutettava
       },
       params: { saving: boolean }
     ) {
@@ -113,6 +119,8 @@
         )
       }
       params.saving = false
+
+      // Todo laillistamis tiedot talletus
     }
 
     onCancel() {
