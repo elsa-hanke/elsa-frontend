@@ -1,49 +1,54 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <elsa-form-group class="col-xs-12 col-sm-4 pl-0" :label="$t('yek.valviran-laillistamispaiva')">
-      <template #default="{ uid }">
-        <elsa-form-datepicker
-          :id="uid"
-          ref="laillistamispaiva"
-          :value.sync="laillistamisTiedotForm.laillistamispaiva"
-          @input="$emit('skipRouteExitConfirm', false)"
-        ></elsa-form-datepicker>
-      </template>
-    </elsa-form-group>
-    <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
-      <span>
-        {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
-      </span>
-      <asiakirjat-upload
-        class="mt-3"
-        :is-primary-button="false"
-        :allow-multiples-files="false"
-        :button-text="$t('lisaa-liitetiedosto')"
-        :disabled="laillistamispaivaAsiakirjat.length > 0"
-        @selectedFiles="onLaillistamispaivaFilesAdded"
-      />
-      <div v-if="laillistamispaivaAsiakirjat.length > 0">
-        <asiakirjat-content
-          :asiakirjat="laillistamispaivaAsiakirjat"
-          :sorting-enabled="false"
-          :pagination-enabled="false"
-          :enable-search="false"
-          :enable-delete="true"
-          :enable-lisatty="false"
-          :no-results-info-text="$t('ei-liitetiedostoja')"
-          @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
+    <div v-if="!laillistamistiedotAdded">
+      <elsa-form-group
+        class="col-xs-12 col-sm-4 pl-0"
+        :label="$t('yek.valviran-laillistamispaiva')"
+      >
+        <template #default="{ uid }">
+          <elsa-form-datepicker
+            :id="uid"
+            ref="laillistamispaiva"
+            :value.sync="laillistamisTiedotForm.laillistamispaiva"
+            @input="$emit('skipRouteExitConfirm', false)"
+          ></elsa-form-datepicker>
+        </template>
+      </elsa-form-group>
+      <elsa-form-group :label="$t('laillistamispaivan-liitetiedosto')" :required="true">
+        <span>
+          {{ $t('lisaa-liite-joka-todistaa-laillistamispaivan') }}
+        </span>
+        <asiakirjat-upload
+          class="mt-3"
+          :is-primary-button="false"
+          :allow-multiples-files="false"
+          :button-text="$t('lisaa-liitetiedosto')"
+          :disabled="laillistamispaivaAsiakirjat.length > 0"
+          @selectedFiles="onLaillistamispaivaFilesAdded"
         />
-      </div>
-      <div v-else>
-        <b-alert variant="dark" class="mt-3" show>
-          <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-          <span>
-            {{ $t('ei-asiakirjoja') }}
-          </span>
-        </b-alert>
-      </div>
-    </elsa-form-group>
-    <hr />
+        <div v-if="laillistamispaivaAsiakirjat.length > 0">
+          <asiakirjat-content
+            :asiakirjat="laillistamispaivaAsiakirjat"
+            :sorting-enabled="false"
+            :pagination-enabled="false"
+            :enable-search="false"
+            :enable-delete="true"
+            :enable-lisatty="false"
+            :no-results-info-text="$t('ei-liitetiedostoja')"
+            @deleteAsiakirja="onDeleteLaillistamispaivanLiite"
+          />
+        </div>
+        <div v-else>
+          <b-alert variant="dark" class="mt-3" show>
+            <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+            <span>
+              {{ $t('ei-asiakirjoja') }}
+            </span>
+          </b-alert>
+        </div>
+      </elsa-form-group>
+      <hr />
+    </div>
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template #default="{ uid }">
         <div>
@@ -373,6 +378,7 @@
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     reservedAsiakirjaNimetMutable: string[] | undefined = []
+    laillistamistiedotAdded = false
 
     form: TyoskentelyjaksoForm = {
       alkamispaiva: null,
@@ -583,6 +589,7 @@
           await axios.get('/erikoistuva-laakari/laillistamispaiva')
         ).data
         this.laillistamisTiedotForm.laillistamispaiva = laillistamistiedot.laillistamispaiva
+        this.laillistamistiedotAdded = laillistamistiedot.laillistamispaiva !== null
 
         if (laillistamistiedot.laillistamistodistus) {
           const data = Uint8Array.from(atob(laillistamistiedot.laillistamistodistus), (c) =>
