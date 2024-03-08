@@ -35,6 +35,11 @@ export class RolesPlugin {
       return store.getters['auth/account'].activeAuthority === ELSA_ROLE.Kouluttaja
     }
 
+    vue.prototype.$hasKouluttajaRole = (): boolean => {
+      const authorities = store.getters['auth/account'].authorities
+      return authorities.includes(ELSA_ROLE.Kouluttaja)
+    }
+
     vue.prototype.$isVastuuhenkilo = (): boolean => {
       return store.getters['auth/account'].activeAuthority === ELSA_ROLE.Vastuuhenkilo
     }
@@ -66,6 +71,7 @@ declare module 'vue/types/vue' {
     $isTerveyskeskuskoulutusjaksoVastuuhenkilo: Function
     $isTekninenPaakayttaja: Function
     $isVirkailija: Function
+    $hasKouluttajaRole: Function
   }
 }
 
