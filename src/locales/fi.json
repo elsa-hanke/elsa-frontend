@@ -1736,6 +1736,7 @@
       "laheta-vamistusmispyyntö": "lähetä valmistumispyyntö"
     },
     "tyoskentelyjaksot-kuvaus": "Lisää työskentelyjaksoja ja kerro poissaoloista jaksojen aikana. Tarkasta työskentelyajan tarkemmat vaatimukset opinto-oppaasta. Yli 10 vuotta vanhoja työskentelyjaksoja hyväksytään vain perustellusta syystä. Pakollinen 9 kuukauden terveyskeskustyö ei vanhene.",
-    "valviran-laillistamispaiva": "Valviran laillistamispäivä"
+    "valviran-laillistamispaiva": "Valviran laillistamispäivä",
+    "laillistamistietojen-tallennus-epaonnistui": "Laillistamistietojen tallennus epäonnistui"
   }
 }

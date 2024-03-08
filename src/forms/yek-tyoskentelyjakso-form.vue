@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <div v-if="!laillistamistiedotAdded">
+    <div v-if="!laillistamisTiedotForm.laillistamistiedotAdded">
       <elsa-form-group
         class="col-xs-12 col-sm-4 pl-0"
         :label="$t('yek.valviran-laillistamispaiva')"
@@ -378,7 +378,6 @@
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     reservedAsiakirjaNimetMutable: string[] | undefined = []
-    laillistamistiedotAdded = false
 
     form: TyoskentelyjaksoForm = {
       alkamispaiva: null,
@@ -410,6 +409,7 @@
     childDataReceived = false
 
     laillistamisTiedotForm: LaillistamistiedotLomakeKoulutettava = {
+      laillistamistiedotAdded: false,
       laillistamispaiva: null,
       laillistamispaivanLiite: null
     }
@@ -450,7 +450,7 @@
       return !this.$v.$anyError
     }
 
-    onSubmit() {
+    async onSubmit() {
       const validations = [
         this.validateForm(),
         this.$refs.alkamispaiva ? this.$refs.alkamispaiva.validateForm() : true,
@@ -460,6 +460,20 @@
 
       if (validations.includes(false)) {
         return
+      }
+
+      if (
+        !this.laillistamisTiedotForm.laillistamistiedotAdded &&
+        this.laillistamisTiedotForm.laillistamispaivanLiite == null &&
+        this.laillistamispaivaAsiakirjat.length > 0
+      ) {
+        const file = this.laillistamispaivaAsiakirjat[0]
+        const data = await file.data
+        if (data) {
+          this.laillistamisTiedotForm.laillistamispaivanLiite = new File([data], file.nimi || '', {
+            type: file.contentType || ''
+          })
+        }
       }
 
       const submitData = {
@@ -589,7 +603,8 @@
           await axios.get('/yek-koulutettava/laillistamispaiva')
         ).data
         this.laillistamisTiedotForm.laillistamispaiva = laillistamistiedot.laillistamispaiva
-        this.laillistamistiedotAdded = laillistamistiedot.laillistamispaiva !== null
+        this.laillistamisTiedotForm.laillistamistiedotAdded =
+          laillistamistiedot.laillistamispaiva !== null
 
         if (laillistamistiedot.laillistamistodistus) {
           const data = Uint8Array.from(atob(laillistamistiedot.laillistamistodistus), (c) =>

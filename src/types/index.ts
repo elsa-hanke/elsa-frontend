@@ -666,6 +666,7 @@ export type OmatTiedotLomakeErikoistuja = {
 }
 
 export type LaillistamistiedotLomakeKoulutettava = {
+  laillistamistiedotAdded: boolean
   laillistamispaiva?: string | null
   laillistamispaivanLiite?: File | null
 }
