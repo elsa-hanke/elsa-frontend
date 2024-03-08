@@ -586,7 +586,7 @@
     async loadLaillistamisTiedot() {
       try {
         const laillistamistiedot: Laillistamistiedot = (
-          await axios.get('/erikoistuva-laakari/laillistamispaiva')
+          await axios.get('/yek-koulutettava/laillistamispaiva')
         ).data
         this.laillistamisTiedotForm.laillistamispaiva = laillistamistiedot.laillistamispaiva
         this.laillistamistiedotAdded = laillistamistiedot.laillistamispaiva !== null
