@@ -39,9 +39,17 @@
           {{ $t('tyoskentelyjaksot') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isErikoistuva() || $isYekKoulutettava()"
+          v-if="$isErikoistuva()"
           class="border-bottom"
           :to="{ name: 'teoriakoulutukset' }"
+        >
+          <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
+          {{ $t('teoriakoulutukset') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isYekKoulutettava()"
+          class="border-bottom"
+          :to="{ name: 'yekteoriakoulutukset' }"
         >
           <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
           {{ $t('teoriakoulutukset') }}
