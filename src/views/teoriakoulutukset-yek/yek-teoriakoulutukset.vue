@@ -19,32 +19,12 @@
           </p>
           <div v-if="!loading">
             <div v-if="teoriakoulutuksetFormatted.length > 0" class="teoriakoulutukset-table">
-              <b-table :items="teoriakoulutuksetFormatted" :fields="fields" stacked="md" responsive>
-                <template #cell(nimi)="row">
-                  <elsa-button
-                    :to="{
-                      name: 'teoriakoulutus',
-                      params: { teoriakoulutusId: row.item.id }
-                    }"
-                    variant="link"
-                    class="p-0 border-0 shadow-none"
-                  >
-                    {{ row.item.nimi }}
-                  </elsa-button>
-                </template>
-                <template #cell(todistus)="row">
-                  <div v-for="todistus in row.item.todistukset" :key="todistus.id">
-                    <elsa-button
-                      variant="link"
-                      class="p-0 border-0 shadow-none"
-                      :loading="todistus.disablePreview"
-                      @click="onViewAsiakirja(todistus)"
-                    >
-                      {{ todistus.nimi }}
-                    </elsa-button>
-                  </div>
-                </template>
-              </b-table>
+              <b-table
+                :items="teoriakoulutuksetFormatted"
+                :fields="fields"
+                stacked="md"
+                responsive
+              ></b-table>
             </div>
             <div v-else>
               <b-alert variant="dark" show>
@@ -67,7 +47,7 @@
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
 
-  import { getTeoriakoulutukset } from '@/api/erikoistuva'
+  import { getYekTeoriakoulutukset } from '@/api/yek-koulutettava'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
@@ -76,7 +56,6 @@
   import { Asiakirja, Teoriakoulutus } from '@/types'
   import { fetchAndOpenBlob } from '@/utils/blobs'
   import { sortByDateDesc } from '@/utils/date'
-  import { ELSA_ROLE } from '@/utils/roles'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -102,27 +81,17 @@
     fields = [
       {
         key: 'nimi',
-        label: this.$t('koulutuksen-nimi'),
-        sortable: true
-      },
-      {
-        key: 'koulutuksenPaikka',
-        label: this.$t('paikka'),
+        label: this.$t('yek.koulutus'),
         sortable: true
       },
       {
         key: 'pvm',
-        label: this.$t('pvm'),
+        label: this.$t('yek.suorituspvm'),
         sortable: true
       },
       {
-        key: 'erikoistumiseenHyvaksyttavaTuntimaara',
-        label: this.$t('tunnit'),
-        sortable: true
-      },
-      {
-        key: 'todistus',
-        label: this.$t('todistus'),
+        key: 'merkinta',
+        label: this.$t('yek.merkinta'),
         sortable: false
       }
     ]
@@ -141,7 +110,7 @@
     async fetchTeoriakoulutukset() {
       try {
         const { teoriakoulutukset, erikoisalanVaatimaTeoriakoulutustenVahimmaismaara } = (
-          await getTeoriakoulutukset()
+          await getYekTeoriakoulutukset()
         ).data
         this.teoriakoulutukset = teoriakoulutukset
         this.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara =
@@ -156,30 +125,17 @@
         .sort((a, b) => sortByDateDesc(a.alkamispaiva, b.alkamispaiva))
         .map((teoriakoulutus) => ({
           ...teoriakoulutus,
-          nimi: teoriakoulutus.koulutuksenNimi,
+          nimi: `${teoriakoulutus.koulutuksenNimi}`,
+          // nimi: `${teoriakoulutus.koulutuksenNimi} (${
+          //   teoriakoulutus.erikoistumiseenHyvaksyttavaTuntimaara
+          // } ${this.$t('tuntia')})`,
           pvm: teoriakoulutus.alkamispaiva
             ? `${this.$date(teoriakoulutus.alkamispaiva)}${
                 teoriakoulutus.paattymispaiva ? `-${this.$date(teoriakoulutus.paattymispaiva)}` : ''
               }`
             : null,
-          todistus: teoriakoulutus.todistukset
+          merkinta: 'todo'
         }))
-    }
-
-    get suoritettuTeoriakoulutusMaara() {
-      return this.teoriakoulutukset
-        .map((teoriakoulutus) => teoriakoulutus.erikoistumiseenHyvaksyttavaTuntimaara)
-        .reduce((a, b) => (a ?? 0) + (b ?? 0), 0)
-    }
-
-    get opintooppaastaLinkki() {
-      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(
-        this.$t('opinto-oppaasta') as string
-      ).toLowerCase()}</a>`
-    }
-
-    get kopiLinkki() {
-      return `<a href="https://www.kopi.fi/" target="_blank" rel="noopener noreferrer">www.kopi.fi</a>`
     }
 
     async onViewAsiakirja(asiakirja: Asiakirja) {
@@ -192,21 +148,6 @@
 
         Vue.set(asiakirja, 'disablePreview', false)
       }
-    }
-
-    get muokkausoikeudet() {
-      if (!this.account.impersonated) {
-        return true
-      }
-
-      if (
-        this.account.originalUser.authorities.includes(ELSA_ROLE.OpintohallinnonVirkailija) &&
-        this.account.erikoistuvaLaakari.muokkausoikeudetVirkailijoilla
-      ) {
-        return true
-      }
-
-      return false
     }
   }
 </script>

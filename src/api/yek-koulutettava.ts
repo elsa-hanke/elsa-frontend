@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import {
   LaillistamistiedotLomakeKoulutettava,
+  Teoriakoulutukset,
   Tyoskentelyjakso,
   TyoskentelyjaksoLomake
 } from '@/types'
@@ -29,4 +30,9 @@ export async function putKoulutettavaLaillistamispaiva(form: LaillistamistiedotL
   return await axios.put('yek-koulutettava/laillistamispaiva', wrapToFormData(form), {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
+}
+
+export async function getYekTeoriakoulutukset() {
+  const path = 'yek-koulutettava/teoriakoulutukset'
+  return await axios.get<Teoriakoulutukset>(path)
 }

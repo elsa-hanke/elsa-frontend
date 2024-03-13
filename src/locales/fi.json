@@ -1741,6 +1741,9 @@
     "asiakirjat-kuvaus": "Hallinnoi asiakirjojasi. Sallitut tiedostoformaatit .pdf, .png, .jpeg ja .jpg. Nimeä liitteet selkeästi, esim. Tyotodistus, sairaalan nimi, sukunimesi.",
     "ei-teoriakoulutuksia": "Teoriakoulutuksia ei löytynyt.",
     "teoriakoulutukset-ingressi": "YEK-vaiheen lääkärin tulee suorittaa koulutusyksikön hyväksymä tai järjestämä vähintään 16 tunnin terveydenhuollon hallintoon ja sosiaaliturvajärjestelmään perehdyttävä teoriakoulutus. Tiedot tuodaan suoraan opintotietojärjestelmästä.",
-    "teoriakoulutus-ei-nay": "Jos teoriakoulutus ei näy ELSAssa tai näytä oikealta, ota yhteyttä opintohallintoon"
+    "teoriakoulutus-ei-nay": "Jos teoriakoulutus ei näy ELSAssa tai näytä oikealta, ota yhteyttä opintohallintoon",
+    "koulutus": "Koulutus",
+    "suorituspvm": "Suorituspvm",
+    "merkinta": "Merkintä"
   }
 }
