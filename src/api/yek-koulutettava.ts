@@ -1,6 +1,11 @@
 import axios from 'axios'
 
-import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
+import {
+  LaillistamistiedotLomakeKoulutettava,
+  Tyoskentelyjakso,
+  TyoskentelyjaksoLomake
+} from '@/types'
+import { wrapToFormData } from '@/utils/functions'
 
 export async function getTyoskentelyjakso(id: number | string) {
   const path = `yek-koulutettava/tyoskentelyjaksot/${id}`
@@ -17,5 +22,11 @@ export async function putTyoskentelyjakso(formData: FormData) {
   await axios.put(path, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000
+  })
+}
+
+export async function putKoulutettavaLaillistamispaiva(form: LaillistamistiedotLomakeKoulutettava) {
+  return await axios.put('yek-koulutettava/laillistamispaiva', wrapToFormData(form), {
+    headers: { 'Content-Type': 'multipart/form-data' }
   })
 }

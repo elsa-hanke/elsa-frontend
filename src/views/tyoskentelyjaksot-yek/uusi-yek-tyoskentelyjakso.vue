@@ -28,8 +28,14 @@
   import axios, { AxiosError } from 'axios'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { putKoulutettavaLaillistamispaiva } from '@/api/yek-koulutettava'
   import YekTyoskentelyjaksoForm from '@/forms/yek-tyoskentelyjakso-form.vue'
-  import { TyoskentelyjaksoLomake, ElsaError, Tyoskentelyjakso } from '@/types'
+  import {
+    TyoskentelyjaksoLomake,
+    ElsaError,
+    Tyoskentelyjakso,
+    LaillistamistiedotLomakeKoulutettava
+  } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -76,6 +82,7 @@
         tyoskentelyjakso: Tyoskentelyjakso
         addedFiles: File[]
         deletedAsiakirjaIds: number[]
+        laillistamistiedot: LaillistamistiedotLomakeKoulutettava
       },
       params: { saving: boolean }
     ) {
@@ -111,6 +118,20 @@
             ? `${this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')}: ${this.$t(message)}`
             : this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')
         )
+      }
+      if (!value.laillistamistiedot.laillistamistiedotAdded) {
+        try {
+          await putKoulutettavaLaillistamispaiva(value.laillistamistiedot)
+        } catch (err) {
+          const axiosError = err as AxiosError<ElsaError>
+          const message = axiosError?.response?.data?.message
+          toastFail(
+            this,
+            message
+              ? `${this.$t('yek.laillistamistietojen-tallennus-epaonnistui')}: ${this.$t(message)}`
+              : this.$t('yek.laillistamistietojen-tallennus-epaonnistui')
+          )
+        }
       }
       params.saving = false
     }

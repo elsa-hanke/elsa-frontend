@@ -139,7 +139,7 @@
                 </div>
               </div>
             </b-dropdown-item>
-            <b-dropdown-item @click="changeToKouluttaja">
+            <b-dropdown-item v-if="$hasKouluttajaRole()" @click="changeToKouluttaja">
               <div
                 class="d-flex"
                 :class="{
