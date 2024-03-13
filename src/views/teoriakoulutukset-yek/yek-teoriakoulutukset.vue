@@ -5,8 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('teoriakoulutukset') }}</h1>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <p v-html="$t('yek.teoriakoulutukset-ingressi')" />
+          <p>{{ $t('yek.teoriakoulutukset-ingressi') }}</p>
           <p>
             {{ $t('yek.teoriakoulutus-ei-nay') }}
             <a
