@@ -5,7 +5,7 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('asiakirjat') }}</h1>
-          <p>{{ $t('asiakirjat-kuvaus') }}</p>
+          <p>{{ $t('yek.asiakirjat-kuvaus') }}</p>
           <asiakirjat-upload
             v-if="!account.impersonated"
             :button-text="$t('lisaa-asiakirja')"
