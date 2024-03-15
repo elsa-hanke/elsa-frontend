@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import {
   LaillistamistiedotLomakeKoulutettava,
-  Teoriakoulutukset,
+  Opintosuoritus,
   Tyoskentelyjakso,
   TyoskentelyjaksoLomake
 } from '@/types'
@@ -34,5 +34,5 @@ export async function putKoulutettavaLaillistamispaiva(form: LaillistamistiedotL
 
 export async function getYekTeoriakoulutukset() {
   const path = 'yek-koulutettava/teoriakoulutukset'
-  return await axios.get<Teoriakoulutukset>(path)
+  return await axios.get<Opintosuoritus[]>(path)
 }

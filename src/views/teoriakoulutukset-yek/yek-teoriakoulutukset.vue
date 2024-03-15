@@ -18,12 +18,15 @@
           </p>
           <div v-if="!loading">
             <div v-if="teoriakoulutuksetFormatted.length > 0" class="teoriakoulutukset-table">
-              <b-table
-                :items="teoriakoulutuksetFormatted"
-                :fields="fields"
-                stacked="md"
-                responsive
-              ></b-table>
+              <b-table :items="teoriakoulutuksetFormatted" :fields="fields" stacked="md" responsive>
+                <template #cell(merkinta)="data">
+                  <span v-if="data.value" class="text-success">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" />
+                    {{ $t('yek.suoritettu') }}
+                  </span>
+                  <span v-else>{{ $t('yek.hylatty') }}</span>
+                </template>
+              </b-table>
             </div>
             <div v-else>
               <b-alert variant="dark" show>
@@ -44,7 +47,7 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Component, Vue } from 'vue-property-decorator'
 
   import { getYekTeoriakoulutukset } from '@/api/yek-koulutettava'
   import ElsaButton from '@/components/button/button.vue'
@@ -52,8 +55,7 @@
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
   import store from '@/store'
-  import { Asiakirja, Teoriakoulutus } from '@/types'
-  import { fetchAndOpenBlob } from '@/utils/blobs'
+  import { Opintosuoritus } from '@/types'
   import { sortByDateDesc } from '@/utils/date'
   import { toastFail } from '@/utils/toast'
 
@@ -94,8 +96,7 @@
         sortable: false
       }
     ]
-    teoriakoulutukset: Teoriakoulutus[] = []
-    erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number | null = null
+    opintosuoritukset: Opintosuoritus[] = []
 
     async mounted() {
       await this.fetchTeoriakoulutukset()
@@ -108,45 +109,21 @@
 
     async fetchTeoriakoulutukset() {
       try {
-        const { teoriakoulutukset, erikoisalanVaatimaTeoriakoulutustenVahimmaismaara } = (
-          await getYekTeoriakoulutukset()
-        ).data
-        this.teoriakoulutukset = teoriakoulutukset
-        this.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara =
-          erikoisalanVaatimaTeoriakoulutustenVahimmaismaara
+        this.opintosuoritukset = (await getYekTeoriakoulutukset()).data
       } catch (err) {
         toastFail(this, this.$t('teoriakoulutuksien-hakeminen-epaonnistui'))
       }
     }
 
     get teoriakoulutuksetFormatted() {
-      return this.teoriakoulutukset
-        .sort((a, b) => sortByDateDesc(a.alkamispaiva, b.alkamispaiva))
-        .map((teoriakoulutus) => ({
-          ...teoriakoulutus,
-          nimi: `${teoriakoulutus.koulutuksenNimi}`,
-          // nimi: `${teoriakoulutus.koulutuksenNimi} (${
-          //   teoriakoulutus.erikoistumiseenHyvaksyttavaTuntimaara
-          // } ${this.$t('tuntia')})`,
-          pvm: teoriakoulutus.alkamispaiva
-            ? `${this.$date(teoriakoulutus.alkamispaiva)}${
-                teoriakoulutus.paattymispaiva ? `-${this.$date(teoriakoulutus.paattymispaiva)}` : ''
-              }`
-            : null,
-          merkinta: 'todo'
+      return this.opintosuoritukset
+        .sort((a, b) => sortByDateDesc(a.suorituspaiva, b.suorituspaiva))
+        .map((opintosuoritus) => ({
+          ...opintosuoritus,
+          nimi: `${opintosuoritus.nimi_fi}`,
+          pvm: this.$date(opintosuoritus.suorituspaiva),
+          merkinta: opintosuoritus.hyvaksytty
         }))
-    }
-
-    async onViewAsiakirja(asiakirja: Asiakirja) {
-      if (asiakirja.id) {
-        Vue.set(asiakirja, 'disablePreview', true)
-        const success = await fetchAndOpenBlob('erikoistuva-laakari/asiakirjat/', asiakirja.id)
-        if (!success) {
-          toastFail(this, this.$t('asiakirjan-sisallon-hakeminen-epaonnistui'))
-        }
-
-        Vue.set(asiakirja, 'disablePreview', false)
-      }
     }
   }
 </script>

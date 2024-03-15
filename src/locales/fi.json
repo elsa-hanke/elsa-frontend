@@ -1744,6 +1744,8 @@
     "teoriakoulutus-ei-nay": "Jos teoriakoulutus ei näy ELSAssa tai näytä oikealta, ota yhteyttä opintohallintoon",
     "koulutus": "Koulutus",
     "suorituspvm": "Suorituspvm",
-    "merkinta": "Merkintä"
+    "merkinta": "Merkintä",
+    "suoritettu": "Suoritettu",
+    "hylatty": "Hylätty"
   }
 }
