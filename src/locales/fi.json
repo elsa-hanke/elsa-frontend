@@ -1735,8 +1735,17 @@
       "kun-olet-suorittanut": "Kun olet suorittanut vaaditun koulutuksen,",
       "laheta-vamistusmispyyntö": "lähetä valmistumispyyntö"
     },
-    "tyoskentelyjaksot-kuvaus": "Lisää työskentelyjaksoja ja kerro poissaoloista jaksojen aikana. Tarkasta työskentelyajan tarkemmat vaatimukset opinto-oppaasta. Yli 10 vuotta vanhoja työskentelyjaksoja hyväksytään vain perustellusta syystä. Pakollinen 9 kuukauden terveyskeskustyö ei vanhene.",
+    "tyoskentelyjaksot-kuvaus": "Lisää työskentelyjaksoja ja merkitse poissaolot jaksojen aikana. Tarkasta työskentelyajan tarkemmat vaatimukset \u2028opinto-oppaasta.\n\nYli 10 vuotta vanhoja työskentelyjaksoja ja teoriakoulutusta hyväksytään vain perustellusta syystä. Pakollinen 9 kuukauden terveyskeskustyö ei vanhene.",
     "valviran-laillistamispaiva": "Valviran laillistamispäivä",
-    "laillistamistietojen-tallennus-epaonnistui": "Laillistamistietojen tallennus epäonnistui"
+    "laillistamistietojen-tallennus-epaonnistui": "Laillistamistietojen tallennus epäonnistui",
+    "asiakirjat-kuvaus": "Hallinnoi asiakirjojasi. Sallitut tiedostoformaatit .pdf, .png, .jpeg ja .jpg. Nimeä liitteet selkeästi, esim. Tyotodistus, sairaalan nimi, sukunimesi.",
+    "ei-teoriakoulutuksia": "Teoriakoulutuksia ei löytynyt.",
+    "teoriakoulutukset-ingressi": "YEK-vaiheen lääkärin tulee suorittaa koulutusyksikön hyväksymä tai järjestämä vähintään 16 tunnin terveydenhuollon hallintoon ja sosiaaliturvajärjestelmään perehdyttävä teoriakoulutus. Tiedot tuodaan suoraan opintotietojärjestelmästä.",
+    "teoriakoulutus-ei-nay": "Jos teoriakoulutus ei näy ELSAssa tai näytä oikealta, ota yhteyttä opintohallintoon",
+    "koulutus": "Koulutus",
+    "suorituspvm": "Suorituspvm",
+    "merkinta": "Merkintä",
+    "suoritettu": "Suoritettu",
+    "hylatty": "Hylätty"
   }
 }

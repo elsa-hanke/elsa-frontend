@@ -99,6 +99,7 @@ import MuokkaaSuoritemerkintaa from '@/views/suoritemerkinnat/muokkaa-suoritemer
 import Suoritemerkinnat from '@/views/suoritemerkinnat/suoritemerkinnat.vue'
 import Suoritemerkinta from '@/views/suoritemerkinnat/suoritemerkinta.vue'
 import UusiSuoritemerkinta from '@/views/suoritemerkinnat/uusi-suoritemerkinta.vue'
+import YekTeoriakoulutukset from '@/views/teoriakoulutukset-yek/yek-teoriakoulutukset.vue'
 import MuokkaaTeoriakoulutusta from '@/views/teoriakoulutukset/muokkaa-teoriakoulutusta.vue'
 import Teoriakoulutukset from '@/views/teoriakoulutukset/teoriakoulutukset.vue'
 import TeoriakoulutusTallennettu from '@/views/teoriakoulutukset/teoriakoulutus-tallennettu.vue'
@@ -1282,6 +1283,15 @@ const routes: Array<RouteConfig> = [
           routeComponent: MuokkaaYekPoissaoloa,
           allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yekteoriakoulutukset',
+        name: 'yekteoriakoulutukset',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YekTeoriakoulutukset,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava]
         }
       },
       {
