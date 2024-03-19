@@ -1746,6 +1746,7 @@
     "suorituspvm": "Suorituspvm",
     "merkinta": "Merkintä",
     "suoritettu": "Suoritettu",
-    "hylatty": "Hylätty"
+    "hylatty": "Hylätty",
+    "aiempi-hyvaksiluettu-suoritus": "Aiemmin suoritetusta lääkärikoulutuksesta hyväksiluettu koulutusta yksi vuosi."
   }
 }
