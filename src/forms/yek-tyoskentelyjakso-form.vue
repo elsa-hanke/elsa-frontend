@@ -398,8 +398,12 @@
     tyypit = [
       { text: this.$t('terveyskeskus'), value: TyoskentelyjaksoTyyppi.TERVEYSKESKUS },
       {
-        text: this.$t('yek.sairaala'),
+        text: this.$t('keskussairaala-tai-aluesairaala'),
         value: TyoskentelyjaksoTyyppi.KESKUSSAIRAALA
+      },
+      {
+        text: this.$t('yliopistollinen-sairaala'),
+        value: TyoskentelyjaksoTyyppi.YLIOPISTOLLINEN_SAIRAALA
       }
     ]
     params = {
