@@ -54,6 +54,16 @@
             </div>
           </elsa-form-group>
           <elsa-form-group
+            v-if="$isYekKoulutettava() && form.laakarikoulutusSuoritettuSuomiTaiBelgia"
+            :label="$t('yek.aiempi-laakarikoulutus')"
+            label-cols-md="4"
+            label-cols-xl="4"
+            label-cols="12"
+            class="align-items-center mb-md-0"
+          >
+            {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut') }}
+          </elsa-form-group>
+          <elsa-form-group
             v-if="account.email"
             :label="$t('sahkopostiosoite')"
             label-cols-md="4"
@@ -324,7 +334,8 @@
       avatar: null,
       avatarUpdated: false,
       laillistamispaiva: null,
-      laillistamispaivanLiite: null
+      laillistamispaivanLiite: null,
+      laakarikoulutusSuoritettuSuomiTaiBelgia: false
     }
 
     laillistamispaivaAsiakirjat: Asiakirja[] = []
@@ -339,6 +350,10 @@
           await axios.get('/erikoistuva-laakari/laillistamispaiva')
         ).data
         this.form.laillistamispaiva = laillistamistiedot.laillistamispaiva
+        if (laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia) {
+          this.form.laakarikoulutusSuoritettuSuomiTaiBelgia =
+            laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia
+        }
 
         if (laillistamistiedot.laillistamistodistus) {
           const data = Uint8Array.from(atob(laillistamistiedot.laillistamistodistus), (c) =>
@@ -403,7 +418,8 @@
         phoneNumber: this.account?.phoneNumber || null,
         avatar: this.account?.avatar || null,
         avatarUpdated: false,
-        laillistamispaiva: this.form.laillistamispaiva
+        laillistamispaiva: this.form.laillistamispaiva,
+        laakarikoulutusSuoritettuSuomiTaiBelgia: this.form.laakarikoulutusSuoritettuSuomiTaiBelgia
       }
     }
 
