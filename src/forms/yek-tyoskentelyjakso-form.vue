@@ -47,6 +47,17 @@
           </b-alert>
         </div>
       </elsa-form-group>
+      <elsa-form-group :label="$t('yek.aiempi-laakarikoulutus')" :required="false">
+        <span>
+          {{ $t('yek.aiempi-laakarikoulutus-selite') }}
+        </span>
+        <b-form-checkbox
+          v-model="laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia"
+          class="mb-4"
+        >
+          {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut') }}
+        </b-form-checkbox>
+      </elsa-form-group>
       <hr />
     </div>
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
@@ -415,7 +426,8 @@
     laillistamisTiedotForm: LaillistamistiedotLomakeKoulutettava = {
       laillistamistiedotAdded: false,
       laillistamispaiva: null,
-      laillistamispaivanLiite: null
+      laillistamispaivanLiite: null,
+      laakarikoulutusSuoritettuSuomiTaiBelgia: false
     }
 
     async mounted() {
