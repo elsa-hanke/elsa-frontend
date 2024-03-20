@@ -23,6 +23,14 @@
                   />
                 </b-col>
               </div>
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                </em>
+                <div>
+                  {{ $t('yek.aiempi-hyvaksiluettu-suoritus') }}
+                </div>
+              </div>
             </div>
           </div>
         </b-col>
