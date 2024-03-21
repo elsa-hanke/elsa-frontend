@@ -4,7 +4,9 @@ import {
   LaillistamistiedotLomakeKoulutettava,
   Opintosuoritus,
   Tyoskentelyjakso,
-  TyoskentelyjaksoLomake
+  TyoskentelyjaksoLomake,
+  Valmistumispyynto,
+  ValmistumispyyntoSuoritustenTila
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -35,4 +37,14 @@ export async function putKoulutettavaLaillistamispaiva(form: LaillistamistiedotL
 export async function getYekTeoriakoulutukset() {
   const path = 'yek-koulutettava/teoriakoulutukset'
   return await axios.get<Opintosuoritus[]>(path)
+}
+
+export async function getYekValmistumispyynto() {
+  const path = 'yek-koulutettava/valmistumispyynto'
+  return await axios.get<Valmistumispyynto>(path)
+}
+
+export async function getYekValmistumispyyntoSuoritustenTila() {
+  const path = 'yek-koulutettava/valmistumispyynto-suoritusten-tila'
+  return await axios.get<ValmistumispyyntoSuoritustenTila>(path)
 }
