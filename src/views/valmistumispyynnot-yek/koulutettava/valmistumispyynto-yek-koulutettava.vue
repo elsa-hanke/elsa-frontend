@@ -36,13 +36,13 @@
                 </div>
               </b-alert>
               <p class="mt-3 mb-3">
-                {{ $t('valmistumispyynto-ingressi-hae-koulutustodistusta-kappale') }}
+                {{ $t('yek.valmistumispyynto-ingressi-hae-koulutustodistusta-kappale') }}
               </p>
               <p class="mb-3">
-                {{ $t('valmistumispyynto-ingressi-opintohallinto-tarkastaa-kappale') }}
+                {{ $t('yek.valmistumispyynto-ingressi-opintohallinto-tarkastaa-kappale') }}
               </p>
               <p class="mb-3">
-                {{ $t('valmistumispyynto-ingressi-kun-koulutuskokonaisuus-arvioitu-kappale') }}
+                {{ $t('yek.valmistumispyynto-ingressi-kun-koulutuskokonaisuus-arvioitu-kappale') }}
               </p>
               <elsa-form-group :label="$t('valmistumispyynto-ennen-lahettamista')" :required="true">
                 <template #label-right>
@@ -74,64 +74,20 @@
                     {{ $t('valmistumispyynto-tyotodistukset') }}
                   </b-form-checkbox>
                   <b-form-checkbox
-                    v-model="valmistumispyyntoVaatimuksetLomake.kuulusteluJaJohtamisopinnot"
-                    :state="validateVaatimuksetState('kuulusteluJaJohtamisopinnot')"
-                    :disabled="vaatimuksetHyvaksytty"
-                    class="py-0 mt-3"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                  >
-                    {{ $t('valmistumispyynto-kuulustelu-ja-johtamisopinnot') }}
-                  </b-form-checkbox>
-                  <b-form-checkbox
                     v-model="valmistumispyyntoVaatimuksetLomake.teoriakoulutus"
                     :state="validateVaatimuksetState('teoriakoulutus')"
                     :disabled="vaatimuksetHyvaksytty"
                     class="py-0 mt-3"
                     @input="$emit('skipRouteExitConfirm', false)"
                   >
-                    {{ $t('valmistumispyynto-teoriakoulutusta-riittavasti') }}
-                  </b-form-checkbox>
-                  <b-form-checkbox
-                    v-model="valmistumispyyntoVaatimuksetLomake.osaamisenArvioinnit"
-                    :state="validateVaatimuksetState('osaamisenArvioinnit')"
-                    :disabled="vaatimuksetHyvaksytty"
-                    class="py-0 mt-3"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                  >
-                    {{ $t('valmistumispyynto-osaamisen-arvioinnit') }}
-                    <a
-                      href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {{ $t('osaamisen-arviointi-oppaasta') }}.
-                    </a>
-                  </b-form-checkbox>
-                  <b-form-checkbox
-                    v-model="valmistumispyyntoVaatimuksetLomake.palautekysely"
-                    :state="validateVaatimuksetState('palautekysely')"
-                    :disabled="vaatimuksetHyvaksytty"
-                    class="py-0 mt-3"
-                    @input="$emit('skipRouteExitConfirm', false)"
-                  >
-                    {{ $t('valmistumispyynto-palautekysely') }}
-                    <a
-                      href="https://link.webropol.com/s/valtakunnallinenpalautekysely "
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {{ $t('valtakunnallisen-palautekyselyn') }}.
-                    </a>
+                    {{ $t('yek.valmistumispyynto-teoriakoulutusta-riittavasti') }}
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>
-              <p class="mt-2 mb-0">
-                {{ $t('valmistumispyynto-mikali-olet-toimittanut-tarvittavat-tiedot') }}
-              </p>
               <hr />
               <div v-if="!vaatimuksetHyvaksytty" class="text-right mr-2">
                 <elsa-button variant="primary" @click="confirmVaatimukset">
-                  {{ $t('tee-valmistumispyynto') }}
+                  {{ $t('yek.laheta-valmistumispyynto') }}
                 </elsa-button>
               </div>
               <div v-else-if="valmistumispyyntoSuoritustenTila">
@@ -435,11 +391,11 @@
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import store from '@/store'
   import {
-    ValmistumispyyntoVaatimuksetLomake,
     ValmistumispyyntoLomakeErikoistuja,
     ValmistumispyyntoSuoritustenTila,
     ElsaError,
-    Asiakirja
+    Asiakirja,
+    ValmistumispyyntoVaatimuksetLomakeYek
   } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { ErikoisalaTyyppi, ValmistumispyynnonTila, phoneNumber } from '@/utils/constants'
@@ -481,7 +437,7 @@
     ]
 
     valmistumispyyntoSuoritustenTila: Partial<ValmistumispyyntoSuoritustenTila> = {}
-    valmistumispyyntoVaatimuksetLomake: Partial<ValmistumispyyntoVaatimuksetLomake> = {}
+    valmistumispyyntoVaatimuksetLomake: Partial<ValmistumispyyntoVaatimuksetLomakeYek> = {}
     valmistumispyyntoLomake: ValmistumispyyntoLomakeErikoistuja = {
       selvitysVanhentuneistaSuorituksista: null,
       laillistamispaiva: null,
@@ -681,9 +637,7 @@
     initForm() {
       this.valmistumispyyntoVaatimuksetLomake.tyoskentelyjaksot = false
       this.valmistumispyyntoVaatimuksetLomake.tyotodistukset = false
-      this.valmistumispyyntoVaatimuksetLomake.kuulusteluJaJohtamisopinnot = false
       this.valmistumispyyntoVaatimuksetLomake.teoriakoulutus = false
-      this.valmistumispyyntoVaatimuksetLomake.osaamisenArvioinnit = false
       this.valmistumispyyntoLomake.selvitysVanhentuneistaSuorituksista = null
       this.valmistumispyyntoLomake.erikoistujanSahkoposti =
         this.account.erikoistuvaLaakari.sahkoposti

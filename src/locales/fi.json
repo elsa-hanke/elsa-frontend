@@ -1750,6 +1750,11 @@
     "aiempi-hyvaksiluettu-suoritus": "Aiemmin suoritetusta lääkärikoulutuksesta hyväksiluettu koulutusta yksi vuosi.",
     "aiempi-laakarikoulutus": "Aiempi lääkärikoulutus",
     "aiempi-laakarikoulutus-selite": "Valitsemalla tämän, YEK-koulutukseen hyväksiluetaan koulutusta yksi vuosi.",
-    "aiempi-laakarikoulutus-olen-suorittanut": "Olen suorittanut lääkärikoulutuksen Suomessa tai Belgiassa."
+    "aiempi-laakarikoulutus-olen-suorittanut": "Olen suorittanut lääkärikoulutuksen Suomessa tai Belgiassa.",
+    "valmistumispyynto-ingressi-hae-koulutustodistusta-kappale": "Hae koulutustodistusta yleislääketieteen erityiskoulutuksen (YEK) suorittamisesta. Hakemus menee opintohallintoon ja YEK-koulutuksen vastuuhenkilölle tarkistettavaksi.",
+    "valmistumispyynto-ingressi-opintohallinto-tarkastaa-kappale": "Opintohallinto tarkistaa käytännön koulutuksen ja opintosuoritusten määrällisen riittävyyden sekä yleisten koulutusvaatimusten toteutumisen. Vastuuhenkilö hyväksyy koulutuskokonaisuuden.",
+    "valmistumispyynto-ingressi-kun-koulutuskokonaisuus-arvioitu-kappale": "Kun koulutuskokonaisuus on arvioitu ja hyväksytty, saat tiedon siitä sähköpostiisi. Valmistuminen tallennetaan opintotietojärjestelmään ja opintohallinto valmistelee sinulle koulutustodistuksen.",
+    "valmistumispyynto-teoriakoulutusta-riittavasti": "16 h teoriakoulutus on suoritettu.",
+    "laheta-valmistumispyynto": "Lähetä valmistumispyyntö"
   }
 }
