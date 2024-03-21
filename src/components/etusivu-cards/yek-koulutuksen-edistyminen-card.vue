@@ -7,7 +7,7 @@
             <div class="container-fluid">
               <elsa-button
                 :to="{
-                  name: 'tyoskentelyjaksot'
+                  name: 'yektyoskentelyjaksot'
                 }"
                 variant="link"
                 class="pl-0 border-0 pt-0"
@@ -60,7 +60,7 @@
           <div class="border rounded pt-3 pb-2 mb-4">
             <div class="container-fluid">
               <elsa-button
-                :to="{ name: 'teoriakoulutukset' }"
+                :to="{ name: 'yekteoriakoulutukset' }"
                 variant="link"
                 class="pl-0 border-0 pt-0"
               >
