@@ -23,7 +23,10 @@
                   />
                 </b-col>
               </div>
-              <div class="d-flex flex-row">
+              <div
+                v-if="edistyminen.laakarikoulutusSuoritettuSuomiTaiBelgia"
+                class="d-flex flex-row"
+              >
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
@@ -97,8 +100,6 @@
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import TyoskentelyjaksotYekBarChart from '@/components/yek/tyoskentelyjaksot-yek-bar-chart.vue'
   import { ErikoistumisenEdistyminen, Teoriakoulutus } from '@/types'
-  import { LomakeTilat, ArviointiasteikkoTyyppi } from '@/utils/constants'
-  import { getKeskiarvoFormatted } from '@/utils/keskiarvoFormatter'
 
   @Component({
     components: {
@@ -123,105 +124,8 @@
       this.initializing = false
     }
 
-    koejaksoComponent(suoritusmerkintaExists: boolean) {
-      return suoritusmerkintaExists ? 'opintosuoritukset' : 'koejakso'
-    }
-
-    koejaksoComponentHash(suoritusmerkintaExists: boolean) {
-      return suoritusmerkintaExists ? '#muut' : ''
-    }
-
-    koejaksoIcon(status: string, opintooikeudenPaattymispaiva: string) {
-      switch (status) {
-        case LomakeTilat.HYVAKSYTTY:
-          return ['fas', 'check-circle']
-        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
-          return ['far', 'clock']
-        case LomakeTilat.EI_AKTIIVINEN:
-          if (differenceInMonths(parseISO(opintooikeudenPaattymispaiva), new Date()) <= 12) {
-            return ['fas', 'exclamation-circle']
-          } else return ['fas', 'info-circle']
-      }
-    }
-
-    koejaksoIconClass(status: string, opintooikeudenPaattymispaiva: string) {
-      switch (status) {
-        case LomakeTilat.HYVAKSYTTY:
-          return 'text-success'
-        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
-          return 'text-warning'
-        case LomakeTilat.EI_AKTIIVINEN:
-          if (differenceInMonths(parseISO(opintooikeudenPaattymispaiva), new Date()) <= 12) {
-            return 'text-danger'
-          } else return 'text-warning'
-      }
-    }
-
-    koejaksoStatusText(status: string) {
-      switch (status) {
-        case LomakeTilat.HYVAKSYTTY:
-          return this.$t('hyvaksytty')
-        case LomakeTilat.ODOTTAA_HYVAKSYNTAA:
-          return this.$t('kesken')
-        case LomakeTilat.EI_AKTIIVINEN:
-          return this.$t('aloittamatta')
-      }
-    }
-
-    koejaksoStatusClass(status: string, opintooikeudenPaattymispaiva: string) {
-      if (
-        status === LomakeTilat.EI_AKTIIVINEN &&
-        differenceInMonths(parseISO(opintooikeudenPaattymispaiva), new Date()) <= 12
-      )
-        return 'text-danger'
-    }
-
-    terveyskeskusjaksoComponent(suoritusmerkintaExists: boolean) {
-      return suoritusmerkintaExists ? 'opintosuoritukset' : 'tyoskentelyjaksot'
-    }
-
-    terveyskeskusjaksoComponentHash(suoritusmerkintaExists: boolean) {
-      return suoritusmerkintaExists ? '#muut' : ''
-    }
-
-    terveyskeskusjaksoIcon(suoritusmerkintaExists: boolean) {
-      if (suoritusmerkintaExists) {
-        return ['fas', 'check-circle']
-      }
-    }
-
-    terveyskeskusjaksoIconClass(suoritusmerkintaExists: boolean) {
-      if (suoritusmerkintaExists) {
-        return 'text-success mr-1'
-      }
-    }
-
-    terveyskeskusjaksoStatusText(suoritusmerkintaExists: boolean) {
-      if (suoritusmerkintaExists) {
-        return this.$t('hyvaksytty')
-      } else {
-        return this.$t('ei-suoritettu')
-      }
-    }
-
     showOpintooikeusAlert(opintooikeudenPaattymispaiva: string) {
       return differenceInMonths(parseISO(opintooikeudenPaattymispaiva), new Date()) <= 6
-    }
-
-    get arviointiAsteikonNimi() {
-      return this.edistyminen?.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
-        ? this.$t('luottamuksen-tason-keskiarvo')
-        : this.$t('etapin-keskiarvo')
-    }
-
-    get arviointiAsteikonSelite() {
-      return this.edistyminen?.arviointiasteikko.nimi === ArviointiasteikkoTyyppi.EPA
-        ? this.$t('arviointien-ka-selite-epa')
-        : this.$t('arviointien-ka-selite-etappi')
-    }
-
-    keskiarvoFormatted(keskiarvo: number) {
-      return getKeskiarvoFormatted(keskiarvo)
     }
   }
 </script>
