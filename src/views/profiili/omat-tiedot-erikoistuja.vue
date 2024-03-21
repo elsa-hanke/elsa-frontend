@@ -194,6 +194,19 @@
             </b-alert>
           </div>
         </elsa-form-group>
+        <elsa-form-group
+          v-if="$isYekKoulutettava()"
+          :label="$t('yek.aiempi-laakarikoulutus')"
+          :required="false"
+        >
+          <span>
+            {{ $t('yek.aiempi-laakarikoulutus-selite') }}
+          </span>
+          <b-form-checkbox v-model="form.laakarikoulutusSuoritettuSuomiTaiBelgia" class="mb-4">
+            {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut') }}
+          </b-form-checkbox>
+          <hr />
+        </elsa-form-group>
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template #default="{ uid }">
             <b-form-input
