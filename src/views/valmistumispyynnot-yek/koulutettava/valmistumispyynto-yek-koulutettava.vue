@@ -381,7 +381,9 @@
 
   import {
     getYekValmistumispyynto,
-    getYekValmistumispyyntoSuoritustenTila
+    getYekValmistumispyyntoSuoritustenTila,
+    postYekValmistumispyynto,
+    putYekValmistumispyynto
   } from '@/api/yek-koulutettava'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -597,9 +599,9 @@
     async onSend() {
       try {
         this.sending = true
-        // this.valmistumispyynto = this.valmistumispyyntoPalautettu
-        //   ? (await putValmistumispyynto(this.valmistumispyyntoLomake)).data
-        //   : (await postValmistumispyynto(this.valmistumispyyntoLomake)).data
+        this.valmistumispyynto = this.valmistumispyyntoPalautettu
+          ? (await putYekValmistumispyynto(this.valmistumispyyntoLomake)).data
+          : (await postYekValmistumispyynto(this.valmistumispyyntoLomake)).data
         const account = store.getters['auth/account']
         account.erikoistuvaLaakari.sahkoposti = this.valmistumispyyntoLomake.erikoistujanSahkoposti
         account.email = this.valmistumispyyntoLomake.erikoistujanSahkoposti
