@@ -1755,6 +1755,9 @@
     "valmistumispyynto-ingressi-opintohallinto-tarkastaa-kappale": "Opintohallinto tarkistaa käytännön koulutuksen ja opintosuoritusten määrällisen riittävyyden sekä yleisten koulutusvaatimusten toteutumisen. Vastuuhenkilö hyväksyy koulutuskokonaisuuden.",
     "valmistumispyynto-ingressi-kun-koulutuskokonaisuus-arvioitu-kappale": "Kun koulutuskokonaisuus on arvioitu ja hyväksytty, saat tiedon siitä sähköpostiisi. Valmistuminen tallennetaan opintotietojärjestelmään ja opintohallinto valmistelee sinulle koulutustodistuksen.",
     "valmistumispyynto-teoriakoulutusta-riittavasti": "16 h teoriakoulutus on suoritettu.",
-    "laheta-valmistumispyynto": "Lähetä valmistumispyyntö"
+    "laheta-valmistumispyynto": "Lähetä valmistumispyyntö",
+    "valmistumispyynto-vanhoja-tyoskentelyjaksoja": "Sinulla on yli {vanhentunutSuoritusVuotta} vuotta vanhoja työskentelyjaksoja.",
+    "yek-koulutuksen-vastuuhenkilo": "YEK-koulutuksen vastuuhenkilö",
+    "valmistumispyynto-vahvistus": "Lähetyksen jälkeen valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää."
   }
 }

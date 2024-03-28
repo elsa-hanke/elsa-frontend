@@ -283,7 +283,7 @@
                     "
                   >
                     {{
-                      $t('valmistumispyynto-vanhoja-tyoskentelyjaksoja-tai-suorituksia', {
+                      $t('yek.valmistumispyynto-vanhoja-tyoskentelyjaksoja', {
                         vanhentunutSuoritusVuotta
                       })
                     }}
@@ -323,7 +323,7 @@
                       {{ vastuuhenkiloHyvaksyja }}
                     </div>
                     <div v-else>
-                      <h3>{{ $t('erikoisala-vastuuhenkilö') }}</h3>
+                      <h3>{{ $t('yek.yek-koulutuksen-vastuuhenkilo') }}</h3>
                       <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
                       {{ vastuuhenkiloHyvaksyja }}
                     </div>
@@ -343,7 +343,7 @@
                       style="min-width: 14rem"
                       @click="onValidateAndConfirmSend('confirm-send')"
                     >
-                      {{ $t('laheta-pyynto') }}
+                      {{ $t('yek.laheta-valmistumispyynto') }}
                     </elsa-button>
                   </b-col>
                 </b-row>
@@ -366,8 +366,8 @@
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('valmistumispyynto-vahvistus')"
-      :submit-text="$t('laheta-pyynto')"
+      :text="$t('yek.valmistumispyynto-vahvistus')"
+      :submit-text="$t('yek.laheta-valmistumispyynto')"
       @submit="onSend"
     />
   </div>
