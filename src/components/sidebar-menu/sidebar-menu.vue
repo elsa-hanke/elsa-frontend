@@ -139,9 +139,17 @@
           {{ $t('asiakirjat') }}
         </b-nav-item>
         <b-nav-item
-          v-if="($isErikoistuva() || $isYekKoulutettava()) && !isImpersonated"
+          v-if="$isErikoistuva() && !isImpersonated"
           class="border-bottom"
           :to="{ name: 'valmistumispyynto' }"
+        >
+          <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
+          {{ $t('valmistumispyynto') }}
+        </b-nav-item>
+        <b-nav-item
+          v-if="$isYekKoulutettava() && !isImpersonated"
+          class="border-bottom"
+          :to="{ name: 'yekvalmistumispyynto' }"
         >
           <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
           {{ $t('valmistumispyynto') }}

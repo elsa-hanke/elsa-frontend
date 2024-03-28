@@ -21,7 +21,6 @@
           <b-link :to="{ path: '/valmistumispyynto' }">
             {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.laheta-vamistusmispyyntö') }}
           </b-link>
-          <span>.</span>
         </span>
       </p>
     </b-alert>
