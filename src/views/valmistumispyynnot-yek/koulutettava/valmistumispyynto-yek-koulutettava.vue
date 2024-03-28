@@ -86,7 +86,11 @@
               </elsa-form-group>
               <hr />
               <div v-if="!vaatimuksetHyvaksytty" class="text-right mr-2">
-                <elsa-button variant="primary" @click="confirmVaatimukset">
+                <elsa-button
+                  :disabled="!getValmistumispyyntoVaatimuksetChecked()"
+                  variant="primary"
+                  @click="confirmVaatimukset"
+                >
                   {{ $t('yek.laheta-valmistumispyynto') }}
                 </elsa-button>
               </div>
@@ -456,10 +460,7 @@
         valmistumispyyntoVaatimuksetLomake: {
           tyoskentelyjaksot: { checked: (value: boolean) => value },
           tyotodistukset: { checked: (value: boolean) => value },
-          kuulusteluJaJohtamisopinnot: { checked: (value: boolean) => value },
-          teoriakoulutus: { checked: (value: boolean) => value },
-          osaamisenArvioinnit: { checked: (value: boolean) => value },
-          palautekysely: { checked: (value: boolean) => value }
+          teoriakoulutus: { checked: (value: boolean) => value }
         },
         valmistumispyyntoLomake: {
           erikoistujanSahkoposti: {
@@ -502,6 +503,14 @@
       } catch (err) {
         toastFail(this, this.$t('valmistumispyynnon-hakeminen-epaonnistui'))
       }
+    }
+
+    getValmistumispyyntoVaatimuksetChecked() {
+      return (
+        this.valmistumispyyntoVaatimuksetLomake.teoriakoulutus &&
+        this.valmistumispyyntoVaatimuksetLomake.tyoskentelyjaksot &&
+        this.valmistumispyyntoVaatimuksetLomake.tyotodistukset
+      )
     }
 
     get account() {
