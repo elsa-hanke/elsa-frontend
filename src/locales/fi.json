@@ -1758,6 +1758,7 @@
     "laheta-valmistumispyynto": "Lähetä valmistumispyyntö",
     "valmistumispyynto-vanhoja-tyoskentelyjaksoja": "Sinulla on yli {vanhentunutSuoritusVuotta} vuotta vanhoja työskentelyjaksoja.",
     "yek-koulutuksen-vastuuhenkilo": "YEK-koulutuksen vastuuhenkilö",
-    "valmistumispyynto-vahvistus": "Lähetyksen jälkeen valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää."
+    "valmistumispyynto-vahvistus": "Lähetyksen jälkeen valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää.",
+    "valmistumispyynto-odottaa-opintohallinnon-tarkastusta-selite": "Valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää."
   }
 }

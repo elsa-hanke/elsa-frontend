@@ -355,7 +355,7 @@
           </b-row>
         </div>
         <div v-else>
-          <valmistumispyynnon-tila-erikoistuja :valmistumispyynto="valmistumispyynto" />
+          <valmistumispyynnon-tila-koulutettava :valmistumispyynto="valmistumispyynto" />
         </div>
       </div>
       <div v-else class="text-center mt-3">
@@ -407,10 +407,11 @@
   import { ErikoisalaTyyppi, ValmistumispyynnonTila, phoneNumber } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
-  import ValmistumispyynnonTilaErikoistuja from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynnon-tila-erikoistuja.vue'
+  import ValmistumispyynnonTilaKoulutettava from '@/views/valmistumispyynnot-yek/koulutettava/valmistumispyynnon-tila-koulutettava.vue'
 
   @Component({
     components: {
+      ValmistumispyynnonTilaKoulutettava,
       AsiakirjatContent,
       AsiakirjatUpload,
       ElsaButton,
@@ -419,8 +420,7 @@
       ElsaFormError,
       ElsaFormDatepicker,
       ElsaPopover,
-      ElsaConfirmationModal,
-      ValmistumispyynnonTilaErikoistuja
+      ElsaConfirmationModal
     }
   })
   export default class ValmistumispyyntoYekKoulutettava extends Mixins<ValmistumispyyntoMixin>(
