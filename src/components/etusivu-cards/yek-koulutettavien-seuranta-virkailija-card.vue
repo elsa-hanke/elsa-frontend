@@ -10,8 +10,7 @@
               :placeholder="$t('hae-koulutettavan-nimella')"
             />
           </b-col>
-          <b-col cols="12" lg="3">
-          </b-col>
+          <b-col cols="12" lg="3"></b-col>
 
           <b-col cols="12" lg="3" class="">
             <div class="filter">

@@ -48,17 +48,21 @@
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
   import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
-  import YekvalmistumispyynnotCard from "@/components/etusivu-cards/yek-valmistumispyynnot-card.vue";
-  import Vastuuhenkilot from "@/views/kayttajahallinta/vastuuhenkilot.vue";
-  import Virkailijat from "@/views/kayttajahallinta/virkailijat.vue";
-  import Kouluttajat from "@/views/kayttajahallinta/kouluttajat.vue";
-  import ErikoistuvatLaakarit from "@/views/kayttajahallinta/erikoistuvat-laakarit.vue";
-  import Paakayttajat from "@/views/kayttajahallinta/paakayttajat.vue";
   import YekKoulutettavienSeurantaVirkailijaCard from '@/components/etusivu-cards/yek-koulutettavien-seuranta-virkailija-card.vue'
+  import YekvalmistumispyynnotCard from '@/components/etusivu-cards/yek-valmistumispyynnot-card.vue'
+  import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
+  import Kouluttajat from '@/views/kayttajahallinta/kouluttajat.vue'
+  import Paakayttajat from '@/views/kayttajahallinta/paakayttajat.vue'
+  import Vastuuhenkilot from '@/views/kayttajahallinta/vastuuhenkilot.vue'
+  import Virkailijat from '@/views/kayttajahallinta/virkailijat.vue'
 
   @Component({
     components: {
-      Paakayttajat, ErikoistuvatLaakarit, Kouluttajat, Virkailijat, Vastuuhenkilot,
+      Paakayttajat,
+      ErikoistuvatLaakarit,
+      Kouluttajat,
+      Virkailijat,
+      Vastuuhenkilot,
       BCardSkeleton,
       ErikoistujienSeurantaVirkailijaCard,
       HenkilotiedotCard,
@@ -75,10 +79,7 @@
     yliopisto: string | null = null
 
     tabIndex = 0
-    tabs = [
-      '#erikoislaakarikoulutus',
-      '#yekkoulutus'
-    ]
+    tabs = ['#erikoislaakarikoulutus', '#yekkoulutus']
     beforeMount() {
       this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
     }
