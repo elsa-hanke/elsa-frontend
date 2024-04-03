@@ -118,6 +118,7 @@ import MuokkaaTyoskentelyjaksoa from '@/views/tyoskentelyjaksot/muokkaa-tyoskent
 import Tyoskentelyjakso from '@/views/tyoskentelyjaksot/tyoskentelyjakso.vue'
 import Tyoskentelyjaksot from '@/views/tyoskentelyjaksot/tyoskentelyjaksot.vue'
 import UusiTyoskentelyjakso from '@/views/tyoskentelyjaksot/uusi-tyoskentelyjakso.vue'
+import ValmistumispyyntoYekKoulutettava from '@/views/valmistumispyynnot-yek/koulutettava/valmistumispyynto-yek-koulutettava.vue'
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
 import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vue'
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
@@ -1301,6 +1302,17 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: YekAsiakirjat,
           allowedRoles: [ELSA_ROLE.YEKKoulutettava]
+        }
+      },
+      {
+        path: '/yekvalmistumispyynto',
+        name: 'yekvalmistumispyynto',
+        beforeEnter: impersonatedErikoistuvaGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyyntoYekKoulutettava,
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
+          confirmRouteExit: true
         }
       }
     ]

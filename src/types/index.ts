@@ -1525,6 +1525,12 @@ export interface ValmistumispyyntoVaatimuksetLomake {
   palautekysely?: boolean
 }
 
+export interface ValmistumispyyntoVaatimuksetLomakeYek {
+  tyoskentelyjaksot?: boolean
+  tyotodistukset?: boolean
+  teoriakoulutus?: boolean
+}
+
 export interface Valmistumispyynto {
   id: number | null
   tila?: ValmistumispyynnonTila

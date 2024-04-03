@@ -4,7 +4,10 @@ import {
   LaillistamistiedotLomakeKoulutettava,
   Opintosuoritus,
   Tyoskentelyjakso,
-  TyoskentelyjaksoLomake
+  TyoskentelyjaksoLomake,
+  Valmistumispyynto,
+  ValmistumispyyntoLomakeErikoistuja,
+  ValmistumispyyntoSuoritustenTila
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -35,4 +38,38 @@ export async function putKoulutettavaLaillistamispaiva(form: LaillistamistiedotL
 export async function getYekTeoriakoulutukset() {
   const path = 'yek-koulutettava/teoriakoulutukset'
   return await axios.get<Opintosuoritus[]>(path)
+}
+
+export async function getYekValmistumispyynto() {
+  const path = 'yek-koulutettava/valmistumispyynto'
+  return await axios.get<Valmistumispyynto>(path)
+}
+
+export async function getYekValmistumispyyntoSuoritustenTila() {
+  const path = 'yek-koulutettava/valmistumispyynto-suoritusten-tila'
+  return await axios.get<ValmistumispyyntoSuoritustenTila>(path)
+}
+
+export async function postYekValmistumispyynto(form: ValmistumispyyntoLomakeErikoistuja) {
+  const formData = wrapToFormData(form)
+  if (form.laillistamistodistus) {
+    formData.append('laillistamistodistus', form.laillistamistodistus)
+  }
+  const path = 'yek-koulutettava/valmistumispyynto'
+  return await axios.post<Valmistumispyynto>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
+}
+
+export async function putYekValmistumispyynto(form: ValmistumispyyntoLomakeErikoistuja) {
+  const formData = wrapToFormData(form)
+  if (form.laillistamistodistus) {
+    formData.append('laillistamistodistus', form.laillistamistodistus)
+  }
+  const path = 'yek-koulutettava/valmistumispyynto'
+  return await axios.put<Valmistumispyynto>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
