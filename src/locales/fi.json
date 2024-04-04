@@ -1525,6 +1525,7 @@
   "valittu": "Valittu",
   "valittuna-enimmäismaara": "Valittuna enimmäismäärä: {max}. Poista jokin valittu lisätäksesi uuden.",
   "valmiit-allekirjoitetut-palautetut": "Valmiit, allekirjoitetut ja palautetut",
+  "valmiit-hyvaksytyt-palautetut": "Valmiit, hyväksytyt ja palautetut",
   "valmis": "Valmis",
   "valmista-osa-aluetta": "Valmista osa-aluetta",
   "valmistumispyynnon-arviointi": "Valmistumispyynnön arviointi",
@@ -1554,7 +1555,7 @@
     "valmis-virkailijan-tarkastus-kesken": "Valmis, virkailijan tarkistus kesken"
   },
   "valmistumispyynnot": "Valmistumispyynnöt",
-  "valmistumispyynnot-ingressi-vastuuhenkilo": "Erikoistujien valmistumiseen liittyvät osaamisen arvioinnit ja hyväksynnät.",
+  "valmistumispyynnot-ingressi-vastuuhenkilo": "Valmistumiseen liittyvät osaamisen arvioinnit ja hyväksynnät.",
   "valmistumispyynto": "Valmistumispyyntö",
   "valmistumispyynto-allekirjoitettu": "Valmistumispyyntö on allekirjoitettu {allekirjoitusaika}",
   "valmistumispyynto-allekirjoitettu-kaikkien-osapuolten-toimesta": "Valmistumispyyntö on allekirjoitettu vastuuhenkilön toimesta. Suoritusmerkintä tallentuu opintotietojärjestelmään ja opintohallinto valmistelee erikoistujalle koulutustodistuksen. Todistus lähetetään erikoistujalle postitse.",
