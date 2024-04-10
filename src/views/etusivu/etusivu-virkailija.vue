@@ -15,7 +15,7 @@
           </div>
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
           <b-tabs>
-            <b-tab title="Erikoislääkärikoulutus">
+            <b-tab :title="$t('virkailija-etusivu-seuranta-otsikko')">
               <div v-if="!loading">
                 <erikoistujien-seuranta-virkailija-card :yliopisto="yliopisto" />
               </div>
@@ -23,7 +23,7 @@
                 <b-spinner variant="primary" :label="$t('ladataan')" />
               </div>
             </b-tab>
-            <b-tab title="Yleislääketieteen erityiskoulutus (YEK)">
+            <b-tab :title="$t('yek.virkailija-etusivu-seuranta-yek-otsikko')">
               <div v-if="!loading">
                 <yek-koulutettavien-seuranta-virkailija-card :yliopisto="yliopisto" />
               </div>

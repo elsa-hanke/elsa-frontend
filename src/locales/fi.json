@@ -1725,6 +1725,7 @@
   "vahvista-lomakkeen-tyhjennys-selite": "Tyhjennyksen jälkeen lomake pitää täyttää uudelleen.",
   "lomake-tyhjennetty-onnistuneesti": "Lomakkeen tyhjennys onnistui",
   "lomakkeen-tyhjennys-epaonnistui": "Lomakkeen tyhjennys epäonnistui",
+  "virkailija-etusivu-seuranta-otsikko": "Erikoislääkärikoulutus",
   "yek": {
     "koulutuksen-edistyminen": "YEK-koulutuksen edistyminen",
     "sairaala": "Sairaala",
@@ -1761,6 +1762,7 @@
     "valmistumispyynto-vanhoja-tyoskentelyjaksoja": "Sinulla on yli {vanhentunutSuoritusVuotta} vuotta vanhoja työskentelyjaksoja.",
     "yek-koulutuksen-vastuuhenkilo": "YEK-koulutuksen vastuuhenkilö",
     "valmistumispyynto-vahvistus": "Lähetyksen jälkeen valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää.",
-    "valmistumispyynto-odottaa-opintohallinnon-tarkastusta-selite": "Valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää."
+    "valmistumispyynto-odottaa-opintohallinnon-tarkastusta-selite": "Valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää.",
+    "virkailija-etusivu-seuranta-yek-otsikko": "Yleislääketieteen erityiskoulutus (YEK)"
   }
 }
