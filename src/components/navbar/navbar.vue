@@ -50,14 +50,7 @@
             {{ $t('kirjaudu-ulos') }}
             <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
           </b-dropdown-item>
-          <div>
-            <!--
-            v-if="
-              ($isErikoistuva() || $isYekKoulutettava()) &&
-              opintooikeudet &&
-              opintooikeudet.length > ($isYekKoulutettava() ? 0 : 1)
-            "
-            -->
+          <div v-if="$isErikoistuva() || $isYekKoulutettava()">
             <hr class="p-0 m-0" />
             <div class="dropdown-item dropdown-item__header mt-1 pb-1">
               <span class="font-weight-500">{{ $t('valitse-opinto-oikeus') }}</span>
