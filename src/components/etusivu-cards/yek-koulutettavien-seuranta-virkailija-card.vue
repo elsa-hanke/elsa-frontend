@@ -232,7 +232,10 @@
 <script lang="ts">
   import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
 
-  import { getErikoistujienSeurantaRajaimet, getKoulutettavienSeurantaList } from '@/api/virkailija'
+  import {
+    getKoulutettavienSeurantaList,
+    getKoulutettavienSeurantaRajaimet
+  } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -322,7 +325,7 @@
     }
 
     async fetchRajaimet() {
-      this.rajaimet = (await getErikoistujienSeurantaRajaimet()).data
+      this.rajaimet = (await getKoulutettavienSeurantaRajaimet()).data
     }
 
     async fetch() {

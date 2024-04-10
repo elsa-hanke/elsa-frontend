@@ -67,6 +67,11 @@ export async function getErikoistujienSeurantaList(params: {
   )
 }
 
+export async function getKoulutettavienSeurantaRajaimet() {
+  const path = '/virkailija/etusivu/koulutettavien-seuranta-rajaimet'
+  return await axios.get<ErikoistujienSeurantaVirkailijaRajaimet>(path)
+}
+
 export async function getKoulutettavienSeurantaList(params: {
   page?: number
   size?: number
