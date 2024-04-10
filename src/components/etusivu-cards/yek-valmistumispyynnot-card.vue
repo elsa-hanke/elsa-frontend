@@ -51,8 +51,7 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getEtusivuValmistumispyynnot as getEtusivuValmistumispyynnotVastuuhenkilo } from '@/api/vastuuhenkilo'
-  import { getEtusivuValmistumispyynnot as getEtusivuValmistumispyynnotVirkailija } from '@/api/virkailija'
+  import { getEtusivuKoulutettavienValmistumispyynnot } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import { ValmistumispyyntoListItem } from '@/types'
@@ -72,8 +71,8 @@
     async mounted() {
       try {
         this.valmistumispyynnot = this.$isVastuuhenkilo()
-          ? (await getEtusivuValmistumispyynnotVastuuhenkilo()).data
-          : (await getEtusivuValmistumispyynnotVirkailija()).data
+          ? (await getEtusivuKoulutettavienValmistumispyynnot()).data
+          : (await getEtusivuKoulutettavienValmistumispyynnot()).data
       } catch (err) {
         toastFail(this, this.$t('valmistumispyyntojen-hakeminen-epaonnistui'))
       }
@@ -84,7 +83,7 @@
       return [
         {
           key: 'erikoistuvanNimi',
-          label: this.$t('erikoistuja'),
+          label: this.$t('yek.koulutettava'),
           sortable: true
         },
         {

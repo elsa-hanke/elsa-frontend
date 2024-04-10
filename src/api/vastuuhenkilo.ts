@@ -115,6 +115,11 @@ export async function getEtusivuValmistumispyynnot() {
   return await axios.get<ValmistumispyyntoListItem[]>(path)
 }
 
+export async function getEtusivuKoulutettavienValmistumispyynnot() {
+  const path = `/vastuuhenkilo/etusivu/koulutettavien-valmistumispyynnot`
+  return await axios.get<ValmistumispyyntoListItem[]>(path)
+}
+
 export async function getEtusivuSeurantajaksot() {
   const path = `/vastuuhenkilo/etusivu/seurantajaksot`
   return await axios.get<Seurantajakso[]>(path)
