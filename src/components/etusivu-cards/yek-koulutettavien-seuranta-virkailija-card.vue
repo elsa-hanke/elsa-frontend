@@ -44,7 +44,7 @@
             </b-form-checkbox>
           </b-col>
         </b-row>
-        <div v-if="!loadingResults && erikoistujat">
+        <div v-if="!loadingResults && koulutettavat">
           <b-row>
             <b-col>
               <b-alert v-if="rows === 0" variant="dark" show>
@@ -57,7 +57,10 @@
                 </span>
               </b-alert>
               <b-list-group>
-                <b-list-group-item v-for="(eteneminen, index) in erikoistujat.content" :key="index">
+                <b-list-group-item
+                  v-for="(eteneminen, index) in koulutettavat.content"
+                  :key="index"
+                >
                   <b-row>
                     <b-col cols="12" lg="6">
                       <elsa-button
@@ -229,7 +232,7 @@
 <script lang="ts">
   import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
 
-  import { getErikoistujienSeurantaRajaimet, getErikoistujienSeurantaList } from '@/api/virkailija'
+  import { getErikoistujienSeurantaRajaimet, getKoulutettavienSeurantaList } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -307,7 +310,7 @@
 
     hakutermi = ''
     rajaimet: ErikoistujienSeurantaVirkailijaRajaimet | null = null
-    erikoistujat: Page<ErikoistujanEteneminenVirkailija> | null = null
+    koulutettavat: Page<ErikoistujanEteneminenVirkailija> | null = null
 
     async mounted() {
       try {
@@ -323,8 +326,8 @@
     }
 
     async fetch() {
-      this.erikoistujat = (
-        await getErikoistujienSeurantaList({
+      this.koulutettavat = (
+        await getKoulutettavienSeurantaList({
           page: this.currentPage - 1,
           size: this.perPage,
           sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
@@ -341,7 +344,7 @@
     }
 
     get rows() {
-      return this.erikoistujat?.totalElements ?? 0
+      return this.koulutettavat?.totalElements ?? 0
     }
 
     get erikoisalatSorted() {

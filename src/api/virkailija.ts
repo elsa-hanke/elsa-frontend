@@ -67,6 +67,24 @@ export async function getErikoistujienSeurantaList(params: {
   )
 }
 
+export async function getKoulutettavienSeurantaList(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  'asetusId.equals'?: number
+}) {
+  return await axios.get<Page<ErikoistujanEteneminenVirkailija>>(
+    '/virkailija/etusivu/koulutettavien-seuranta',
+    {
+      params: {
+        ...params
+      }
+    }
+  )
+}
+
 export async function getEtusivuKoejaksot() {
   const path = '/virkailija/etusivu/koejaksot'
   return await axios.get<KoejaksonVaihe[]>(path)
