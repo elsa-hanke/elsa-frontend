@@ -316,7 +316,7 @@
       try {
         await Promise.all([this.fetchRajaimet(), this.fetch()])
       } catch {
-        toastFail(this, this.$t('erikoistujien-seurannan-hakeminen-epaonnistui'))
+        toastFail(this, this.$t('yek.koulutettavien-seurannan-hakeminen-epaonnistui'))
       }
       this.initializing = false
     }
