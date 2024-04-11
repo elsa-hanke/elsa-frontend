@@ -231,7 +231,7 @@
               />
             </div>
             <div class="flex-column">
-              {{ $t('yek.koulutettava') }}
+              {{ $t('yek.yek-koulutettava') }}
             </div>
           </div>
         </b-nav-item>

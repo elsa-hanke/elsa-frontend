@@ -1729,7 +1729,8 @@
   "yek": {
     "koulutuksen-edistyminen": "YEK-koulutuksen edistyminen",
     "sairaala": "Sairaala",
-    "koulutettava": "YEK-koulutettava",
+    "yek-koulutettava": "YEK-koulutettava",
+    "koulutettava": "Koulutettava",
     "ei-avoimia-asioita-yek-koulutettava-info": {
       "ja": "ja",
       "voit": "Voit",
