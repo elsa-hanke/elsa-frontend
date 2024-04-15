@@ -67,6 +67,29 @@ export async function getErikoistujienSeurantaList(params: {
   )
 }
 
+export async function getKoulutettavienSeurantaRajaimet() {
+  const path = '/virkailija/etusivu/koulutettavien-seuranta-rajaimet'
+  return await axios.get<ErikoistujienSeurantaVirkailijaRajaimet>(path)
+}
+
+export async function getKoulutettavienSeurantaList(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  'asetusId.equals'?: number
+}) {
+  return await axios.get<Page<ErikoistujanEteneminenVirkailija>>(
+    '/virkailija/etusivu/koulutettavien-seuranta',
+    {
+      params: {
+        ...params
+      }
+    }
+  )
+}
+
 export async function getEtusivuKoejaksot() {
   const path = '/virkailija/etusivu/koejaksot'
   return await axios.get<KoejaksonVaihe[]>(path)
@@ -74,6 +97,11 @@ export async function getEtusivuKoejaksot() {
 
 export async function getEtusivuValmistumispyynnot() {
   const path = `/virkailija/etusivu/valmistumispyynnot`
+  return await axios.get<ValmistumispyyntoListItem[]>(path)
+}
+
+export async function getEtusivuKoulutettavienValmistumispyynnot() {
+  const path = `/virkailija/etusivu/koulutettavien-valmistumispyynnot`
   return await axios.get<ValmistumispyyntoListItem[]>(path)
 }
 
