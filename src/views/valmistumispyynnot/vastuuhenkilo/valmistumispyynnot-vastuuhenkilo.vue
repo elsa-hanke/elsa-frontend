@@ -1,43 +1,70 @@
 <template>
   <div>
     <p class="mt-1 mb-3">{{ $t('valmistumispyynnot-ingressi-vastuuhenkilo') }}</p>
-    <b-row lg>
-      <b-col>
-        <elsa-search-input
-          class="mb-4"
-          :hakutermi.sync="hakutermi"
-          :placeholder="$t('hae-erikoistujan-nimella')"
-        />
-      </b-col>
-    </b-row>
-    <b-row class="mb-5">
-      <b-col>
-        <h3>{{ $t('avoimet') }}</h3>
-        <valmistumispyynnot-list
-          :valmistumispyynnot="valmistumispyynnotAvoimet"
-          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
-          :current-page="currentAvoinPage"
-          :per-page="perPage"
-          :loading="loadingAvoimet"
-          :hakutermi-exists="hakutermi.length > 0"
-          @update:currentPage="onAvoinPageInput"
-        />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <h3>{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
-        <valmistumispyynnot-list
-          :valmistumispyynnot="valmistumispyynnotMuut"
-          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
-          :current-page="currentMuutPage"
-          :per-page="perPage"
-          :loading="loadingMuut"
-          :hakutermi-exists="hakutermi.length > 0"
-          @update:currentPage="onMuutPageInput"
-        />
-      </b-col>
-    </b-row>
+    <b-tabs>
+      <b-tab title="Erikoislääkärikoulutus">
+        <b-row lg>
+          <b-col>
+            <elsa-search-input
+              class="mb-4"
+              :hakutermi.sync="hakutermi"
+              :placeholder="$t('hae-erikoistujan-nimella')"
+            />
+          </b-col>
+        </b-row>
+        <b-row class="mb-5">
+          <b-col>
+            <h3>{{ $t('avoimet') }}</h3>
+            <valmistumispyynnot-list
+              :valmistumispyynnot="valmistumispyynnotAvoimet"
+              :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
+              :current-page="currentAvoinPage"
+              :per-page="perPage"
+              :loading="loadingAvoimet"
+              :hakutermi-exists="hakutermi.length > 0"
+              @update:currentPage="onAvoinPageInput"
+            />
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <h3>{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
+            <valmistumispyynnot-list
+              :valmistumispyynnot="valmistumispyynnotMuut"
+              :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
+              :current-page="currentMuutPage"
+              :per-page="perPage"
+              :loading="loadingMuut"
+              :hakutermi-exists="hakutermi.length > 0"
+              @update:currentPage="onMuutPageInput"
+            />
+          </b-col>
+        </b-row>
+      </b-tab>
+      <b-tab title="Yleislääketieteen erityiskoulutus (YEK)">
+        <b-row lg>
+          <b-col cols="12" lg="5">
+            <elsa-search-input
+              class="mb-4 hakutermi"
+              :hakutermi.sync="hakutermi"
+              :placeholder="$t('hae-koulutettavan-nimella')"
+            />
+          </b-col>
+        </b-row>
+        <b-row class="mb-5">
+          <b-col>
+            <h3>{{ $t('avoimet') }}</h3>
+            <!-- avoimet Yek-valmistumispyynnot -->
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <h3>{{ $t('valmiit-hyvaksytyt-palautetut') }}</h3>
+            <!-- valmiit yms Yek-valmistumispyynnot -->
+          </b-col>
+        </b-row>
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 
