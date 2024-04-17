@@ -9,23 +9,29 @@
           <koejaksot-card />
           <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
           <valmistumispyynnot-card />
-          <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
-          <erikoistujien-seuranta-card />
+          <yekvalmistumispyynnot-card />
         </b-col>
         <b-col xxl="3">
-          <b-row>
-            <b-col xxl="12" lg="6">
-              <henkilotiedot-card />
-            </b-col>
-            <b-col xxl="12" lg="6">
-              <arvioinnin-tyokalut-card />
-            </b-col>
-            <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
-              <arvioitavat-kokonaisuudet-card />
-            </b-col>
-          </b-row>
+          <b-col xxl="12" lg="6">
+            <henkilotiedot-card />
+          </b-col>
+          <b-col xxl="12" lg="6">
+            <arvioinnin-tyokalut-card />
+          </b-col>
+          <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
+            <arvioitavat-kokonaisuudet-card />
+          </b-col>
         </b-col>
       </b-row>
+
+      <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
+      <b-tabs>
+        <b-tab :title="$t('vastuuhenkilo-etusivu-seuranta-otsikko')">
+          <erikoistujien-seuranta-card />
+        </b-tab>
+
+        <b-tab :title="$t('yek.virkailija-etusivu-seuranta-yek-otsikko')"></b-tab>
+      </b-tabs>
     </div>
   </b-container>
 </template>
@@ -43,9 +49,11 @@
   import SeurantajaksotCard from '@/components/etusivu-cards/seurantajaksot-card.vue'
   import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
+  import YekvalmistumispyynnotCard from '@/components/etusivu-cards/yek-valmistumispyynnot-card.vue'
 
   @Component({
     components: {
+      YekvalmistumispyynnotCard,
       ArvioinninTyokalutCard,
       ArviointipyynnotCard,
       ArvioitavatKokonaisuudetCard,
@@ -58,5 +66,11 @@
       ValmistumispyynnotCard
     }
   })
-  export default class EtusivuVastuuhenkilo extends Vue {}
+  export default class EtusivuVastuuhenkilo extends Vue {
+    tabIndex = 0
+    tabs = ['#erikoislaakarikoulutus', '#yekkoulutus']
+    beforeMount() {
+      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
+    }
+  }
 </script>

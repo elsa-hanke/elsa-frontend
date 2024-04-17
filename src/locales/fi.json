@@ -1766,6 +1766,8 @@
     "valmistumispyynto-vahvistus": "Lähetyksen jälkeen valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää.",
     "valmistumispyynto-odottaa-opintohallinnon-tarkastusta-selite": "Valmistumispyyntö odottaa opintohallinnon tarkistusta sekä vastuuhenkilön lopullista hyväksyntää.",
     "virkailija-etusivu-seuranta-yek-otsikko": "Yleislääketieteen erityiskoulutus (YEK)",
+    "vastuuhenkilo-etusivu-seuranta-yek-otsikko": "Yleislääketieteen erityiskoulutus (YEK)",
     "koulutettavien-seurannan-hakeminen-epaonnistui": "Koulutettavien seurannan hakeminen epäonnistui"
-  }
+  },
+  "vastuuhenkilo-etusivu-seuranta-otsikko": "Erikoislääkärikoulutus"
 }
