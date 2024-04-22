@@ -103,7 +103,7 @@ export default class NavbarMixin extends Vue {
   }
 
   get title() {
-    if (this.isErikoistuvaLaakari) {
+    if (this.isErikoistuvaLaakari || this.isYekKoulutettava) {
       return this.erikoisalaNimi
     }
     return getTitleFromAuthorities(this, this.activeRole, this.$isYekKoulutettava())

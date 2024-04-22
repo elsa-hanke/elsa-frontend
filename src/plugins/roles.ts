@@ -2,8 +2,6 @@
 import Vue from 'vue'
 
 import store from '@/store'
-import { Opintooikeus } from '@/types'
-import { ERIKOISALA_YEK_ID } from '@/utils/constants'
 import { ELSA_ROLE } from '@/utils/roles'
 
 export class RolesPlugin {
@@ -13,22 +11,7 @@ export class RolesPlugin {
     }
 
     vue.prototype.$isYekKoulutettava = (): boolean => {
-      // return store.getters['auth/account'].activeAuthority === ELSA_ROLE.YEKKoulutettava
-      const data = store.getters['auth/account']
-      if (!data.erikoistuvaLaakari) {
-        return false
-      }
-      const { opintooikeudet, opintooikeusKaytossaId } = data.erikoistuvaLaakari
-      const opintooikeus = opintooikeudet.filter(
-        (oo: Opintooikeus) => oo.id === opintooikeusKaytossaId
-      )
-      if (opintooikeus.length === 0) {
-        return false
-      }
-      return (
-        store.getters['auth/account'].activeAuthority === ELSA_ROLE.YEKKoulutettava &&
-        opintooikeus[0].erikoisalaId === ERIKOISALA_YEK_ID
-      )
+      return store.getters['auth/account'].activeAuthority === ELSA_ROLE.YEKKoulutettava
     }
 
     vue.prototype.$isKouluttaja = (): boolean => {
