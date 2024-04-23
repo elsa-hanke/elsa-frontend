@@ -12,15 +12,17 @@
           <yekvalmistumispyynnot-card />
         </b-col>
         <b-col xxl="3">
-          <b-col xxl="12" lg="6">
-            <henkilotiedot-card />
-          </b-col>
-          <b-col xxl="12" lg="6">
-            <arvioinnin-tyokalut-card />
-          </b-col>
-          <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
-            <arvioitavat-kokonaisuudet-card />
-          </b-col>
+          <b-row>
+            <b-col xxl="12" lg="6">
+              <henkilotiedot-card />
+            </b-col>
+            <b-col xxl="12" lg="6">
+              <arvioinnin-tyokalut-card />
+            </b-col>
+            <b-col xxl="12" md="6" class="mt-4 mt-xxl-0">
+              <arvioitavat-kokonaisuudet-card />
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
 
@@ -69,8 +71,5 @@
   export default class EtusivuVastuuhenkilo extends Vue {
     tabIndex = 0
     tabs = ['#erikoislaakarikoulutus', '#yekkoulutus']
-    beforeMount() {
-      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
-    }
   }
 </script>
