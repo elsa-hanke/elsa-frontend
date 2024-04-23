@@ -103,10 +103,13 @@ export default class NavbarMixin extends Vue {
   }
 
   get title() {
-    if (this.isErikoistuvaLaakari) {
+    if (this.account.impersonated) {
+      return getTitleFromAuthorities(this, this.account.originalUser.activeAuthority)
+    }
+    if (this.isErikoistuvaLaakari || this.isYekKoulutettava) {
       return this.erikoisalaNimi
     }
-    return getTitleFromAuthorities(this, this.activeRole, this.$isYekKoulutettava())
+    return getTitleFromAuthorities(this, this.activeRole)
   }
 
   getOpintooikeusKaytossa(id: number) {
