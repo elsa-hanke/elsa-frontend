@@ -13,8 +13,8 @@ export function checkCurrentRouteAndRedirect(router: any, path: any) {
   if (curPath !== path) router.push({ path })
 }
 
-export function getTitleFromAuthorities(vue: Vue, authority: string, isYekKoulutettava: boolean) {
-  if (authority === ELSA_ROLE.ErikoistuvaLaakari && isYekKoulutettava) {
+export function getTitleFromAuthorities(vue: Vue, authority: string) {
+  if (authority === ELSA_ROLE.YEKKoulutettava) {
     return vue.$t('yek.yek-koulutettava')
   } else if (authority === ELSA_ROLE.ErikoistuvaLaakari) {
     return vue.$t('erikoistuja')
