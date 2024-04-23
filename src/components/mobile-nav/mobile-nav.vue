@@ -17,7 +17,23 @@
         <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
         {{ $t('tyoskentelyjaksot') }}
       </b-nav-item>
+      <b-nav-item
+        v-if="$isYekKoulutettava()"
+        class="border-bottom"
+        :to="{ name: 'yektyoskentelyjaksot' }"
+      >
+        <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
+        {{ $t('tyoskentelyjaksot') }}
+      </b-nav-item>
       <b-nav-item v-if="$isErikoistuva()" class="border-bottom" :to="{ name: 'teoriakoulutukset' }">
+        <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
+        {{ $t('teoriakoulutukset') }}
+      </b-nav-item>
+      <b-nav-item
+        v-if="$isYekKoulutettava()"
+        class="border-bottom"
+        :to="{ name: 'yekteoriakoulutukset' }"
+      >
         <font-awesome-icon :icon="['fas', 'university']" fixed-width size="lg" />
         {{ $t('teoriakoulutukset') }}
       </b-nav-item>
@@ -85,10 +101,22 @@
         <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
         {{ $t('asiakirjat') }}
       </b-nav-item>
+      <b-nav-item v-if="$isYekKoulutettava()" class="border-bottom" :to="{ name: 'yekasiakirjat' }">
+        <font-awesome-icon :icon="['far', 'file-alt']" fixed-width size="lg" />
+        {{ $t('asiakirjat') }}
+      </b-nav-item>
       <b-nav-item
         v-if="$isErikoistuva() && !isImpersonated"
         class="border-bottom"
         :to="{ name: 'valmistumispyynto' }"
+      >
+        <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
+        {{ $t('valmistumispyynto') }}
+      </b-nav-item>
+      <b-nav-item
+        v-if="$isYekKoulutettava() && !isImpersonated"
+        class="border-bottom"
+        :to="{ name: 'yekvalmistumispyynto' }"
       >
         <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
         {{ $t('valmistumispyynto') }}
@@ -150,7 +178,7 @@
       <b-nav-item class="ml-6" link-classes="p-0 pt-1 pb-3" @click="logout()">
         {{ $t('kirjaudu-ulos') }}
       </b-nav-item>
-      <div v-if="$isErikoistuva() && opintooikeudet && opintooikeudet.length > 1" class="pb-2">
+      <div v-if="!account.impersonated && ($isErikoistuva() || $isYekKoulutettava())" class="pb-2">
         <hr class="p-0 m-0" />
         <div class="pl-2">
           <div class="dropdown-item dropdown-item__header mt-1 pb-1">
@@ -188,7 +216,7 @@
           </b-nav-item>
         </div>
       </div>
-      <div v-if="authorities && authorities.length > 1">
+      <div v-if="!account.impersonated && authorities && authorities.length > 1">
         <hr class="p-0 m-0" />
         <div class="dropdown-item dropdown-item__header mt-1 pb-1">
           <span class="font-weight-500">{{ $t('valitse-rooli') }}</span>
@@ -214,7 +242,7 @@
             </div>
           </div>
         </b-nav-item>
-        <b-nav-item @click="changeToYekKoulutettava">
+        <b-nav-item v-if="$hasYekRole()" @click="changeToYekKoulutettava">
           <div
             class="d-flex"
             :class="{

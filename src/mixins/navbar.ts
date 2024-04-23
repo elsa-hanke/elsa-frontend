@@ -139,18 +139,28 @@ export default class NavbarMixin extends Vue {
   async changeToErikoistuja() {
     if (this.$isErikoistuva()) return
     await vaihdaRooli(ELSA_ROLE.ErikoistuvaLaakari)
-    this.$router.go(0)
+    this.routeToEtusivu()
   }
 
   async changeToYekKoulutettava() {
     if (this.$isYekKoulutettava()) return
     await vaihdaRooli(ELSA_ROLE.YEKKoulutettava)
-    this.$router.go(0)
+    this.routeToEtusivu()
   }
 
   async changeToKouluttaja() {
     if (this.$isKouluttaja()) return
     await vaihdaRooli(ELSA_ROLE.Kouluttaja)
-    this.$router.go(0)
+    this.routeToEtusivu()
+  }
+
+  routeToEtusivu() {
+    if (this.$router.currentRoute.path.includes('etusivu')) {
+      this.$router.go(0)
+    } else {
+      this.$router.push({ name: 'etusivu' }).then(() => {
+        this.$router.go(0)
+      })
+    }
   }
 }
