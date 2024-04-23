@@ -521,7 +521,7 @@
     }
 
     get title() {
-      return getTitleFromAuthorities(this, this.activeAuthority, this.$isYekKoulutettava())
+      return getTitleFromAuthorities(this, this.activeAuthority)
     }
 
     get avatar() {
