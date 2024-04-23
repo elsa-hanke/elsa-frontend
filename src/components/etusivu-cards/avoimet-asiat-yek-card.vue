@@ -66,7 +66,7 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getAvoimetAsiat } from '@/api/erikoistuva'
+  import { getAvoimetAsiat } from '@/api/yek-koulutettava'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import { AvoinAsia } from '@/types'
