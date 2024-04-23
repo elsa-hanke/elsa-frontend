@@ -50,7 +50,7 @@
             {{ $t('kirjaudu-ulos') }}
             <b-form ref="logoutForm" :action="logoutUrl" method="POST" />
           </b-dropdown-item>
-          <div v-if="$isErikoistuva() || $isYekKoulutettava()">
+          <div v-if="!account.impersonated && ($isErikoistuva() || $isYekKoulutettava())">
             <hr class="p-0 m-0" />
             <div class="dropdown-item dropdown-item__header mt-1 pb-1">
               <span class="font-weight-500">{{ $t('valitse-opinto-oikeus') }}</span>
@@ -86,7 +86,7 @@
               </div>
             </b-dropdown-item>
           </div>
-          <div v-if="authorities && authorities.length > 1">
+          <div v-if="!account.impersonated && authorities && authorities.length > 1">
             <hr class="p-0 m-0" />
             <div class="dropdown-item dropdown-item__header mt-1 pb-1">
               <span class="font-weight-500">{{ $t('valitse-rooli') }}</span>
@@ -112,7 +112,7 @@
                 </div>
               </div>
             </b-dropdown-item>
-            <b-dropdown-item @click="changeToYekKoulutettava">
+            <b-dropdown-item v-if="$hasYekRole()" @click="changeToYekKoulutettava">
               <div
                 class="d-flex"
                 :class="{

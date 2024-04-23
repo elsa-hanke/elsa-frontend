@@ -90,7 +90,7 @@
   import { parseISO, differenceInMonths } from 'date-fns'
   import { Vue, Component } from 'vue-property-decorator'
 
-  import { getErikoistumisenEdistyminen } from '@/api/erikoistuva'
+  import { getErikoistumisenEdistyminen } from '@/api/yek-koulutettava'
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ElsaButton from '@/components/button/button.vue'
