@@ -2,7 +2,7 @@
   <div class="valmistumispyynnot">
     <p class="mt-1 mb-3">{{ $t('valmistumispyynnot-ingressi-vastuuhenkilo') }}</p>
     <b-tabs>
-      <b-tab title="Erikoislääkärikoulutus">
+      <b-tab :title="$t('virkailija-etusivu-seuranta-otsikko')">
         <b-row lg>
           <b-col cols="12" lg="5">
             <elsa-search-input
@@ -57,7 +57,7 @@
           </b-col>
         </b-row>
       </b-tab>
-      <b-tab title="Yleislääketieteen erityiskoulutus (YEK)">
+      <b-tab :title="$t('virkailija-etusivu-seuranta-yek-otsikko')">
         <b-row lg>
           <b-col cols="12" lg="5">
             <elsa-search-input
