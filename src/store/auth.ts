@@ -59,7 +59,10 @@ const auth: Module<any, any> = {
       commit('authRequest')
       try {
         const { data } = await api.getKayttaja()
-        if (data.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)) {
+        if (
+          data.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari) ||
+          data.authorities.includes(ELSA_ROLE.YEKKoulutettava)
+        ) {
           data.erikoistuvaLaakari = (await getErikoistuvaLaakari()).data
         }
         if (data.impersonated) {

@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 import {
+  AvoinAsia,
+  ErikoistumisenEdistyminen,
   LaillistamistiedotLomakeKoulutettava,
   Opintosuoritus,
   Tyoskentelyjakso,
@@ -72,4 +74,14 @@ export async function putYekValmistumispyynto(form: ValmistumispyyntoLomakeEriko
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 120000
   })
+}
+
+export async function getErikoistumisenEdistyminen() {
+  const path = 'yek-koulutettava/etusivu/erikoistumisen-edistyminen'
+  return await axios.get<ErikoistumisenEdistyminen>(path)
+}
+
+export async function getAvoimetAsiat() {
+  const path = 'yek-koulutettava/etusivu/avoimet-asiat'
+  return await axios.get<AvoinAsia[]>(path)
 }
