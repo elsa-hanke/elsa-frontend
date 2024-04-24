@@ -10,6 +10,13 @@
           <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
           <valmistumispyynnot-card />
           <yekvalmistumispyynnot-card />
+          <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
+          <b-tabs>
+            <b-tab :title="$t('vastuuhenkilo-etusivu-seuranta-otsikko')">
+              <erikoistujien-seuranta-card />
+            </b-tab>
+            <b-tab :title="$t('yek.virkailija-etusivu-seuranta-yek-otsikko')"></b-tab>
+          </b-tabs>
         </b-col>
         <b-col xxl="3">
           <b-row>
@@ -25,15 +32,6 @@
           </b-row>
         </b-col>
       </b-row>
-
-      <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
-      <b-tabs>
-        <b-tab :title="$t('vastuuhenkilo-etusivu-seuranta-otsikko')">
-          <erikoistujien-seuranta-card />
-        </b-tab>
-
-        <b-tab :title="$t('yek.virkailija-etusivu-seuranta-yek-otsikko')"></b-tab>
-      </b-tabs>
     </div>
   </b-container>
 </template>
