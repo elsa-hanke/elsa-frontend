@@ -3,7 +3,10 @@ import { Module } from 'vuex'
 
 import * as api from '@/api'
 import { getErikoistuvaLaakari } from '@/api/erikoistuva'
-import { getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo } from '@/api/vastuuhenkilo'
+import {
+  getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo,
+  getOnkoYekVastuuhenkilo
+} from '@/api/vastuuhenkilo'
 import { ELSA_ROLE } from '@/utils/roles'
 
 const auth: Module<any, any> = {
@@ -72,6 +75,7 @@ const auth: Module<any, any> = {
           data.terveyskeskuskoulutusjaksoVastuuhenkilo = (
             await getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo()
           ).data
+          data.yekVastuuhenkilo = (await getOnkoYekVastuuhenkilo()).data
         }
         commit('authSuccess', data)
       } catch (err) {

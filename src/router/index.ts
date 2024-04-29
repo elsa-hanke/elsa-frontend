@@ -122,7 +122,9 @@ import ValmistumispyyntoYekKoulutettava from '@/views/valmistumispyynnot-yek/kou
 import Valmistumispyynto from '@/views/valmistumispyynnot/erikoistuja/valmistumispyynto.vue'
 import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vue'
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
+import ValmistumispyynnonHyvaksyntaYek from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta-yek.vue'
 import ValmistumispyynnonHyvaksynta from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta.vue'
+import ValmistumispyynnonTarkistusYek from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus-yek.vue'
 import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
 
 Vue.use(VueRouter)
@@ -690,11 +692,29 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
+        path: '/valmistumispyynnon-hyvaksynta-yek/:valmistumispyyntoId',
+        name: 'valmistumispyynnon-hyvaksynta-yek',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyynnonHyvaksyntaYek,
+          allowedRoles: [ELSA_ROLE.Vastuuhenkilo]
+        }
+      },
+      {
         path: '/valmistumispyynnon-tarkistus/:valmistumispyyntoId',
         name: 'valmistumispyynnon-tarkistus',
         component: RoleSpecificRoute,
         props: {
           routeComponent: ValmistumispyynnonTarkistus,
+          allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
+        }
+      },
+      {
+        path: '/valmistumispyynnon-tarkistus-yek/:valmistumispyyntoId',
+        name: 'valmistumispyynnon-tarkistus-yek',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ValmistumispyynnonTarkistusYek,
           allowedRoles: [ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },

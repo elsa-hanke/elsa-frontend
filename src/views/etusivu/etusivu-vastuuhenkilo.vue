@@ -9,7 +9,7 @@
           <koejaksot-card />
           <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
           <valmistumispyynnot-card />
-          <yekvalmistumispyynnot-card />
+          <yekvalmistumispyynnot-card v-if="$isYekVastuuhenkilo()" />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
           <b-tabs>
             <b-tab :title="$t('vastuuhenkilo-etusivu-seuranta-otsikko')">
