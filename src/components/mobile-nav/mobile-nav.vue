@@ -87,7 +87,7 @@
         :to="{ name: 'terveyskeskuskoulutusjaksot' }"
       >
         <font-awesome-icon :icon="['far', 'hospital']" fixed-width size="lg" />
-        {{ $t('koejakso') }}
+        {{ $t('terveyskeskusjaksot') }}
       </b-nav-item>
       <b-nav-item
         v-if="$isErikoistuva() || $isKouluttaja() || $isVastuuhenkilo() || $isVirkailija()"
@@ -120,6 +120,14 @@
       >
         <font-awesome-icon :icon="['fas', 'trophy']" fixed-width size="lg" />
         {{ $t('valmistumispyynto') }}
+      </b-nav-item>
+      <b-nav-item
+        v-if="$isVirkailija() || $isVastuuhenkilo()"
+        class="border-bottom"
+        :to="{ name: 'valmistumispyynnot' }"
+      >
+        <font-awesome-icon icon="award" fixed-width size="lg" />
+        {{ $t('valmistumispyynnot') }}
       </b-nav-item>
       <b-nav-item
         v-if="$isTekninenPaakayttaja() || $isVirkailija()"
