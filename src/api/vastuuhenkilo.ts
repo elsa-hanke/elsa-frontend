@@ -116,7 +116,7 @@ export async function getEtusivuValmistumispyynnot() {
 }
 
 export async function getEtusivuKoulutettavienValmistumispyynnot() {
-  const path = `/vastuuhenkilo/etusivu/koulutettavien-valmistumispyynnot`
+  const path = `/vastuuhenkilo/etusivu/yek-valmistumispyynnot`
   return await axios.get<ValmistumispyyntoListItem[]>(path)
 }
 
@@ -157,6 +157,11 @@ export async function putTerveyskeskuskoulutusjakso(id: string, korjausehdotus: 
 
 export async function getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo() {
   const path = 'vastuuhenkilo/onko-terveyskeskuskoulutusjakso-vastuuhenkilo'
+  return await axios.get<boolean>(path)
+}
+
+export async function getOnkoYekVastuuhenkilo() {
+  const path = 'vastuuhenkilo/onko-yek-vastuuhenkilo'
   return await axios.get<boolean>(path)
 }
 

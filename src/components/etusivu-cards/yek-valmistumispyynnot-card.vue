@@ -15,7 +15,7 @@
         <template #cell(erikoistuvanNimi)="data">
           <b-link
             :to="{
-              name: linkComponent(data.item.tila),
+              name: linkComponent(),
               params: { valmistumispyyntoId: data.item.id }
             }"
             class="task-type"
@@ -30,7 +30,7 @@
             variant="primary"
             class="pt-1 pb-1"
             :to="{
-              name: linkComponent(data.item.tila),
+              name: linkComponent(),
               params: { valmistumispyyntoId: data.item.id }
             }"
           >
@@ -110,15 +110,11 @@
       return this.valmistumispyynnot?.length ?? 0
     }
 
-    linkComponent(tila: ValmistumispyynnonTila) {
+    linkComponent() {
       if (this.$isVirkailija()) {
-        return 'valmistumispyynnon-tarkistus'
+        return 'valmistumispyynnon-tarkistus-yek'
       } else {
-        if (tila === ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA) {
-          return 'valmistumispyynnon-arviointi'
-        } else {
-          return 'valmistumispyynnon-hyvaksynta'
-        }
+        return 'valmistumispyynnon-hyvaksynta-yek'
       }
     }
 
@@ -136,8 +132,6 @@
 
     taskStatus(status: string) {
       switch (status) {
-        case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA:
-          return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-osaamisen-arviointia')
         case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-hyvaksyntaa')
         case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:

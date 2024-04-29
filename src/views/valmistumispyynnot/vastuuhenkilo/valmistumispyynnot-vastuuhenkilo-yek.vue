@@ -1,0 +1,163 @@
+<template>
+  <div>
+    <b-row lg>
+      <b-col cols="12" lg="5">
+        <elsa-search-input
+          class="mb-4 hakutermi"
+          :hakutermi.sync="hakutermi"
+          :placeholder="$t('hae-koulutettavan-nimella')"
+        />
+      </b-col>
+    </b-row>
+    <b-row class="mb-5">
+      <b-col>
+        <h3>{{ $t('avoimet') }}</h3>
+        <valmistumispyynnot-list
+          :valmistumispyynnot="valmistumispyynnotAvoimet"
+          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
+          :current-page="currentAvoinPage"
+          :per-page="perPage"
+          :loading="loadingAvoimet"
+          :hakutermi-exists="hakutermi.length > 0"
+          @update:currentPage="onAvoinPageInput"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <h3>{{ $t('valmiit-hyvaksytyt-palautetut') }}</h3>
+        <valmistumispyynnot-list
+          :valmistumispyynnot="valmistumispyynnotMuut"
+          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
+          :current-page="currentMuutPage"
+          :per-page="perPage"
+          :loading="loadingMuut"
+          :hakutermi-exists="hakutermi.length > 0"
+          @update:currentPage="onMuutPageInput"
+        />
+      </b-col>
+    </b-row>
+  </div>
+</template>
+
+<script lang="ts">
+  import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+
+  import { getValmistumispyynnot } from '@/api/vastuuhenkilo'
+  import ElsaSearchInput from '@/components/search-input/search-input.vue'
+  import ValmistumispyynnotList from '@/components/valmistumispyynnot-list/valmistumispyynnot-list.vue'
+  import { ValmistumispyyntoListItem, Page } from '@/types'
+  import { ERIKOISALA_YEK_ID } from '@/utils/constants'
+  import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
+
+  @Component({
+    components: {
+      ElsaSearchInput,
+      ValmistumispyynnotList
+    }
+  })
+  export default class ValmistumispyynnotVastuuhenkiloYek extends Vue {
+    hakutermi = ''
+    currentAvoinPage = 1
+    currentMuutPage = 1
+    perPage = 10
+    loadingAvoimet = true
+    loadingMuut = true
+    valmistumispyynnotAvoimet: Page<ValmistumispyyntoListItem> | null = null
+    valmistumispyynnotMuut: Page<ValmistumispyyntoListItem> | null = null
+    debounce?: number
+
+    @Prop({ required: true, type: String })
+    valmistumispyynnonHyvaksyjaRole!: ValmistumispyynnonHyvaksyjaRole
+
+    @Watch('hakutermi')
+    onPropertyChanged(value: string) {
+      this.debounceSearch(value)
+    }
+
+    debounceSearch(value: string) {
+      this.loadingAvoimet = true
+      this.loadingMuut = true
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.filtered.erikoistujanNimi = value
+        this.filterResults()
+      }, 400)
+    }
+
+    async mounted() {
+      this.fetchAll()
+    }
+
+    async filterResults() {
+      this.loadingAvoimet = true
+      this.loadingMuut = true
+      this.currentAvoinPage = 1
+      this.currentMuutPage = 1
+      this.fetchAll()
+    }
+
+    async fetchAll() {
+      this.fetchAvoimet()
+      this.fetchMuut()
+    }
+
+    async fetchAvoimet() {
+      if (!this.valmistumispyynnonHyvaksyjaRole) {
+        this.loadingAvoimet = false
+        return
+      }
+      getValmistumispyynnot({
+        page: this.currentAvoinPage - 1,
+        size: this.perPage,
+        sort: 'muokkauspaiva,asc',
+        ...(this.filtered.erikoistujanNimi
+          ? { 'erikoistujanNimi.contains': this.filtered.erikoistujanNimi }
+          : {}),
+        ...{ avoin: true },
+        ...{ 'erikoisalaId.equals': ERIKOISALA_YEK_ID }
+      }).then((response) => {
+        this.valmistumispyynnotAvoimet = response.data
+        this.loadingAvoimet = false
+      })
+    }
+
+    async fetchMuut() {
+      if (!this.valmistumispyynnonHyvaksyjaRole) {
+        this.loadingMuut = false
+        return
+      }
+      getValmistumispyynnot({
+        page: this.currentMuutPage - 1,
+        size: this.perPage,
+        sort: 'muokkauspaiva,desc',
+        ...(this.filtered.erikoistujanNimi
+          ? { 'erikoistujanNimi.contains': this.filtered.erikoistujanNimi }
+          : {}),
+        ...{ avoin: false },
+        ...{ 'erikoisalaId.equals': ERIKOISALA_YEK_ID }
+      }).then((response) => {
+        this.valmistumispyynnotMuut = response.data
+        this.loadingMuut = false
+      })
+    }
+
+    onAvoinPageInput(value: number) {
+      this.loadingAvoimet = true
+      this.currentAvoinPage = value
+      this.fetchAvoimet()
+    }
+
+    onMuutPageInput(value: number) {
+      this.loadingMuut = true
+      this.currentMuutPage = value
+      this.fetchMuut()
+    }
+
+    filtered: {
+      erikoistujanNimi: string | null
+    } = {
+      erikoistujanNimi: null
+    }
+  }
+</script>
