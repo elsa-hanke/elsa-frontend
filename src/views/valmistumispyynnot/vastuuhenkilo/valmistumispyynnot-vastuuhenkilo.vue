@@ -28,8 +28,9 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ValmistumispyynnotVastuuhenkiloYek from '../../valmistumispyynnot-yek/vastuuhenkilo/valmistumispyynnot-vastuuhenkilo-yek.vue'
+
   import ValmistumispyynnotVastuuhenkiloErikoistuvaLaakari from './valmistumispyynnot-vastuuhenkilo-erikoistuva-laakari.vue'
-  import ValmistumispyynnotVastuuhenkiloYek from './valmistumispyynnot-vastuuhenkilo-yek.vue'
 
   import { getValmistumispyynnonHyvaksyjaRole } from '@/api/vastuuhenkilo'
   import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'

@@ -63,21 +63,10 @@
                       {{ valmistumispyynto.virkailijanSaate }}
                     </span>
                     <span v-else-if="virkailijaPalauttanut">
-                      {{
-                        $t(
-                          'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-virkailijan-toimesta'
-                        )
-                      }}
+                      {{ $t('valmistumispyynto-palautettu-koulutettavalle-virkailijan-toimesta') }}
                     </span>
                     <span v-else-if="vastuuhenkiloHyvaksyjaPalauttanut">
-                      {{
-                        $t(
-                          'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-hyvaksyjan-toimesta'
-                        )
-                      }}
-                    </span>
-                    <span v-else-if="odottaaAllekirjoituksia">
-                      {{ $t('valmistumispyynto-tarkistettu-odottaa-allekirjoituksia') }}
+                      {{ $t('valmistumispyynto-palautettu-koulutettavalle-hyvaksyjan-toimesta') }}
                     </span>
                     <span
                       v-if="virkailijaPalauttanut || vastuuhenkiloHyvaksyjaPalauttanut"
@@ -98,7 +87,7 @@
                   </em>
                   <div>
                     <span>
-                      {{ $t('valmistumispyynto-allekirjoitettu-kaikkien-osapuolten-toimesta') }}
+                      {{ $t('valmistumispyynto-hyvaksytty-kaikkien-osapuolten-toimesta') }}
                     </span>
                   </div>
                 </div>
@@ -107,7 +96,8 @@
                 variant="primary"
                 class="mt-2 mb-1"
                 :to="{
-                  name: 'valmistumispyynnot'
+                  name: 'valmistumispyynnot',
+                  hash: '#yek'
                 }"
               >
                 {{ $t('palaa-valmistumispyyntoihin') }}
@@ -131,6 +121,7 @@
                 :laillistamisen-muokkaus-sallittu="editable"
                 :opintooikeuden-myontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
                 :asetus="valmistumispyynto.erikoistujanAsetus"
+                :yek="true"
                 @muokkaaLaillistamista="muokkaaLaillistamista"
               />
               <div v-if="laillistaminenMuokattavissa">
@@ -180,173 +171,34 @@
               </div>
             </div>
             <hr />
-            <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
-            <div>
-              <h5>
-                {{ $t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen') }}
-              </h5>
-              <p>
-                {{ $t('kylla') }}
-              </p>
-            </div>
-            <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
-              <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
-              <b-row>
-                <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
-                  <h5>{{ $t('paivays') }}</h5>
-                  <p>
-                    {{ $date(valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika) }}
-                  </p>
-                </b-col>
-                <b-col>
-                  <h5>{{ $t('vastuuhenkilon-nimi-ja-nimike') }}</h5>
-                  <p>
-                    {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi }}
-                  </p>
-                </b-col>
-              </b-row>
-            </div>
+            <h2 class="mb-3">{{ $t('yek.koulutettavan-suoritustiedot') }}</h2>
+            <elsa-button
+              variant="outline-primary"
+              class="mt-2"
+              @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
+            >
+              {{ $t('yek.nayta-koulutettavan-suoritustiedot') }}
+            </elsa-button>
+            <hr />
+            <h2 class="mb-3">{{ $t('teoriakoulutus') }}</h2>
+            <h5>
+              {{ $t('teoriakoulutus') }}
+            </h5>
+            <p v-if="teoriakoulutusSuoritettu" class="mb-1">
+              <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+              {{ $t('suoritettu') }}
+            </p>
+            <p v-else class="mb-1">
+              <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-error mr-2" />
+              {{ $t('ei-suoritettu') }}
+            </p>
+            <hr />
             <b-form @submit.stop.prevent="onSubmit">
-              <hr />
-              <h2 class="mb-3">{{ $t('maaralliset-tarkistukset') }}</h2>
-              <elsa-button
-                variant="outline-primary"
-                class="mt-2 mb-4"
-                @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
-              >
-                {{ $t('nayta-erikoistujan-suoritustiedot') }}
-              </elsa-button>
-              <h5>{{ $t('muut-koulutukset-ja-tutkinnot') }}</h5>
-              <div v-if="yekSuorituspaivaTila" class="mb-3">
-                <p v-if="form.yekSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('yek-suoritettu') }}
-                  {{ $date(form.yekSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('yek-ei-suoritettu') }}
-                </p>
-              </div>
-              <div v-if="editable && !yekSuorituspaivaTila" class="my-3">
-                <b-form-checkbox v-model="form.yekSuoritettu" @input="onSkipRouteExitConfirm">
-                  {{ $t('yek-suoritettu') }}
-                </b-form-checkbox>
-                <elsa-form-group
-                  v-if="form.yekSuoritettu"
-                  :label="$t('suorituspaiva')"
-                  class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                >
-                  <template #default="{ uid }">
-                    <elsa-form-datepicker
-                      :id="uid"
-                      v-model="form.yekSuorituspaiva"
-                      @input="onSkipRouteExitConfirm"
-                    ></elsa-form-datepicker>
-                  </template>
-                </elsa-form-group>
-              </div>
-              <div v-if="ptlSuorituspaivaTila" class="mb-3">
-                <p v-if="form.ptlSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('ptl-suoritettu') }}
-                  {{ $date(form.ptlSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('ptl-ei-suoritettu') }}
-                </p>
-              </div>
-              <div v-if="editable && !ptlSuorituspaivaTila" class="my-3">
-                <b-form-checkbox v-model="form.ptlSuoritettu" @input="onSkipRouteExitConfirm">
-                  {{ $t('ptl-suoritettu') }}
-                </b-form-checkbox>
-                <elsa-form-group
-                  v-if="form.ptlSuoritettu"
-                  :label="$t('suorituspaiva')"
-                  class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                >
-                  <template #default="{ uid }">
-                    <elsa-form-datepicker
-                      :id="uid"
-                      v-model="form.ptlSuorituspaiva"
-                      @input="onSkipRouteExitConfirm"
-                    ></elsa-form-datepicker>
-                  </template>
-                </elsa-form-group>
-              </div>
-              <div v-if="aiempiElKoulutusSuorituspaivaTila" class="mb-3">
-                <p v-if="form.aiempiElKoulutusSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('aiempi-el-koulutus-suoritettu') }}
-                  {{ $date(form.aiempiElKoulutusSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('aiempi-el-koulutus-ei-suoritettu') }}
-                </p>
-              </div>
-              <div v-if="editable && !aiempiElKoulutusSuorituspaivaTila" class="my-3">
-                <b-form-checkbox
-                  v-model="form.aiempiElKoulutusSuoritettu"
-                  @input="onSkipRouteExitConfirm"
-                >
-                  {{ $t('aiempi-el-koulutus-suoritettu') }}
-                </b-form-checkbox>
-                <elsa-form-group
-                  v-if="form.aiempiElKoulutusSuoritettu"
-                  :label="$t('suorituspaiva')"
-                  class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                >
-                  <template #default="{ uid }">
-                    <elsa-form-datepicker
-                      :id="uid"
-                      v-model="form.aiempiElKoulutusSuorituspaiva"
-                      @input="onSkipRouteExitConfirm"
-                    ></elsa-form-datepicker>
-                  </template>
-                </elsa-form-group>
-              </div>
-              <div v-if="ltTutkintoSuorituspaivaTila" class="mb-3">
-                <p v-if="form.ltTutkintoSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('lt-tutkinto-suoritettu') }}
-                  {{ $date(form.ltTutkintoSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('lt-tutkinto-ei-suoritettu') }}
-                </p>
-              </div>
-              <div v-if="editable && !ltTutkintoSuorituspaivaTila" class="my-3">
-                <b-form-checkbox
-                  v-model="form.ltTutkintoSuoritettu"
-                  @input="onSkipRouteExitConfirm"
-                >
-                  {{ $t('lt-tutkinto-suoritettu') }}
-                </b-form-checkbox>
-                <elsa-form-group
-                  v-if="form.ltTutkintoSuoritettu"
-                  :label="$t('suorituspaiva')"
-                  class="col-xs-6 col-sm-4 col-md-4 pr-sm-3 ml-2 mt-2"
-                >
-                  <template #default="{ uid }">
-                    <elsa-form-datepicker
-                      :id="uid"
-                      v-model="form.ltTutkintoSuorituspaiva"
-                      @input="onSkipRouteExitConfirm"
-                    ></elsa-form-datepicker>
-                  </template>
-                </elsa-form-group>
-              </div>
-              <hr />
               <h2 class="mb-3">{{ $t('tyoskentelyjaksot') }}</h2>
-              <b-alert variant="dark" :show="valmistumispyynnonTarkistus.tutkimustyotaTehty">
-                <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-                <span>
-                  {{ $t('valmistumispyynto-virkailija-tyoskentelyjaksot-huomio') }}
-                </span>
-              </b-alert>
               <elsa-form-group
                 v-if="editable"
-                :label="$t('terveyskeskustyo')"
-                class="mt-3"
+                :label="terveyskeskustyoLabel"
+                class="mt-3 mb-0"
                 :required="true"
               >
                 <template #default="{ uid }">
@@ -369,15 +221,9 @@
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>
-              <div v-if="!editable && form.terveyskeskustyoTarkistettu" class="my-3">
+              <div v-if="!editable" class="mt-3">
                 <h5>
-                  {{ $t('terveyskeskustyo') }}
-                  {{
-                    $duration(
-                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
-                        .terveyskeskusVaadittuVahintaan
-                    )
-                  }}
+                  {{ terveyskeskustyoLabel }}
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
@@ -387,62 +233,40 @@
                     )
                   }}
                 </p>
-                <span>
+                <span v-if="form.terveyskeskustyoTarkistettu">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('kesto-ja-todistukset') }} {{ $t('tarkistettu') }}
                 </span>
               </div>
-              <elsa-form-group
-                v-if="editable"
-                :label="$t('yliopistosairaalan-ulkopuolinen-tyo')"
-                class="mt-3"
-                :required="true"
+              <elsa-button
+                v-if="
+                  valmistumispyynnonTarkistus.tyoskentelyjaksot &&
+                  valmistumispyynnonTarkistus.tyoskentelyjaksot.terveyskeskus.length > 0
+                "
+                variant="link"
+                class="pl-0"
+                @click="showTerveystyo = !showTerveystyo"
               >
-                <template #default="{ uid }">
-                  <p class="mb-1">
-                    {{ $t('suoritettu') }}
-                    {{
-                      $duration(
-                        valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
-                          .yliopistosairaaloidenUlkopuolinenSuoritettu
-                      )
-                    }}
-                  </p>
-                  <b-form-checkbox
-                    :id="uid"
-                    v-model="form.yliopistosairaalanUlkopuolinenTyoTarkistettu"
-                    :state="validateState('yliopistosairaalanUlkopuolinenTyoTarkistettu')"
-                    @input="onSkipRouteExitConfirm"
-                  >
-                    {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
-                  </b-form-checkbox>
-                </template>
-              </elsa-form-group>
-              <div
-                v-if="!editable && form.yliopistosairaalanUlkopuolinenTyoTarkistettu"
-                class="my-3"
-              >
-                <h5>
-                  {{ $t('yliopistosairaalan-ulkopuolinen-tyo') }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{
-                    $duration(
-                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
-                        .yliopistosairaaloidenUlkopuolinenSuoritettu
-                    )
-                  }}
-                </p>
-                <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
-                </p>
+                {{ $t('nayta-tyoskentelyjaksot') }}
+                <font-awesome-icon
+                  :icon="showTerveystyo ? 'chevron-up' : 'chevron-down'"
+                  fixed-width
+                  size="lg"
+                  class="ml-2 text-dark"
+                />
+              </elsa-button>
+              <div v-if="showTerveystyo && valmistumispyynnonTarkistus.tyoskentelyjaksot">
+                <hr />
+                <yek-tyoskentelyjaksot-list
+                  :tyoskentelyjaksot="valmistumispyynnonTarkistus.tyoskentelyjaksot.terveyskeskus"
+                  :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                  class="ml-3"
+                />
               </div>
               <elsa-form-group
                 v-if="editable"
-                :label="$t('yliopistosairaalatyo')"
-                class="mt-3"
+                :label="sairaalatyoLabel"
+                class="mt-3 mb-0"
                 :required="true"
               >
                 <template #default="{ uid }">
@@ -465,9 +289,9 @@
                   </b-form-checkbox>
                 </template>
               </elsa-form-group>
-              <div v-if="!editable && form.yliopistosairaalatyoTarkistettu" class="my-3">
+              <div v-if="!editable" class="mt-3">
                 <h5>
-                  {{ $t('yliopistosairaalatyo') }}
+                  {{ sairaalatyoLabel }}
                 </h5>
                 <p class="mb-1">
                   {{ $t('suoritettu') }}
@@ -478,10 +302,109 @@
                     )
                   }}
                 </p>
-                <p class="mb-1">
+                <p v-if="form.yliopistosairaalatyoTarkistettu" class="mb-1">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
                   {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
                 </p>
+              </div>
+              <elsa-button
+                v-if="
+                  valmistumispyynnonTarkistus.tyoskentelyjaksot &&
+                  valmistumispyynnonTarkistus.tyoskentelyjaksot.yliopistosairaala.length > 0
+                "
+                variant="link"
+                class="pl-0"
+                @click="showSairaalatyo = !showSairaalatyo"
+              >
+                {{ $t('nayta-tyoskentelyjaksot') }}
+                <font-awesome-icon
+                  :icon="showSairaalatyo ? 'chevron-up' : 'chevron-down'"
+                  fixed-width
+                  size="lg"
+                  class="ml-2 text-dark"
+                />
+              </elsa-button>
+              <div v-if="showSairaalatyo && valmistumispyynnonTarkistus.tyoskentelyjaksot">
+                <hr />
+                <yek-tyoskentelyjaksot-list
+                  :tyoskentelyjaksot="
+                    valmistumispyynnonTarkistus.tyoskentelyjaksot.yliopistosairaala
+                  "
+                  :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                  class="ml-3"
+                />
+              </div>
+              <elsa-form-group
+                v-if="editable"
+                :label="$t('muut')"
+                class="mt-3 mb-0"
+                :required="true"
+              >
+                <template #default="{ uid }">
+                  <p class="mb-1">
+                    {{ $t('suoritettu') }}
+                    {{
+                      $duration(
+                        valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                          .yliopistosairaaloidenUlkopuolinenSuoritettu
+                      )
+                    }}
+                  </p>
+                  <b-form-checkbox
+                    :id="uid"
+                    v-model="form.yliopistosairaalanUlkopuolinenTyoTarkistettu"
+                    :state="validateState('yliopistosairaalanUlkopuolinenTyoTarkistettu')"
+                    @input="onSkipRouteExitConfirm"
+                  >
+                    {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
+                  </b-form-checkbox>
+                </template>
+              </elsa-form-group>
+              <div v-if="!editable" class="mt-3">
+                <h5>
+                  {{ $t('muut') }}
+                </h5>
+                <p class="mb-1">
+                  {{ $t('suoritettu') }}
+                  {{
+                    $duration(
+                      valmistumispyynnonTarkistus.tyoskentelyjaksotTilastot
+                        .yliopistosairaaloidenUlkopuolinenSuoritettu
+                    )
+                  }}
+                </p>
+                <p v-if="form.yliopistosairaalanUlkopuolinenTyoTarkistettu" class="mb-1">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                  {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
+                </p>
+              </div>
+              <elsa-button
+                v-if="
+                  valmistumispyynnonTarkistus.tyoskentelyjaksot &&
+                  valmistumispyynnonTarkistus.tyoskentelyjaksot.yliopistosairaaloidenUlkopuolinen
+                    .length > 0
+                "
+                variant="link"
+                class="pl-0"
+                @click="showMuu = !showMuu"
+              >
+                {{ $t('nayta-tyoskentelyjaksot') }}
+                <font-awesome-icon
+                  :icon="showMuu ? 'chevron-up' : 'chevron-down'"
+                  fixed-width
+                  size="lg"
+                  class="ml-2 text-dark"
+                />
+              </elsa-button>
+              <div v-if="showMuu && valmistumispyynnonTarkistus.tyoskentelyjaksot">
+                <hr />
+                <yek-tyoskentelyjaksot-list
+                  :tyoskentelyjaksot="
+                    valmistumispyynnonTarkistus.tyoskentelyjaksot.yliopistosairaaloidenUlkopuolinen
+                  "
+                  :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                  class="ml-3"
+                />
               </div>
               <elsa-form-group
                 v-if="editable"
@@ -526,132 +449,7 @@
                 </p>
               </div>
               <hr />
-              <h2 class="mb-3">{{ $t('koulutukset') }}</h2>
-              <elsa-form-group
-                v-if="editable"
-                :label="$t('teoriakoulutus')"
-                class="mt-3"
-                :required="true"
-              >
-                <template #default="{ uid }">
-                  <p class="mb-1">
-                    {{ $t('suoritettu') }}
-                    {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusSuoritettu) }} /
-                    {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusVaadittu) }}
-                    {{ $t('tuntia-lyhenne') }}
-                  </p>
-                  <b-form-checkbox
-                    :id="uid"
-                    v-model="form.teoriakoulutusTarkistettu"
-                    :state="validateState('teoriakoulutusTarkistettu')"
-                    @input="onSkipRouteExitConfirm"
-                  >
-                    {{ $t('todistukset-tarkistettu') }}
-                  </b-form-checkbox>
-                </template>
-              </elsa-form-group>
-              <div v-if="!editable && form.teoriakoulutusTarkistettu" class="my-3">
-                <h5>
-                  {{ $t('teoriakoulutus') }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusSuoritettu) }} /
-                  {{ Math.round(valmistumispyynnonTarkistus.teoriakoulutusVaadittu) }}
-                  {{ $t('tuntia-lyhenne') }}
-                </p>
-                <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('todistukset-tarkistettu') }}
-                </p>
-              </div>
-              <div v-if="valmistumispyynnonTarkistus.sateilusuojakoulutusVaadittu > 0" class="my-3">
-                <h5>
-                  {{ $t('sateilysuojelukoulutus') }}
-                </h5>
-                <p class="mb-1">
-                  <font-awesome-icon
-                    v-if="
-                      valmistumispyynnonTarkistus.sateilusuojakoulutusSuoritettu >=
-                      valmistumispyynnonTarkistus.sateilusuojakoulutusVaadittu
-                    "
-                    :icon="['fas', 'check-circle']"
-                    class="text-success mr-2"
-                  />
-                  <font-awesome-icon
-                    v-else
-                    :icon="['fas', 'exclamation-circle']"
-                    class="text-error mr-2"
-                  />
-                  {{ $t('suoritettu') }}
-                  {{ Math.round(valmistumispyynnonTarkistus.sateilusuojakoulutusSuoritettu) }} /
-                  {{ Math.round(valmistumispyynnonTarkistus.sateilusuojakoulutusVaadittu) }}
-                  {{ $t('opintopistetta-lyhenne') }}
-                </p>
-              </div>
-              <div class="my-3">
-                <h5>
-                  {{ $t('johtamiskoulutus') }}
-                </h5>
-                <p class="mb-1">
-                  <font-awesome-icon
-                    v-if="
-                      valmistumispyynnonTarkistus.johtamiskoulutusSuoritettu >=
-                      valmistumispyynnonTarkistus.johtamiskoulutusVaadittu
-                    "
-                    :icon="['fas', 'check-circle']"
-                    class="text-success mr-2"
-                  />
-                  <font-awesome-icon
-                    v-else
-                    :icon="['fas', 'exclamation-circle']"
-                    class="text-error mr-2"
-                  />
-                  {{ $t('suoritettu') }}
-                  {{ Math.round(valmistumispyynnonTarkistus.johtamiskoulutusSuoritettu) }} /
-                  {{ Math.round(valmistumispyynnonTarkistus.johtamiskoulutusVaadittu) }}
-                  {{ $t('opintopistetta-lyhenne') }}
-                </p>
-              </div>
-              <hr />
               <h2 class="mb-3">{{ $t('muut-tarkistukset') }}</h2>
-              <opintosuoritus-tab
-                class="mx-2"
-                variant="kuulustelu"
-                :suoritukset="valmistumispyynnonTarkistus.kuulustelut"
-              />
-              <div class="my-3">
-                <h5>
-                  {{ $t('koejakso') }}
-                </h5>
-                <p v-if="valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm" class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('hyvaksytty') }}
-                  {{ $date(valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm) }}
-                </p>
-                <p
-                  v-if="!valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm && editable"
-                  class="mb-1"
-                >
-                  {{ $t('koejakso-ei-hyvaksytty') }}
-                  <b-form-checkbox
-                    v-model="form.koejaksoEiVaadittu"
-                    class="mt-3"
-                    @input="onSkipRouteExitConfirm"
-                  >
-                    {{ $t('koejaksoa-ei-vaadita') }}
-                  </b-form-checkbox>
-                </p>
-                <p
-                  v-if="!valmistumispyynnonTarkistus.koejaksoHyvaksyttyPvm && !editable"
-                  class="mb-1"
-                >
-                  {{ $t('koejakso-ei-hyvaksytty') }}
-                </p>
-                <p v-if="form.koejaksoEiVaadittu && !editable" class="mb-1">
-                  {{ $t('koejaksoa-ei-vaadita') }}
-                </p>
-              </div>
               <div class="my-3">
                 <h5>
                   {{ $t('vanhat-suoritukset') }}
@@ -777,13 +575,14 @@
                 <elsa-button
                   variant="back"
                   :to="{
-                    name: 'valmistumispyynnot'
+                    name: 'valmistumispyynnot',
+                    hash: '#yek'
                   }"
                 >
                   {{ $t('peruuta') }}
                 </elsa-button>
                 <elsa-button v-b-modal.return-to-sender variant="outline-primary" class="ml-6">
-                  {{ $t('palauta-erikoistujalle') }}
+                  {{ $t('yek.palauta-koulutettavalle') }}
                 </elsa-button>
                 <elsa-button
                   v-b-modal.confirm-save
@@ -829,7 +628,7 @@
     </elsa-confirmation-modal>
     <elsa-return-to-sender-modal
       id="return-to-sender"
-      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+      :title="$t('yek.palauta-koulutettavalle')"
       @submit="onReturnToSender"
     />
     <elsa-confirmation-modal
@@ -859,6 +658,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import YekTyoskentelyjaksotList from '@/components/tyoskentelyjaksot-list/yek-tyoskentelyjaksot-list.vue'
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import {
     ValmistumispyyntoArviointienTila,
@@ -870,10 +670,10 @@
   import { ValmistumispyynnonTila } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastSuccess, toastFail } from '@/utils/toast'
-  import OpintosuoritusTab from '@/views/opintosuoritukset/opintosuoritus-tab.vue'
 
   @Component({
     components: {
+      AsiakirjaButton,
       AsiakirjatContent,
       AsiakirjatUpload,
       ElsaButton,
@@ -883,8 +683,7 @@
       ErikoistuvaDetails,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
-      OpintosuoritusTab,
-      AsiakirjaButton
+      YekTyoskentelyjaksotList
     }
   })
   export default class ValmistumispyynnonTarkistusYek extends Mixins<ValmistumispyyntoMixin>(
@@ -903,7 +702,6 @@
           },
           yliopistosairaalatyoTarkistettu: { checked: (value: boolean) => value === true },
           kokonaistyoaikaTarkistettu: { checked: (value: boolean) => value === true },
-          teoriakoulutusTarkistettu: { checked: (value: boolean) => value === true },
           laillistamispaiva: {
             required
           },
@@ -923,7 +721,7 @@
       },
       {
         text: this.$t('valmistumispyynnot'),
-        to: { name: 'valmistumispyynnot' }
+        to: { name: 'valmistumispyynnot', hash: '#yek' }
       },
       {
         text: this.$t('valmistumispyynto'),
@@ -970,6 +768,9 @@
     laillistamispaivaAsiakirjat: Asiakirja[] = []
     laillistaminenMuokattavissa = false
     skipRouteExitConfirm = true
+    showTerveystyo = false
+    showSairaalatyo = false
+    showMuu = false
 
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
@@ -1050,7 +851,7 @@
         } catch {
           toastFail(this, this.$t('valmistumispyynnon-hakeminen-epaonnistui'))
           this.loading = false
-          this.$router.replace({ name: 'valmistumispyynnot' })
+          this.$router.replace({ name: 'valmistumispyynnot', hash: '#yek' })
         }
       }
     }
@@ -1128,7 +929,7 @@
         } else {
           toastSuccess(this, this.$t('virkailijan-tarkistus-lahetetty-onnistuneesti'))
         }
-        this.$router.replace({ name: 'valmistumispyynnot' })
+        this.$router.replace({ name: 'valmistumispyynnot', hash: '#yek' })
       } catch (err) {
         toastFail(this, this.$t('virkailijan-tarkistus-lahetys-epaonnistui'))
       }
@@ -1168,8 +969,8 @@
         this.sending = true
         this.response = (await putValmistumispyynto(form)).data
         this.$emit('skipRouteExitConfirm', true)
-        toastSuccess(this, this.$t('virkailijan-tarkistus-palautettu-onnistuneesti'))
-        this.$router.replace({ name: 'valmistumispyynnot' })
+        toastSuccess(this, this.$t('yek.virkailijan-tarkistus-palautettu-onnistuneesti'))
+        this.$router.replace({ name: 'valmistumispyynnot', hash: '#yek' })
       } catch (err) {
         toastFail(this, this.$t('virkailijan-tarkistus-palautus-epaonnistui'))
       }
@@ -1194,6 +995,32 @@
     onSkipRouteExitConfirm() {
       this.skipRouteExitConfirm = false
       this.$emit('skipRouteExitConfirm', false)
+    }
+
+    get teoriakoulutusSuoritettu(): boolean {
+      const suoritettu = Math.round(
+        this.valmistumispyynnonTarkistus?.johtamiskoulutusSuoritettu || 0
+      )
+      const vaadittu = Math.round(this.valmistumispyynnonTarkistus?.teoriakoulutusVaadittu || 0)
+      return suoritettu >= vaadittu
+    }
+
+    get terveyskeskustyoLabel() {
+      return `${this.$t('yek.terveyskeskustyo')} ${this.$t('yek.vah')} ${this.$duration(
+        this.valmistumispyynnonTarkistus?.tyoskentelyjaksotTilastot
+          .terveyskeskusVaadittuVahintaan || 0
+      )}`
+    }
+
+    get sairaalatyoLabel() {
+      return `${this.$t('yek.sairaalatyo')} ${this.$t('yek.vah')} ${this.$duration(
+        this.valmistumispyynnonTarkistus?.tyoskentelyjaksotTilastot
+          .yliopistosairaalaVaadittuVahintaan || 0
+      )}`
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return `virkailija/valmistumispyynto/tyoskentelyjakso-liite`
     }
   }
 </script>

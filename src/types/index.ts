@@ -1275,6 +1275,12 @@ export type TyoskentelyjaksotTilastotKoulutustyypit = {
   yhteensaSuoritettu: number
 }
 
+export type TyoskentelyjaksotKoulutustyypit = {
+  terveyskeskus: Tyoskentelyjakso[]
+  yliopistosairaala: Tyoskentelyjakso[]
+  yliopistosairaaloidenUlkopuolinen: Tyoskentelyjakso[]
+}
+
 export interface TyoskentelyjaksotTilastotKaytannonKoulutus {
   kaytannonKoulutus: KaytannonKoulutusTyyppi
   suoritettu: number
@@ -1617,6 +1623,7 @@ export interface ValmistumispyyntoVirkailijanTarkistus {
   ltTutkintoSuorituspaiva: string | null
   virkailijanSaate: string | null
   tyoskentelyjaksotTilastot: TyoskentelyjaksotTilastotKoulutustyypit
+  tyoskentelyjaksot: TyoskentelyjaksotKoulutustyypit | null
   terveyskeskustyoHyvaksyttyPvm: string | null
   terveyskeskustyoHyvaksyntaId: number | null
   terveyskeskustyoOpintosuoritusId: number | null

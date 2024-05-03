@@ -211,7 +211,6 @@
                             :id="uid"
                             v-model="valmistumispyyntoLomake.erikoistujanSahkoposti"
                             :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
-                            :value="account.erikoistuvaLaakari.sahkoposti"
                             @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <b-form-invalid-feedback
@@ -244,7 +243,6 @@
                             :id="uid"
                             v-model="valmistumispyyntoLomake.erikoistujanPuhelinnumero"
                             :state="validateValmistumispyyntoState('erikoistujanPuhelinnumero')"
-                            :value="account.erikoistuvaLaakari.puhelinnumero"
                             @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <small class="form-text text-muted">

@@ -17,8 +17,9 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ValmistumispyynnotVirkailijaYek from '../../valmistumispyynnot-yek/virkailija/valmistumispyynnot-virkailija-yek.vue'
+
   import ValmistumispyynnotVirkailijaErikoistuvaLaakari from './valmistumispyynnot-virkailija-erikoistuva-laakari.vue'
-  import ValmistumispyynnotVirkailijaYek from './valmistumispyynnot-virkailija-yek.vue'
 
   import { getErikoisalat } from '@/api/virkailija'
   import { Erikoisala } from '@/types'
