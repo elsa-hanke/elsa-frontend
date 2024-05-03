@@ -171,7 +171,6 @@
                             :id="uid"
                             v-model="valmistumispyyntoLomake.erikoistujanSahkoposti"
                             :state="validateValmistumispyyntoState('erikoistujanSahkoposti')"
-                            :value="account.erikoistuvaLaakari.sahkoposti"
                             @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <b-form-invalid-feedback
@@ -204,7 +203,6 @@
                             :id="uid"
                             v-model="valmistumispyyntoLomake.erikoistujanPuhelinnumero"
                             :state="validateValmistumispyyntoState('erikoistujanPuhelinnumero')"
-                            :value="account.erikoistuvaLaakari.puhelinnumero"
                             @input="$emit('skipRouteExitConfirm', false)"
                           />
                           <small class="form-text text-muted">
@@ -315,18 +313,9 @@
                 </div>
                 <b-row>
                   <b-col lg="8">
-                    <div v-if="useaVastuuhenkilo">
-                      <h3>{{ $t('erikoisala-vastuuhenkilöt') }}</h3>
-                      <h5 class="mt-3">{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-                      {{ vastuuhenkiloOsaamisenArvioija }}
-                      <h5 class="mt-3">{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-                      {{ vastuuhenkiloHyvaksyja }}
-                    </div>
-                    <div v-else>
-                      <h3>{{ $t('yek.yek-koulutuksen-vastuuhenkilo') }}</h3>
-                      <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
-                      {{ vastuuhenkiloHyvaksyja }}
-                    </div>
+                    <h3>{{ $t('yek.yek-koulutuksen-vastuuhenkilo') }}</h3>
+                    <h5>{{ $t('erikoisala-vastuuhenkilö-label') }}</h5>
+                    {{ vastuuhenkiloHyvaksyja }}
                   </b-col>
                 </b-row>
                 <hr />

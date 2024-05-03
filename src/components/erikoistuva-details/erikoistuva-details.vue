@@ -10,7 +10,7 @@
       </tr>
       <tr>
         <th scope="row" style="width: 11rem" class="align-middle font-weight-500">
-          {{ $t('erikoistuja') }}
+          {{ yek ? $t('yek.koulutettava-laakari') : $t('erikoistuja') }}
         </th>
         <td class="pl-6">
           <user-avatar
@@ -19,7 +19,7 @@
             :display-name="displayName"
           >
             <template #display-name>
-              {{ displayNameAndErikoisala }}
+              {{ yek ? displayName : displayNameAndErikoisala }}
             </template>
           </user-avatar>
         </td>
@@ -148,6 +148,9 @@
 
     @Prop({ required: false, type: String })
     asetus?: string
+
+    @Prop({ required: false, default: false })
+    yek!: boolean
 
     laillistaminenMuokattavissa = false
 
