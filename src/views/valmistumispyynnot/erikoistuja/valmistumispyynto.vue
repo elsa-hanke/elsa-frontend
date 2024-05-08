@@ -539,6 +539,8 @@
             this.account.erikoistuvaLaakari.sahkoposti
           this.valmistumispyyntoLomake.erikoistujanPuhelinnumero =
             this.account.erikoistuvaLaakari.puhelinnumero
+          this.valmistumispyyntoLomake.selvitysVanhentuneistaSuorituksista =
+            this.valmistumispyynto.selvitysVanhentuneistaSuorituksista || ''
         }
         this.loading = false
       } catch (err) {

@@ -12,7 +12,7 @@
     <b-row class="mb-5">
       <b-col>
         <h3>{{ $t('avoimet') }}</h3>
-        <valmistumispyynnot-list
+        <yek-valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotAvoimet"
           :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
           :current-page="currentAvoinPage"
@@ -26,7 +26,7 @@
     <b-row>
       <b-col>
         <h3>{{ $t('valmiit-hyvaksytyt-palautetut') }}</h3>
-        <valmistumispyynnot-list
+        <yek-valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotMuut"
           :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
           :current-page="currentMuutPage"
@@ -41,11 +41,11 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+  import { Component, Vue, Watch } from 'vue-property-decorator'
 
   import { getValmistumispyynnot } from '@/api/vastuuhenkilo'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
-  import ValmistumispyynnotList from '@/components/valmistumispyynnot-list/valmistumispyynnot-list.vue'
+  import YekValmistumispyynnotList from '@/components/valmistumispyynnot-list/yek-valmistumispyynnot-list.vue'
   import { ValmistumispyyntoListItem, Page } from '@/types'
   import { ERIKOISALA_YEK_ID } from '@/utils/constants'
   import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
@@ -53,7 +53,7 @@
   @Component({
     components: {
       ElsaSearchInput,
-      ValmistumispyynnotList
+      YekValmistumispyynnotList
     }
   })
   export default class ValmistumispyynnotVastuuhenkiloYek extends Vue {
@@ -66,9 +66,6 @@
     valmistumispyynnotAvoimet: Page<ValmistumispyyntoListItem> | null = null
     valmistumispyynnotMuut: Page<ValmistumispyyntoListItem> | null = null
     debounce?: number
-
-    @Prop({ required: true, type: String })
-    valmistumispyynnonHyvaksyjaRole!: ValmistumispyynnonHyvaksyjaRole
 
     @Watch('hakutermi')
     onPropertyChanged(value: string) {
@@ -103,10 +100,6 @@
     }
 
     async fetchAvoimet() {
-      if (!this.valmistumispyynnonHyvaksyjaRole) {
-        this.loadingAvoimet = false
-        return
-      }
       getValmistumispyynnot({
         page: this.currentAvoinPage - 1,
         size: this.perPage,
@@ -123,10 +116,6 @@
     }
 
     async fetchMuut() {
-      if (!this.valmistumispyynnonHyvaksyjaRole) {
-        this.loadingMuut = false
-        return
-      }
       getValmistumispyynnot({
         page: this.currentMuutPage - 1,
         size: this.perPage,
@@ -158,6 +147,10 @@
       erikoistujanNimi: string | null
     } = {
       erikoistujanNimi: null
+    }
+
+    get valmistumispyynnonHyvaksyjaRole() {
+      return ValmistumispyynnonHyvaksyjaRole.VASTUUHENKILO_HYVAKSYJA
     }
   }
 </script>
