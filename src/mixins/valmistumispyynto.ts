@@ -27,6 +27,10 @@ export default class ValmistumispyyntoMixin extends Vue {
     return this.valmistumispyynto?.tila === ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA
   }
 
+  get hyvaksytty() {
+    return this.valmistumispyynto?.tila === ValmistumispyynnonTila.HYVAKSYTTY
+  }
+
   get allekirjoitettu() {
     return this.valmistumispyynto?.tila === ValmistumispyynnonTila.ALLEKIRJOITETTU
   }

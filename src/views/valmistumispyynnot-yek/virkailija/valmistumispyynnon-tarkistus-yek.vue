@@ -43,7 +43,7 @@
               </b-alert>
             </div>
             <div v-else class="mt-3">
-              <b-alert :show="!allekirjoitettu" variant="dark">
+              <b-alert :show="!hyvaksytty" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon
@@ -63,10 +63,16 @@
                       {{ valmistumispyynto.virkailijanSaate }}
                     </span>
                     <span v-else-if="virkailijaPalauttanut">
-                      {{ $t('valmistumispyynto-palautettu-koulutettavalle-virkailijan-toimesta') }}
+                      {{
+                        $t('yek.valmistumispyynto-palautettu-koulutettavalle-virkailijan-toimesta')
+                      }}
                     </span>
                     <span v-else-if="vastuuhenkiloHyvaksyjaPalauttanut">
-                      {{ $t('valmistumispyynto-palautettu-koulutettavalle-hyvaksyjan-toimesta') }}
+                      {{
+                        $t(
+                          'yek.valmistumispyynto-palautettu-koulutettavalle-vastuuhenkilon-toimesta'
+                        )
+                      }}
                     </span>
                     <span
                       v-if="virkailijaPalauttanut || vastuuhenkiloHyvaksyjaPalauttanut"
@@ -80,14 +86,14 @@
                   </div>
                 </div>
               </b-alert>
-              <b-alert :show="allekirjoitettu" variant="success">
+              <b-alert :show="hyvaksytty" variant="success">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                   </em>
                   <div>
                     <span>
-                      {{ $t('valmistumispyynto-hyvaksytty-kaikkien-osapuolten-toimesta') }}
+                      {{ $t('valmistumispyynto-hyvaksytty-vastuuhenkilon-toimesta') }}
                     </span>
                   </div>
                 </div>
@@ -455,15 +461,15 @@
                   {{ $t('vanhat-suoritukset') }}
                 </h5>
                 <p v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
-                  {{ $t('erikoistuvalla-on-vanhoja-yli-10v-suorituksia') }}
+                  {{ $t('yek.koulutettavalla-on-vanhoja-yli-10v-suorituksia') }}
                 </p>
                 <p v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
-                  {{ $t('erikoistuvalla-ei-vanhoja-yli-10v-suorituksia') }}
+                  {{ $t('yek.koulutettavalla-on-vanhoja-yli-10v-suorituksia') }}
                 </p>
               </div>
               <div v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="my-3">
                 <h5>
-                  {{ $t('selvitys-vanhentuneista-suorituksista-virkailija') }}
+                  {{ $t('yek.selvitys-vanhentuneista-suorituksista-virkailija') }}
                 </h5>
                 <p class="mb-1">
                   {{ valmistumispyynto.selvitysVanhentuneistaSuorituksista }}
@@ -792,8 +798,7 @@
                 ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA ||
               this.valmistumispyynto.tila ==
                 ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU ||
-              this.valmistumispyynto.tila == ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA ||
-              this.valmistumispyynto.tila == ValmistumispyynnonTila.ALLEKIRJOITETTU ||
+              this.valmistumispyynto.tila == ValmistumispyynnonTila.HYVAKSYTTY ||
               this.valmistumispyynto.tila ==
                 ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU
             ) {
@@ -998,9 +1003,7 @@
     }
 
     get teoriakoulutusSuoritettu(): boolean {
-      const suoritettu = Math.round(
-        this.valmistumispyynnonTarkistus?.johtamiskoulutusSuoritettu || 0
-      )
+      const suoritettu = Math.round(this.valmistumispyynnonTarkistus?.teoriakoulutusSuoritettu || 0)
       const vaadittu = Math.round(this.valmistumispyynnonTarkistus?.teoriakoulutusVaadittu || 0)
       return suoritettu >= vaadittu
     }

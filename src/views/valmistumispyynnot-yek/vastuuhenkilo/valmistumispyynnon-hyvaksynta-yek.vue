@@ -7,7 +7,7 @@
           <h1>{{ $t('valmistumispyynnon-hyvaksynta') }}</h1>
           <div v-if="!loading && virkailijanTarkistus">
             <div class="mt-3">
-              <b-alert :show="odottaaHyvaksyntaa || odottaaAllekirjoituksia" variant="dark">
+              <b-alert :show="odottaaHyvaksyntaa" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon
@@ -15,30 +15,27 @@
                       class="text-muted text-size-md mr-2"
                     />
                   </em>
-                  <div v-if="odottaaHyvaksyntaa">
+                  <div>
                     <span>
-                      {{ $t('valmistumispyynto-hyvaksynta-virkailija-tarkastanut') }}
+                      {{ $t('yek.valmistumispyynto-hyvaksynta-virkailija-tarkastanut') }}
                     </span>
-                    <span v-if="valmistumispyynto.virkailijanSaate" class="d-block">
+                    <span v-if="valmistumispyynto.virkailijanSaate" class="mt-2 d-block">
                       <strong>{{ $t('lisatiedot-virkailijalta') }}: &nbsp;</strong>
                       <span>
                         {{ valmistumispyynto.virkailijanSaate }}
                       </span>
                     </span>
                   </div>
-                  <span v-if="odottaaAllekirjoituksia">
-                    {{ $t('valmistumispyynto-hyvaksynta-odottaa-allekirjoituksia') }}
-                  </span>
                 </div>
               </b-alert>
-              <b-alert :show="allekirjoitettu" variant="success">
+              <b-alert :show="hyvaksytty" variant="success">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                   </em>
                   <div>
                     <span>
-                      {{ $t('valmistumispyynto-allekirjoitettu-kaikkien-osapuolten-toimesta') }}
+                      {{ $t('valmistumispyynto-hyvaksytty-vastuuhenkilon-toimesta') }}
                     </span>
                   </div>
                 </div>
@@ -55,7 +52,7 @@
                     <span>
                       {{
                         $t(
-                          'valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle-hyvaksyjan-toimesta'
+                          'yek.valmistumispyynto-palautettu-koulutettavalle-vastuuhenkilon-toimesta'
                         )
                       }}
                     </span>
@@ -72,7 +69,8 @@
                 variant="primary"
                 class="mt-2 mb-1"
                 :to="{
-                  name: 'valmistumispyynnot'
+                  name: 'valmistumispyynnot',
+                  hash: '#yek'
                 }"
               >
                 {{ $t('palaa-valmistumispyyntoihin') }}
@@ -95,419 +93,289 @@
                 "
                 :opintooikeuden-myontamispaiva="valmistumispyynto.opintooikeudenMyontamispaiva"
                 :asetus="valmistumispyynto.erikoistujanAsetus"
+                :yek="true"
               ></erikoistuva-details>
             </div>
             <hr />
-            <div v-if="odottaaHyvaksyntaa">
-              <b-row>
-                <b-col lg="4">
-                  <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                    <template #default="{ uid }">
-                      <b-form-input
-                        :id="uid"
-                        v-model="form.sahkoposti"
-                        :state="validateState('sahkoposti')"
-                        @input="onSkipRouteExitConfirm"
-                      />
-                      <b-form-invalid-feedback
-                        v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
-                        :id="`${uid}-feedback`"
-                      >
-                        {{ $t('pakollinen-tieto') }}
-                      </b-form-invalid-feedback>
-                      <b-form-invalid-feedback
-                        v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
-                        :id="`${uid}-feedback`"
-                        :state="validateState('sahkoposti')"
-                      >
-                        {{ $t('sahkopostiosoite-ei-kelvollinen') }}
-                      </b-form-invalid-feedback>
-                    </template>
-                  </elsa-form-group>
-                </b-col>
-                <b-col lg="4">
-                  <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                    <template #default="{ uid }">
-                      <b-form-input
-                        :id="uid"
-                        v-model="form.puhelinnumero"
-                        :state="validateState('puhelinnumero')"
-                        @input="onSkipRouteExitConfirm"
-                      />
-                      <small class="form-text text-muted">
-                        {{ $t('syota-puhelinnumero-muodossa') }}
-                      </small>
-                      <b-form-invalid-feedback :id="`${uid}-feedback`">
-                        {{ $t('tarkista-puhelinnumeron-muoto') }}
-                      </b-form-invalid-feedback>
-                    </template>
-                  </elsa-form-group>
-                </b-col>
-              </b-row>
-              <hr />
-            </div>
-            <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
-            <div>
+            <h2 class="mb-3">{{ $t('yek.koulutettavan-suoritustiedot') }}</h2>
+            <elsa-button
+              variant="outline-primary"
+              class="mt-2"
+              @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
+            >
+              {{ $t('yek.nayta-koulutettavan-suoritustiedot') }}
+            </elsa-button>
+            <hr />
+            <h2 class="mb-3">{{ $t('teoriakoulutus') }}</h2>
+            <h5>
+              {{ $t('teoriakoulutus') }}
+            </h5>
+            <p v-if="teoriakoulutusSuoritettu" class="mb-1">
+              <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+              {{ $t('suoritettu') }}
+            </p>
+            <p v-else class="mb-1">
+              <font-awesome-icon :icon="['fas', 'exclamation-circle']" class="text-error mr-2" />
+              {{ $t('ei-suoritettu') }}
+            </p>
+            <hr />
+            <h2 class="mb-3">{{ $t('tyoskentelyjaksot') }}</h2>
+            <b-alert variant="dark" :show="virkailijanTarkistus.tutkimustyotaTehty">
+              <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+              <span>
+                {{ $t('valmistumispyynto-virkailija-tyoskentelyjaksot-huomio') }}
+              </span>
+            </b-alert>
+            <div class="mt-3">
               <h5>
-                {{ $t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen') }}
+                {{ terveyskeskustyoLabel }}
               </h5>
-              <p>
-                {{ $t('kylla') }}
+              <p class="mb-1">
+                {{ $t('suoritettu') }}
+                {{
+                  $duration(virkailijanTarkistus.tyoskentelyjaksotTilastot.terveyskeskusSuoritettu)
+                }}
+              </p>
+              <span>
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                {{ $t('kesto-ja-todistukset') }} {{ $t('tarkistettu') }}
+              </span>
+            </div>
+            <elsa-button
+              v-if="
+                virkailijanTarkistus.tyoskentelyjaksot &&
+                virkailijanTarkistus.tyoskentelyjaksot.terveyskeskus.length > 0
+              "
+              variant="link"
+              class="pl-0"
+              @click="showTerveystyo = !showTerveystyo"
+            >
+              {{ $t('nayta-tyoskentelyjaksot') }}
+              <font-awesome-icon
+                :icon="showTerveystyo ? 'chevron-up' : 'chevron-down'"
+                fixed-width
+                size="lg"
+                class="ml-2 text-dark"
+              />
+            </elsa-button>
+            <div v-if="showTerveystyo && virkailijanTarkistus.tyoskentelyjaksot">
+              <hr />
+              <yek-tyoskentelyjaksot-list
+                :tyoskentelyjaksot="virkailijanTarkistus.tyoskentelyjaksot.terveyskeskus"
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                class="ml-3"
+              />
+            </div>
+            <div v-if="virkailijanTarkistus.yliopistosairaalatyoTarkistettu" class="mt-3">
+              <h5>
+                {{ sairaalatyoLabel }}
+              </h5>
+              <p class="mb-1">
+                {{ $t('suoritettu') }}
+                {{
+                  $duration(
+                    virkailijanTarkistus.tyoskentelyjaksotTilastot.yliopistosairaalaSuoritettu
+                  )
+                }}
+              </p>
+              <p class="mb-1">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
               </p>
             </div>
-            <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
-              <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
+            <elsa-button
+              v-if="
+                virkailijanTarkistus.tyoskentelyjaksot &&
+                virkailijanTarkistus.tyoskentelyjaksot.yliopistosairaala.length > 0
+              "
+              variant="link"
+              class="pl-0"
+              @click="showSairaalatyo = !showSairaalatyo"
+            >
+              {{ $t('nayta-tyoskentelyjaksot') }}
+              <font-awesome-icon
+                :icon="showSairaalatyo ? 'chevron-up' : 'chevron-down'"
+                fixed-width
+                size="lg"
+                class="ml-2 text-dark"
+              />
+            </elsa-button>
+            <div v-if="showSairaalatyo && virkailijanTarkistus.tyoskentelyjaksot">
+              <hr />
+              <yek-tyoskentelyjaksot-list
+                :tyoskentelyjaksot="virkailijanTarkistus.tyoskentelyjaksot.yliopistosairaala"
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                class="ml-3"
+              />
+            </div>
+            <div
+              v-if="virkailijanTarkistus.yliopistosairaalanUlkopuolinenTyoTarkistettu"
+              class="my-3"
+            >
+              <h5>
+                {{ $t('muut') }}
+              </h5>
+              <p class="mb-1">
+                {{ $t('suoritettu') }}
+                {{
+                  $duration(
+                    virkailijanTarkistus.tyoskentelyjaksotTilastot
+                      .yliopistosairaaloidenUlkopuolinenSuoritettu
+                  )
+                }}
+              </p>
+              <p class="mb-1">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
+              </p>
+            </div>
+            <elsa-button
+              v-if="
+                virkailijanTarkistus.tyoskentelyjaksot &&
+                virkailijanTarkistus.tyoskentelyjaksot.yliopistosairaaloidenUlkopuolinen.length > 0
+              "
+              variant="link"
+              class="pl-0"
+              @click="showMuu = !showMuu"
+            >
+              {{ $t('nayta-tyoskentelyjaksot') }}
+              <font-awesome-icon
+                :icon="showMuu ? 'chevron-up' : 'chevron-down'"
+                fixed-width
+                size="lg"
+                class="ml-2 text-dark"
+              />
+            </elsa-button>
+            <div v-if="showMuu && virkailijanTarkistus.tyoskentelyjaksot">
+              <hr />
+              <yek-tyoskentelyjaksot-list
+                :tyoskentelyjaksot="
+                  virkailijanTarkistus.tyoskentelyjaksot.yliopistosairaaloidenUlkopuolinen
+                "
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                class="ml-3"
+              />
+            </div>
+            <div v-if="virkailijanTarkistus.kokonaistyoaikaTarkistettu" class="my-3">
+              <h5>
+                {{ $t('kokonaistyoaika') }}
+              </h5>
+              <p class="mb-1">
+                {{ $t('suoritettu') }}
+                {{ $duration(virkailijanTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
+              </p>
+              <p class="mb-1">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
+                {{ $t('kesto-tarkistettu-tyotodistuksista') }}
+              </p>
+            </div>
+            <hr />
+            <h2 class="mb-3">{{ $t('muut-tarkistukset') }}</h2>
+            <div class="my-3">
+              <h5>
+                {{ $t('vanhat-suoritukset') }}
+              </h5>
+              <p v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
+                {{ $t('yek.koulutettavalla-on-vanhoja-yli-10v-suorituksia') }}
+              </p>
+              <p v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
+                {{ $t('yek.koulutettavalla-ei-vanhoja-yli-10v-suorituksia') }}
+              </p>
+            </div>
+            <div v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="my-3">
+              <h5>
+                {{ $t('yek.selvitys-vanhentuneista-suorituksista-virkailija') }}
+              </h5>
+              <p class="mb-1">
+                {{ valmistumispyynto.selvitysVanhentuneistaSuorituksista }}
+              </p>
+            </div>
+            <hr />
+            <div v-if="valmistumispyynto.virkailijanKuittausaika">
               <b-row>
-                <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
-                  <h5>{{ $t('paivays') }}</h5>
-                  <p>
-                    {{ $date(valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika) }}
-                  </p>
-                </b-col>
                 <b-col>
-                  <h5>{{ $t('vastuuhenkilon-nimi-ja-nimike') }}</h5>
+                  <h3>{{ $t('tarkistanut') }}</h3>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="4">
+                  <h5>{{ $t('paivays') }}</h5>
+                  <p>{{ $date(valmistumispyynto.virkailijanKuittausaika) }}</p>
+                </b-col>
+                <b-col lg="4">
+                  <h5>{{ $t('nimi-ja-nimike') }}</h5>
                   <p>
-                    {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi }}
+                    {{ valmistumispyynto.virkailijaNimi }}
                   </p>
                 </b-col>
               </b-row>
+              <hr />
+            </div>
+            <div v-if="valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika">
+              <b-row>
+                <b-col>
+                  <h3>{{ $t('hyvaksynyt') }}</h3>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="4">
+                  <h5>{{ $t('paivays') }}</h5>
+                  <p>{{ $date(valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika) }}</p>
+                </b-col>
+                <b-col lg="4">
+                  <h5>{{ $t('nimi-ja-nimike') }}</h5>
+                  <p>
+                    {{ valmistumispyynto.vastuuhenkiloHyvaksyjaNimi
+                    }}{{
+                      valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
+                        ? ', ' + valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
+                        : ''
+                    }}
+                  </p>
+                </b-col>
+              </b-row>
+              <hr />
+            </div>
+            <div v-if="yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl">
+              <b-row>
+                <b-col>
+                  <h3>{{ $t('dokumentit') }}</h3>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <asiakirja-button
+                    v-if="yhteenvetoAsiakirjaUrl"
+                    :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                    :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
+                    :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                  />
+                  <asiakirja-button
+                    v-if="liitteetAsiakirjaUrl"
+                    :id="valmistumispyynto.liitteetAsiakirjaId"
+                    :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
+                    :asiakirja-label="$t('valmistumispyynnon-liitteet')"
+                  />
+                </b-col>
+              </b-row>
+              <hr />
             </div>
             <b-form @submit.stop.prevent="onSubmit">
-              <hr />
-              <h2 class="mb-3">{{ $t('maaralliset-tarkistukset') }}</h2>
-              <elsa-button
-                variant="outline-primary"
-                class="mt-2 mb-4"
-                @click="vaihdaRooli(valmistumispyynto.opintooikeusId)"
-              >
-                {{ $t('nayta-erikoistujan-suoritustiedot') }}
-              </elsa-button>
-              <h5>{{ $t('muut-koulutukset-ja-tutkinnot') }}</h5>
-              <div class="mb-3">
-                <p v-if="virkailijanTarkistus.yekSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('yek-suoritettu') }}
-                  {{ $date(virkailijanTarkistus.yekSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('yek-ei-suoritettu') }}
-                </p>
-              </div>
-              <div class="mb-3">
-                <p v-if="virkailijanTarkistus.ptlSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('ptl-suoritettu') }}
-                  {{ $date(virkailijanTarkistus.ptlSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('ptl-ei-suoritettu') }}
-                </p>
-              </div>
-              <div class="mb-3">
-                <p v-if="virkailijanTarkistus.aiempiElKoulutusSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('aiempi-el-koulutus-suoritettu') }}
-                  {{ $date(virkailijanTarkistus.aiempiElKoulutusSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('aiempi-el-koulutus-ei-suoritettu') }}
-                </p>
-              </div>
-              <div class="mb-3">
-                <p v-if="virkailijanTarkistus.ltTutkintoSuorituspaiva" class="mb-0">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('lt-tutkinto-suoritettu') }}
-                  {{ $date(virkailijanTarkistus.ltTutkintoSuorituspaiva) }}
-                </p>
-                <p v-else>
-                  {{ $t('lt-tutkinto-ei-suoritettu') }}
-                </p>
-              </div>
-              <hr />
-              <h2 class="mb-3">{{ $t('tyoskentelyjaksot') }}</h2>
-              <b-alert variant="dark" :show="virkailijanTarkistus.tutkimustyotaTehty">
-                <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-                <span>
-                  {{ $t('valmistumispyynto-virkailija-tyoskentelyjaksot-huomio') }}
-                </span>
-              </b-alert>
-              <div class="my-3">
-                <h5>
-                  {{ $t('terveyskeskustyo') }}
-                  {{
-                    $duration(
-                      virkailijanTarkistus.tyoskentelyjaksotTilastot.terveyskeskusVaadittuVahintaan
-                    )
-                  }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{
-                    $duration(
-                      virkailijanTarkistus.tyoskentelyjaksotTilastot.terveyskeskusSuoritettu
-                    )
-                  }}
-                </p>
-                <span>
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('kesto-ja-todistukset') }} {{ $t('tarkistettu') }}
-                </span>
-              </div>
-              <div
-                v-if="virkailijanTarkistus.yliopistosairaalanUlkopuolinenTyoTarkistettu"
-                class="my-3"
-              >
-                <h5>
-                  {{ $t('yliopistosairaalan-ulkopuolinen-tyo') }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{
-                    $duration(
-                      virkailijanTarkistus.tyoskentelyjaksotTilastot
-                        .yliopistosairaaloidenUlkopuolinenSuoritettu
-                    )
-                  }}
-                </p>
-                <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
-                </p>
-              </div>
-              <div v-if="virkailijanTarkistus.yliopistosairaalatyoTarkistettu" class="my-3">
-                <h5>
-                  {{ $t('yliopistosairaalatyo') }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{
-                    $duration(
-                      virkailijanTarkistus.tyoskentelyjaksotTilastot.yliopistosairaalaSuoritettu
-                    )
-                  }}
-                </p>
-                <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('kesto-poissaolot-ja-vanheneminen-tarkistettu-tyotodistuksesta') }}
-                </p>
-              </div>
-              <div v-if="virkailijanTarkistus.kokonaistyoaikaTarkistettu" class="my-3">
-                <h5>
-                  {{ $t('kokonaistyoaika') }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{ $duration(virkailijanTarkistus.tyoskentelyjaksotTilastot.yhteensaSuoritettu) }}
-                </p>
-                <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('kesto-tarkistettu-tyotodistuksista') }}
-                </p>
-              </div>
-              <hr />
-              <h2 class="mb-3">{{ $t('koulutukset') }}</h2>
-              <div v-if="virkailijanTarkistus.teoriakoulutusTarkistettu" class="my-3">
-                <h5>
-                  {{ $t('teoriakoulutus') }}
-                </h5>
-                <p class="mb-1">
-                  {{ $t('suoritettu') }}
-                  {{ Math.round(virkailijanTarkistus.teoriakoulutusSuoritettu) }} /
-                  {{ Math.round(virkailijanTarkistus.teoriakoulutusVaadittu) }}
-                  {{ $t('tuntia-lyhenne') }}
-                </p>
-                <p class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('todistukset-tarkistettu') }}
-                </p>
-              </div>
-              <div v-if="virkailijanTarkistus.sateilusuojakoulutusVaadittu > 0" class="my-3">
-                <h5>
-                  {{ $t('sateilysuojelukoulutus') }}
-                </h5>
-                <p class="mb-1">
-                  <font-awesome-icon
-                    v-if="
-                      virkailijanTarkistus.sateilusuojakoulutusSuoritettu >=
-                      virkailijanTarkistus.sateilusuojakoulutusVaadittu
-                    "
-                    :icon="['fas', 'check-circle']"
-                    class="text-success mr-2"
-                  />
-                  <font-awesome-icon
-                    v-else
-                    :icon="['fas', 'exclamation-circle']"
-                    class="text-error mr-2"
-                  />
-                  {{ $t('suoritettu') }}
-                  {{ Math.round(virkailijanTarkistus.sateilusuojakoulutusSuoritettu) }} /
-                  {{ Math.round(virkailijanTarkistus.sateilusuojakoulutusVaadittu) }}
-                  {{ $t('opintopistetta-lyhenne') }}
-                </p>
-              </div>
-              <div class="my-3">
-                <h5>
-                  {{ $t('johtamiskoulutus') }}
-                </h5>
-                <p class="mb-1">
-                  <font-awesome-icon
-                    v-if="
-                      virkailijanTarkistus.johtamiskoulutusSuoritettu >=
-                      virkailijanTarkistus.johtamiskoulutusVaadittu
-                    "
-                    :icon="['fas', 'check-circle']"
-                    class="text-success mr-2"
-                  />
-                  <font-awesome-icon
-                    v-else
-                    :icon="['fas', 'exclamation-circle']"
-                    class="text-error mr-2"
-                  />
-                  {{ $t('suoritettu') }}
-                  {{ Math.round(virkailijanTarkistus.johtamiskoulutusSuoritettu) }} /
-                  {{ Math.round(virkailijanTarkistus.johtamiskoulutusVaadittu) }}
-                  {{ $t('opintopistetta-lyhenne') }}
-                </p>
-              </div>
-              <hr />
-              <h2 class="mb-3">{{ $t('muut-tarkistukset') }}</h2>
-              <opintosuoritus-tab
-                class="mx-2"
-                variant="kuulustelu"
-                :suoritukset="virkailijanTarkistus.kuulustelut"
-              />
-              <div class="my-3">
-                <h5>
-                  {{ $t('koejakso') }}
-                </h5>
-                <p v-if="virkailijanTarkistus.koejaksoHyvaksyttyPvm" class="mb-1">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-                  {{ $t('hyvaksytty') }}
-                  {{ $date(virkailijanTarkistus.koejaksoHyvaksyttyPvm) }}
-                </p>
-                <p v-if="!virkailijanTarkistus.koejaksoHyvaksyttyPvm" class="mb-1">
-                  {{ $t('koejakso-ei-hyvaksytty') }}
-                </p>
-                <p
-                  v-if="
-                    !virkailijanTarkistus.koejaksoHyvaksyttyPvm &&
-                    virkailijanTarkistus.koejaksoEiVaadittu
-                  "
-                  class="mb-1"
-                >
-                  {{ $t('koejaksoa-ei-vaadita') }}
-                </p>
-              </div>
-              <div class="my-3">
-                <h5>
-                  {{ $t('vanhat-suoritukset') }}
-                </h5>
-                <p v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
-                  {{ $t('erikoistuvalla-on-vanhoja-yli-10v-suorituksia') }}
-                </p>
-                <p v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
-                  {{ $t('erikoistuvalla-ei-vanhoja-yli-10v-suorituksia') }}
-                </p>
-              </div>
-              <div v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="my-3">
-                <h5>
-                  {{ $t('selvitys-vanhentuneista-suorituksista-virkailija') }}
-                </h5>
-                <p class="mb-1">
-                  {{ valmistumispyynto.selvitysVanhentuneistaSuorituksista }}
-                </p>
-              </div>
-              <div v-if="valmistumispyynto.virkailijanKuittausaika">
-                <hr />
-                <b-row>
-                  <b-col>
-                    <h3>{{ $t('tarkistanut') }}</h3>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col lg="4">
-                    <h5>{{ $t('paivays') }}</h5>
-                    <p>{{ $date(valmistumispyynto.virkailijanKuittausaika) }}</p>
-                  </b-col>
-                  <b-col lg="4">
-                    <h5>{{ $t('nimi-ja-nimike') }}</h5>
-                    <p>
-                      {{ valmistumispyynto.virkailijaNimi }}
-                    </p>
-                  </b-col>
-                </b-row>
-              </div>
-              <div v-if="valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika">
-                <hr />
-                <b-row>
-                  <b-col>
-                    <h3>{{ $t('hyvaksynyt') }}</h3>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col lg="4">
-                    <h5>{{ $t('paivays') }}</h5>
-                    <p>{{ $date(valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika) }}</p>
-                  </b-col>
-                  <b-col lg="4">
-                    <h5>{{ $t('nimi-ja-nimike') }}</h5>
-                    <p>
-                      {{ valmistumispyynto.vastuuhenkiloHyvaksyjaNimi
-                      }}{{
-                        valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
-                          ? ', ' + valmistumispyynto.vastuuhenkiloHyvaksyjaNimike
-                          : ''
-                      }}
-                    </p>
-                  </b-col>
-                </b-row>
-              </div>
-              <div v-if="yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl">
-                <hr />
-                <b-row>
-                  <b-col>
-                    <h3>{{ $t('dokumentit') }}</h3>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col>
-                    <asiakirja-button
-                      v-if="yhteenvetoAsiakirjaUrl"
-                      :id="valmistumispyynto.yhteenvetoAsiakirjaId"
-                      :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
-                      :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
-                    />
-                    <asiakirja-button
-                      v-if="liitteetAsiakirjaUrl"
-                      :id="valmistumispyynto.liitteetAsiakirjaId"
-                      :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
-                      :asiakirja-label="$t('valmistumispyynnon-liitteet')"
-                    />
-                  </b-col>
-                </b-row>
-                <hr />
-              </div>
-              <elsa-form-group
-                v-if="vastuuhenkiloOsaamisenArvioijaPalauttanut"
-                class="mt-3"
-                :label="$t('lisatiedot-erikoistujalle')"
-              >
-                <span>{{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKorjausehdotus }}</span>
-              </elsa-form-group>
               <div v-if="odottaaHyvaksyntaa" class="text-right">
                 <elsa-button
                   variant="back"
                   :to="{
-                    name: 'valmistumispyynnot'
+                    name: 'valmistumispyynnot',
+                    hash: '#yek'
                   }"
                 >
                   {{ $t('peruuta') }}
                 </elsa-button>
                 <elsa-button v-b-modal.return-to-sender variant="outline-primary" class="ml-6">
-                  {{ $t('palauta-erikoistujalle') }}
+                  {{ $t('yek.palauta-koulutettavalle') }}
                 </elsa-button>
                 <elsa-button :loading="sending" variant="primary" type="submit" class="ml-2">
-                  {{ $t('laheta-allekirjoitettavaksi') }}
+                  {{ $t('hyvaksy-valmistumispyynto') }}
                 </elsa-button>
               </div>
             </b-form>
@@ -520,14 +388,14 @@
     </b-container>
     <elsa-return-to-sender-modal
       id="return-to-sender"
-      :title="$t('palauta-erikoistuvalle-muokattavaksi')"
+      :title="$t('yek.palauta-koulutettavalle')"
       @submit="onReturnToSender"
     />
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('valmistumispyynto-hyvaksynta-vahvistus')"
-      :submit-text="$t('laheta-allekirjoitettavaksi')"
+      :text="$t('yek.valmistumispyynto-hyvaksynta-vahvistus')"
+      :submit-text="$t('hyvaksy-valmistumispyynto')"
       @submit="onSend"
     />
   </div>
@@ -549,6 +417,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import YekTyoskentelyjaksotList from '@/components/tyoskentelyjaksot-list/yek-tyoskentelyjaksot-list.vue'
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import store from '@/store'
   import {
@@ -569,7 +438,8 @@
       ErikoistuvaDetails,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
-      OpintosuoritusTab
+      OpintosuoritusTab,
+      YekTyoskentelyjaksotList
     }
   })
   export default class ValmistumispyynnonHyvaksynta extends Mixins<ValmistumispyyntoMixin>(
@@ -606,6 +476,9 @@
     yhteenvetoAsiakirjaUrl: string | null = null
     liitteetAsiakirjaUrl: string | null = null
     skipRouteExitConfirm = true
+    showTerveystyo = false
+    showSairaalatyo = false
+    showMuu = false
 
     validations() {
       return {
@@ -688,7 +561,7 @@
           account.phoneNumber = this.form.puhelinnumero
           this.$emit('skipRouteExitConfirm', true)
           toastSuccess(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-onnistui'))
-          this.$router.replace({ name: 'valmistumispyynnot' })
+          this.$router.replace({ name: 'valmistumispyynnot', hash: '#yek' })
         }
       } catch (err) {
         toastFail(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-epaonnistui'))
@@ -710,7 +583,7 @@
           ).data
           this.$emit('skipRouteExitConfirm', true)
           toastSuccess(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-palautettu'))
-          this.$router.replace({ name: 'valmistumispyynnot' })
+          this.$router.replace({ name: 'valmistumispyynnot', hash: '#yek' })
         }
       } catch (err) {
         toastFail(this, this.$t('valmistumispyynto-hyvaksynta-palautus-epaonnistui'))
@@ -721,6 +594,28 @@
     onSkipRouteExitConfirm() {
       this.skipRouteExitConfirm = false
       this.$emit('skipRouteExitConfirm', false)
+    }
+
+    get teoriakoulutusSuoritettu(): boolean {
+      const suoritettu = Math.round(this.virkailijanTarkistus?.teoriakoulutusSuoritettu || 0)
+      const vaadittu = Math.round(this.virkailijanTarkistus?.teoriakoulutusVaadittu || 0)
+      return suoritettu >= vaadittu
+    }
+
+    get terveyskeskustyoLabel() {
+      return `${this.$t('yek.terveyskeskustyo')} ${this.$t('yek.vah')} ${this.$duration(
+        this.virkailijanTarkistus?.tyoskentelyjaksotTilastot.terveyskeskusVaadittuVahintaan || 0
+      )}`
+    }
+
+    get sairaalatyoLabel() {
+      return `${this.$t('yek.sairaalatyo')} ${this.$t('yek.vah')} ${this.$duration(
+        this.virkailijanTarkistus?.tyoskentelyjaksotTilastot.yliopistosairaalaVaadittuVahintaan || 0
+      )}`
+    }
+
+    get asiakirjaDataEndpointUrl() {
+      return `vastuuhenkilo/valmistumispyynto/${this.valmistumispyynto.id}/tyoskentelyjakso-liite`
     }
   }
 </script>
