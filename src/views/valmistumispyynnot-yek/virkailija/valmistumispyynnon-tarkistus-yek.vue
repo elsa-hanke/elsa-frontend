@@ -557,7 +557,7 @@
                       v-if="yhteenvetoAsiakirjaUrl"
                       :id="valmistumispyynto.yhteenvetoAsiakirjaId"
                       :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
-                      :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                      :asiakirja-label="$t('yek.valmistumisen-yhteenveto')"
                     />
                     <asiakirja-button
                       v-if="liitteetAsiakirjaUrl"
@@ -621,8 +621,9 @@
       @submit="onSend"
     >
       <template #modal-content>
-        <elsa-form-group :label="$t('lisatiedot-vastuuhenkilolle')">
+        <elsa-form-group class="lomakkeen-vahvistus" :label="$t('lisatiedot-vastuuhenkilolle')">
           <template #default="{ uid }">
+            <div class="mb-2">{{ $t('yek.lisatiedot-vastuuhenkilolle-viesti') }}</div>
             <b-form-textarea
               :id="uid"
               v-model="form.lisatiedotVastuuhenkilolle"
@@ -1035,5 +1036,11 @@
 
   .allekirjoitus-pvm {
     min-width: 7rem;
+  }
+
+  .lomakkeen-vahvistus {
+    ::v-deep label {
+      margin-bottom: 0;
+    }
   }
 </style>

@@ -67,6 +67,21 @@
                     : $t('valmistumispyynto-vastuuhenkilo-ei-viela-hyvaksynyt')
                 }}
               </span>
+              <div v-if="yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl" class="mt-2">
+                <h3>{{ $t('lataa-dokumentit') }}</h3>
+                <asiakirja-button
+                  v-if="yhteenvetoAsiakirjaUrl"
+                  :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                  :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
+                  :asiakirja-label="$t('yek.valmistumisen-yhteenveto')"
+                />
+                <asiakirja-button
+                  v-if="liitteetAsiakirjaUrl"
+                  :id="valmistumispyynto.liitteetAsiakirjaId"
+                  :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
+                  :asiakirja-label="$t('valmistumispyynnon-liitteet')"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -106,6 +121,14 @@
       return this.valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika
         ? this.$date(this.valmistumispyynto.vastuuhenkiloHyvaksyjaKuittausaika)
         : null
+    }
+
+    get yhteenvetoAsiakirjaUrl() {
+      return this.valmistumispyynto.yhteenvetoAsiakirjaId ? `yek-koulutettava/asiakirjat/` : null
+    }
+
+    get liitteetAsiakirjaUrl() {
+      return this.valmistumispyynto.liitteetAsiakirjaId ? `yek-koulutettava/asiakirjat/` : null
     }
 
     tilaIcon(vaiheHyvaksytty: boolean) {

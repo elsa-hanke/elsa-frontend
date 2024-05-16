@@ -348,7 +348,7 @@
                     v-if="yhteenvetoAsiakirjaUrl"
                     :id="valmistumispyynto.yhteenvetoAsiakirjaId"
                     :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
-                    :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                    :asiakirja-label="$t('yek.valmistumisen-yhteenveto')"
                   />
                   <asiakirja-button
                     v-if="liitteetAsiakirjaUrl"
