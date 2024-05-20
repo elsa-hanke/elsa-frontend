@@ -16,7 +16,8 @@ $font-family-sans-serif: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Rob
 $font-size-base: 0.9375rem;
 $line-height-base: 1.466666667;
 $text-muted: #808080;
-$primary: #4ebdef;
+$primary: #097BB9;
+$yek: #0d642f;
 $success: $green;
 $warning: $yellow;
 $danger: $red;
@@ -139,3 +140,17 @@ $backdrop-background-color: #f7f7f7;
 $b-table-sort-icon-bg-not-sorted: none;
 $b-table-sort-icon-bg-dark-not-sorted: none;
 $sidebar-width: 230px;
+
+// This table defines the theme colors (variant names)
+$theme-colors: () !default;
+$theme-colors: map-merge(
+    (
+      'primary': $primary,
+      'success': $success,
+      'warning': $warning,
+      'danger': $danger,
+      'light': $light,
+      'yek': $yek,
+    ),
+    $theme-colors
+);

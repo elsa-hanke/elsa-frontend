@@ -3,7 +3,7 @@
     id="navbar-top"
     toggleable="lg"
     type="dark"
-    variant="primary"
+    :variant="$isYekKoulutettava() ? 'yek' : 'primary'"
     sticky
     class="px-0 py-lg-0"
   >
