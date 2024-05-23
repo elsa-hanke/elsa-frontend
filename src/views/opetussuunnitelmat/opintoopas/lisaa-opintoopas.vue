@@ -6,14 +6,23 @@
         <b-col>
           <h1>{{ $t('lisaa-opintoopas') }}</h1>
           <hr />
-          <opintoopas-form
-            v-if="!loading"
-            :opas="opas"
-            :erikoisala-id="$route.params.erikoisalaId"
-            :arviointiasteikot="arviointiasteikot"
-            :editing="true"
-            @submit="onSubmit"
-          />
+          <div v-if="!loading">
+            <yek-opintoopas-form
+              v-if="onkoYEK"
+              :opas="opas"
+              :erikoisala-id="$route.params.erikoisalaId"
+              :editing="true"
+              @submit="onSubmit"
+            />
+            <opintoopas-form
+              v-else
+              :opas="opas"
+              :erikoisala-id="$route.params.erikoisalaId"
+              :arviointiasteikot="arviointiasteikot"
+              :editing="true"
+              @submit="onSubmit"
+            />
+          </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -32,14 +41,17 @@
   import { getArviointiasteikot, getErikoisala, postOpinoopas } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import OpintoopasForm from '@/forms/opintoopas-form.vue'
+  import YekOpintoopasForm from '@/forms/yek-opintoopas-form.vue'
   import { Arviointiasteikko, ElsaError, Opintoopas, UusiOpintoopas } from '@/types'
+  import { ERIKOISALA_YEK_ID } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
       Avatar,
       ElsaButton,
-      OpintoopasForm
+      OpintoopasForm,
+      YekOpintoopasForm
     },
     validations: {
       form: {
@@ -104,6 +116,11 @@
     async fetchErikoisala() {
       try {
         this.opas.erikoisala = (await getErikoisala(this.$route.params.erikoisalaId)).data
+
+        if (this.$route.params.erikoisalaId == ERIKOISALA_YEK_ID.toString()) {
+          this.opas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara = 0
+          this.opas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara = 0
+        }
       } catch (err) {
         toastFail(this, this.$t('erikoisalan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'opetussuunnitelmat' })
@@ -113,6 +130,10 @@
     async fetchArviointiasteikot() {
       try {
         this.arviointiasteikot = (await getArviointiasteikot()).data
+
+        if (this.$route.params.erikoisalaId == ERIKOISALA_YEK_ID.toString()) {
+          this.opas.arviointiasteikkoId = this.arviointiasteikot[0].id || null
+        }
       } catch (err) {
         toastFail(this, this.$t('arviointiasteikkojen-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'opetussuunnitelmat' })
@@ -139,6 +160,10 @@
         )
       }
       params.saving = false
+    }
+
+    get onkoYEK() {
+      return this.$route.params.erikoisalaId == ERIKOISALA_YEK_ID.toString()
     }
   }
 </script>
