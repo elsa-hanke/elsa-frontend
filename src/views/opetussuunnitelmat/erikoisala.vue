@@ -12,13 +12,14 @@
                 <opintooppaat />
               </b-tab>
               <b-tab
+                v-if="!onkoYEK"
                 :title="$t('arvioitavat-kokonaisuudet')"
                 lazy
                 href="#arvioitavat-kokonaisuudet"
               >
                 <arvioitavat-kokonaisuudet />
               </b-tab>
-              <b-tab :title="$t('suoritteet')" lazy href="#suoritteet">
+              <b-tab v-if="!onkoYEK" :title="$t('suoritteet')" lazy href="#suoritteet">
                 <suoritteet />
               </b-tab>
             </b-tabs>
@@ -39,6 +40,7 @@
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
   import { Erikoisala } from '@/types'
+  import { ERIKOISALA_YEK_ID } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
   import ArvioitavatKokonaisuudet from '@/views/opetussuunnitelmat/arvioitava-kokonaisuus/arvioitavat-kokonaisuudet.vue'
   import Opintooppaat from '@/views/opetussuunnitelmat/opintoopas/opintooppaat.vue'
@@ -94,6 +96,10 @@
         toastFail(this, this.$t('erikoisalan-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'opetussuunnitelmat' })
       }
+    }
+
+    get onkoYEK() {
+      return this.erikoisala?.id == ERIKOISALA_YEK_ID
     }
   }
 </script>

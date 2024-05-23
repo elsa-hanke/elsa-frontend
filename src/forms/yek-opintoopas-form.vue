@@ -125,7 +125,7 @@
           </elsa-form-group>
           <b-form-row>
             <elsa-form-group
-              :label="$t('tk-jakson-vahimmaispituus')"
+              :label="$t('yek.tk-jakson-vahimmaispituus')"
               class="col-xs-12 col-sm-6 col-md-6 pr-sm-3"
               :required="true"
             >
@@ -183,68 +183,11 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col></b-col>
-                  <b-col class="mt-2">
-                    <span>{{ '-' }}</span>
-                  </b-col>
-                </b-row>
-              </template>
-            </elsa-form-group>
-            <elsa-form-group
-              :label="$t('tk-jakson-maksimipituus')"
-              class="col-xs-12 col-sm-6 col-md-6 pr-sm-3"
-            >
-              <template #default="{ uid }">
-                <b-row>
-                  <b-col cols="4">
-                    <b-row>
-                      <b-col class="pr-1">
-                        <b-form-input
-                          :id="uid"
-                          v-model="opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet"
-                          :state="validateState('terveyskeskuskoulutusjaksonMaksimipituusVuodet')"
-                        ></b-form-input>
-                        <b-form-invalid-feedback
-                          :id="`${uid}-feedback`"
-                          :state="validateState('terveyskeskuskoulutusjaksonMaksimipituusVuodet')"
-                        >
-                          {{ $t('virheellinen-arvo') }}
-                        </b-form-invalid-feedback>
-                      </b-col>
-                      <b-col cols="1" class="pl-1 mt-2">
-                        <span>{{ 'v' }}</span>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                  <b-col cols="4">
-                    <b-row>
-                      <b-col class="pr-1">
-                        <b-form-input
-                          :id="uid"
-                          v-model="opas.terveyskeskuskoulutusjaksonMaksimipituusKuukaudet"
-                          :state="
-                            validateState('terveyskeskuskoulutusjaksonMaksimipituusKuukaudet')
-                          "
-                        ></b-form-input>
-                        <b-form-invalid-feedback
-                          :id="`${uid}-feedback`"
-                          :state="
-                            validateState('terveyskeskuskoulutusjaksonMaksimipituusKuukaudet')
-                          "
-                        >
-                          {{ $t('virheellinen-arvo') }}
-                        </b-form-invalid-feedback>
-                      </b-col>
-                      <b-col cols="1" class="pl-1 mt-2">
-                        <span>{{ 'kk' }}</span>
-                      </b-col>
-                    </b-row>
-                  </b-col>
                 </b-row>
               </template>
             </elsa-form-group>
           </b-form-row>
-          <elsa-form-group :label="$t('yliopistosairaalajakson-vahimmaispituus')" :required="true">
+          <elsa-form-group :label="$t('yek.sairaalajakson-vahimmaispituus')" :required="true">
             <template #default="{ uid }">
               <b-row>
                 <b-col cols="2">
@@ -298,78 +241,159 @@
               </b-row>
             </template>
           </elsa-form-group>
-          <elsa-form-group
-            :label="$t('yliopistosairaalan-ulkop-tyoskentelyjakson-vahimmaispituus')"
-            :required="true"
-          >
-            <template #default="{ uid }">
-              <b-row>
-                <b-col cols="2">
-                  <b-row>
-                    <b-col class="pr-1">
-                      <b-form-input
-                        :id="uid"
-                        v-model="
-                          opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet
-                        "
-                        :state="
-                          validateState(
-                            'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet'
-                          )
-                        "
-                      ></b-form-input>
-                      <b-form-invalid-feedback
-                        :id="`${uid}-feedback`"
-                        :state="
-                          validateState(
-                            'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet'
-                          )
-                        "
-                      >
-                        {{
-                          opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet
-                            ? $t('virheellinen-arvo')
-                            : $t('pakollinen-tieto')
-                        }}
-                      </b-form-invalid-feedback>
-                    </b-col>
-                    <b-col cols="1" class="pl-1 mt-2">
-                      <span>{{ 'v' }}</span>
-                    </b-col>
-                  </b-row>
-                </b-col>
-                <b-col cols="2">
-                  <b-row>
-                    <b-col class="pr-1">
-                      <b-form-input
-                        :id="uid"
-                        v-model="
-                          opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet
-                        "
-                      ></b-form-input>
-                      <b-form-invalid-feedback
-                        :id="`${uid}-feedback`"
-                        :state="
-                          validateState(
-                            'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet'
-                          )
-                        "
-                      >
-                        {{
-                          opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet
-                            ? $t('virheellinen-arvo')
-                            : $t('pakollinen-tieto')
-                        }}
-                      </b-form-invalid-feedback>
-                    </b-col>
-                    <b-col cols="1" class="pl-1 mt-2">
-                      <span>{{ 'kk' }}</span>
-                    </b-col>
-                  </b-row>
-                </b-col>
-              </b-row>
-            </template>
-          </elsa-form-group>
+          <b-form-row>
+            <elsa-form-group
+              :label="$t('yek.muun-koulutuksen-vahimmaispituus')"
+              class="col-xs-12 col-sm-6 col-md-6 pr-sm-3"
+              :required="true"
+            >
+              <template #default="{ uid }">
+                <b-row>
+                  <b-col cols="4">
+                    <b-row>
+                      <b-col class="pr-1">
+                        <b-form-input
+                          :id="uid"
+                          v-model="
+                            opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet
+                          "
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet'
+                            )
+                          "
+                        ></b-form-input>
+                        <b-form-invalid-feedback
+                          :id="`${uid}-feedback`"
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet'
+                            )
+                          "
+                        >
+                          {{
+                            opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet
+                              ? $t('virheellinen-arvo')
+                              : $t('pakollinen-tieto')
+                          }}
+                        </b-form-invalid-feedback>
+                      </b-col>
+                      <b-col cols="1" class="pl-1 mt-2">
+                        <span>{{ 'v' }}</span>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col cols="4">
+                    <b-row>
+                      <b-col class="pr-1">
+                        <b-form-input
+                          :id="uid"
+                          v-model="
+                            opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet
+                          "
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet'
+                            )
+                          "
+                        ></b-form-input>
+                        <b-form-invalid-feedback
+                          :id="`${uid}-feedback`"
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet'
+                            )
+                          "
+                        >
+                          {{
+                            opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet
+                              ? $t('virheellinen-arvo')
+                              : $t('pakollinen-tieto')
+                          }}
+                        </b-form-invalid-feedback>
+                      </b-col>
+                      <b-col cols="1" class="pl-1 mt-2">
+                        <span>{{ 'kk' }}</span>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col></b-col>
+                  <b-col class="mt-2">
+                    <span>{{ '-' }}</span>
+                  </b-col>
+                </b-row>
+              </template>
+            </elsa-form-group>
+            <elsa-form-group
+              :label="$t('yek.muun-koulutuksen-maksimipituus')"
+              class="col-xs-12 col-sm-6 col-md-6 pr-sm-3"
+            >
+              <template #default="{ uid }">
+                <b-row>
+                  <b-col cols="4">
+                    <b-row>
+                      <b-col class="pr-1">
+                        <b-form-input
+                          :id="uid"
+                          v-model="
+                            opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet
+                          "
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet'
+                            )
+                          "
+                        ></b-form-input>
+                        <b-form-invalid-feedback
+                          :id="`${uid}-feedback`"
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet'
+                            )
+                          "
+                        >
+                          {{ $t('virheellinen-arvo') }}
+                        </b-form-invalid-feedback>
+                      </b-col>
+                      <b-col cols="1" class="pl-1 mt-2">
+                        <span>{{ 'v' }}</span>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col cols="4">
+                    <b-row>
+                      <b-col class="pr-1">
+                        <b-form-input
+                          :id="uid"
+                          v-model="
+                            opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet
+                          "
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet'
+                            )
+                          "
+                        ></b-form-input>
+                        <b-form-invalid-feedback
+                          :id="`${uid}-feedback`"
+                          :state="
+                            validateState(
+                              'yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet'
+                            )
+                          "
+                        >
+                          {{ $t('virheellinen-arvo') }}
+                        </b-form-invalid-feedback>
+                      </b-col>
+                      <b-col cols="1" class="pl-1 mt-2">
+                        <span>{{ 'kk' }}</span>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                </b-row>
+              </template>
+            </elsa-form-group>
+          </b-form-row>
           <elsa-form-group :label="$t('teoriakoulutusten-vahimmaismaara')" :required="true">
             <template #default="{ uid }">
               <b-row>
@@ -398,88 +422,6 @@
                   </b-row>
                 </b-col>
               </b-row>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('johtamisopintojen-vahimmaismaara')" :required="true">
-            <template #default="{ uid }">
-              <b-row>
-                <b-col cols="2">
-                  <b-row align-v="center">
-                    <b-col class="pr-1">
-                      <b-form-input
-                        :id="uid"
-                        v-model="opas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara"
-                        :state="validateState('erikoisalanVaatimaJohtamisopintojenVahimmaismaara')"
-                      ></b-form-input>
-                      <b-form-invalid-feedback
-                        :id="`${uid}-feedback`"
-                        :state="validateState('erikoisalanVaatimaJohtamisopintojenVahimmaismaara')"
-                      >
-                        {{
-                          opas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara
-                            ? $t('virheellinen-arvo')
-                            : $t('pakollinen-tieto')
-                        }}
-                      </b-form-invalid-feedback>
-                    </b-col>
-                    <b-col cols="1" class="pl-1">
-                      <span>{{ 'op' }}</span>
-                    </b-col>
-                  </b-row>
-                </b-col>
-              </b-row>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('sateilysuojakoulutuksen-vahimmaismaara')" :required="true">
-            <template #default="{ uid }">
-              <b-row>
-                <b-col cols="2">
-                  <b-row align-v="center">
-                    <b-col class="pr-1">
-                      <b-form-input
-                        :id="uid"
-                        v-model="opas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara"
-                        :state="
-                          validateState('erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara')
-                        "
-                      ></b-form-input>
-                      <b-form-invalid-feedback
-                        :id="`${uid}-feedback`"
-                        :state="
-                          validateState('erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara')
-                        "
-                      >
-                        {{
-                          opas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara
-                            ? $t('virheellinen-arvo')
-                            : $t('pakollinen-tieto')
-                        }}
-                      </b-form-invalid-feedback>
-                    </b-col>
-                    <b-col cols="1" class="pl-1">
-                      <span>{{ 'op' }}</span>
-                    </b-col>
-                  </b-row>
-                </b-col>
-              </b-row>
-            </template>
-          </elsa-form-group>
-          <elsa-form-group :label="$t('kaytossa-oleva-arviointiasteikko')" :required="true">
-            <template #default="{ uid }">
-              <b-form-radio-group
-                :id="uid"
-                v-model="opas.arviointiasteikkoId"
-                :options="arviointiasteikotFormatted"
-                :state="validateState('arviointiasteikkoId')"
-                stacked
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></b-form-radio-group>
-              <b-form-invalid-feedback
-                :id="`${uid}-feedback`"
-                :state="validateState('arviointiasteikkoId')"
-              >
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
             </template>
           </elsa-form-group>
           <div class="text-right">
@@ -522,7 +464,7 @@
               {{ opas.kaytannonKoulutuksenVahimmaispituusKuukaudet }} {{ 'kk' }}
             </span>
           </p>
-          <h5>{{ $t('terveyskeskuskoulutusjakson-pituus') }}</h5>
+          <h5>{{ $t('yek.tk-jakson-vahimmaispituus') }}</h5>
           <p>
             <span v-if="opas.terveyskeskuskoulutusjaksonVahimmaispituusVuodet > 0">
               {{ opas.terveyskeskuskoulutusjaksonVahimmaispituusVuodet }} {{ 'v' }}
@@ -535,27 +477,8 @@
             >
               {{ opas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet }} {{ 'kk' }}
             </span>
-            <span v-if="showTerveyskeskuskoulutusjaksonMaksimipituus">
-              <span>{{ '-' }}</span>
-              <span
-                v-if="
-                  opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet &&
-                  opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet > 0
-                "
-              >
-                {{ opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet }} {{ 'v' }}
-              </span>
-              <span
-                v-if="
-                  opas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet > 0 ||
-                  opas.terveyskeskuskoulutusjaksonMaksimipituusVuodet === 0
-                "
-              >
-                {{ opas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet }} {{ 'kk' }}
-              </span>
-            </span>
           </p>
-          <h5>{{ $t('yliopistosairaalajakson-vahimmaispituus') }}</h5>
+          <h5>{{ $t('yek.sairaalajakson-vahimmaispituus') }}</h5>
           <p>
             <span v-if="opas.yliopistosairaalajaksonVahimmaispituusVuodet > 0">
               {{ opas.yliopistosairaalajaksonVahimmaispituusVuodet }} {{ 'v' }}
@@ -569,7 +492,7 @@
               {{ opas.yliopistosairaalajaksonVahimmaispituusKuukaudet }} {{ 'kk' }}
             </span>
           </p>
-          <h5>{{ $t('yliopistosairaalan-ulkop-tyoskentelyjakson-vahimmaispituus') }}</h5>
+          <h5>{{ $t('yek.muun-koulutuksen-pituus') }}</h5>
           <p>
             <span v-if="opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet > 0">
               {{ opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet }} {{ 'v' }}
@@ -583,21 +506,30 @@
               {{ opas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet }}
               {{ 'kk' }}
             </span>
+            <span v-if="showMuunKoulutuksenMaksimipituus">
+              <span>{{ '-' }}</span>
+              <span
+                v-if="
+                  opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet &&
+                  opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet > 0
+                "
+              >
+                {{ opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet }} {{ 'v' }}
+              </span>
+              <span
+                v-if="
+                  (opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet &&
+                    opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet > 0) ||
+                  opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet === 0
+                "
+              >
+                {{ opas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet }}
+                {{ 'kk' }}
+              </span>
+            </span>
           </p>
           <h5>{{ $t('teoriakoulutusten-vahimmaismaara') }}</h5>
           <p>{{ opas.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara }} {{ $t('tuntia') }}</p>
-          <h5>{{ $t('johtamisopintojen-vahimmaismaara') }}</h5>
-          <p>
-            {{ opas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara }}
-            {{ $t('opintopistetta-lyhenne') }}
-          </p>
-          <h5>{{ $t('sateilysuojakoulutuksen-vahimmaismaara') }}</h5>
-          <p>
-            {{ opas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara }}
-            {{ $t('opintopistetta-lyhenne') }}
-          </p>
-          <h5>{{ $t('kaytossa-oleva-arviointiasteikko') }}</h5>
-          <p>{{ arviointiAsteikonNimi }}</p>
         </div>
       </b-col>
     </b-row>
@@ -614,8 +546,7 @@
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import { Arviointiasteikko, Opintoopas } from '@/types'
-  import { ArviointiasteikkoTyyppi } from '@/utils/constants'
+  import { Opintoopas } from '@/types'
 
   @Component({
     components: {
@@ -625,7 +556,7 @@
       ElsaFormDatepicker
     }
   })
-  export default class OpintoopasForm extends Mixins(validationMixin) {
+  export default class YekOpintoopasForm extends Mixins(validationMixin) {
     $refs!: {
       voimassaoloAlkaa: ElsaFormDatepicker
       voimassaoloPaattyy: ElsaFormDatepicker
@@ -640,9 +571,6 @@
     @Prop({ required: true })
     erikoisalaId!: number
 
-    @Prop({ required: false, type: Array })
-    arviointiasteikot!: Arviointiasteikko[]
-
     params = {
       saving: false
     }
@@ -651,9 +579,6 @@
       return {
         opas: {
           nimi: {
-            required
-          },
-          arviointiasteikkoId: {
             required
           },
           voimassaoloAlkaa: {
@@ -685,13 +610,6 @@
             minValue: minValue(0),
             maxValue: maxValue(12)
           },
-          terveyskeskuskoulutusjaksonMaksimipituusVuodet: {
-            minValue: minValue(0)
-          },
-          terveyskeskuskoulutusjaksonMaksimipituusKuukaudet: {
-            minValue: minValue(0),
-            maxValue: maxValue(12)
-          },
           yliopistosairaalajaksonVahimmaispituusVuodet: {
             required: requiredIf(() => {
               return !this.opas.yliopistosairaalajaksonVahimmaispituusKuukaudet
@@ -718,15 +636,14 @@
             minValue: minValue(0),
             maxValue: maxValue(12)
           },
+          yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet: {
+            minValue: minValue(0)
+          },
+          yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet: {
+            minValue: minValue(0),
+            maxValue: maxValue(12)
+          },
           erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: {
-            required,
-            minValue: minValue(0)
-          },
-          erikoisalanVaatimaJohtamisopintojenVahimmaismaara: {
-            required,
-            minValue: minValue(0)
-          },
-          erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: {
             required,
             minValue: minValue(0)
           }
@@ -734,27 +651,13 @@
       }
     }
 
-    get arviointiAsteikonNimi() {
-      return this.opas?.arviointiasteikkoNimi === ArviointiasteikkoTyyppi.EPA
-        ? this.$t('luottamuksen-taso')
-        : this.$t('etappi')
-    }
-
-    get showTerveyskeskuskoulutusjaksonMaksimipituus() {
+    get showMuunKoulutuksenMaksimipituus() {
       return (
-        this.opas?.terveyskeskuskoulutusjaksonMaksimipituusVuodet !=
-          this.opas?.terveyskeskuskoulutusjaksonVahimmaispituusVuodet ||
-        this.opas?.terveyskeskuskoulutusjaksonMaksimipituusKuukaudet !=
-          this.opas?.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet
+        this.opas?.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet !=
+          this.opas?.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet ||
+        this.opas?.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet !=
+          this.opas?.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet
       )
-    }
-
-    get arviointiasteikotFormatted() {
-      return this.arviointiasteikot.map((a) => ({
-        text:
-          a.nimi === ArviointiasteikkoTyyppi.EPA ? this.$t('luottamuksen-taso') : this.$t('etappi'),
-        value: a.id
-      }))
     }
 
     async tuoOppaanTiedot() {
@@ -767,16 +670,6 @@
         uusinOpas.terveyskeskuskoulutusjaksonVahimmaispituusVuodet
       this.opas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet =
         uusinOpas.terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet
-      Vue.set(
-        this.opas,
-        'terveyskeskuskoulutusjaksonMaksimipituusVuodet',
-        uusinOpas.terveyskeskuskoulutusjaksonMaksimipituusVuodet
-      )
-      Vue.set(
-        this.opas,
-        'terveyskeskuskoulutusjaksonMaksimipituusKuukaudet',
-        uusinOpas.terveyskeskuskoulutusjaksonMaksimipituusKuukaudet
-      )
       this.opas.yliopistosairaalajaksonVahimmaispituusVuodet =
         uusinOpas.yliopistosairaalajaksonVahimmaispituusVuodet
       this.opas.yliopistosairaalajaksonVahimmaispituusKuukaudet =
@@ -787,11 +680,16 @@
         uusinOpas.yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet
       this.opas.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara =
         uusinOpas.erikoisalanVaatimaTeoriakoulutustenVahimmaismaara
-      this.opas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara =
-        uusinOpas.erikoisalanVaatimaJohtamisopintojenVahimmaismaara
-      this.opas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara =
-        uusinOpas.erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara
-      this.opas.arviointiasteikkoId = uusinOpas.arviointiasteikkoId
+      Vue.set(
+        this.opas,
+        'yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet',
+        uusinOpas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet
+      )
+      Vue.set(
+        this.opas,
+        'yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet',
+        uusinOpas.yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet
+      )
     }
 
     validateState(name: string) {

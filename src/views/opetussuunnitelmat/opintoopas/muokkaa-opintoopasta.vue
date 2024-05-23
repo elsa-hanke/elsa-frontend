@@ -6,14 +6,23 @@
         <b-col>
           <h1>{{ $t('muokkaa-opintoopasta') }}</h1>
           <hr />
-          <opintoopas-form
-            v-if="!loading"
-            :opas="opas"
-            :erikoisala-id="$route.params.erikoisalaId"
-            :arviointiasteikot="arviointiasteikot"
-            :editing="true"
-            @submit="onSubmit"
-          />
+          <div v-if="!loading">
+            <yek-opintoopas-form
+              v-if="onkoYEK"
+              :opas="opas"
+              :erikoisala-id="$route.params.erikoisalaId"
+              :editing="true"
+              @submit="onSubmit"
+            />
+            <opintoopas-form
+              v-else
+              :opas="opas"
+              :erikoisala-id="$route.params.erikoisalaId"
+              :arviointiasteikot="arviointiasteikot"
+              :editing="true"
+              @submit="onSubmit"
+            />
+          </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
@@ -30,12 +39,15 @@
 
   import { getArviointiasteikot, getOpinoopas, putOpinoopas } from '@/api/tekninen-paakayttaja'
   import OpintoopasForm from '@/forms/opintoopas-form.vue'
+  import YekOpintoopasForm from '@/forms/yek-opintoopas-form.vue'
   import { Arviointiasteikko, ElsaError, Opintoopas } from '@/types'
+  import { ERIKOISALA_YEK_ID } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
-      OpintoopasForm
+      OpintoopasForm,
+      YekOpintoopasForm
     },
     validations: {
       form: {
@@ -118,6 +130,10 @@
         )
       }
       params.saving = false
+    }
+
+    get onkoYEK() {
+      return this.$route.params.erikoisalaId == ERIKOISALA_YEK_ID.toString()
     }
   }
 </script>

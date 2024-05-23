@@ -689,9 +689,6 @@
     }
   }
 
-  .bar-chart {
-  }
-
   .donut-chart {
     max-width: 450px;
   }

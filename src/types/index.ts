@@ -230,6 +230,8 @@ export interface Opintoopas {
   yliopistosairaalajaksonVahimmaispituusKuukaudet: number
   yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet: number
   yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet: number
+  yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet?: number
+  yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet?: number
   erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number
   erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: number
   erikoisalanVaatimaJohtamisopintojenVahimmaismaara: number
@@ -253,6 +255,8 @@ export interface UusiOpintoopas {
   yliopistosairaalajaksonVahimmaispituusKuukaudet: number | null
   yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet: number | null
   yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusKuukaudet: number | null
+  yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusVuodet?: number | null
+  yliopistosairaalanUlkopuolisenTyoskentelynMaksimipituusKuukaudet?: number | null
   erikoisalanVaatimaTeoriakoulutustenVahimmaismaara: number | null
   erikoisalanVaatimaSateilysuojakoulutustenVahimmaismaara: number | null
   erikoisalanVaatimaJohtamisopintojenVahimmaismaara: number | null

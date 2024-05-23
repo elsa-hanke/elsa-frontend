@@ -49,6 +49,10 @@ html:not(.e2e) {
   scroll-behavior: smooth;
 }
 
+body {
+  overscroll-behavior: none;
+}
+
 .font-weight-400 {
   font-weight: $font-weight-400;
 }

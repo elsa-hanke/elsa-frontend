@@ -75,6 +75,7 @@
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
   import { Erikoisala } from '@/types'
+  import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -120,7 +121,7 @@
     async mounted() {
       this.loading = true
       try {
-        this.erikoisalat = (await getErikoisalat()).data
+        this.erikoisalat = (await getErikoisalat()).data.sort((a, b) => sortByAsc(a.nimi, b.nimi))
       } catch {
         toastFail(this, this.$t('erikoisalojen-hakeminen-epaonnistui'))
         this.erikoisalat = []
