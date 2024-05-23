@@ -8,7 +8,7 @@
           <div v-if="!loading && valmistumispyynnonTarkistus">
             <div v-if="editable">
               <p class="mt-1 mb-3">
-                {{ $t('valmistumispyynto-virkailijan-ingressi') }}
+                {{ $t('yek.valmistumispyynto-virkailijan-ingressi') }}
               </p>
               <b-alert
                 :show="

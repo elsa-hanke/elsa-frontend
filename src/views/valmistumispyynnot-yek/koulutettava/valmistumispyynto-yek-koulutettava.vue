@@ -111,6 +111,7 @@
                     valmistumispyynto.erikoistujanLaillistamistodistusTyyppi
                   "
                   :laillistamisen-muokkaus-sallittu="true"
+                  :yek="true"
                   @muokkaaLaillistamista="muokkaaLaillistamista"
                 />
                 <div v-if="laillistaminenMuokattavissa">
