@@ -115,14 +115,8 @@
 
     getComponentName(tyyppi: AvoinAsiaTyyppi) {
       switch (tyyppi) {
-        case AvoinAsiaTyyppi.KOULUTUSSOPIMUS:
-          return 'koulutussopimus-erikoistuva'
-        case AvoinAsiaTyyppi.ALOITUSKESKUSTELU:
-          return 'koejakson-aloituskeskustelu'
-        case AvoinAsiaTyyppi.VASTUUHENKILON_ARVIO:
-          return 'koejakson-vastuuhenkilon-arvio'
         case AvoinAsiaTyyppi.VALMISTUMISPYYNTO:
-          return 'valmistumispyynto'
+          return 'yekvalmistumispyynto'
         case AvoinAsiaTyyppi.KOULUTTAJAVALTUUTUS:
           return 'profiili'
         default:
@@ -135,7 +129,7 @@
         case AvoinAsiaTyyppi.SEURANTAJAKSO:
           return `/seurantakeskustelut/seurantajakso/${id}`
         case AvoinAsiaTyyppi.TERVEYSKESKUSKOULUTUSJAKSO:
-          return '/tyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta'
+          return '/yektyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta'
         default:
           return ''
       }
