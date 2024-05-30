@@ -8,6 +8,7 @@
       :yliopisto="hyvaksynta.erikoistuvanYliopisto"
       :syntymaaika="hyvaksynta.erikoistuvanSyntymaaika"
       :show-birthdate="true"
+      :yek="yek"
     />
     <div class="table-responsive">
       <table
@@ -333,7 +334,7 @@
     </div>
     <div v-if="editable" class="d-flex flex-row-reverse flex-wrap">
       <elsa-button
-        v-if="$isErikoistuva()"
+        v-if="$isErikoistuva() || $isYekKoulutettava()"
         :loading="params.saving"
         variant="primary"
         class="ml-2"
@@ -360,7 +361,7 @@
         {{ $t('hyvaksy') }}
       </elsa-button>
       <elsa-button
-        v-if="!$isErikoistuva()"
+        v-if="!$isErikoistuva() && !$isYekKoulutettava()"
         v-b-modal.return-to-sender
         variant="outline-primary"
         class="ml-2"
@@ -508,6 +509,9 @@
 
     @Prop({ required: false, default: '' })
     asiakirjaDataEndpointUrl!: string
+
+    @Prop({ required: false, default: false })
+    yek!: boolean
 
     form: TerveyskeskuskoulutusjaksonHyvaksyntaForm = {
       laillistamispaiva: null,

@@ -24,7 +24,8 @@
             <b-alert
               v-if="
                 terveyskeskuskoulutusjaksoPalautettuKorjattavaksi ||
-                terveyskeskuskoulutusjaksoLahetetty
+                terveyskeskuskoulutusjaksoLahetetty ||
+                terveyskeskuskoulutusjaksoUusi
               "
               variant="dark"
               show
@@ -54,6 +55,22 @@
                   }"
                   variant="primary"
                   class="mt-2"
+                >
+                  {{ $t('pyyda-hyvaksyntaa') }}
+                </elsa-button>
+              </div>
+              <div v-if="terveyskeskuskoulutusjaksoUusi">
+                <div class="d-flex flex-row">
+                  <div>
+                    {{ $t('terveyskeskuskoulutusjakso-on-hyvaksyttavissa') }}
+                  </div>
+                </div>
+                <elsa-button
+                  :to="{
+                    name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto'
+                  }"
+                  variant="primary"
+                  class="mt-3"
                 >
                   {{ $t('pyyda-hyvaksyntaa') }}
                 </elsa-button>
@@ -563,6 +580,13 @@
           TerveyskeskuskoulutusjaksonTila.ODOTTAA_VIRKAILIJAN_TARKISTUSTA ||
         this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
           TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+      )
+    }
+
+    get terveyskeskuskoulutusjaksoUusi() {
+      return (
+        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
+        TerveyskeskuskoulutusjaksonTila.UUSI
       )
     }
 

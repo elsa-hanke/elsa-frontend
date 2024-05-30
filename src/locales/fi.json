@@ -1321,6 +1321,7 @@
   "terveyskeskuskoulutuksen-yhteenlaskettu-kesto": "Terveyskeskuskoulutuksen yhteenlaskettu kesto",
   "terveyskeskuskoulutusjakso": "Terveyskeskuskoulutusjakso",
   "terveyskeskuskoulutusjakso-hyvaksytty": "Terveyskeskuskoulutusjakso hyväksytty",
+  "terveyskeskuskoulutusjakso-on-hyvaksyttavissa": "Pyydä yhdeksän kuukauden terveyskeskuskoulutusjaksolle vastuuhenkilön hyväksyntä. Tarkista ennen lähetystä, että olet liittänyt työskentelyjaksoihin koulutustodistuksen sekä työtodistuksen, jossa keskeytystiedot.",
   "terveyskeskuskoulutusjakso-on-hyvaksytty": "Terveyskeskuskoulutusjakso on tarkistettu ja vastuuhenkilö on hyväksynyt sen. Seuraavaksi opintohallinto kirjaa suorituksen opintorekisteriin",
   "terveyskeskuskoulutusjakso-on-hyvaksytty-pvm": "Terveyskeskuskoulutusjakso on tarkistettu ja vastuuhenkilö on hyväksynyt sen {pvm}.",
   "terveyskeskuskoulutusjakso-on-lahetetty-hyvaksyttavaksi": "Terveyskeskuskoulutusjakso on lähetetty hyväksyttäväksi. Saat ilmoitukset, kun tiedot on hyväksytty.",
