@@ -106,6 +106,7 @@ import TeoriakoulutusTallennettu from '@/views/teoriakoulutukset/teoriakoulutus-
 import TeoriakoulutusView from '@/views/teoriakoulutukset/teoriakoulutus.vue'
 import UusiTeoriakoulutus from '@/views/teoriakoulutukset/uusi-teoriakoulutus.vue'
 import TerveyskeskuskoulutusjaksonHyvaksynta from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-hyvaksynta.vue'
+import TerveyskeskuskoulutusjaksonHyvaksyntaPyyntoYek from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-hyvaksyntapyynto-yek.vue'
 import TerveyskeskuskoulutusjaksonHyvaksyntaPyynto from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-hyvaksyntapyynto.vue'
 import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-tarkistus.vue'
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
@@ -464,6 +465,17 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: TerveyskeskuskoulutusjaksonHyvaksyntaPyynto,
+          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/yektyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta-yek',
+        name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto-yek',
+        beforeEnter: impersonatedErikoistuvaGuard,
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: TerveyskeskuskoulutusjaksonHyvaksyntaPyyntoYek,
           allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
           confirmRouteExit: true
         }

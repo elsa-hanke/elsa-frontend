@@ -32,7 +32,7 @@
           <b-link
             :to="{
               name: getComponentName(row.item.tyyppi),
-              path: getComponentPath(row.item.tyyppi, row.item.id),
+              path: getComponentPath(row.item.tyyppi),
               hash: getHash(row.item.tyyppi)
             }"
             class="task-type"
@@ -51,7 +51,7 @@
             class="pt-1 pb-1"
             :to="{
               name: getComponentName(row.item.tyyppi),
-              path: getComponentPath(row.item.tyyppi, row.item.id),
+              path: getComponentPath(row.item.tyyppi),
               hash: getHash(row.item.tyyppi)
             }"
           >
@@ -124,12 +124,10 @@
       }
     }
 
-    getComponentPath(tyyppi: AvoinAsiaTyyppi, id: number) {
+    getComponentPath(tyyppi: AvoinAsiaTyyppi) {
       switch (tyyppi) {
-        case AvoinAsiaTyyppi.SEURANTAJAKSO:
-          return `/seurantakeskustelut/seurantajakso/${id}`
         case AvoinAsiaTyyppi.TERVEYSKESKUSKOULUTUSJAKSO:
-          return '/yektyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta'
+          return '/yektyoskentelyjaksot/terveyskeskuskoulutusjakson-hyvaksynta-yek'
         default:
           return ''
       }

@@ -5,6 +5,7 @@ import {
   ErikoistumisenEdistyminen,
   LaillistamistiedotLomakeKoulutettava,
   Opintosuoritus,
+  TerveyskeskuskoulutusjaksonHyvaksyminen,
   Tyoskentelyjakso,
   TyoskentelyjaksoLomake,
   Valmistumispyynto,
@@ -84,4 +85,9 @@ export async function getErikoistumisenEdistyminen() {
 export async function getAvoimetAsiat() {
   const path = 'yek-koulutettava/etusivu/avoimet-asiat'
   return await axios.get<AvoinAsia[]>(path)
+}
+
+export async function getTerveyskeskuskoulutusjakso() {
+  const path = 'yek-koulutettava/tyoskentelyjaksot/terveyskeskuskoulutusjakso'
+  return await axios.get<TerveyskeskuskoulutusjaksonHyvaksyminen>(path)
 }
