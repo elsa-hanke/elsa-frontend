@@ -151,6 +151,12 @@
                     </div>
                   </template>
                 </elsa-form-group>
+                <b-row class="col-xl-12 mb-0">
+                  <span>
+                    <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+                    {{ $t('yek.tyoskentelyjaksot-muut-koulutukset-ohje') }}
+                  </span>
+                </b-row>
               </div>
             </div>
             <div class="tyoskentelyjaksot-table">
