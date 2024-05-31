@@ -151,10 +151,19 @@
                     </div>
                   </template>
                 </elsa-form-group>
-                <b-row class="col-xl-12 mb-0">
+                <b-row class="col-xl-12 mb-0 mt-2">
                   <span>
                     <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
                     {{ $t('yek.tyoskentelyjaksot-muut-koulutukset-ohje') }}
+                  </span>
+                </b-row>
+                <b-row
+                  v-if="edistyminen && edistyminen.laakarikoulutusSuoritettuSuomiTaiBelgia"
+                  class="col-xl-12 mb-0 mt-2"
+                >
+                  <span>
+                    <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
+                    {{ $t('yek.aiempi-hyvaksiluettu-suoritus') }}
                   </span>
                 </b-row>
               </div>
@@ -268,6 +277,7 @@
   import { parseISO } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { getErikoistumisenEdistyminen } from '@/api/yek-koulutettava'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
@@ -277,6 +287,7 @@
   import TyoskentelyjaksotYekBarChart from '@/components/yek/tyoskentelyjaksot-yek-bar-chart.vue'
   import store from '@/store'
   import {
+    ErikoistumisenEdistyminen,
     Keskeytysaika,
     TyoskentelyjaksotTable,
     TyoskentelyjaksotTilastotKaytannonKoulutus,
@@ -300,6 +311,8 @@
     }
   })
   export default class TyoskentelyjaksotYek extends Vue {
+    edistyminen: ErikoistumisenEdistyminen | null = null
+
     items = [
       {
         text: this.$t('etusivu'),
@@ -342,6 +355,7 @@
 
     async mounted() {
       await this.fetchTyoskentelyjaksot()
+      this.edistyminen = (await getErikoistumisenEdistyminen()).data
       this.loading = false
     }
 
