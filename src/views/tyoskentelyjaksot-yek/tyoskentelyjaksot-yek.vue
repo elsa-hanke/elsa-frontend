@@ -5,7 +5,17 @@
       <b-row lg>
         <b-col>
           <h1>{{ $t('tyoskentelyjaksot') }}</h1>
-          <p>{{ $t('yek.tyoskentelyjaksot-kuvaus') }}</p>
+          <p>
+            {{ $t('yek.tyoskentelyjaksot-kuvaus') }}
+            <a
+              href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ $t('yek.tyoskentelyjaksot-kuvaus-opinto-oppaasta') }}
+            </a>
+            {{ $t('yek.tyoskentelyjaksot-kuvaus-yli-kymmenen-vuotta-vanhoja') }}
+          </p>
           <elsa-vanha-asetus-varoitus />
           <div v-if="muokkausoikeudet" class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
