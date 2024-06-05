@@ -110,7 +110,7 @@
     fields = [
       {
         key: 'erikoistujanNimi',
-        label: this.$t('erikoistuja'),
+        label: this.$t('yek.koulutettava'),
         class: 'nimi',
         sortable: false
       },

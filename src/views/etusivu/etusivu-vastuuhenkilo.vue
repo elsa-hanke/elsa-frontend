@@ -8,6 +8,7 @@
           <seurantajaksot-card />
           <koejaksot-card />
           <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
+          <yek-terveyskeskuskoulutusjaksot-card v-if="$isYekVastuuhenkilo()" />
           <valmistumispyynnot-card />
           <yekvalmistumispyynnot-card v-if="$isYekVastuuhenkilo()" />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
@@ -49,11 +50,11 @@
   import SeurantajaksotCard from '@/components/etusivu-cards/seurantajaksot-card.vue'
   import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
+  import YekTerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/yek-terveyskeskuskoulutusjaksot-card.vue'
   import YekvalmistumispyynnotCard from '@/components/etusivu-cards/yek-valmistumispyynnot-card.vue'
 
   @Component({
     components: {
-      YekvalmistumispyynnotCard,
       ArvioinninTyokalutCard,
       ArviointipyynnotCard,
       ArvioitavatKokonaisuudetCard,
@@ -63,6 +64,8 @@
       KoejaksotCard,
       SeurantajaksotCard,
       TerveyskeskuskoulutusjaksotCard,
+      YekTerveyskeskuskoulutusjaksotCard,
+      YekvalmistumispyynnotCard,
       ValmistumispyynnotCard
     }
   })

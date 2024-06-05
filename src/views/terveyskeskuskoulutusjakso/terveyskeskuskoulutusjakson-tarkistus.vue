@@ -12,7 +12,18 @@
                   <font-awesome-icon icon="info-circle" fixed-width class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi') }}
+                  <span v-if="onkoYek">
+                    {{
+                      $t(
+                        'yek.terveyskeskuskoulutusjakso-on-palautettu-koulutettavalle-muokattavaksi'
+                      )
+                    }}
+                  </span>
+                  <span v-else>
+                    {{
+                      $t('terveyskeskuskoulutusjakso-on-palautettu-erikoistujalle-muokattavaksi')
+                    }}
+                  </span>
                   <span class="d-block">
                     {{ $t('syy') }}&nbsp;
                     <span class="font-weight-500">
@@ -49,7 +60,12 @@
               </div>
             </b-alert>
             <p v-if="editable">
-              {{ $t('terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}
+              <span v-if="onkoYek">
+                {{ $t('yek.terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}
+              </span>
+              <span v-else>
+                {{ $t('terveyskeskuskoulutusjakson-tarkistus-kuvaus') }}
+              </span>
               <b-alert
                 :show="
                   hyvaksynta.virkailijanKorjausehdotus != null ||
@@ -84,7 +100,7 @@
             </p>
             <elsa-button
               v-if="!editable"
-              :to="{ name: 'terveyskeskuskoulutusjaksot' }"
+              :to="{ name: 'terveyskeskuskoulutusjaksot', hash: hash }"
               variant="primary"
             >
               {{ $t('palaa-terveyskeskuskoulutusjaksoihin') }}
@@ -94,6 +110,7 @@
               :hyvaksynta="hyvaksynta"
               :editable="editable"
               :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+              :yek="onkoYek"
               @submit="onSubmit"
               @cancel="onCancel"
             />
@@ -119,7 +136,7 @@
     TerveyskeskuskoulutusjaksonHyvaksyminen,
     TerveyskeskuskoulutusjaksonHyvaksyntaForm
   } from '@/types'
-  import { TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
+  import { ERIKOISALA_YEK_ID, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -166,7 +183,7 @@
               )}`
             : this.$t('terveyskeskuskoulutusjakson-tietojen-hakeminen-epaonnistui')
         )
-        this.$router.replace({ name: 'terveyskeskuskoulutusjaksot' })
+        this.$router.replace({ name: 'terveyskeskuskoulutusjaksot', hash: this.hash })
       }
     }
 
@@ -217,7 +234,10 @@
         )
 
         this.$emit('skipRouteExitConfirm', true)
-        this.$router.push({ name: 'terveyskeskuskoulutusjaksot' })
+        this.$router.push({
+          name: 'terveyskeskuskoulutusjaksot',
+          hash: this.hash
+        })
       } catch (err) {
         const axiosError = err as AxiosError<ElsaError>
         const message = axiosError?.response?.data?.message
@@ -232,7 +252,18 @@
     }
 
     async onCancel() {
-      this.$router.push({ name: 'terveyskeskuskoulutusjaksot' })
+      this.$router.push({
+        name: 'terveyskeskuskoulutusjaksot',
+        hash: this.hash
+      })
+    }
+
+    get onkoYek() {
+      return this.hyvaksynta?.erikoisalaId === ERIKOISALA_YEK_ID
+    }
+
+    get hash() {
+      return this.onkoYek ? '#yek' : '#erikoislaakarikoulutus'
     }
   }
 </script>

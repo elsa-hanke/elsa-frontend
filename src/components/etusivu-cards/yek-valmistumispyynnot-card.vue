@@ -65,7 +65,7 @@
       ElsaButton
     }
   })
-  export default class ValmistumispyynnotCard extends Vue {
+  export default class YekValmistumispyynnotCard extends Vue {
     valmistumispyynnot: ValmistumispyyntoListItem[] | null = null
     loading = true
 
