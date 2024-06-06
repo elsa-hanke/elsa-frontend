@@ -1507,6 +1507,7 @@ export type TerveyskeskuskoulutusjaksonHyvaksyminen = {
   vastuuhenkilonNimike: string
   vastuuhenkilonKuittausaika: string
   opintooikeusId?: number
+  erikoisalaId?: number
 }
 
 export type TerveyskeskuskoulutusjaksonHyvaksyntaForm = {

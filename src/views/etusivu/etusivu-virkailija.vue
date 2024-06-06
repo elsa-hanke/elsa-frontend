@@ -6,6 +6,7 @@
         <b-col xxl="9">
           <div v-if="!loading">
             <terveyskeskuskoulutusjaksot-card />
+            <yek-terveyskeskuskoulutusjaksot-card />
             <koejaksot-card :show-vaihe="false" />
             <valmistumispyynnot-card />
             <yekvalmistumispyynnot-card />
@@ -49,6 +50,7 @@
   import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
   import YekKoulutettavienSeurantaVirkailijaCard from '@/components/etusivu-cards/yek-koulutettavien-seuranta-virkailija-card.vue'
+  import YekTerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/yek-terveyskeskuskoulutusjaksot-card.vue'
   import YekvalmistumispyynnotCard from '@/components/etusivu-cards/yek-valmistumispyynnot-card.vue'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
   import Kouluttajat from '@/views/kayttajahallinta/kouluttajat.vue'
@@ -69,6 +71,7 @@
       KoejaksotCard,
       TerveyskeskuskoulutusjaksotCard,
       ValmistumispyynnotCard,
+      YekTerveyskeskuskoulutusjaksotCard,
       YekvalmistumispyynnotCard,
       YekKoulutettavienSeurantaVirkailijaCard
     }

@@ -42,7 +42,7 @@
             <elsa-button variant="link" class="pl-0" @click="onDownloadLaillistamistodistus">
               {{ hyvaksynta.laillistamispaivanLiitteenNimi }}
             </elsa-button>
-            <div v-if="editable && ($isErikoistuva() || $isVirkailija())">
+            <div v-if="editable && (isHakija || $isVirkailija())">
               <b-link @click="muokkaaLaillistamista">
                 <font-awesome-icon class="feedback-icon" :icon="['fa', 'edit']" fixed-width />
                 {{ $t('muokkaa') }}
@@ -50,7 +50,7 @@
             </div>
           </td>
         </tr>
-        <tr v-if="!$isErikoistuva() && hyvaksynta.asetus != null">
+        <tr v-if="!isHakija && hyvaksynta.asetus != null">
           <th scope="row" class="align-middle font-weight-500">
             {{ $t('asetus') }}
           </th>
@@ -111,13 +111,18 @@
       class="mt-2 mb-4"
       @click="vaihdaRooli(hyvaksynta ? hyvaksynta.opintooikeusId : null)"
     >
-      {{ $t('nayta-erikoistujan-suoritustiedot') }}
+      <span v-if="yek">
+        {{ $t('yek.nayta-koulutettavan-suoritustiedot') }}
+      </span>
+      <span v-else>
+        {{ $t('nayta-erikoistujan-suoritustiedot') }}
+      </span>
     </elsa-button>
     <hr />
     <div
       v-if="
         editable &&
-        $isErikoistuva() &&
+        isHakija &&
         (hyvaksynta.laillistamispaiva == null || hyvaksynta.laillistamispaivanLiite == null)
       "
     >
@@ -218,7 +223,7 @@
           <p>{{ sp.osaaikaprosentti }}%</p>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="!yek">
         <b-col>
           <h5>{{ $t('kaytannon-koulutus') }}</h5>
           <p>
@@ -230,7 +235,7 @@
       <b-row>
         <b-col>
           <elsa-form-group :label="$t('liitetiedostot')" :required="true">
-            <div v-if="editable && $isErikoistuva()">
+            <div v-if="editable && isHakija">
               <span>
                 {{ $t('lisaa-tyoskentelyjaksoon-tyojakoulutustodistus') }}
               </span>
@@ -249,7 +254,7 @@
               :sorting-enabled="false"
               :pagination-enabled="false"
               :enable-search="false"
-              :enable-delete="editable && $isErikoistuva()"
+              :enable-delete="editable && isHakija"
               :no-results-info-text="$t('ei-liitetiedostoja')"
               :state="validateTyoskentelyjaksoState(index)"
               :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
@@ -334,7 +339,7 @@
     </div>
     <div v-if="editable" class="d-flex flex-row-reverse flex-wrap">
       <elsa-button
-        v-if="$isErikoistuva() || $isYekKoulutettava()"
+        v-if="isHakija"
         :loading="params.saving"
         variant="primary"
         class="ml-2"
@@ -361,7 +366,7 @@
         {{ $t('hyvaksy') }}
       </elsa-button>
       <elsa-button
-        v-if="!$isErikoistuva() && !$isYekKoulutettava()"
+        v-if="!isHakija"
         v-b-modal.return-to-sender
         variant="outline-primary"
         class="ml-2"
@@ -740,6 +745,10 @@
     onSkipRouteExitConfirm() {
       this.skipRouteExitConfirm = false
       this.$emit('skipRouteExitConfirm', false)
+    }
+
+    get isHakija() {
+      return this.$isErikoistuva() || this.$isYekKoulutettava()
     }
   }
 </script>
