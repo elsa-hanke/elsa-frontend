@@ -47,6 +47,8 @@
           </b-alert>
         </div>
       </elsa-form-group>
+    </div>
+    <div v-if="isEnsimmainenTyoskentelyjakso">
       <elsa-form-group :label="$t('yek.aiempi-laakarikoulutus')" :required="false">
         <span>
           {{ $t('yek.aiempi-laakarikoulutus-selite') }}
@@ -58,8 +60,8 @@
           {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut') }}
         </b-form-checkbox>
       </elsa-form-group>
-      <hr />
     </div>
+    <hr v-if="!laillistamisTiedotForm.laillistamistiedotAdded || isEnsimmainenTyoskentelyjakso" />
     <elsa-form-group :label="$t('tyyppi')" :required="!value.tapahtumia">
       <template #default="{ uid }">
         <div>
@@ -392,6 +394,8 @@
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     reservedAsiakirjaNimetMutable: string[] | undefined = []
+    ensimmainenTyoskentelyjakso: Tyoskentelyjakso | null = null
+    isEnsimmainenTyoskentelyjakso = false
 
     form: TyoskentelyjaksoForm = {
       alkamispaiva: null,
@@ -446,8 +450,21 @@
       }
 
       this.loadLaillistamisTiedot()
+      this.fetchEnsimmainenTyoskentelyjakso()
 
       this.childDataReceived = true
+    }
+
+    async fetchEnsimmainenTyoskentelyjakso() {
+      try {
+        this.ensimmainenTyoskentelyjakso = (
+          await axios.get(`yek-koulutettava/ensimmainen-tyoskentelyjakso`)
+        ).data
+        this.isEnsimmainenTyoskentelyjakso = this.ensimmainenTyoskentelyjakso?.id === this.form.id
+      } catch {
+        this.isEnsimmainenTyoskentelyjakso = false
+        toastFail(this, this.$t('yek.ensimmaisen-tyoskentelyjakson-hakeminen-epaonnistui'))
+      }
     }
 
     validateState(name: string) {
