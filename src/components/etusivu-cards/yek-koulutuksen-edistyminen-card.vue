@@ -16,6 +16,30 @@
                   {{ $t('tyoskentelyjaksot') }}
                 </h3>
               </elsa-button>
+              <div class="d-flex flex-wrap">
+                <div class="d-flex flex-column mb-2 w-50">
+                  <span class="text-size-lg">
+                    {{
+                      $duration(
+                        edistyminen.tyoskentelyjaksoTilastot.arvioErikoistumiseenHyvaksyttavista
+                      )
+                    }}
+                  </span>
+                  <span class="text-size-sm">
+                    {{ $t('yek.arvio-hyvaksyttavasta-koulutuksesta') }}
+                  </span>
+                </div>
+                <div class="d-flex flex-column mb-2 pl-4 w-50">
+                  <span class="text-size-lg">
+                    {{
+                      $duration(edistyminen.tyoskentelyjaksoTilastot.arvioPuuttuvastaKoulutuksesta)
+                    }}
+                  </span>
+                  <span class="text-size-sm">
+                    {{ $t('arvio-puuttuvasta-koulutuksesta') }}
+                  </span>
+                </div>
+              </div>
               <div class="d-flex justify-content-center">
                 <b-col class="p-0" md="10">
                   <tyoskentelyjaksot-yek-bar-chart

@@ -1464,6 +1464,7 @@
     "ingressi": "Arvioi tekemäsi suoritteen vaativuutta huomioiden tekninen suoritus ja/tai potilaaseen tai tapahtumaan liittyvät muuttujat."
   },
   "vah": "Väh.",
+  "enint": "Enint. ",
   "vahvista-aloituskeskustelu-lahetys": "Lähetyksen jälkeen lomake menee lähikouluttajan ja lähiesimiehen käsiteltäväksi. Saat ilmoituksen, kun asia on käsitelty. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-koejakson-vaihe-erikoistuvalle": "Lähetyksen jälkeen lomake menee erikoistujalle hyväksyttäväksi.",
   "vahvista-koejakson-vaihe-esimiehelle": "Lähetyksen jälkeen lomake menee lähiesimiehelle tai muulle erikoisalan asiantuntijalle hyväksyttäväksi.",
@@ -1752,7 +1753,9 @@
     "teoriakoulutus-ei-nay": "Jos teoriakoulutus ei näy ELSAssa tai näytä oikealta, ota yhteyttä opintohallintoon",
     "terveyskeskustyo": "Terveyskeskustyö",
     "tk-jakson-vahimmaispituus": "Terveyskeskusjakson vähimmäispituus",
-    "tyoskentelyjaksot-kuvaus": "Lisää työskentelyjaksoja ja merkitse poissaolot jaksojen aikana. Tarkasta työskentelyajan tarkemmat vaatimukset \u2028opinto-oppaasta.\n\nYli 10 vuotta vanhoja työskentelyjaksoja ja teoriakoulutusta hyväksytään vain perustellusta syystä. Pakollinen 9 kuukauden terveyskeskustyö ei vanhene.",
+    "tyoskentelyjaksot-kuvaus": "Lisää työskentelyjaksoja ja merkitse poissaolot jaksojen aikana. Tarkasta työskentelyajan tarkemmat vaatimukset",
+    "tyoskentelyjaksot-kuvaus-opinto-oppaasta": "opinto-oppaasta. ",
+    "tyoskentelyjaksot-kuvaus-yli-kymmenen-vuotta-vanhoja": "Yli 10 vuotta vanhoja työskentelyjaksoja ja teoriakoulutusta hyväksytään vain perustellusta syystä. Pakollinen 9 kuukauden terveyskeskustyö ei vanhene.",
     "valmistumispyynto-hyvaksynta-vahvistus": "Hyväksymällä vahvistat koulutettavan valmistumisen. Hyväksymistä ei erikseen allekirjoiteta sähköisesti.",
     "valmistumispyynto-hyvaksynta-virkailija-tarkastanut": "Virkailija on tarkistanut koulutuksen määrälliset vaatimukset. Voit seuraavaksi hyväksyä valmistumispyynnön tai palauttaa pyynnön koulutettavalle. Tutustu sitä ennen virkailijan tarkistamiin tietoihin.",
     "valmistumispyynto-ingressi-hae-koulutustodistusta-kappale": "Hae koulutustodistusta yleislääketieteen erityiskoulutuksen (YEK) suorittamisesta. Hakemus menee opintohallintoon ja YEK-koulutuksen vastuuhenkilölle tarkistettavaksi.",
@@ -1772,7 +1775,10 @@
     "virkailija-etusivu-seuranta-yek-otsikko": "Yleislääketieteen erityiskoulutus (YEK)",
     "virkailijan-tarkistus-palautettu-onnistuneesti": "Virkailijan tarkistus palautettu koulutettavalle",
     "yek-koulutettava": "YEK-koulutettava",
-    "yek-koulutuksen-vastuuhenkilo": "YEK-koulutuksen vastuuhenkilö"
+    "yek-koulutuksen-vastuuhenkilo": "YEK-koulutuksen vastuuhenkilö",
+    "tyoskentelyjaksot-muut-koulutukset-ohje": "Muut: Koulutuksesta enintään 6 kuukautta voi olla työtä muussa yliopiston hyväksymässä yleislääkärin tehtäviin suuntautuvassa julkisen tai yksityisen terveydenhuollon toimipaikassa.",
+    "työskentelyjakson-lisays-muu-ohje": "Koulutuksesta enintään 6 kk voi olla työtä muussa yliopiston hyväksymässä yleislääkärin tehtäviin suuntautuvassa julkisen tai yksityisen terveydenhuollon toimipaikassa.",
+    "arvio-hyvaksyttavasta-koulutuksesta": "Arvio hyväksyttävästä koulutuksesta"
   },
   "yek-ei-suoritettu": "YEK ei suoritettu",
   "yek-suoritettu": "YEK suoritettu",

@@ -29,7 +29,8 @@
             value: this.tilastot.koulutustyypit.terveyskeskusSuoritettu,
             minRequired: this.tilastot.koulutustyypit.terveyskeskusVaadittuVahintaan,
             maxLength: this.tilastot.koulutustyypit.terveyskeskusMaksimipituus,
-            highlight: false
+            highlight: false,
+            showMax: false
           },
           {
             text: this.$t('yliopistosairaala'),
@@ -37,7 +38,8 @@
             backgroundColor: '#9fd7ef',
             value: this.tilastot.koulutustyypit.yliopistosairaalaSuoritettu,
             minRequired: this.tilastot.koulutustyypit.yliopistosairaalaVaadittuVahintaan,
-            highlight: false
+            highlight: false,
+            showMax: false
           },
           {
             text: this.$t('yo-sair-ulkopuolinen'),
@@ -46,7 +48,8 @@
             value: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
             minRequired:
               this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
-            highlight: false
+            highlight: false,
+            showMax: false
           },
           {
             text: this.$t('yhteensa'),
@@ -54,7 +57,8 @@
             backgroundColor: '#b3e1bc',
             value: this.tilastot.koulutustyypit.yhteensaSuoritettu,
             minRequired: this.tilastot.koulutustyypit.yhteensaVaadittuVahintaan,
-            highlight: true
+            highlight: true,
+            showMax: false
           }
         ]
       } else {

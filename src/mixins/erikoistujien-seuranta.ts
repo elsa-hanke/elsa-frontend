@@ -51,7 +51,8 @@ export default class ErikoistujienSeurantaMixin extends Vue {
         backgroundColor: '#ffe19b',
         value: tilastot.koulutustyypit.terveyskeskusSuoritettu,
         minRequired: tilastot.koulutustyypit.terveyskeskusVaadittuVahintaan,
-        highlight: false
+        highlight: false,
+        showMax: false
       },
       {
         text: this.$t('yliopistosairaala'),
@@ -59,7 +60,8 @@ export default class ErikoistujienSeurantaMixin extends Vue {
         backgroundColor: '#9fd7ef',
         value: tilastot.koulutustyypit.yliopistosairaalaSuoritettu,
         minRequired: tilastot.koulutustyypit.yliopistosairaalaVaadittuVahintaan,
-        highlight: false
+        highlight: false,
+        showMax: false
       },
       {
         text: this.$t('yo-sair-ulkopuolinen'),
@@ -67,7 +69,8 @@ export default class ErikoistujienSeurantaMixin extends Vue {
         backgroundColor: '#cfcdfd',
         value: tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
         minRequired: tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
-        highlight: false
+        highlight: false,
+        showMax: false
       }
     ]
   }

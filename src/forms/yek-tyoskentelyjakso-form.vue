@@ -100,6 +100,9 @@
             ></b-form-input>
             <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
           </div>
+          <span v-if="form.tyoskentelypaikka.tyyppi === 'MUU'" class="text-muted small">
+            {{ $t('yek.työskentelyjakson-lisays-muu-ohje') }}
+          </span>
           <b-form-invalid-feedback
             :id="`${uid}-feedback`"
             :style="{

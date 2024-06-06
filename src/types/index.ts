@@ -1017,6 +1017,8 @@ export interface BarChartRow {
   minRequired: number
   maxLength?: number
   highlight: boolean
+  showMax: boolean
+  maxRequired?: number
 }
 
 export interface Palaute {

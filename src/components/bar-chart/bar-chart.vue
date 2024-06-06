@@ -34,6 +34,8 @@
         >
           <span v-if="row.maxLength == null || row.maxLength === 0">{{ $t('vah') }}</span>
           {{ $duration(row.minRequired) }}
+          <span v-if="row.showMax">/ {{ $t('enint') }}</span>
+          <span v-if="row.showMax">{{ row.maxRequired }} kk</span>
         </b-td>
       </b-tr>
     </b-table-simple>
