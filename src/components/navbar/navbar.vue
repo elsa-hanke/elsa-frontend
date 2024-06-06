@@ -256,6 +256,8 @@
 
   .user-dropdown-content {
     min-width: 15rem;
+    max-height: 500px;
+    overflow-y: auto;
   }
 
   .icon-col-min-width {
