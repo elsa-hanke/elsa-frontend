@@ -8,7 +8,9 @@
           <seurantajaksot-card />
           <koejaksot-card />
           <terveyskeskuskoulutusjaksot-card v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()" />
-          <yek-terveyskeskuskoulutusjaksot-card v-if="$isYekVastuuhenkilo()" />
+          <yek-terveyskeskuskoulutusjaksot-card
+            v-if="$isTerveyskeskuskoulutusjaksoVastuuhenkilo()"
+          />
           <valmistumispyynnot-card />
           <yekvalmistumispyynnot-card v-if="$isYekVastuuhenkilo()" />
           <h2 class="mt-5 mb-3">{{ $t('erikoistujien-seuranta') }}</h2>
