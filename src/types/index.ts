@@ -672,6 +672,7 @@ export type OmatTiedotLomakeErikoistuja = {
 
 export type LaillistamistiedotLomakeKoulutettava = {
   laillistamistiedotAdded: boolean
+  ensimmainenTyoskentelyjakso: boolean
   laillistamispaiva?: string | null
   laillistamispaivanLiite?: File | null
   laakarikoulutusSuoritettuSuomiTaiBelgia: boolean

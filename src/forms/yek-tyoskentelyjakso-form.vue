@@ -432,6 +432,7 @@
 
     laillistamisTiedotForm: LaillistamistiedotLomakeKoulutettava = {
       laillistamistiedotAdded: false,
+      ensimmainenTyoskentelyjakso: false,
       laillistamispaiva: null,
       laillistamispaivanLiite: null,
       laakarikoulutusSuoritettuSuomiTaiBelgia: false
@@ -461,6 +462,7 @@
           await axios.get(`yek-koulutettava/ensimmainen-tyoskentelyjakso`)
         ).data
         this.isEnsimmainenTyoskentelyjakso = this.ensimmainenTyoskentelyjakso?.id === this.form.id
+        this.laillistamisTiedotForm.ensimmainenTyoskentelyjakso = this.isEnsimmainenTyoskentelyjakso
       } catch {
         this.isEnsimmainenTyoskentelyjakso = false
         toastFail(this, this.$t('yek.ensimmaisen-tyoskentelyjakson-hakeminen-epaonnistui'))
@@ -653,6 +655,11 @@
               })
             )
           )
+        }
+
+        if (laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia) {
+          this.laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia =
+            laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia
         }
       } catch {
         toastFail(this, this.$t('laillistamispaivan-hakeminen-epaonnistui'))
