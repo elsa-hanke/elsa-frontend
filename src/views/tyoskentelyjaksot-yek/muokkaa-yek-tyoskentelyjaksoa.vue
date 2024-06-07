@@ -32,10 +32,16 @@
   import {
     getTyoskentelyjakso,
     getTyoskentelyjaksoLomake,
+    putKoulutettavaLaillistamispaiva,
     putTyoskentelyjakso
   } from '@/api/yek-koulutettava'
   import YekTyoskentelyjaksoForm from '@/forms/yek-tyoskentelyjakso-form.vue'
-  import { Tyoskentelyjakso, TyoskentelyjaksoLomake, ElsaError } from '@/types'
+  import {
+    Tyoskentelyjakso,
+    TyoskentelyjaksoLomake,
+    ElsaError,
+    LaillistamistiedotLomakeKoulutettava
+  } from '@/types'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -94,6 +100,7 @@
         tyoskentelyjakso: Tyoskentelyjakso
         addedFiles: File[]
         deletedAsiakirjaIds: number[]
+        laillistamistiedot: LaillistamistiedotLomakeKoulutettava
       },
       params: { saving: boolean }
     ) {
@@ -125,6 +132,22 @@
             : this.$t('tyoskentelyjakson-tallentaminen-epaonnistui')
         )
       }
+
+      if (value.laillistamistiedot.ensimmainenTyoskentelyjakso) {
+        try {
+          await putKoulutettavaLaillistamispaiva(value.laillistamistiedot)
+        } catch (err) {
+          const axiosError = err as AxiosError<ElsaError>
+          const message = axiosError?.response?.data?.message
+          toastFail(
+            this,
+            message
+              ? `${this.$t('yek.laillistamistietojen-tallennus-epaonnistui')}: ${this.$t(message)}`
+              : this.$t('yek.laillistamistietojen-tallennus-epaonnistui')
+          )
+        }
+      }
+
       params.saving = false
     }
 

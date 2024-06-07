@@ -54,7 +54,7 @@
         to: { name: 'yektyoskentelyjaksot' }
       },
       {
-        text: this.$t('lisaa-yek-tyoskentelyjakso'),
+        text: this.$t('lisaa-tyoskentelyjakso'),
         active: true
       }
     ]
