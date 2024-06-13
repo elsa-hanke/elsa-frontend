@@ -94,7 +94,7 @@
             </b-alert>
             <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
               <div class="container-fluid">
-                <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <elsa-form-group :label="$t('tyoskentelyaika')">
                   <template #default="{ uid }">
                     <div :id="uid" class="d-flex flex-wrap">
                       <div class="d-flex flex-column mb-2 duration-card">
@@ -108,7 +108,7 @@
                           {{ $duration(tilastot.arvioErikoistumiseenHyvaksyttavista) }}
                         </span>
                         <span class="text-size-sm">
-                          {{ $t('arvio-erikoistumiseen-hyvaksyttavista') }}
+                          {{ $t('yek.arvio-hyvaksyttavasta-koulutuksesta') }}
                         </span>
                       </div>
                       <div class="d-flex flex-column mb-2 duration-card">
