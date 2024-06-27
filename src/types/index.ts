@@ -1539,6 +1539,8 @@ export interface ValmistumispyyntoVaatimuksetLomake {
   teoriakoulutus?: boolean
   osaamisenArvioinnit?: boolean
   palautekysely?: boolean
+  tkjakso?: boolean
+  tyoskentelyjaksotpaatetty?: boolean
 }
 
 export interface ValmistumispyyntoVaatimuksetLomakeYek {

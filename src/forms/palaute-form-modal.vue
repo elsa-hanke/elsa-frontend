@@ -59,6 +59,7 @@
         <b class="mr-1">Turku:</b>
         <a href="mailto:laak-ammatillinen@utu.fi">laak-ammatillinen@utu.fi</a>
       </p>
+      <p>{{ $t('palaute-ohje') }}</p>
       <elsa-form-group :label="$t('palautteen-aihe')" :required="true">
         <template #default="{ uid }">
           <b-form-radio
@@ -90,7 +91,7 @@
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
-      <elsa-form-group :label="$t('palaute')" :required="true">
+      <elsa-form-group :label="$t('palaute-ja-tuki')" :required="true">
         <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
