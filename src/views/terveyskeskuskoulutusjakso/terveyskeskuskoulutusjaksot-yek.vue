@@ -5,7 +5,7 @@
         <elsa-search-input
           class="mb-4 hakutermi"
           :hakutermi.sync="hakutermi"
-          :placeholder="$t('hae-erikoistujan-nimella')"
+          :placeholder="$t('hae-koulutettavan-nimella')"
         />
       </b-col>
     </b-row>

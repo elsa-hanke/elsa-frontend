@@ -11,14 +11,28 @@
         }}
       </p>
       <div v-if="!loading">
-        <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
-          <b-tab :title="$t('erikoislaakarikoulutus')" href="#erikoislaakarikoulutus">
-            <terveyskeskuskoulutusjaksot-el :erikoisalat="erikoisalat" />
-          </b-tab>
-          <b-tab :title="$t('yleislaaketieteen-erikoiskoulutus')" href="#yek">
-            <terveyskeskuskoulutusjaksot-yek />
-          </b-tab>
-        </b-tabs>
+        <div
+          v-if="
+            $isVirkailija() ||
+            ($isTerveyskeskuskoulutusjaksoVastuuhenkilo() &&
+              $isYekTerveyskeskuskoulutusjaksoVastuuhenkilo())
+          "
+        >
+          <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
+            <b-tab :title="$t('erikoislaakarikoulutus')" href="#erikoislaakarikoulutus">
+              <terveyskeskuskoulutusjaksot-el :erikoisalat="erikoisalat" />
+            </b-tab>
+            <b-tab :title="$t('yleislaaketieteen-erikoiskoulutus')" href="#yek">
+              <terveyskeskuskoulutusjaksot-yek />
+            </b-tab>
+          </b-tabs>
+        </div>
+        <div v-else-if="$isYekTerveyskeskuskoulutusjaksoVastuuhenkilo()">
+          <terveyskeskuskoulutusjaksot-yek />
+        </div>
+        <div v-else>
+          <terveyskeskuskoulutusjaksot-el :erikoisalat="erikoisalat" />
+        </div>
       </div>
       <div v-else class="text-center">
         <b-spinner variant="primary" :label="$t('ladataan')" />

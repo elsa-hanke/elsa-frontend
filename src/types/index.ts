@@ -20,6 +20,7 @@ import {
   TerveyskeskuskoulutusjaksonTila,
   ValmistumispyynnonTila
 } from '@/utils/constants'
+import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
 export type Opintooikeus = {
   id: number
@@ -1611,6 +1612,7 @@ export interface ValmistumispyyntoListItem {
   tila: ValmistumispyynnonTila
   tapahtumanAjankohta: string
   isAvoinForCurrentKayttaja: boolean
+  rooli: ValmistumispyynnonHyvaksyjaRole
 }
 
 export interface ValmistumispyyntoLomakeOsaamisenArviointi {
@@ -1716,4 +1718,11 @@ export interface Kurssikoodi {
   id: number | null
   tunniste: string | null
   tyyppi: OpintosuoritusTyyppi | null
+}
+
+export interface VastuuhenkilonVastuualueet {
+  terveyskeskuskoulutusjakso: boolean
+  yekTerveyskeskuskoulutusjakso: boolean
+  valmistuminen: boolean
+  yekValmistuminen: boolean
 }

@@ -14,7 +14,6 @@
         <h3>{{ $t('avoimet') }}</h3>
         <valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotAvoimet"
-          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
           :current-page="currentAvoinPage"
           :per-page="perPage"
           :loading="loadingAvoimet"
@@ -28,7 +27,6 @@
         <h3>{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
         <valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotMuut"
-          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
           :current-page="currentMuutPage"
           :per-page="perPage"
           :loading="loadingMuut"
@@ -41,7 +39,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
+  import { Component, Mixins, Watch } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
 
   import { getValmistumispyynnot } from '@/api/vastuuhenkilo'
@@ -53,7 +51,6 @@
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import ValmistumispyynnotList from '@/components/valmistumispyynnot-list/valmistumispyynnot-list.vue'
   import { ValmistumispyyntoListItem, Page } from '@/types'
-  import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
   @Component({
     components: {
@@ -78,9 +75,6 @@
     valmistumispyynnotAvoimet: Page<ValmistumispyyntoListItem> | null = null
     valmistumispyynnotMuut: Page<ValmistumispyyntoListItem> | null = null
     debounce?: number
-
-    @Prop({ required: true, type: String })
-    valmistumispyynnonHyvaksyjaRole!: ValmistumispyynnonHyvaksyjaRole
 
     @Watch('hakutermi')
     onPropertyChanged(value: string) {
@@ -115,10 +109,6 @@
     }
 
     async fetchAvoimet() {
-      if (!this.valmistumispyynnonHyvaksyjaRole) {
-        this.loadingAvoimet = false
-        return
-      }
       getValmistumispyynnot({
         page: this.currentAvoinPage - 1,
         size: this.perPage,
@@ -134,10 +124,6 @@
     }
 
     async fetchMuut() {
-      if (!this.valmistumispyynnonHyvaksyjaRole) {
-        this.loadingMuut = false
-        return
-      }
       getValmistumispyynnot({
         page: this.currentMuutPage - 1,
         size: this.perPage,

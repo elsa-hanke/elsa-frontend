@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <b-alert v-if="!valmistumispyynnonHyvaksyjaRole || rows === 0" variant="dark" class="mt-2" show>
+    <b-alert v-if="rows === 0" variant="dark" class="mt-2" show>
       <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
       <span v-if="hakutermiExists">
         {{ $t('ei-hakutuloksia') }}
@@ -92,9 +92,6 @@
     @Prop({ required: true, default: undefined })
     valmistumispyynnot!: Page<ValmistumispyyntoListItem>
 
-    @Prop({ required: false, default: undefined })
-    valmistumispyynnonHyvaksyjaRole!: ValmistumispyynnonHyvaksyjaRole
-
     @Prop({ required: true, type: Boolean, default: false })
     hakutermiExists!: boolean
 
@@ -143,7 +140,7 @@
     }
 
     linkComponent(valmistumispyynto: ValmistumispyyntoListItem) {
-      switch (this.valmistumispyynnonHyvaksyjaRole) {
+      switch (valmistumispyynto.rooli) {
         case ValmistumispyynnonHyvaksyjaRole.VIRKAILIJA:
           return 'valmistumispyynnon-tarkistus'
         case ValmistumispyynnonHyvaksyjaRole.VASTUUHENKILO_OSAAMISEN_ARVIOIJA_HYVAKSYJA:

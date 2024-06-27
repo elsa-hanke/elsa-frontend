@@ -14,7 +14,6 @@
         <h3>{{ $t('avoimet') }}</h3>
         <yek-valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotAvoimet"
-          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
           :current-page="currentAvoinPage"
           :per-page="perPage"
           :loading="loadingAvoimet"
@@ -28,7 +27,6 @@
         <h3>{{ $t('valmiit-hyvaksytyt-palautetut') }}</h3>
         <yek-valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotMuut"
-          :valmistumispyynnon-hyvaksyja-role="valmistumispyynnonHyvaksyjaRole"
           :current-page="currentMuutPage"
           :per-page="perPage"
           :loading="loadingMuut"
@@ -48,7 +46,6 @@
   import YekValmistumispyynnotList from '@/components/valmistumispyynnot-list/yek-valmistumispyynnot-list.vue'
   import { ValmistumispyyntoListItem, Page } from '@/types'
   import { ERIKOISALA_YEK_ID } from '@/utils/constants'
-  import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
   @Component({
     components: {
@@ -147,10 +144,6 @@
       erikoistujanNimi: string | null
     } = {
       erikoistujanNimi: null
-    }
-
-    get valmistumispyynnonHyvaksyjaRole() {
-      return ValmistumispyynnonHyvaksyjaRole.VASTUUHENKILO_HYVAKSYJA
     }
   }
 </script>

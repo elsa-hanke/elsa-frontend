@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <b-alert v-if="!valmistumispyynnonHyvaksyjaRole || rows === 0" variant="dark" class="mt-2" show>
+    <b-alert v-if="rows === 0" variant="dark" class="mt-2" show>
       <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
       <span v-if="hakutermiExists">
         {{ $t('ei-hakutuloksia') }}
@@ -27,7 +27,7 @@
           variant="link"
           class="p-0 border-0"
           :to="{
-            name: linkComponent(),
+            name: linkComponent(row.item),
             params: { valmistumispyyntoId: row.item.id }
           }"
         >
@@ -51,7 +51,7 @@
           variant="primary"
           class="pt-1 pb-1"
           :to="{
-            name: linkComponent(),
+            name: linkComponent(row.item),
             params: { valmistumispyyntoId: row.item.id }
           }"
         >
@@ -91,9 +91,6 @@
   export default class YekValmistumispyynnotList extends Vue {
     @Prop({ required: true, default: undefined })
     valmistumispyynnot!: Page<ValmistumispyyntoListItem>
-
-    @Prop({ required: false, default: undefined })
-    valmistumispyynnonHyvaksyjaRole!: ValmistumispyynnonHyvaksyjaRole
 
     @Prop({ required: true, type: Boolean, default: false })
     hakutermiExists!: boolean
@@ -138,8 +135,8 @@
       return valmistumispyynto.tila === ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
     }
 
-    linkComponent() {
-      switch (this.valmistumispyynnonHyvaksyjaRole) {
+    linkComponent(valmistumispyynto: ValmistumispyyntoListItem) {
+      switch (valmistumispyynto.rooli) {
         case ValmistumispyynnonHyvaksyjaRole.VIRKAILIJA:
           return 'valmistumispyynnon-tarkistus-yek'
         case ValmistumispyynnonHyvaksyjaRole.VASTUUHENKILO_HYVAKSYJA:

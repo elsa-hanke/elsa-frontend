@@ -22,9 +22,9 @@ import {
   Asiakirja,
   Seurantajakso,
   ErikoistujanEteneminen,
-  ErikoistujienSeurantaVastuuhenkiloRajaimet
+  ErikoistujienSeurantaVastuuhenkiloRajaimet,
+  VastuuhenkilonVastuualueet
 } from '@/types'
-import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
 export async function getKoejaksot() {
   const path = 'vastuuhenkilo/koejaksot'
@@ -155,14 +155,9 @@ export async function putTerveyskeskuskoulutusjakso(id: string, korjausehdotus: 
   })
 }
 
-export async function getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo() {
-  const path = 'vastuuhenkilo/onko-terveyskeskuskoulutusjakso-vastuuhenkilo'
-  return await axios.get<boolean>(path)
-}
-
-export async function getOnkoYekVastuuhenkilo() {
-  const path = 'vastuuhenkilo/onko-yek-vastuuhenkilo'
-  return await axios.get<boolean>(path)
+export async function getVastuualueet() {
+  const path = 'vastuuhenkilo/vastuualueet'
+  return await axios.get<VastuuhenkilonVastuualueet>(path)
 }
 
 export async function getValmistumispyynnot(params: {
@@ -177,11 +172,6 @@ export async function getValmistumispyynnot(params: {
       ...params
     }
   })
-}
-
-export async function getValmistumispyynnonHyvaksyjaRole() {
-  const path = '/vastuuhenkilo/valmistumispyynnon-hyvaksyja-role'
-  return await axios.get<ValmistumispyynnonHyvaksyjaRole>(path)
 }
 
 export async function getValmistumispyyntoOsaamisenArviointi(id: number) {

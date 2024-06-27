@@ -111,7 +111,11 @@
           {{ $t('seurantakeskustelut') }}
         </b-nav-item>
         <b-nav-item
-          v-if="$isVirkailija() || $isTerveyskeskuskoulutusjaksoVastuuhenkilo()"
+          v-if="
+            $isVirkailija() ||
+            $isTerveyskeskuskoulutusjaksoVastuuhenkilo() ||
+            $isYekTerveyskeskuskoulutusjaksoVastuuhenkilo()
+          "
           class="border-bottom"
           :to="{ name: 'terveyskeskuskoulutusjaksot' }"
         >

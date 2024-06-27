@@ -40,9 +40,22 @@ export class RolesPlugin {
       )
     }
 
-    vue.prototype.$isYekVastuuhenkilo = (): boolean => {
+    vue.prototype.$isYekTerveyskeskuskoulutusjaksoVastuuhenkilo = (): boolean => {
       const data = store.getters['auth/account']
-      return data.activeAuthority === ELSA_ROLE.Vastuuhenkilo && data.yekVastuuhenkilo
+      return (
+        data.activeAuthority === ELSA_ROLE.Vastuuhenkilo &&
+        data.yekTerveyskeskuskoulutusjaksoVastuuhenkilo
+      )
+    }
+
+    vue.prototype.$isValmistumisenVastuuhenkilo = (): boolean => {
+      const data = store.getters['auth/account']
+      return data.activeAuthority === ELSA_ROLE.Vastuuhenkilo && data.valmistumisenVastuuhenkilo
+    }
+
+    vue.prototype.$isYekValmistumisenVastuuhenkilo = (): boolean => {
+      const data = store.getters['auth/account']
+      return data.activeAuthority === ELSA_ROLE.Vastuuhenkilo && data.yekValmistumisenVastuuhenkilo
     }
 
     vue.prototype.$isTekninenPaakayttaja = (): boolean => {
@@ -62,7 +75,9 @@ declare module 'vue/types/vue' {
     $isKouluttaja: Function
     $isVastuuhenkilo: Function
     $isTerveyskeskuskoulutusjaksoVastuuhenkilo: Function
-    $isYekVastuuhenkilo: Function
+    $isYekTerveyskeskuskoulutusjaksoVastuuhenkilo: Function
+    $isValmistumisenVastuuhenkilo: Function
+    $isYekValmistumisenVastuuhenkilo: Function
     $isTekninenPaakayttaja: Function
     $isVirkailija: Function
     $hasKouluttajaRole: Function
