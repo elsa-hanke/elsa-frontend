@@ -3,10 +3,7 @@ import { Module } from 'vuex'
 
 import * as api from '@/api'
 import { getErikoistuvaLaakari } from '@/api/erikoistuva'
-import {
-  getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo,
-  getOnkoYekVastuuhenkilo
-} from '@/api/vastuuhenkilo'
+import { getVastuualueet } from '@/api/vastuuhenkilo'
 import { ELSA_ROLE } from '@/utils/roles'
 
 const auth: Module<any, any> = {
@@ -72,10 +69,12 @@ const auth: Module<any, any> = {
           data.originalUser = (await axios.get('kayttaja-impersonated')).data
         }
         if (data.authorities.includes(ELSA_ROLE.Vastuuhenkilo)) {
-          data.terveyskeskuskoulutusjaksoVastuuhenkilo = (
-            await getOnkoTerveyskeskuskoulutusjaksoVastuuhenkilo()
-          ).data
-          data.yekVastuuhenkilo = (await getOnkoYekVastuuhenkilo()).data
+          const vastuualueet = (await getVastuualueet()).data
+          data.terveyskeskuskoulutusjaksoVastuuhenkilo = vastuualueet.terveyskeskuskoulutusjakso
+          data.yekTerveyskeskuskoulutusjaksoVastuuhenkilo =
+            vastuualueet.yekTerveyskeskuskoulutusjakso
+          data.valmistumisenVastuuhenkilo = vastuualueet.valmistuminen
+          data.yekValmistumisenVastuuhenkilo = vastuualueet.yekValmistuminen
         }
         commit('authSuccess', data)
       } catch (err) {
