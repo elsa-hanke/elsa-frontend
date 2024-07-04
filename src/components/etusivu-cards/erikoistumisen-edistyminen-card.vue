@@ -128,6 +128,20 @@
               </div>
             </div>
           </div>
+          <div v-if="edistyminen.yekSuoritusPvm" class="border rounded pt-3 pb-2 mb-4">
+            <div class="container-fluid">
+              <h3 class="mb-0">
+                {{ $t('muut-koulutukset') }}
+              </h3>
+              <div class="d-flex align-items-center">
+                <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
+                <span>
+                  {{ $t('yek-suoritettu') }}
+                  {{ $date(edistyminen.opintooikeudenMyontamispaiva) }}
+                </span>
+              </div>
+            </div>
+          </div>
         </b-col>
         <b-col xl="4">
           <div class="border rounded pt-3 pb-2 mb-4">
