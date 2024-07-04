@@ -1422,6 +1422,7 @@ export interface ErikoistumisenEdistyminen {
   opintooikeudenPaattymispaiva: string
   terveyskeskuskoulutusjaksoSuoritettu: boolean
   laakarikoulutusSuoritettuSuomiTaiBelgia: boolean
+  yekSuoritusPvm: string
 }
 
 export interface HyvaksyttyKoejaksonVaihe {

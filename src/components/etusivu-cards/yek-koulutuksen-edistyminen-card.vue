@@ -96,11 +96,18 @@
                 </h3>
               </elsa-button>
               <div>
-                {{
-                  teoriakoulutukset.length > 0
-                    ? `${teoriakoulutukset.length} ${$t('kpl')}`
-                    : $t('ei-suoritettu')
-                }}
+                <span
+                  v-if="
+                    edistyminen.teoriakoulutuksetSuoritettu >= edistyminen.teoriakoulutuksetVaadittu
+                  "
+                  class="text-success"
+                >
+                  <font-awesome-icon :icon="['fas', 'check-circle']" />
+                  {{ $t('suoritettu') }}
+                </span>
+                <span v-else>
+                  {{ $t('ei-suoritettu') }}
+                </span>
               </div>
             </div>
           </div>
@@ -123,7 +130,7 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import TyoskentelyjaksotYekBarChart from '@/components/yek/tyoskentelyjaksot-yek-bar-chart.vue'
-  import { ErikoistumisenEdistyminen, Teoriakoulutus } from '@/types'
+  import { ErikoistumisenEdistyminen } from '@/types'
 
   @Component({
     components: {
@@ -140,7 +147,6 @@
   export default class YekKoulutuksenEdistyminenCard extends Vue {
     initializing = true
 
-    teoriakoulutukset: Teoriakoulutus[] = []
     edistyminen: ErikoistumisenEdistyminen | null = null
 
     async mounted() {
