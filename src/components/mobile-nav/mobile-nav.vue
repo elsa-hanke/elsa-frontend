@@ -271,7 +271,7 @@
             </div>
           </div>
         </b-nav-item>
-        <b-nav-item @click="changeToKouluttaja">
+        <b-nav-item v-if="$isKouluttaja()" @click="changeToKouluttaja">
           <div
             class="d-flex"
             :class="{
