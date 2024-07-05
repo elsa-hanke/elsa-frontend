@@ -74,6 +74,15 @@
                     {{ $t('valmistumispyynto-tyotodistukset') }}
                   </b-form-checkbox>
                   <b-form-checkbox
+                    v-model="valmistumispyyntoVaatimuksetLomake.tyoskentelyjaksotpaatetty"
+                    :state="validateVaatimuksetState('tyoskentelyjaksotpaatetty')"
+                    :disabled="vaatimuksetHyvaksytty"
+                    class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                  >
+                    {{ $t('valmistumispyynto-tyoskentelyjaksot-paatetty') }}
+                  </b-form-checkbox>
+                  <b-form-checkbox
                     v-model="valmistumispyyntoVaatimuksetLomake.kuulusteluJaJohtamisopinnot"
                     :state="validateVaatimuksetState('kuulusteluJaJohtamisopinnot')"
                     :disabled="vaatimuksetHyvaksytty"
@@ -106,6 +115,15 @@
                     >
                       {{ $t('osaamisen-arviointi-oppaasta') }}.
                     </a>
+                  </b-form-checkbox>
+                  <b-form-checkbox
+                    v-model="valmistumispyyntoVaatimuksetLomake.tkjakso"
+                    :state="validateVaatimuksetState('tkjakso')"
+                    :disabled="vaatimuksetHyvaksytty"
+                    class="py-0 mt-3"
+                    @input="$emit('skipRouteExitConfirm', false)"
+                  >
+                    {{ $t('valmistumispyynto-tkjakso') }}
                   </b-form-checkbox>
                   <b-form-checkbox
                     v-model="valmistumispyyntoVaatimuksetLomake.palautekysely"
@@ -500,9 +518,11 @@
         valmistumispyyntoVaatimuksetLomake: {
           tyoskentelyjaksot: { checked: (value: boolean) => value === true },
           tyotodistukset: { checked: (value: boolean) => value === true },
+          tyoskentelyjaksotpaatetty: { checked: (value: boolean) => value === true },
           kuulusteluJaJohtamisopinnot: { checked: (value: boolean) => value === true },
           teoriakoulutus: { checked: (value: boolean) => value === true },
           osaamisenArvioinnit: { checked: (value: boolean) => value === true },
+          tkjakso: { checked: (value: boolean) => value === true },
           palautekysely: { checked: (value: boolean) => value === true }
         },
         valmistumispyyntoLomake: {
