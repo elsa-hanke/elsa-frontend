@@ -127,6 +127,8 @@ import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vu
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
 import ValmistumispyynnonHyvaksynta from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta.vue'
 import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
+import YleinenTyoskentelyjaksotView from '@/views/yleinen-tyojaksolaskuri/yleinen-tyoskentelyjaksot-view.vue'
+import YleinenTyoskentelyjaksot from '@/views/yleinen-tyojaksolaskuri/yleinen-tyoskentelyjaksot.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -1449,6 +1451,18 @@ const routes: Array<RouteConfig> = [
     path: '/tietosuojaseloste',
     beforeEnter: languageGuard,
     component: TietosuojaselosteView
+  },
+  {
+    path: '/yleinen-tyojaksolaskuri',
+    name: 'yleinen-tyojaksolaskuri',
+    component: YleinenTyoskentelyjaksotView,
+    children: [
+      {
+        path: '',
+        name: 'yleinen-tyojaksolaskuri',
+        component: YleinenTyoskentelyjaksot
+      }
+    ]
   }
 ]
 

@@ -1314,8 +1314,8 @@ export interface TyoskentelyjaksotTable {
   keskeytykset: Keskeytysaika[]
   tilastot: TyoskentelyjaksotTilastot
   terveyskeskuskoulutusjaksonTila: TerveyskeskuskoulutusjaksonTila
-  terveyskeskuskoulutusjaksonKorjausehdotus: string
-  terveyskeskuskoulutusjaksonHyvaksymispvm: string
+  terveyskeskuskoulutusjaksonKorjausehdotus: string | null
+  terveyskeskuskoulutusjaksonHyvaksymispvm: string | null
 }
 
 export interface KayttajaErikoisalaPerYliopisto {

@@ -1827,5 +1827,11 @@
   "yliopistosairaalan-ulkop-tyoskentelyjakson-vahimmaispituus": "Yliopistosairaalan ulkop. työskentelyjakson vähimmäispituus",
   "yliopistosairaalan-ulkopuolinen-tyo": "Yliopistosairaalan ulkopuolinen työ",
   "yliopistosairaalatyo": "Yliopistosairaalatyö",
-  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"
+  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
+  "yleinen-tyojaksolaskuri":  "Yleinen työjaksolaskuri",
+  "siirry-tyojaksolaskuriin": "Siirry työjaksolaskuriin",
+  "yleinen-tyoskentelyjaksot": "Työskentelyjaksot laskuri",
+  "kirjautuminen-linkki": "Kirjautuminen",
+  "yleinen-tyojaksolaskuri-kuvaus": "Kuvaus",
+  "tulosta": "Tulosta"
 }
