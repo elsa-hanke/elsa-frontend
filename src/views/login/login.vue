@@ -86,7 +86,7 @@
           <p class="mb-3">{{ $t('tyokertymalaskuri-selite') }}</p>
           <elsa-button
             variant="outline-primary"
-            :to="{ name: 'yleinen-tyojaksolaskuri' }"
+            :to="{ name: 'tyokertymalaskuri' }"
             class="mr-3 mb-2"
           >
             {{ $t('tyokertymalaskuriin') }}

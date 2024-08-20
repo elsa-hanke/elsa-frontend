@@ -253,6 +253,8 @@
   import { parseISO } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { tyoskentelyjaksotTaulukkoData } from './tyoskentelyjaksot-offline-data'
+
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
@@ -269,7 +271,6 @@
   import { sortByDateDesc } from '@/utils/date'
   import { toastSuccess } from '@/utils/toast'
   import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
-  import { tyoskentelyjaksotTaulukkoData } from '@/views/yleinen-tyojaksolaskuri/tyoskentelyjaksot-offline-data'
 
   @Component({
     components: {
@@ -281,7 +282,7 @@
       ElsaVanhaAsetusVaroitus
     }
   })
-  export default class YleinenTyoskentelyjaksot extends Vue {
+  export default class Tyokertymalaskuri extends Vue {
     items = [
       {
         text: this.$t('kirjautuminen-linkki'),

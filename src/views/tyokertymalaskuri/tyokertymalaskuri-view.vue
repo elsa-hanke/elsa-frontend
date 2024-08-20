@@ -17,7 +17,7 @@
       ElsaButton
     }
   })
-  export default class YleinenTyoskentelyjaksotView extends Vue {
+  export default class TyokertymalaskuriView extends Vue {
     changeLocale(lang: string) {
       this.$i18n.locale = lang
     }

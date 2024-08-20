@@ -111,6 +111,8 @@ import TerveyskeskuskoulutusjaksonHyvaksyntaPyynto from '@/views/terveyskeskusko
 import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-tarkistus.vue'
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
+import TyokertymalaskuriView from '@/views/tyokertymalaskuri/tyokertymalaskuri-view.vue'
+import Tyokertymalaskuri from '@/views/tyokertymalaskuri/tyokertymalaskuri.vue'
 import MuokkaaYekTyoskentelyjaksoa from '@/views/tyoskentelyjaksot-yek/muokkaa-yek-tyoskentelyjaksoa.vue'
 import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot-yek/tyoskentelyjaksot-yek.vue'
 import UusiYekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/uusi-yek-tyoskentelyjakso.vue'
@@ -127,8 +129,6 @@ import Valmistumispyynnot from '@/views/valmistumispyynnot/valmistumispyynnot.vu
 import ValmistumispyynnonArviointi from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-arviointi.vue'
 import ValmistumispyynnonHyvaksynta from '@/views/valmistumispyynnot/vastuuhenkilo/valmistumispyynnon-hyvaksynta.vue'
 import ValmistumispyynnonTarkistus from '@/views/valmistumispyynnot/virkailija/valmistumispyynnon-tarkistus.vue'
-import YleinenTyoskentelyjaksotView from '@/views/yleinen-tyojaksolaskuri/yleinen-tyoskentelyjaksot-view.vue'
-import YleinenTyoskentelyjaksot from '@/views/yleinen-tyojaksolaskuri/yleinen-tyoskentelyjaksot.vue'
 
 Vue.use(VueRouter)
 Vue.use(Meta)
@@ -1453,14 +1453,14 @@ const routes: Array<RouteConfig> = [
     component: TietosuojaselosteView
   },
   {
-    path: '/yleinen-tyojaksolaskuri',
-    name: 'yleinen-tyojaksolaskuri',
-    component: YleinenTyoskentelyjaksotView,
+    path: '/tyokertymalaskuri',
+    name: 'tyokertymalaskuri',
+    component: TyokertymalaskuriView,
     children: [
       {
         path: '',
-        name: 'yleinen-tyojaksolaskuri',
-        component: YleinenTyoskentelyjaksot
+        name: 'tyokertymalaskuri',
+        component: Tyokertymalaskuri
       }
     ]
   }
