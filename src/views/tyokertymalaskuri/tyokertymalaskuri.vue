@@ -18,98 +18,38 @@
             -->
           </div>
           <div v-if="tyoskentelyjaksotTaulukko != null && tilastot != null">
-            <b-alert
-              v-if="
-                terveyskeskuskoulutusjaksoPalautettuKorjattavaksi ||
-                terveyskeskuskoulutusjaksoLahetetty ||
-                terveyskeskuskoulutusjaksoUusi
-              "
-              variant="dark"
-              show
-            >
-              <h5>{{ $t('terveyskeskuskoulutusjakson-hyvaksynta') }}</h5>
-              <div v-if="terveyskeskuskoulutusjaksoPalautettuKorjattavaksi">
-                <div class="d-flex flex-row">
-                  <em class="align-middle">
-                    <font-awesome-icon
-                      :icon="['fas', 'exclamation-circle']"
-                      class="mr-2 text-danger"
-                    />
-                  </em>
-                  <div>
-                    {{ $t('terveyskeskuskoulutusjakso-on-palautettu-muokattavaksi') }}
-                    <span class="d-block">
-                      {{ $t('syy') }}&nbsp;
-                      <span>
-                        {{ tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonKorjausehdotus }}
-                      </span>
-                    </span>
-                  </div>
-                </div>
-                <elsa-button
-                  :to="{
-                    name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto'
-                  }"
-                  variant="primary"
-                  class="mt-2"
-                >
-                  {{ $t('pyyda-hyvaksyntaa') }}
-                </elsa-button>
-              </div>
-              <div v-if="terveyskeskuskoulutusjaksoUusi">
-                <div class="d-flex flex-row">
-                  <div>
-                    {{ $t('terveyskeskuskoulutusjakso-on-hyvaksyttavissa') }}
-                  </div>
-                </div>
-                <elsa-button
-                  :to="{
-                    name: 'terveyskeskuskoulutusjakson-hyvaksyntapyynto'
-                  }"
-                  variant="primary"
-                  class="mt-3"
-                >
-                  {{ $t('pyyda-hyvaksyntaa') }}
-                </elsa-button>
-              </div>
-              <span v-if="terveyskeskuskoulutusjaksoLahetetty">
-                {{ $t('terveyskeskuskoulutusjakso-on-lahetetty-hyvaksyttavaksi') }}
-              </span>
-            </b-alert>
+            <h2>{{ $t('laskennan-yhteenveto') }}</h2>
             <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
               <div class="container-fluid">
-                <elsa-form-group :label="$t('tyoskentelyaika-erikoisalalla')">
+                <elsa-form-group :label="$t('tyokertyma')">
                   <template #default="{ uid }">
                     <div :id="uid" class="d-flex flex-wrap">
                       <div class="d-flex flex-column mb-2 duration-card">
                         <span class="duration-text">
                           {{ $duration(tilastot.tyoskentelyaikaYhteensa) }}
                         </span>
-                        <span class="text-size-sm">{{ $t('tyoskentelyaika-yhteensa') }}</span>
+                        <span class="text-size-sm">{{ $t('tyoskentelyaika') }}</span>
                       </div>
                       <div class="d-flex flex-column mb-2 duration-card">
                         <span class="duration-text">
-                          {{ $duration(tilastot.arvioErikoistumiseenHyvaksyttavista) }}
+                          {{ $duration(tilastot.poissaoloaikaYhteensa) }}
                         </span>
                         <span class="text-size-sm">
-                          {{ $t('arvio-erikoistumiseen-hyvaksyttavista') }}
+                          {{ $t('poissaolot') }}
                         </span>
                       </div>
                       <div class="d-flex flex-column mb-2 duration-card">
                         <span class="duration-text">
-                          {{ $duration(tilastot.arvioPuuttuvastaKoulutuksesta) }}
+                          {{ $duration(tilastot.tyokertymaYhteensa) }}
                         </span>
                         <span class="text-size-sm">
-                          {{ $t('arvio-puuttuvasta-koulutuksesta') }}
+                          {{ $t('tyokertyma-yhteensa') }}
                         </span>
                       </div>
                     </div>
                   </template>
                 </elsa-form-group>
                 <b-row>
-                  <elsa-form-group :label="$t('koulutustyypit')" class="col-xl-6 mb-0">
-                    <tyoskentelyjaksot-bar-chart :tilastot="tilastot" />
-                  </elsa-form-group>
                   <elsa-form-group :label="$t('kaytannon-koulutus')" class="col-xl-6 mb-0">
                     <template #default="{ uid }">
                       <div :id="uid" class="donut-chart">
@@ -144,100 +84,9 @@
                 </elsa-form-group>
               </div>
             </div>
-            <div class="tyoskentelyjaksot-table">
-              <b-table :items="tyoskentelyjaksotFormatted" :fields="fields" stacked="md" responsive>
-                <template #table-colgroup="scope">
-                  <col
-                    v-for="field in scope.fields"
-                    :key="field.key"
-                    :style="{ width: field.width }"
-                  />
-                </template>
-                <template #cell(tyoskentelypaikkaLabel)="row">
-                  <elsa-button
-                    :to="{
-                      name: 'tyoskentelyjakso',
-                      params: { tyoskentelyjaksoId: row.item.id }
-                    }"
-                    variant="link"
-                    class="shadow-none px-0"
-                  >
-                    {{ row.item.tyoskentelypaikka.nimi }}
-                  </elsa-button>
-                </template>
-                <template #cell(ajankohtaDate)="row">
-                  {{ row.item.ajankohta }}
-                </template>
-                <template #cell(keskeytyksetLength)="row">
-                  <elsa-button
-                    v-if="row.item.keskeytyksetLength > 0"
-                    variant="link"
-                    class="shadow-none text-nowrap px-0"
-                    @click="row.toggleDetails"
-                  >
-                    {{ row.item.keskeytyksetLength }}
-                    <span class="text-lowercase">
-                      {{ row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa') }}
-                    </span>
-                    <font-awesome-icon
-                      :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
-                      fixed-width
-                      size="lg"
-                      class="ml-2 text-dark"
-                    />
-                  </elsa-button>
-                  <span v-else>
-                    {{ $t('ei-poissaoloja') }}
-                  </span>
-                </template>
-                <template #row-details="row">
-                  <div class="px-md-3">
-                    <b-table-simple stacked="md">
-                      <b-thead>
-                        <b-tr>
-                          <b-th style="width: 60%">
-                            {{ $t('poissaolon-syy') }}
-                            <elsa-popover :title="$t('poissaolon-syy')">
-                              <elsa-poissaolon-syyt />
-                            </elsa-popover>
-                          </b-th>
-                          <b-th style="width: 25%">{{ $t('ajankohta') }}</b-th>
-                          <b-th style="width: 15%">{{ $t('poissaolo') }}</b-th>
-                        </b-tr>
-                      </b-thead>
-                      <b-tbody>
-                        <b-tr v-for="(keskeytysaika, index) in row.item.keskeytykset" :key="index">
-                          <b-td :stacked-heading="$t('poissaolon-syy')">
-                            <elsa-button
-                              :to="{
-                                name: 'poissaolo',
-                                params: { poissaoloId: keskeytysaika.id }
-                              }"
-                              variant="link"
-                              class="shadow-none px-0"
-                            >
-                              {{ keskeytysaika.poissaolonSyy.nimi }}
-                            </elsa-button>
-                          </b-td>
-                          <b-td :stacked-heading="$t('ajankohta')">
-                            {{
-                              keskeytysaika.alkamispaiva != keskeytysaika.paattymispaiva
-                                ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
-                                    keskeytysaika.paattymispaiva
-                                  )}`
-                                : $date(keskeytysaika.alkamispaiva)
-                            }}
-                          </b-td>
-                          <b-td :stacked-heading="$t('tyoaika')">
-                            <span>{{ keskeytysaika.poissaoloprosentti }} %</span>
-                          </b-td>
-                        </b-tr>
-                      </b-tbody>
-                    </b-table-simple>
-                  </div>
-                </template>
-              </b-table>
-            </div>
+            <elsa-button variant="link" class="shadow-none p-0" :to="{ name: 'etusivu' }">
+              {{ $t('siirry-elsan-etusivulle') }}
+            </elsa-button>
           </div>
           <div v-else class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -401,13 +250,13 @@
           `${this.$t('oma-erikoisala')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[0].suoritettu
           )}`,
-          `${this.$t('omaa-erikoisalaa-tukeva')}: ${this.$duration(
+          `${this.$t('muu-erikoisala')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[1].suoritettu
           )}`,
-          `${this.$t('tutkimustyo')}: ${this.$duration(
+          `${this.$t('kahden-vuoden-kliininen-tyokokemus')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[2].suoritettu
           )}`,
-          `${this.$t('pakollinen-terveyskeskuskoulutusjakso-lyh')}: ${this.$duration(
+          `${this.$t('terveyskeskustyo')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[3].suoritettu
           )}`
         ],

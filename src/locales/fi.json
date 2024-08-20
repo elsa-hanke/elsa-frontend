@@ -1834,5 +1834,11 @@
   "yleinen-tyoskentelyjaksot": "Työskentelyjaksot laskuri",
   "kirjautuminen-linkki": "Kirjautuminen",
   "tyokertymalaskuri-kuvaus": "Laske työkertymäsi lisäämällä työskentelyjaksojen alkamis- ja päättymispäivät ja niihin liittyvät poissaolot. Laskuri laskee työskentelyajat yhteen ja vähentää niistä poissaolot.",
-  "tulosta": "Tulosta"
+  "tulosta": "Tulosta",
+  "laskennan-yhteenveto": "Laskennan yhteenveto",
+  "tyokertyma": "Työkertymä",
+  "tyokertyma-yhteensa": "Työkertymä yhteensä",
+  "siirry-elsan-etusivulle": "Siirry Elsan etusivulle",
+  "muu-erikoisala": "Muu erikoisala",
+  "kahden-vuoden-kliininen-tyokokemus":"2 vuoden kliininen työkokemus (ehl)"
 }

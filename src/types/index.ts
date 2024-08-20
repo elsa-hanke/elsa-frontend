@@ -1306,6 +1306,8 @@ export interface TyoskentelyjaksotTilastot {
   koulutustyypit: TyoskentelyjaksotTilastotKoulutustyypit
   kaytannonKoulutus: TyoskentelyjaksotTilastotKaytannonKoulutus[]
   tyoskentelyjaksot: TyoskentelyjaksotTilastotTyoskentelyjaksot[]
+  poissaoloaikaYhteensa: number
+  tyokertymaYhteensa: number
 }
 
 export interface TyoskentelyjaksotTable {

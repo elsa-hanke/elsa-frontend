@@ -38,7 +38,9 @@ export const tyoskentelyjaksotTaulukkoData: TyoskentelyjaksotTable | null = {
         suoritettu: 0.0
       }
     ],
-    tyoskentelyjaksot: []
+    tyoskentelyjaksot: [],
+    poissaoloaikaYhteensa: 0.0,
+    tyokertymaYhteensa: 0.0
   },
   terveyskeskuskoulutusjaksonTila: TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY,
   terveyskeskuskoulutusjaksonKorjausehdotus: null,
