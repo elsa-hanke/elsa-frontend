@@ -1828,12 +1828,11 @@
   "yliopistosairaalan-ulkopuolinen-tyo": "Yliopistosairaalan ulkopuolinen työ",
   "yliopistosairaalatyo": "Yliopistosairaalatyö",
   "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
-  "yleinen-tyojaksolaskuri":  "Yleinen työjaksolaskuri",
   "tyokertymalaskuri": "Työkertymälaskuri",
   "tyokertymalaskuri-selite": "Tällä laskurilla lasket työkertymäsi ilman kirjautumista Elsaan.",
   "tyokertymalaskuriin": "Työkertymälaskuriin",
   "yleinen-tyoskentelyjaksot": "Työskentelyjaksot laskuri",
   "kirjautuminen-linkki": "Kirjautuminen",
-  "yleinen-tyojaksolaskuri-kuvaus": "Kuvaus",
+  "tyokertymalaskuri-kuvaus": "Laske työkertymäsi lisäämällä työskentelyjaksojen alkamis- ja päättymispäivät ja niihin liittyvät poissaolot. Laskuri laskee työskentelyajat yhteen ja vähentää niistä poissaolot.",
   "tulosta": "Tulosta"
 }

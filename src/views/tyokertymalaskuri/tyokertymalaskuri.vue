@@ -4,19 +4,18 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('yleinen-tyoskentelyjaksot') }}</h1>
+          <h1>{{ $t('tyokertymalaskuri') }}</h1>
           <!-- eslint-disable vue/no-v-html -->
-          <p v-html="$t('yleinen-tyojaksolaskuri-kuvaus', { opintooppaastaLinkki })" />
+          <p v-html="$t('tyokertymalaskuri-kuvaus', { opintooppaastaLinkki })" />
           <div class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button variant="primary" class="mb-2 mr-2" @click="showToast">
               {{ $t('lisaa-tyoskentelyjakso') }}
             </elsa-button>
-            <elsa-button variant="outline-primary" class="mb-2 mr-2" @click="showToast">
-              {{ $t('lisaa-poissaolo') }}
-            </elsa-button>
+            <!--
             <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
               {{ $t('tulosta') }}
             </elsa-button>
+            -->
           </div>
           <div v-if="tyoskentelyjaksotTaulukko != null && tilastot != null">
             <b-alert
@@ -289,7 +288,7 @@
         to: { name: 'login' }
       },
       {
-        text: this.$t('yleinen-tyojaksolaskuri'),
+        text: this.$t('tyokertymalaskuri'),
         active: true
       }
     ]
