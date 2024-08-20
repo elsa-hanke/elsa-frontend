@@ -80,14 +80,16 @@
             {{ $t('kirjaudu-sisaan') }} (HAKA)
           </elsa-button>
         </div>
+        <hr />
         <div class="mb-4">
-          <h4 class="mb-1">{{ $t('yleinen-tyojaksolaskuri') }}</h4>
+          <h4 class="mb-1">{{ $t('tyokertymalaskuri') }}</h4>
+          <p class="mb-3">{{ $t('tyokertymalaskuri-selite') }}</p>
           <elsa-button
-            variant="primary"
+            variant="outline-primary"
             :to="{ name: 'yleinen-tyojaksolaskuri' }"
             class="mr-3 mb-2"
           >
-            {{ $t('siirry-tyojaksolaskuriin') }}
+            {{ $t('tyokertymalaskuriin') }}
           </elsa-button>
         </div>
       </b-col>
