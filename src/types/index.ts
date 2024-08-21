@@ -1731,3 +1731,21 @@ export interface VastuuhenkilonVastuualueet {
   valmistuminen: boolean
   yekValmistuminen: boolean
 }
+
+export interface TyokertymaLaskuriTyoskentelyjaksoForm {
+  id?: number | null
+  alkamispaiva: string | null
+  paattymispaiva: string | null
+  minPaattymispaiva: string | null
+  maxAlkamispaiva: string | null
+  osaaikaprosentti: number | null
+  kaytannonKoulutus: KaytannonKoulutusTyyppi | null
+  tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
+  label?: string
+}
+
+export interface TyokertymaLaskuriTyoskentelypaikkaForm {
+  nimi: string | null
+  tyyppi: TyoskentelyjaksoTyyppi | null
+  muuTyyppi: string | null
+}
