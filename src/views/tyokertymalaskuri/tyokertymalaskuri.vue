@@ -8,9 +8,16 @@
           <!-- eslint-disable vue/no-v-html -->
           <p v-html="$t('tyokertymalaskuri-kuvaus', { opintooppaastaLinkki })" />
           <div class="d-flex flex-wrap mb-3 mb-lg-4">
-            <elsa-button variant="primary" class="mb-2 mr-2" @click="showToast">
+            <elsa-button
+              variant="primary"
+              class="mb-2 mr-2"
+              @click="openLisaaTyoskentelyjaksoFormModal"
+            >
               {{ $t('lisaa-tyoskentelyjakso') }}
             </elsa-button>
+            <tyokertymalaskuri-modal
+              v-model="lisaaTyoskentelyjaksoFormModal"
+            ></tyokertymalaskuri-modal>
             <!--
             <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
               {{ $t('tulosta') }}
@@ -107,6 +114,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import TyokertymalaskuriModal from '@/components/tyokertymalaskuri/tyokertymalaskuri-modal.vue'
   import TyoskentelyjaksotBarChart from '@/components/tyoskentelyjaksot-bar-chart.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
   import {
@@ -122,6 +130,7 @@
 
   @Component({
     components: {
+      TyokertymalaskuriModal,
       ElsaButton,
       ElsaFormGroup,
       ElsaPopover,
@@ -174,6 +183,7 @@
         sortable: true
       }
     ]
+    lisaaTyoskentelyjaksoFormModal = false
 
     get tyoskentelyjaksot() {
       if (this.tyoskentelyjaksotTaulukko) {
@@ -417,6 +427,10 @@
 
     showToast() {
       toastSuccess(this, 'todo')
+    }
+
+    openLisaaTyoskentelyjaksoFormModal() {
+      this.lisaaTyoskentelyjaksoFormModal = true
     }
   }
 </script>
