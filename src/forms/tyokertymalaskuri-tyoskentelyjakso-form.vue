@@ -149,7 +149,87 @@
       </template>
     </elsa-form-group>
     <hr />
-    Todo poissaolot
+    <div>
+      <h3>{{ $t('poissaolo') }}</h3>
+      <elsa-form-group :label="$t('poissaolon-syy')" :required="true">
+        <template #label-help>
+          <elsa-popover :title="$t('poissaolon-syy')">
+            <elsa-poissaolon-syyt />
+          </elsa-popover>
+        </template>
+        <template #default="{ uid }">
+          <elsa-form-multiselect
+            :id="uid"
+            v-model="form.poissaolonSyy"
+            :options="poissaolonSyytSorted"
+            :state="validateState('poissaolonSyy')"
+            label="nimi"
+            track-by="id"
+            @input="$emit('skipRouteExitConfirm', false)"
+          />
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
+        </template>
+      </elsa-form-group>
+      <b-form-row>
+        <elsa-form-group
+          :label="$t('alkamispaiva')"
+          class="col-xs-12 col-sm-6 pr-sm-3"
+          :required="true"
+        >
+          <template #default="{ uid }">
+            <elsa-form-datepicker
+              v-if="childDataReceived"
+              :id="uid"
+              ref="alkamispaiva"
+              :value.sync="form.alkamispaiva"
+              :initial-date="alkamispaivaInitialDate"
+              :min="minAlkamispaiva"
+              :min-error-text="
+                $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
+              "
+              :max="maxAlkamispaiva"
+              :max-error-text="$t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')"
+              @input="$emit('skipRouteExitConfirm', false)"
+            ></elsa-form-datepicker>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group
+          :label="$t('paattymispaiva')"
+          class="col-xs-12 col-sm-6 pl-sm-3"
+          :required="true"
+        >
+          <template #default="{ uid }">
+            <elsa-form-datepicker
+              v-if="childDataReceived"
+              :id="uid"
+              ref="paattymispaiva"
+              :value.sync="form.paattymispaiva"
+              :initial-date="paattymispaivaInitialDate"
+              :min="minPaattymispaiva"
+              :min-error-text="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
+              :max="maxPaattymispaiva"
+              :max-error-text="
+                $t('poissaolon-paattymispaivan-taytyy-olla-ennen-tyoskentelyjakson-paattymista')
+              "
+              class="datepicker-range"
+              @input="$emit('skipRouteExitConfirm', false)"
+            ></elsa-form-datepicker>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+      </b-form-row>
+      <b-form-checkbox
+        v-model="form.kokoTyoajanPoissaolo"
+        :class="{ 'mb-3': !form.kokoTyoajanPoissaolo }"
+        @change="$emit('skipRouteExitConfirm', false)"
+      >
+        {{ $t('koko-tyoajan-poissaolo') }}
+      </b-form-checkbox>
+    </div>
     <hr />
     <div class="d-flex flex-row-reverse flex-wrap">
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
@@ -166,6 +246,7 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios'
   import Component from 'vue-class-component'
   import { Prop, Vue } from 'vue-property-decorator'
   import { required, between, requiredIf, integer } from 'vuelidate/lib/validators'
@@ -177,6 +258,7 @@
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
+  import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import {
     LaillistamistiedotLomakeKoulutettava,
@@ -184,11 +266,14 @@
     Tyoskentelyjakso
   } from '@/types'
   import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import { sortByAsc } from '@/utils/sort'
+  import { toastFail } from '@/utils/toast'
   import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
 
   @Component({
     components: {
+      ElsaPoissaolonSyyt,
       KouluttajaKoulutussopimusForm,
       AsiakirjatContent,
       AsiakirjatUpload,
@@ -289,11 +374,23 @@
       laakarikoulutusSuoritettuSuomiTaiBelgia: false
     }
 
+    poissaolonSyyt: any[] = []
+
     async mounted() {
+      await this.fetchPoissaolonSyyt()
+
       this.form = {
         ...this.value
       }
       this.childDataReceived = true
+    }
+
+    async fetchPoissaolonSyyt() {
+      try {
+        this.poissaolonSyyt = (await axios.get(`todo-route/poissaolon-syyt`)).data
+      } catch {
+        toastFail(this, this.$t('poissaolon-syiden-hakeminen-epaonnistui'))
+      }
     }
 
     validateState(name: string) {
@@ -385,6 +482,26 @@
 
     get terveyskeskustyo() {
       return KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
+    }
+
+    get poissaolonSyytSorted() {
+      return [...this.poissaolonSyyt.sort((a, b) => sortByAsc(a.nimi, b.nimi))]
+    }
+
+    get minAlkamispaiva() {
+      return this.form.alkamispaiva
+    }
+
+    get alkamispaivaInitialDate() {
+      return this.form.alkamispaiva
+    }
+
+    get paattymispaivaInitialDate() {
+      return this.form.alkamispaiva
+    }
+
+    get maxPaattymispaiva() {
+      return this.form.paattymispaiva
     }
   }
 </script>
