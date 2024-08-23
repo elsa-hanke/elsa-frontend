@@ -1742,6 +1742,7 @@ export interface TyokertymaLaskuriTyoskentelyjaksoForm {
   kaytannonKoulutus: KaytannonKoulutusTyyppi | null
   tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
   label?: string
+  poissaolot: Poissaolo[]
 }
 
 export interface TyokertymaLaskuriTyoskentelypaikkaForm {

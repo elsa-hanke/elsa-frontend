@@ -150,85 +150,29 @@
     </elsa-form-group>
     <hr />
     <div>
-      <h3>{{ $t('poissaolo') }}</h3>
-      <elsa-form-group :label="$t('poissaolon-syy')" :required="true">
-        <template #label-help>
-          <elsa-popover :title="$t('poissaolon-syy')">
-            <elsa-poissaolon-syyt />
-          </elsa-popover>
-        </template>
-        <template #default="{ uid }">
-          <elsa-form-multiselect
-            :id="uid"
-            v-model="form.poissaolonSyy"
-            :options="poissaolonSyytSorted"
-            :state="validateState('poissaolonSyy')"
-            label="nimi"
-            track-by="id"
-            @input="$emit('skipRouteExitConfirm', false)"
-          />
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </template>
-      </elsa-form-group>
-      <b-form-row>
-        <elsa-form-group
-          :label="$t('alkamispaiva')"
-          class="col-xs-12 col-sm-6 pr-sm-3"
-          :required="true"
+      <div v-for="(poissaolo, index) in form.poissaolot" :key="index">
+        <tyokertymalaskuri-tyoskentelyjakso-poissaolo-form
+          :poissaolo="poissaolo"
+          :poissaolon-syyt-sorted="poissaolonSyytSorted"
+          :child-data-received="childDataReceived"
+          :tyojakso-alkamispaiva="form.alkamispaiva"
+          :tyojakso-paattymispaiva="form.paattymispaiva"
+          @input="onPoissaoloInput($event, index)"
+        />
+        <elsa-button
+          variant="link"
+          size="sm"
+          class="text-decoration-none shadow-none p-0"
+          @click="removePoissaolo(index)"
         >
-          <template #default="{ uid }">
-            <elsa-form-datepicker
-              v-if="childDataReceived"
-              :id="uid"
-              ref="alkamispaiva"
-              :value.sync="form.alkamispaiva"
-              :initial-date="alkamispaivaInitialDate"
-              :min="minAlkamispaiva"
-              :min-error-text="
-                $t('poissaolon-alkamispaiva-ei-voi-olla-ennen-tyoskentelyjakson-alkamista')
-              "
-              :max="maxAlkamispaiva"
-              :max-error-text="$t('poissaolon-taytyy-alkaa-ennen-paattymispaivaa')"
-              @input="$emit('skipRouteExitConfirm', false)"
-            ></elsa-form-datepicker>
-          </template>
-        </elsa-form-group>
-        <elsa-form-group
-          :label="$t('paattymispaiva')"
-          class="col-xs-12 col-sm-6 pl-sm-3"
-          :required="true"
-        >
-          <template #default="{ uid }">
-            <elsa-form-datepicker
-              v-if="childDataReceived"
-              :id="uid"
-              ref="paattymispaiva"
-              :value.sync="form.paattymispaiva"
-              :initial-date="paattymispaivaInitialDate"
-              :min="minPaattymispaiva"
-              :min-error-text="$t('poissaolon-paattymispaivan-taytyy-olla-alkamispaivan-jalkeen')"
-              :max="maxPaattymispaiva"
-              :max-error-text="
-                $t('poissaolon-paattymispaivan-taytyy-olla-ennen-tyoskentelyjakson-paattymista')
-              "
-              class="datepicker-range"
-              @input="$emit('skipRouteExitConfirm', false)"
-            ></elsa-form-datepicker>
-            <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
-            </b-form-invalid-feedback>
-          </template>
-        </elsa-form-group>
-      </b-form-row>
-      <b-form-checkbox
-        v-model="form.kokoTyoajanPoissaolo"
-        :class="{ 'mb-3': !form.kokoTyoajanPoissaolo }"
-        @change="$emit('skipRouteExitConfirm', false)"
-      >
-        {{ $t('koko-tyoajan-poissaolo') }}
-      </b-form-checkbox>
+          <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
+          {{ $t('poista-poissaolo') }}
+        </elsa-button>
+        <hr />
+      </div>
+      <b-button variant="outline-primary" @click="addPoissaolo">
+        {{ $t('lisaa-jaksolle-poissaolo') }}
+      </b-button>
     </div>
     <hr />
     <div class="d-flex flex-row-reverse flex-wrap">
@@ -249,7 +193,7 @@
   import axios from 'axios'
   import Component from 'vue-class-component'
   import { Prop, Vue } from 'vue-property-decorator'
-  import { required, between, requiredIf, integer } from 'vuelidate/lib/validators'
+  import { between, integer, required, requiredIf } from 'vuelidate/lib/validators'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -260,12 +204,18 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import {
     LaillistamistiedotLomakeKoulutettava,
+    PoissaolonSyy,
     TyokertymaLaskuriTyoskentelyjaksoForm,
     Tyoskentelyjakso
   } from '@/types'
-  import { KaytannonKoulutusTyyppi, TyoskentelyjaksoTyyppi } from '@/utils/constants'
+  import {
+    KaytannonKoulutusTyyppi,
+    PoissaolonSyyTyyppi,
+    TyoskentelyjaksoTyyppi
+  } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
   import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
@@ -273,6 +223,7 @@
 
   @Component({
     components: {
+      TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
       ElsaPoissaolonSyyt,
       KouluttajaKoulutussopimusForm,
       AsiakirjatContent,
@@ -347,7 +298,8 @@
         tyyppi: null,
         muuTyyppi: null
       },
-      kaytannonKoulutus: null
+      kaytannonKoulutus: null,
+      poissaolot: []
     }
     tyypit = [
       { text: this.$t('terveyskeskus'), value: TyoskentelyjaksoTyyppi.TERVEYSKESKUS },
@@ -374,20 +326,20 @@
       laakarikoulutusSuoritettuSuomiTaiBelgia: false
     }
 
-    poissaolonSyyt: any[] = []
+    poissaolonSyyt: PoissaolonSyy[] = []
 
     async mounted() {
       await this.fetchPoissaolonSyyt()
 
-      this.form = {
-        ...this.value
-      }
+      // this.form = {
+      //   ...this.value
+      // }
       this.childDataReceived = true
     }
 
     async fetchPoissaolonSyyt() {
       try {
-        this.poissaolonSyyt = (await axios.get(`todo-route/poissaolon-syyt`)).data
+        this.poissaolonSyyt = (await axios.get(`/julkinen/poissaolon-syyt`)).data
       } catch {
         toastFail(this, this.$t('poissaolon-syiden-hakeminen-epaonnistui'))
       }
@@ -412,6 +364,19 @@
       return !this.$v.$anyError
     }
 
+    validatePoissaolot() {
+      let isValid = true
+      this.form.poissaolot.forEach((poissaolo) => {
+        if (!poissaolo.alkamispaiva || !poissaolo.paattymispaiva) {
+          isValid = false
+          this.$set(poissaolo, 'invalid', true)
+        } else {
+          this.$set(poissaolo, 'invalid', false)
+        }
+      })
+      return isValid
+    }
+
     async onSubmit() {
       const validations = [
         this.validateForm(),
@@ -421,6 +386,7 @@
       if (validations.includes(false)) {
         return
       }
+
       const submitData = {
         tyoskentelyjakso: {
           ...this.form,
@@ -502,6 +468,40 @@
 
     get maxPaattymispaiva() {
       return this.form.paattymispaiva
+    }
+
+    addPoissaolo() {
+      this.form.poissaolot.push({
+        poissaolonSyyId: 0,
+        poissaolonSyy: {
+          id: 0,
+          nimi: '',
+          vahennystyyppi: PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN,
+          voimassaolonAlkamispaiva: '',
+          voimassaolonPaattymispaiva: null
+        },
+        tyoskentelyjaksoId: 0,
+        kokoTyoajanPoissaolo: false
+      })
+    }
+
+    removePoissaolo(index: number) {
+      this.form.poissaolot.splice(index, 1)
+    }
+
+    onPoissaoloInput(updatedPoissaolo: any, index: number) {
+      this.$set(this.form.poissaolot, index, updatedPoissaolo)
+    }
+
+    saveToLocalStorage() {
+      localStorage.setItem('tyokertyma-lomake', JSON.stringify(this.$data))
+    }
+
+    loadFromLocalStorage() {
+      const savedData = localStorage.getItem('tyokertyma-lomake')
+      if (savedData) {
+        this.form = JSON.parse(savedData)
+      }
     }
   }
 </script>
