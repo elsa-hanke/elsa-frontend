@@ -36,7 +36,6 @@
             v-model="poissaolo.alkamispaiva"
             :min="minAlkamispaiva"
             :max="maxAlkamispaiva"
-            :disabled="isParentDatesSelected"
             @input="$emit('input', poissaolo)"
           ></elsa-form-datepicker>
         </template>
@@ -54,7 +53,6 @@
             v-model="poissaolo.paattymispaiva"
             :min="minPaattymispaiva"
             :max="maxPaattymispaiva"
-            :disabled="isParentDatesSelected"
             class="datepicker-range"
             @input="$emit('input', poissaolo)"
           ></elsa-form-datepicker>

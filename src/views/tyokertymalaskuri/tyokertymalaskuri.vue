@@ -17,6 +17,7 @@
             </elsa-button>
             <tyokertymalaskuri-modal
               v-model="lisaaTyoskentelyjaksoFormModal"
+              @submit="onSubmit"
             ></tyokertymalaskuri-modal>
             <!--
             <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
@@ -431,6 +432,21 @@
 
     openLisaaTyoskentelyjaksoFormModal() {
       this.lisaaTyoskentelyjaksoFormModal = true
+    }
+
+    async onSubmit(formData: any, params: any) {
+      console.log(formData, params)
+    }
+
+    saveToLocalStorage() {
+      localStorage.setItem('tyokertyma-lomake', JSON.stringify(this.$data))
+    }
+
+    loadFromLocalStorage() {
+      const savedData = localStorage.getItem('tyokertyma-lomake')
+      if (savedData) {
+        // this.form = JSON.parse(savedData)
+      }
     }
   }
 </script>

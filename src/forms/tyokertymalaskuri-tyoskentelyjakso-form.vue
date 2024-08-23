@@ -21,6 +21,7 @@
           <b-form-radio
             v-model="form.kaytannonKoulutus"
             name="kaytannon-koulutus-tyyppi"
+            :state="validateState('kaytannonKoulutus')"
             :value="omanErikoisalanKoulutus"
             @input="$emit('skipRouteExitConfirm', false)"
           >
@@ -29,6 +30,7 @@
           <b-form-radio
             v-model="form.kaytannonKoulutus"
             name="kaytannon-koulutus-tyyppi"
+            :state="validateState('kaytannonKoulutus')"
             :value="muuErikoisala"
             @input="$emit('skipRouteExitConfirm', false)"
           >
@@ -37,6 +39,7 @@
           <b-form-radio
             v-model="form.kaytannonKoulutus"
             name="kaytannon-koulutus-tyyppi"
+            :state="validateState('kaytannonKoulutus')"
             :value="kahdenVuodenKliininenTyokokemus"
             @input="$emit('skipRouteExitConfirm', false)"
           >
@@ -45,6 +48,7 @@
           <b-form-radio
             v-model="form.kaytannonKoulutus"
             name="kaytannon-koulutus-tyyppi"
+            :state="validateState('kaytannonKoulutus')"
             :value="terveyskeskustyo"
             @input="$emit('skipRouteExitConfirm', false)"
           >
@@ -77,11 +81,6 @@
               "
               @input="$emit('skipRouteExitConfirm', false)"
             ></elsa-form-datepicker>
-            <!--
-            <small v-if="value.tapahtumia" class="form-text text-muted">
-              {{ $t('tyoskentelyjakso-paattymispaiva-help') }}
-            </small>
-            -->
           </div>
         </template>
       </elsa-form-group>
@@ -106,11 +105,6 @@
           <small v-if="value.tapahtumia" class="form-text text-muted">
             {{ $t('tyoskentelyjakso-paattymispaiva-help') }}
           </small>
-          <!--
-          <small v-else class="form-text text-muted">
-            {{ $t('jata-tyhjaksi-jos-ei-tiedossa') }}
-          </small>
-          -->
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -132,11 +126,6 @@
             />
             <span class="mx-3">%</span>
           </div>
-          <!--
-          <small class="d-flex form-text text-muted">
-            {{ $t('alle-50-osaaikaisuus-ei-kerryta') }}
-          </small>
-          -->
           <b-form-invalid-feedback
             :id="`${uid}-feedback`"
             :style="{
@@ -193,7 +182,7 @@
   import axios from 'axios'
   import Component from 'vue-class-component'
   import { Prop, Vue } from 'vue-property-decorator'
-  import { between, integer, required, requiredIf } from 'vuelidate/lib/validators'
+  import { between, integer, required } from 'vuelidate/lib/validators'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -241,23 +230,15 @@
           required,
           nimi: {
             required
-          },
-          kunta: {
-            required
-          },
-          tyyppi: {
-            required
-          },
-          muuTyyppi: {
-            required: requiredIf((value) => {
-              return value.tyyppi === 'MUU'
-            })
           }
         },
         osaaikaprosentti: {
           required,
           integer,
           between: between(50, 100)
+        },
+        kaytannonKoulutus: {
+          required
         }
       }
     }
@@ -330,10 +311,6 @@
 
     async mounted() {
       await this.fetchPoissaolonSyyt()
-
-      // this.form = {
-      //   ...this.value
-      // }
       this.childDataReceived = true
     }
 
@@ -366,10 +343,11 @@
 
     validatePoissaolot() {
       let isValid = true
-      this.form.poissaolot.forEach((poissaolo) => {
+      this.form.poissaolot.forEach((poissaolo, index) => {
         if (!poissaolo.alkamispaiva || !poissaolo.paattymispaiva) {
           isValid = false
           this.$set(poissaolo, 'invalid', true)
+          console.log(`Invalid Poissaolo at index ${index}:`, poissaolo)
         } else {
           this.$set(poissaolo, 'invalid', false)
         }
@@ -381,8 +359,10 @@
       const validations = [
         this.validateForm(),
         this.$refs.alkamispaiva ? this.$refs.alkamispaiva.validateForm() : true,
-        this.$refs.paattymispaiva.validateForm()
+        this.$refs.paattymispaiva.validateForm(),
+        this.validatePoissaolot()
       ]
+
       if (validations.includes(false)) {
         return
       }
@@ -491,17 +471,6 @@
 
     onPoissaoloInput(updatedPoissaolo: any, index: number) {
       this.$set(this.form.poissaolot, index, updatedPoissaolo)
-    }
-
-    saveToLocalStorage() {
-      localStorage.setItem('tyokertyma-lomake', JSON.stringify(this.$data))
-    }
-
-    loadFromLocalStorage() {
-      const savedData = localStorage.getItem('tyokertyma-lomake')
-      if (savedData) {
-        this.form = JSON.parse(savedData)
-      }
     }
   }
 </script>
