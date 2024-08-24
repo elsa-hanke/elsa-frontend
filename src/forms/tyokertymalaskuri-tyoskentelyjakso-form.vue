@@ -195,16 +195,12 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import {
-    LaillistamistiedotLomakeKoulutettava,
     PoissaolonSyy,
+    TyokertymaLaskuriTyoskentelyjakso,
     TyokertymaLaskuriTyoskentelyjaksoForm,
     Tyoskentelyjakso
   } from '@/types'
-  import {
-    KaytannonKoulutusTyyppi,
-    PoissaolonSyyTyyppi,
-    TyoskentelyjaksoTyyppi
-  } from '@/utils/constants'
+  import { KaytannonKoulutusTyyppi, PoissaolonSyyTyyppi } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
   import { tyoskentelypaikkaTyyppiLabel } from '@/utils/tyoskentelyjakso'
@@ -282,30 +278,11 @@
       kaytannonKoulutus: null,
       poissaolot: []
     }
-    tyypit = [
-      { text: this.$t('terveyskeskus'), value: TyoskentelyjaksoTyyppi.TERVEYSKESKUS },
-      {
-        text: this.$t('keskussairaala-tai-aluesairaala'),
-        value: TyoskentelyjaksoTyyppi.KESKUSSAIRAALA
-      },
-      {
-        text: this.$t('yliopistollinen-sairaala'),
-        value: TyoskentelyjaksoTyyppi.YLIOPISTOLLINEN_SAIRAALA
-      }
-    ]
     params = {
       saving: false,
       deleting: false
     }
     childDataReceived = false
-
-    laillistamisTiedotForm: LaillistamistiedotLomakeKoulutettava = {
-      laillistamistiedotAdded: false,
-      ensimmainenTyoskentelyjakso: false,
-      laillistamispaiva: null,
-      laillistamispaivanLiite: null,
-      laakarikoulutusSuoritettuSuomiTaiBelgia: false
-    }
 
     poissaolonSyyt: PoissaolonSyy[] = []
 
@@ -367,20 +344,19 @@
         return
       }
 
-      const submitData = {
-        tyoskentelyjakso: {
-          ...this.form,
-          tyoskentelypaikka: {
-            ...this.form.tyoskentelypaikka
-          }
-        }
+      const submitData: TyokertymaLaskuriTyoskentelyjakso = {
+        alkamispaiva: this.form.alkamispaiva as string,
+        paattymispaiva: this.form.paattymispaiva as string,
+        kaytannonKoulutus: this.form.kaytannonKoulutus as KaytannonKoulutusTyyppi,
+        osaaikaprosentti: this.form.osaaikaprosentti,
+        poissaolot: []
       }
       this.$emit('submit', submitData, this.params)
     }
 
     onOsaaikaprosenttiInput(value: string) {
       if (value === '') {
-        this.form.osaaikaprosentti = null
+        this.form.osaaikaprosentti = 100
       } else {
         this.form.osaaikaprosentti = parseFloat(value)
       }

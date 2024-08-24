@@ -22,28 +22,19 @@
 
   import TyokertymalaskuriTyoskentelyjaksoForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-form.vue'
   import YekTyoskentelyjaksoForm from '@/forms/yek-tyoskentelyjakso-form.vue'
-  import { Tyoskentelyjakso, TyoskentelyjaksoLomake } from '@/types'
 
   @Component({
     components: { TyokertymalaskuriTyoskentelyjaksoForm, YekTyoskentelyjaksoForm }
   })
   export default class TyokertymalaskuriModalContent extends Vue {
     loading = false
-    tyoskentelyjaksoLomake: null | TyoskentelyjaksoLomake = null
 
     async mounted() {
-      // await this.fetchLomake()
       this.loading = false
     }
 
-    async onSubmit(
-      value: {
-        tyoskentelyjakso: Tyoskentelyjakso
-      },
-      params: { saving: boolean }
-    ) {
-      params.saving = true
-      params.saving = false
+    onSubmit(formData: any, params: any) {
+      this.$emit('submit', formData, params)
     }
 
     onCancel() {

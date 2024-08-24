@@ -1,10 +1,8 @@
-import { TyoskentelyjaksotTable } from '@/types'
-import { KaytannonKoulutusTyyppi, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
+import { TyokertymaLaskuriTyoskentelyjaksotTable } from '@/types'
+import { KaytannonKoulutusTyyppi } from '@/utils/constants'
 
-export const tyoskentelyjaksotTaulukkoData: TyoskentelyjaksotTable | null = {
-  poissaolonSyyt: [],
+export const tyoskentelyjaksotTaulukkoData: TyokertymaLaskuriTyoskentelyjaksotTable = {
   tyoskentelyjaksot: [],
-  keskeytykset: [],
   tilastot: {
     tyoskentelyaikaYhteensa: 0.0,
     arvioErikoistumiseenHyvaksyttavista: 0.0,
@@ -42,7 +40,6 @@ export const tyoskentelyjaksotTaulukkoData: TyoskentelyjaksotTable | null = {
     poissaoloaikaYhteensa: 0.0,
     tyokertymaYhteensa: 0.0
   },
-  terveyskeskuskoulutusjaksonTila: TerveyskeskuskoulutusjaksonTila.HYVAKSYTTY,
   terveyskeskuskoulutusjaksonKorjausehdotus: null,
   terveyskeskuskoulutusjaksonHyvaksymispvm: null
 }

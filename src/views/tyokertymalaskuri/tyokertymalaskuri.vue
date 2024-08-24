@@ -106,7 +106,6 @@
 </template>
 
 <script lang="ts">
-  import { parseISO } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { tyoskentelyjaksotTaulukkoData } from './tyoskentelyjaksot-offline-data'
@@ -119,15 +118,12 @@
   import TyoskentelyjaksotBarChart from '@/components/tyoskentelyjaksot-bar-chart.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
   import {
-    Keskeytysaika,
-    TyoskentelyjaksotTable,
-    TyoskentelyjaksotTilastotKaytannonKoulutus,
-    TyoskentelyjaksotTilastotTyoskentelyjaksot
+    TyokertymaLaskuriTyoskentelyjakso,
+    TyokertymaLaskuriTyoskentelyjaksotTable,
+    TyoskentelyjaksotTilastotKaytannonKoulutus
   } from '@/types'
-  import { KaytannonKoulutusTyyppi, TerveyskeskuskoulutusjaksonTila } from '@/utils/constants'
-  import { sortByDateDesc } from '@/utils/date'
-  import { toastSuccess } from '@/utils/toast'
-  import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
+  import { KaytannonKoulutusTyyppi } from '@/utils/constants'
+  import { tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -151,7 +147,8 @@
         active: true
       }
     ]
-    tyoskentelyjaksotTaulukko: TyoskentelyjaksotTable | null = tyoskentelyjaksotTaulukkoData
+    tyoskentelyjaksotTaulukko: TyokertymaLaskuriTyoskentelyjaksotTable =
+      tyoskentelyjaksotTaulukkoData
     fields = [
       {
         key: 'tyoskentelypaikkaLabel',
@@ -194,13 +191,13 @@
       }
     }
 
-    get keskeytykset() {
-      if (this.tyoskentelyjaksotTaulukko) {
-        return this.tyoskentelyjaksotTaulukko.keskeytykset
-      } else {
-        return []
-      }
-    }
+    // get keskeytykset() {
+    //   if (this.tyoskentelyjaksotTaulukko) {
+    //     return this.tyoskentelyjaksotTaulukko.keskeytykset
+    //   } else {
+    //     return []
+    //   }
+    // }
 
     get tilastot() {
       if (this.tyoskentelyjaksotTaulukko) {
@@ -343,6 +340,7 @@
       ).toLowerCase()}</a>`
     }
 
+    /*
     get tyoskentelyjaksotFormatted() {
       const keskeytyksetGroupByTyoskentelyjakso = this.keskeytykset.reduce(
         (result: { [key: number]: Partial<Keskeytysaika>[] }, keskeytysaika: Keskeytysaika) => {
@@ -402,50 +400,29 @@
         }))
         .sort((a, b) => sortByDateDesc(a.paattymispaiva, b.paattymispaiva))
     }
-
-    get terveyskeskuskoulutusjaksoPalautettuKorjattavaksi() {
-      return (
-        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
-        TerveyskeskuskoulutusjaksonTila.PALAUTETTU_KORJATTAVAKSI
-      )
-    }
-
-    get terveyskeskuskoulutusjaksoLahetetty() {
-      return (
-        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
-          TerveyskeskuskoulutusjaksonTila.ODOTTAA_VIRKAILIJAN_TARKISTUSTA ||
-        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
-          TerveyskeskuskoulutusjaksonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
-      )
-    }
-
-    get terveyskeskuskoulutusjaksoUusi() {
-      return (
-        this.tyoskentelyjaksotTaulukko?.terveyskeskuskoulutusjaksonTila ===
-        TerveyskeskuskoulutusjaksonTila.UUSI
-      )
-    }
-
-    showToast() {
-      toastSuccess(this, 'todo')
-    }
+    */
 
     openLisaaTyoskentelyjaksoFormModal() {
       this.lisaaTyoskentelyjaksoFormModal = true
     }
 
-    async onSubmit(formData: any, params: any) {
+    async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso, params: any) {
       console.log(formData, params)
+      this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
+      this.saveToLocalStorage()
     }
 
     saveToLocalStorage() {
-      localStorage.setItem('tyokertyma-lomake', JSON.stringify(this.$data))
+      localStorage.setItem(
+        'laskuri-tyoskentelyjaksot',
+        JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot)
+      )
     }
 
     loadFromLocalStorage() {
-      const savedData = localStorage.getItem('tyokertyma-lomake')
+      const savedData = localStorage.getItem('laskuri-tyoskentelyjaksot')
       if (savedData) {
-        // this.form = JSON.parse(savedData)
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot = JSON.parse(savedData)
       }
     }
   }

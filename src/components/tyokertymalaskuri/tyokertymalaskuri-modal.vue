@@ -8,7 +8,7 @@
     :hide-footer="true"
     @hidden="$emit('input', false)"
   >
-    <tyokertymalaskuri-modal-content @closeModal="closeModal" />
+    <tyokertymalaskuri-modal-content @submit="onSubmit" @closeModal="closeModal" />
   </b-modal>
 </template>
 <script lang="ts">
@@ -33,6 +33,10 @@
 
     @Prop({ required: true, type: Boolean, default: false })
     value!: boolean
+
+    onSubmit(formData: any, params: any) {
+      this.$emit('submit', formData, params)
+    }
 
     closeModal() {
       this.$emit('input', false)
