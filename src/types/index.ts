@@ -1752,6 +1752,7 @@ export interface TyokertymaLaskuriTyoskentelypaikkaForm {
 }
 
 export interface TyokertymaLaskuriTyoskentelyjakso {
+  tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
   alkamispaiva: string
   paattymispaiva: string
   osaaikaprosentti: number

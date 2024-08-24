@@ -19,14 +19,20 @@
               v-model="lisaaTyoskentelyjaksoFormModal"
               @submit="onSubmit"
             ></tyokertymalaskuri-modal>
-            <!--
-            <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
-              {{ $t('tulosta') }}
-            </elsa-button>
-            -->
           </div>
           <div v-if="tyoskentelyjaksotTaulukko != null && tilastot != null">
             <h2>{{ $t('laskennan-yhteenveto') }}</h2>
+            <div
+              v-if="tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length > 0"
+              class="d-flex flex-wrap mb-3 mb-lg-4"
+            >
+              <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
+                {{ $t('tallenna-pdf') }}
+              </elsa-button>
+              <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
+                {{ $t('jaa-linkkina') }}
+              </elsa-button>
+            </div>
             <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
               <div class="container-fluid">
                 <elsa-form-group :label="$t('tyokertyma')">
@@ -66,31 +72,98 @@
                     </template>
                   </elsa-form-group>
                 </b-row>
-                <elsa-form-group
-                  v-if="tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonHyvaksymispvm != null"
-                  :label="$t('terveyskeskuskoulutusjakso')"
-                >
-                  <template #default="{ uid }">
-                    <div :id="uid" class="d-flex flex-wrap">
-                      <em class="align-middle">
-                        <font-awesome-icon
-                          :icon="['fas', 'check-circle']"
-                          class="text-success mr-2"
-                        />
-                      </em>
-                      <div>
-                        {{
-                          $t('terveyskeskuskoulutusjakso-on-hyvaksytty-pvm', {
-                            pvm: $date(
-                              tyoskentelyjaksotTaulukko.terveyskeskuskoulutusjaksonHyvaksymispvm
-                            )
-                          })
-                        }}
-                      </div>
-                    </div>
-                  </template>
-                </elsa-form-group>
               </div>
+            </div>
+            <div class="tyoskentelyjaksot-table">
+              <b-table :items="tyoskentelyjaksotFormatted" :fields="fields" stacked="md" responsive>
+                <template #table-colgroup="scope">
+                  <col
+                    v-for="field in scope.fields"
+                    :key="field.key"
+                    :style="{ width: field.width }"
+                  />
+                </template>
+                <template #cell(tyoskentelypaikkaLabel)="row">
+                  <elsa-button
+                    variant="link"
+                    class="shadow-none px-0"
+                    @click="openLisaaTyoskentelyjaksoFormModal"
+                  >
+                    {{ row.item.tyoskentelypaikka.nimi }}
+                  </elsa-button>
+                </template>
+                <template #cell(ajankohtaDate)="row">
+                  {{ row.item.ajankohta }}
+                </template>
+                <template #cell(keskeytyksetLength)="row">
+                  <elsa-button
+                    v-if="row.item.keskeytyksetLength > 0"
+                    variant="link"
+                    class="shadow-none text-nowrap px-0"
+                    @click="row.toggleDetails"
+                  >
+                    {{ row.item.keskeytyksetLength }}
+                    <span class="text-lowercase">
+                      {{ row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa') }}
+                    </span>
+                    <font-awesome-icon
+                      :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
+                      fixed-width
+                      size="lg"
+                      class="ml-2 text-dark"
+                    />
+                  </elsa-button>
+                  <span v-else>
+                    {{ $t('ei-poissaoloja') }}
+                  </span>
+                </template>
+                <template #row-details="row">
+                  <div class="px-md-3">
+                    <b-table-simple stacked="md">
+                      <b-thead>
+                        <b-tr>
+                          <b-th style="width: 60%">
+                            {{ $t('poissaolon-syy') }}
+                            <elsa-popover :title="$t('poissaolon-syy')">
+                              <elsa-poissaolon-syyt />
+                            </elsa-popover>
+                          </b-th>
+                          <b-th style="width: 25%">{{ $t('ajankohta') }}</b-th>
+                          <b-th style="width: 15%">{{ $t('poissaolo') }}</b-th>
+                        </b-tr>
+                      </b-thead>
+                      <b-tbody>
+                        <b-tr v-for="(keskeytysaika, index) in row.item.keskeytykset" :key="index">
+                          <b-td :stacked-heading="$t('poissaolon-syy')">
+                            <elsa-button
+                              :to="{
+                                name: 'todo',
+                                params: { poissaoloId: keskeytysaika.id }
+                              }"
+                              variant="link"
+                              class="shadow-none px-0"
+                            >
+                              {{ keskeytysaika.poissaolonSyy.nimi }}
+                            </elsa-button>
+                          </b-td>
+                          <b-td :stacked-heading="$t('ajankohta')">
+                            {{
+                              keskeytysaika.alkamispaiva != keskeytysaika.paattymispaiva
+                                ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
+                                    keskeytysaika.paattymispaiva
+                                  )}`
+                                : $date(keskeytysaika.alkamispaiva)
+                            }}
+                          </b-td>
+                          <b-td :stacked-heading="$t('tyoaika')">
+                            <span>{{ keskeytysaika.poissaoloprosentti }} %</span>
+                          </b-td>
+                        </b-tr>
+                      </b-tbody>
+                    </b-table-simple>
+                  </div>
+                </template>
+              </b-table>
             </div>
             <elsa-button variant="link" class="shadow-none p-0" :to="{ name: 'etusivu' }">
               {{ $t('siirry-elsan-etusivulle') }}
@@ -106,6 +179,7 @@
 </template>
 
 <script lang="ts">
+  import { parseISO } from 'date-fns'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { tyoskentelyjaksotTaulukkoData } from './tyoskentelyjaksot-offline-data'
@@ -120,10 +194,12 @@
   import {
     TyokertymaLaskuriTyoskentelyjakso,
     TyokertymaLaskuriTyoskentelyjaksotTable,
-    TyoskentelyjaksotTilastotKaytannonKoulutus
+    TyoskentelyjaksotTilastotKaytannonKoulutus,
+    TyoskentelyjaksotTilastotTyoskentelyjaksot
   } from '@/types'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
-  import { tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
+  import { sortByDateDesc } from '@/utils/date'
+  import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -171,17 +247,16 @@
         sortable: true
       },
       {
-        key: 'hyvaksyttyAiempaanErikoisalaanLabel',
-        label: this.$t('hyvaksytty-toiselle-erikoisalalle'),
-        sortable: true
-      },
-      {
         key: 'keskeytyksetLength',
         label: this.$t('poissaolot'),
         sortable: true
       }
     ]
     lisaaTyoskentelyjaksoFormModal = false
+
+    async mounted() {
+      this.loadFromLocalStorage()
+    }
 
     get tyoskentelyjaksot() {
       if (this.tyoskentelyjaksotTaulukko) {
@@ -340,37 +415,7 @@
       ).toLowerCase()}</a>`
     }
 
-    /*
     get tyoskentelyjaksotFormatted() {
-      const keskeytyksetGroupByTyoskentelyjakso = this.keskeytykset.reduce(
-        (result: { [key: number]: Partial<Keskeytysaika>[] }, keskeytysaika: Keskeytysaika) => {
-          const tyoskentelyjaksoId = keskeytysaika?.tyoskentelyjakso?.id
-          if (tyoskentelyjaksoId) {
-            if (tyoskentelyjaksoId in result) {
-              result[tyoskentelyjaksoId].push({
-                id: keskeytysaika.id,
-                alkamispaiva: keskeytysaika.alkamispaiva,
-                paattymispaiva: keskeytysaika.paattymispaiva,
-                poissaoloprosentti: keskeytysaika.poissaoloprosentti,
-                poissaolonSyy: keskeytysaika.poissaolonSyy
-              })
-            } else {
-              result[tyoskentelyjaksoId] = [
-                {
-                  id: keskeytysaika.id,
-                  alkamispaiva: keskeytysaika.alkamispaiva,
-                  paattymispaiva: keskeytysaika.paattymispaiva,
-                  poissaoloprosentti: keskeytysaika.poissaoloprosentti,
-                  poissaolonSyy: keskeytysaika.poissaolonSyy
-                }
-              ]
-            }
-          }
-          return result
-        },
-        {}
-      )
-
       const tilastotTyoskentelyjaksotMap = this.tilastotTyoskentelyjaksot.reduce(
         (
           result: { [key: number]: number },
@@ -383,24 +428,18 @@
       )
 
       return this.tyoskentelyjaksot
-        .map((tj) => ({
+        .map((tj, index) => ({
           ...tj,
           tyoskentelypaikkaLabel: tj.tyoskentelypaikka.nimi,
           ajankohtaDate: tj.alkamispaiva ? parseISO(tj.alkamispaiva) : null,
           ajankohta: ajankohtaLabel(this, tj),
-          tyoskentelyaikaLabel: tj.id ? this.$duration(tilastotTyoskentelyjaksotMap[tj.id]) : null,
+          tyoskentelyaikaLabel: index ? this.$duration(tilastotTyoskentelyjaksotMap[index]) : null,
           osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
-          hyvaksyttyAiempaanErikoisalaanLabel: tj.hyvaksyttyAiempaanErikoisalaan
-            ? this.$t('kylla')
-            : this.$t('ei'),
-          keskeytykset: (tj.id ? keskeytyksetGroupByTyoskentelyjakso[tj.id] : undefined) || [],
-          keskeytyksetLength: (
-            (tj.id ? keskeytyksetGroupByTyoskentelyjakso[tj.id] : undefined) || []
-          ).length
+          keskeytykset: [],
+          keskeytyksetLength: 0
         }))
         .sort((a, b) => sortByDateDesc(a.paattymispaiva, b.paattymispaiva))
     }
-    */
 
     openLisaaTyoskentelyjaksoFormModal() {
       this.lisaaTyoskentelyjaksoFormModal = true

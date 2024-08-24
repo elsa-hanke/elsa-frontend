@@ -345,6 +345,7 @@
       }
 
       const submitData: TyokertymaLaskuriTyoskentelyjakso = {
+        tyoskentelypaikka: this.form.tyoskentelypaikka,
         alkamispaiva: this.form.alkamispaiva as string,
         paattymispaiva: this.form.paattymispaiva as string,
         kaytannonKoulutus: this.form.kaytannonKoulutus as KaytannonKoulutusTyyppi,
