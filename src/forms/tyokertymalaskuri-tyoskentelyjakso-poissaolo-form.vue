@@ -69,6 +69,41 @@
     >
       {{ $t('koko-tyoajan-poissaolo') }}
     </b-form-checkbox>
+    <b-form-row>
+      <elsa-form-group
+        v-if="!poissaolo.kokoTyoajanPoissaolo"
+        :label="`${$t('poissaolo-nykyisesta-taydesta-tyoajasta')} (0-100 %)`"
+        :required="true"
+        class="col-sm-5"
+      >
+        <template #label-help>
+          <elsa-popover>
+            {{ $t('poissaoloprosentti-tooltip') }}
+          </elsa-popover>
+        </template>
+        <template #default="{ uid }">
+          <div class="d-flex align-items-center">
+            <b-form-input
+              :id="uid"
+              v-model.number="poissaolo.poissaoloprosentti"
+              :state="validateState('poissaoloprosentti')"
+              type="number"
+              step="any"
+              @input="$emit('skipRouteExitConfirm', false)"
+            />
+            <span class="mx-3">%</span>
+          </div>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display: validateState('poissaoloprosentti') === false ? 'block' : 'none'
+            }"
+          >
+            {{ `${$t('poissaoloprosentti-validointivirhe')} 0-100 %` }}
+          </b-form-invalid-feedback>
+        </template>
+      </elsa-form-group>
+    </b-form-row>
   </div>
 </template>
 

@@ -466,7 +466,8 @@
           voimassaolonPaattymispaiva: null
         },
         tyoskentelyjaksoId: 0,
-        kokoTyoajanPoissaolo: false
+        kokoTyoajanPoissaolo: true,
+        poissaoloprosentti: 100
       })
     }
 

@@ -541,15 +541,14 @@
               const startDate = parseISO(poissaolo.alkamispaiva)
               const endDate = parseISO(poissaolo.paattymispaiva)
               const daysDifference = differenceInDays(startDate, endDate)
-              return totalDays + daysDifference
+              return ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
             }
-            return totalDays
+            return ((poissaolo.poissaoloprosentti || 100) / 100) * totalDays
           }, 0)
-          const poissaolomaaraOsaaika = poissaolomaara * (tj.osaaikaprosentti / 100)
 
-          const tyokertyma = tyoskentelyaikaOsaaika - poissaolomaaraOsaaika
+          const tyokertyma = tyoskentelyaikaOsaaika - poissaolomaara
           this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertyma
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaaraOsaaika
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaikaOsaaika
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
