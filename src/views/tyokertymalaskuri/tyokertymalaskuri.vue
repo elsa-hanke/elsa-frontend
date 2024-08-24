@@ -466,7 +466,9 @@
       const indexToRemove: number = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.findIndex(
         (item) => item.id === id
       )
-      this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.splice(indexToRemove)
+      if (indexToRemove !== -1) {
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.splice(indexToRemove, 1)
+      }
       this.saveToLocalStorage()
       this.lisaaTyoskentelyjaksoFormModal = false
     }
@@ -531,6 +533,8 @@
             parseISO(tj.alkamispaiva),
             parseISO(tj.paattymispaiva)
           )
+          const tyoskentelyaikaOsaaika = tyoskentelyaika * (tj.osaaikaprosentti / 100)
+
           const poissaolomaara = tj.poissaolot.reduce((totalDays, poissaolo) => {
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
               const startDate = parseISO(poissaolo.alkamispaiva)
@@ -540,32 +544,33 @@
             }
             return totalDays
           }, 0)
+          const poissaolomaaraOsaaika = poissaolomaara * (tj.osaaikaprosentti / 100)
 
-          const tyokertyma = tyoskentelyaika - poissaolomaara
+          const tyokertyma = tyoskentelyaikaOsaaika - poissaolomaaraOsaaika
           this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertyma
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
-          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaika
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaaraOsaaika
+          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaikaOsaaika
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[0].suoritettu +=
-                tyoskentelyaika
+                tyoskentelyaikaOsaaika
               break
             case KaytannonKoulutusTyyppi.MUU_ERIKOISALA:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[1].suoritettu +=
-                tyoskentelyaika
+                tyoskentelyaikaOsaaika
               break
             case KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[2].suoritettu +=
-                tyoskentelyaika
+                tyoskentelyaikaOsaaika
               break
             case KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[3].suoritettu +=
-                tyoskentelyaika
+                tyoskentelyaikaOsaaika
               break
           }
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyjaksot.push({
             id: index + 1,
-            suoritettu: tyoskentelyaika
+            suoritettu: tyoskentelyaikaOsaaika
           })
         }
       )
