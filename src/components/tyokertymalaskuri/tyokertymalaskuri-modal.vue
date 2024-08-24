@@ -2,7 +2,7 @@
   <b-modal
     id="tyokertymalaskuri-modal"
     :visible="value"
-    :title="$t('lisaa-tyoskentelyjakso')"
+    :title="tyoskentelyjakso ? $t('muokkaa-tyoskentelyjaksoa') : $t('lisaa-tyoskentelyjakso')"
     size="xl"
     :scrollable="true"
     :hide-footer="true"

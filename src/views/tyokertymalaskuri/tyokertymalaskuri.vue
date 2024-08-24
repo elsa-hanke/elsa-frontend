@@ -27,7 +27,7 @@
               v-if="tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length > 0"
               class="d-flex flex-wrap mb-3 mb-lg-4"
             >
-              <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
+              <elsa-button variant="outline-primary" class="mb-2 mr-2" @click="printPage">
                 {{ $t('tallenna-pdf') }}
               </elsa-button>
               <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
@@ -76,7 +76,13 @@
               </div>
             </div>
             <div class="tyoskentelyjaksot-table">
-              <b-table :items="tyoskentelyjaksotFormatted" :fields="fields" stacked="md" responsive>
+              <b-table
+                ref="tyoskentelyjaksotTable"
+                :items="tyoskentelyjaksotFormatted"
+                :fields="fields"
+                stacked="md"
+                responsive
+              >
                 <template #table-colgroup="scope">
                   <col
                     v-for="field in scope.fields"
@@ -88,7 +94,7 @@
                   <elsa-button
                     variant="link"
                     class="shadow-none px-0"
-                    @click="openLisaaTyoskentelyjaksoFormModal"
+                    @click="openTyoskentelyjaksoFormModalForEdit(row.item)"
                   >
                     {{ row.item.tyoskentelypaikka.nimi }}
                   </elsa-button>
@@ -136,14 +142,7 @@
                       <b-tbody>
                         <b-tr v-for="(keskeytysaika, index) in row.item.keskeytykset" :key="index">
                           <b-td :stacked-heading="$t('poissaolon-syy')">
-                            <elsa-button
-                              :to="{
-                                name: 'todo',
-                                params: { poissaoloId: keskeytysaika.id }
-                              }"
-                              variant="link"
-                              class="shadow-none px-0"
-                            >
+                            <elsa-button variant="link" class="shadow-none px-0">
                               {{ keskeytysaika.poissaolonSyy.nimi }}
                             </elsa-button>
                           </b-td>
@@ -268,14 +267,6 @@
         return []
       }
     }
-
-    // get keskeytykset() {
-    //   if (this.tyoskentelyjaksotTaulukko) {
-    //     return this.tyoskentelyjaksotTaulukko.keskeytykset
-    //   } else {
-    //     return []
-    //   }
-    // }
 
     get tilastot() {
       if (this.tyoskentelyjaksotTaulukko) {
@@ -440,8 +431,8 @@
           ajankohta: ajankohtaLabel(this, tj),
           tyoskentelyaikaLabel: this.$duration(tilastotTyoskentelyjaksotMap[index + 1]),
           osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
-          keskeytykset: [],
-          keskeytyksetLength: 0
+          keskeytykset: tj.poissaolot,
+          keskeytyksetLength: tj.poissaolot.length
         }))
         .sort((a, b) => sortByDateDesc(a.paattymispaiva, b.paattymispaiva))
     }
@@ -450,10 +441,18 @@
       this.lisaaTyoskentelyjaksoFormModal = true
     }
 
-    async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso, params: any) {
-      console.log(formData, params)
-      formData.id = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length + 1
-      this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
+    openTyoskentelyjaksoFormModalForEdit(tj: TyokertymaLaskuriTyoskentelyjakso) {
+      this.editTyoskentelyjakso = tj
+      this.openLisaaTyoskentelyjaksoFormModal()
+    }
+
+    async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
+      if (formData.id) {
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[formData.id - 1] = formData
+      } else {
+        formData.id = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length + 1
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
+      }
       this.saveToLocalStorage()
       this.lisaaTyoskentelyjaksoFormModal = false
     }
@@ -556,6 +555,13 @@
           })
         }
       )
+    }
+
+    printPage() {
+      const styleElement = document.createElement('style')
+      document.head.appendChild(styleElement)
+      window.print()
+      document.head.removeChild(styleElement)
     }
   }
 </script>

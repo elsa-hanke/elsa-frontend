@@ -292,6 +292,12 @@
       this.childDataReceived = true
       if (this.tyoskentelyjakso) {
         this.editing = true
+        this.form.alkamispaiva = this.tyoskentelyjakso.alkamispaiva
+        this.form.paattymispaiva = this.tyoskentelyjakso.paattymispaiva
+        this.form.tyoskentelypaikka = this.tyoskentelyjakso.tyoskentelypaikka
+        this.form.osaaikaprosentti = this.tyoskentelyjakso.osaaikaprosentti
+        this.form.kaytannonKoulutus = this.tyoskentelyjakso.kaytannonKoulutus
+        this.form.poissaolot = this.tyoskentelyjakso.poissaolot
       }
     }
 
@@ -355,6 +361,9 @@
         kaytannonKoulutus: this.form.kaytannonKoulutus as KaytannonKoulutusTyyppi,
         osaaikaprosentti: this.form.osaaikaprosentti,
         poissaolot: this.form.poissaolot
+      }
+      if (this.editing) {
+        submitData.id = this.tyoskentelyjakso.id
       }
       this.$emit('submit', submitData, this.params)
     }
