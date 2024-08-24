@@ -159,7 +159,11 @@
         </elsa-button>
         <hr />
       </div>
-      <b-button variant="outline-primary" @click="addPoissaolo">
+      <b-button
+        variant="outline-primary"
+        :disabled="!form.alkamispaiva || !form.paattymispaiva"
+        @click="addPoissaolo"
+      >
         {{ $t('lisaa-jaksolle-poissaolo') }}
       </b-button>
     </div>
