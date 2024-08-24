@@ -148,13 +148,8 @@
           :tyojakso-paattymispaiva="form.paattymispaiva"
           @input="onPoissaoloInput($event, index)"
         />
-        <elsa-button
-          variant="link"
-          size="sm"
-          class="text-decoration-none shadow-none p-0"
-          @click="removePoissaolo(index)"
-        >
-          <font-awesome-icon :icon="['far', 'trash-alt']" fixed-width size="sm" />
+        <elsa-button variant="link" class="shadow-none p-0 mt-2" @click="removePoissaolo(index)">
+          <font-awesome-icon :icon="['far', 'trash-alt']" />
           {{ $t('poista-poissaolo') }}
         </elsa-button>
         <hr />

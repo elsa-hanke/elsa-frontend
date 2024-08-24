@@ -439,12 +439,13 @@
     }
 
     openLisaaTyoskentelyjaksoFormModal() {
+      this.editTyoskentelyjakso = null
       this.lisaaTyoskentelyjaksoFormModal = true
     }
 
     openTyoskentelyjaksoFormModalForEdit(tj: TyokertymaLaskuriTyoskentelyjakso) {
       this.editTyoskentelyjakso = tj
-      this.openLisaaTyoskentelyjaksoFormModal()
+      this.lisaaTyoskentelyjaksoFormModal = true
     }
 
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
