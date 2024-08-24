@@ -245,8 +245,8 @@
       paattymispaiva: ElsaFormDatepicker
     }
 
-    @Prop({ required: false, default: false })
-    editing!: boolean
+    @Prop({ required: false })
+    tyoskentelyjakso!: TyokertymaLaskuriTyoskentelyjakso
 
     @Prop({
       required: false,
@@ -283,12 +283,16 @@
       deleting: false
     }
     childDataReceived = false
+    editing = false
 
     poissaolonSyyt: PoissaolonSyy[] = []
 
     async mounted() {
       await this.fetchPoissaolonSyyt()
       this.childDataReceived = true
+      if (this.tyoskentelyjakso) {
+        this.editing = true
+      }
     }
 
     async fetchPoissaolonSyyt() {

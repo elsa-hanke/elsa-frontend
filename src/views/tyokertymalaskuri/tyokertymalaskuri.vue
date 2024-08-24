@@ -17,6 +17,7 @@
             </elsa-button>
             <tyokertymalaskuri-modal
               v-model="lisaaTyoskentelyjaksoFormModal"
+              :tyoskentelyjakso="editTyoskentelyjakso"
               @submit="onSubmit"
             ></tyokertymalaskuri-modal>
           </div>
@@ -254,6 +255,7 @@
       }
     ]
     lisaaTyoskentelyjaksoFormModal = false
+    editTyoskentelyjakso: TyokertymaLaskuriTyoskentelyjakso | null = null
 
     async mounted() {
       this.loadFromLocalStorage()

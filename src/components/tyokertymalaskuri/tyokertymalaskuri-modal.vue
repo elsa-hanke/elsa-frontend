@@ -8,13 +8,18 @@
     :hide-footer="true"
     @hidden="$emit('input', false)"
   >
-    <tyokertymalaskuri-modal-content @submit="onSubmit" @closeModal="closeModal" />
+    <tyokertymalaskuri-modal-content
+      :tyoskentelyjakso="tyoskentelyjakso"
+      @submit="onSubmit"
+      @closeModal="closeModal"
+    />
   </b-modal>
 </template>
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
   import TyokertymalaskuriModalContent from '@/components/tyokertymalaskuri/tyokertymalaskuri-modal-content.vue'
+  import { TyokertymaLaskuriTyoskentelyjakso } from '@/types'
 
   @Component({
     components: { TyokertymalaskuriModalContent }
@@ -33,6 +38,9 @@
 
     @Prop({ required: true, type: Boolean, default: false })
     value!: boolean
+
+    @Prop({ required: false })
+    tyoskentelyjakso!: TyokertymaLaskuriTyoskentelyjakso
 
     onSubmit(formData: any, params: any) {
       this.$emit('submit', formData, params)

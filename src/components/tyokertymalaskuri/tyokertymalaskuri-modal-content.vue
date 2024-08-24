@@ -5,6 +5,7 @@
         <b-col>
           <tyokertymalaskuri-tyoskentelyjakso-form
             v-if="!loading"
+            :tyoskentelyjakso="tyoskentelyjakso"
             @submit="onSubmit"
             @cancel="onCancel"
             @skipRouteExitConfirm="skipRouteExitConfirm"
@@ -18,15 +19,19 @@
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Vue, Component, Prop } from 'vue-property-decorator'
 
   import TyokertymalaskuriTyoskentelyjaksoForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-form.vue'
   import YekTyoskentelyjaksoForm from '@/forms/yek-tyoskentelyjakso-form.vue'
+  import { TyokertymaLaskuriTyoskentelyjakso } from '@/types'
 
   @Component({
     components: { TyokertymalaskuriTyoskentelyjaksoForm, YekTyoskentelyjaksoForm }
   })
   export default class TyokertymalaskuriModalContent extends Vue {
+    @Prop({ required: false })
+    tyoskentelyjakso!: TyokertymaLaskuriTyoskentelyjakso
+
     loading = false
 
     async mounted() {
