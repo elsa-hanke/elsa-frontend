@@ -527,7 +527,7 @@
       }
       this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.forEach(
         (tj: TyokertymaLaskuriTyoskentelyjakso, index: number) => {
-          const tyokertyma = differenceInDays(
+          const tyoskentelyaika = differenceInDays(
             parseISO(tj.alkamispaiva),
             parseISO(tj.paattymispaiva)
           )
@@ -541,9 +541,9 @@
             return totalDays
           }, 0)
 
+          const tyokertyma = tyoskentelyaika - poissaolomaara
           this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertyma
           this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
-          const tyoskentelyaika = tyokertyma - poissaolomaara
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaika
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
