@@ -200,7 +200,7 @@
   } from '@/types'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
-  import { ajankohtaLabel, tyoskentelyjaksoKaytannonKoulutusLabel } from '@/utils/tyoskentelyjakso'
+  import { ajankohtaLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
     components: {
@@ -314,7 +314,7 @@
         this.tilastotKaytannonKoulutus.find(
           (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
         )
-      ].filter((kk) => kk !== null) as TyoskentelyjaksotTilastotKaytannonKoulutus[]
+      ].filter((kk) => kk != null) as TyoskentelyjaksotTilastotKaytannonKoulutus[]
     }
 
     get donutSeries() {
@@ -322,28 +322,29 @@
     }
 
     get donutOptions() {
-      this.tilastotKaytannonKoulutus.map(
-        (kk) =>
-          `${tyoskentelyjaksoKaytannonKoulutusLabel(this, kk.kaytannonKoulutus)}: ${this.$duration(
-            kk.suoritettu
-          )}`
-      )
-
       return {
         colors: ['#097BB9', '#FF8B06', '#808080', '#FFB406'],
         labels: [
-          `${this.$t('oma-erikoisala')}: ${this.$duration(
-            this.tilastotKaytannonKoulutusSorted[0].suoritettu
-          )}`,
-          `${this.$t('muu-erikoisala')}: ${this.$duration(
-            this.tilastotKaytannonKoulutusSorted[1].suoritettu
-          )}`,
-          `${this.$t('kahden-vuoden-kliininen-tyokokemus')}: ${this.$duration(
-            this.tilastotKaytannonKoulutusSorted[2].suoritettu
-          )}`,
-          `${this.$t('terveyskeskustyo')}: ${this.$duration(
-            this.tilastotKaytannonKoulutusSorted[3].suoritettu
-          )}`
+          `${this.$t('oma-erikoisala')}: ${
+            this.tilastotKaytannonKoulutusSorted[0]?.suoritettu
+              ? this.$duration(this.tilastotKaytannonKoulutusSorted[0].suoritettu)
+              : '0'
+          }`,
+          `${this.$t('muu-erikoisala')}: ${
+            this.tilastotKaytannonKoulutusSorted[1]?.suoritettu
+              ? this.$duration(this.tilastotKaytannonKoulutusSorted[1].suoritettu)
+              : '0'
+          }`,
+          `${this.$t('kahden-vuoden-kliininen-tyokokemus')}: ${
+            this.tilastotKaytannonKoulutusSorted[2]?.suoritettu
+              ? this.$duration(this.tilastotKaytannonKoulutusSorted[2].suoritettu)
+              : '0'
+          }`,
+          `${this.$t('terveyskeskustyo')}: ${
+            this.tilastotKaytannonKoulutusSorted[3]?.suoritettu
+              ? this.$duration(this.tilastotKaytannonKoulutusSorted[3].suoritettu)
+              : '0'
+          }`
         ],
         legend: {
           fontSize: '13px',
@@ -435,7 +436,7 @@
           tyoskentelypaikkaLabel: tj.tyoskentelypaikka.nimi,
           ajankohtaDate: tj.alkamispaiva ? parseISO(tj.alkamispaiva) : null,
           ajankohta: ajankohtaLabel(this, tj),
-          tyoskentelyaikaLabel: index ? this.$duration(tilastotTyoskentelyjaksotMap[index]) : null,
+          tyoskentelyaikaLabel: this.$duration(tilastotTyoskentelyjaksotMap[index + 1]),
           osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
           keskeytykset: [],
           keskeytyksetLength: 0
@@ -449,6 +450,7 @@
 
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso, params: any) {
       console.log(formData, params)
+      formData.id = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length + 1
       this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
       this.saveToLocalStorage()
     }
@@ -508,7 +510,7 @@
         tyoskentelyjaksot: []
       }
       this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.forEach(
-        (tj: TyokertymaLaskuriTyoskentelyjakso) => {
+        (tj: TyokertymaLaskuriTyoskentelyjakso, index: number) => {
           const tyokertyma = differenceInDays(
             parseISO(tj.alkamispaiva),
             parseISO(tj.paattymispaiva)
@@ -545,6 +547,10 @@
                 tyoskentelyaika
               break
           }
+          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyjaksot.push({
+            id: index + 1,
+            suoritettu: tyoskentelyaika
+          })
         }
       )
     }
