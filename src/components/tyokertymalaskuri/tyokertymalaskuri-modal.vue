@@ -11,6 +11,7 @@
     <tyokertymalaskuri-modal-content
       :tyoskentelyjakso="tyoskentelyjakso"
       @submit="onSubmit"
+      @delete="onDelete"
       @closeModal="closeModal"
     />
   </b-modal>
@@ -44,6 +45,10 @@
 
     onSubmit(formData: any, params: any) {
       this.$emit('submit', formData, params)
+    }
+
+    onDelete(id: number) {
+      this.$emit('delete', id)
     }
 
     closeModal() {

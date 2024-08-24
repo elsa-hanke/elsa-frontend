@@ -7,6 +7,7 @@
             v-if="!loading"
             :tyoskentelyjakso="tyoskentelyjakso"
             @submit="onSubmit"
+            @delete="onDelete"
             @cancel="onCancel"
             @skipRouteExitConfirm="skipRouteExitConfirm"
           />
@@ -40,6 +41,10 @@
 
     onSubmit(formData: any, params: any) {
       this.$emit('submit', formData, params)
+    }
+
+    onDelete(id: number) {
+      this.$emit('delete', id)
     }
 
     onCancel() {

@@ -168,6 +168,14 @@
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{ editing ? $t('tallenna') : $t('tallenna-jakso') }}
       </elsa-button>
+      <elsa-button
+        v-if="tyoskentelyjakso"
+        variant="outline-danger"
+        class="mb-2"
+        @click.stop.prevent="onDelete(tyoskentelyjakso.id)"
+      >
+        {{ $t('poista-jakso') }}
+      </elsa-button>
       <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
         {{ $t('peruuta') }}
       </elsa-button>
@@ -195,6 +203,7 @@
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import {
+    Poissaolo,
     PoissaolonSyy,
     TyokertymaLaskuriTyoskentelyjakso,
     TyokertymaLaskuriTyoskentelyjaksoForm,
@@ -355,6 +364,7 @@
       }
 
       const submitData: TyokertymaLaskuriTyoskentelyjakso = {
+        id: -1,
         tyoskentelypaikka: this.form.tyoskentelypaikka,
         alkamispaiva: this.form.alkamispaiva as string,
         paattymispaiva: this.form.paattymispaiva as string,
@@ -379,6 +389,12 @@
 
     onCancel() {
       this.$emit('cancel')
+    }
+
+    onDelete(id: number | undefined) {
+      if (id) {
+        this.$emit('delete', id)
+      }
     }
 
     get maxAlkamispaiva() {
@@ -459,7 +475,8 @@
       this.form.poissaolot.splice(index, 1)
     }
 
-    onPoissaoloInput(updatedPoissaolo: any, index: number) {
+    onPoissaoloInput(updatedPoissaolo: Poissaolo, index: number) {
+      updatedPoissaolo.poissaoloprosentti = updatedPoissaolo.kokoTyoajanPoissaolo ? 100 : 0
       this.$set(this.form.poissaolot, index, updatedPoissaolo)
     }
   }

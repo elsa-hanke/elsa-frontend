@@ -18,6 +18,7 @@
             <tyokertymalaskuri-modal
               v-model="lisaaTyoskentelyjaksoFormModal"
               :tyoskentelyjakso="editTyoskentelyjakso"
+              @delete="onDelete"
               @submit="onSubmit"
             ></tyokertymalaskuri-modal>
           </div>
@@ -447,12 +448,25 @@
     }
 
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
-      if (formData.id) {
+      if (formData.id > 0) {
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[formData.id - 1] = formData
       } else {
-        formData.id = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length + 1
+        const maxId = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.reduce(
+          (max, item) => Math.max(max, item.id),
+          0
+        )
+        formData.id = maxId + 1
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
       }
+      this.saveToLocalStorage()
+      this.lisaaTyoskentelyjaksoFormModal = false
+    }
+
+    onDelete(id: number) {
+      const indexToRemove: number = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.findIndex(
+        (item) => item.id === id
+      )
+      this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.splice(indexToRemove)
       this.saveToLocalStorage()
       this.lisaaTyoskentelyjaksoFormModal = false
     }

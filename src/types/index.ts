@@ -1752,7 +1752,7 @@ export interface TyokertymaLaskuriTyoskentelypaikkaForm {
 }
 
 export interface TyokertymaLaskuriTyoskentelyjakso {
-  id?: number
+  id: number
   tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
   alkamispaiva: string
   paattymispaiva: string
