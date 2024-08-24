@@ -350,7 +350,7 @@
         paattymispaiva: this.form.paattymispaiva as string,
         kaytannonKoulutus: this.form.kaytannonKoulutus as KaytannonKoulutusTyyppi,
         osaaikaprosentti: this.form.osaaikaprosentti,
-        poissaolot: []
+        poissaolot: this.form.poissaolot
       }
       this.$emit('submit', submitData, this.params)
     }

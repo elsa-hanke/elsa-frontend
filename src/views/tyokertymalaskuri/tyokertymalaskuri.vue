@@ -314,7 +314,7 @@
         this.tilastotKaytannonKoulutus.find(
           (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
         )
-      ].filter((kk) => kk != null) as TyoskentelyjaksotTilastotKaytannonKoulutus[]
+      ].filter((kk) => kk !== null) as TyoskentelyjaksotTilastotKaytannonKoulutus[]
     }
 
     get donutSeries() {
@@ -453,6 +453,7 @@
       formData.id = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length + 1
       this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
       this.saveToLocalStorage()
+      this.lisaaTyoskentelyjaksoFormModal = false
     }
 
     saveToLocalStorage() {
