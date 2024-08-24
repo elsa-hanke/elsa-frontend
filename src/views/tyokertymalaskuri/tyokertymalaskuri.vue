@@ -180,6 +180,7 @@
 
 <script lang="ts">
   import { parseISO } from 'date-fns'
+  import { differenceInDays } from 'date-fns/fp'
   import { Component, Vue } from 'vue-property-decorator'
 
   import { tyoskentelyjaksotTaulukkoData } from './tyoskentelyjaksot-offline-data'
@@ -304,10 +305,11 @@
           (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS
         ),
         this.tilastotKaytannonKoulutus.find(
-          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.OMAA_ERIKOISALAA_TUKEVA_KOULUTUS
+          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.MUU_ERIKOISALA
         ),
         this.tilastotKaytannonKoulutus.find(
-          (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TUTKIMUSTYO
+          (kk) =>
+            kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS
         ),
         this.tilastotKaytannonKoulutus.find(
           (kk) => kk.kaytannonKoulutus === KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO
@@ -328,7 +330,7 @@
       )
 
       return {
-        colors: ['#4EBDEF', '#FF8B06', '#808080', '#FFB406'],
+        colors: ['#097BB9', '#FF8B06', '#808080', '#FFB406'],
         labels: [
           `${this.$t('oma-erikoisala')}: ${this.$duration(
             this.tilastotKaytannonKoulutusSorted[0].suoritettu
@@ -456,13 +458,95 @@
         'laskuri-tyoskentelyjaksot',
         JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot)
       )
+      this.laskeTilastot()
     }
 
     loadFromLocalStorage() {
       const savedData = localStorage.getItem('laskuri-tyoskentelyjaksot')
       if (savedData) {
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot = JSON.parse(savedData)
+        this.laskeTilastot()
       }
+    }
+
+    laskeTilastot() {
+      this.tyoskentelyjaksotTaulukko.tilastot = {
+        arvioErikoistumiseenHyvaksyttavista: 0,
+        arvioPuuttuvastaKoulutuksesta: 0,
+        kaytannonKoulutus: [
+          {
+            kaytannonKoulutus: KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS,
+            suoritettu: 0
+          },
+          {
+            kaytannonKoulutus: KaytannonKoulutusTyyppi.MUU_ERIKOISALA,
+            suoritettu: 0
+          },
+          {
+            kaytannonKoulutus: KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS,
+            suoritettu: 0
+          },
+          {
+            kaytannonKoulutus: KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO,
+            suoritettu: 0
+          }
+        ],
+        koulutustyypit: {
+          terveyskeskusVaadittuVahintaan: 0,
+          terveyskeskusMaksimipituus: 0,
+          terveyskeskusSuoritettu: 0,
+          yliopistosairaalaVaadittuVahintaan: 0,
+          yliopistosairaalaSuoritettu: 0,
+          yliopistosairaaloidenUlkopuolinenVaadittuVahintaan: 0,
+          yliopistosairaaloidenUlkopuolinenSuoritettu: 0,
+          yhteensaVaadittuVahintaan: 0,
+          yhteensaSuoritettu: 0
+        },
+        poissaoloaikaYhteensa: 0,
+        tyokertymaYhteensa: 0,
+        tyoskentelyaikaYhteensa: 0,
+        tyoskentelyjaksot: []
+      }
+      this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.forEach(
+        (tj: TyokertymaLaskuriTyoskentelyjakso) => {
+          const tyokertyma = differenceInDays(
+            parseISO(tj.alkamispaiva),
+            parseISO(tj.paattymispaiva)
+          )
+          const poissaolomaara = tj.poissaolot.reduce((totalDays, poissaolo) => {
+            if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
+              const startDate = parseISO(poissaolo.alkamispaiva)
+              const endDate = parseISO(poissaolo.paattymispaiva)
+              const daysDifference = differenceInDays(startDate, endDate)
+              return totalDays + daysDifference
+            }
+            return totalDays
+          }, 0)
+
+          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertyma
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
+          const tyoskentelyaika = tyokertyma - poissaolomaara
+          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaika
+          switch (tj.kaytannonKoulutus) {
+            case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
+              this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[0].suoritettu +=
+                tyoskentelyaika
+              break
+            case KaytannonKoulutusTyyppi.MUU_ERIKOISALA:
+              this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[1].suoritettu +=
+                tyoskentelyaika
+              break
+            case KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS:
+              this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[2].suoritettu +=
+                tyoskentelyaika
+              break
+            case KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO:
+              this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[3].suoritettu +=
+                tyoskentelyaika
+              break
+          }
+        }
+      )
     }
   }
 </script>
