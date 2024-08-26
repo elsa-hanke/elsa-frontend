@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('tyokertymalaskuri') }}</h1>
           <!-- eslint-disable vue/no-v-html -->
-          <p v-html="$t('tyokertymalaskuri-kuvaus', { opintooppaastaLinkki })" />
+          <p>{{ $t('tyokertymalaskuri-kuvaus') }}</p>
           <div class="d-flex flex-wrap mb-3 mb-lg-4">
             <elsa-button
               variant="primary"
@@ -404,12 +404,6 @@
           }
         ]
       }
-    }
-
-    get opintooppaastaLinkki() {
-      return `<a href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/opinto-oppaat/" target="_blank" rel="noopener noreferrer">${(
-        this.$t('tarkemmat-vaatimukset-opinto-oppaasta') as string
-      ).toLowerCase()}</a>`
     }
 
     get tyoskentelyjaksotFormatted() {
