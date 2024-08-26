@@ -111,6 +111,8 @@ import TerveyskeskuskoulutusjaksonHyvaksyntaPyynto from '@/views/terveyskeskusko
 import TerveyskeskuskoulutusjaksonTarkistus from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjakson-tarkistus.vue'
 import Terveyskeskuskoulutusjaksot from '@/views/terveyskeskuskoulutusjakso/terveyskeskuskoulutusjaksot.vue'
 import TietosuojaselosteView from '@/views/tietosuojaseloste/tietosuojaseloste.vue'
+import TyokertymalaskuriView from '@/views/tyokertymalaskuri/tyokertymalaskuri-view.vue'
+import Tyokertymalaskuri from '@/views/tyokertymalaskuri/tyokertymalaskuri.vue'
 import MuokkaaYekTyoskentelyjaksoa from '@/views/tyoskentelyjaksot-yek/muokkaa-yek-tyoskentelyjaksoa.vue'
 import TyoskentelyjaksotYek from '@/views/tyoskentelyjaksot-yek/tyoskentelyjaksot-yek.vue'
 import UusiYekTyoskentelyjakso from '@/views/tyoskentelyjaksot-yek/uusi-yek-tyoskentelyjakso.vue'
@@ -1449,6 +1451,18 @@ const routes: Array<RouteConfig> = [
     path: '/tietosuojaseloste',
     beforeEnter: languageGuard,
     component: TietosuojaselosteView
+  },
+  {
+    path: '/tyokertymalaskuri',
+    name: 'tyokertymalaskuri',
+    component: TyokertymalaskuriView,
+    children: [
+      {
+        path: '',
+        name: 'tyokertymalaskuri',
+        component: Tyokertymalaskuri
+      }
+    ]
   }
 ]
 

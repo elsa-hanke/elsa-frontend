@@ -1827,5 +1827,22 @@
   "yliopistosairaalan-ulkop-tyoskentelyjakson-vahimmaispituus": "Yliopistosairaalan ulkop. työskentelyjakson vähimmäispituus",
   "yliopistosairaalan-ulkopuolinen-tyo": "Yliopistosairaalan ulkopuolinen työ",
   "yliopistosairaalatyo": "Yliopistosairaalatyö",
-  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen"
+  "yo-sair-ulkopuolinen": "Yo-sair. ulkopuolinen",
+  "tyokertymalaskuri": "Työkertymälaskuri",
+  "tyokertymalaskuri-selite": "Tällä laskurilla lasket työkertymäsi ilman kirjautumista Elsaan.",
+  "tyokertymalaskuriin": "Työkertymälaskuriin",
+  "yleinen-tyoskentelyjaksot": "Työskentelyjaksot laskuri",
+  "kirjautuminen-linkki": "Kirjautuminen",
+  "tyokertymalaskuri-kuvaus": "Laske työkertymäsi lisäämällä työskentelyjaksojen alkamis- ja päättymispäivät ja niihin liittyvät poissaolot. Laskuri laskee työskentelyajat yhteen ja vähentää niistä poissaolot.",
+  "tulosta": "Tulosta",
+  "laskennan-yhteenveto": "Laskennan yhteenveto",
+  "tyokertyma": "Työkertymä",
+  "tyokertyma-yhteensa": "Työkertymä yhteensä",
+  "siirry-elsan-etusivulle": "Siirry Elsan etusivulle",
+  "muu-erikoisala": "Muu erikoisala",
+  "kahden-vuoden-kliininen-tyokokemus":"2 vuoden kliininen työkokemus (ehl)",
+  "tallenna-jakso": "Tallenna jakso",
+  "lisaa-jaksolle-poissaolo": "Lisää jaksolle poissaolo",
+  "tallenna-pdf": "Tallenna pdf:nä",
+  "jaa-linkkina": "Jaa linkkinä"
 }

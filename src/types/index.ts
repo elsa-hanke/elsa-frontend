@@ -1306,6 +1306,8 @@ export interface TyoskentelyjaksotTilastot {
   koulutustyypit: TyoskentelyjaksotTilastotKoulutustyypit
   kaytannonKoulutus: TyoskentelyjaksotTilastotKaytannonKoulutus[]
   tyoskentelyjaksot: TyoskentelyjaksotTilastotTyoskentelyjaksot[]
+  poissaoloaikaYhteensa: number
+  tyokertymaYhteensa: number
 }
 
 export interface TyoskentelyjaksotTable {
@@ -1314,8 +1316,8 @@ export interface TyoskentelyjaksotTable {
   keskeytykset: Keskeytysaika[]
   tilastot: TyoskentelyjaksotTilastot
   terveyskeskuskoulutusjaksonTila: TerveyskeskuskoulutusjaksonTila
-  terveyskeskuskoulutusjaksonKorjausehdotus: string
-  terveyskeskuskoulutusjaksonHyvaksymispvm: string
+  terveyskeskuskoulutusjaksonKorjausehdotus: string | null
+  terveyskeskuskoulutusjaksonHyvaksymispvm: string | null
 }
 
 export interface KayttajaErikoisalaPerYliopisto {
@@ -1728,4 +1730,40 @@ export interface VastuuhenkilonVastuualueet {
   yekTerveyskeskuskoulutusjakso: boolean
   valmistuminen: boolean
   yekValmistuminen: boolean
+}
+
+export interface TyokertymaLaskuriTyoskentelyjaksoForm {
+  id?: number | null
+  alkamispaiva: string | null
+  paattymispaiva: string | null
+  minPaattymispaiva: string | null
+  maxAlkamispaiva: string | null
+  osaaikaprosentti: number
+  kaytannonKoulutus: KaytannonKoulutusTyyppi | null
+  tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
+  label?: string
+  poissaolot: Poissaolo[]
+}
+
+export interface TyokertymaLaskuriTyoskentelypaikkaForm {
+  nimi: string | null
+  tyyppi: TyoskentelyjaksoTyyppi | null
+  muuTyyppi: string | null
+}
+
+export interface TyokertymaLaskuriTyoskentelyjakso {
+  id: number
+  tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
+  alkamispaiva: string
+  paattymispaiva: string
+  osaaikaprosentti: number
+  kaytannonKoulutus: KaytannonKoulutusTyyppi
+  poissaolot: Poissaolo[]
+}
+
+export interface TyokertymaLaskuriTyoskentelyjaksotTable {
+  tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[]
+  tilastot: TyoskentelyjaksotTilastot
+  terveyskeskuskoulutusjaksonKorjausehdotus: string | null
+  terveyskeskuskoulutusjaksonHyvaksymispvm: string | null
 }

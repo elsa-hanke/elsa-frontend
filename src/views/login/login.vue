@@ -80,6 +80,18 @@
             {{ $t('kirjaudu-sisaan') }} (HAKA)
           </elsa-button>
         </div>
+        <hr />
+        <div class="mb-4">
+          <h4 class="mb-1">{{ $t('tyokertymalaskuri') }}</h4>
+          <p class="mb-3">{{ $t('tyokertymalaskuri-selite') }}</p>
+          <elsa-button
+            variant="outline-primary"
+            :to="{ name: 'tyokertymalaskuri' }"
+            class="mr-3 mb-2"
+          >
+            {{ $t('tyokertymalaskuriin') }}
+          </elsa-button>
+        </div>
       </b-col>
       <b-col class="">
         <img src="@/assets/elsa-kirjautuminen.svg" :alt="$t('elsa-palvelu')" class="img-fluid" />
