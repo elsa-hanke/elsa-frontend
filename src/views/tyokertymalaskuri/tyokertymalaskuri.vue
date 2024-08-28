@@ -204,6 +204,7 @@
     TyoskentelyjaksotTilastotKaytannonKoulutus,
     TyoskentelyjaksotTilastotTyoskentelyjaksot
   } from '@/types'
+  import { confirmExitWithTexts } from '@/utils/confirm'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
   import { toastSuccess } from '@/utils/toast'
@@ -262,6 +263,7 @@
     ]
     lisaaTyoskentelyjaksoFormModal = false
     editTyoskentelyjakso: TyokertymaLaskuriTyoskentelyjakso | null = null
+    tyoskentelyjaksotLocalStorageKey = 'laskuri-tyoskentelyjaksot'
 
     async mounted() {
       this.loadFromLocalStorage()
@@ -479,14 +481,14 @@
 
     saveToLocalStorage() {
       localStorage.setItem(
-        'laskuri-tyoskentelyjaksot',
+        this.tyoskentelyjaksotLocalStorageKey,
         JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot)
       )
       this.laskeTilastot()
     }
 
     loadFromLocalStorage() {
-      const savedData = localStorage.getItem('laskuri-tyoskentelyjaksot')
+      const savedData = localStorage.getItem(this.tyoskentelyjaksotLocalStorageKey)
       if (savedData) {
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot = JSON.parse(savedData)
         this.laskeTilastot()
@@ -584,6 +586,28 @@
       document.head.appendChild(styleElement)
       window.print()
       document.head.removeChild(styleElement)
+    }
+
+    beforeRouteLeave(to: any, from: any, next: any) {
+      console.log(to, from, next)
+      const handleNavigation = async () => {
+        const shouldProceed = await confirmExitWithTexts(
+          this,
+          this.$t('vahvista-poistuminen') as string,
+          this.$t('tyokertymalaskuri-poistuminen-ohje') as string,
+          this.$t('poistu-laskurista') as string,
+          this.$t('peruuta') as string
+        )
+        if (shouldProceed) {
+          localStorage.removeItem(this.tyoskentelyjaksotLocalStorageKey)
+          window.location.href = '/kirjautuminen'
+        } else {
+          next(false)
+        }
+      }
+      handleNavigation().catch(() => {
+        next(false)
+      })
     }
   }
 </script>
