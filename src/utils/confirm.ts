@@ -12,6 +12,24 @@ export async function confirmExit(vue: Vue) {
   })
 }
 
+export async function confirmExitWithTexts(
+  vue: Vue,
+  title: string,
+  content: string,
+  okTitle: string,
+  cancelTitle: string
+) {
+  return vue.$bvModal.msgBoxConfirm(content, {
+    title: title,
+    okVariant: 'primary',
+    okTitle: okTitle,
+    cancelTitle: cancelTitle,
+    cancelVariant: 'back',
+    hideHeaderClose: false,
+    centered: false
+  })
+}
+
 export async function confirmDelete(vue: Vue, title: string, name: string, additionalInfo = '') {
   const confirmText = additionalInfo
     ? `${vue.$t('haluatko-varmasti-poistaa', { name }) as string} ${additionalInfo}`
