@@ -1,182 +1,187 @@
 <template>
-  <div class="tyoskentelyjaksot">
-    <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid>
-      <b-row lg>
-        <b-col>
-          <h1>{{ $t('tyokertymalaskuri') }}</h1>
-          <!-- eslint-disable vue/no-v-html -->
-          <p>{{ $t('tyokertymalaskuri-kuvaus') }}</p>
-          <div class="d-flex flex-wrap mb-3 mb-lg-4">
-            <elsa-button
-              variant="primary"
-              class="mb-2 mr-2"
-              @click="openLisaaTyoskentelyjaksoFormModal"
-            >
-              {{ $t('lisaa-tyoskentelyjakso') }}
-            </elsa-button>
-            <tyokertymalaskuri-modal
-              v-model="lisaaTyoskentelyjaksoFormModal"
-              :tyoskentelyjakso="editTyoskentelyjakso"
-              @delete="onDelete"
-              @submit="onSubmit"
-            ></tyokertymalaskuri-modal>
-          </div>
-          <div v-if="tyoskentelyjaksotTaulukko != null && tilastot != null">
-            <h2>{{ $t('laskennan-yhteenveto') }}</h2>
-            <div
-              v-if="tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length > 0"
-              class="d-flex flex-wrap mb-3 mb-lg-4"
-            >
-              <elsa-button variant="outline-primary" class="mb-2 mr-2" @click="printPage">
-                {{ $t('tallenna-pdf') }}
+  <b-container class="mt-4 mb-6">
+    <div class="tyoskentelyjaksot">
+      <b-breadcrumb :items="items" class="mb-0" />
+      <b-container fluid>
+        <b-row lg>
+          <b-col>
+            <h1>{{ $t('tyokertymalaskuri') }}</h1>
+            <!-- eslint-disable vue/no-v-html -->
+            <p>{{ $t('tyokertymalaskuri-kuvaus') }}</p>
+            <div class="d-flex flex-wrap mb-3 mb-lg-4">
+              <elsa-button
+                variant="primary"
+                class="mb-2 mr-2"
+                @click="openLisaaTyoskentelyjaksoFormModal"
+              >
+                {{ $t('lisaa-tyoskentelyjakso') }}
               </elsa-button>
-              <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
-                {{ $t('jaa-linkkina') }}
-              </elsa-button>
+              <tyokertymalaskuri-modal
+                v-model="lisaaTyoskentelyjaksoFormModal"
+                :tyoskentelyjakso="editTyoskentelyjakso"
+                @delete="onDelete"
+                @submit="onSubmit"
+              ></tyokertymalaskuri-modal>
             </div>
-            <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
-              <div class="container-fluid">
-                <elsa-form-group :label="$t('tyokertyma')">
-                  <template #default="{ uid }">
-                    <div :id="uid" class="d-flex flex-wrap">
-                      <div class="d-flex flex-column mb-2 duration-card">
-                        <span class="duration-text">
-                          {{ $duration(tilastot.tyoskentelyaikaYhteensa) }}
-                        </span>
-                        <span class="text-size-sm">{{ $t('tyoskentelyaika') }}</span>
-                      </div>
-                      <div class="d-flex flex-column mb-2 duration-card">
-                        <span class="duration-text">
-                          {{ $duration(tilastot.poissaoloaikaYhteensa) }}
-                        </span>
-                        <span class="text-size-sm">
-                          {{ $t('poissaolot') }}
-                        </span>
-                      </div>
-                      <div class="d-flex flex-column mb-2 duration-card">
-                        <span class="duration-text">
-                          {{ $duration(tilastot.tyokertymaYhteensa) }}
-                        </span>
-                        <span class="text-size-sm">
-                          {{ $t('tyokertyma-yhteensa') }}
-                        </span>
-                      </div>
-                    </div>
-                  </template>
-                </elsa-form-group>
-                <b-row>
-                  <elsa-form-group :label="$t('kaytannon-koulutus')" class="col-xl-6 mb-0">
+            <div v-if="tyoskentelyjaksotTaulukko != null && tilastot != null">
+              <h2>{{ $t('laskennan-yhteenveto') }}</h2>
+              <div
+                v-if="tyoskentelyjaksotTaulukko.tyoskentelyjaksot.length > 0"
+                class="d-flex flex-wrap mb-3 mb-lg-4"
+              >
+                <elsa-button variant="outline-primary" class="mb-2 mr-2" @click="printPage">
+                  {{ $t('tallenna-pdf') }}
+                </elsa-button>
+                <elsa-button variant="outline-primary" class="mb-2 mr-2" disabled="disabled">
+                  {{ $t('jaa-linkkina') }}
+                </elsa-button>
+              </div>
+              <div class="d-flex justify-content-center border rounded pt-3 pb-2 mb-4">
+                <div class="container-fluid">
+                  <elsa-form-group :label="$t('tyokertyma')">
                     <template #default="{ uid }">
-                      <div :id="uid" class="donut-chart">
-                        <apexchart :options="donutOptions" :series="donutSeries"></apexchart>
+                      <div :id="uid" class="d-flex flex-wrap">
+                        <div class="d-flex flex-column mb-2 duration-card">
+                          <span class="duration-text">
+                            {{ $duration(tilastot.tyoskentelyaikaYhteensa) }}
+                          </span>
+                          <span class="text-size-sm">{{ $t('tyoskentelyaika') }}</span>
+                        </div>
+                        <div class="d-flex flex-column mb-2 duration-card">
+                          <span class="duration-text">
+                            {{ $duration(tilastot.poissaoloaikaYhteensa) }}
+                          </span>
+                          <span class="text-size-sm">
+                            {{ $t('poissaolot') }}
+                          </span>
+                        </div>
+                        <div class="d-flex flex-column mb-2 duration-card">
+                          <span class="duration-text">
+                            {{ $duration(tilastot.tyokertymaYhteensa) }}
+                          </span>
+                          <span class="text-size-sm">
+                            {{ $t('tyokertyma-yhteensa') }}
+                          </span>
+                        </div>
                       </div>
                     </template>
                   </elsa-form-group>
-                </b-row>
+                  <b-row>
+                    <elsa-form-group :label="$t('kaytannon-koulutus')" class="col-xl-6 mb-0">
+                      <template #default="{ uid }">
+                        <div :id="uid" class="donut-chart">
+                          <apexchart :options="donutOptions" :series="donutSeries"></apexchart>
+                        </div>
+                      </template>
+                    </elsa-form-group>
+                  </b-row>
+                </div>
               </div>
-            </div>
-            <div class="tyoskentelyjaksot-table">
-              <b-table
-                ref="tyoskentelyjaksotTable"
-                :items="tyoskentelyjaksotFormatted"
-                :fields="fields"
-                stacked="md"
-                responsive
-              >
-                <template #table-colgroup="scope">
-                  <col
-                    v-for="field in scope.fields"
-                    :key="field.key"
-                    :style="{ width: field.width }"
-                  />
-                </template>
-                <template #cell(tyoskentelypaikkaLabel)="row">
-                  <elsa-button
-                    variant="link"
-                    class="shadow-none px-0"
-                    @click="openTyoskentelyjaksoFormModalForEdit(row.item)"
-                  >
-                    {{ row.item.tyoskentelypaikka.nimi }}
-                  </elsa-button>
-                </template>
-                <template #cell(ajankohtaDate)="row">
-                  {{ row.item.ajankohta }}
-                </template>
-                <template #cell(keskeytyksetLength)="row">
-                  <elsa-button
-                    v-if="row.item.keskeytyksetLength > 0"
-                    variant="link"
-                    class="shadow-none text-nowrap px-0"
-                    @click="row.toggleDetails"
-                  >
-                    {{ row.item.keskeytyksetLength }}
-                    <span class="text-lowercase">
-                      {{ row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa') }}
-                    </span>
-                    <font-awesome-icon
-                      :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
-                      fixed-width
-                      size="lg"
-                      class="ml-2 text-dark"
+              <div class="tyoskentelyjaksot-table">
+                <b-table
+                  ref="tyoskentelyjaksotTable"
+                  :items="tyoskentelyjaksotFormatted"
+                  :fields="fields"
+                  stacked="md"
+                  responsive
+                >
+                  <template #table-colgroup="scope">
+                    <col
+                      v-for="field in scope.fields"
+                      :key="field.key"
+                      :style="{ width: field.width }"
                     />
-                  </elsa-button>
-                  <span v-else>
-                    {{ $t('ei-poissaoloja') }}
-                  </span>
-                </template>
-                <template #row-details="row">
-                  <div class="px-md-3">
-                    <b-table-simple stacked="md">
-                      <b-thead>
-                        <b-tr>
-                          <b-th style="width: 60%">
-                            {{ $t('poissaolon-syy') }}
-                            <elsa-popover :title="$t('poissaolon-syy')">
-                              <elsa-poissaolon-syyt />
-                            </elsa-popover>
-                          </b-th>
-                          <b-th style="width: 25%">{{ $t('ajankohta') }}</b-th>
-                          <b-th style="width: 15%">{{ $t('poissaolo') }}</b-th>
-                        </b-tr>
-                      </b-thead>
-                      <b-tbody>
-                        <b-tr v-for="(keskeytysaika, index) in row.item.keskeytykset" :key="index">
-                          <b-td :stacked-heading="$t('poissaolon-syy')">
-                            <elsa-button variant="link" class="shadow-none px-0">
-                              {{ keskeytysaika.poissaolonSyy.nimi }}
-                            </elsa-button>
-                          </b-td>
-                          <b-td :stacked-heading="$t('ajankohta')">
-                            {{
-                              keskeytysaika.alkamispaiva != keskeytysaika.paattymispaiva
-                                ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
-                                    keskeytysaika.paattymispaiva
-                                  )}`
-                                : $date(keskeytysaika.alkamispaiva)
-                            }}
-                          </b-td>
-                          <b-td :stacked-heading="$t('tyoaika')">
-                            <span>{{ keskeytysaika.poissaoloprosentti }} %</span>
-                          </b-td>
-                        </b-tr>
-                      </b-tbody>
-                    </b-table-simple>
-                  </div>
-                </template>
-              </b-table>
+                  </template>
+                  <template #cell(tyoskentelypaikkaLabel)="row">
+                    <elsa-button
+                      variant="link"
+                      class="shadow-none px-0"
+                      @click="openTyoskentelyjaksoFormModalForEdit(row.item)"
+                    >
+                      {{ row.item.tyoskentelypaikka.nimi }}
+                    </elsa-button>
+                  </template>
+                  <template #cell(ajankohtaDate)="row">
+                    {{ row.item.ajankohta }}
+                  </template>
+                  <template #cell(keskeytyksetLength)="row">
+                    <elsa-button
+                      v-if="row.item.keskeytyksetLength > 0"
+                      variant="link"
+                      class="shadow-none text-nowrap px-0"
+                      @click="row.toggleDetails"
+                    >
+                      {{ row.item.keskeytyksetLength }}
+                      <span class="text-lowercase">
+                        {{ row.item.keskeytyksetLength == 1 ? $t('poissaolo') : $t('poissaoloa') }}
+                      </span>
+                      <font-awesome-icon
+                        :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"
+                        fixed-width
+                        size="lg"
+                        class="ml-2 text-dark"
+                      />
+                    </elsa-button>
+                    <span v-else>
+                      {{ $t('ei-poissaoloja') }}
+                    </span>
+                  </template>
+                  <template #row-details="row">
+                    <div class="px-md-3">
+                      <b-table-simple stacked="md">
+                        <b-thead>
+                          <b-tr>
+                            <b-th style="width: 60%">
+                              {{ $t('poissaolon-syy') }}
+                              <elsa-popover :title="$t('poissaolon-syy')">
+                                <elsa-poissaolon-syyt />
+                              </elsa-popover>
+                            </b-th>
+                            <b-th style="width: 25%">{{ $t('ajankohta') }}</b-th>
+                            <b-th style="width: 15%">{{ $t('poissaolo') }}</b-th>
+                          </b-tr>
+                        </b-thead>
+                        <b-tbody>
+                          <b-tr
+                            v-for="(keskeytysaika, index) in row.item.keskeytykset"
+                            :key="index"
+                          >
+                            <b-td :stacked-heading="$t('poissaolon-syy')">
+                              <elsa-button variant="link" class="shadow-none px-0">
+                                {{ keskeytysaika.poissaolonSyy.nimi }}
+                              </elsa-button>
+                            </b-td>
+                            <b-td :stacked-heading="$t('ajankohta')">
+                              {{
+                                keskeytysaika.alkamispaiva != keskeytysaika.paattymispaiva
+                                  ? `${$date(keskeytysaika.alkamispaiva)}-${$date(
+                                      keskeytysaika.paattymispaiva
+                                    )}`
+                                  : $date(keskeytysaika.alkamispaiva)
+                              }}
+                            </b-td>
+                            <b-td :stacked-heading="$t('tyoaika')">
+                              <span>{{ keskeytysaika.poissaoloprosentti }} %</span>
+                            </b-td>
+                          </b-tr>
+                        </b-tbody>
+                      </b-table-simple>
+                    </div>
+                  </template>
+                </b-table>
+              </div>
+              <elsa-button variant="link" class="shadow-none p-0" :to="{ name: 'etusivu' }">
+                {{ $t('siirry-elsan-etusivulle') }}
+              </elsa-button>
             </div>
-            <elsa-button variant="link" class="shadow-none p-0" :to="{ name: 'etusivu' }">
-              {{ $t('siirry-elsan-etusivulle') }}
-            </elsa-button>
-          </div>
-          <div v-else class="text-center">
-            <b-spinner variant="primary" :label="$t('ladataan')" />
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+            <div v-else class="text-center">
+              <b-spinner variant="primary" :label="$t('ladataan')" />
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
+  </b-container>
 </template>
 
 <script lang="ts">
