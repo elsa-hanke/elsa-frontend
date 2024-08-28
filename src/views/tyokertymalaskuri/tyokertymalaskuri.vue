@@ -206,6 +206,7 @@
   } from '@/types'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
+  import { toastSuccess } from '@/utils/toast'
   import { ajankohtaLabel } from '@/utils/tyoskentelyjakso'
 
   @Component({
@@ -450,6 +451,7 @@
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
       if (formData.id > 0) {
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[formData.id - 1] = formData
+        toastSuccess(this, this.$t('tyoskentelyjakson-muutokset-tallennettu'))
       } else {
         const maxId = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.reduce(
           (max, item) => Math.max(max, item.id),
@@ -457,6 +459,7 @@
         )
         formData.id = maxId + 1
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.push(formData)
+        toastSuccess(this, this.$t('tyoskentelyjakso-lisatty'))
       }
       this.saveToLocalStorage()
       this.lisaaTyoskentelyjaksoFormModal = false
@@ -471,6 +474,7 @@
       }
       this.saveToLocalStorage()
       this.lisaaTyoskentelyjaksoFormModal = false
+      toastSuccess(this, this.$t('tyoskentelyjakso-poistettu'))
     }
 
     saveToLocalStorage() {

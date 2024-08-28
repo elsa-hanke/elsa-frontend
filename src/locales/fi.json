@@ -1844,5 +1844,9 @@
   "tallenna-jakso": "Tallenna jakso",
   "lisaa-jaksolle-poissaolo": "Lisää jaksolle poissaolo",
   "tallenna-pdf": "Tallenna pdf:nä",
-  "jaa-linkkina": "Jaa linkkinä"
+  "jaa-linkkina": "Jaa linkkinä",
+  "tyoskentelyjakso-lisatty": "Työskentelyjakso lisätty",
+  "tyoskentelyjakson-muutokset-tallennettu": "Työskentelyjakson muutokset tallennettu",
+  "tyoskentelyjakso-poistettu": "Työskentelyjakso poistettu",
+  "linkki-laskelmaan-kopioitu-ohje-teksti": "Linkki laskelmaan kopioitu leikepöydälle. Voit liittää linkin eteenpäin haluamallasi tavalla. Linkin vastaanottaja voi muokata syöttämiäsi tietoja."
 }
