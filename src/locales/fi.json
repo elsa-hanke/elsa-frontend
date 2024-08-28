@@ -1851,5 +1851,6 @@
   "linkki-laskelmaan-kopioitu-ohje-teksti": "Linkki laskelmaan kopioitu leikepöydälle. Voit liittää linkin eteenpäin haluamallasi tavalla. Linkin vastaanottaja voi muokata syöttämiäsi tietoja.",
   "vahvista-poistuminen": "Vahvista poistuminen",
   "tyokertymalaskuri-poistuminen-ohje": "Työkertymälaskun tietoja ei tallenneta. Jos olet varma, että haluat poistua laskurista, paina poistu laskurista.",
-  "poistu-laskurista": "Poistu laskurista"
+  "poistu-laskurista": "Poistu laskurista",
+  "tyoaikaprosentti": "Työaikaprosentti"
 }

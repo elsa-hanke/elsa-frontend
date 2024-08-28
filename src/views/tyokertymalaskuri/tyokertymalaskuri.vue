@@ -438,7 +438,12 @@
           ajankohtaDate: tj.alkamispaiva ? parseISO(tj.alkamispaiva) : null,
           ajankohta: ajankohtaLabel(this, tj),
           tyoskentelyaikaLabel: this.$duration(tilastotTyoskentelyjaksotMap[index + 1]),
-          osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
+          osaaikaprosenttiLabel: `${
+            String(tj.kaytannonKoulutus) !==
+            String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
+              ? tj.osaaikaprosentti
+              : tj.kahdenvuodenosaaikaprosentti
+          } %`,
           keskeytykset: tj.poissaolot,
           keskeytyksetLength: tj.poissaolot.length
         }))
@@ -457,7 +462,10 @@
 
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
       if (formData.id > 0) {
-        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[formData.id - 1] = formData
+        const index: number = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.findIndex(
+          (item) => item.id === formData.id
+        )
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[index] = formData
         toastSuccess(this, this.$t('tyoskentelyjakson-muutokset-tallennettu'))
       } else {
         const maxId = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.reduce(
@@ -480,6 +488,7 @@
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.splice(indexToRemove, 1)
       }
       this.saveToLocalStorage()
+      this.editTyoskentelyjakso = null
       this.lisaaTyoskentelyjaksoFormModal = false
       toastSuccess(this, this.$t('tyoskentelyjakso-poistettu'))
     }
@@ -543,7 +552,13 @@
           const tyoskentelyaika =
             differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) + 1
 
-          const tyoskentelyaikaOsaaika = tyoskentelyaika * (tj.osaaikaprosentti / 100)
+          const tyoskentelyaikaOsaaika =
+            tyoskentelyaika *
+            ((String(tj.kaytannonKoulutus) !==
+            String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
+              ? tj.osaaikaprosentti
+              : tj.kahdenvuodenosaaikaprosentti) /
+              100)
 
           const poissaolomaara = tj.poissaolot.reduce((totalDays, poissaolo) => {
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
