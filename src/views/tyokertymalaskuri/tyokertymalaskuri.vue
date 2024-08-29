@@ -325,12 +325,18 @@
     }
 
     get donutSeries() {
-      return this.tilastotKaytannonKoulutusSorted.map((kk) => kk.suoritettu)
+      const hasTyoskentelyjaksot = this.tyoskentelyjaksot.length > 0
+      return hasTyoskentelyjaksot
+        ? this.tilastotKaytannonKoulutusSorted.map((kk) => kk.suoritettu)
+        : [100]
     }
 
     get donutOptions() {
+      const hasTyoskentelyjaksot = this.tyoskentelyjaksot.length > 0
       return {
-        colors: ['#097BB9', '#FF8B06', '#808080', '#FFB406'],
+        colors: hasTyoskentelyjaksot
+          ? ['#097BB9', '#FF8B06', '#808080', '#FFB406']
+          : ['#E8E9EC', '#E8E9EC', '#E8E9EC', '#E8E9EC'],
         labels: [
           `${this.$t('oma-erikoisala')}: ${
             this.tilastotKaytannonKoulutusSorted[0]?.suoritettu
