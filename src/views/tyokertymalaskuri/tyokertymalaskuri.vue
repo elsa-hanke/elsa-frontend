@@ -267,6 +267,11 @@
 
     async mounted() {
       this.loadFromLocalStorage()
+      window.addEventListener('beforeunload', this.handleBeforeUnload)
+    }
+
+    beforeDestroy() {
+      window.removeEventListener('beforeunload', this.handleBeforeUnload)
     }
 
     get tyoskentelyjaksot() {
@@ -433,7 +438,12 @@
           ajankohtaDate: tj.alkamispaiva ? parseISO(tj.alkamispaiva) : null,
           ajankohta: ajankohtaLabel(this, tj),
           tyoskentelyaikaLabel: this.$duration(tilastotTyoskentelyjaksotMap[index + 1]),
-          osaaikaprosenttiLabel: `${tj.osaaikaprosentti} %`,
+          osaaikaprosenttiLabel: `${
+            String(tj.kaytannonKoulutus) !==
+            String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
+              ? tj.osaaikaprosentti
+              : tj.kahdenvuodenosaaikaprosentti
+          } %`,
           keskeytykset: tj.poissaolot,
           keskeytyksetLength: tj.poissaolot.length
         }))
@@ -452,7 +462,10 @@
 
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
       if (formData.id > 0) {
-        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[formData.id - 1] = formData
+        const index: number = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.findIndex(
+          (item) => item.id === formData.id
+        )
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot[index] = formData
         toastSuccess(this, this.$t('tyoskentelyjakson-muutokset-tallennettu'))
       } else {
         const maxId = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.reduce(
@@ -475,6 +488,7 @@
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.splice(indexToRemove, 1)
       }
       this.saveToLocalStorage()
+      this.editTyoskentelyjakso = null
       this.lisaaTyoskentelyjaksoFormModal = false
       toastSuccess(this, this.$t('tyoskentelyjakso-poistettu'))
     }
@@ -535,17 +549,22 @@
       }
       this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.forEach(
         (tj: TyokertymaLaskuriTyoskentelyjakso, index: number) => {
-          const tyoskentelyaika = differenceInDays(
-            parseISO(tj.alkamispaiva),
-            parseISO(tj.paattymispaiva)
-          )
-          const tyoskentelyaikaOsaaika = tyoskentelyaika * (tj.osaaikaprosentti / 100)
+          const tyoskentelyaika =
+            differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) + 1
+
+          const tyoskentelyaikaOsaaika =
+            tyoskentelyaika *
+            ((String(tj.kaytannonKoulutus) !==
+            String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
+              ? tj.osaaikaprosentti
+              : tj.kahdenvuodenosaaikaprosentti) /
+              100)
 
           const poissaolomaara = tj.poissaolot.reduce((totalDays, poissaolo) => {
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
               const startDate = parseISO(poissaolo.alkamispaiva)
               const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate)
+              const daysDifference = differenceInDays(startDate, endDate) + 1
               return ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
             }
             return ((poissaolo.poissaoloprosentti || 100) / 100) * totalDays
@@ -609,6 +628,10 @@
         next(false)
       })
     }
+
+    async handleBeforeUnload() {
+      // localStorage.removeItem(this.tyoskentelyjaksotLocalStorageKey)
+    }
   }
 </script>
 
@@ -635,18 +658,21 @@
           text-align: left;
         }
       }
+
       .b-table-details {
         td {
           padding-left: 0;
           padding-right: 0;
           background-color: #f5f5f6;
         }
+
         table {
           th {
             padding-bottom: 0.3rem;
             padding-left: 0;
             padding-right: 0;
           }
+
           border-bottom: none;
         }
       }
@@ -703,9 +729,11 @@
               padding-top: $table-cell-padding !important;
               padding-bottom: $table-cell-padding !important;
             }
+
             tr:last-child {
               border-bottom: 0;
             }
+
             td {
               padding-left: $table-cell-padding;
               padding-right: $table-cell-padding;
@@ -714,6 +742,7 @@
                 padding-bottom: 0 !important;
               }
             }
+
             margin: 0;
           }
         }

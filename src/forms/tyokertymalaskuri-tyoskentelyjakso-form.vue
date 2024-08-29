@@ -109,6 +109,7 @@
       </elsa-form-group>
     </b-form-row>
     <elsa-form-group
+      v-if="String(form.kaytannonKoulutus) !== String(kahdenVuodenKliininenTyokokemus)"
       :label="$t('tyoaika-taydesta-tyopaivasta') + ' (50–100 %)'"
       :required="!value.tapahtumia"
     >
@@ -133,6 +134,32 @@
             }"
           >
             {{ $t('osaaikaprosentti-validointivirhe') }} 50–100 %
+          </b-form-invalid-feedback>
+        </div>
+      </template>
+    </elsa-form-group>
+    <elsa-form-group v-else :label="$t('tyoaikaprosentti')" :required="!value.tapahtumia">
+      <template #default="{ uid }">
+        <div>
+          <div class="d-flex align-items-center">
+            <b-form-input
+              :id="uid"
+              :value="form.kahdenvuodenosaaikaprosentti"
+              :state="validateState('kahdenvuodenosaaikaprosentti')"
+              type="number"
+              step="any"
+              class="col-sm-3"
+              @input="onOsaaikaprosenttiInput2"
+            />
+            <span class="mx-3">%</span>
+          </div>
+          <b-form-invalid-feedback
+            :id="`${uid}-feedback`"
+            :style="{
+              display: validateState('kahdenvuodenosaaikaprosentti') === false ? 'block' : 'none'
+            }"
+          >
+            {{ $t('osaaikaprosentti-validointivirhe') }} 1–100 %
           </b-form-invalid-feedback>
         </div>
       </template>
@@ -243,6 +270,11 @@
         },
         kaytannonKoulutus: {
           required
+        },
+        kahdenvuodenosaaikaprosentti: {
+          required,
+          integer,
+          between: between(1, 100)
         }
       }
     }
@@ -278,6 +310,7 @@
       minPaattymispaiva: null,
       maxAlkamispaiva: null,
       osaaikaprosentti: 100,
+      kahdenvuodenosaaikaprosentti: 100,
       tyoskentelypaikka: {
         nimi: null,
         tyyppi: null,
@@ -304,6 +337,7 @@
         this.form.paattymispaiva = this.tyoskentelyjakso.paattymispaiva
         this.form.tyoskentelypaikka = this.tyoskentelyjakso.tyoskentelypaikka
         this.form.osaaikaprosentti = this.tyoskentelyjakso.osaaikaprosentti
+        this.form.kahdenvuodenosaaikaprosentti = this.tyoskentelyjakso.kahdenvuodenosaaikaprosentti
         this.form.kaytannonKoulutus = this.tyoskentelyjakso.kaytannonKoulutus
         this.form.poissaolot = this.tyoskentelyjakso.poissaolot
       }
@@ -368,7 +402,8 @@
         alkamispaiva: this.form.alkamispaiva as string,
         paattymispaiva: this.form.paattymispaiva as string,
         kaytannonKoulutus: this.form.kaytannonKoulutus as KaytannonKoulutusTyyppi,
-        osaaikaprosentti: this.form.osaaikaprosentti,
+        osaaikaprosentti: this.form.osaaikaprosentti || 100,
+        kahdenvuodenosaaikaprosentti: this.form.kahdenvuodenosaaikaprosentti || 100,
         poissaolot: this.form.poissaolot
       }
       if (this.editing) {
@@ -379,9 +414,18 @@
 
     onOsaaikaprosenttiInput(value: string) {
       if (value === '') {
-        this.form.osaaikaprosentti = 100
+        this.form.osaaikaprosentti = null
       } else {
         this.form.osaaikaprosentti = parseFloat(value)
+      }
+      this.$emit('skipRouteExitConfirm', false)
+    }
+
+    onOsaaikaprosenttiInput2(value: string) {
+      if (value === '') {
+        this.form.kahdenvuodenosaaikaprosentti = null
+      } else {
+        this.form.kahdenvuodenosaaikaprosentti = parseFloat(value)
       }
       this.$emit('skipRouteExitConfirm', false)
     }

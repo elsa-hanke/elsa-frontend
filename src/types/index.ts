@@ -1738,7 +1738,8 @@ export interface TyokertymaLaskuriTyoskentelyjaksoForm {
   paattymispaiva: string | null
   minPaattymispaiva: string | null
   maxAlkamispaiva: string | null
-  osaaikaprosentti: number
+  osaaikaprosentti: number | null
+  kahdenvuodenosaaikaprosentti: number | null
   kaytannonKoulutus: KaytannonKoulutusTyyppi | null
   tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
   label?: string
@@ -1757,6 +1758,7 @@ export interface TyokertymaLaskuriTyoskentelyjakso {
   alkamispaiva: string
   paattymispaiva: string
   osaaikaprosentti: number
+  kahdenvuodenosaaikaprosentti: number
   kaytannonKoulutus: KaytannonKoulutusTyyppi
   poissaolot: Poissaolo[]
 }
