@@ -207,8 +207,9 @@
   import { confirmExitWithTexts } from '@/utils/confirm'
   import { KaytannonKoulutusTyyppi } from '@/utils/constants'
   import { sortByDateDesc } from '@/utils/date'
-  import { toastSuccess } from '@/utils/toast'
+  import { toastFail, toastSuccess } from '@/utils/toast'
   import { ajankohtaLabel } from '@/utils/tyoskentelyjakso'
+  import { validateTyoskentelyaika } from '@/views/tyokertymalaskuri/overlapping-tyoskentelyjakso-validator'
 
   @Component({
     components: {
@@ -467,6 +468,18 @@
     }
 
     async onSubmit(formData: TyokertymaLaskuriTyoskentelyjakso) {
+      const isValid = validateTyoskentelyaika(
+        formData.id > 0 ? formData.id : null,
+        parseISO(formData.alkamispaiva),
+        parseISO(formData.paattymispaiva),
+        this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot,
+        formData.osaaikaprosentti
+      )
+      if (!isValid) {
+        toastFail(this, this.$t('paallekkaiset-tyoskentelyjaksot-yhteenlaskettu-tyoaika-virhe'))
+        return
+      }
+
       if (formData.id > 0) {
         const index: number = this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.findIndex(
           (item) => item.id === formData.id

@@ -543,6 +543,7 @@ export interface PoissaolonSyy {
   id?: number | null
   nimi: string
   vahennystyyppi: PoissaolonSyyTyyppi
+  vahennetaanKerran: boolean
   voimassaolonAlkamispaiva: string
   voimassaolonPaattymispaiva?: string | null
 }
@@ -1768,4 +1769,9 @@ export interface TyokertymaLaskuriTyoskentelyjaksotTable {
   tilastot: TyoskentelyjaksotTilastot
   terveyskeskuskoulutusjaksonKorjausehdotus: string | null
   terveyskeskuskoulutusjaksonHyvaksymispvm: string | null
+}
+
+export interface HyvaksiluettavatCounterData {
+  hyvaksiluettavatDays: Record<string, number>
+  hyvaksiluettavatPerYearMap: Record<number, number>
 }

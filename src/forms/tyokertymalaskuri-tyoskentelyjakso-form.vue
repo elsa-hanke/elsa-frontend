@@ -506,6 +506,7 @@
           id: 0,
           nimi: '',
           vahennystyyppi: PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN,
+          vahennetaanKerran: false,
           voimassaolonAlkamispaiva: '',
           voimassaolonPaattymispaiva: null
         },
