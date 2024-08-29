@@ -608,7 +608,6 @@
     }
 
     beforeRouteLeave(to: any, from: any, next: any) {
-      console.log(to, from, next)
       const handleNavigation = async () => {
         const shouldProceed = await confirmExitWithTexts(
           this,
@@ -630,7 +629,9 @@
     }
 
     async handleBeforeUnload() {
-      // localStorage.removeItem(this.tyoskentelyjaksotLocalStorageKey)
+      if (process.env.NODE_ENV !== 'development') {
+        localStorage.removeItem(this.tyoskentelyjaksotLocalStorageKey)
+      }
     }
   }
 </script>
