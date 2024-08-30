@@ -71,7 +71,7 @@
       kaytannonKoulutuksenVahimmaispituusKuukaudet: null,
       terveyskeskuskoulutusjaksonVahimmaispituusVuodet: null,
       terveyskeskuskoulutusjaksonVahimmaispituusKuukaudet: 9,
-      terveyskeskuskoulutusjaksonMaksimipituusKuukaudet: 9,
+      terveyskeskuskoulutusjaksonMaksimipituusKuukaudet: this.onkoYEK ? null : 9,
       yliopistosairaalajaksonVahimmaispituusVuodet: null,
       yliopistosairaalajaksonVahimmaispituusKuukaudet: null,
       yliopistosairaalanUlkopuolisenTyoskentelynVahimmaispituusVuodet: null,
