@@ -319,7 +319,7 @@
         to: { name: 'etusivu' }
       },
       {
-        text: this.$t('yektyoskentelyjaksot'),
+        text: this.$t('tyoskentelyjaksot'),
         active: true
       }
     ]
