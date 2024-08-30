@@ -1749,13 +1749,15 @@ export interface TyokertymaLaskuriTyoskentelyjaksoForm {
 
 export interface TyokertymaLaskuriPoissaolo {
   id?: number
-  alkamispaiva?: string
+  alkamispaiva: string
   paattymispaiva?: string
   poissaoloprosentti?: number
   poissaolonSyyId: number
   tyoskentelyjaksoId: number
   poissaolonSyy: PoissaolonSyy
-  tyoskentelyjakso?: {
+  tyoskentelyjakso: {
+    id: number
+    paattymispaiva: string
     osaaikaprosentti: number
   }
   kokoTyoajanPoissaolo?: boolean

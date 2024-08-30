@@ -199,6 +199,8 @@
   import TyoskentelyjaksotBarChart from '@/components/tyoskentelyjaksot-bar-chart.vue'
   import ElsaVanhaAsetusVaroitus from '@/components/vanha-asetus-varoitus/vanha-asetus-varoitus.vue'
   import {
+    HyvaksiluettavatCounterData,
+    TyokertymaLaskuriPoissaolo,
     TyokertymaLaskuriTyoskentelyjakso,
     TyokertymaLaskuriTyoskentelyjaksotTable,
     TyoskentelyjaksotTilastotKaytannonKoulutus,
@@ -210,6 +212,10 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
   import { ajankohtaLabel } from '@/utils/tyoskentelyjakso'
   import { validateTyoskentelyaika } from '@/views/tyokertymalaskuri/overlapping-tyoskentelyjakso-validator'
+  import {
+    calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter,
+    getHyvaksiluettavatPerYearMap
+  } from '@/views/tyokertymalaskuri/tyoskentelyjakson-pituus-counter'
 
   @Component({
     components: {
@@ -529,6 +535,8 @@
     }
 
     laskeTilastot() {
+      // console.log(this.getVahennettavatPaivat(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
+
       this.tyoskentelyjaksotTaulukko.tilastot = {
         arvioErikoistumiseenHyvaksyttavista: 0,
         arvioPuuttuvastaKoulutuksesta: 0,
@@ -617,6 +625,51 @@
           })
         }
       )
+    }
+
+    getVahennettavatPaivat(
+      tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[]
+    ): Map<number, number> {
+      const result = new Map<number, number>()
+      const hyvaksiluettavatCounter: HyvaksiluettavatCounterData = {
+        hyvaksiluettavatDays: new Map(),
+        hyvaksiluettavatPerYearMap: getHyvaksiluettavatPerYearMap(tyoskentelyjaksot)
+      }
+      const now = new Date()
+      tyoskentelyjaksot
+        .flatMap((jakso: TyokertymaLaskuriTyoskentelyjakso) =>
+          jakso.poissaolot
+            .filter((poissaolo) => poissaolo.alkamispaiva)
+            .map((poissaolo: TyokertymaLaskuriPoissaolo) => {
+              poissaolo.tyoskentelyjakso = jakso
+              return poissaolo
+            })
+        )
+        .sort((a, b) => parseISO(a.alkamispaiva).getTime() - parseISO(b.alkamispaiva).getTime())
+        .forEach((keskeytys: TyokertymaLaskuriPoissaolo) => {
+          const tyoskentelyjaksoFactor =
+            (keskeytys.tyoskentelyjakso?.osaaikaprosentti ?? 100) / 100.0
+          const endDate = keskeytys.tyoskentelyjakso?.paattymispaiva
+            ? parseISO(keskeytys.tyoskentelyjakso.paattymispaiva)
+            : now
+
+          const effectiveEndDate = endDate > now ? now : endDate
+
+          const amountOfReducedDays = calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
+            keskeytys,
+            tyoskentelyjaksoFactor,
+            hyvaksiluettavatCounter,
+            effectiveEndDate
+          )
+
+          const tyoskentelyjaksoId = keskeytys.tyoskentelyjakso.id
+          result.set(
+            tyoskentelyjaksoId,
+            (result.get(tyoskentelyjaksoId) ?? 0) + amountOfReducedDays
+          )
+        })
+
+      return result
     }
 
     printPage() {

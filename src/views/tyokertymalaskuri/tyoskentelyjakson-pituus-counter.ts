@@ -51,7 +51,7 @@ export function calculateHyvaksiluettavatDaysLeft(
   return hyvaksiluettavatCounterData
 }
 
-function getHyvaksiluettavatPerYearMap(
+export function getHyvaksiluettavatPerYearMap(
   tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[]
 ): Map<number, number> {
   const hyvaksiluettavatPerYearMap = new Map<number, number>()
@@ -74,14 +74,14 @@ function getHyvaksiluettavatPerYearMap(
   return hyvaksiluettavatPerYearMap
 }
 
-function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
+export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
   keskeytysaika: TyokertymaLaskuriPoissaolo,
   tyoskentelyjaksoFactor: number,
   hyvaksiluettavatCounterData: HyvaksiluettavatCounterData,
   calculateUntilDate: Date | null
 ): number {
   const endDate = getEndDate(parseISO(keskeytysaika.paattymispaiva!), calculateUntilDate)
-  const keskeytysaikaDaysBetween = differenceInDays(endDate, parseISO(keskeytysaika.alkamispaiva!))
+  const keskeytysaikaDaysBetween = differenceInDays(parseISO(keskeytysaika.alkamispaiva!), endDate)
 
   if (keskeytysaikaDaysBetween < 1) return 0.0
 
