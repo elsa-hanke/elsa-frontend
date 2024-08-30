@@ -10,7 +10,7 @@ import {
 import { PoissaolonSyyTyyppi } from '@/utils/constants'
 import { calculateHyvaksiluettavatDaysLeft } from '@/views/tyokertymalaskuri/tyoskentelyjakson-pituus-counter'
 
-// const HYVAKSILUETTAVAT_DAYS = 365
+const HYVAKSILUETTAVAT_DAYS = 365
 
 export function validateTyoskentelyaika(
   existingTyoskentelyjaksoId: number | null,
@@ -95,32 +95,41 @@ export function validateTyoskentelyaika(
               new Date(date.getTime() - 86400000)
             )
             if (vahennetaanKerran) {
-              console.log(counterData)
-              //   counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy.nimi] = HYVAKSILUETTAVAT_DAYS
-              // }
-              // if (!counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]) {
-              //   counterData.hyvaksiluettavatPerYearMap[date.getFullYear()] = HYVAKSILUETTAVAT_DAYS
-              // }
-              // const hyvaksiluettavaFactor = vahennetaanKerran
-              //   ? Math.min(
-              //       counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]!,
-              //       counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()]!
-              //     )
-              //   : counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]!
-              // const reducedFactor = hyvaksiluettavaFactor - keskeytysaikaFactor
-              // if (reducedFactor < 0) {
-              //   overallTyoskentelyaikaFactorForCurrentDate -= Math.abs(reducedFactor)
-              // }
-              // counterData.hyvaksiluettavatPerYearMap[date.getFullYear()] = Math.max(
-              //   0,
-              //   counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]! - keskeytysaikaFactor
-              // )
-              // if (vahennetaanKerran) {
-              //   counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()] = Math.max(
-              //     0,
-              //     counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()]! -
-              //       keskeytysaikaFactor
-              //   )
+              counterData.hyvaksiluettavatDays.set(
+                keskeytys.poissaolonSyy.nimi,
+                HYVAKSILUETTAVAT_DAYS
+              )
+            }
+            if (!counterData.hyvaksiluettavatPerYearMap.get(date.getFullYear())) {
+              counterData.hyvaksiluettavatPerYearMap.set(date.getFullYear(), HYVAKSILUETTAVAT_DAYS)
+            }
+            const hyvaksiluettavaFactor = vahennetaanKerran
+              ? Math.min(
+                  counterData.hyvaksiluettavatPerYearMap.get(date.getFullYear())!,
+                  counterData.hyvaksiluettavatDays.get(keskeytys.poissaolonSyy.nimi)!
+                )
+              : counterData.hyvaksiluettavatPerYearMap.get(date.getFullYear())!
+            const reducedFactor = hyvaksiluettavaFactor - keskeytysaikaFactor
+            if (reducedFactor < 0) {
+              overallTyoskentelyaikaFactorForCurrentDate -= Math.abs(reducedFactor)
+            }
+            counterData.hyvaksiluettavatPerYearMap.set(
+              date.getFullYear(),
+              Math.max(
+                0,
+                counterData.hyvaksiluettavatPerYearMap.get(date.getFullYear())! -
+                  keskeytysaikaFactor
+              )
+            )
+            if (vahennetaanKerran) {
+              counterData.hyvaksiluettavatDays.set(
+                keskeytys.poissaolonSyy.nimi,
+                Math.max(
+                  0,
+                  counterData.hyvaksiluettavatDays.get(keskeytys.poissaolonSyy.nimi)! -
+                    keskeytysaikaFactor
+                )
+              )
             }
             break
           }
