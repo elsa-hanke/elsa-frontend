@@ -66,7 +66,7 @@
 <script lang="ts">
   import { parse, format, isValid, addYears, subYears } from 'date-fns'
   import { fi, sv, enUS } from 'date-fns/locale'
-  import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
+  import { Component, Prop, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { requiredIf } from 'vuelidate/lib/validators'
 
@@ -141,13 +141,6 @@
       this.form.dateStr = dateStr ? this.$date(dateStr as string) : ''
 
       document.querySelector(`button#datepicker-${this.id}`)?.setAttribute('tabindex', '-1')
-    }
-
-    @Watch('value')
-    onPropertyChanged(value: string | Date | null) {
-      const isDateObj = value instanceof Date
-      const dateStr = isDateObj ? format(value as Date, defaultDateFormat) : this.value
-      this.form.dateStr = dateStr ? this.$date(dateStr as string) : ''
     }
 
     isValidMinDate(value: string) {
