@@ -1,11 +1,16 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { HyvaksiluettavatCounterData, Poissaolo, TyokertymaLaskuriTyoskentelyjakso } from '@/types'
+import { parseISO } from 'date-fns'
+
+import {
+  HyvaksiluettavatCounterData,
+  TyokertymaLaskuriPoissaolo,
+  TyokertymaLaskuriTyoskentelyjakso
+} from '@/types'
 import { PoissaolonSyyTyyppi } from '@/utils/constants'
-import { parseISO } from 'date-fns';
-// import { calculateHyvaksiluettavatDaysLeft } from '@/views/tyokertymalaskuri/tyoskentelyjakson-pituus-counter'
+import { calculateHyvaksiluettavatDaysLeft } from '@/views/tyokertymalaskuri/tyoskentelyjakson-pituus-counter'
 
-const HYVAKSILUETTAVAT_DAYS = 365
+// const HYVAKSILUETTAVAT_DAYS = 365
 
 export function validateTyoskentelyaika(
   existingTyoskentelyjaksoId: number | null,
@@ -14,19 +19,19 @@ export function validateTyoskentelyaika(
   tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[],
   osaaikaProsentti: number | null = null
 ): boolean {
-  // let hyvaksiluettavatCounterData: HyvaksiluettavatCounterData | null = null
-  // function getHyvaksiluettavatCounterData(
-  //   tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[],
-  //   calculateUntilDate: Date
-  // ): HyvaksiluettavatCounterData {
-  //   if (!hyvaksiluettavatCounterData) {
-  //     hyvaksiluettavatCounterData = calculateHyvaksiluettavatDaysLeft(
-  //       tyoskentelyjaksot,
-  //       calculateUntilDate
-  //     )
-  //   }
-  //   return hyvaksiluettavatCounterData
-  // }
+  let hyvaksiluettavatCounterData: HyvaksiluettavatCounterData | null = null
+  function getHyvaksiluettavatCounterData(
+    tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[],
+    calculateUntilDate: Date
+  ): HyvaksiluettavatCounterData {
+    if (!hyvaksiluettavatCounterData) {
+      hyvaksiluettavatCounterData = calculateHyvaksiluettavatDaysLeft(
+        tyoskentelyjaksot,
+        calculateUntilDate
+      )
+    }
+    return hyvaksiluettavatCounterData
+  }
 
   if (tyoskentelyjaksoEndDate < tyoskentelyjaksoStartDate) return true
 
@@ -68,62 +73,61 @@ export function validateTyoskentelyaika(
 
     for (const tyoskentelyjakso of overlappingTyoskentelyjaksotForCurrentDate) {
       const keskeytyksetForCurrentDate = tyoskentelyjakso.poissaolot.filter(
-        (keskeytys: Poissaolo) => {
+        (keskeytys: TyokertymaLaskuriPoissaolo) => {
           return (
             parseISO(keskeytys.alkamispaiva!) <= date && parseISO(keskeytys.paattymispaiva!) >= date
           )
         }
       )
 
-      // for (const keskeytys of keskeytyksetForCurrentDate) {
-      //   const keskeytysaikaFactor =
-      //     (keskeytys.poissaoloprosentti! / 100.0) * (tyoskentelyjakso.osaaikaprosentti / 100.0)
-      //   const vahennetaanKerran = keskeytys.poissaolonSyy!.vahennetaanKerran
-//
-      //   switch (keskeytys.poissaolonSyy?.vahennystyyppi) {
-      //     case PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN:
-      //       overallTyoskentelyaikaFactorForCurrentDate -= keskeytysaikaFactor
-      //       break
-//
-      //     case PoissaolonSyyTyyppi.VAHENNETAAN_YLIMENEVA_AIKA_PER_VUOSI: {
-      //       const counterData = getHyvaksiluettavatCounterData(
-      //         tyoskentelyjaksot,
-      //         new Date(date.getTime() - 86400000)
-      //       )
-      //       if (vahennetaanKerran) {
-      //         counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()] =
-      //           HYVAKSILUETTAVAT_DAYS
-      //       }
-      //       if (!counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]) {
-      //         counterData.hyvaksiluettavatPerYearMap[date.getFullYear()] = HYVAKSILUETTAVAT_DAYS
-      //       }
-      //       const hyvaksiluettavaFactor = vahennetaanKerran
-      //         ? Math.min(
-      //             counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]!,
-      //             counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()]!
-      //           )
-      //         : counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]!
-      //       const reducedFactor = hyvaksiluettavaFactor - keskeytysaikaFactor
-      //       if (reducedFactor < 0) {
-      //         overallTyoskentelyaikaFactorForCurrentDate -= Math.abs(reducedFactor)
-      //       }
-      //       counterData.hyvaksiluettavatPerYearMap[date.getFullYear()] = Math.max(
-      //         0,
-      //         counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]! - keskeytysaikaFactor
-      //       )
-      //       if (vahennetaanKerran) {
-      //         counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()] = Math.max(
-      //           0,
-      //           counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()]! -
-      //             keskeytysaikaFactor
-      //         )
-      //       }
-      //       break
-      //     }
-      //     default:
-      //       break
-      //   }
-      // }
+      for (const keskeytys of keskeytyksetForCurrentDate) {
+        const keskeytysaikaFactor =
+          (keskeytys.poissaoloprosentti! / 100.0) * (tyoskentelyjakso.osaaikaprosentti / 100.0)
+        const vahennetaanKerran = keskeytys.poissaolonSyy!.vahennetaanKerran
+        console.log(keskeytys.poissaolonSyy?.vahennystyyppi)
+        switch (keskeytys.poissaolonSyy?.vahennystyyppi) {
+          case PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN:
+            overallTyoskentelyaikaFactorForCurrentDate -= keskeytysaikaFactor
+            break
+          case PoissaolonSyyTyyppi.VAHENNETAAN_YLIMENEVA_AIKA_PER_VUOSI: {
+            const counterData = getHyvaksiluettavatCounterData(
+              tyoskentelyjaksot,
+              new Date(date.getTime() - 86400000)
+            )
+            if (vahennetaanKerran) {
+              console.log(counterData)
+              //   counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy.nimi] = HYVAKSILUETTAVAT_DAYS
+              // }
+              // if (!counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]) {
+              //   counterData.hyvaksiluettavatPerYearMap[date.getFullYear()] = HYVAKSILUETTAVAT_DAYS
+              // }
+              // const hyvaksiluettavaFactor = vahennetaanKerran
+              //   ? Math.min(
+              //       counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]!,
+              //       counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()]!
+              //     )
+              //   : counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]!
+              // const reducedFactor = hyvaksiluettavaFactor - keskeytysaikaFactor
+              // if (reducedFactor < 0) {
+              //   overallTyoskentelyaikaFactorForCurrentDate -= Math.abs(reducedFactor)
+              // }
+              // counterData.hyvaksiluettavatPerYearMap[date.getFullYear()] = Math.max(
+              //   0,
+              //   counterData.hyvaksiluettavatPerYearMap[date.getFullYear()]! - keskeytysaikaFactor
+              // )
+              // if (vahennetaanKerran) {
+              //   counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()] = Math.max(
+              //     0,
+              //     counterData.hyvaksiluettavatDays[keskeytys.poissaolonSyy!.toString()]! -
+              //       keskeytysaikaFactor
+              //   )
+            }
+            break
+          }
+          default:
+            break
+        }
+      }
     }
 
     if (overallTyoskentelyaikaFactorForCurrentDate > 1) {
