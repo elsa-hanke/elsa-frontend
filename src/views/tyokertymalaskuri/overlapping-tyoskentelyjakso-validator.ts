@@ -84,7 +84,6 @@ export function validateTyoskentelyaika(
         const keskeytysaikaFactor =
           (keskeytys.poissaoloprosentti! / 100.0) * (tyoskentelyjakso.osaaikaprosentti / 100.0)
         const vahennetaanKerran = keskeytys.poissaolonSyy!.vahennetaanKerran
-        console.log(keskeytys.poissaolonSyy?.vahennystyyppi)
         switch (keskeytys.poissaolonSyy?.vahennystyyppi) {
           case PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN:
             overallTyoskentelyaikaFactorForCurrentDate -= keskeytysaikaFactor
