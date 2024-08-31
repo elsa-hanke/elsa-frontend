@@ -178,10 +178,10 @@ function getKeskeytysaikaMap(
   const lastYear = endDate.getFullYear()
 
   if (currentYear === lastYear) {
-    const days = differenceInDays(endDate, startDate)
+    const days = differenceInDays(startDate, endDate)
     keskeytysaikaMap.set(currentYear, days * keskeytysaikaFactor * tyoskentelyjaksoFactor)
   } else {
-    const daysInFirstYear = differenceInDays(endOfYear(startDate), startDate) + 1
+    const daysInFirstYear = differenceInDays(startDate, endOfYear(startDate)) + 1
     keskeytysaikaMap.set(
       currentYear,
       daysInFirstYear * keskeytysaikaFactor * tyoskentelyjaksoFactor
@@ -192,14 +192,14 @@ function getKeskeytysaikaMap(
     while (currentYear < lastYear) {
       const fullYearDays =
         differenceInDays(
-          endOfYear(startOfYear(new Date(currentYear, 0, 1))),
-          startOfYear(new Date(currentYear, 0, 1))
+          startOfYear(new Date(currentYear, 0, 1)),
+          endOfYear(startOfYear(new Date(currentYear, 0, 1)))
         ) + 1
       keskeytysaikaMap.set(currentYear, fullYearDays * keskeytysaikaFactor * tyoskentelyjaksoFactor)
       currentYear++
     }
 
-    const daysInLastYear = differenceInDays(endDate, startOfYear(new Date(lastYear, 0, 1)))
+    const daysInLastYear = differenceInDays(startOfYear(new Date(lastYear, 0, 1)), endDate)
     keskeytysaikaMap.set(currentYear, daysInLastYear * keskeytysaikaFactor * tyoskentelyjaksoFactor)
   }
 

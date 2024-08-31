@@ -535,7 +535,11 @@
     }
 
     laskeTilastot() {
-      // console.log(this.getVahennettavatPaivat(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
+      console.log(
+        this.getVahennettavatPaivat(
+          JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
+        )
+      )
 
       this.tyoskentelyjaksotTaulukko.tilastot = {
         arvioErikoistumiseenHyvaksyttavista: 0,
@@ -652,7 +656,6 @@
           const endDate = keskeytys.tyoskentelyjakso?.paattymispaiva
             ? parseISO(keskeytys.tyoskentelyjakso.paattymispaiva)
             : now
-
           const effectiveEndDate = endDate > now ? now : endDate
 
           const amountOfReducedDays = calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
