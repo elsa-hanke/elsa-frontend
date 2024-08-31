@@ -85,7 +85,9 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
 
   if (keskeytysaikaDaysBetween < 1) return 0.0
 
-  const keskeytysaikaFactor = keskeytysaika.poissaoloprosentti || 100 / 100.0
+  const keskeytysaikaProsentti = keskeytysaika.poissaoloprosentti ?? 100
+  const keskeytysaikaFactor = keskeytysaikaProsentti / 100.0
+
   const keskeytysaikaLength =
     keskeytysaikaFactor * tyoskentelyjaksoFactor * keskeytysaikaDaysBetween
   const vahennetaanKerran = keskeytysaika.poissaolonSyy!.vahennetaanKerran
@@ -173,7 +175,6 @@ function getKeskeytysaikaMap(
   tyoskentelyjaksoFactor: number
 ): Map<number, number> {
   const keskeytysaikaMap = new Map<number, number>()
-
   let currentYear = startDate.getFullYear()
   const lastYear = endDate.getFullYear()
 

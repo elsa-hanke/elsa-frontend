@@ -535,10 +535,8 @@
     }
 
     laskeTilastot() {
-      console.log(
-        this.getVahennettavatPaivat(
-          JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
-        )
+      const vahennettavatPaivat = this.getVahennettavatPaivat(
+        JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
       )
 
       this.tyoskentelyjaksotTaulukko.tilastot = {
@@ -580,8 +578,17 @@
       }
       this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot.forEach(
         (tj: TyokertymaLaskuriTyoskentelyjakso, index: number) => {
-          const tyoskentelyaika =
-            differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) + 1
+          const vahennettavat = vahennettavatPaivat.get(tj.id) || 0
+
+          let tyoskentelyaika = 0
+          if (vahennettavat > 0) {
+            tyoskentelyaika =
+              differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) -
+              vahennettavat
+          } else {
+            tyoskentelyaika =
+              differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) + 1
+          }
 
           const tyoskentelyaikaOsaaika =
             tyoskentelyaika *
