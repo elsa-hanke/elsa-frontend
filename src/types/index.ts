@@ -543,6 +543,7 @@ export interface PoissaolonSyy {
   id?: number | null
   nimi: string
   vahennystyyppi: PoissaolonSyyTyyppi
+  vahennetaanKerran: boolean
   voimassaolonAlkamispaiva: string
   voimassaolonPaattymispaiva?: string | null
 }
@@ -1743,7 +1744,23 @@ export interface TyokertymaLaskuriTyoskentelyjaksoForm {
   kaytannonKoulutus: KaytannonKoulutusTyyppi | null
   tyoskentelypaikka: TyokertymaLaskuriTyoskentelypaikkaForm
   label?: string
-  poissaolot: Poissaolo[]
+  poissaolot: TyokertymaLaskuriPoissaolo[]
+}
+
+export interface TyokertymaLaskuriPoissaolo {
+  id?: number
+  alkamispaiva: string
+  paattymispaiva?: string
+  poissaoloprosentti?: number
+  poissaolonSyyId: number
+  tyoskentelyjaksoId: number
+  poissaolonSyy: PoissaolonSyy
+  tyoskentelyjakso: {
+    id: number
+    paattymispaiva: string
+    osaaikaprosentti: number
+  }
+  kokoTyoajanPoissaolo?: boolean
 }
 
 export interface TyokertymaLaskuriTyoskentelypaikkaForm {
@@ -1760,7 +1777,7 @@ export interface TyokertymaLaskuriTyoskentelyjakso {
   osaaikaprosentti: number
   kahdenvuodenosaaikaprosentti: number
   kaytannonKoulutus: KaytannonKoulutusTyyppi
-  poissaolot: Poissaolo[]
+  poissaolot: TyokertymaLaskuriPoissaolo[]
 }
 
 export interface TyokertymaLaskuriTyoskentelyjaksotTable {
@@ -1768,4 +1785,9 @@ export interface TyokertymaLaskuriTyoskentelyjaksotTable {
   tilastot: TyoskentelyjaksotTilastot
   terveyskeskuskoulutusjaksonKorjausehdotus: string | null
   terveyskeskuskoulutusjaksonHyvaksymispvm: string | null
+}
+
+export interface HyvaksiluettavatCounterData {
+  hyvaksiluettavatDays: Map<string, number>
+  hyvaksiluettavatPerYearMap: Map<number, number>
 }

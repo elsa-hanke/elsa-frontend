@@ -501,11 +501,18 @@
 
     addPoissaolo() {
       this.form.poissaolot.push({
+        alkamispaiva: this.tyoskentelyjakso.alkamispaiva,
+        tyoskentelyjakso: {
+          id: -1,
+          osaaikaprosentti: 100,
+          paattymispaiva: this.tyoskentelyjakso.paattymispaiva
+        },
         poissaolonSyyId: 0,
         poissaolonSyy: {
           id: 0,
           nimi: '',
           vahennystyyppi: PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN,
+          vahennetaanKerran: false,
           voimassaolonAlkamispaiva: '',
           voimassaolonPaattymispaiva: null
         },

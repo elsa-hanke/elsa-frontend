@@ -1853,5 +1853,6 @@
   "tyokertymalaskuri-poistuminen-ohje": "Työkertymälaskun tietoja ei tallenneta. Jos olet varma, että haluat poistua laskurista, paina poistu laskurista.",
   "poistu-laskurista": "Poistu laskurista",
   "tyoaikaprosentti": "Työaikaprosentti",
-  "poissaolon-syiden-hakeminen-epaonnistui": "Poissaolon syiden hakeminen epäonnistui"
+  "poissaolon-syiden-hakeminen-epaonnistui": "Poissaolon syiden hakeminen epäonnistui",
+  "paallekkaiset-tyoskentelyjaksot-yhteenlaskettu-tyoaika-virhe": "Päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ei voi ylittää 100%:a"
 }
