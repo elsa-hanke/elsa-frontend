@@ -598,18 +598,17 @@
               : tj.kahdenvuodenosaaikaprosentti) /
               100)
 
-          const poissaolomaara = tj.poissaolot.reduce((totalDays, poissaolo) => {
+          let poissaolomaara = 0
+          tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
               const startDate = parseISO(poissaolo.alkamispaiva)
               const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate) + 1
-              return ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
+              const daysDifference = differenceInDays(startDate, endDate)
+              poissaolomaara += ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
             }
-            return ((poissaolo.poissaoloprosentti || 100) / 100) * totalDays
-          }, 0)
+          })
 
-          const tyokertyma = tyoskentelyaikaOsaaika - poissaolomaara
-          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertyma
+          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
           this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaikaOsaaika
           switch (tj.kaytannonKoulutus) {
