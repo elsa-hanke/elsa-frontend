@@ -70,7 +70,11 @@
                     <elsa-form-group :label="$t('kaytannon-koulutus')" class="col-xl-6 mb-0">
                       <template #default="{ uid }">
                         <div :id="uid" class="donut-chart">
-                          <apexchart :options="donutOptions" :series="donutSeries"></apexchart>
+                          <apexchart
+                            v-if="showChart"
+                            :options="donutOptions"
+                            :series="donutSeries"
+                          ></apexchart>
                         </div>
                       </template>
                     </elsa-form-group>
@@ -271,6 +275,7 @@
     lisaaTyoskentelyjaksoFormModal = false
     editTyoskentelyjakso: TyokertymaLaskuriTyoskentelyjakso | null = null
     tyoskentelyjaksotLocalStorageKey = 'laskuri-tyoskentelyjaksot'
+    showChart = false
 
     async mounted() {
       this.loadFromLocalStorage()
@@ -535,6 +540,7 @@
     }
 
     laskeTilastot() {
+      this.showChart = false
       const vahennettavatPaivat = this.getVahennettavatPaivat(
         JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
       )
@@ -581,13 +587,19 @@
           const vahennettavat = vahennettavatPaivat.get(tj.id) || 0
 
           let tyoskentelyaika = 0
+
           if (vahennettavat > 0) {
             tyoskentelyaika =
-              differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) -
-              vahennettavat
+              differenceInDays(
+                parseISO(tj.alkamispaiva),
+                parseISO(tj.paattymispaiva || this.getISODateNow())
+              ) - vahennettavat
           } else {
             tyoskentelyaika =
-              differenceInDays(parseISO(tj.alkamispaiva), parseISO(tj.paattymispaiva)) + 1
+              differenceInDays(
+                parseISO(tj.alkamispaiva),
+                parseISO(tj.paattymispaiva || this.getISODateNow())
+              ) + 1
           }
 
           const tyoskentelyaikaOsaaika =
@@ -598,20 +610,20 @@
               : tj.kahdenvuodenosaaikaprosentti) /
               100)
 
-          const poissaolomaara = tj.poissaolot.reduce((totalDays, poissaolo) => {
+          let poissaolomaara = 0
+          tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
               const startDate = parseISO(poissaolo.alkamispaiva)
               const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate) + 1
-              return ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
+              const daysDifference = differenceInDays(startDate, endDate)
+              poissaolomaara += ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
             }
-            return ((poissaolo.poissaoloprosentti || 100) / 100) * totalDays
-          }, 0)
+          })
 
-          const tyokertyma = tyoskentelyaikaOsaaika - poissaolomaara
-          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertyma
+          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
           this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
-          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaikaOsaaika
+          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
+            tyoskentelyaikaOsaaika + poissaolomaara
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[0].suoritettu +=
@@ -636,6 +648,7 @@
           })
         }
       )
+      this.showChart = true
     }
 
     getVahennettavatPaivat(
@@ -680,6 +693,11 @@
         })
 
       return result
+    }
+
+    getISODateNow() {
+      const date = new Date()
+      return date.toISOString().split('T')[0]
     }
 
     printPage() {
