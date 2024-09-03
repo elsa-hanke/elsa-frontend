@@ -151,7 +151,11 @@
                             :key="index"
                           >
                             <b-td :stacked-heading="$t('poissaolon-syy')">
-                              <elsa-button variant="link" class="shadow-none px-0">
+                              <elsa-button
+                                variant="link"
+                                class="shadow-none px-0"
+                                @click="openTyoskentelyjaksoFormModalForEdit(row.item)"
+                              >
                                 {{ keskeytysaika.poissaolonSyy.nimi }}
                               </elsa-button>
                             </b-td>
