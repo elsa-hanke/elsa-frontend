@@ -620,31 +620,31 @@
             }
           })
 
-          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
+          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa += tyoskentelyaikaOsaaika
           this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
-          this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
-            tyoskentelyaikaOsaaika + poissaolomaara
+          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa +=
+            tyoskentelyaikaOsaaika - poissaolomaara
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[0].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyoskentelyaikaOsaaika - poissaolomaara
               break
             case KaytannonKoulutusTyyppi.MUU_ERIKOISALA:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[1].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyoskentelyaikaOsaaika - poissaolomaara
               break
             case KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[2].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyoskentelyaikaOsaaika - poissaolomaara
               break
             case KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[3].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyoskentelyaikaOsaaika - poissaolomaara
               break
           }
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyjaksot.push({
             id: index + 1,
-            suoritettu: tyoskentelyaikaOsaaika
+            suoritettu: tyoskentelyaikaOsaaika - poissaolomaara
           })
         }
       )
