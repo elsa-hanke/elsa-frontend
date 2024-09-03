@@ -81,7 +81,6 @@
           </elsa-button>
         </div>
         <hr />
-        <!-- Piiloitettu julkaisu syistä
         <div class="mb-4">
           <h4 class="mb-1">{{ $t('tyokertymalaskuri') }}</h4>
           <p class="mb-3">{{ $t('tyokertymalaskuri-selite') }}</p>
@@ -93,7 +92,6 @@
             {{ $t('tyokertymalaskuriin') }}
           </elsa-button>
         </div>
-        -->
       </b-col>
       <b-col class="">
         <img src="@/assets/elsa-kirjautuminen.svg" :alt="$t('elsa-palvelu')" class="img-fluid" />
