@@ -26,7 +26,7 @@
             </b-tab>
             <b-tab :title="$t('yek.virkailija-etusivu-seuranta-yek-otsikko')">
               <div v-if="!loading">
-                <yek-koulutettavien-seuranta-virkailija-card :yliopisto="yliopisto" />
+                <yek-koulutettavien-seuranta-card :yliopisto="yliopisto" />
               </div>
               <div v-else class="text-center">
                 <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -49,7 +49,7 @@
   import KoejaksotCard from '@/components/etusivu-cards/koejaksot-card.vue'
   import TerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/terveyskeskuskoulutusjaksot-card.vue'
   import ValmistumispyynnotCard from '@/components/etusivu-cards/valmistumispyynnot-card.vue'
-  import YekKoulutettavienSeurantaVirkailijaCard from '@/components/etusivu-cards/yek-koulutettavien-seuranta-virkailija-card.vue'
+  import YekKoulutettavienSeurantaCard from '@/components/etusivu-cards/yek-koulutettavien-seuranta-card.vue'
   import YekTerveyskeskuskoulutusjaksotCard from '@/components/etusivu-cards/yek-terveyskeskuskoulutusjaksot-card.vue'
   import YekvalmistumispyynnotCard from '@/components/etusivu-cards/yek-valmistumispyynnot-card.vue'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
@@ -73,7 +73,7 @@
       ValmistumispyynnotCard,
       YekTerveyskeskuskoulutusjaksotCard,
       YekvalmistumispyynnotCard,
-      YekKoulutettavienSeurantaVirkailijaCard
+      YekKoulutettavienSeurantaCard
     }
   })
   export default class EtusivuVirkailija extends Vue {

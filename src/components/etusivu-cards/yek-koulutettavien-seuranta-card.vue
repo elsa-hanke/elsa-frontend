@@ -53,7 +53,7 @@
                   {{ $t('ei-hakutuloksia') }}
                 </span>
                 <span v-else>
-                  {{ $t('ei-seurattavia-erikoistujia') }}
+                  {{ $t('ei-seurattavia-koulutettavia') }}
                 </span>
               </b-alert>
               <b-list-group>
@@ -81,20 +81,6 @@
                     <b-col cols="12" lg="6">
                       <div class="text-lg-right text-size-sm mb-2">
                         <span class="d-block d-lg-inline-block">
-                          {{ $t('koejakso') }}:
-                          <span
-                            :class="
-                              koejaksoTyyli(
-                                eteneminen.koejaksoTila,
-                                eteneminen.opintooikeudenPaattymispaiva
-                              )
-                            "
-                          >
-                            {{ koejaksoTila(eteneminen.koejaksoTila) }}
-                          </span>
-                        </span>
-                        <span v-if="$screen.lg">{{ ' | ' }}</span>
-                        <span class="d-block d-lg-inline-block">
                           {{ $t('opintooikeus') }}:
                           {{ $date(eteneminen.opintooikeudenMyontamispaiva) }} -
                           <span :class="opintoOikeusTyyli(eteneminen.opintooikeudenPaattymispaiva)">
@@ -105,7 +91,7 @@
                     </b-col>
                   </b-row>
                   <b-row>
-                    <b-col cols="12" lg="3" class="pr-3 mb-4">
+                    <b-col cols="12" lg="5" class="pr-3 mb-4">
                       <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                         {{ $t('tyoskentelyaika-yht') }}
                       </div>
@@ -159,55 +145,25 @@
                         </b-row>
                       </b-collapse>
                     </b-col>
-                    <b-col cols="6" lg="auto" class="pl-lg-3 pr-1 pr-lg-3">
+                    <b-col cols="6" lg="auto" class="pl-lg-4 pr-1 pr-lg-4">
                       <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
                         {{ $t('teoriakoulutus') }}
                       </div>
-                      <span class="font-weight-bold">
-                        {{ eteneminen.teoriakoulutuksetSuoritettu }}
-                      </span>
-                      /
-                      <span>
-                        {{ eteneminen.teoriakoulutuksetVaadittu }} {{ $t('tuntia-lyhenne') }}
-                      </span>
-                    </b-col>
-                    <b-col cols="6" lg="auto" class="mb-2 pl-1 pl-lg-3">
-                      <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
-                        {{ $t('johtamisopinnot') }}
-                      </div>
-                      <span class="font-weight-bold">
-                        {{ eteneminen.johtamisopinnotSuoritettu }}
-                      </span>
-                      /
-                      <span>
-                        {{ eteneminen.johtamisopinnotVaadittu }} {{ $t('opintopistetta-lyhenne') }}
+                      <span :class="eteneminen.teoriakoulutuksetSuoritettu ? 'text-success' : ''">
+                        {{
+                          eteneminen.teoriakoulutuksetSuoritettu
+                            ? $t('suoritettu')
+                            : $t('ei-suoritettu')
+                        }}
                       </span>
                     </b-col>
-                    <b-col cols="6" lg="auto" class="pr-1 pr-lg-3">
+                    <b-col cols="6" lg="auto" class="pr-1 pl-1 pl-lg-4">
                       <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
-                        {{ $t('sateilysuojeluk') }}
+                        {{ $t('yek.koulutuksen-tila') }}
                       </div>
-                      <div v-if="eteneminen.sateilysuojakoulutuksetVaadittu > 0">
-                        <span class="font-weight-bold">
-                          {{ eteneminen.sateilysuojakoulutuksetSuoritettu }}
-                        </span>
-                        /
-                        <span>
-                          {{ eteneminen.sateilysuojakoulutuksetVaadittu }}
-                          {{ $t('opintopistetta-lyhenne') }}
-                        </span>
-                      </div>
-                      <div v-else>-</div>
-                    </b-col>
-                    <b-col cols="6" lg="auto" class="pr-1 pl-1 pl-lg-3">
-                      <div class="text-uppercase font-weight-normal mb-1 text-size-sm">
-                        {{ $t('kuulustelu') }}
-                      </div>
-                      {{
-                        eteneminen.valtakunnallisetKuulustelutSuoritettuLkm > 0
-                          ? `${eteneminen.valtakunnallisetKuulustelutSuoritettuLkm} ${$t('kpl')}`
-                          : $t('ei-suoritettu')
-                      }}
+                      <span :class="eteneminen.yekSuoritettu ? 'text-success' : ''">
+                        {{ eteneminen.yekSuoritettu ? $t('yek.valmistunut') : $t('yek.kesken') }}
+                      </span>
                     </b-col>
                   </b-row>
                 </b-list-group-item>
@@ -232,10 +188,8 @@
 <script lang="ts">
   import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
 
-  import {
-    getKoulutettavienSeurantaList,
-    getKoulutettavienSeurantaRajaimet
-  } from '@/api/virkailija'
+  import { getKoulutettavienSeurantaList as getKoulutettavienSeurantaListVastuuhenkilo } from '@/api/vastuuhenkilo'
+  import { getKoulutettavienSeurantaList as getKoulutettavienSeurantaListVirkailija } from '@/api/virkailija'
   import ElsaButton from '@/components/button/button.vue'
   import BCardSkeleton from '@/components/card/card.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -243,17 +197,9 @@
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaProgressBar from '@/components/progress-bar/progress-bar.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
-  import ErikoistujienSeurantaMixin from '@/mixins/erikoistujien-seuranta'
-  import {
-    Page,
-    ErikoistujienSeurantaVirkailijaRajaimet,
-    ErikoistujanEteneminenVirkailija,
-    Erikoisala,
-    Asetus,
-    SortByEnum
-  } from '@/types'
-  import { ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
-  import { sortByAsc } from '@/utils/sort'
+  import KoulutettavienSeurantaMixin from '@/mixins/koulutettavien-seuranta'
+  import { Page, Erikoisala, Asetus, SortByEnum, KoulutettavanEteneminen } from '@/types'
+  import { ERIKOISALA_YEK_ID, ErikoistuvanSeurantaJarjestys } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
 
   @Component({
@@ -267,7 +213,7 @@
       ElsaSearchInput
     }
   })
-  export default class YekKoulutettavienSeurantaCard extends Mixins(ErikoistujienSeurantaMixin) {
+  export default class YekKoulutettavienSeurantaCard extends Mixins(KoulutettavienSeurantaMixin) {
     @Prop({ required: true })
     yliopisto!: string
 
@@ -312,50 +258,34 @@
     debounce?: number
 
     hakutermi = ''
-    rajaimet: ErikoistujienSeurantaVirkailijaRajaimet | null = null
-    koulutettavat: Page<ErikoistujanEteneminenVirkailija> | null = null
+    koulutettavat: Page<KoulutettavanEteneminen> | null = null
 
     async mounted() {
       try {
-        await Promise.all([this.fetchRajaimet(), this.fetch()])
+        await this.fetch()
       } catch {
         toastFail(this, this.$t('yek.koulutettavien-seurannan-hakeminen-epaonnistui'))
       }
       this.initializing = false
     }
 
-    async fetchRajaimet() {
-      this.rajaimet = (await getKoulutettavienSeurantaRajaimet()).data
-    }
-
     async fetch() {
-      this.koulutettavat = (
-        await getKoulutettavienSeurantaList({
-          page: this.currentPage - 1,
-          size: this.perPage,
-          sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
-          ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
-          ...(this.filtered.erikoisala?.id
-            ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-            : {}),
-          ...(this.filtered.asetus?.id ? { 'asetusId.equals': this.filtered.asetus.id } : {}),
-          ...(this.filtered.naytaPaattyneet
-            ? { naytaPaattyneet: this.filtered.naytaPaattyneet }
-            : {})
-        })
-      ).data
+      const params = {
+        page: this.currentPage - 1,
+        size: this.perPage,
+        sort: this.filtered.sortBy ?? 'opintooikeudenPaattymispaiva,asc',
+        ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
+        ...{ 'erikoisalaId.equals': ERIKOISALA_YEK_ID },
+        ...(this.filtered.asetus?.id ? { 'asetusId.equals': this.filtered.asetus.id } : {}),
+        ...(this.filtered.naytaPaattyneet ? { naytaPaattyneet: this.filtered.naytaPaattyneet } : {})
+      }
+      this.koulutettavat = this.$isVirkailija()
+        ? (await getKoulutettavienSeurantaListVirkailija(params)).data
+        : (await getKoulutettavienSeurantaListVastuuhenkilo(params)).data
     }
 
     get rows() {
       return this.koulutettavat?.totalElements ?? 0
-    }
-
-    get erikoisalatSorted() {
-      return this.rajaimet?.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi))
-    }
-
-    get asetuksetReversed() {
-      return this.rajaimet?.asetukset.reverse()
     }
 
     @Watch('hakutermi')

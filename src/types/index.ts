@@ -1397,6 +1397,21 @@ export interface ErikoistujanEteneminenVirkailija {
   opintooikeusId: number
 }
 
+export interface KoulutettavanEteneminen {
+  erikoistuvaLaakariId: number
+  etunimi: string
+  sukunimi: string
+  syntymaaika: string
+  erikoisala: string
+  asetus: string
+  opintooikeudenMyontamispaiva: string
+  opintooikeudenPaattymispaiva: string
+  tyoskentelyjaksoTilastot: TyoskentelyjaksotTilastot
+  teoriakoulutuksetSuoritettu: boolean
+  yekSuoritettu: boolean
+  opintooikeusId: number
+}
+
 export type SortByEnum = {
   name: string
   value: number

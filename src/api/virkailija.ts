@@ -15,7 +15,8 @@ import {
   Asiakirja,
   TerveyskeskuskoulutusjaksonHyvaksyntaForm,
   Kurssikoodi,
-  OpintosuoritusTyyppi
+  OpintosuoritusTyyppi,
+  KoulutettavanEteneminen
 } from '@/types'
 import { wrapToFormData } from '@/utils/functions'
 
@@ -67,11 +68,6 @@ export async function getErikoistujienSeurantaList(params: {
   )
 }
 
-export async function getKoulutettavienSeurantaRajaimet() {
-  const path = '/virkailija/etusivu/koulutettavien-seuranta-rajaimet'
-  return await axios.get<ErikoistujienSeurantaVirkailijaRajaimet>(path)
-}
-
 export async function getKoulutettavienSeurantaList(params: {
   page?: number
   size?: number
@@ -80,7 +76,7 @@ export async function getKoulutettavienSeurantaList(params: {
   'erikoisalaId.equals'?: number
   'asetusId.equals'?: number
 }) {
-  return await axios.get<Page<ErikoistujanEteneminenVirkailija>>(
+  return await axios.get<Page<KoulutettavanEteneminen>>(
     '/virkailija/etusivu/koulutettavien-seuranta',
     {
       params: {
