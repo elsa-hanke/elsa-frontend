@@ -23,7 +23,8 @@ import {
   Seurantajakso,
   ErikoistujanEteneminen,
   ErikoistujienSeurantaVastuuhenkiloRajaimet,
-  VastuuhenkilonVastuualueet
+  VastuuhenkilonVastuualueet,
+  KoulutettavanEteneminen
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -205,4 +206,27 @@ export async function getValmistumispyyntoAsiakirja(
 ) {
   const path = `/vastuuhenkilo/valmistumispyynto/${valmistumispyyntoId}/asiakirja/${asiakirjaId}`
   return await axios.get<Asiakirja>(path)
+}
+
+export async function getKoulutettavienSeurantaList(params: {
+  page?: number
+  size?: number
+  sort: string | null
+  'nimi.contains'?: string
+  'erikoisalaId.equals'?: number
+  'asetusId.equals'?: number
+}) {
+  return await axios.get<Page<KoulutettavanEteneminen>>(
+    '/vastuuhenkilo/etusivu/koulutettavien-seuranta',
+    {
+      params: {
+        ...params
+      }
+    }
+  )
+}
+
+export async function getYliopisto() {
+  const path = '/vastuuhenkilo/etusivu/yliopisto'
+  return await axios.get<string>(path)
 }
