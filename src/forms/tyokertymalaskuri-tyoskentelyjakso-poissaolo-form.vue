@@ -17,7 +17,7 @@
           track-by="id"
           @input="$emit('input', poissaolo)"
         />
-        <b-form-invalid-feedback :id="`${uid}-feedback`">
+        <b-form-invalid-feedback :state="poissaolo.poissaolonSyy.id !== 0">
           {{ $t('pakollinen-tieto') }}
         </b-form-invalid-feedback>
       </template>
@@ -131,12 +131,11 @@
       ElsaPopover
     },
     validations: {
-      form: {
+      poissaolo: {
         poissaolonSyy: {
-          required
-        },
-        tyoskentelyjakso: {
-          required
+          nimi: {
+            required
+          }
         },
         kokoTyoajanPoissaolo: {
           required
@@ -152,6 +151,10 @@
     }
   })
   export default class TyokertymalaskuriTyoskentelyjaksoPoissaoloForm extends Vue {
+    $refs!: {
+      alkamispaiva: ElsaFormDatepicker
+      paattymispaiva: ElsaFormDatepicker
+    }
     @Prop({ type: Object, required: true })
     poissaolo!: any
 
@@ -170,6 +173,21 @@
     validateState(name: string) {
       const { $dirty, $error } = this.poissaolo[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    mounted() {
+      this.$parent.$on('validate-all-poissaolot', this.validateForm)
+    }
+
+    beforeDestroy() {
+      this.$parent.$off('validate-all-poissaolot', this.validateForm)
+    }
+
+    validateForm(): boolean {
+      this.$refs.alkamispaiva.validateForm()
+      this.$refs.paattymispaiva.validateForm()
+      this.$v.poissaolo.$touch()
+      return !this.$v.$anyError
     }
 
     get minAlkamispaiva() {

@@ -279,6 +279,7 @@
     $refs!: {
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
+      // [key: string]: TyokertymalaskuriTyoskentelyjaksoPoissaoloForm | ElsaFormDatepicker
     }
 
     @Prop({ required: false })
@@ -368,8 +369,9 @@
 
     validatePoissaolot() {
       let isValid = true
+      this.$emit('validate-all-poissaolot')
       this.form.poissaolot.forEach((poissaolo, index) => {
-        if (!poissaolo.alkamispaiva || !poissaolo.paattymispaiva) {
+        if (!poissaolo.poissaolonSyy.id || !poissaolo.alkamispaiva || !poissaolo.paattymispaiva) {
           isValid = false
           this.$set(poissaolo, 'invalid', true)
           console.log(`Invalid Poissaolo at index ${index}:`, poissaolo)
