@@ -4,7 +4,7 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('valmistumispyynto') }}</h1>
+          <h1>{{ $t('yek.valmistumispyynto') }}</h1>
           <div v-if="!loading && valmistumispyynnonTarkistus">
             <div v-if="editable">
               <p class="mt-1 mb-3">
@@ -464,7 +464,7 @@
                   {{ $t('yek.koulutettavalla-on-vanhoja-yli-10v-suorituksia') }}
                 </p>
                 <p v-if="!valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="mb-1">
-                  {{ $t('yek.koulutettavalla-on-vanhoja-yli-10v-suorituksia') }}
+                  {{ $t('yek.koulutettavalla-ei-vanhoja-yli-10v-suorituksia') }}
                 </p>
               </div>
               <div v-if="valmistumispyynto.selvitysVanhentuneistaSuorituksista" class="my-3">
@@ -731,7 +731,7 @@
         to: { name: 'valmistumispyynnot', hash: '#yek' }
       },
       {
-        text: this.$t('valmistumispyynto'),
+        text: this.$t('yek.valmistumispyynto'),
         active: true
       }
     ]
