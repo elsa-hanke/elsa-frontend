@@ -172,7 +172,7 @@
           :poissaolon-syyt-sorted="poissaolonSyytSorted"
           :child-data-received="childDataReceived"
           :tyojakso-alkamispaiva="form.alkamispaiva"
-          :tyojakso-paattymispaiva="form.paattymispaiva"
+          :tyojakso-paattymispaiva="form.paattymispaiva || getISODateNow()"
           @input="onPoissaoloInput($event, index)"
         />
         <elsa-button variant="link" class="shadow-none p-0 mt-2" @click="removePoissaolo(index)">
@@ -181,11 +181,7 @@
         </elsa-button>
         <hr />
       </div>
-      <b-button
-        variant="outline-primary"
-        :disabled="!form.alkamispaiva || !form.paattymispaiva"
-        @click="addPoissaolo"
-      >
+      <b-button variant="outline-primary" :disabled="!form.alkamispaiva" @click="addPoissaolo">
         {{ $t('lisaa-jaksolle-poissaolo') }}
       </b-button>
     </div>
@@ -483,25 +479,10 @@
       return [...this.poissaolonSyyt.sort((a, b) => sortByAsc(a.nimi, b.nimi))]
     }
 
-    get minAlkamispaiva() {
-      return this.form.alkamispaiva
-    }
-
-    get alkamispaivaInitialDate() {
-      return this.form.alkamispaiva
-    }
-
-    get paattymispaivaInitialDate() {
-      return this.form.alkamispaiva
-    }
-
-    get maxPaattymispaiva() {
-      return this.form.paattymispaiva
-    }
-
     addPoissaolo() {
       this.form.poissaolot.push({
         alkamispaiva: this.tyoskentelyjakso.alkamispaiva,
+        paattymispaiva: this.getISODateNow() as string,
         tyoskentelyjakso: {
           id: -1,
           osaaikaprosentti: 100,
@@ -529,6 +510,11 @@
     onPoissaoloInput(updatedPoissaolo: Poissaolo, index: number) {
       updatedPoissaolo.poissaoloprosentti = updatedPoissaolo.kokoTyoajanPoissaolo ? 100 : 0
       this.$set(this.form.poissaolot, index, updatedPoissaolo)
+    }
+
+    getISODateNow() {
+      const date = new Date()
+      return date.toISOString().split('T')[0]
     }
   }
 </script>

@@ -191,6 +191,11 @@
     get isParentDatesSelected() {
       return this.tyojaksoAlkamispaiva && this.tyojaksoPaattymispaiva
     }
+
+    getISODateNow() {
+      const date = new Date()
+      return date.toISOString().split('T')[0]
+    }
   }
 </script>
 
