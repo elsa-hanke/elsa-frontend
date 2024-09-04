@@ -486,7 +486,7 @@
       const isValid = validateTyoskentelyaika(
         formData.id > 0 ? formData.id : null,
         parseISO(formData.alkamispaiva),
-        parseISO(formData.paattymispaiva),
+        parseISO(formData.paattymispaiva || this.getISODateNow()),
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot,
         formData.osaaikaprosentti
       )

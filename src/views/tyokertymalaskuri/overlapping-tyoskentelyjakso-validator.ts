@@ -42,7 +42,7 @@ export function validateTyoskentelyaika(
         return (
           tyoskentelyjakso.id !== existingTyoskentelyjaksoId &&
           parseISO(tyoskentelyjakso.alkamispaiva) <= date &&
-          parseISO(tyoskentelyjakso.paattymispaiva) >= date
+          parseISO(tyoskentelyjakso.paattymispaiva || getISODateNow()) >= date
         )
       }
     )
@@ -146,4 +146,9 @@ export function validateTyoskentelyaika(
   }
 
   return true
+}
+
+function getISODateNow() {
+  const date = new Date()
+  return date.toISOString().split('T')[0]
 }

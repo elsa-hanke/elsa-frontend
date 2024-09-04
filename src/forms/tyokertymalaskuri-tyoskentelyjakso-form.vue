@@ -481,12 +481,12 @@
 
     addPoissaolo() {
       this.form.poissaolot.push({
-        alkamispaiva: this.tyoskentelyjakso.alkamispaiva,
-        paattymispaiva: this.getISODateNow() as string,
+        alkamispaiva: this.form.alkamispaiva as string,
+        paattymispaiva: this.getISODateNow(),
         tyoskentelyjakso: {
           id: -1,
           osaaikaprosentti: 100,
-          paattymispaiva: this.tyoskentelyjakso.paattymispaiva
+          paattymispaiva: this.form.paattymispaiva || this.getISODateNow()
         },
         poissaolonSyyId: 0,
         poissaolonSyy: {
