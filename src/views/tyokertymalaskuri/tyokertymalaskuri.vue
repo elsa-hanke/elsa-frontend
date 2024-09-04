@@ -151,7 +151,11 @@
                             :key="index"
                           >
                             <b-td :stacked-heading="$t('poissaolon-syy')">
-                              <elsa-button variant="link" class="shadow-none px-0">
+                              <elsa-button
+                                variant="link"
+                                class="shadow-none px-0"
+                                @click="openTyoskentelyjaksoFormModalForEdit(row.item)"
+                              >
                                 {{ keskeytysaika.poissaolonSyy.nimi }}
                               </elsa-button>
                             </b-td>
@@ -544,6 +548,7 @@
       const vahennettavatPaivat = this.getVahennettavatPaivat(
         JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
       )
+      console.log(vahennettavatPaivat)
 
       this.tyoskentelyjaksotTaulukko.tilastot = {
         arvioErikoistumiseenHyvaksyttavista: 0,
@@ -610,20 +615,20 @@
               : tj.kahdenvuodenosaaikaprosentti) /
               100)
 
-          let poissaolomaara = 0
-          tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
-            if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
-              const startDate = parseISO(poissaolo.alkamispaiva)
-              const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate)
-              poissaolomaara += ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
-            }
-          })
+          let poissaolomaara = vahennettavatPaivat.get(tj.id) || 0
+          // tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
+          //   if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
+          //     const startDate = parseISO(poissaolo.alkamispaiva)
+          //     const endDate = parseISO(poissaolo.paattymispaiva)
+          //     const daysDifference = differenceInDays(startDate, endDate)
+          //     poissaolomaara += ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
+          //   }
+          // })
 
-          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
             tyoskentelyaikaOsaaika + poissaolomaara
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
+          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[0].suoritettu +=
