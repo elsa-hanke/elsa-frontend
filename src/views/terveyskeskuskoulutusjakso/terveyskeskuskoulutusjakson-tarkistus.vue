@@ -4,7 +4,13 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('terveyskeskuskoulutusjakson-tarkistus') }}</h1>
+          <h1>
+            {{
+              onkoYek
+                ? $t('yek.terveyskeskuskoulutusjakson-tarkistus')
+                : $t('terveyskeskuskoulutusjakson-tarkistus')
+            }}
+          </h1>
           <div v-if="hyvaksynta != null">
             <b-alert :show="showReturned" variant="dark">
               <div class="d-flex flex-row">
@@ -146,20 +152,24 @@
     }
   })
   export default class TerveyskeskuskoulutusjaksonTarkistus extends Vue {
-    items = [
-      {
-        text: this.$t('etusivu'),
-        to: { name: 'etusivu' }
-      },
-      {
-        text: this.$t('terveyskeskuskoulutusjaksot'),
-        to: { name: 'terveyskeskuskoulutusjaksot' }
-      },
-      {
-        text: this.$t('terveyskeskuskoulutusjakson-tarkistus'),
-        active: true
-      }
-    ]
+    get items() {
+      return [
+        {
+          text: this.$t('etusivu'),
+          to: { name: 'etusivu' }
+        },
+        {
+          text: this.$t('terveyskeskuskoulutusjaksot'),
+          to: { name: 'terveyskeskuskoulutusjaksot' }
+        },
+        {
+          text: this.onkoYek
+            ? this.$t('yek.terveyskeskuskoulutusjakson-tarkistus')
+            : this.$t('terveyskeskuskoulutusjakson-tarkistus'),
+          active: true
+        }
+      ]
+    }
 
     params = {
       saving: false
