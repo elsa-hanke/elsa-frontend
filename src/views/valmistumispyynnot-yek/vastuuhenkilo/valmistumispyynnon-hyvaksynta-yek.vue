@@ -4,7 +4,7 @@
     <b-container fluid>
       <b-row lg>
         <b-col>
-          <h1>{{ $t('valmistumispyynnon-hyvaksynta') }}</h1>
+          <h1>{{ $t('yek.valmistumispyynnon-hyvaksynta') }}</h1>
           <div v-if="!loading && virkailijanTarkistus">
             <div class="mt-3">
               <b-alert :show="odottaaHyvaksyntaa" variant="dark">
@@ -456,7 +456,7 @@
         to: { name: 'valmistumispyynnot' }
       },
       {
-        text: this.$t('valmistumispyynnon-hyvaksynta'),
+        text: this.$t('yek.valmistumispyynnon-hyvaksynta'),
         active: true
       }
     ]
