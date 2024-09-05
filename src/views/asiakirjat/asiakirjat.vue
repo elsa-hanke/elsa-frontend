@@ -21,6 +21,7 @@
             :sort-by="sortBy"
             :confirm-delete-title="$t('poista-asiakirja')"
             :confirm-delete-type-text="$t('asiakirjan')"
+            :enable-delete="!account.impersonated"
             @deleteAsiakirja="onDeleteAsiakirja"
           />
         </b-col>
