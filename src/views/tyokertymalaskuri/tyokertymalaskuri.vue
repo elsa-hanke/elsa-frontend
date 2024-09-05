@@ -486,7 +486,7 @@
       const isValid = validateTyoskentelyaika(
         formData.id > 0 ? formData.id : null,
         parseISO(formData.alkamispaiva),
-        parseISO(formData.paattymispaiva),
+        parseISO(formData.paattymispaiva || this.getISODateNow()),
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot,
         formData.osaaikaprosentti
       )
@@ -615,19 +615,21 @@
               : tj.kahdenvuodenosaaikaprosentti) /
               100)
 
-          let poissaolomaara = vahennettavatPaivat.get(tj.id) || 0
-          // tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
-          //   if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
-          //     const startDate = parseISO(poissaolo.alkamispaiva)
-          //     const endDate = parseISO(poissaolo.paattymispaiva)
-          //     const daysDifference = differenceInDays(startDate, endDate)
-          //     poissaolomaara += ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
-          //   }
-          // })
+          // let poissaolomaara = vahennettavatPaivat.get(tj.id) || 0
+          let poissaoloaikaYhteensa = 0
+          tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
+            if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
+              const startDate = parseISO(poissaolo.alkamispaiva)
+              const endDate = parseISO(poissaolo.paattymispaiva)
+              const daysDifference = differenceInDays(startDate, endDate)
+              poissaoloaikaYhteensa +=
+                ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
+            }
+          })
 
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
-            tyoskentelyaikaOsaaika + poissaolomaara
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaolomaara
+            tyoskentelyaikaOsaaika + (vahennettavatPaivat.get(tj.id) || 0)
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaoloaikaYhteensa
           this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
