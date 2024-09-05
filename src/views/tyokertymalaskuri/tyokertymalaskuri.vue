@@ -621,7 +621,7 @@
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
               const startDate = parseISO(poissaolo.alkamispaiva)
               const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate)
+              const daysDifference = differenceInDays(startDate, endDate) + 1
               poissaoloaikaYhteensa +=
                 ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
             }

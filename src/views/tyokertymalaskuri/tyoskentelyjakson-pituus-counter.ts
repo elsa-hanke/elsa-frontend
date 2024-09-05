@@ -81,7 +81,8 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
   calculateUntilDate: Date | null
 ): number {
   const endDate = getEndDate(parseISO(keskeytysaika.paattymispaiva!), calculateUntilDate)
-  const keskeytysaikaDaysBetween = differenceInDays(parseISO(keskeytysaika.alkamispaiva!), endDate)
+  const keskeytysaikaDaysBetween =
+    differenceInDays(parseISO(keskeytysaika.alkamispaiva!), endDate) + 1
 
   if (keskeytysaikaDaysBetween < 1) return 0.0
 
