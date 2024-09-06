@@ -12,13 +12,13 @@
           <b-link :to="{ path: '/yektyoskentelyjaksot' }">
             {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.lisata-tyoskentelyjaksoja') }}
           </b-link>
-          <span>{{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.ja') }}</span>
-          <b-link :to="{ path: '/opintosuoritukset' }">
+          {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.ja') }}
+          <b-link :to="{ path: '/yekteoriakoulutukset' }">
             {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.tarkistaa-opintosuorituksesi') }}
           </b-link>
           <span>.</span>
           {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.kun-olet-suorittanut') }}
-          <b-link :to="{ path: '/valmistumispyynto' }">
+          <b-link :to="{ path: '/yekvalmistumispyynto' }">
             {{ $t('yek.ei-avoimia-asioita-yek-koulutettava-info.laheta-vamistusmispyyntö') }}
           </b-link>
         </span>
