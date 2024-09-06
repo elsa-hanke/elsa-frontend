@@ -1,7 +1,10 @@
 variables:
-  vmImageName: "Ubuntu-latest"
+  vmImageName: 'Ubuntu-latest'
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   isRelease: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')]
+
+# no PR triggers
+pr: none
 
 stages:
   - stage: Test
@@ -15,8 +18,8 @@ stages:
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: "16.x"
-            displayName: "Install Node.js"
+              versionSpec: '16.x'
+            displayName: 'Install Node.js'
           - task: Cache@2
             inputs:
               key: 'yarn | "$(Agent.OS)" | yarn.lock'
@@ -27,19 +30,19 @@ stages:
             displayName: Cache Yarn packages
           - script: |
               yarn --frozen-lockfile
-            displayName: "Install"
+            displayName: 'Install'
           - script: |
               yarn lint
-            displayName: "Lint"
+            displayName: 'Lint'
           - script: |
               yarn test:unit
-            displayName: "Test"
+            displayName: 'Test'
           # - script: |
           #     yarn test:e2e:headless
           #   displayName: "E2E Test"
           - script: |
               yarn generate-thirdparty
-            displayName: "Generate thirdparty"
+            displayName: 'Generate thirdparty'
 
   - stage: Build
     displayName: Build
@@ -53,8 +56,8 @@ stages:
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: "16.x"
-            displayName: "Install Node.js"
+              versionSpec: '16.x'
+            displayName: 'Install Node.js'
           - task: Cache@2
             inputs:
               key: 'yarn | "$(Agent.OS)" | yarn.lock'
@@ -65,10 +68,10 @@ stages:
             displayName: Cache Yarn packages
           - script: |
               yarn --frozen-lockfile
-            displayName: "Install"
+            displayName: 'Install'
           - script: |
               yarn build --mode production-test
-            displayName: "Build"
+            displayName: 'Build'
           - publish: $(System.DefaultWorkingDirectory)/dist
             artifact: ElsaFrontendApp
 
@@ -79,7 +82,7 @@ stages:
     jobs:
       - deployment: Deploy
         displayName: Deploy
-        environment: "development"
+        environment: 'development'
         pool:
           vmImage: $(vmImageName)
         strategy:
@@ -90,25 +93,25 @@ stages:
                   artifact: ElsaFrontendApp
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: "elsa-ci"
-                    regionName: "eu-west-1"
-                    awsCommand: "s3"
-                    awsSubCommand: "rm"
-                    awsArguments: "s3://kehitys.elsapalvelu.fi/  --recursive"
+                    awsCredentials: 'elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 's3'
+                    awsSubCommand: 'rm'
+                    awsArguments: 's3://kehitys.elsapalvelu.fi/  --recursive'
                 - task: S3Upload@1
                   inputs:
-                    awsCredentials: "elsa-ci"
-                    regionName: "eu-west-1"
-                    bucketName: "kehitys.elsapalvelu.fi"
-                    sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
-                    globExpressions: "**"
-                  displayName: "Deploy to S3"
+                    awsCredentials: 'elsa-ci'
+                    regionName: 'eu-west-1'
+                    bucketName: 'kehitys.elsapalvelu.fi'
+                    sourceFolder: '$(Pipeline.Workspace)/ElsaFrontendApp'
+                    globExpressions: '**'
+                  displayName: 'Deploy to S3'
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: "elsa-ci"
-                    regionName: "eu-west-1"
-                    awsCommand: "cloudfront"
-                    awsSubCommand: "create-invalidation"
+                    awsCredentials: 'elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 'cloudfront'
+                    awsSubCommand: 'create-invalidation'
                     awsArguments: '--distribution-id EXEO15DPST8ID --paths "/*"'
 
   - stage: DeployStaging
@@ -118,7 +121,7 @@ stages:
     jobs:
       - deployment: Deploy
         displayName: Deploy staging
-        environment: "testi"
+        environment: 'testi'
         pool:
           vmImage: $(vmImageName)
         strategy:
@@ -129,25 +132,25 @@ stages:
                   artifact: ElsaFrontendApp
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: "staging-elsa-ci"
-                    regionName: "eu-west-1"
-                    awsCommand: "s3"
-                    awsSubCommand: "rm"
-                    awsArguments: "s3://testi.elsapalvelu.fi/  --recursive"
+                    awsCredentials: 'staging-elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 's3'
+                    awsSubCommand: 'rm'
+                    awsArguments: 's3://testi.elsapalvelu.fi/  --recursive'
                 - task: S3Upload@1
                   inputs:
-                    awsCredentials: "staging-elsa-ci"
-                    regionName: "eu-west-1"
-                    bucketName: "testi.elsapalvelu.fi"
-                    sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendApp"
-                    globExpressions: "**"
-                  displayName: "Deploy to S3"
+                    awsCredentials: 'staging-elsa-ci'
+                    regionName: 'eu-west-1'
+                    bucketName: 'testi.elsapalvelu.fi'
+                    sourceFolder: '$(Pipeline.Workspace)/ElsaFrontendApp'
+                    globExpressions: '**'
+                  displayName: 'Deploy to S3'
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: "staging-elsa-ci"
-                    regionName: "eu-west-1"
-                    awsCommand: "cloudfront"
-                    awsSubCommand: "create-invalidation"
+                    awsCredentials: 'staging-elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 'cloudfront'
+                    awsSubCommand: 'create-invalidation'
                     awsArguments: '--distribution-id E45AQGQKD12C0 --paths "/*"'
 
   - stage: BuildProd
@@ -163,8 +166,8 @@ stages:
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: "16.x"
-            displayName: "Install Node.js"
+              versionSpec: '16.x'
+            displayName: 'Install Node.js'
           - task: Cache@2
             inputs:
               key: 'yarn | "$(Agent.OS)" | yarn.lock'
@@ -175,10 +178,10 @@ stages:
             displayName: Cache Yarn packages
           - script: |
               yarn --frozen-lockfile
-            displayName: "Install"
+            displayName: 'Install'
           - script: |
               yarn build
-            displayName: "Build"
+            displayName: 'Build'
           - publish: $(System.DefaultWorkingDirectory)/dist
             artifact: ElsaFrontendAppProd
 
@@ -191,7 +194,7 @@ stages:
     jobs:
       - deployment: Deploy
         displayName: Deploy prod
-        environment: "production"
+        environment: 'production'
         pool:
           vmImage: $(vmImageName)
         strategy:
@@ -202,23 +205,23 @@ stages:
                   artifact: ElsaFrontendAppProd
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: "prod-elsa-ci"
-                    regionName: "eu-west-1"
-                    awsCommand: "s3"
-                    awsSubCommand: "rm"
-                    awsArguments: "s3://elsapalvelu.fi/  --recursive"
+                    awsCredentials: 'prod-elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 's3'
+                    awsSubCommand: 'rm'
+                    awsArguments: 's3://elsapalvelu.fi/  --recursive'
                 - task: S3Upload@1
                   inputs:
-                    awsCredentials: "prod-elsa-ci"
-                    regionName: "eu-west-1"
-                    bucketName: "elsapalvelu.fi"
-                    sourceFolder: "$(Pipeline.Workspace)/ElsaFrontendAppProd"
-                    globExpressions: "**"
-                  displayName: "Deploy to S3"
+                    awsCredentials: 'prod-elsa-ci'
+                    regionName: 'eu-west-1'
+                    bucketName: 'elsapalvelu.fi'
+                    sourceFolder: '$(Pipeline.Workspace)/ElsaFrontendAppProd'
+                    globExpressions: '**'
+                  displayName: 'Deploy to S3'
                 - task: AWSCLI@1
                   inputs:
-                    awsCredentials: "prod-elsa-ci"
-                    regionName: "eu-west-1"
-                    awsCommand: "cloudfront"
-                    awsSubCommand: "create-invalidation"
+                    awsCredentials: 'prod-elsa-ci'
+                    regionName: 'eu-west-1'
+                    awsCommand: 'cloudfront'
+                    awsSubCommand: 'create-invalidation'
                     awsArguments: '--distribution-id E1FSXLBGWL4WJQ --paths "/*"'
