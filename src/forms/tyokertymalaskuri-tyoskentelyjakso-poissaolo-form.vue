@@ -119,6 +119,7 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import { TyokertymaLaskuriPoissaolo } from '@/types'
 
   @Component({
     components: {
@@ -156,7 +157,7 @@
       paattymispaiva: ElsaFormDatepicker
     }
     @Prop({ type: Object, required: true })
-    poissaolo!: any
+    poissaolo!: TyokertymaLaskuriPoissaolo | any
 
     @Prop({ type: Array, required: true })
     poissaolonSyytSorted!: any[]
@@ -199,6 +200,9 @@
     }
 
     get minPaattymispaiva() {
+      if (this.poissaolo.alkamispaiva !== null) {
+        return this.poissaolo.alkamispaiva
+      }
       return this.tyojaksoAlkamispaiva
     }
 

@@ -92,6 +92,7 @@
             ref="paattymispaiva"
             :value.sync="form.paattymispaiva"
             :min="minPaattymispaiva"
+            :max="maxPaattymispaiva"
             :min-error-text="
               value.tapahtumia
                 ? $t('tyoskentelyjakso-datepicker-help')
@@ -442,7 +443,7 @@
       if (this.value.tapahtumia) {
         return this.form.maxAlkamispaiva
       } else {
-        return this.form.paattymispaiva
+        return this.form.paattymispaiva === null ? this.getISODateNow() : this.form.paattymispaiva
       }
     }
 
@@ -452,6 +453,10 @@
       } else {
         return this.form.alkamispaiva
       }
+    }
+
+    get maxPaattymispaiva() {
+      return this.getISODateNow()
     }
 
     get tyyppiLabel() {
@@ -483,8 +488,8 @@
 
     addPoissaolo() {
       this.form.poissaolot.push({
-        alkamispaiva: this.form.alkamispaiva as string,
-        paattymispaiva: this.getISODateNow(),
+        alkamispaiva: '',
+        paattymispaiva: '',
         tyoskentelyjakso: {
           id: -1,
           osaaikaprosentti: 100,
