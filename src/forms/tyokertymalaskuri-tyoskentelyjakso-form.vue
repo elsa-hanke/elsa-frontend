@@ -488,8 +488,8 @@
 
     addPoissaolo() {
       this.form.poissaolot.push({
-        alkamispaiva: this.form.alkamispaiva as string,
-        paattymispaiva: this.getISODateNow(),
+        alkamispaiva: '',
+        paattymispaiva: '',
         tyoskentelyjakso: {
           id: -1,
           osaaikaprosentti: 100,
