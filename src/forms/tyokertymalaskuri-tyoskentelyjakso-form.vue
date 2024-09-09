@@ -493,6 +493,7 @@
         tyoskentelyjakso: {
           id: -1,
           osaaikaprosentti: 100,
+          kahdenvuodenosaaikaprosentti: 100,
           paattymispaiva: this.form.paattymispaiva || this.getISODateNow()
         },
         poissaolonSyyId: 0,

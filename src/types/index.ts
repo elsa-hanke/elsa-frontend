@@ -1774,6 +1774,8 @@ export interface TyokertymaLaskuriPoissaolo {
     id: number
     paattymispaiva: string
     osaaikaprosentti: number
+    kahdenvuodenosaaikaprosentti: number
+    kaytannonKoulutus?: KaytannonKoulutusTyyppi
   }
   kokoTyoajanPoissaolo?: boolean
 }

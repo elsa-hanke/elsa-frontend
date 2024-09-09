@@ -7,7 +7,7 @@ import {
   TyokertymaLaskuriPoissaolo,
   TyokertymaLaskuriTyoskentelyjakso
 } from '@/types'
-import { PoissaolonSyyTyyppi } from '@/utils/constants'
+import { KaytannonKoulutusTyyppi, PoissaolonSyyTyyppi } from '@/utils/constants'
 import { calculateHyvaksiluettavatDaysLeft } from '@/views/tyokertymalaskuri/tyoskentelyjakson-pituus-counter'
 
 const HYVAKSILUETTAVAT_DAYS = 365
@@ -54,7 +54,7 @@ export function validateTyoskentelyaika(
 
     let overallTyoskentelyaikaFactorForCurrentDate =
       overlappingTyoskentelyjaksotForCurrentDate.reduce(
-        (sum, tyoskentelyjakso) => sum + tyoskentelyjakso.osaaikaprosentti / 100.0,
+        (sum, tyoskentelyjakso) => sum + getOsaaikaprosentti(tyoskentelyjakso) / 100.0,
         0
       )
 
@@ -82,7 +82,7 @@ export function validateTyoskentelyaika(
 
       for (const keskeytys of keskeytyksetForCurrentDate) {
         const keskeytysaikaFactor =
-          (keskeytys.poissaoloprosentti! / 100.0) * (tyoskentelyjakso.osaaikaprosentti / 100.0)
+          (keskeytys.poissaoloprosentti! / 100.0) * (getOsaaikaprosentti(tyoskentelyjakso) / 100.0)
         const vahennetaanKerran = keskeytys.poissaolonSyy!.vahennetaanKerran
         switch (keskeytys.poissaolonSyy?.vahennystyyppi) {
           case PoissaolonSyyTyyppi.VAHENNETAAN_SUORAAN:
@@ -148,7 +148,14 @@ export function validateTyoskentelyaika(
   return true
 }
 
-function getISODateNow() {
+function getISODateNow(): string {
   const date = new Date()
   return date.toISOString().split('T')[0]
+}
+
+function getOsaaikaprosentti(tyoskentelyjakso: TyokertymaLaskuriTyoskentelyjakso): number {
+  return tyoskentelyjakso.kaytannonKoulutus !==
+    String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
+    ? tyoskentelyjakso.osaaikaprosentti
+    : tyoskentelyjakso.kahdenvuodenosaaikaprosentti
 }
