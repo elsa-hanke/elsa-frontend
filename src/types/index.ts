@@ -1021,7 +1021,6 @@ export interface BarChartRow {
   maxLength?: number
   highlight: boolean
   showMax: boolean
-  maxRequired?: number
 }
 
 export interface Palaute {
@@ -1279,6 +1278,7 @@ export type TyoskentelyjaksotTilastotKoulutustyypit = {
   yliopistosairaalaVaadittuVahintaan: number
   yliopistosairaalaSuoritettu: number
   yliopistosairaaloidenUlkopuolinenVaadittuVahintaan: number
+  yliopistosairaaloidenUlkopuolinenMaksimipituus?: number
   yliopistosairaaloidenUlkopuolinenSuoritettu: number
   yhteensaVaadittuVahintaan: number
   yhteensaSuoritettu: number
