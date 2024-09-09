@@ -48,9 +48,9 @@
             value: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenSuoritettu,
             minRequired:
               this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenVaadittuVahintaan,
+            maxLength: this.tilastot.koulutustyypit.yliopistosairaaloidenUlkopuolinenMaksimipituus,
             highlight: false,
-            showMax: true,
-            maxRequired: 6
+            showMax: true
           },
           {
             text: this.$t('yhteensa'),
