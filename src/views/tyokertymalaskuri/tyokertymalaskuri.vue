@@ -488,7 +488,10 @@
         parseISO(formData.alkamispaiva),
         parseISO(formData.paattymispaiva || this.getISODateNow()),
         this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot,
-        formData.osaaikaprosentti
+        formData.kaytannonKoulutus !==
+          String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
+          ? formData.osaaikaprosentti
+          : formData.kahdenvuodenosaaikaprosentti
       )
       if (!isValid) {
         toastFail(this, this.$t('paallekkaiset-tyoskentelyjaksot-yhteenlaskettu-tyoaika-virhe'))
