@@ -1875,5 +1875,7 @@
   "poistu-laskurista": "Poistu laskurista",
   "tyoaikaprosentti": "Työaikaprosentti",
   "poissaolon-syiden-hakeminen-epaonnistui": "Poissaolon syiden hakeminen epäonnistui",
-  "paallekkaiset-tyoskentelyjaksot-yhteenlaskettu-tyoaika-virhe": "Päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ei voi ylittää 100%:a"
+  "paallekkaiset-tyoskentelyjaksot-yhteenlaskettu-tyoaika-virhe": "Päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ei voi ylittää 100%:a",
+  "yhdista-kayttajatileja": "Yhdistä käyttäjätilejä",
+  "yhdista-kayttajatileja-ingressi": "Valitse erikoistuja ja kouluttaja, joiden tilit yhdistetään. Määritä käyttäjille yhteinen sähköpostiosoite. Jos et ole tästä varma, käytä kouluttajan sähköpostiosoitetta tai varmista sähköpostiosoite kouluttajalta."
 }

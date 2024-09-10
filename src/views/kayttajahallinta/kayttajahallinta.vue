@@ -11,6 +11,13 @@
           <elsa-button variant="primary" :to="{ name: 'uusi-kayttaja' }" class="mb-4">
             {{ $t('lisaa-uusi-kayttaja') }}
           </elsa-button>
+          <elsa-button
+            variant="outline-primary"
+            :to="{ name: 'yhdista-kayttajatileja' }"
+            class="mb-4 ml-4"
+          >
+            {{ $t('yhdista-kayttajatileja') }}
+          </elsa-button>
           <div v-if="!initializing">
             <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
               <b-tab :title="$t('erikoistujat')" href="#erikoistuvat-laakarit">
