@@ -9,8 +9,10 @@
             {{ $t('yhdista-kayttajatileja-ingressi') }}
           </p>
           <hr />
-          todo
         </b-col>
+        <b-container>
+          <erikoistujat-ja-kouluttajat :rajaimet="rajaimet"></erikoistujat-ja-kouluttajat>
+        </b-container>
       </b-row>
       <div v-if="!form.rooli" class="d-flex flex-row-reverse flex-wrap">
         <elsa-button :disabled="true" variant="primary" class="ml-2 mb-2">
@@ -33,10 +35,13 @@
   import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
   import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
+  import { KayttajahallintaRajaimet } from '@/types'
   import { ELSA_ROLE } from '@/utils/roles'
+  import ErikoistujatJaKouluttajat from '@/views/kayttajahallinta/yhdista-kayttajatileja/erikoistujat-ja-kouluttajat.vue'
 
   @Component({
     components: {
+      ErikoistujatJaKouluttajat,
       ElsaFormGroup,
       ErikoistuvaLaakariForm,
       VastuuhenkiloForm,
@@ -74,6 +79,8 @@
         value: this.virkailijaRole
       }
     ]
+
+    rajaimet: KayttajahallintaRajaimet | null = null
 
     mounted() {
       if (this.$isTekninenPaakayttaja()) {
