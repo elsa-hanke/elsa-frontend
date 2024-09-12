@@ -72,6 +72,7 @@
                         <div :id="uid" class="donut-chart">
                           <apexchart
                             v-if="showChart"
+                            :key="chartKey"
                             :options="donutOptions"
                             :series="donutSeries"
                           ></apexchart>
@@ -280,6 +281,7 @@
     editTyoskentelyjakso: TyokertymaLaskuriTyoskentelyjakso | null = null
     tyoskentelyjaksotLocalStorageKey = 'laskuri-tyoskentelyjaksot'
     showChart = false
+    chartKey = 0
 
     async mounted() {
       this.loadFromLocalStorage()
@@ -288,6 +290,10 @@
 
     beforeDestroy() {
       window.removeEventListener('beforeunload', this.handleBeforeUnload)
+    }
+
+    refreshChart() {
+      this.chartKey += 1
     }
 
     get tyoskentelyjaksot() {
@@ -315,7 +321,7 @@
     }
 
     get tilastotTyoskentelyjaksot() {
-      if (this.tilastot) {
+      if (this.tilastot && this.showChart) {
         return this.tilastot.tyoskentelyjaksot
       } else {
         return []
@@ -659,6 +665,7 @@
         }
       )
       this.showChart = true
+      this.refreshChart()
     }
 
     getVahennettavatPaivat(

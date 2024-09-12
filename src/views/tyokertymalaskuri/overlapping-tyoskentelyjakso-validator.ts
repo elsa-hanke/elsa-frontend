@@ -58,12 +58,12 @@ export function validateTyoskentelyaika(
         0
       )
 
-    if (overallTyoskentelyaikaFactorForCurrentDate >= 1) {
-      return false
+    if (osaaikaProsentti !== null) {
+      overallTyoskentelyaikaFactorForCurrentDate += osaaikaProsentti / 100.0
     }
 
-    if (existingTyoskentelyjaksoId === null && osaaikaProsentti !== null) {
-      overallTyoskentelyaikaFactorForCurrentDate += osaaikaProsentti / 100.0
+    if (overallTyoskentelyaikaFactorForCurrentDate > 1) {
+      return false
     }
 
     if (overallTyoskentelyaikaFactorForCurrentDate <= 1) {
