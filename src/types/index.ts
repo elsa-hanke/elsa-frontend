@@ -1819,3 +1819,8 @@ export interface HyvaksiluettavatCounterData {
   hyvaksiluettavatDays: Map<string, number>
   hyvaksiluettavatPerYearMap: Map<number, number>
 }
+
+export interface YhdistaKayttajatilejaForm {
+  erikoistujaKayttajaId: number
+  kouluttajaKayttajaId: number
+}

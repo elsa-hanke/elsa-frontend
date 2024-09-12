@@ -11,11 +11,14 @@
           <hr />
         </b-col>
         <b-container>
-          <erikoistujat-ja-kouluttajat :rajaimet="rajaimet"></erikoistujat-ja-kouluttajat>
+          <erikoistujat-ja-kouluttajat
+            :rajaimet="rajaimet"
+            :form="form"
+          ></erikoistujat-ja-kouluttajat>
         </b-container>
       </b-row>
-      <div v-if="!form.rooli" class="d-flex flex-row-reverse flex-wrap">
-        <elsa-button :disabled="true" variant="primary" class="ml-2 mb-2">
+      <div class="d-flex flex-row-reverse flex-wrap">
+        <elsa-button :disabled="!formValid" variant="primary" class="ml-2 mb-2">
           {{ $t('jatka') }}
         </elsa-button>
         <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
@@ -60,11 +63,17 @@
         active: true
       }
     ]
-    form = {
-      rooli: null
+
+    form: any = {
+      erikoistujaKayttajaId: -1,
+      kouluttajaKayttajaId: -1
     }
 
     rajaimet: KayttajahallintaRajaimet | null = null
+
+    get formValid(): boolean {
+      return this.form.erikoistujaKayttajaId > 0 && this.form.kouluttajaKayttajaId > 0
+    }
 
     onCancel() {
       this.$router.push({

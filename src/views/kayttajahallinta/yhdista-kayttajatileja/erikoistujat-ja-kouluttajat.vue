@@ -42,17 +42,24 @@
       responsive
     >
       <template #cell(nimi)="row">
-        <elsa-button
-          :to="{
-            name: 'erikoistuva-laakari',
-            params: { kayttajaId: row.item.kayttajaId }
-          }"
-          variant="link"
-          class="p-0 border-0 shadow-none"
+        <b-form-radio
+          v-model="form.erikoistujaKayttajaId"
+          :name="`kayttaja-${row.item.kayttajaId}`"
+          :state="null"
+          :value="row.item.kayttajaId"
         >
-          <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
-          <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
-        </elsa-button>
+          <elsa-button
+            :to="{
+              name: 'erikoistuva-laakari',
+              params: { kayttajaId: row.item.kayttajaId }
+            }"
+            variant="link"
+            class="p-0 border-0 shadow-none"
+          >
+            <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
+            <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
+          </elsa-button>
+        </b-form-radio>
       </template>
       <template #cell(opintooikeus)="row">
         <div v-for="(item, index) in row.item.yliopistotAndErikoisalat" :key="index">
@@ -79,17 +86,24 @@
       responsive
     >
       <template #cell(nimi)="row">
-        <elsa-button
-          :to="{
-            name: 'erikoistuva-laakari',
-            params: { kayttajaId: row.item.kayttajaId }
-          }"
-          variant="link"
-          class="p-0 border-0 shadow-none"
+        <b-form-radio
+          v-model="form.kouluttajaKayttajaId"
+          :name="`kayttaja-${row.item.kayttajaId}`"
+          :state="null"
+          :value="row.item.kayttajaId"
         >
-          <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
-          <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
-        </elsa-button>
+          <elsa-button
+            :to="{
+              name: 'erikoistuva-laakari',
+              params: { kayttajaId: row.item.kayttajaId }
+            }"
+            variant="link"
+            class="p-0 border-0 shadow-none"
+          >
+            <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
+            <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
+          </elsa-button>
+        </b-form-radio>
       </template>
       <template #cell(opintooikeus)="row">
         <div v-for="(item, index) in row.item.yliopistotAndErikoisalat" :key="index">
@@ -106,7 +120,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Mixins, Watch } from 'vue-property-decorator'
+  import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 
   import { getErikoistujatJaKouluttajat } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
@@ -119,7 +133,8 @@
     Erikoisala,
     KayttajahallintaYhdistaKayttajatilejaListItem,
     Page,
-    SortByEnum
+    SortByEnum,
+    YhdistaKayttajatilejaForm
   } from '@/types'
   import { KayttajaJarjestys } from '@/utils/constants'
   import { ELSA_ROLE } from '@/utils/roles'
@@ -134,6 +149,8 @@
     }
   })
   export default class ErikoistujatJaKouluttajat extends Mixins(KayttajahallintaMixin) {
+    @Prop({ required: true })
+    form!: YhdistaKayttajatilejaForm
     fields = [
       {
         key: 'nimi',
@@ -181,16 +198,6 @@
       useaOpintooikeus: false,
       sortBy: null
     }
-
-    // async mounted() {
-    //   this.loading = true
-    //   try {
-    //     await this.fetch()
-    //   } catch {
-    //     toastFail(this, this.$t('kayttajien-hakeminen-epaonnistui'))
-    //   }
-    //   this.loading = false
-    // }
 
     async fetch() {
       if (!this.filtered.nimi) {
