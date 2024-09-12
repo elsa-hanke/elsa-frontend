@@ -13,7 +13,8 @@ import {
   KayttajahallintaNewKayttaja,
   Yliopisto,
   OpintoopasSimple,
-  Kayttaja, KayttajahallintaYhdistaKayttajatilejaListItem
+  Kayttaja,
+  KayttajahallintaYhdistaKayttajatilejaListItem
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -210,7 +211,7 @@ export async function getErikoistujatJaKouluttajat(params: {
   size?: number
   'nimi.contains'?: string
 }) {
-  const path = `${resolveRolePath()}/erikoistuvat-laakarit`
+  const path = `${resolveRolePath()}/erikoistujat-ja-kouluttajat`
   return await axios.get<Page<KayttajahallintaYhdistaKayttajatilejaListItem>>(path, {
     params: {
       ...params
