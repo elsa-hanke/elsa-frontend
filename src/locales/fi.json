@@ -1880,5 +1880,7 @@
   "yhdista-kayttajatileja-ingressi": "Valitse erikoistuja ja kouluttaja, joiden tilit yhdistetään. Määritä käyttäjille yhteinen sähköpostiosoite. Jos et ole tästä varma, käytä kouluttajan sähköpostiosoitetta tai varmista sähköpostiosoite kouluttajalta.",
   "hae-erikoistujaa-kouluttajaa": "Hae erikoistujaa / kouluttajaa",
   "erikoistuja-jonka-tili-yhdistetaan": "1. Valitse erikoistuja, jonka tili yhdistetään",
-  "kouluttaja-jonka-tili-yhdistetaan": "2. Valitse kouluttaja, jonka tili yhdistetään"
+  "kouluttaja-jonka-tili-yhdistetaan": "2. Valitse kouluttaja, jonka tili yhdistetään",
+  "valittu-erikoistuja": "Valittu erikoistuja",
+  "valittu-kouluttaja":"Valittu kouluttaja"
 }

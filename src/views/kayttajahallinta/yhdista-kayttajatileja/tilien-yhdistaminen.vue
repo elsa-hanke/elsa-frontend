@@ -1,35 +1,11 @@
 <template>
   <div>
-    <b-row lg>
+    <b-row lg class="mt-4">
       <b-col>
-        <h1>{{ $t('hae-erikoistujaa-kouluttajaa') }}</h1>
+        <h1>{{ $t('valittu-erikoistuja') }}</h1>
       </b-col>
     </b-row>
-    <b-row align-v="center" lg>
-      <b-col cols="12" lg="8">
-        <elsa-search-input
-          class="mb-3"
-          :hakutermi.sync="hakutermi"
-          :placeholder="$t('hae-erikoistujaa-kouluttajaa')"
-        />
-      </b-col>
-    </b-row>
-    <div v-if="!loading">
-      <b-alert v-if="hakutermi.length > 0 && rows === 0" variant="dark" show>
-        <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
-        <span>
-          {{ $t('ei-hakutuloksia') }}
-        </span>
-      </b-alert>
-    </div>
-    <div v-else class="text-center">
-      <b-spinner variant="primary" :label="$t('ladataan')" />
-    </div>
-    <b-row v-if="!loading && kayttajat && rows > 0" lg class="mt-4">
-      <b-col>
-        <h1>{{ $t('erikoistuja-jonka-tili-yhdistetaan') }}</h1>
-      </b-col>
-    </b-row>
+    <!--
     <b-table
       v-if="!loading && kayttajat && rows > 0"
       class="kayttajat-table"
@@ -69,11 +45,13 @@
         </span>
       </template>
     </b-table>
-    <b-row v-if="!loading && kayttajat && rows > 0" lg class="mt-4">
+    -->
+    <b-row lg class="mt-4">
       <b-col>
-        <h1>{{ $t('kouluttaja-jonka-tili-yhdistetaan') }}</h1>
+        <h1>{{ $t('valittu-kouluttaja') }}</h1>
       </b-col>
     </b-row>
+    <!--
     <b-table
       v-if="!loading && kayttajat && rows > 0"
       class="kayttajat-table"
@@ -113,6 +91,7 @@
         </span>
       </template>
     </b-table>
+    -->
   </div>
 </template>
 
@@ -145,7 +124,7 @@
       ElsaSearchInput
     }
   })
-  export default class ErikoistujatJaKouluttajat extends Mixins(KayttajahallintaMixin) {
+  export default class TilienYhdistaminen extends Mixins(KayttajahallintaMixin) {
     @Prop({ required: true })
     form!: YhdistaKayttajatilejaForm
     fields = [

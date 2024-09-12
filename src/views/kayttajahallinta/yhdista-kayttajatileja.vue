@@ -10,15 +10,23 @@
           </p>
           <hr />
         </b-col>
-        <b-container>
+        <b-container v-if="!form.valinnatSuoritettu">
           <erikoistujat-ja-kouluttajat
             :rajaimet="rajaimet"
             :form="form"
           ></erikoistujat-ja-kouluttajat>
         </b-container>
+        <b-container v-if="form.valinnatSuoritettu">
+          <tilien-yhdistaminen :form="form"></tilien-yhdistaminen>
+        </b-container>
       </b-row>
       <div class="d-flex flex-row-reverse flex-wrap">
-        <elsa-button :disabled="!formValid" variant="primary" class="ml-2 mb-2">
+        <elsa-button
+          :disabled="!formValid"
+          variant="primary"
+          class="ml-2 mb-2"
+          @click="form.valinnatSuoritettu = true"
+        >
           {{ $t('jatka') }}
         </elsa-button>
         <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
@@ -38,11 +46,13 @@
   import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
   import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
-  import { KayttajahallintaRajaimet } from '@/types'
+  import { KayttajahallintaRajaimet, YhdistaKayttajatilejaForm } from '@/types'
   import ErikoistujatJaKouluttajat from '@/views/kayttajahallinta/yhdista-kayttajatileja/erikoistujat-ja-kouluttajat.vue'
+  import TilienYhdistaminen from '@/views/kayttajahallinta/yhdista-kayttajatileja/tilien-yhdistaminen.vue'
 
   @Component({
     components: {
+      TilienYhdistaminen,
       ErikoistujatJaKouluttajat,
       ElsaFormGroup,
       ErikoistuvaLaakariForm,
@@ -64,9 +74,11 @@
       }
     ]
 
-    form: any = {
+    form: YhdistaKayttajatilejaForm = {
       erikoistujaKayttajaId: -1,
-      kouluttajaKayttajaId: -1
+      kouluttajaKayttajaId: -1,
+      valinnatSuoritettu: false,
+      yhteinenSahkoposti: null
     }
 
     rajaimet: KayttajahallintaRajaimet | null = null
