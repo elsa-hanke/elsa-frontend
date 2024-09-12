@@ -56,7 +56,7 @@
         to: { name: 'kayttajahallinta' }
       },
       {
-        text: this.$t('uusi-kayttaja'),
+        text: this.$t('yhdista-kayttajatileja'),
         active: true
       }
     ]
@@ -65,10 +65,6 @@
     }
 
     rajaimet: KayttajahallintaRajaimet | null = null
-
-    mounted() {
-      /* */
-    }
 
     onCancel() {
       this.$router.push({

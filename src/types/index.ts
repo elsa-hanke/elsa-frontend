@@ -1145,6 +1145,7 @@ export interface KayttajahallintaYhdistaKayttajatilejaListItem {
   yliopistotAndErikoisalat: YliopistoErikoisalaPair[]
   kayttajatilinTila: string
   sahkoposti: string
+  authorities: string[]
 }
 
 export interface YliopistoErikoisalaPair {

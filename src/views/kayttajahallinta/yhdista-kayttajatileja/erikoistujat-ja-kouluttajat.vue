@@ -33,11 +33,10 @@
         <h1>{{ $t('erikoistuja-jonka-tili-yhdistetaan') }}</h1>
       </b-col>
     </b-row>
-
     <b-table
       v-if="!loading && kayttajat && rows > 0"
       class="kayttajat-table"
-      :items="kayttajat.content"
+      :items="erikoistujat"
       :fields="fields"
       stacked="md"
       responsive
@@ -66,12 +65,43 @@
         </span>
       </template>
     </b-table>
-
     <b-row lg class="mt-4">
       <b-col>
         <h1>{{ $t('kouluttaja-jonka-tili-yhdistetaan') }}</h1>
       </b-col>
     </b-row>
+    <b-table
+      v-if="!loading && kayttajat && rows > 0"
+      class="kayttajat-table"
+      :items="kouluttajat"
+      :fields="fields"
+      stacked="md"
+      responsive
+    >
+      <template #cell(nimi)="row">
+        <elsa-button
+          :to="{
+            name: 'erikoistuva-laakari',
+            params: { kayttajaId: row.item.kayttajaId }
+          }"
+          variant="link"
+          class="p-0 border-0 shadow-none"
+        >
+          <span>{{ row.item.sukunimi }}&nbsp;{{ row.item.etunimi }}</span>
+          <span v-if="row.item.syntymaaika">&nbsp;({{ $date(row.item.syntymaaika) }})</span>
+        </elsa-button>
+      </template>
+      <template #cell(opintooikeus)="row">
+        <div v-for="(item, index) in row.item.yliopistotAndErikoisalat" :key="index">
+          {{ `${$t(`yliopisto-nimi.${item.yliopisto}`)}: ${item.erikoisala}` }}
+        </div>
+      </template>
+      <template #cell(tila)="row">
+        <span :class="getTilaColor(row.item.kayttajatilinTila)">
+          {{ $t(`tilin-tila-${row.item.kayttajatilinTila}`) }}
+        </span>
+      </template>
+    </b-table>
   </div>
 </template>
 
@@ -92,7 +122,7 @@
     SortByEnum
   } from '@/types'
   import { KayttajaJarjestys } from '@/utils/constants'
-  import { toastFail } from '@/utils/toast'
+  import { ELSA_ROLE } from '@/utils/roles'
 
   @Component({
     components: {
@@ -152,17 +182,20 @@
       sortBy: null
     }
 
-    async mounted() {
-      this.loading = true
-      try {
-        await this.fetch()
-      } catch {
-        toastFail(this, this.$t('kayttajien-hakeminen-epaonnistui'))
-      }
-      this.loading = false
-    }
+    // async mounted() {
+    //   this.loading = true
+    //   try {
+    //     await this.fetch()
+    //   } catch {
+    //     toastFail(this, this.$t('kayttajien-hakeminen-epaonnistui'))
+    //   }
+    //   this.loading = false
+    // }
 
     async fetch() {
+      if (!this.filtered.nimi) {
+        return
+      }
       this.kayttajat = (
         await getErikoistujatJaKouluttajat({
           page: this.currentPage - 1,
@@ -226,6 +259,21 @@
 
     get rows() {
       return this.kayttajat?.totalElements ?? 0
+    }
+
+    get erikoistujat() {
+      return this.kayttajat?.content.filter((k) =>
+        k.authorities.some(
+          (authority: string) =>
+            authority === ELSA_ROLE.ErikoistuvaLaakari || authority === ELSA_ROLE.YEKKoulutettava
+        )
+      )
+    }
+
+    get kouluttajat() {
+      return this.kayttajat?.content.filter((k) =>
+        k.authorities.some((authority: string) => authority === ELSA_ROLE.Kouluttaja)
+      )
     }
   }
 </script>
