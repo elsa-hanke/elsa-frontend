@@ -1,11 +1,16 @@
 <template>
   <div>
+    <b-row lg>
+      <b-col>
+        <h1>{{ $t('hae-erikoistujaa-kouluttajaa') }}</h1>
+      </b-col>
+    </b-row>
     <b-row align-v="center" lg>
-      <b-col cols="12" lg="4">
+      <b-col cols="12" lg="8">
         <elsa-search-input
           class="mb-3"
           :hakutermi.sync="hakutermi"
-          :placeholder="$t('hae-erikoistujan-nimella')"
+          :placeholder="$t('hae-erikoistujaa-kouluttajaa')"
         />
       </b-col>
     </b-row>
@@ -23,6 +28,11 @@
     <div v-else class="text-center">
       <b-spinner variant="primary" :label="$t('ladataan')" />
     </div>
+    <b-row lg class="mt-4">
+      <b-col>
+        <h1>{{ $t('erikoistuja-jonka-tili-yhdistetaan') }}</h1>
+      </b-col>
+    </b-row>
 
     <b-table
       v-if="!loading && kayttajat && rows > 0"
@@ -56,27 +66,31 @@
         </span>
       </template>
     </b-table>
-    <elsa-pagination
-      v-if="!loading"
-      :current-page="currentPage"
-      :per-page="perPage"
-      :rows="rows"
-      @update:currentPage="onPageInput"
-    />
+
+    <b-row lg class="mt-4">
+      <b-col>
+        <h1>{{ $t('kouluttaja-jonka-tili-yhdistetaan') }}</h1>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Mixins, Watch } from 'vue-property-decorator'
 
-  import { getErikoistuvatLaakarit } from '@/api/kayttajahallinta'
+  import { getErikoistujatJaKouluttajat } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPagination from '@/components/pagination/pagination.vue'
   import ElsaSearchInput from '@/components/search-input/search-input.vue'
   import KayttajahallintaMixin from '@/mixins/kayttajahallinta'
-  import { Erikoisala, KayttajahallintaKayttajaListItem, Page, SortByEnum } from '@/types'
+  import {
+    Erikoisala,
+    KayttajahallintaYhdistaKayttajatilejaListItem,
+    Page,
+    SortByEnum
+  } from '@/types'
   import { KayttajaJarjestys } from '@/utils/constants'
   import { toastFail } from '@/utils/toast'
 
@@ -124,7 +138,7 @@
     debounce?: number
     hakutermi = ''
 
-    kayttajat: Page<KayttajahallintaKayttajaListItem> | null = null
+    kayttajat: Page<KayttajahallintaYhdistaKayttajatilejaListItem> | null = null
 
     filtered: {
       nimi: string | null
@@ -150,15 +164,10 @@
 
     async fetch() {
       this.kayttajat = (
-        await getErikoistuvatLaakarit({
+        await getErikoistujatJaKouluttajat({
           page: this.currentPage - 1,
           size: this.perPage,
-          sort: this.filtered.sortBy ?? 'kayttaja.user.lastName,asc',
-          ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
-          ...(this.filtered.erikoisala?.id
-            ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }
-            : {}),
-          ...{ 'useaOpintooikeus.equals': this.filtered.useaOpintooikeus }
+          ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {})
         })
       ).data
     }

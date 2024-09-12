@@ -1137,6 +1137,16 @@ export interface KayttajahallintaKayttajaListItem {
   kayttajatilinTila: string
 }
 
+export interface KayttajahallintaYhdistaKayttajatilejaListItem {
+  kayttajaId: number
+  etunimi: string
+  sukunimi: string
+  syntymaaika: string
+  yliopistotAndErikoisalat: YliopistoErikoisalaPair[]
+  kayttajatilinTila: string
+  sahkoposti: string
+}
+
 export interface YliopistoErikoisalaPair {
   yliopisto: string
   erikoisala: string

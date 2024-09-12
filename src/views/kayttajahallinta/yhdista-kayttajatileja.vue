@@ -36,7 +36,6 @@
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
   import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
   import { KayttajahallintaRajaimet } from '@/types'
-  import { ELSA_ROLE } from '@/utils/roles'
   import ErikoistujatJaKouluttajat from '@/views/kayttajahallinta/yhdista-kayttajatileja/erikoistujat-ja-kouluttajat.vue'
 
   @Component({
@@ -65,52 +64,16 @@
       rooli: null
     }
 
-    roolit = [
-      {
-        text: this.$t('erikoistuja'),
-        value: this.erikoistuvaLaakariRole
-      },
-      {
-        text: this.$t('vastuuhenkilo'),
-        value: this.vastuuhenkiloRole
-      },
-      {
-        text: this.$t('virkailija'),
-        value: this.virkailijaRole
-      }
-    ]
-
     rajaimet: KayttajahallintaRajaimet | null = null
 
     mounted() {
-      if (this.$isTekninenPaakayttaja()) {
-        this.roolit.push({
-          text: this.$t('paakayttaja'),
-          value: this.paakayttajaRole
-        })
-      }
+      /* */
     }
 
     onCancel() {
       this.$router.push({
         name: 'kayttajahallinta'
       })
-    }
-
-    get erikoistuvaLaakariRole() {
-      return ELSA_ROLE.ErikoistuvaLaakari
-    }
-
-    get vastuuhenkiloRole() {
-      return ELSA_ROLE.Vastuuhenkilo
-    }
-
-    get virkailijaRole() {
-      return ELSA_ROLE.OpintohallinnonVirkailija
-    }
-
-    get paakayttajaRole() {
-      return ELSA_ROLE.TekninenPaakayttaja
     }
 
     skipRouteExitConfirm(value: boolean) {

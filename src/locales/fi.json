@@ -1877,5 +1877,8 @@
   "poissaolon-syiden-hakeminen-epaonnistui": "Poissaolon syiden hakeminen epäonnistui",
   "paallekkaiset-tyoskentelyjaksot-yhteenlaskettu-tyoaika-virhe": "Päällekkäisten työskentelyjaksojen yhteenlaskettu työaika ei voi ylittää 100%:a",
   "yhdista-kayttajatileja": "Yhdistä käyttäjätilejä",
-  "yhdista-kayttajatileja-ingressi": "Valitse erikoistuja ja kouluttaja, joiden tilit yhdistetään. Määritä käyttäjille yhteinen sähköpostiosoite. Jos et ole tästä varma, käytä kouluttajan sähköpostiosoitetta tai varmista sähköpostiosoite kouluttajalta."
+  "yhdista-kayttajatileja-ingressi": "Valitse erikoistuja ja kouluttaja, joiden tilit yhdistetään. Määritä käyttäjille yhteinen sähköpostiosoite. Jos et ole tästä varma, käytä kouluttajan sähköpostiosoitetta tai varmista sähköpostiosoite kouluttajalta.",
+  "hae-erikoistujaa-kouluttajaa": "Hae erikoistujaa / kouluttajaa",
+  "erikoistuja-jonka-tili-yhdistetaan": "1. Valitse erikoistuja, jonka tili yhdistetään",
+  "kouluttaja-jonka-tili-yhdistetaan": "2. Valitse kouluttaja, jonka tili yhdistetään"
 }
