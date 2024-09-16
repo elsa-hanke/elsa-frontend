@@ -10,14 +10,14 @@
           </p>
           <hr />
         </b-col>
-        <b-container v-if="!form.valinnatSuoritettu">
+        <b-container>
           <erikoistujat-ja-kouluttajat
             :rajaimet="rajaimet"
             :form="form"
           ></erikoistujat-ja-kouluttajat>
         </b-container>
-        <b-container v-if="form.valinnatSuoritettu">
-          <tilien-yhdistaminen :form="form"></tilien-yhdistaminen>
+        <b-container v-if="kayttajatValittu">
+          <yhteinen-sahkoposti :form="form"></yhteinen-sahkoposti>
         </b-container>
       </b-row>
       <div class="d-flex flex-row-reverse flex-wrap">
@@ -25,9 +25,9 @@
           :disabled="!formValid"
           variant="primary"
           class="ml-2 mb-2"
-          @click="form.valinnatSuoritettu = true"
+          @click="yhdistaKayttajatilit"
         >
-          {{ $t('jatka') }}
+          {{ $t('yhdista-kayttajatilit') }}
         </elsa-button>
         <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
           {{ $t('peruuta') }}
@@ -47,12 +47,13 @@
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
   import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
   import { KayttajahallintaRajaimet, YhdistaKayttajatilejaForm } from '@/types'
+  import { toastSuccess } from '@/utils/toast'
   import ErikoistujatJaKouluttajat from '@/views/kayttajahallinta/yhdista-kayttajatileja/erikoistujat-ja-kouluttajat.vue'
-  import TilienYhdistaminen from '@/views/kayttajahallinta/yhdista-kayttajatileja/tilien-yhdistaminen.vue'
+  import YhteinenSahkoposti from '@/views/kayttajahallinta/yhdista-kayttajatileja/yhteinen-sahkoposti.vue'
 
   @Component({
     components: {
-      TilienYhdistaminen,
+      YhteinenSahkoposti,
       ErikoistujatJaKouluttajat,
       ElsaFormGroup,
       ErikoistuvaLaakariForm,
@@ -77,14 +78,23 @@
     form: YhdistaKayttajatilejaForm = {
       erikoistujaKayttajaId: -1,
       kouluttajaKayttajaId: -1,
-      valinnatSuoritettu: false,
-      yhteinenSahkoposti: null
+      yhteinenSahkoposti: '',
+      yhteinenSahkopostiUudelleen: '',
+      formValid: false
     }
 
     rajaimet: KayttajahallintaRajaimet | null = null
 
-    get formValid(): boolean {
+    get kayttajatValittu(): boolean {
       return this.form.erikoistujaKayttajaId > 0 && this.form.kouluttajaKayttajaId > 0
+    }
+
+    get formValid(): boolean {
+      return (
+        this.form.erikoistujaKayttajaId > 0 &&
+        this.form.kouluttajaKayttajaId > 0 &&
+        this.form.formValid
+      )
     }
 
     onCancel() {
@@ -95,6 +105,19 @@
 
     skipRouteExitConfirm(value: boolean) {
       this.$emit('skipRouteExitConfirm', value)
+    }
+
+    validateState(name: string) {
+      const { $dirty, $error } = this.$v.form[name] as any
+      return $dirty ? ($error ? false : null) : null
+    }
+
+    async yhdistaKayttajatilit() {
+      const validations = [this.formValid]
+      if (validations.includes(false)) {
+        return
+      }
+      toastSuccess(this, 'Lomake oli ok ja tähän tehdään backend kutsu')
     }
   }
 </script>

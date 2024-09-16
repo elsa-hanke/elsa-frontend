@@ -1823,6 +1823,7 @@ export interface HyvaksiluettavatCounterData {
 export interface YhdistaKayttajatilejaForm {
   erikoistujaKayttajaId: number
   kouluttajaKayttajaId: number
-  valinnatSuoritettu: boolean
-  yhteinenSahkoposti: string | null
+  yhteinenSahkoposti: string
+  yhteinenSahkopostiUudelleen: string
+  formValid: boolean
 }
