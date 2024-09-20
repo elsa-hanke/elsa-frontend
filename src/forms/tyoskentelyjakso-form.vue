@@ -588,7 +588,9 @@
 
     get erikoisalatFormatted() {
       return [
-        ...this.erikoisalat.sort((a, b) => sortByAsc(a.nimi, b.nimi)),
+        ...this.erikoisalat
+          .filter((erikoisala) => erikoisala.nimi !== 'Yleislääketieteen erityiskoulutus')
+          .sort((a, b) => sortByAsc(a.nimi, b.nimi)),
         {
           nimi: this.$t('muu')
         }
