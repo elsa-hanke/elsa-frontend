@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row lg>
-      <b-col>
+      <b-col v-if="!loading">
         <b-form v-if="editing" @submit.stop.prevent="onSubmit">
           <elsa-form-group
             :label="$t('kategorian-nimi')"
@@ -176,6 +176,8 @@
     @Prop({ required: false, type: Array, default: () => [] })
     kategoriat!: ArvioitavanKokonaisuudenKategoria[]
 
+    loading = true
+
     params = {
       saving: false
     }
@@ -184,6 +186,7 @@
 
     mounted() {
       this.form = { ...this.kokonaisuus }
+      this.loading = false
     }
 
     get sortedKategoriat() {

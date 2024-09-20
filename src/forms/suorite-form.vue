@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row lg>
-      <b-col>
+      <b-col v-if="!loading">
         <b-form v-if="editing" @submit.stop.prevent="onSubmit">
           <elsa-form-group
             :label="$t('kategorian-nimi')"
@@ -173,10 +173,13 @@
       saving: false
     }
 
+    loading = true
+
     form: Partial<SuoriteWithErikoisala> = {}
 
     mounted() {
       this.form = { ...this.suorite }
+      this.loading = false
     }
 
     get sortedKategoriat() {
