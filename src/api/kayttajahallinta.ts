@@ -14,7 +14,8 @@ import {
   Yliopisto,
   OpintoopasSimple,
   Kayttaja,
-  KayttajahallintaYhdistaKayttajatilejaListItem
+  KayttajahallintaYhdistaKayttajatilejaListItem,
+  KayttajienYhdistaminenDTO
 } from '@/types'
 import { resolveRolePath } from '@/utils/kayttajahallintaRolePathResolver'
 
@@ -217,4 +218,9 @@ export async function getErikoistujatJaKouluttajat(params: {
       ...params
     }
   })
+}
+
+export async function yhdistaKayttajatilit(form: KayttajienYhdistaminenDTO) {
+  const path = `${resolveRolePath()}/yhdista-kayttajatilit`
+  return await axios.patch(path, form)
 }

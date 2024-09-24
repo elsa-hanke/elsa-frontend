@@ -1827,3 +1827,9 @@ export interface YhdistaKayttajatilejaForm {
   yhteinenSahkopostiUudelleen: string
   formValid: boolean
 }
+
+export interface KayttajienYhdistaminenDTO {
+  ensimmainenKayttajaId: number
+  toinenKayttajaId: number
+  yhteinenSahkoposti: string
+}

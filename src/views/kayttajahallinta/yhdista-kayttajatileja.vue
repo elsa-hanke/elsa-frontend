@@ -40,6 +40,7 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { yhdistaKayttajatilit } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
@@ -47,7 +48,7 @@
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
   import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
   import { KayttajahallintaRajaimet, YhdistaKayttajatilejaForm } from '@/types'
-  import { toastSuccess } from '@/utils/toast'
+  import { toastFail, toastSuccess } from '@/utils/toast'
   import ErikoistujatJaKouluttajat from '@/views/kayttajahallinta/yhdista-kayttajatileja/erikoistujat-ja-kouluttajat.vue'
   import YhteinenSahkoposti from '@/views/kayttajahallinta/yhdista-kayttajatileja/yhteinen-sahkoposti.vue'
 
@@ -117,7 +118,16 @@
       if (validations.includes(false)) {
         return
       }
-      toastSuccess(this, 'Lomake oli ok ja tähän tehdään backend kutsu')
+      try {
+        await yhdistaKayttajatilit({
+          ensimmainenKayttajaId: this.form.erikoistujaKayttajaId,
+          toinenKayttajaId: this.form.kouluttajaKayttajaId,
+          yhteinenSahkoposti: this.form.yhteinenSahkoposti
+        })
+        toastSuccess(this, 'ok')
+      } catch (e) {
+        toastFail(this, 'virhe')
+      }
     }
   }
 </script>
