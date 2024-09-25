@@ -132,7 +132,7 @@
                     </span>
                   </template>
                   <template #row-details="row">
-                    <div class="px-md-3">
+                    <div v-if="row.item.keskeytykset.length > 0" class="px-md-3">
                       <b-table-simple stacked="md">
                         <b-thead>
                           <b-tr>
