@@ -280,7 +280,6 @@
     $refs!: {
       alkamispaiva: ElsaFormDatepicker
       paattymispaiva: ElsaFormDatepicker
-      // [key: string]: TyokertymalaskuriTyoskentelyjaksoPoissaoloForm | ElsaFormDatepicker
     }
 
     @Prop({ required: false })
@@ -408,6 +407,7 @@
       if (this.editing) {
         submitData.id = this.tyoskentelyjakso.id
       }
+      this.$emit('skipRouteExitConfirm', true)
       this.$emit('submit', submitData, this.params)
     }
 
