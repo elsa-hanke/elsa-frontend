@@ -430,11 +430,13 @@
     }
 
     onCancel() {
+      this.$emit('skipRouteExitConfirm', true)
       this.$emit('cancel')
     }
 
     onDelete(id: number | undefined) {
       if (id) {
+        this.$emit('skipRouteExitConfirm', true)
         this.$emit('delete', id)
       }
     }
