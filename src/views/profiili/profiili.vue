@@ -21,7 +21,7 @@
               <omat-tiedot :editing="editing" @change="changeEditing" />
             </b-tab>
             <b-tab
-              v-if="$isErikoistuva() || $isYekKoulutettava()"
+              v-if="$isErikoistuva()"
               :title="$t('katseluoikeudet')"
               href="#katseluoikeudet"
               lazy
