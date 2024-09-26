@@ -132,7 +132,7 @@
                     </span>
                   </template>
                   <template #row-details="row">
-                    <div class="px-md-3">
+                    <div v-if="row.item.keskeytykset.length > 0" class="px-md-3">
                       <b-table-simple stacked="md">
                         <b-thead>
                           <b-tr>
@@ -282,6 +282,7 @@
     tyoskentelyjaksotLocalStorageKey = 'laskuri-tyoskentelyjaksot'
     showChart = false
     chartKey = 0
+    showDetails = false
 
     async mounted() {
       this.loadFromLocalStorage()
@@ -473,7 +474,8 @@
               : tj.kahdenvuodenosaaikaprosentti
           } %`,
           keskeytykset: tj.poissaolot,
-          keskeytyksetLength: tj.poissaolot.length
+          keskeytyksetLength: tj.poissaolot.length,
+          _showDetails: this.showDetails
         }))
         .sort((a, b) => sortByDateDesc(a.paattymispaiva, b.paattymispaiva))
     }
@@ -718,10 +720,13 @@
     }
 
     printPage() {
-      const styleElement = document.createElement('style')
-      document.head.appendChild(styleElement)
-      window.print()
-      document.head.removeChild(styleElement)
+      this.showDetails = true
+      setTimeout(() => {
+        const styleElement = document.createElement('style')
+        document.head.appendChild(styleElement)
+        window.print()
+        document.head.removeChild(styleElement)
+      }, 500)
     }
 
     beforeRouteLeave(to: any, from: any, next: any) {
