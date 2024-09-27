@@ -12,18 +12,12 @@
             :id="uid"
             v-model="form.yhteinenSahkoposti"
             :state="validateState('yhteinenSahkoposti')"
-            @input="$v.form.yhteinenSahkoposti.$touch()"
+            @input="yhteinenSahkopostiTouch"
           ></b-form-input>
-          <b-form-invalid-feedback
-            v-if="$v.form.yhteinenSahkoposti.$error && !$v.form.yhteinenSahkoposti.required"
-            :id="`${uid}-feedback`"
-          >
+          <b-form-invalid-feedback v-if="yhteinenSahkopostiRequired" :id="`${uid}-feedback`">
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
-          <b-form-invalid-feedback
-            v-if="$v.form.yhteinenSahkoposti.$error && !$v.form.yhteinenSahkoposti.email"
-            :id="`${uid}-feedback`"
-          >
+          <b-form-invalid-feedback v-if="yhteinenSahkopostiInvalid" :id="`${uid}-feedback`">
             {{ $t('sahkopostiosoite-ei-kelvollinen') }}
           </b-form-invalid-feedback>
         </template>
@@ -36,33 +30,22 @@
             :id="uid"
             v-model="form.yhteinenSahkopostiUudelleen"
             :state="validateState('yhteinenSahkopostiUudelleen')"
-            @input="$v.form.yhteinenSahkopostiUudelleen.$touch()"
+            @input="yhteinenSahkopostiUudelleenTouch"
           ></b-form-input>
           <b-form-invalid-feedback
-            v-if="
-              $v.form.yhteinenSahkopostiUudelleen.$error &&
-              !$v.form.yhteinenSahkopostiUudelleen.required
-            "
+            v-if="yhteinenSahkopostiUudelleenRequired"
             :id="`${uid}-feedback`"
           >
             {{ $t('pakollinen-tieto') }}
           </b-form-invalid-feedback>
           <b-form-invalid-feedback
-            v-if="
-              $v.form.yhteinenSahkopostiUudelleen.$error &&
-              !$v.form.yhteinenSahkopostiUudelleen.email
-            "
+            v-if="yhteinenSahkopostiUudelleenInvalid"
             :id="`${uid}-feedback`"
           >
             {{ $t('sahkopostiosoite-ei-kelvollinen') }}
           </b-form-invalid-feedback>
           <b-form-invalid-feedback
-            v-if="
-              $v.form.yhteinenSahkopostiUudelleen.$error &&
-              $v.form.yhteinenSahkopostiUudelleen.required &&
-              $v.form.yhteinenSahkopostiUudelleen.email &&
-              !$v.form.yhteinenSahkopostiUudelleen.sameAsSahkoposti
-            "
+            v-if="yhteinenSahkopostiUudelleenNoMatch"
             :id="`${uid}-feedback`"
           >
             {{ $t('sahkopostiosoitteet-eivat-tasmaa') }}
@@ -116,6 +99,45 @@
     validateState(name: string) {
       const { $dirty, $error } = this.$v.form[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    yhteinenSahkopostiTouch() {
+      this.$v.form.yhteinenSahkoposti?.$touch()
+    }
+
+    yhteinenSahkopostiUudelleenTouch() {
+      this.$v.form?.yhteinenSahkopostiUudelleen?.$touch()
+    }
+
+    get yhteinenSahkopostiRequired() {
+      return this.$v.form.yhteinenSahkoposti?.$error && !this.$v.form.yhteinenSahkoposti.required
+    }
+
+    get yhteinenSahkopostiUudelleenRequired() {
+      return (
+        this.$v.form?.yhteinenSahkopostiUudelleen?.$error &&
+        !this.$v.form?.yhteinenSahkopostiUudelleen.required
+      )
+    }
+
+    get yhteinenSahkopostiInvalid() {
+      return this.$v.form.yhteinenSahkoposti?.$error && !this.$v.form.yhteinenSahkoposti.email
+    }
+
+    get yhteinenSahkopostiUudelleenInvalid() {
+      return (
+        this.$v.form?.yhteinenSahkopostiUudelleen?.$error &&
+        !this.$v.form?.yhteinenSahkopostiUudelleen.email
+      )
+    }
+
+    get yhteinenSahkopostiUudelleenNoMatch() {
+      return (
+        this.$v.form?.yhteinenSahkopostiUudelleen?.$error &&
+        this.$v.form?.yhteinenSahkopostiUudelleen?.required &&
+        this.$v.form?.yhteinenSahkopostiUudelleen?.email &&
+        !this.$v.form.yhteinenSahkopostiUudelleen.sameAsSahkoposti
+      )
     }
 
     get isFormValid() {
