@@ -25,13 +25,20 @@
           :disabled="!formValid"
           variant="primary"
           class="ml-2 mb-2"
-          @click="yhdistaKayttajatilit"
+          @click="$bvModal.show('confirm-yhdista-kayttajatilit')"
         >
           {{ $t('yhdista-kayttajatilit') }}
         </elsa-button>
         <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
           {{ $t('peruuta') }}
         </elsa-button>
+        <elsa-confirmation-modal
+          id="confirm-yhdista-kayttajatilit"
+          :title="$t('vahvista-kayttajatilien-yhdistaminen')"
+          :text="$t('haluatko-varmasti-yhdistaa-kayttajatilit')"
+          :submit-text="$t('yhdista-kayttajatilit')"
+          @submit="yhdistaKayttajatilit"
+        />
       </div>
     </b-container>
   </div>
@@ -43,6 +50,7 @@
   import { yhdistaKayttajatilit } from '@/api/kayttajahallinta'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
   import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
@@ -54,6 +62,7 @@
 
   @Component({
     components: {
+      ElsaConfirmationModal,
       YhteinenSahkoposti,
       ErikoistujatJaKouluttajat,
       ElsaFormGroup,
@@ -124,7 +133,10 @@
           toinenKayttajaId: this.form.kouluttajaKayttajaId,
           yhteinenSahkoposti: this.form.yhteinenSahkoposti
         })
-        toastSuccess(this, 'ok')
+        toastSuccess(this, this.$t('kayttajatilien-yhdistaminen-onnistui'))
+        this.$router.push({
+          name: 'kayttajahallinta'
+        })
       } catch (e) {
         toastFail(this, 'virhe')
       }

@@ -1882,5 +1882,8 @@
   "erikoistuja-jonka-tili-yhdistetaan": "1. Valitse erikoistuja, jonka tili yhdistetään",
   "kouluttaja-jonka-tili-yhdistetaan": "2. Valitse kouluttaja, jonka tili yhdistetään",
   "maarita-kayttajatileille-yhteinen-sahkopostiosoite": "3. Määritä käyttäjätileille yhteinen sähköpostiosoite",
-  "yhdista-kayttajatilit": "Yhdistä käyttäjätilit"
+  "yhdista-kayttajatilit": "Yhdistä käyttäjätilit",
+  "vahvista-kayttajatilien-yhdistaminen": "Vahvista käyttäjätilien yhdistäminen",
+  "haluatko-varmasti-yhdistaa-kayttajatilit": "Haluatko varmasti yhdistää käyttäjätilit?",
+  "kayttajatilien-yhdistaminen-onnistui": "Käyttäjätilien yhdistäminen onnistui"
 }
