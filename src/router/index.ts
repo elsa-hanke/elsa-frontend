@@ -959,7 +959,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: YhdistaKayttajatileja,
-          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
       {
