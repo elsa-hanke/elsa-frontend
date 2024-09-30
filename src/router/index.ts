@@ -30,6 +30,7 @@ import Paakayttaja from '@/views/kayttajahallinta/paakayttaja.vue'
 import UusiKayttaja from '@/views/kayttajahallinta/uusi-kayttaja.vue'
 import Vastuuhenkilo from '@/views/kayttajahallinta/vastuuhenkilo.vue'
 import Virkailija from '@/views/kayttajahallinta/virkailija.vue'
+import YhdistaKayttajatileja from '@/views/kayttajahallinta/yhdista-kayttajatileja.vue'
 import ErikoistuvaArviointilomakeAloituskeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-aloituskeskustelu/erikoistuva-arviointilomake-aloituskeskustelu.vue'
 import ErikoistuvaArviointilomakeKehittamistoimenpiteet from '@/views/koejakso/erikoistuva/arviointilomake-kehittamistoimenpiteet/erikoistuva-arviointilomake-kehittamistoimenpiteet.vue'
 import ErikoistuvaArviointilomakeLoppukeskustelu from '@/views/koejakso/erikoistuva/arviointilomake-loppukeskustelu/erikoistuva-arviointilomake-loppukeskustelu.vue'
@@ -950,6 +951,15 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: Paakayttaja,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/kayttajahallinta/yhdista-kayttajatileja',
+        name: 'yhdista-kayttajatileja',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: YhdistaKayttajatileja,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja, ELSA_ROLE.OpintohallinnonVirkailija]
         }
       },
       {

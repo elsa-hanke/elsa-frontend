@@ -1137,6 +1137,17 @@ export interface KayttajahallintaKayttajaListItem {
   kayttajatilinTila: string
 }
 
+export interface KayttajahallintaYhdistaKayttajatilejaListItem {
+  kayttajaId: number
+  etunimi: string
+  sukunimi: string
+  syntymaaika: string
+  yliopistotAndErikoisalat: YliopistoErikoisalaPair[]
+  kayttajatilinTila: string
+  sahkoposti: string
+  authorities: string[]
+}
+
 export interface YliopistoErikoisalaPair {
   yliopisto: string
   erikoisala: string
@@ -1807,4 +1818,18 @@ export interface TyokertymaLaskuriTyoskentelyjaksotTable {
 export interface HyvaksiluettavatCounterData {
   hyvaksiluettavatDays: Map<string, number>
   hyvaksiluettavatPerYearMap: Map<number, number>
+}
+
+export interface YhdistaKayttajatilejaForm {
+  erikoistujaKayttajaId: number
+  kouluttajaKayttajaId: number
+  yhteinenSahkoposti: string
+  yhteinenSahkopostiUudelleen: string
+  formValid: boolean
+}
+
+export interface KayttajienYhdistaminenDTO {
+  ensimmainenKayttajaId: number
+  toinenKayttajaId: number
+  yhteinenSahkoposti: string
 }
