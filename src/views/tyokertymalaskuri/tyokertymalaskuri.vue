@@ -75,6 +75,7 @@
                             :key="chartKey"
                             :options="donutOptions"
                             :series="donutSeries"
+                            style="width: 500px"
                           ></apexchart>
                         </div>
                       </template>
@@ -886,6 +887,6 @@
   }
 
   .donut-chart {
-    max-width: 450px;
+    max-width: 500px;
   }
 </style>
