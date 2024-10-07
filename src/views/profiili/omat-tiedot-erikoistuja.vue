@@ -403,6 +403,10 @@
           this.form.laakarikoulutusSuoritettuSuomiTaiBelgia =
             laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia
         }
+        if (laillistamistiedot.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia) {
+          this.form.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia =
+            laillistamistiedot.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
+        }
 
         if (laillistamistiedot.laillistamistodistus) {
           const data = Uint8Array.from(atob(laillistamistiedot.laillistamistodistus), (c) =>

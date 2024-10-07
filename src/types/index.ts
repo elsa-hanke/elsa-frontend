@@ -688,6 +688,7 @@ export type Laillistamistiedot = {
   laillistamistodistusNimi?: string | null
   laillistamistodistusTyyppi?: string | null
   laakarikoulutusSuoritettuSuomiTaiBelgia?: boolean | null
+  laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia?: boolean | null
 }
 
 export type Kayttajatiedot = {
