@@ -701,6 +701,10 @@
           this.laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia =
             laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia
         }
+        if (laillistamistiedot.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia) {
+          this.laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia =
+            laillistamistiedot.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
+        }
       } catch {
         toastFail(this, this.$t('laillistamispaivan-hakeminen-epaonnistui'))
       }
