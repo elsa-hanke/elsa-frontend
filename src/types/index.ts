@@ -678,6 +678,7 @@ export type LaillistamistiedotLomakeKoulutettava = {
   laillistamispaiva?: string | null
   laillistamispaivanLiite?: File | null
   laakarikoulutusSuoritettuSuomiTaiBelgia: boolean
+  laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia: boolean
 }
 
 export type Laillistamistiedot = {
