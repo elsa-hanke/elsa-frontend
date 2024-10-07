@@ -197,16 +197,51 @@
         <elsa-form-group
           v-if="$isYekKoulutettava()"
           :label="$t('yek.aiempi-laakarikoulutus')"
-          :required="false"
+          :required="true"
         >
-          <span>
-            {{ $t('yek.aiempi-laakarikoulutus-selite') }}
-          </span>
-          <b-form-checkbox v-model="form.laakarikoulutusSuoritettuSuomiTaiBelgia" class="mb-4">
-            {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut') }}
-          </b-form-checkbox>
-          <hr />
+          <template #default="{ uid }">
+            <div>
+              <b-form-radio
+                key="laakarikoulutus-suomi-belgia"
+                v-model="form.laakarikoulutusSuoritettuSuomiTaiBelgia"
+                name="laakarikoulutus"
+                :value="true"
+                @input="$emit('skipRouteExitConfirm', false)"
+                @change="aiempiLaakarikoulutusChange('suomibelgia')"
+              >
+                <span>
+                  {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut-suomi-belgia') }}
+                </span>
+              </b-form-radio>
+              <b-form-radio
+                key="laakarikoulutus-muu"
+                v-model="form.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia"
+                name="laakarikoulutus"
+                :value="true"
+                @input="$emit('skipRouteExitConfirm', false)"
+                @change="aiempiLaakarikoulutusChange('muu')"
+              >
+                <span>
+                  {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut-muu-kuin-suomi-belgia') }}
+                </span>
+              </b-form-radio>
+              <b-form-invalid-feedback
+                :id="`${uid}-feedback`"
+                :style="{
+                  display:
+                    !form.laakarikoulutusSuoritettuSuomiTaiBelgia &&
+                    !form.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
+                      ? 'block'
+                      : 'none'
+                }"
+              >
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
+            </div>
+            <hr />
+          </template>
         </elsa-form-group>
+
         <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
           <template #default="{ uid }">
             <b-form-input
@@ -348,7 +383,8 @@
       avatarUpdated: false,
       laillistamispaiva: null,
       laillistamispaivanLiite: null,
-      laakarikoulutusSuoritettuSuomiTaiBelgia: false
+      laakarikoulutusSuoritettuSuomiTaiBelgia: false,
+      laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia: false
     }
 
     laillistamispaivaAsiakirjat: Asiakirja[] = []
@@ -432,7 +468,9 @@
         avatar: this.account?.avatar || null,
         avatarUpdated: false,
         laillistamispaiva: this.form.laillistamispaiva,
-        laakarikoulutusSuoritettuSuomiTaiBelgia: this.form.laakarikoulutusSuoritettuSuomiTaiBelgia
+        laakarikoulutusSuoritettuSuomiTaiBelgia: this.form.laakarikoulutusSuoritettuSuomiTaiBelgia,
+        laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia:
+          this.form.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
       }
     }
 
@@ -571,6 +609,16 @@
         (a: Opintooikeus, b: Opintooikeus) =>
           sortByDesc(a.opintooikeudenMyontamispaiva, b.opintooikeudenMyontamispaiva)
       )
+    }
+
+    aiempiLaakarikoulutusChange(option: string) {
+      if (option === 'suomibelgia') {
+        this.form.laakarikoulutusSuoritettuSuomiTaiBelgia = true
+        this.form.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia = false
+      } else {
+        this.form.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia = true
+        this.form.laakarikoulutusSuoritettuSuomiTaiBelgia = false
+      }
     }
   }
 </script>
