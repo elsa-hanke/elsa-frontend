@@ -49,16 +49,47 @@
       </elsa-form-group>
     </div>
     <div v-if="isEnsimmainenTyoskentelyjakso">
-      <elsa-form-group :label="$t('yek.aiempi-laakarikoulutus')" :required="false">
-        <span>
-          {{ $t('yek.aiempi-laakarikoulutus-selite') }}
-        </span>
-        <b-form-checkbox
-          v-model="laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia"
-          class="mb-4"
-        >
-          {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut') }}
-        </b-form-checkbox>
+      <elsa-form-group :label="$t('yek.aiempi-laakarikoulutus')" :required="true">
+        <template #default="{ uid }">
+          <div>
+            <b-form-radio
+              key="laakarikoulutus-suomi-belgia"
+              v-model="laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia"
+              name="laakarikoulutus"
+              :value="true"
+              @input="$emit('skipRouteExitConfirm', false)"
+              @change="aiempiLaakarikoulutusChange('suomibelgia')"
+            >
+              <span>
+                {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut-suomi-belgia') }}
+              </span>
+            </b-form-radio>
+            <b-form-radio
+              key="laakarikoulutus-muu"
+              v-model="laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia"
+              name="laakarikoulutus"
+              :value="true"
+              @input="$emit('skipRouteExitConfirm', false)"
+              @change="aiempiLaakarikoulutusChange('muu')"
+            >
+              <span>
+                {{ $t('yek.aiempi-laakarikoulutus-olen-suorittanut-muu-kuin-suomi-belgia') }}
+              </span>
+            </b-form-radio>
+            <b-form-invalid-feedback
+              :id="`${uid}-feedback`"
+              :style="{
+                display:
+                  !laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia &&
+                  !laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
+                    ? 'block'
+                    : 'none'
+              }"
+            >
+              {{ $t('pakollinen-tieto') }}
+            </b-form-invalid-feedback>
+          </div>
+        </template>
       </elsa-form-group>
     </div>
     <hr v-if="!laillistamisTiedotForm.laillistamistiedotAdded || isEnsimmainenTyoskentelyjakso" />
@@ -435,7 +466,8 @@
       ensimmainenTyoskentelyjakso: false,
       laillistamispaiva: null,
       laillistamispaivanLiite: null,
-      laakarikoulutusSuoritettuSuomiTaiBelgia: false
+      laakarikoulutusSuoritettuSuomiTaiBelgia: false,
+      laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia: false
     }
 
     async mounted() {
@@ -495,6 +527,14 @@
         this.$refs.paattymispaiva.validateForm(),
         this.$refs.laillistamispaiva ? this.$refs.laillistamispaiva.validateForm() : true
       ]
+
+      if (
+        this.isEnsimmainenTyoskentelyjakso &&
+        !this.laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia &&
+        !this.laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
+      ) {
+        return
+      }
 
       if (validations.includes(false)) {
         return
@@ -661,6 +701,10 @@
           this.laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia =
             laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia
         }
+        if (laillistamistiedot.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia) {
+          this.laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia =
+            laillistamistiedot.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia
+        }
       } catch {
         toastFail(this, this.$t('laillistamispaivan-hakeminen-epaonnistui'))
       }
@@ -674,6 +718,16 @@
     async onDeleteLaillistamispaivanLiite() {
       this.laillistamisTiedotForm.laillistamispaivanLiite = null
       this.laillistamispaivaAsiakirjat = []
+    }
+
+    aiempiLaakarikoulutusChange(option: string) {
+      if (option === 'suomibelgia') {
+        this.laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia = true
+        this.laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia = false
+      } else {
+        this.laillistamisTiedotForm.laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia = true
+        this.laillistamisTiedotForm.laakarikoulutusSuoritettuSuomiTaiBelgia = false
+      }
     }
   }
 </script>

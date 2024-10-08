@@ -670,6 +670,7 @@ export type OmatTiedotLomakeErikoistuja = {
   laillistamispaiva?: string | null
   laillistamispaivanLiite?: File | null
   laakarikoulutusSuoritettuSuomiTaiBelgia: boolean
+  laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia: boolean
 }
 
 export type LaillistamistiedotLomakeKoulutettava = {
@@ -678,6 +679,7 @@ export type LaillistamistiedotLomakeKoulutettava = {
   laillistamispaiva?: string | null
   laillistamispaivanLiite?: File | null
   laakarikoulutusSuoritettuSuomiTaiBelgia: boolean
+  laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia: boolean
 }
 
 export type Laillistamistiedot = {
@@ -686,6 +688,7 @@ export type Laillistamistiedot = {
   laillistamistodistusNimi?: string | null
   laillistamistodistusTyyppi?: string | null
   laakarikoulutusSuoritettuSuomiTaiBelgia?: boolean | null
+  laakarikoulutusSuoritettuMuuKuinSuomiTaiBelgia?: boolean | null
 }
 
 export type Kayttajatiedot = {
