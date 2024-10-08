@@ -196,9 +196,9 @@
 
 <script lang="ts">
   import { parseISO } from 'date-fns'
-  import { differenceInDays } from 'date-fns/fp'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { daysBetween } from './dateUtils'
   import { tyoskentelyjaksotTaulukkoData } from './tyoskentelyjaksot-offline-data'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -607,16 +607,15 @@
 
           if (vahennettavat > 0) {
             tyoskentelyaika =
-              differenceInDays(
+              daysBetween(
                 parseISO(tj.alkamispaiva),
                 parseISO(tj.paattymispaiva || this.getISODateNow())
               ) - vahennettavat
           } else {
-            tyoskentelyaika =
-              differenceInDays(
-                parseISO(tj.alkamispaiva),
-                parseISO(tj.paattymispaiva || this.getISODateNow())
-              ) + 1
+            tyoskentelyaika = daysBetween(
+              parseISO(tj.alkamispaiva),
+              parseISO(tj.paattymispaiva || this.getISODateNow())
+            )
           }
 
           const tyoskentelyaikaOsaaika =
@@ -633,7 +632,7 @@
             if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
               const startDate = parseISO(poissaolo.alkamispaiva)
               const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate) + 1
+              const daysDifference = daysBetween(startDate, endDate)
               poissaoloaikaYhteensa +=
                 ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
             }
