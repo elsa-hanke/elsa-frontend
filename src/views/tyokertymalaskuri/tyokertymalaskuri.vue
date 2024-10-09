@@ -674,7 +674,7 @@
     ): Map<number, number> {
       const result = new Map<number, number>()
       const hyvaksiluettavatCounter: HyvaksiluettavatCounterData = {
-        hyvaksiluettavatDays: new Map(),
+        hyvaksiluettavatDays: new Map<string, number>(),
         hyvaksiluettavatPerYearMap: getHyvaksiluettavatPerYearMap(tyoskentelyjaksot)
       }
       const now = new Date()
@@ -683,7 +683,12 @@
           jakso.poissaolot
             .filter((poissaolo) => poissaolo.alkamispaiva)
             .map((poissaolo: TyokertymaLaskuriPoissaolo) => {
-              return { ...poissaolo, tyoskentelyjakso: jakso }
+              return {
+                ...poissaolo,
+                tyoskentelyjakso: jakso,
+                tyoskentelyjaksoId: jakso.id,
+                poissaolonSyyId: poissaolo.poissaolonSyy.id || 0
+              }
             })
         )
         .sort((a, b) => parseISO(a.alkamispaiva).getTime() - parseISO(b.alkamispaiva).getTime())
