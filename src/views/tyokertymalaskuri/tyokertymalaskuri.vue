@@ -560,7 +560,6 @@
       const vahennettavatPaivat = this.getVahennettavatPaivat(
         JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
       )
-      console.log(vahennettavatPaivat)
 
       this.tyoskentelyjaksotTaulukko.tilastot = {
         arvioErikoistumiseenHyvaksyttavista: 0,
@@ -684,18 +683,18 @@
           jakso.poissaolot
             .filter((poissaolo) => poissaolo.alkamispaiva)
             .map((poissaolo: TyokertymaLaskuriPoissaolo) => {
-              poissaolo.tyoskentelyjakso = jakso
-              return poissaolo
+              return { ...poissaolo, tyoskentelyjakso: jakso }
             })
         )
         .sort((a, b) => parseISO(a.alkamispaiva).getTime() - parseISO(b.alkamispaiva).getTime())
         .forEach((keskeytys: TyokertymaLaskuriPoissaolo) => {
           const tyoskentelyjaksoFactor =
             (keskeytys.tyoskentelyjakso?.osaaikaprosentti ?? 100) / 100.0
+
           const endDate = keskeytys.tyoskentelyjakso?.paattymispaiva
             ? parseISO(keskeytys.tyoskentelyjakso.paattymispaiva)
             : now
-          const effectiveEndDate = endDate > now ? now : endDate
+          const effectiveEndDate = endDate.getTime() > now.getTime() ? now : endDate
 
           const amountOfReducedDays = calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
             keskeytys,
@@ -710,7 +709,6 @@
             (result.get(tyoskentelyjaksoId) ?? 0) + amountOfReducedDays
           )
         })
-
       return result
     }
 
