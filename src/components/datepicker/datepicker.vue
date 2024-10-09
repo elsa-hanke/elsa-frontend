@@ -9,7 +9,7 @@
         maxlength="10"
         v-bind="$attrs"
         type="text"
-        @input="onDateStrInput"
+        @blur="onDateStrInput"
       ></b-form-input>
       <b-input-group-append>
         <b-form-datepicker
@@ -188,7 +188,9 @@
       return isValid(parsedDate)
     }
 
-    onDateStrInput(dateStr: string) {
+    onDateStrInput(event: FocusEvent) {
+      let dateStr = (event.target as HTMLInputElement).value
+      dateStr = this.parsePartialYear(dateStr)
       const isDate = dateStr && this.isValidLocalDate(dateStr)
       const parsedDate = isDate ? this.parseDate(dateStr) : null
       const formattedDate = parsedDate ? format(parsedDate, defaultDateFormat) : null
@@ -197,6 +199,22 @@
 
       this.$emit('update:value', formattedDate)
       this.$emit('input', formattedDate)
+    }
+
+    parsePartialYear(dateStr: string): string {
+      const dateParts = dateStr.split('.')
+      if (dateParts.length === 3) {
+        const day = dateParts[0]
+        const month = dateParts[1]
+        let year = dateParts[2]
+        if (year.length === 2) {
+          year = '20' + year
+        }
+        const formatted = `${day}.${month}.${year}`
+        this.form.dateStr = formatted
+        return formatted
+      }
+      return dateStr
     }
 
     parseDate(value: string): Date {
