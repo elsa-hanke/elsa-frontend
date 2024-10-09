@@ -1,7 +1,5 @@
 # ELSA-palvelun frontend
 
-[![Build Status](https://dev.azure.com/elsa-hanke/ELSA/_apis/build/status/elsa-hanke.elsa-frontend?branchName=main)](https://dev.azure.com/elsa-hanke/ELSA/_build/latest?definitionId=3&branchName=main)
-
 ## Projektin asennus
 
 ```
