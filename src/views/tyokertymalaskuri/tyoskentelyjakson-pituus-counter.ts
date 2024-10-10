@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { endOfYear, parseISO, startOfYear } from 'date-fns'
-import { differenceInDays } from 'date-fns/fp'
+
+import { daysBetween } from './dateUtils'
 
 import {
   HyvaksiluettavatCounterData,
@@ -39,7 +40,6 @@ export function calculateHyvaksiluettavatDaysLeft(
 
   keskeytykset.forEach((keskeytys: TyokertymaLaskuriPoissaolo) => {
     const tyoskentelyjaksoFactor = keskeytys.tyoskentelyjakso?.osaaikaprosentti || 100 / 100.0
-
     calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
       keskeytys,
       tyoskentelyjaksoFactor,
@@ -63,9 +63,13 @@ export function getHyvaksiluettavatPerYearMap(
   const minDate = new Date(
     Math.min(...tyoskentelyjaksot.map((j) => parseISO(j.alkamispaiva).getTime()))
   )
-  const maxDate = tyoskentelyjaksot.some((j) => j.paattymispaiva === null)
-    ? new Date()
-    : new Date(Math.max(...tyoskentelyjaksot.map((j) => parseISO(j.paattymispaiva)?.getTime())))
+  const maxDate = new Date(
+    Math.max(
+      ...tyoskentelyjaksot.map((j) =>
+        j.paattymispaiva === null ? Date.now() : parseISO(j.paattymispaiva).getTime()
+      )
+    )
+  )
 
   for (let year = minDate.getFullYear(); year <= maxDate.getFullYear(); year++) {
     hyvaksiluettavatPerYearMap.set(year, HYVAKSILUETTAVAT_DAYS)
@@ -81,8 +85,7 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
   calculateUntilDate: Date | null
 ): number {
   const endDate = getEndDate(parseISO(keskeytysaika.paattymispaiva!), calculateUntilDate)
-  const keskeytysaikaDaysBetween =
-    differenceInDays(parseISO(keskeytysaika.alkamispaiva!), endDate) + 1
+  const keskeytysaikaDaysBetween = daysBetween(parseISO(keskeytysaika.alkamispaiva!), endDate)
 
   if (keskeytysaikaDaysBetween < 1) return 0.0
 
@@ -112,7 +115,12 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
         tyoskentelyjaksoFactor
       )
       let reducedDaysTotal = 0.0
-      keskeytysaikaMap.forEach((days, year) => {
+      keskeytysaikaMap.forEach((days: number, year: number) => {
+        // Tarkistetaan hyväksiluettavat päivät vuosittaisesta määrästä ja
+        // vain kerran hyväksyttävien keskeytyksien (vanhempainvapaat) osalta
+        // poissaolokohtaisesta määrästä. Hyväksiluetaan näistä niin paljon kuin
+        // pystytään ja päivitetään molemmat laskurit.
+
         const hyvaksiLuettavatLeft = vahennetaanKerran
           ? Math.min(
               hyvaksiluettavatCounterData.hyvaksiluettavatPerYearMap.get(year)!,
@@ -124,6 +132,7 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
 
         const { amountOfReducedDays, hyvaksiluettavatUsed } =
           getAmountOfReducedDaysAndHyvaksiluettavatUsed(days, hyvaksiLuettavatLeft)
+
         if (vahennetaanKerran) {
           hyvaksiluettavatCounterData.hyvaksiluettavatDays.set(
             keskeytysaika.poissaolonSyy.nimi,
@@ -135,6 +144,7 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
             )
           )
         }
+
         hyvaksiluettavatCounterData.hyvaksiluettavatPerYearMap.set(
           year,
           Math.max(
@@ -158,14 +168,21 @@ function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
   let hyvaksiluettavatUsed = 0.0
 
   if (hyvaksiluettavatLeft === 0.0) {
+    // Jäljellä olevia hyväksiluettavia päiviä ei ole jäljellä, joten vähennetään
+    // keskeytysajan pituus.
     amountOfReducedDays = keskeytysaikaLength
   } else if (keskeytysaikaLength >= hyvaksiluettavatLeft) {
-    amountOfReducedDays = keskeytysaikaLength - hyvaksiluettavatLeft
+    // Keskeytysajan pituus on suurempi tai yhtä suuri kuin jäljellä olevien
+    // hyväksiluettavien päivien määrä, joten vähennetään työskentelyjaksosta
+    // keskeystysajan pituuden ja jäljellä olevien hyväksiluettavien päivien erotus sekä
+    // asetetaan jäljellä olevien hyväksiluettavien päivien määrä nollaan.
+    amountOfReducedDays = parseFloat((keskeytysaikaLength - hyvaksiluettavatLeft).toFixed(2))
     hyvaksiluettavatUsed = hyvaksiluettavatLeft
   } else {
+    // Keskeytysajan pituus on pienempi kuin jäljellä olevien hyväksiluettavien päivien määrä,
+    // vähennetään vain jäljellä olevien hyväksiluettavien päivien määrää.
     hyvaksiluettavatUsed = keskeytysaikaLength
   }
-
   return { amountOfReducedDays, hyvaksiluettavatUsed }
 }
 
@@ -180,10 +197,10 @@ function getKeskeytysaikaMap(
   const lastYear = endDate.getFullYear()
 
   if (currentYear === lastYear) {
-    const days = differenceInDays(startDate, endDate)
+    const days = daysBetween(startDate, endDate)
     keskeytysaikaMap.set(currentYear, days * keskeytysaikaFactor * tyoskentelyjaksoFactor)
   } else {
-    const daysInFirstYear = differenceInDays(startDate, endOfYear(startDate)) + 1
+    const daysInFirstYear = daysBetween(startDate, endOfYear(startDate))
     keskeytysaikaMap.set(
       currentYear,
       daysInFirstYear * keskeytysaikaFactor * tyoskentelyjaksoFactor
@@ -192,19 +209,17 @@ function getKeskeytysaikaMap(
     currentYear++
 
     while (currentYear < lastYear) {
-      const fullYearDays =
-        differenceInDays(
-          startOfYear(new Date(currentYear, 0, 1)),
-          endOfYear(startOfYear(new Date(currentYear, 0, 1)))
-        ) + 1
+      const fullYearDays = daysBetween(
+        startOfYear(new Date(currentYear, 0, 1)),
+        endOfYear(startOfYear(new Date(currentYear, 0, 1)))
+      )
       keskeytysaikaMap.set(currentYear, fullYearDays * keskeytysaikaFactor * tyoskentelyjaksoFactor)
       currentYear++
     }
 
-    const daysInLastYear = differenceInDays(startOfYear(new Date(lastYear, 0, 1)), endDate)
+    const daysInLastYear = daysBetween(startOfYear(new Date(lastYear, 0, 1)), endDate)
     keskeytysaikaMap.set(currentYear, daysInLastYear * keskeytysaikaFactor * tyoskentelyjaksoFactor)
   }
-
   return keskeytysaikaMap
 }
 

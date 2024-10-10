@@ -75,6 +75,7 @@
                             :key="chartKey"
                             :options="donutOptions"
                             :series="donutSeries"
+                            style="width: 500px"
                           ></apexchart>
                         </div>
                       </template>
@@ -195,9 +196,9 @@
 
 <script lang="ts">
   import { parseISO } from 'date-fns'
-  import { differenceInDays } from 'date-fns/fp'
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { daysBetween } from './dateUtils'
   import { tyoskentelyjaksotTaulukkoData } from './tyoskentelyjaksot-offline-data'
 
   import ElsaButton from '@/components/button/button.vue'
@@ -263,7 +264,7 @@
       },
       {
         key: 'tyoskentelyaikaLabel',
-        label: this.$t('tyoskentelyaika'),
+        label: this.$t('tyokertyma'),
         sortable: true
       },
       {
@@ -559,7 +560,6 @@
       const vahennettavatPaivat = this.getVahennettavatPaivat(
         JSON.parse(JSON.stringify(this.tyoskentelyjaksotTaulukko.tyoskentelyjaksot))
       )
-      console.log(vahennettavatPaivat)
 
       this.tyoskentelyjaksotTaulukko.tilastot = {
         arvioErikoistumiseenHyvaksyttavista: 0,
@@ -603,66 +603,72 @@
           const vahennettavat = vahennettavatPaivat.get(tj.id) || 0
 
           let tyoskentelyaika = 0
+          let tyokertyma = 0
 
           if (vahennettavat > 0) {
-            tyoskentelyaika =
-              differenceInDays(
+            tyokertyma =
+              daysBetween(
                 parseISO(tj.alkamispaiva),
                 parseISO(tj.paattymispaiva || this.getISODateNow())
               ) - vahennettavat
           } else {
-            tyoskentelyaika =
-              differenceInDays(
-                parseISO(tj.alkamispaiva),
-                parseISO(tj.paattymispaiva || this.getISODateNow())
-              ) + 1
+            tyokertyma = daysBetween(
+              parseISO(tj.alkamispaiva),
+              parseISO(tj.paattymispaiva || this.getISODateNow())
+            )
           }
 
-          const tyoskentelyaikaOsaaika =
-            tyoskentelyaika *
-            ((String(tj.kaytannonKoulutus) !==
+          const osaaikaProsentti =
+            (String(tj.kaytannonKoulutus) !==
             String(KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS)
               ? tj.osaaikaprosentti
-              : tj.kahdenvuodenosaaikaprosentti) /
-              100)
+              : tj.kahdenvuodenosaaikaprosentti) / 100
 
-          // let poissaolomaara = vahennettavatPaivat.get(tj.id) || 0
-          let poissaoloaikaYhteensa = 0
-          tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
-            if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
-              const startDate = parseISO(poissaolo.alkamispaiva)
-              const endDate = parseISO(poissaolo.paattymispaiva)
-              const daysDifference = differenceInDays(startDate, endDate) + 1
-              poissaoloaikaYhteensa +=
-                ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference
-            }
-          })
+          const tyokertymaOsaajalla = tyokertyma * osaaikaProsentti
+
+          tyoskentelyaika = daysBetween(
+            parseISO(tj.alkamispaiva),
+            parseISO(tj.paattymispaiva || this.getISODateNow())
+          )
+          const tyoskentelyaikaOsaajalla = tyoskentelyaika * osaaikaProsentti
+
+          // let poissaoloaikaYhteensa = 0
+          // tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
+          //   if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
+          //     const startDate = parseISO(poissaolo.alkamispaiva)
+          //     const endDate = parseISO(poissaolo.paattymispaiva)
+          //     const daysDifference = daysBetween(startDate, endDate)
+          //     poissaoloaikaYhteensa +=
+          //       ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference * osaaikaProsentti
+          //   }
+          // })
 
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
-            tyoskentelyaikaOsaaika + (vahennettavatPaivat.get(tj.id) || 0)
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += poissaoloaikaYhteensa
-          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyoskentelyaikaOsaaika
+            tyoskentelyaikaOsaajalla
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa +=
+            vahennettavat * osaaikaProsentti
+          this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertymaOsaajalla
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[0].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyokertymaOsaajalla
               break
             case KaytannonKoulutusTyyppi.MUU_ERIKOISALA:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[1].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyokertymaOsaajalla
               break
             case KaytannonKoulutusTyyppi.KAHDEN_VUODEN_KLIININEN_TYOKOKEMUS:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[2].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyokertymaOsaajalla
               break
             case KaytannonKoulutusTyyppi.TERVEYSKESKUSTYO:
               this.tyoskentelyjaksotTaulukko.tilastot.kaytannonKoulutus[3].suoritettu +=
-                tyoskentelyaikaOsaaika
+                tyokertymaOsaajalla
               break
           }
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyjaksot.push({
             id: index + 1,
-            suoritettu: tyoskentelyaikaOsaaika
+            suoritettu: tyokertymaOsaajalla
           })
         }
       )
@@ -675,7 +681,7 @@
     ): Map<number, number> {
       const result = new Map<number, number>()
       const hyvaksiluettavatCounter: HyvaksiluettavatCounterData = {
-        hyvaksiluettavatDays: new Map(),
+        hyvaksiluettavatDays: new Map<string, number>(),
         hyvaksiluettavatPerYearMap: getHyvaksiluettavatPerYearMap(tyoskentelyjaksot)
       }
       const now = new Date()
@@ -684,18 +690,23 @@
           jakso.poissaolot
             .filter((poissaolo) => poissaolo.alkamispaiva)
             .map((poissaolo: TyokertymaLaskuriPoissaolo) => {
-              poissaolo.tyoskentelyjakso = jakso
-              return poissaolo
+              return {
+                ...poissaolo,
+                tyoskentelyjakso: jakso,
+                tyoskentelyjaksoId: jakso.id,
+                poissaolonSyyId: poissaolo.poissaolonSyy.id || 0
+              }
             })
         )
         .sort((a, b) => parseISO(a.alkamispaiva).getTime() - parseISO(b.alkamispaiva).getTime())
         .forEach((keskeytys: TyokertymaLaskuriPoissaolo) => {
           const tyoskentelyjaksoFactor =
             (keskeytys.tyoskentelyjakso?.osaaikaprosentti ?? 100) / 100.0
+
           const endDate = keskeytys.tyoskentelyjakso?.paattymispaiva
             ? parseISO(keskeytys.tyoskentelyjakso.paattymispaiva)
             : now
-          const effectiveEndDate = endDate > now ? now : endDate
+          const effectiveEndDate = endDate.getTime() > now.getTime() ? now : endDate
 
           const amountOfReducedDays = calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
             keskeytys,
@@ -710,7 +721,6 @@
             (result.get(tyoskentelyjaksoId) ?? 0) + amountOfReducedDays
           )
         })
-
       return result
     }
 
@@ -886,6 +896,6 @@
   }
 
   .donut-chart {
-    max-width: 450px;
+    max-width: 500px;
   }
 </style>
