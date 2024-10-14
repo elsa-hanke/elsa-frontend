@@ -185,11 +185,9 @@
                     {{ $t('useampi-opinto-oikeus-suostumus-erikoistuja') }}
                     <label class="d-block">
                       <span v-for="(opintooikeus, index) in muutOpintooikeudet" :key="index">
-                        <template v-if="opintooikeus.erikoisalaId !== 61">
-                          {{ opintooikeus.erikoisalaNimi }},
-                          {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
-                          <br />
-                        </template>
+                        {{ opintooikeus.erikoisalaNimi }},
+                        {{ $t(`yliopisto-nimi.${opintooikeus.yliopistoNimi}`) }}
+                        <br />
                       </span>
                     </label>
                   </b-form-checkbox>
