@@ -33,7 +33,7 @@
         </b-col>
         <b-col lg="4">
           <h5>{{ $t('paattymispaiva') }}</h5>
-          <p>{{ $date(sp.alkamispaiva) }}</p>
+          <p>{{ $date(sp.paattymispaiva) }}</p>
         </b-col>
       </b-row>
       <b-row>
