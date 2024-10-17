@@ -13,6 +13,49 @@ import { PoissaolonSyyTyyppi } from '@/utils/constants'
 
 const HYVAKSILUETTAVAT_DAYS = 30.0
 
+export function getVahennettavatPaivat(
+  tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[]
+): Map<number, number> {
+  const result = new Map<number, number>()
+  const hyvaksiluettavatCounter: HyvaksiluettavatCounterData = {
+    hyvaksiluettavatDays: new Map<string, number>(),
+    hyvaksiluettavatPerYearMap: getHyvaksiluettavatPerYearMap(tyoskentelyjaksot)
+  }
+  const now = new Date()
+  tyoskentelyjaksot
+    .flatMap((jakso: TyokertymaLaskuriTyoskentelyjakso) =>
+      jakso.poissaolot
+        .filter((poissaolo) => poissaolo.alkamispaiva)
+        .map((poissaolo: TyokertymaLaskuriPoissaolo) => {
+          return {
+            ...poissaolo,
+            tyoskentelyjakso: jakso,
+            tyoskentelyjaksoId: jakso.id,
+            poissaolonSyyId: poissaolo.poissaolonSyy.id || 0
+          }
+        })
+    )
+    .sort((a, b) => parseISO(a.alkamispaiva).getTime() - parseISO(b.alkamispaiva).getTime())
+    .forEach((keskeytys: TyokertymaLaskuriPoissaolo) => {
+      const tyoskentelyjaksoFactor = (keskeytys.tyoskentelyjakso?.osaaikaprosentti ?? 100) / 100.0
+
+      const endDate = keskeytys.tyoskentelyjakso?.paattymispaiva
+        ? parseISO(keskeytys.tyoskentelyjakso.paattymispaiva)
+        : now
+      const effectiveEndDate = endDate.getTime() > now.getTime() ? now : endDate
+
+      const amountOfReducedDays = calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
+        keskeytys,
+        tyoskentelyjaksoFactor,
+        hyvaksiluettavatCounter,
+        effectiveEndDate
+      )
+      const tyoskentelyjaksoId = keskeytys.tyoskentelyjakso.id
+      result.set(tyoskentelyjaksoId, (result.get(tyoskentelyjaksoId) ?? 0) + amountOfReducedDays)
+    })
+  return result
+}
+
 export function calculateHyvaksiluettavatDaysLeft(
   tyoskentelyjaksot: TyokertymaLaskuriTyoskentelyjakso[],
   calculateUntilDate: Date | null
@@ -102,12 +145,16 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
     }
     case PoissaolonSyyTyyppi.VAHENNETAAN_YLIMENEVA_AIKA_PER_VUOSI: {
       if (vahennetaanKerran) {
-        hyvaksiluettavatCounterData.hyvaksiluettavatDays.set(
-          keskeytysaika.poissaolonSyy.nimi,
-          hyvaksiluettavatCounterData.hyvaksiluettavatDays.get(keskeytysaika.poissaolonSyy.nimi) ||
+        if (
+          !hyvaksiluettavatCounterData.hyvaksiluettavatDays.has(keskeytysaika.poissaolonSyy.nimi)
+        ) {
+          hyvaksiluettavatCounterData.hyvaksiluettavatDays.set(
+            keskeytysaika.poissaolonSyy.nimi,
             30.0
-        )
+          )
+        }
       }
+
       const keskeytysaikaMap = getKeskeytysaikaMap(
         parseISO(keskeytysaika.alkamispaiva!),
         endDate,
@@ -160,7 +207,7 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
   return 0.0
 }
 
-function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
+export function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
   keskeytysaikaLength: number,
   hyvaksiluettavatLeft: number
 ): { amountOfReducedDays: number; hyvaksiluettavatUsed: number } {
@@ -186,7 +233,7 @@ function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
   return { amountOfReducedDays, hyvaksiluettavatUsed }
 }
 
-function getKeskeytysaikaMap(
+export function getKeskeytysaikaMap(
   startDate: Date,
   endDate: Date,
   keskeytysaikaFactor: number,
