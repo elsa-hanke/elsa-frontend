@@ -145,12 +145,16 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
     }
     case PoissaolonSyyTyyppi.VAHENNETAAN_YLIMENEVA_AIKA_PER_VUOSI: {
       if (vahennetaanKerran) {
-        hyvaksiluettavatCounterData.hyvaksiluettavatDays.set(
-          keskeytysaika.poissaolonSyy.nimi,
-          hyvaksiluettavatCounterData.hyvaksiluettavatDays.get(keskeytysaika.poissaolonSyy.nimi) ||
+        if (
+          !hyvaksiluettavatCounterData.hyvaksiluettavatDays.has(keskeytysaika.poissaolonSyy.nimi)
+        ) {
+          hyvaksiluettavatCounterData.hyvaksiluettavatDays.set(
+            keskeytysaika.poissaolonSyy.nimi,
             30.0
-        )
+          )
+        }
       }
+
       const keskeytysaikaMap = getKeskeytysaikaMap(
         parseISO(keskeytysaika.alkamispaiva!),
         endDate,
@@ -203,7 +207,7 @@ export function calculateAmountOfReducedDaysAndUpdateHyvaksiluettavatCounter(
   return 0.0
 }
 
-function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
+export function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
   keskeytysaikaLength: number,
   hyvaksiluettavatLeft: number
 ): { amountOfReducedDays: number; hyvaksiluettavatUsed: number } {
@@ -229,7 +233,7 @@ function getAmountOfReducedDaysAndHyvaksiluettavatUsed(
   return { amountOfReducedDays, hyvaksiluettavatUsed }
 }
 
-function getKeskeytysaikaMap(
+export function getKeskeytysaikaMap(
   startDate: Date,
   endDate: Date,
   keskeytysaikaFactor: number,
