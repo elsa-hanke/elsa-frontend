@@ -33,7 +33,8 @@
         </b-col>
         <b-col lg="4">
           <h5>{{ $t('paattymispaiva') }}</h5>
-          <p>{{ $date(sp.paattymispaiva) }}</p>
+          <p v-if="sp.paattymispaiva">{{ $date(sp.paattymispaiva) }}</p>
+          <p v-else>Kesken</p>
         </b-col>
       </b-row>
       <b-row>
