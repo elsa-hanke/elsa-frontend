@@ -534,6 +534,7 @@
 </template>
 
 <script lang="ts">
+  import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
@@ -554,7 +555,8 @@
   import {
     ValmistumispyyntoArviointienTila,
     ValmistumispyyntoVirkailijanTarkistus,
-    ValmistumispyyntoHyvaksynta
+    ValmistumispyyntoHyvaksynta,
+    ElsaError
   } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { phoneNumber } from '@/utils/constants'
@@ -691,7 +693,14 @@
           this.$router.replace({ name: 'valmistumispyynnot' })
         }
       } catch (err) {
-        toastFail(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-epaonnistui'))
+        const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('valmistumispyynto-hyvaksynta-lahetys-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('valmistumispyynto-hyvaksynta-lahetys-epaonnistui')
+        )
       }
       this.sending = false
     }
@@ -713,7 +722,14 @@
           this.$router.replace({ name: 'valmistumispyynnot' })
         }
       } catch (err) {
-        toastFail(this, this.$t('valmistumispyynto-hyvaksynta-palautus-epaonnistui'))
+        const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('valmistumispyynto-hyvaksynta-palautus-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('valmistumispyynto-hyvaksynta-palautus-epaonnistui')
+        )
       }
       this.sending = false
     }

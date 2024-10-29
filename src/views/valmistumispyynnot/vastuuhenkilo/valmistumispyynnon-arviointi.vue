@@ -279,6 +279,7 @@
 </template>
 
 <script lang="ts">
+  import { AxiosError } from 'axios'
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
@@ -296,6 +297,7 @@
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import {
+    ElsaError,
     ValmistumispyyntoArviointienTila,
     ValmistumispyyntoLomakeOsaamisenArviointi
   } from '@/types'
@@ -416,7 +418,14 @@
         this.$emit('skipRouteExitConfirm', true)
         toastSuccess(this, this.$t('osaamisen-arviointi-tallennettu'))
       } catch (err) {
-        toastFail(this, this.$t('osaamisen-arvioinnin-tallentaminen-epaonnistui'))
+        const axiosError = err as AxiosError<ElsaError>
+        const message = axiosError?.response?.data?.message
+        toastFail(
+          this,
+          message
+            ? `${this.$t('osaamisen-arvioinnin-tallentaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('osaamisen-arvioinnin-tallentaminen-epaonnistui')
+        )
       }
       this.sending = false
     }
