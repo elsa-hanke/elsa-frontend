@@ -91,7 +91,7 @@
             <div class="dropdown-item dropdown-item__header mt-1 pb-1">
               <span class="font-weight-500">{{ $t('valitse-rooli') }}</span>
             </div>
-            <b-dropdown-item @click="changeToErikoistuja">
+            <b-dropdown-item v-if="$hasErikoistujaRole()" @click="changeToErikoistuja">
               <div
                 class="d-flex"
                 :class="{

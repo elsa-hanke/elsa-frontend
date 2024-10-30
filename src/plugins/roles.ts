@@ -10,6 +10,11 @@ export class RolesPlugin {
       return store.getters['auth/account'].activeAuthority === ELSA_ROLE.ErikoistuvaLaakari
     }
 
+    vue.prototype.$hasErikoistujaRole = (): boolean => {
+      const authorities = store.getters['auth/account'].authorities
+      return authorities.includes(ELSA_ROLE.ErikoistuvaLaakari)
+    }
+
     vue.prototype.$isYekKoulutettava = (): boolean => {
       return store.getters['auth/account'].activeAuthority === ELSA_ROLE.YEKKoulutettava
     }
@@ -82,6 +87,7 @@ declare module 'vue/types/vue' {
     $isVirkailija: Function
     $hasKouluttajaRole: Function
     $hasYekRole: Function
+    $hasErikoistujaRole: Function
   }
 }
 
