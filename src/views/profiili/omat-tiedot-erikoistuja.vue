@@ -395,8 +395,9 @@
 
     async mounted() {
       try {
+        const role = this.$isErikoistuva() ? 'erikoistuva-laakari' : 'yek-koulutettava'
         const laillistamistiedot: Laillistamistiedot = (
-          await axios.get('/erikoistuva-laakari/laillistamispaiva')
+          await axios.get(`/${role}/laillistamispaiva`)
         ).data
         this.form.laillistamispaiva = laillistamistiedot.laillistamispaiva
         if (laillistamistiedot.laakarikoulutusSuoritettuSuomiTaiBelgia) {
