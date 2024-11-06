@@ -479,7 +479,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: TerveyskeskuskoulutusjaksonHyvaksyntaPyyntoYek,
-          allowedRoles: [ELSA_ROLE.ErikoistuvaLaakari],
+          allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
         }
       },
