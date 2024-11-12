@@ -600,18 +600,10 @@
           let tyoskentelyaika = 0
           let tyokertyma = 0
 
-          if (vahennettavat > 0) {
-            tyokertyma =
-              daysBetween(
-                parseISO(tj.alkamispaiva),
-                parseISO(tj.paattymispaiva || this.getISODateNow())
-              ) - vahennettavat
-          } else {
-            tyokertyma = daysBetween(
-              parseISO(tj.alkamispaiva),
-              parseISO(tj.paattymispaiva || this.getISODateNow())
-            )
-          }
+          tyokertyma = daysBetween(
+            parseISO(tj.alkamispaiva),
+            parseISO(tj.paattymispaiva || this.getISODateNow())
+          )
 
           const osaaikaProsentti =
             (String(tj.kaytannonKoulutus) !==
@@ -619,7 +611,7 @@
               ? tj.osaaikaprosentti
               : tj.kahdenvuodenosaaikaprosentti) / 100
 
-          const tyokertymaOsaajalla = tyokertyma * osaaikaProsentti
+          const tyokertymaOsaajalla = tyokertyma * osaaikaProsentti - vahennettavat
 
           tyoskentelyaika = daysBetween(
             parseISO(tj.alkamispaiva),
