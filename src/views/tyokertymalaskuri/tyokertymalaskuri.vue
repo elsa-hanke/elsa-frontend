@@ -627,21 +627,9 @@
           )
           const tyoskentelyaikaOsaajalla = tyoskentelyaika * osaaikaProsentti
 
-          // let poissaoloaikaYhteensa = 0
-          // tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
-          //   if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
-          //     const startDate = parseISO(poissaolo.alkamispaiva)
-          //     const endDate = parseISO(poissaolo.paattymispaiva)
-          //     const daysDifference = daysBetween(startDate, endDate)
-          //     poissaoloaikaYhteensa +=
-          //       ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference * osaaikaProsentti
-          //   }
-          // })
-
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
             tyoskentelyaikaOsaajalla
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa +=
-            vahennettavat * osaaikaProsentti
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += vahennettavat
           this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertymaOsaajalla
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
