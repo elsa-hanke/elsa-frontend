@@ -600,18 +600,10 @@
           let tyoskentelyaika = 0
           let tyokertyma = 0
 
-          if (vahennettavat > 0) {
-            tyokertyma =
-              daysBetween(
-                parseISO(tj.alkamispaiva),
-                parseISO(tj.paattymispaiva || this.getISODateNow())
-              ) - vahennettavat
-          } else {
-            tyokertyma = daysBetween(
-              parseISO(tj.alkamispaiva),
-              parseISO(tj.paattymispaiva || this.getISODateNow())
-            )
-          }
+          tyokertyma = daysBetween(
+            parseISO(tj.alkamispaiva),
+            parseISO(tj.paattymispaiva || this.getISODateNow())
+          )
 
           const osaaikaProsentti =
             (String(tj.kaytannonKoulutus) !==
@@ -619,7 +611,7 @@
               ? tj.osaaikaprosentti
               : tj.kahdenvuodenosaaikaprosentti) / 100
 
-          const tyokertymaOsaajalla = tyokertyma * osaaikaProsentti
+          const tyokertymaOsaajalla = tyokertyma * osaaikaProsentti - vahennettavat
 
           tyoskentelyaika = daysBetween(
             parseISO(tj.alkamispaiva),
@@ -627,21 +619,9 @@
           )
           const tyoskentelyaikaOsaajalla = tyoskentelyaika * osaaikaProsentti
 
-          // let poissaoloaikaYhteensa = 0
-          // tj.poissaolot.forEach((poissaolo: TyokertymaLaskuriPoissaolo) => {
-          //   if (poissaolo.alkamispaiva && poissaolo.paattymispaiva) {
-          //     const startDate = parseISO(poissaolo.alkamispaiva)
-          //     const endDate = parseISO(poissaolo.paattymispaiva)
-          //     const daysDifference = daysBetween(startDate, endDate)
-          //     poissaoloaikaYhteensa +=
-          //       ((poissaolo.poissaoloprosentti || 100) / 100) * daysDifference * osaaikaProsentti
-          //   }
-          // })
-
           this.tyoskentelyjaksotTaulukko.tilastot.tyoskentelyaikaYhteensa +=
             tyoskentelyaikaOsaajalla
-          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa +=
-            vahennettavat * osaaikaProsentti
+          this.tyoskentelyjaksotTaulukko.tilastot.poissaoloaikaYhteensa += vahennettavat
           this.tyoskentelyjaksotTaulukko.tilastot.tyokertymaYhteensa += tyokertymaOsaajalla
           switch (tj.kaytannonKoulutus) {
             case KaytannonKoulutusTyyppi.OMAN_ERIKOISALAN_KOULUTUS:
