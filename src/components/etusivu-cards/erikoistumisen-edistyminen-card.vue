@@ -137,7 +137,7 @@
                 <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-1" />
                 <span>
                   {{ $t('yek-suoritettu') }}
-                  {{ $date(edistyminen.opintooikeudenMyontamispaiva) }}
+                  {{ $date(edistyminen.yekSuoritusPvm) }}
                 </span>
               </div>
             </div>
