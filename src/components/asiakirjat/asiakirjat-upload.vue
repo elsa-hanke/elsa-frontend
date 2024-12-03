@@ -53,6 +53,9 @@
             <li v-if="filesExceedingMaxSize.length > 0">
               {{ $t('asiakirjan-maksimi-tiedostokoko-ylitetty') }}
             </li>
+            <li v-if="filesBelowMinSize.length > 0">
+              {{ $t('asiakirjan-minimi-tiedostokoko-alitettu') }}
+            </li>
           </ul>
         </div>
         <div v-else>
@@ -99,6 +102,14 @@
               </li>
             </ul>
           </span>
+          <span v-if="filesBelowMinSize.length > 0">
+            {{ $t('asiakirjan-minimi-tiedostokoko-alitettu') }}
+            <ul>
+              <li v-for="(file, index) in filesExceedingMaxSize" :key="index">
+                {{ file.name }}
+              </li>
+            </ul>
+          </span>
         </div>
       </div>
     </b-alert>
@@ -110,6 +121,8 @@
   // Maksimi tiedostokoko 20 Mt
   const maxFileSize = 20 * 1024 * 1024
   const maxFilesTotalSize = 100 * 1024 * 1024
+  const minFileSize = 100
+  const minPdfFileSize = 10 * 1024
 
   @Component
   export default class AsiakirjatUpload extends Vue {
@@ -119,6 +132,7 @@
     duplicateFilesInCurrentView: File[] = []
     duplicateFilesInOtherViews: File[] = []
     selectedFilesCount = 0
+    filesBelowMinSize: File[] = []
 
     @Prop({ required: false })
     uploading?: boolean
@@ -161,6 +175,7 @@
       this.filesOfWrongType = this.getFilesOfWrongType(fileArray)
       this.duplicateFilesInCurrentView = this.getduplicateFilesInCurrentView(fileArray)
       this.duplicateFilesInOtherViews = this.getduplicateFilesInOtherViews(fileArray)
+      this.filesBelowMinSize = this.getFilesBelowMinSize(fileArray)
 
       if (!this.hasErrors) {
         this.selectedFilesCount = 0
@@ -188,12 +203,20 @@
       return files.filter((file) => this.existingFileNamesInOtherViews?.includes(file.name))
     }
 
+    // Yritetään suodattaa tyhjät tiedostot pois (PDF/10kt, muut 100b)
+    getFilesBelowMinSize(files: File[]): File[] {
+      return files.filter(
+        (file) => file.size < (file.type === 'application/pdf' ? minPdfFileSize : minFileSize)
+      )
+    }
+
     onDismissAlert() {
       this.maxFilesTotalSizeExceeded = false
       this.filesExceedingMaxSize = []
       this.filesOfWrongType = []
       this.duplicateFilesInCurrentView = []
       this.duplicateFilesInOtherViews = []
+      this.filesBelowMinSize = []
     }
 
     get uid() {
@@ -206,7 +229,8 @@
         this.filesExceedingMaxSize.length > 0 ||
         this.filesOfWrongType.length > 0 ||
         this.duplicateFilesInCurrentView.length > 0 ||
-        this.duplicateFilesInOtherViews.length > 0
+        this.duplicateFilesInOtherViews.length > 0 ||
+        this.filesBelowMinSize.length > 0
       )
     }
   }

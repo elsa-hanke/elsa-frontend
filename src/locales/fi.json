@@ -159,6 +159,7 @@
   "asiakirjojen-tallentaminen-epaonnistui": "Tiedostojen tallennus epäonnistui",
   "asiakirjojen-tallentaminen-onnistui": "Asiakirjojen tallennus onnistui",
   "asiakirjojen-yhteenlaskettu-koko-ylitetty": "Asiakirjojen yhteenlaskettu koko ylitti sallitun maksimikoon: 100 Mt",
+  "asiakirjan-minimi-tiedostokoko-alitettu": "Asiakirjan koko on liian pieni. Tyhjää asiakirjaa ei voi ladata.",
   "avaa": "Avaa",
   "avaa-arviointi": "Avaa arviointi",
   "avoimet": "Avoimet",
