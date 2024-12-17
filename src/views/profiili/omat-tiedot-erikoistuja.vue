@@ -251,7 +251,7 @@
               :aria-describedby="`${uid}-feedback`"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
+              {{ $t('tarkista-sahkoposti') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
