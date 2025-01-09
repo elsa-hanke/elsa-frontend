@@ -98,6 +98,32 @@
               ></erikoistuva-details>
             </div>
             <hr />
+            <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
+            <div>
+              <h5>
+                {{ $t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen') }}
+              </h5>
+              <p>
+                {{ $t('kylla') }}
+              </p>
+            </div>
+            <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
+              <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
+              <b-row>
+                <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
+                  <h5>{{ $t('paivays') }}</h5>
+                  <p>
+                    {{ $date(valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika) }}
+                  </p>
+                </b-col>
+                <b-col>
+                  <h5>{{ $t('vastuuhenkilon-nimi-ja-nimike') }}</h5>
+                  <p>
+                    {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi }}
+                  </p>
+                </b-col>
+              </b-row>
+            </div>
             <div v-if="odottaaHyvaksyntaa">
               <b-row>
                 <b-col lg="4">
@@ -142,33 +168,6 @@
                       </b-form-invalid-feedback>
                     </template>
                   </elsa-form-group>
-                </b-col>
-              </b-row>
-              <hr />
-            </div>
-            <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
-            <div>
-              <h5>
-                {{ $t('erikoistujan-osaaminen-riittavalla-tasolla-valmistumiseen') }}
-              </h5>
-              <p>
-                {{ $t('kylla') }}
-              </p>
-            </div>
-            <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
-              <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
-              <b-row>
-                <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
-                  <h5>{{ $t('paivays') }}</h5>
-                  <p>
-                    {{ $date(valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika) }}
-                  </p>
-                </b-col>
-                <b-col>
-                  <h5>{{ $t('vastuuhenkilon-nimi-ja-nimike') }}</h5>
-                  <p>
-                    {{ valmistumispyynto.vastuuhenkiloOsaamisenArvioijaNimi }}
-                  </p>
                 </b-col>
               </b-row>
             </div>
