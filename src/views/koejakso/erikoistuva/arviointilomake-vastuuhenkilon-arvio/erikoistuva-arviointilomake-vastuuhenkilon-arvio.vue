@@ -89,8 +89,11 @@
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
-                <div>
+                <div v-if="waitingForVirkailija">
                   {{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}
+                </div>
+                <div v-else>
+                  {{ $t('virkailijan-arvio-tila-odottaa-hyvaksyntaa') }}
                 </div>
               </div>
             </b-alert>
@@ -587,6 +590,10 @@
     validateKoulutussuunnitelmaHyvaksytty() {
       const { $dirty, $error } = this.$v.koulutussuunnitelmaHyvaksytty as any
       return $dirty ? !$error : null
+    }
+
+    get waitingForVirkailija() {
+      return this.koejaksoData.vastuuhenkilonArvio.virkailija?.sopimusHyvaksytty
     }
 
     get waitingForAcceptance() {
