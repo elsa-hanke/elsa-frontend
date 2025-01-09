@@ -223,7 +223,7 @@
               :aria-describedby="`${uid}-feedback`"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
+              {{ $t('tarkista-sahkoposti') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -296,7 +296,7 @@
   import { TranslateResult } from 'vue-i18n'
   import { Component, Vue, Prop, Mixins } from 'vue-property-decorator'
   import { Validation, validationMixin } from 'vuelidate'
-  import { minLength, required } from 'vuelidate/lib/validators'
+  import { minLength, required, email } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
@@ -332,7 +332,8 @@
       return {
         form: {
           email: {
-            required
+            required,
+            email
           },
           phoneNumber: {
             phoneNumber

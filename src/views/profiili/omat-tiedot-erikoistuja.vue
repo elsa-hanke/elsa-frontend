@@ -251,7 +251,7 @@
               :aria-describedby="`${uid}-feedback`"
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
+              {{ $t('tarkista-sahkoposti') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -322,7 +322,7 @@
   import axios, { AxiosError } from 'axios'
   import Avatar from 'vue-avatar'
   import { Component, Vue, Prop } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
+  import { email, required } from 'vuelidate/lib/validators'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -359,7 +359,8 @@
     validations: {
       form: {
         email: {
-          required
+          required,
+          email
         },
         phoneNumber: {
           phoneNumber
