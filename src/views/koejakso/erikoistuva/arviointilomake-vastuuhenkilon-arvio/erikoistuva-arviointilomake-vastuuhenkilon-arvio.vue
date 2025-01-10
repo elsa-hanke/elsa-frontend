@@ -593,7 +593,7 @@
     }
 
     get waitingForVirkailija() {
-      return this.koejaksoData.vastuuhenkilonArvio.virkailija?.sopimusHyvaksytty
+      return this.koejaksoData.vastuuhenkilonArvio?.virkailija?.sopimusHyvaksytty
     }
 
     get waitingForAcceptance() {
