@@ -1499,7 +1499,7 @@
   "vahvista-lomakkeen-tyhjennys": "Vahvista lomakkeen tyhjennys",
   "vahvista-lomakkeen-tyhjennys-selite": "Tyhjennyksen jälkeen lomake pitää täyttää uudelleen.",
   "vahvista-poistuminen-tallentamatta": "Vahvista poistuminen tallentamatta",
-  "vahvista-pyyda-vastuuhenkilon-arvio": "Lähetyksen jälkeen lomake menee vastuuhenkilön käsiteltäväksi. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Lähetyksen jälkeen et voi enää muokata lomaketta.",
+  "vahvista-pyyda-vastuuhenkilon-arvio": "Lähetyksen jälkeen lomake menee virkailijan tarkistettavaksi ja sen jälkeen vastuuhenkilön arvioitavaksi. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-sahkopostiosoite": "Vahvista sähköpostiosoite",
   "vahvista-seurantajakson-arviointi": "Lähetyksen jälkeen seurantajakso on arvioitu ja tieto tästä lähetetään erikoistujalle.",
   "vahvista-seurantajakson-hyvaksynta": "Lähetyksen jälkeen seurantajakso on arvioitu sekä hyväksytty ja tieto tästä lähetetään erikoistujalle.",
@@ -1676,7 +1676,7 @@
   "vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti": "Koejakson arvioinnin allekirjoitus onnistui",
   "vastuuhenkilon-arvio-allekirjoitus-epaonnistui": "Koejakson arvioinnin allekirjoitus epäonnistui",
   "vastuuhenkilon-arvio-ingressi-sisalto": {
-    "kuvaus": "Pyydä vastuuhenkilöä antamaan arvio koejaksosta. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Tarkista ennen lähetystä, että",
+    "kuvaus": "Pyydä vastuuhenkilöä antamaan arvio koejaksosta. Lomake siirtyy ensin virkailijalle tarkistettavaksi ja sen jälkeen vastuuhenkilölle arvioitavaksi. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Tarkista ennen lähetystä, että",
     "lista": {
       "item1": {
         "linkki": "koejakson päänäkymässä.",
@@ -1717,7 +1717,7 @@
   "virkailija-etusivu-seuranta-otsikko": "Erikoislääkärikoulutus",
   "virkailija-etusivu-seuranta-yek-otsikko": "Yleislääketieteen erityiskoulutus (YEK)",
   "virkailija-lisatty": "Uusi virkailija lisätty",
-  "virkailijan-arvio-tila-odottaa-hyvaksyntaa": "Odottaa virkailijan hyväksyntää. Saat ilmoituksen sähköpostiisi, kun virkailija on tehnyt hyväksynnän. Et voi enää muokata lomaketta.",
+  "virkailijan-arvio-tila-odottaa-hyvaksyntaa": "Odottaa virkailijan hyväksyntää. Saat ilmoituksen sähköpostiisi, kun vastuuhenkilö on tehnyt hyväksynnän. Et voi enää muokata lomaketta.",
   "virkailijan-tarkistus": "Koejakson tarkistus",
   "virkailijan-tarkistus-lahetetty-onnistuneesti": "Virkailijan tarkistus lähetetty onnistuneesti",
   "virkailijan-tarkistus-lahetys-epaonnistui": "Virkailijan tarkistuksen lähetys epäonnistui",
