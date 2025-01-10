@@ -249,9 +249,24 @@
               v-model="form.email"
               :state="validateState('email')"
               :aria-describedby="`${uid}-feedback`"
+              @input="needEmailConfirm = true"
+              @copy.prevent
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
               {{ $t('tarkista-sahkoposti') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group v-if="needEmailConfirm" :label="$t('vahvista-sahkopostiosoite')">
+          <template #default="{ uid }">
+            <b-form-input
+              :id="uid"
+              v-model="confirmEmailValue"
+              :state="validateState('emailConfirm')"
+              :aria-describedby="`${uid}-feedback`"
+            ></b-form-input>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('sahkopostiosoitteet-eivat-tasmaa') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -355,22 +370,32 @@
       ElsaButton,
       ElsaFormError,
       ElsaFormGroup
-    },
-    validations: {
-      form: {
-        email: {
-          required,
-          email
-        },
-        phoneNumber: {
-          phoneNumber
-        }
-      }
     }
   })
   export default class OmatTiedotErikoistuja extends Vue {
     @Prop({ required: false, default: false })
     editing!: boolean
+    needEmailConfirm = false
+    confirmEmailValue = ''
+
+    validations() {
+      return {
+        form: {
+          email: {
+            required,
+            email
+          },
+          emailConfirm: {
+            emailConfirmed: () => {
+              return this.needEmailConfirm && this.form.email === this.confirmEmailValue
+            }
+          },
+          phoneNumber: {
+            phoneNumber
+          }
+        }
+      }
+    }
 
     $refs!: {
       laillistamispaiva: ElsaFormDatepicker
