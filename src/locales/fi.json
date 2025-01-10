@@ -1499,7 +1499,7 @@
   "vahvista-lomakkeen-tyhjennys": "Vahvista lomakkeen tyhjennys",
   "vahvista-lomakkeen-tyhjennys-selite": "Tyhjennyksen jälkeen lomake pitää täyttää uudelleen.",
   "vahvista-poistuminen-tallentamatta": "Vahvista poistuminen tallentamatta",
-  "vahvista-pyyda-vastuuhenkilon-arvio": "Lähetyksen jälkeen lomake menee vastuuhenkilön käsiteltäväksi. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Lähetyksen jälkeen et voi enää muokata lomaketta.",
+  "vahvista-pyyda-vastuuhenkilon-arvio": "Lähetyksen jälkeen lomake menee virkailijan tarkistettavaksi ja sen jälkeen vastuuhenkilön arvioitavaksi. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Lähetyksen jälkeen et voi enää muokata lomaketta.",
   "vahvista-sahkopostiosoite": "Vahvista sähköpostiosoite",
   "vahvista-seurantajakson-arviointi": "Lähetyksen jälkeen seurantajakso on arvioitu ja tieto tästä lähetetään erikoistujalle.",
   "vahvista-seurantajakson-hyvaksynta": "Lähetyksen jälkeen seurantajakso on arvioitu sekä hyväksytty ja tieto tästä lähetetään erikoistujalle.",
