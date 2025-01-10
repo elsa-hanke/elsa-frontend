@@ -1676,7 +1676,7 @@
   "vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti": "Koejakson arvioinnin allekirjoitus onnistui",
   "vastuuhenkilon-arvio-allekirjoitus-epaonnistui": "Koejakson arvioinnin allekirjoitus epäonnistui",
   "vastuuhenkilon-arvio-ingressi-sisalto": {
-    "kuvaus": "Pyydä vastuuhenkilöä antamaan arvio koejaksosta. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Tarkista ennen lähetystä, että",
+    "kuvaus": "Pyydä vastuuhenkilöä antamaan arvio koejaksosta. Lomake siirtyy ensin virkailijalle tarkistettavaksi ja sen jälkeen vastuuhenkilölle arvioitavaksi. Saat ilmoituksen sähköpostiisi, kun koejakso on arvioitu. Tarkista ennen lähetystä, että",
     "lista": {
       "item1": {
         "linkki": "koejakson päänäkymässä.",
