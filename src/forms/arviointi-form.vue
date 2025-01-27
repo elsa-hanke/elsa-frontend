@@ -485,12 +485,15 @@
               >
                 {{ $t('pakollinen-tieto') }}
               </b-form-invalid-feedback>
-              <b-form-input
-                v-if="muuValittu"
-                v-model="form.muuPeruste"
-                :state="validateState('muuPeruste')"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></b-form-input>
+              <div v-if="muuValittu">
+                <b-form-input
+                  v-model="form.muuPeruste"
+                  maxlength="5"
+                  :state="validateState('muuPeruste')"
+                  @input="$emit('skipRouteExitConfirm', false)"
+                ></b-form-input>
+                <p v-if="muuPerustePituus() >= 5">{{ $t('maksimi-pituus') }} 255</p>
+              </div>
               <b-form-invalid-feedback>{{ $t('pakollinen-tieto') }}</b-form-invalid-feedback>
             </div>
           </template>
@@ -821,6 +824,10 @@
 
     vaativuustasoLabel(value: Vaativuustaso) {
       return `${value.arvo} ${this.$t(value.nimi)}`
+    }
+
+    muuPerustePituus() {
+      return this.form.muuPeruste != null ? this.form.muuPeruste.length : 0
     }
   }
 </script>
