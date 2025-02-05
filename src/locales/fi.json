@@ -1894,5 +1894,7 @@
   "yhdista-kayttajatilit": "Yhdistä käyttäjätilit",
   "vahvista-kayttajatilien-yhdistaminen": "Vahvista käyttäjätilien yhdistäminen",
   "haluatko-varmasti-yhdistaa-kayttajatilit": "Haluatko varmasti yhdistää käyttäjätilit?",
-  "kayttajatilien-yhdistaminen-onnistui": "Käyttäjätilien yhdistäminen onnistui"
+  "kayttajatilien-yhdistaminen-onnistui": "Käyttäjätilien yhdistäminen onnistui",
+  "arviointityokalut": "Arviointityökalut",
+  "arviointityokalut-kuvaus": "Hallinnoi kouluttajien arviointityökaluja."
 }

@@ -15,6 +15,7 @@ import ArviointipyyntoLahetetty from '@/views/arvioinnit/arviointipyynto-lahetet
 import Arviointipyynto from '@/views/arvioinnit/arviointipyynto.vue'
 import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
+import Arviointityokalut from '@/views/arviointityokalut/arviointityokalut.vue'
 import ArvioitavatKokonaisuudet from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet.vue'
 import YekAsiakirjat from '@/views/asiakirjat-yek/yek-asiakirjat.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
@@ -1357,6 +1358,15 @@ const routes: Array<RouteConfig> = [
           routeComponent: ValmistumispyyntoYekKoulutettava,
           allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
+        }
+      },
+      {
+        path: '/arviointityokalut',
+        name: 'arviointityokalut',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Arviointityokalut,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
         }
       }
     ]
