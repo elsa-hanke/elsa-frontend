@@ -148,6 +148,14 @@
       <b-nav-item
         v-if="$isTekninenPaakayttaja()"
         class="border-top border-bottom"
+        :to="{ name: 'arviointityokalut' }"
+      >
+        <font-awesome-icon icon="clipboard-list" fixed-width size="lg" />
+        {{ $t('arviointityokalut') }}
+      </b-nav-item>
+      <b-nav-item
+        v-if="$isTekninenPaakayttaja()"
+        class="border-top border-bottom"
         :to="{ name: 'ilmoitukset' }"
       >
         <font-awesome-icon icon="info-circle" fixed-width size="lg" />
