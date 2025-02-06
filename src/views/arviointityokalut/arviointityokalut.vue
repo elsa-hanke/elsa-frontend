@@ -6,7 +6,12 @@
         <b-col>
           <h1>{{ $t('arviointityokalut') }}</h1>
           <p>{{ $t('arviointityokalut-kuvaus') }}</p>
-          Todo - painikkeet tähän
+          <elsa-button variant="primary" :to="{ name: 'uusi-arviointityokalu' }" class="mb-4 mr-2">
+            {{ $t('lisaa-arviointityokalu') }}
+          </elsa-button>
+          <elsa-button variant="primary" :to="{ name: 'uusi-kategoria' }" class="mb-4">
+            {{ $t('lisaa-kategoria') }}
+          </elsa-button>
         </b-col>
       </b-row>
       <b-row>
@@ -59,12 +64,14 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import ElsaButton from '@/components/button/button.vue'
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
   import { Arviointityokalu } from '@/types'
 
   @Component({
     components: {
+      ElsaButton,
       SearchInput,
       Pagination
     }

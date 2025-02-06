@@ -1896,5 +1896,7 @@
   "haluatko-varmasti-yhdistaa-kayttajatilit": "Haluatko varmasti yhdistää käyttäjätilit?",
   "kayttajatilien-yhdistaminen-onnistui": "Käyttäjätilien yhdistäminen onnistui",
   "arviointityokalut": "Arviointityökalut",
-  "arviointityokalut-kuvaus": "Hallinnoi kouluttajien arviointityökaluja."
+  "arviointityokalut-kuvaus": "Hallinnoi kouluttajien arviointityökaluja.",
+  "lisaa-arviointityokalu": "Lisää arviointityökalu",
+  "lisaa-uusi-kategoria": "Lisää kategoria"
 }
