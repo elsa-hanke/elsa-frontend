@@ -1,4 +1,5 @@
 import { LocaleMessages } from 'vue-i18n'
+import { numeric } from 'vuelidate/lib/validators'
 
 import {
   ArvioinninPerustuminen,
@@ -1824,4 +1825,18 @@ export interface KayttajienYhdistaminenDTO {
   ensimmainenKayttajaId: number
   toinenKayttajaId: number
   yhteinenSahkoposti: string
+}
+
+export type PaaKayttajaArviointityokalu = {
+  id?: number
+  nimi: string
+  kategoriaId: number
+  kayttajaId: number
+  luontiaika: string
+  muokkausaika: string
+}
+
+export type ArviointityokaluKategoria = {
+  id?: number
+  nimi: string | null
 }

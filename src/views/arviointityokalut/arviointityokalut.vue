@@ -64,10 +64,13 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
+  import { getArviointityokalutKategoriat } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
-  import { Arviointityokalu } from '@/types'
+  import { ArviointityokaluKategoria } from '@/types'
+  import { sortByAsc } from '@/utils/sort'
+  import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
@@ -77,7 +80,7 @@
     }
   })
   export default class Arviointityokalut extends Vue {
-    arviointityokalut: Arviointityokalu[] = []
+    arviointityokalut: ArviointityokaluKategoria[] = []
 
     loading = true
 
@@ -111,13 +114,15 @@
 
     async mounted() {
       this.loading = true
-      // try {
-      //   this.arviointityokalut = (await getErikoisalat()).data.sort((a, b) => sortByAsc(a.nimi, b.nimi))
-      // } catch {
-      //   toastFail(this, this.$t('arviointityokalujen-hakeminen-epaonnistui'))
-      //   this.arviointityokalut = []
-      // }
-      // this.loading = false
+      try {
+        this.arviointityokalut = (await getArviointityokalutKategoriat()).data.sort((a, b) =>
+          sortByAsc(a.nimi, b.nimi)
+        )
+      } catch {
+        toastFail(this, this.$t('arviointityokalujen-kategorioiden-hakeminen-epaonnistui'))
+        this.arviointityokalut = []
+      }
+      this.loading = false
     }
 
     get rows() {

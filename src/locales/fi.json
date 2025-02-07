@@ -1898,5 +1898,8 @@
   "arviointityokalut": "Arviointityökalut",
   "arviointityokalut-kuvaus": "Hallinnoi kouluttajien arviointityökaluja.",
   "lisaa-arviointityokalu": "Lisää arviointityökalu",
-  "lisaa-uusi-kategoria": "Lisää kategoria"
+  "lisaa-uusi-kategoria": "Lisää kategoria",
+  "arviointityokalu-kategoria-lisatty": "Arviointityökalu kategoria lisätty",
+  "arviointityokalu-kategoria-lisaaminen-epaonnistui": "Arviointityökalu kategorian lisääminen epäonnistui",
+  "arviointityokalujen-kategorioiden-hakeminen-epaonnistui": "Arviointityökalu kategorioiden haku epäonnistui"
 }
