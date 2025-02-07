@@ -12,7 +12,8 @@ import {
   SuoritteenKategoria,
   SuoritteenKategoriaWithErikoisala,
   SuoriteWithErikoisala,
-  Ilmoitus
+  Ilmoitus,
+  ArviointityokaluKategoria
 } from '@/types'
 
 export async function getErikoistuvatLaakarit(params: {
@@ -175,4 +176,14 @@ export async function putIlmoitus(ilmoitus: Ilmoitus) {
 export async function deleteIlmoitus(id: number) {
   const path = `/tekninen-paakayttaja/ilmoitukset/${id}`
   return await axios.delete<Ilmoitus>(path)
+}
+
+export async function postArviointityokalutKategoria(form: ArviointityokaluKategoria) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria`
+  return await axios.post<ArviointityokaluKategoria>(path, form)
+}
+
+export async function getArviointityokalutKategoriat() {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoriat`
+  return await axios.get<ArviointityokaluKategoria[]>(path)
 }
