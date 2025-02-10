@@ -187,3 +187,18 @@ export async function getArviointityokalutKategoriat() {
   const path = `/tekninen-paakayttaja/arviointityokalut/kategoriat`
   return await axios.get<ArviointityokaluKategoria[]>(path)
 }
+
+export async function getArviointityokalutKategoria(id: string) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria/${id}`
+  return await axios.get<ArviointityokaluKategoria>(path)
+}
+
+export async function patchArviointityokalutKategoria(form: ArviointityokaluKategoria) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria`
+  return await axios.patch<ArviointityokaluKategoria>(path, form)
+}
+
+export async function deleteArviointityokalutKategoria(id: number) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria/${id}`
+  return await axios.delete<ArviointityokaluKategoria>(path)
+}
