@@ -37,8 +37,8 @@
             <template #cell(nimi)="data">
               <b-link
                 :to="{
-                  name: 'arviointityokalu',
-                  params: { id: data.item.id }
+                  name: 'kategoria',
+                  params: { kategoriaId: data.item.id }
                 }"
               >
                 {{ data.item.nimi }}

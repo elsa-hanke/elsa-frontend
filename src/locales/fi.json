@@ -1901,5 +1901,11 @@
   "lisaa-uusi-kategoria": "Lisää kategoria",
   "arviointityokalu-kategoria-lisatty": "Arviointityökalu kategoria lisätty",
   "arviointityokalu-kategoria-lisaaminen-epaonnistui": "Arviointityökalu kategorian lisääminen epäonnistui",
-  "arviointityokalujen-kategorioiden-hakeminen-epaonnistui": "Arviointityökalu kategorioiden haku epäonnistui"
+  "arviointityokalujen-kategorioiden-hakeminen-epaonnistui": "Arviointityökalu kategorioiden haku epäonnistui",
+  "muokkaa-arviointityokalut-kategoriaa": "Muokkaa arviointityökalujen kategoriaa",
+  "arviointityokalut-kategorian-hakeminen-epaonnistui": "Kategorian hakeminen epäonnistui",
+  "arviointityokalut-kategoria-paivitetty": "Arviointityokalut kategoria päivitetty",
+  "arviointityokalut-kategoria-poista-kategoria": "Poista kategoria",
+  "arviointityokalut-kategoria-poista-kategoria-selite": "Haluatko varmasti poistaa kategorian? Mikäli kategoriaan on liitetty arviointityökaluja, poistetaan kategoria näistä arviointityökaluista.",
+  "arviointityokalut-kategoria-poistettu": "Arviointityokalut kategoria poistettu"
 }
