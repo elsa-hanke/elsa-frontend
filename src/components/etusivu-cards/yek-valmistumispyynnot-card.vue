@@ -132,6 +132,8 @@
 
     taskStatus(status: string) {
       switch (status) {
+        case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA:
+          return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-osaamisen-arviointia')
         case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-hyvaksyntaa')
         case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
@@ -143,7 +145,16 @@
       }
     }
     showButton(tila: ValmistumispyynnonTila) {
-      return tila === ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA ? false : true
+      if (this.$isVirkailija())
+        return (
+          tila === ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA ||
+          tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN
+        )
+      else
+        return (
+          tila === ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA ||
+          tila === ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+        )
     }
   }
 </script>
