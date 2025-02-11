@@ -875,6 +875,19 @@ export type Arviointityokalu = {
   kategoriaId: number
   ohjeteksti: string | null
   liite: File | null
+  kysymykset: ArviointityokaluKysymys[]
+}
+
+export type ArviointityokaluKysymys = {
+  id?: number
+  otsikko: string | null
+  vaihtoehdot: ArviointityokaluKysymysVaihtoehto[]
+  pakollinen: boolean
+}
+
+export type ArviointityokaluKysymysVaihtoehto = {
+  id?: number
+  teksti: string
 }
 
 export type SuoritusarviointiForm = {
