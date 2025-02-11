@@ -1255,23 +1255,12 @@ export interface PageSort {
 }
 export interface Page<T> {
   content: T[]
-  pageable: {
-    sort: PageSort
-    offset: number
-    pageSize: number
-    pageNumber: number
-    unpaged: boolean
-    paged: boolean
+  page: {
+    size: number
+    number: number
+    totalElements: number
+    totalPages: number
   }
-  last: boolean
-  totalPages: number
-  totalElements: number
-  first: boolean
-  number: number
-  sort: PageSort
-  size: number
-  numberOfElements: number
-  empty: boolean
 }
 
 export type Keskeytysaika = {

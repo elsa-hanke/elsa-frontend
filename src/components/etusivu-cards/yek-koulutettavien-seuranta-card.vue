@@ -285,7 +285,7 @@
     }
 
     get rows() {
-      return this.koulutettavat?.totalElements ?? 0
+      return this.koulutettavat?.page.totalElements ?? 0
     }
 
     @Watch('hakutermi')
