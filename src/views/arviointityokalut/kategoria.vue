@@ -66,6 +66,15 @@
               >
                 {{ $t('arviointityokalut-kategoria-poista-kategoria') }}
               </elsa-button>
+              <elsa-button
+                v-if="!editing"
+                :disabled="updatingKategoria"
+                :to="{ name: 'arviointityokalut' }"
+                variant="link"
+                class="mb-3 mr-auto font-weight-500 kayttajahallinta-link"
+              >
+                {{ $t('palaa-arviointityokaluihin') }}
+              </elsa-button>
             </div>
           </div>
           <div v-else class="text-center">
