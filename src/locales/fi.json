@@ -1912,5 +1912,7 @@
   "arviointityokalun-nimi": "Arviotyökalun nimi",
   "ohjeteksti-arviointityokalun-kayttoon": "Ohjeteksti arviointityökalun käyttöön",
   "arviointityokalu-liitetiedostona": "Arviointityökalu liitetiedostona",
-  "arviointityokalu-liite-ohje": "Voit lisätä saman arviointityökalun esim. word-pohjaisena liitetiedostona. Liite tulee kouluttajille ladattavaksi ja html-lomakkeen sijaan vaihtoehtoisesti täytettäväksi. Varmista että word- ja html-lomakkeissa on yhtenevä sisältö."
+  "arviointityokalu-liite-ohje": "Voit lisätä saman arviointityökalun esim. word-pohjaisena liitetiedostona. Liite tulee kouluttajille ladattavaksi ja html-lomakkeen sijaan vaihtoehtoisesti täytettäväksi. Varmista että word- ja html-lomakkeissa on yhtenevä sisältö.",
+  "kysymykset": "Kysymykset",
+  "kysymys": "Kysymys"
 }

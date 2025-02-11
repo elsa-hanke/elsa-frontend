@@ -90,6 +90,17 @@
             </b-form-row>
           </b-col>
         </b-row>
+        <hr />
+        <h1>{{ $t('kysymykset') }}</h1>
+        <div>
+          <div v-for="(kysymys, index) in form.kysymykset" :key="index">
+            <arviointityokalu-lomake-kysymys-form
+              :kysymys="kysymys"
+              :child-data-received="childDataReceived"
+            />
+          </div>
+        </div>
+        <hr />
         <div class="d-flex flex-row-reverse flex-wrap">
           <elsa-button :loading="saving" type="submit" variant="primary" class="ml-2 mb-2">
             {{ $t('tallenna') }}
@@ -120,6 +131,8 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
+  import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
   import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
@@ -130,6 +143,8 @@
 
   @Component({
     components: {
+      ArviointityokaluLomakeKysymysForm,
+      TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
       ElsaFormMultiselect,
       AsiakirjatContent,
       AsiakirjatUpload,
@@ -170,7 +185,8 @@
       nimi: null,
       kategoriaId: -1,
       ohjeteksti: null,
-      liite: null
+      liite: null,
+      kysymykset: [{ id: 0, otsikko: 'hello world', pakollinen: true, vaihtoehdot: [] }]
     }
 
     asiakirjat: Asiakirja[] = []
@@ -226,6 +242,7 @@
       if (this.$isTekninenPaakayttaja()) {
         /* */
       }
+      this.childDataReceived = true
     }
 
     onCancel() {
