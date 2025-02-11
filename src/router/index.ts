@@ -17,6 +17,7 @@ import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
 import Arviointityokalut from '@/views/arviointityokalut/arviointityokalut.vue'
 import KategoriaView from '@/views/arviointityokalut/kategoria.vue'
+import LisaaArviointityokalu from '@/views/arviointityokalut/lisaa-arviointityokalu.vue'
 import UusiKategoria from '@/views/arviointityokalut/uusi-kategoria.vue'
 import ArvioitavatKokonaisuudet from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet.vue'
 import YekAsiakirjat from '@/views/asiakirjat-yek/yek-asiakirjat.vue'
@@ -1388,6 +1389,16 @@ const routes: Array<RouteConfig> = [
         props: {
           routeComponent: KategoriaView,
           allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/arviointityokalut/arviointityokalu/uusi',
+        name: 'lisaa-arviointityokalu',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaArviointityokalu,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja],
+          confirmRouteExit: true
         }
       }
     ]

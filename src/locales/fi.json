@@ -1908,5 +1908,9 @@
   "arviointityokalut-kategoria-poista-kategoria": "Poista kategoria",
   "arviointityokalut-kategoria-poista-kategoria-selite": "Haluatko varmasti poistaa kategorian? Mikäli kategoriaan on liitetty arviointityökaluja, poistetaan kategoria näistä arviointityökaluista.",
   "arviointityokalut-kategoria-poistettu": "Arviointityokalut kategoria poistettu",
-  "palaa-arviointityokaluihin": "Palaa arviointityökaluihin"
+  "palaa-arviointityokaluihin": "Palaa arviointityökaluihin",
+  "arviointityokalun-nimi": "Arviotyökalun nimi",
+  "ohjeteksti-arviointityokalun-kayttoon": "Ohjeteksti arviointityökalun käyttöön",
+  "arviointityokalu-liitetiedostona": "Arviointityökalu liitetiedostona",
+  "arviointityokalu-liite-ohje": "Voit lisätä saman arviointityökalun esim. word-pohjaisena liitetiedostona. Liite tulee kouluttajille ladattavaksi ja html-lomakkeen sijaan vaihtoehtoisesti täytettäväksi. Varmista että word- ja html-lomakkeissa on yhtenevä sisältö."
 }

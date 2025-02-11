@@ -871,7 +871,10 @@ export type ArviointiasteikonTaso = {
 
 export type Arviointityokalu = {
   id?: number
-  nimi: string
+  nimi: string | null
+  kategoriaId: number
+  ohjeteksti: string | null
+  liite: File | null
 }
 
 export type SuoritusarviointiForm = {

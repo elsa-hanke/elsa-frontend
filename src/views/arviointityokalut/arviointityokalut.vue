@@ -6,7 +6,7 @@
         <b-col>
           <h1>{{ $t('arviointityokalut') }}</h1>
           <p>{{ $t('arviointityokalut-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'uusi-arviointityokalu' }" class="mb-4 mr-2">
+          <elsa-button variant="primary" :to="{ name: 'lisaa-arviointityokalu' }" class="mb-4 mr-2">
             {{ $t('lisaa-arviointityokalu') }}
           </elsa-button>
           <elsa-button variant="primary" :to="{ name: 'uusi-kategoria' }" class="mb-4">
