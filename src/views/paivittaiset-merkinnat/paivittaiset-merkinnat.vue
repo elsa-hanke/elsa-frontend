@@ -90,56 +90,57 @@
                   </b-col>
                 </b-row>
               </b-container>
-              <b-alert v-if="merkinnat.empty" variant="dark" show>
+              <b-alert v-if="merkinnat.page.totalElements === 0" variant="dark" show>
                 <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
                 <span>
                   {{ $t('ei-paivittaisia-merkintoja') }}
                 </span>
               </b-alert>
-              <div
-                v-for="(paivittainenMerkinta, index) in merkinnat.content"
-                v-else
-                :key="index"
-                class="d-flex flex-column border rounded p-2 mb-2"
-              >
-                <elsa-button
-                  :to="{
-                    name: 'paivittainen-merkinta',
-                    params: { paivakirjamerkintaId: paivittainenMerkinta.id }
-                  }"
-                  variant="link"
-                  class="d-flex p-0 border-0 shadow-none font-weight-500 text-left"
+              <div v-else>
+                <div
+                  v-for="(paivittainenMerkinta, index) in merkinnat.content"
+                  :key="index"
+                  class="d-flex flex-column border rounded p-2 mb-2"
                 >
-                  {{ paivittainenMerkinta.oppimistapahtumanNimi }}
-                </elsa-button>
-                <div class="d-flex flex-wrap">
-                  <small class="mr-2">{{ $date(paivittainenMerkinta.paivamaara) }}</small>
-                  <b-badge
-                    v-for="aihe in paivittainenMerkinta.aihekategoriat"
-                    :key="aihe.id"
-                    pill
-                    variant="light"
-                    class="font-weight-400 mr-2 mb-2"
+                  <elsa-button
+                    :to="{
+                      name: 'paivittainen-merkinta',
+                      params: { paivakirjamerkintaId: paivittainenMerkinta.id }
+                    }"
+                    variant="link"
+                    class="d-flex p-0 border-0 shadow-none font-weight-500 text-left"
                   >
-                    {{
-                      `${aihe.nimi}${
-                        aihe.teoriakoulutus && paivittainenMerkinta.teoriakoulutus
-                          ? `: ${paivittainenMerkinta.teoriakoulutus.koulutuksenNimi}`
-                          : ''
-                      }${aihe.muunAiheenNimi ? `: ${paivittainenMerkinta.muunAiheenNimi}` : ''}`
-                    }}
-                  </b-badge>
+                    {{ paivittainenMerkinta.oppimistapahtumanNimi }}
+                  </elsa-button>
+                  <div class="d-flex flex-wrap">
+                    <small class="mr-2">{{ $date(paivittainenMerkinta.paivamaara) }}</small>
+                    <b-badge
+                      v-for="aihe in paivittainenMerkinta.aihekategoriat"
+                      :key="aihe.id"
+                      pill
+                      variant="light"
+                      class="font-weight-400 mr-2 mb-2"
+                    >
+                      {{
+                        `${aihe.nimi}${
+                          aihe.teoriakoulutus && paivittainenMerkinta.teoriakoulutus
+                            ? `: ${paivittainenMerkinta.teoriakoulutus.koulutuksenNimi}`
+                            : ''
+                        }${aihe.muunAiheenNimi ? `: ${paivittainenMerkinta.muunAiheenNimi}` : ''}`
+                      }}
+                    </b-badge>
+                  </div>
+                  <div class="line-clamp">
+                    {{ paivittainenMerkinta.reflektio }}
+                  </div>
                 </div>
-                <div class="line-clamp">
-                  {{ paivittainenMerkinta.reflektio }}
-                </div>
+                <elsa-pagination
+                  :current-page="currentPage"
+                  :per-page="perPage"
+                  :rows="rows"
+                  @update:currentPage="onPageInput"
+                />
               </div>
-              <elsa-pagination
-                :current-page="currentPage"
-                :per-page="perPage"
-                :rows="rows"
-                @update:currentPage="onPageInput"
-              />
             </div>
             <div v-else class="text-center">
               <b-spinner variant="primary" :label="$t('ladataan')" />
@@ -313,7 +314,7 @@
     }
 
     get rows() {
-      return this.merkinnat?.totalElements ?? 0
+      return this.merkinnat?.page.totalElements ?? 0
     }
 
     get aihekategoriat() {

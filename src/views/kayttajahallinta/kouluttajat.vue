@@ -197,7 +197,7 @@
     }
 
     get rows() {
-      return this.kayttajat?.totalElements ?? 0
+      return this.kayttajat?.page.totalElements ?? 0
     }
   }
 </script>

@@ -263,7 +263,7 @@
     }
 
     get rows() {
-      return this.valmistumispyynnot?.totalElements ?? 0
+      return this.valmistumispyynnot?.page.totalElements ?? 0
     }
 
     onPageInput(value: number) {
