@@ -207,7 +207,15 @@
       kategoriaId: -1,
       ohjeteksti: null,
       liite: null,
-      kysymykset: [{ id: 0, otsikko: 'hello world', pakollinen: true, vaihtoehdot: [] }]
+      kysymykset: [
+        {
+          id: 0,
+          otsikko: 'hello world',
+          tyyppi: 'tekstikenttakysymys',
+          pakollinen: true,
+          vaihtoehdot: []
+        }
+      ]
     }
 
     asiakirjat: Asiakirja[] = []
