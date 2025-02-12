@@ -99,11 +99,32 @@
               :child-data-received="childDataReceived"
             />
           </div>
+          <elsa-button
+            variant="outline-primary"
+            class="mb-2"
+            @click.stop.prevent="addTekstikenttaKysymys"
+          >
+            {{ $t('lisaa-tekstikenttakysymys') }}
+          </elsa-button>
+          <elsa-button
+            variant="outline-primary"
+            class="ml-2 mb-2"
+            @click.stop.prevent="addValintaKysymys"
+          >
+            {{ $t('lisaa-valintakysymys') }}
+          </elsa-button>
         </div>
         <hr />
         <div class="d-flex flex-row-reverse flex-wrap">
           <elsa-button :loading="saving" type="submit" variant="primary" class="ml-2 mb-2">
             {{ $t('tallenna') }}
+          </elsa-button>
+          <elsa-button
+            variant="outline-primary"
+            class="ml-2 mb-2"
+            @click.stop.prevent="onSaveAsDraft"
+          >
+            {{ $t('tallenna-luonnoksena') }}
           </elsa-button>
           <elsa-button variant="back" class="mb-2" @click.stop.prevent="onCancel">
             {{ $t('peruuta') }}
@@ -226,6 +247,18 @@
         )
       }
       this.saving = false
+    }
+
+    async onSaveAsDraft() {
+      /* */
+    }
+
+    addTekstikenttaKysymys() {
+      /* */
+    }
+
+    addValintaKysymys() {
+      /* */
     }
 
     validateForm(): boolean {
