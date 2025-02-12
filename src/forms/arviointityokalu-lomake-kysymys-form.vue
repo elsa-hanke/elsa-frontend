@@ -1,7 +1,27 @@
 <template>
   <div v-if="kysymys !== null && childDataReceived" class="border rounded pt-1 pb-1 mb-4 p-2">
-    <h3>{{ $t('kysymys') }}</h3>
-    todo
+    <b-form-row>
+      <elsa-form-group :label="$t('kysymys')" class="col-sm-12 col-md-12 pr-md-3" :required="true">
+        <template #default="{ uid }">
+          <b-form-input
+            :id="uid"
+            v-model="kysymys.otsikko"
+            :state="validateState('otsikko')"
+            @input="$emit('skipRouteExitConfirm', false)"
+          ></b-form-input>
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
+        </template>
+      </elsa-form-group>
+      <elsa-form-group label="" class="col-sm-12 col-md-12 pr-md-3" :required="false">
+        <template #default="{ uid }">
+          <b-form-row v-if="kysymys.tyyppi === 'tekstikenttakysymys'">
+            <b-form-textarea :id="uid" rows="3" disabled :placeholder="$t('vastaus')" />
+          </b-form-row>
+        </template>
+      </elsa-form-group>
+    </b-form-row>
   </div>
 </template>
 
