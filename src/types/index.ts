@@ -878,16 +878,21 @@ export type Arviointityokalu = {
   kysymykset: ArviointityokaluKysymys[]
 }
 
+export type ArviointityokaluKysymysTyyppi = 'tekstikenttakysymys' | 'valintakysymys'
+
 export type ArviointityokaluKysymys = {
   id?: number
   otsikko: string | null
+  tyyppi: ArviointityokaluKysymysTyyppi
   vaihtoehdot: ArviointityokaluKysymysVaihtoehto[]
   pakollinen: boolean
+  tekstikenttavastaus?: string
 }
 
 export type ArviointityokaluKysymysVaihtoehto = {
   id?: number
   teksti: string
+  valittu: boolean
 }
 
 export type SuoritusarviointiForm = {
