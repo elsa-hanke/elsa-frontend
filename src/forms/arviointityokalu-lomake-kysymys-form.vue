@@ -1,5 +1,5 @@
 <template>
-  <div v-if="kysymys !== null && childDataReceived" class="border rounded pt-1 pb-1 mb-4 p-2">
+  <div v-if="kysymys !== null && childDataReceived" class="border rounded pt-1 pb-4 mb-4 p-2">
     <b-form-row>
       <elsa-form-group :label="$t('kysymys')" class="col-sm-12 col-md-12 pr-md-3" :required="true">
         <template #default="{ uid }">
@@ -14,13 +14,43 @@
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
-      <elsa-form-group label="" class="col-sm-12 col-md-12 pr-md-3" :required="false">
+    </b-form-row>
+    <b-form-row v-if="kysymys.tyyppi === 'tekstikenttakysymys'">
+      <b-form-group class="col-sm-12 col-md-12 pr-md-3" :required="false">
         <template #default="{ uid }">
-          <b-form-row v-if="kysymys.tyyppi === 'tekstikenttakysymys'">
-            <b-form-textarea :id="uid" rows="3" disabled :placeholder="$t('vastaus')" />
-          </b-form-row>
+          <b-form-textarea :id="uid" rows="3" disabled :placeholder="$t('vastaus')" />
         </template>
-      </elsa-form-group>
+      </b-form-group>
+    </b-form-row>
+    <div v-for="(vaihtoehto, index) in kysymys.vaihtoehdot" :key="index">
+      <b-form-group class="col-sm-12 col-md-12 mb-2">
+        <template #default="{ uid }">
+          <b-form-input
+            :id="uid"
+            v-model="vaihtoehto.teksti"
+            @input="$emit('skipRouteExitConfirm', false)"
+          ></b-form-input>
+        </template>
+      </b-form-group>
+    </div>
+    <b-form-row>
+      <div class="col-sm-12 col-md-12 pr-md-3 d-flex align-items-end">
+        <elsa-button
+          v-if="kysymys.tyyppi === 'valintakysymys'"
+          variant="link"
+          class="shadow-none p-0 mt-2 d-block"
+          @click.stop.prevent="onAddVastausVaihtoehto"
+        >
+          {{ $t('lisaa-vastausvaihtoehto') }}
+        </elsa-button>
+        <b-form-checkbox
+          v-model="kysymys.pakollinen"
+          class="py-0 ml-auto"
+          @input="$emit('skipRouteExitConfirm', false)"
+        >
+          {{ $t('pakollinen-kysymys') }}
+        </b-form-checkbox>
+      </div>
     </b-form-row>
   </div>
 </template>
@@ -65,6 +95,10 @@
     validateState(name: string) {
       const { $dirty, $error } = this.kysymys[name] as any
       return $dirty ? ($error ? false : null) : null
+    }
+
+    onAddVastausVaihtoehto() {
+      /* */
     }
 
     mounted() {
