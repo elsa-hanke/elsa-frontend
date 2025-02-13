@@ -210,10 +210,35 @@
       kysymykset: [
         {
           id: 0,
-          otsikko: 'hello world',
+          otsikko: 'Tekstikenttä esimerkki',
           tyyppi: 'tekstikenttakysymys',
           pakollinen: true,
-          vaihtoehdot: []
+          vaihtoehdot: [],
+          jarjestysnumero: 0
+        },
+        {
+          id: 1,
+          otsikko: 'Valinta esimerkki',
+          tyyppi: 'valintakysymys',
+          pakollinen: true,
+          vaihtoehdot: [
+            {
+              id: 0,
+              teksti: 'Valinta yksi',
+              valittu: false
+            },
+            {
+              id: 1,
+              teksti: 'Valinta kaksi',
+              valittu: false
+            },
+            {
+              id: 2,
+              teksti: 'Valinta kolme',
+              valittu: false
+            }
+          ],
+          jarjestysnumero: 1
         }
       ]
     }

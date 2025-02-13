@@ -887,6 +887,7 @@ export type ArviointityokaluKysymys = {
   vaihtoehdot: ArviointityokaluKysymysVaihtoehto[]
   pakollinen: boolean
   tekstikenttavastaus?: string
+  jarjestysnumero: number
 }
 
 export type ArviointityokaluKysymysVaihtoehto = {

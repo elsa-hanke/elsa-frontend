@@ -1918,5 +1918,7 @@
   "tallenna-luonnoksena": "Tallenna luonnoksena",
   "lisaa-tekstikenttakysymys": "Lisää tekstikenttäkysymys",
   "lisaa-valintakysymys": "Lisää valintakysymys",
-  "vastaus": "Vastaus..."
+  "vastaus": "Vastaus...",
+  "pakollinen-kysymys": "Pakollinen kysymys",
+  "lisaa-vastausvaihtoehto": "Lisää vastausvaihtoehto"
 }
