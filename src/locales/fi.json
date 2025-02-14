@@ -1920,5 +1920,6 @@
   "lisaa-valintakysymys": "Lisää valintakysymys",
   "vastaus": "Vastaus...",
   "pakollinen-kysymys": "Pakollinen kysymys",
-  "lisaa-vastausvaihtoehto": "Lisää vastausvaihtoehto"
+  "lisaa-vastausvaihtoehto": "Lisää vastausvaihtoehto",
+  "ei-kategoriaa": "Ei kategoriaa"
 }
