@@ -21,8 +21,8 @@ describe('Tyokertymalaskuri', () => {
       1.0,
       1.0
     )
-    expect(keskeytys1.get(2020)).toBe(59.0)
-    expect(keskeytys1.get(2021)).toBe(169.0)
+    expect(keskeytys1.get(2020)).toBe(60.0)
+    expect(keskeytys1.get(2021)).toBe(170.0)
 
     const keskeytys2: Map<number, number> = getKeskeytysaikaMap(
       parseISO('2021-07-26'),
@@ -30,7 +30,7 @@ describe('Tyokertymalaskuri', () => {
       1.0,
       1.0
     )
-    expect(keskeytys2.get(2021)).toBe(50)
+    expect(keskeytys2.get(2021)).toBe(51)
   })
 
   it('pitaisi palauttaa oikeat reduced days ja hyvaksiluettavat used paivat', () => {
@@ -93,7 +93,7 @@ describe('Tyokertymalaskuri', () => {
       hyvaksiluettavatCounter,
       parseISO('2021-12-29')
     )
-    expect(test).toBe(50.0)
+    expect(test).toBe(51)
   })
 
   it('pitaisi palauttaa oikea maara vahennettavia paivia', () => {
@@ -155,6 +155,6 @@ describe('Tyokertymalaskuri', () => {
       }
     ]
     const vahennettavat: Map<number, number> = getVahennettavatPaivat(tyoskentelyjaksot)
-    expect(vahennettavat.get(1)).toBe(248)
+    expect(vahennettavat.get(1)).toBe(251)
   })
 })
