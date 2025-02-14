@@ -34,8 +34,8 @@
               >
                 <elsa-form-multiselect
                   v-model="form.kategoriaId"
-                  :options="kategoriat"
-                  label="kategoria"
+                  :options="kategoriatFormatted"
+                  label="nimi"
                   track-by="id"
                   @input="$emit('skipRouteExitConfirm', false)"
                 />
@@ -144,7 +144,10 @@
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
-  import { postArviointityokalutKategoria } from '@/api/tekninen-paakayttaja'
+  import {
+    getArviointityokalutKategoriat,
+    postArviointityokalutKategoria
+  } from '@/api/tekninen-paakayttaja'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -304,11 +307,20 @@
       return $dirty ? ($error ? false : null) : null
     }
 
-    mounted() {
-      if (this.$isTekninenPaakayttaja()) {
-        /* */
-      }
+    async mounted() {
+      this.fetchKategoriat()
       this.childDataReceived = true
+    }
+
+    async fetchKategoriat() {
+      this.kategoriat = (await getArviointityokalutKategoriat()).data
+    }
+
+    get kategoriatFormatted() {
+      if (!this.kategoriat || this.kategoriat.length === 0) {
+        return [{ id: 0, nimi: this.$t('ei-kategoriaa') }]
+      }
+      return [{ id: 0, nimi: this.$t('ei-kategoriaa') }, ...this.kategoriat]
     }
 
     onCancel() {
