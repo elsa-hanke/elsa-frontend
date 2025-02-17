@@ -97,6 +97,8 @@
             <arviointityokalu-lomake-kysymys-form
               :kysymys="kysymys"
               :child-data-received="childDataReceived"
+              :index="index"
+              @delete="onDeleteKysymys"
             />
           </div>
           <elsa-button
@@ -161,7 +163,14 @@
   import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
   import VastuuhenkiloForm from '@/forms/uusi-vastuuhenkilo-form.vue'
   import VirkailijaForm from '@/forms/uusi-virkailija-form.vue'
-  import { Arviointityokalu, ArviointityokaluKategoria, Asiakirja, ElsaError } from '@/types'
+  import {
+    Arviointityokalu,
+    ArviointityokaluKategoria,
+    ArviointityokaluKysymysTyyppi,
+    ArviointityokaluKysymysVaihtoehto,
+    Asiakirja,
+    ElsaError
+  } from '@/types'
   import { mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -290,11 +299,40 @@
     }
 
     addTekstikenttaKysymys() {
-      /* */
+      this.addKysymys('tekstikenttakysymys', [])
     }
 
     addValintaKysymys() {
-      /* */
+      this.addKysymys('valintakysymys', [
+        {
+          teksti: '',
+          valittu: false
+        },
+        {
+          teksti: '',
+          valittu: false
+        }
+      ])
+    }
+
+    private addKysymys(
+      tyyppi: ArviointityokaluKysymysTyyppi,
+      vaihtoehdot: ArviointityokaluKysymysVaihtoehto[]
+    ) {
+      this.form.kysymykset.push({
+        otsikko: '',
+        tyyppi: tyyppi,
+        pakollinen: false,
+        vaihtoehdot: vaihtoehdot,
+        jarjestysnumero: 99
+      })
+    }
+
+    onDeleteKysymys(index: number) {
+      const kysymykset = [...this.form.kysymykset]
+      kysymykset.splice(index, 1)
+      this.form.kysymykset = kysymykset
+      toastSuccess(this, this.$t('arviointityokalu-kysymys-poistettu'))
     }
 
     validateForm(): boolean {

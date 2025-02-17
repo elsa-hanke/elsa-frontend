@@ -1,19 +1,35 @@
 <template>
   <div v-if="kysymys !== null && childDataReceived" class="border rounded pt-1 pb-4 mb-4 p-2">
     <b-form-row>
-      <elsa-form-group :label="$t('kysymys')" class="col-sm-12 col-md-12 pr-md-3" :required="true">
-        <template #default="{ uid }">
-          <b-form-input
-            :id="uid"
-            v-model="kysymys.otsikko"
-            :state="validateState('otsikko')"
-            @input="$emit('skipRouteExitConfirm', false)"
-          ></b-form-input>
-          <b-form-invalid-feedback :id="`${uid}-feedback`">
-            {{ $t('pakollinen-tieto') }}
-          </b-form-invalid-feedback>
-        </template>
-      </elsa-form-group>
+      <div class="d-flex col-sm-12 col-md-12 justify-content-between align-items-start">
+        <div class="d-flex flex-grow-1 pr-md-3">
+          <elsa-form-group :label="$t('kysymys')" class="w-100" :required="true">
+            <template #default="{ uid }">
+              <b-form-input
+                :id="uid"
+                v-model="kysymys.otsikko"
+                :state="validateState('otsikko')"
+                @input="$emit('skipRouteExitConfirm', false)"
+              ></b-form-input>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
+            </template>
+          </elsa-form-group>
+        </div>
+        <elsa-button
+          variant="link"
+          class="text-decoration-none shadow-none p-0"
+          @click="onDeleteKysymys"
+        >
+          <font-awesome-icon
+            :icon="['far', 'trash-alt']"
+            fixed-width
+            size="lg"
+            class="text-primary"
+          />
+        </elsa-button>
+      </div>
     </b-form-row>
     <b-form-row v-if="kysymys.tyyppi === 'tekstikenttakysymys'">
       <b-form-group class="col-sm-12 col-md-12 pr-md-3" :required="false">
@@ -110,6 +126,9 @@
     @Prop({ type: Boolean, default: false })
     childDataReceived!: boolean
 
+    @Prop({ required: true, type: Number })
+    index?: number
+
     validateState(name: string) {
       const { $dirty, $error } = this.kysymys[name] as any
       return $dirty ? ($error ? false : null) : null
@@ -140,6 +159,10 @@
     validateForm(): boolean {
       this.$v.poissaolo.$touch()
       return !this.$v.$anyError
+    }
+
+    onDeleteKysymys() {
+      this.$emit('delete', this.index)
     }
   }
 </script>
