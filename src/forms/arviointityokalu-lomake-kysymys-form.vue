@@ -22,16 +22,34 @@
         </template>
       </b-form-group>
     </b-form-row>
-    <div v-for="(vaihtoehto, index) in kysymys.vaihtoehdot" :key="index">
-      <b-form-group class="col-sm-12 col-md-12 mb-2">
+    <div
+      v-for="(vaihtoehto, index) in kysymys.vaihtoehdot"
+      :key="index"
+      class="d-flex align-items-center col-sm-12 col-md-12 container"
+    >
+      <span class="fake-checkbox mb-2"></span>
+      <b-form-group class="flex-grow-1 mb-2 mr-3">
         <template #default="{ uid }">
           <b-form-input
             :id="uid"
             v-model="vaihtoehto.teksti"
+            class="ml-2"
             @input="$emit('skipRouteExitConfirm', false)"
           ></b-form-input>
         </template>
       </b-form-group>
+      <elsa-button
+        variant="link"
+        class="text-decoration-none shadow-none p-0"
+        @click="deleteVastausVaihtoehto(Number(index))"
+      >
+        <font-awesome-icon
+          :icon="['far', 'trash-alt']"
+          fixed-width
+          size="lg"
+          class="text-primary"
+        />
+      </elsa-button>
     </div>
     <b-form-row>
       <div class="col-sm-12 col-md-12 pr-md-3 d-flex align-items-end">
@@ -98,7 +116,17 @@
     }
 
     onAddVastausVaihtoehto() {
-      /* */
+      this.kysymys.vaihtoehdot.push({
+        teksti: '',
+        valittu: false
+      })
+    }
+
+    deleteVastausVaihtoehto(index: number) {
+      const vaihtoehdot = [...this.kysymys.vaihtoehdot]
+      vaihtoehdot.splice(index, 1)
+      this.kysymys.vaihtoehdot = vaihtoehdot
+      this.$emit('skipRouteExitConfirm', false)
     }
 
     mounted() {
@@ -120,13 +148,12 @@
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
 
-  .datepicker-range::before {
-    content: '–';
-    position: absolute;
-    left: -1.5rem;
-    padding: 0.375rem 0.75rem;
-    @include media-breakpoint-down(xs) {
-      display: none;
-    }
+  .fake-checkbox {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f5f5f6;
+    border: 2px solid #b1b1b1;
+    flex-shrink: 0;
   }
 </style>
