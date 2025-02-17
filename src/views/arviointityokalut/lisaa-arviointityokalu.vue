@@ -93,13 +93,15 @@
         <hr />
         <h1>{{ $t('kysymykset') }}</h1>
         <div>
-          <div v-for="(kysymys, index) in form.kysymykset" :key="index">
-            <arviointityokalu-lomake-kysymys-form
-              :kysymys="kysymys"
-              :child-data-received="childDataReceived"
-              :index="index"
-              @delete="onDeleteKysymys"
-            />
+          <div ref="sortableContainer">
+            <div v-for="(kysymys, index) in form.kysymykset" :key="kysymys.jarjestysnumero">
+              <arviointityokalu-lomake-kysymys-form
+                :kysymys="kysymys"
+                :child-data-received="childDataReceived"
+                :index="index"
+                @delete="onDeleteKysymys"
+              />
+            </div>
           </div>
           <elsa-button
             variant="outline-primary"
@@ -142,6 +144,8 @@
 
 <script lang="ts">
   import { AxiosError } from 'axios'
+  // eslint-disable-next-line import/no-named-as-default
+  import Sortable, { SortableEvent } from 'sortablejs'
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
@@ -199,6 +203,9 @@
     }
   })
   export default class LisaaArviointityokalu extends Mixins(validationMixin) {
+    $refs!: {
+      sortableContainer: any
+    }
     items = [
       {
         text: this.$t('etusivu'),
@@ -265,6 +272,8 @@
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     childDataReceived = false
+
+    sortableInstance: Sortable | null = null
 
     async onSubmit() {
       const validations = [this.validateForm()]
@@ -348,6 +357,18 @@
     async mounted() {
       this.fetchKategoriat()
       this.childDataReceived = true
+      this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
+        handle: '.drag-handle',
+        animation: 200,
+        onEnd: this.updateOrder
+      })
+    }
+
+    updateOrder = (event: SortableEvent) => {
+      if (event.oldIndex === undefined || event.newIndex === undefined) return
+      this.form.kysymykset.sort((a, b) => a.jarjestysnumero - b.jarjestysnumero)
+      const movedItem = this.form.kysymykset.splice(event.oldIndex, 1)[0]
+      this.form.kysymykset.splice(event.newIndex, 0, movedItem)
     }
 
     async fetchKategoriat() {
