@@ -41,7 +41,7 @@
             </elsa-button>
           </div>
         </b-form-row>
-        <b-form-row v-if="kysymys.tyyppi === 'tekstikenttakysymys'">
+        <b-form-row v-if="kysymys.tyyppi === arviointityokaluKysymysTyyppit.TEKSTIKENTTAKYSYMYS">
           <b-form-group class="col-sm-12 col-md-12 pr-md-3" :required="false">
             <template #default="{ uid }">
               <b-form-textarea :id="uid" rows="3" disabled :placeholder="$t('vastaus')" />
@@ -80,7 +80,7 @@
         <b-form-row>
           <div class="col-sm-12 col-md-12 pr-md-3 d-flex align-items-end">
             <elsa-button
-              v-if="kysymys.tyyppi === 'valintakysymys'"
+              v-if="kysymys.tyyppi === arviointityokaluKysymysTyyppit.VALINTAKYSYMYS"
               variant="link"
               class="shadow-none p-0 mt-2 d-block"
               @click.stop.prevent="onAddVastausVaihtoehto"
@@ -114,6 +114,7 @@
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import { ArviointityokaluKysymys } from '@/types'
+  import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
 
   @Component({
     components: {
@@ -175,6 +176,10 @@
 
     onDeleteKysymys() {
       this.$emit('delete', this.index)
+    }
+
+    get arviointityokaluKysymysTyyppit() {
+      return ArviointityokaluKysymysTyyppi
     }
   }
 </script>

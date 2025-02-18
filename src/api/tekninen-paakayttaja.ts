@@ -13,7 +13,8 @@ import {
   SuoritteenKategoriaWithErikoisala,
   SuoriteWithErikoisala,
   Ilmoitus,
-  ArviointityokaluKategoria
+  ArviointityokaluKategoria,
+  Arviointityokalu
 } from '@/types'
 
 export async function getErikoistuvatLaakarit(params: {
@@ -201,4 +202,29 @@ export async function patchArviointityokalutKategoria(form: ArviointityokaluKate
 export async function deleteArviointityokalutKategoria(id: number) {
   const path = `/tekninen-paakayttaja/arviointityokalut/kategoria/${id}`
   return await axios.delete<ArviointityokaluKategoria>(path)
+}
+
+export async function getArviointityokalut() {
+  const path = `/tekninen-paakayttaja/arviointityokalut`
+  return await axios.get<Arviointityokalu[]>(path)
+}
+
+export async function getArviointityokalu() {
+  const path = `/tekninen-paakayttaja/arviointityokalu`
+  return await axios.get<Arviointityokalu>(path)
+}
+
+export async function postArviointityokalu(form: Arviointityokalu) {
+  const path = `/tekninen-paakayttaja/arviointityokalu`
+  return await axios.post<Arviointityokalu>(path, form)
+}
+
+export async function patchArviointityokalu(form: Arviointityokalu) {
+  const path = `/tekninen-paakayttaja/arviointityokalu`
+  return await axios.patch<Arviointityokalu>(path, form)
+}
+
+export async function deleteArviointityokalu(id: number) {
+  const path = `/tekninen-paakayttaja/arviointityokalu/${id}`
+  return await axios.delete<Arviointityokalu>(path)
 }

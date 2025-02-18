@@ -150,10 +150,7 @@
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
-  import {
-    getArviointityokalutKategoriat,
-    postArviointityokalutKategoria
-  } from '@/api/tekninen-paakayttaja'
+  import { getArviointityokalutKategoriat, postArviointityokalu } from '@/api/tekninen-paakayttaja'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -170,11 +167,11 @@
   import {
     Arviointityokalu,
     ArviointityokaluKategoria,
-    ArviointityokaluKysymysTyyppi,
     ArviointityokaluKysymysVaihtoehto,
     Asiakirja,
     ElsaError
   } from '@/types'
+  import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -226,53 +223,16 @@
       kategoriaId: -1,
       ohjeteksti: null,
       liite: null,
-      kysymykset: [
-        {
-          id: 0,
-          otsikko: 'Tekstikenttä esimerkki',
-          tyyppi: 'tekstikenttakysymys',
-          pakollinen: true,
-          vaihtoehdot: [],
-          jarjestysnumero: 0
-        },
-        {
-          id: 1,
-          otsikko: 'Valinta esimerkki',
-          tyyppi: 'valintakysymys',
-          pakollinen: true,
-          vaihtoehdot: [
-            {
-              id: 0,
-              teksti: 'Valinta yksi',
-              valittu: false
-            },
-            {
-              id: 1,
-              teksti: 'Valinta kaksi',
-              valittu: false
-            },
-            {
-              id: 2,
-              teksti: 'Valinta kolme',
-              valittu: false
-            }
-          ],
-          jarjestysnumero: 1
-        }
-      ]
+      kysymykset: []
     }
 
     asiakirjat: Asiakirja[] = []
     kategoriat: ArviointityokaluKategoria[] = []
-
     saving = false
-
     addedFiles: File[] = []
-    reservedAsiakirjaNimetMutable: string[] = []
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     childDataReceived = false
-
     sortableInstance: Sortable | null = null
 
     async onSubmit() {
@@ -282,10 +242,10 @@
       }
 
       try {
-        await postArviointityokalutKategoria({
+        await postArviointityokalu({
           ...this.form
         })
-        toastSuccess(this, this.$t('arviointityokalu-kategoria-lisatty'))
+        toastSuccess(this, this.$t('arviointityokalu-lisatty'))
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'arviointityokalut'
@@ -296,23 +256,23 @@
         toastFail(
           this,
           message
-            ? `${this.$t('arviointityokalu-kategoria-lisaaminen-epaonnistui')}: ${this.$t(message)}`
-            : this.$t('arviointityokalu-kategoria-lisaaminen-epaonnistui')
+            ? `${this.$t('arviointityokalun-lisaaminen-epaonnistui')}: ${this.$t(message)}`
+            : this.$t('arviointityokalun-lisaaminen-epaonnistui')
         )
       }
       this.saving = false
     }
 
     async onSaveAsDraft() {
-      /* */
+      toastFail(this, 'Toimintoa ei ole olemassa')
     }
 
     addTekstikenttaKysymys() {
-      this.addKysymys('tekstikenttakysymys', [])
+      this.addKysymys(ArviointityokaluKysymysTyyppi.TEKSTIKENTTAKYSYMYS, [])
     }
 
     addValintaKysymys() {
-      this.addKysymys('valintakysymys', [
+      this.addKysymys(ArviointityokaluKysymysTyyppi.VALINTAKYSYMYS, [
         {
           teksti: '',
           valittu: false

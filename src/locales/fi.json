@@ -1922,5 +1922,7 @@
   "pakollinen-kysymys": "Pakollinen kysymys",
   "lisaa-vastausvaihtoehto": "Lisää vastausvaihtoehto",
   "ei-kategoriaa": "Ei kategoriaa",
-  "arviointityokalu-kysymys-poistettu": "Arviointityokalu kysymys poistettu"
+  "arviointityokalu-kysymys-poistettu": "Arviointityokalu kysymys poistettu",
+  "arviointityokalu-lisatty": "Arviointityokalu lisätty",
+  "arviointityokalun-lisaaminen-epaonnistui": "Arviointityokalun lisääminen epäonnistui"
 }

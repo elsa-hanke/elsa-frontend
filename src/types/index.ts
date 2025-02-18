@@ -1,5 +1,4 @@
 import { LocaleMessages } from 'vue-i18n'
-import { numeric } from 'vuelidate/lib/validators'
 
 import {
   ArvioinninPerustuminen,
@@ -19,7 +18,7 @@ import {
   ReassignedVastuuhenkilonTehtavaTyyppi,
   AvoinAsiaTyyppi,
   TerveyskeskuskoulutusjaksonTila,
-  ValmistumispyynnonTila
+  ValmistumispyynnonTila, ArviointityokaluKysymysTyyppi
 } from '@/utils/constants'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -877,8 +876,6 @@ export type Arviointityokalu = {
   liite: File | null
   kysymykset: ArviointityokaluKysymys[]
 }
-
-export type ArviointityokaluKysymysTyyppi = 'tekstikenttakysymys' | 'valintakysymys'
 
 export type ArviointityokaluKysymys = {
   id?: number
