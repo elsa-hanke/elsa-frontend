@@ -148,7 +148,6 @@
             .map((tool) => ({ ...tool, isCategory: false, arviointityokaluId: tool.id }))
         )
       })
-      console.log(list)
       return list
     }
   }

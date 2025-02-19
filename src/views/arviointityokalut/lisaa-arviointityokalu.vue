@@ -98,7 +98,7 @@
         <div>
           <div ref="sortableContainer">
             <div v-for="(kysymys, index) in form.kysymykset" :key="kysymys.jarjestysnumero">
-              <arviointityokalu-lomake-kysymys-form
+              <arviointityokalu-lomake-kysymys-luonti-form
                 :kysymys="kysymys"
                 :child-data-received="childDataReceived"
                 :index="index"
@@ -166,7 +166,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
+  import ArviointityokaluLomakeKysymysLuontiForm from '@/forms/arviointityokalu-lomake-kysymys-luonti-form.vue'
   import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
   import PaakayttajaForm from '@/forms/uusi-paakayttaja-form.vue'
@@ -185,7 +185,7 @@
 
   @Component({
     components: {
-      ArviointityokaluLomakeKysymysForm,
+      ArviointityokaluLomakeKysymysLuontiForm,
       TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
       ElsaFormMultiselect,
       AsiakirjatContent,
@@ -310,7 +310,7 @@
         tyyppi: tyyppi,
         pakollinen: false,
         vaihtoehdot: vaihtoehdot,
-        jarjestysnumero: 99
+        jarjestysnumero: this.form.kysymykset.length + 1
       })
     }
 
@@ -333,18 +333,19 @@
 
     async mounted() {
       this.loading = true
-      this.fetchKategoriat()
+      await this.fetchKategoriat()
       this.childDataReceived = true
-      this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
-        handle: '.drag-handle',
-        animation: 200,
-        onEnd: this.updateOrder
-      })
-
       const arviointityokaluId = Number(this.$route?.params?.arviointityokaluId)
       if (arviointityokaluId > 0) {
         await this.fetchArviointityokalu(arviointityokaluId)
       }
+      this.$nextTick(() => {
+        this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
+          handle: '.drag-handle',
+          animation: 200,
+          onEnd: this.updateOrder
+        })
+      })
       this.loading = false
     }
 
@@ -361,9 +362,8 @@
 
     updateOrder = (event: SortableEvent) => {
       if (event.oldIndex === undefined || event.newIndex === undefined) return
-      this.form.kysymykset.sort((a, b) => a.jarjestysnumero - b.jarjestysnumero)
-      const movedItem = this.form.kysymykset.splice(event.oldIndex, 1)[0]
-      this.form.kysymykset.splice(event.newIndex, 0, movedItem)
+      console.log(this.form.kysymykset)
+      // todo
     }
 
     async fetchKategoriat() {

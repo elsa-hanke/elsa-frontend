@@ -6,7 +6,13 @@
         <b-col>
           <h1>{{ $t('arviointityokalu') }}</h1>
           <hr />
-          Tähän tulee työkalun tila
+          <b-form-row>
+            <elsa-form-group :label="$t('tila')" class="col-sm-12 col-md-6 pr-md-3">
+              <template #default="{ uid }">
+                <span :id="uid" class="text-success">{{ 'Julkaistu' }}</span>
+              </template>
+            </elsa-form-group>
+          </b-form-row>
           <hr />
           <div v-if="form">
             <b-form-row>
@@ -19,6 +25,63 @@
                 </template>
               </elsa-form-group>
             </b-form-row>
+            <b-form-row>
+              <elsa-form-group :label="$t('kategoria')" class="col-sm-12 col-md-6 pr-md-3">
+                <template #default="{ uid }">
+                  <span :id="uid">
+                    {{ form.kategoria ? form.kategoria.nimi : $t('ei-kategoriaa') }}
+                  </span>
+                </template>
+              </elsa-form-group>
+            </b-form-row>
+            <b-form-row>
+              <elsa-form-group
+                :label="$t('ohjeteksti-arviointityokalun-kayttoon')"
+                class="col-sm-12 col-md-12 pr-md-3"
+              >
+                <template #default="{ uid }">
+                  <span :id="uid">
+                    {{ form.ohjeteksti }}
+                  </span>
+                </template>
+              </elsa-form-group>
+            </b-form-row>
+            <b-form-row>
+              <elsa-form-group
+                class="col-sm-12 col-md-6 pr-md-3"
+                :label="$t('arviointityokalu-liitetiedostona')"
+              >
+                <asiakirjat-content
+                  v-if="asiakirjat && asiakirjat.length > 0"
+                  :asiakirjat="asiakirjat"
+                  :sorting-enabled="false"
+                  :pagination-enabled="false"
+                  :enable-search="false"
+                  :show-info-if-empty="false"
+                  :enable-delete="false"
+                />
+                <b-alert v-else variant="dark" show>
+                  <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+                  <span>
+                    {{ $t('ei-liitetiedostoa') }}
+                  </span>
+                </b-alert>
+              </elsa-form-group>
+            </b-form-row>
+            <hr />
+            <h1>{{ $t('kysymykset') }}</h1>
+            <div
+              v-for="(kysymys, index) in form.kysymykset"
+              :key="kysymys.jarjestysnumero"
+              class="mt-4"
+            >
+              <arviointityokalu-lomake-kysymys-form
+                :kysymys="kysymys"
+                :child-data-received="!loading"
+                :answer-mode="false"
+                :index="index"
+              />
+            </div>
             <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
@@ -76,16 +139,20 @@
   import { required } from 'vuelidate/lib/validators'
 
   import { deleteArviointityokalu, getArviointityokalu } from '@/api/tekninen-paakayttaja'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import { Arviointityokalu } from '@/types'
+  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
+  import { Arviointityokalu, Asiakirja } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
+      ArviointityokaluLomakeKysymysForm,
+      AsiakirjatContent,
       ElsaButton,
       ElsaConfirmationModal,
       ElsaFormGroup,
@@ -124,6 +191,7 @@
       liite: null
     }
 
+    asiakirjat: Asiakirja[] = []
     skipRouteExitConfirm = true
     deleting = false
     loading = false
