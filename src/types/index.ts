@@ -871,7 +871,7 @@ export type ArviointiasteikonTaso = {
 export type Arviointityokalu = {
   id?: number
   nimi: string | null
-  kategoriaId: number
+  kategoria: ArviointityokaluKategoria | null
   ohjeteksti: string | null
   liite: File | null
   kysymykset: ArviointityokaluKysymys[]

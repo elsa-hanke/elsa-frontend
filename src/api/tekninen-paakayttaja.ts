@@ -209,8 +209,8 @@ export async function getArviointityokalut() {
   return await axios.get<Arviointityokalu[]>(path)
 }
 
-export async function getArviointityokalu() {
-  const path = `/tekninen-paakayttaja/arviointityokalu`
+export async function getArviointityokalu(id: number) {
+  const path = `/tekninen-paakayttaja/arviointityokalu/${id}`
   return await axios.get<Arviointityokalu>(path)
 }
 
