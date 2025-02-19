@@ -16,45 +16,48 @@
       </b-row>
       <b-row>
         <b-col>
-          <div v-if="!loading">
-            <b-alert v-if="rows === 0" variant="dark" show>test test</b-alert>
-          </div>
-          <div v-else class="text-center">
+          <div v-if="loading" class="text-center">
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
           <b-table
-            v-if="!loading && rows > 0"
-            :items="tulokset"
+            :items="flatList"
             :fields="fields"
-            :per-page="perPage"
-            :current-page="currentPage"
             class="arviointityokalut-table"
-            details-td-class="row-details"
-            tbody-tr-class="outer-table"
             stacked="md"
             responsive
           >
             <template #cell(nimi)="data">
-              <b-link
-                :to="{
-                  name: 'kategoria',
-                  params: { kategoriaId: data.item.id }
-                }"
-              >
-                {{ data.item.nimi }}
-              </b-link>
+              <template v-if="data.item.isCategory">
+                <b-link
+                  :to="{
+                    name: 'kategoria',
+                    params: { kategoriaId: data.item.kategoriaId }
+                  }"
+                  class="font-weight-bold"
+                >
+                  {{ data.item.nimi }}
+                </b-link>
+              </template>
+              <template v-else>
+                <div class="pl-4">
+                  <b-link
+                    :to="{
+                      name: 'arviointityokalu',
+                      params: { arviointityokaluId: data.item.arviointityokaluId }
+                    }"
+                  >
+                    {{ data.item.nimi }}
+                  </b-link>
+                </div>
+              </template>
             </template>
 
             <template #cell(tyyppi)="data">
-              {{ $t('arviointityokalu-tila-' + data.item.tyyppi) }}
+              <template v-if="!data.item.isCategory">
+                {{ $t('arviointityokalu-tila-' + data.item.tyyppi) }}
+              </template>
             </template>
           </b-table>
-          <pagination
-            :current-page.sync="currentPage"
-            :per-page="perPage"
-            :rows="rows"
-            :loading="loading"
-          />
         </b-col>
       </b-row>
     </b-container>
@@ -64,11 +67,11 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 
-  import { getArviointityokalutKategoriat } from '@/api/tekninen-paakayttaja'
+  import { getArviointityokalut, getArviointityokalutKategoriat } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
-  import { ArviointityokaluKategoria } from '@/types'
+  import { Arviointityokalu, ArviointityokaluKategoria } from '@/types'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
@@ -80,7 +83,8 @@
     }
   })
   export default class Arviointityokalut extends Vue {
-    arviointityokalut: ArviointityokaluKategoria[] = []
+    arviointityokaluKategoriat: ArviointityokaluKategoria[] = []
+    arviointityokalut: Arviointityokalu[] = []
 
     loading = true
 
@@ -98,7 +102,7 @@
     fields = [
       {
         key: 'nimi',
-        label: this.$t('arviointityokalu'),
+        label: this.$t('nimi'),
         class: 'nimi',
         sortable: false
       },
@@ -115,29 +119,37 @@
     async mounted() {
       this.loading = true
       try {
-        this.arviointityokalut = (await getArviointityokalutKategoriat()).data.sort((a, b) =>
+        this.arviointityokaluKategoriat = (await getArviointityokalutKategoriat()).data.sort(
+          (a, b) => sortByAsc(a.nimi, b.nimi)
+        )
+        this.arviointityokalut = (await getArviointityokalut()).data.sort((a, b) =>
           sortByAsc(a.nimi, b.nimi)
         )
       } catch {
         toastFail(this, this.$t('arviointityokalujen-kategorioiden-hakeminen-epaonnistui'))
+        this.arviointityokaluKategoriat = []
         this.arviointityokalut = []
       }
       this.loading = false
     }
 
-    get rows() {
-      return this.tulokset?.length ?? 0
-    }
-
-    get tulokset() {
-      // if (this.hakutermi) {
-      //   this.currentPage = 1
-      //   return this.erikoisalat?.filter((item: Erikoisala) =>
-      //     item.nimi?.toLowerCase().includes(this.hakutermi.toLowerCase())
-      //   )
-      // }
-
-      return this.arviointityokalut
+    get flatList() {
+      let list = []
+      list.push(
+        ...this.arviointityokalut
+          .filter((tool) => tool.kategoria === null)
+          .map((tool) => ({ ...tool, isCategory: false, arviointityokaluId: tool.id }))
+      )
+      this.arviointityokaluKategoriat.forEach((category) => {
+        list.push({ nimi: category.nimi, isCategory: true, kategoriaId: category.id })
+        list.push(
+          ...this.arviointityokalut
+            .filter((tool) => tool.kategoria?.id === category.id)
+            .map((tool) => ({ ...tool, isCategory: false, arviointityokaluId: tool.id }))
+        )
+      })
+      console.log(list)
+      return list
     }
   }
 </script>
@@ -148,59 +160,5 @@
 
   .arviointityokalut {
     max-width: 1420px;
-  }
-
-  ::v-deep .arviointityokalut-table {
-    .row-details {
-      padding: 0;
-      table {
-        margin: 0;
-
-        border: none;
-        thead,
-        &tr {
-          display: none;
-        }
-        td {
-          word-wrap: break-all;
-        }
-      }
-    }
-
-    @include media-breakpoint-down(sm) {
-      border-bottom: 0;
-
-      tr {
-        border: $table-border-width solid $table-border-color;
-        border-radius: $border-radius;
-        margin-top: 0.5rem;
-        padding-top: $table-cell-padding;
-        padding-bottom: $table-cell-padding;
-      }
-
-      td {
-        border: none;
-        padding: 0 0.5rem;
-
-        & > div {
-          width: 100% !important;
-          padding: 0 0 0.5rem 0 !important;
-        }
-
-        &::before {
-          text-align: left !important;
-          font-weight: 500 !important;
-          width: 100% !important;
-          padding-right: 0 !important;
-        }
-        &:last-child > div {
-          padding-bottom: 0 !important;
-        }
-
-        &.last > div {
-          padding-bottom: 0 !important;
-        }
-      }
-    }
   }
 </style>
