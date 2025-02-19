@@ -5,7 +5,10 @@
       <b-form @submit.stop.prevent="onSubmit">
         <b-row lg>
           <b-col>
-            <h1>{{ $t('lisaa-arviointityokalu') }}</h1>
+            <h1>{{ editing ? $t('muokkaa-arviointityokalua') : $t('lisaa-arviointityokalu') }}</h1>
+            <div v-if="loading" class="text-center">
+              <b-spinner variant="primary" :label="$t('ladataan')" />
+            </div>
             <hr />
             <b-form-row>
               <elsa-form-group
@@ -33,7 +36,7 @@
                 :required="false"
               >
                 <elsa-form-multiselect
-                  v-model="form.kategoriaId"
+                  v-model="form.kategoria"
                   :options="kategoriatFormatted"
                   label="nimi"
                   track-by="id"
@@ -150,7 +153,12 @@
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
-  import { getArviointityokalutKategoriat, postArviointityokalu } from '@/api/tekninen-paakayttaja'
+  import {
+    getArviointityokalu,
+    getArviointityokalutKategoriat,
+    patchArviointityokalu,
+    postArviointityokalu
+  } from '@/api/tekninen-paakayttaja'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
@@ -220,7 +228,7 @@
 
     form: Arviointityokalu = {
       nimi: null,
-      kategoriaId: -1,
+      kategoria: null,
       ohjeteksti: null,
       liite: null,
       kysymykset: []
@@ -229,6 +237,8 @@
     asiakirjat: Asiakirja[] = []
     kategoriat: ArviointityokaluKategoria[] = []
     saving = false
+    loading = false
+    editing = false
     addedFiles: File[] = []
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
@@ -242,10 +252,17 @@
       }
 
       try {
-        await postArviointityokalu({
-          ...this.form
-        })
-        toastSuccess(this, this.$t('arviointityokalu-lisatty'))
+        if (this.editing) {
+          await patchArviointityokalu({
+            ...this.form
+          })
+          toastSuccess(this, this.$t('arviointityokalun-muutokset-tallennettu'))
+        } else {
+          await postArviointityokalu({
+            ...this.form
+          })
+          toastSuccess(this, this.$t('arviointityokalu-lisatty'))
+        }
         this.$emit('skipRouteExitConfirm', true)
         this.$router.push({
           name: 'arviointityokalut'
@@ -315,6 +332,7 @@
     }
 
     async mounted() {
+      this.loading = true
       this.fetchKategoriat()
       this.childDataReceived = true
       this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
@@ -322,6 +340,23 @@
         animation: 200,
         onEnd: this.updateOrder
       })
+
+      const arviointityokaluId = Number(this.$route?.params?.arviointityokaluId)
+      if (arviointityokaluId > 0) {
+        await this.fetchArviointityokalu(arviointityokaluId)
+      }
+      this.loading = false
+    }
+
+    async fetchArviointityokalu(arviointityokaluId: number) {
+      try {
+        this.form = (await getArviointityokalu(arviointityokaluId)).data
+        this.editing = true
+      } catch (err) {
+        toastFail(this, this.$t('arviointityokalun-hakeminen-epaonnistui'))
+        this.$router.replace({ name: 'arviointityokalut' })
+        this.loading = false
+      }
     }
 
     updateOrder = (event: SortableEvent) => {

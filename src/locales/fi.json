@@ -1924,5 +1924,8 @@
   "ei-kategoriaa": "Ei kategoriaa",
   "arviointityokalu-kysymys-poistettu": "Arviointityokalu kysymys poistettu",
   "arviointityokalu-lisatty": "Arviointityokalu lisätty",
-  "arviointityokalun-lisaaminen-epaonnistui": "Arviointityokalun lisääminen epäonnistui"
+  "arviointityokalun-lisaaminen-epaonnistui": "Arviointityokalun lisääminen epäonnistui",
+  "muokkaa-arviointityokalua": "Muokkaa arviointityökalua",
+  "poista-arviointityokalu": "Poista arviointityökalu",
+  "arviointityokalun-muutokset-tallennettu": "Arviointityökalun muutokset tallennettu"
 }
