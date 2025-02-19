@@ -1927,5 +1927,6 @@
   "arviointityokalun-lisaaminen-epaonnistui": "Arviointityokalun lisääminen epäonnistui",
   "muokkaa-arviointityokalua": "Muokkaa arviointityökalua",
   "poista-arviointityokalu": "Poista arviointityökalu",
-  "arviointityokalun-muutokset-tallennettu": "Arviointityökalun muutokset tallennettu"
+  "arviointityokalun-muutokset-tallennettu": "Arviointityökalun muutokset tallennettu",
+  "ei-liitetiedostoa": "Ei liitetiedostoa"
 }
