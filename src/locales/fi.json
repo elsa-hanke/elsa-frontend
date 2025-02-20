@@ -1928,5 +1928,8 @@
   "muokkaa-arviointityokalua": "Muokkaa arviointityökalua",
   "poista-arviointityokalu": "Poista arviointityökalu",
   "arviointityokalun-muutokset-tallennettu": "Arviointityökalun muutokset tallennettu",
-  "ei-liitetiedostoa": "Ei liitetiedostoa"
+  "ei-liitetiedostoa": "Ei liitetiedostoa",
+  "arviointityokalu-poista-arviointityokalu": "Poista arviointityökalu",
+  "arviointityokalu-poista-arviointityokalu-selite": "Haluatko varmasti poistaa arviointityökalun? Arviointityökalulla tehdyt arvioinnit säilytetään, vaikka arviointityökalu poistetaankin.",
+  "arviointityokalun-hakeminen-epaonnistui": "Arviointityökalun hakeminen epäonnistui"
 }
