@@ -252,15 +252,21 @@
       }
 
       try {
+        if (this.form.liite == null && this.asiakirjat.length > 0) {
+          const file = this.asiakirjat[0]
+          const data = await file.data
+          if (data) {
+            this.form.liite = new File([data], file.nimi || '', {
+              type: file.contentType || ''
+            })
+          }
+        }
+
         if (this.editing) {
-          await patchArviointityokalu({
-            ...this.form
-          })
+          await patchArviointityokalu(this.form)
           toastSuccess(this, this.$t('arviointityokalun-muutokset-tallennettu'))
         } else {
-          await postArviointityokalu({
-            ...this.form
-          })
+          await postArviointityokalu(this.form)
           toastSuccess(this, this.$t('arviointityokalu-lisatty'))
         }
         this.$emit('skipRouteExitConfirm', true)
@@ -340,11 +346,13 @@
         await this.fetchArviointityokalu(arviointityokaluId)
       }
       this.$nextTick(() => {
-        this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
-          handle: '.drag-handle',
-          animation: 200,
-          onEnd: this.updateOrder
-        })
+        if (this.$refs.sortableContainer) {
+          this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
+            handle: '.drag-handle',
+            animation: 200,
+            onEnd: this.updateOrder
+          })
+        }
       })
       this.loading = false
     }
@@ -362,8 +370,6 @@
 
     updateOrder = (event: SortableEvent) => {
       if (event.oldIndex === undefined || event.newIndex === undefined) return
-      console.log(this.form.kysymykset)
-      // todo
     }
 
     async fetchKategoriat() {
