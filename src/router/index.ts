@@ -1518,7 +1518,6 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/tyokertymalaskuri',
-    name: 'tyokertymalaskuri',
     component: TyokertymalaskuriView,
     children: [
       {
