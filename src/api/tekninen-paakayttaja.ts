@@ -215,13 +215,29 @@ export async function getArviointityokalu(id: number) {
 }
 
 export async function postArviointityokalu(form: Arviointityokalu) {
+  const formData = new FormData()
+  formData.append('data', JSON.stringify(form))
+  if (form.liite) {
+    formData.append('liiteData', form.liite)
+  }
   const path = `/tekninen-paakayttaja/arviointityokalu`
-  return await axios.post<Arviointityokalu>(path, form)
+  return await axios.post<Arviointityokalu>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
 
 export async function patchArviointityokalu(form: Arviointityokalu) {
+  const formData = new FormData()
+  formData.append('data', JSON.stringify(form))
+  if (form.liite) {
+    formData.append('liiteData', form.liite)
+  }
   const path = `/tekninen-paakayttaja/arviointityokalu`
-  return await axios.patch<Arviointityokalu>(path, form)
+  return await axios.patch<Arviointityokalu>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
 }
 
 export async function deleteArviointityokalu(id: number) {
