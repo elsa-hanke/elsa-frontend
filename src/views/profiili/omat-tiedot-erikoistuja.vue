@@ -387,7 +387,7 @@
           },
           emailConfirm: {
             emailConfirmed: () => {
-              return this.needEmailConfirm && this.form.email === this.confirmEmailValue
+              return this.needEmailConfirm ? this.form.email === this.confirmEmailValue : true
             }
           },
           phoneNumber: {
@@ -565,6 +565,7 @@
         )
       } finally {
         this.params.saving = false
+        this.needEmailConfirm = false
       }
     }
 
