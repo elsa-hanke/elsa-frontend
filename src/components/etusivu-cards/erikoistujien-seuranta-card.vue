@@ -431,7 +431,7 @@
     }
 
     get rows() {
-      return this.erikoistujat?.totalElements ?? 0
+      return this.erikoistujat?.page.totalElements ?? 0
     }
 
     keskiarvoFormatted(keskiarvo: number) {

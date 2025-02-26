@@ -1377,7 +1377,8 @@ const routes: Array<RouteConfig> = [
           if (store.getters['auth/isLoggedIn']) {
             const account = store.getters['auth/account']
             if (
-              account.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari) &&
+              (account.authorities.includes(ELSA_ROLE.ErikoistuvaLaakari) ||
+                account.authorities.includes(ELSA_ROLE.YEKKoulutettava)) &&
               !account.email &&
               to.name !== 'kaytonaloitus'
             ) {

@@ -76,7 +76,16 @@
         "
       >
         <template #content>
-          <p class="pr-6 mb-2">{{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}</p>
+          <div v-if="waitingForVirkailija">
+            <p class="pr-6 mb-2">
+              {{ $t('vastuuhenkilon-arvio-tila-odottaa-hyvaksyntaa') }}
+            </p>
+          </div>
+          <div v-else>
+            <p class="pr-6 mb-2">
+              {{ $t('virkailijan-arvio-tila-odottaa-hyvaksyntaa') }}
+            </p>
+          </div>
         </template>
         <template #button>
           <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
@@ -164,6 +173,10 @@
 
     get url() {
       return 'koejakson-vastuuhenkilon-arvio'
+    }
+
+    get waitingForVirkailija() {
+      return this.koejakso.vastuuhenkilonArvio?.virkailija?.sopimusHyvaksytty
     }
   }
 </script>

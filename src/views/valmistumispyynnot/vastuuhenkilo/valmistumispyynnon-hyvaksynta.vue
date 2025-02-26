@@ -98,54 +98,6 @@
               ></erikoistuva-details>
             </div>
             <hr />
-            <div v-if="odottaaHyvaksyntaa">
-              <b-row>
-                <b-col lg="4">
-                  <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
-                    <template #default="{ uid }">
-                      <b-form-input
-                        :id="uid"
-                        v-model="form.sahkoposti"
-                        :state="validateState('sahkoposti')"
-                        @input="onSkipRouteExitConfirm"
-                      />
-                      <b-form-invalid-feedback
-                        v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
-                        :id="`${uid}-feedback`"
-                      >
-                        {{ $t('pakollinen-tieto') }}
-                      </b-form-invalid-feedback>
-                      <b-form-invalid-feedback
-                        v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
-                        :id="`${uid}-feedback`"
-                        :state="validateState('sahkoposti')"
-                      >
-                        {{ $t('sahkopostiosoite-ei-kelvollinen') }}
-                      </b-form-invalid-feedback>
-                    </template>
-                  </elsa-form-group>
-                </b-col>
-                <b-col lg="4">
-                  <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
-                    <template #default="{ uid }">
-                      <b-form-input
-                        :id="uid"
-                        v-model="form.puhelinnumero"
-                        :state="validateState('puhelinnumero')"
-                        @input="onSkipRouteExitConfirm"
-                      />
-                      <small class="form-text text-muted">
-                        {{ $t('syota-puhelinnumero-muodossa') }}
-                      </small>
-                      <b-form-invalid-feedback :id="`${uid}-feedback`">
-                        {{ $t('tarkista-puhelinnumeron-muoto') }}
-                      </b-form-invalid-feedback>
-                    </template>
-                  </elsa-form-group>
-                </b-col>
-              </b-row>
-              <hr />
-            </div>
             <h2 class="mb-3">{{ $t('osaamisen-arviointi') }}</h2>
             <div>
               <h5>
@@ -173,6 +125,53 @@
               </b-row>
             </div>
             <b-form @submit.stop.prevent="onSubmit">
+              <div v-if="odottaaHyvaksyntaa">
+                <b-row>
+                  <b-col lg="4">
+                    <elsa-form-group :label="$t('sahkopostiosoite')" :required="true">
+                      <template #default="{ uid }">
+                        <b-form-input
+                          :id="uid"
+                          v-model="form.sahkoposti"
+                          :state="validateState('sahkoposti')"
+                          @input="onSkipRouteExitConfirm"
+                        />
+                        <b-form-invalid-feedback
+                          v-if="$v.form.sahkoposti && !$v.form.sahkoposti.required"
+                          :id="`${uid}-feedback`"
+                        >
+                          {{ $t('pakollinen-tieto') }}
+                        </b-form-invalid-feedback>
+                        <b-form-invalid-feedback
+                          v-if="$v.form.sahkoposti && !$v.form.sahkoposti.email"
+                          :id="`${uid}-feedback`"
+                          :state="validateState('sahkoposti')"
+                        >
+                          {{ $t('sahkopostiosoite-ei-kelvollinen') }}
+                        </b-form-invalid-feedback>
+                      </template>
+                    </elsa-form-group>
+                  </b-col>
+                  <b-col lg="4">
+                    <elsa-form-group :label="$t('matkapuhelinnumero')" :required="true">
+                      <template #default="{ uid }">
+                        <b-form-input
+                          :id="uid"
+                          v-model="form.puhelinnumero"
+                          :state="validateState('puhelinnumero')"
+                          @input="onSkipRouteExitConfirm"
+                        />
+                        <small class="form-text text-muted">
+                          {{ $t('syota-puhelinnumero-muodossa') }}
+                        </small>
+                        <b-form-invalid-feedback :id="`${uid}-feedback`">
+                          {{ $t('tarkista-puhelinnumeron-muoto') }}
+                        </b-form-invalid-feedback>
+                      </template>
+                    </elsa-form-group>
+                  </b-col>
+                </b-row>
+              </div>
               <hr />
               <h2 class="mb-3">{{ $t('maaralliset-tarkistukset') }}</h2>
               <elsa-button
@@ -670,7 +669,13 @@
       window.location.href = `${ELSA_API_LOCATION}/api/login/impersonate?opintooikeusId=${id}&originalUrl=${window.location.href}`
     }
 
+    validateForm(): boolean {
+      this.$v.form.$touch()
+      return !this.$v.$anyError
+    }
+
     onSubmit() {
+      if (!this.validateForm()) return
       return this.$bvModal.show('confirm-send')
     }
 

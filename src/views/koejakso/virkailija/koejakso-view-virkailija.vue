@@ -359,11 +359,11 @@
     }
 
     get avoimetRows() {
-      return this.avoimetKoejaksot?.totalElements ?? 0
+      return this.avoimetKoejaksot?.page.totalElements ?? 0
     }
 
     get muutRows() {
-      return this.muutKoejaksot?.totalElements ?? 0
+      return this.muutKoejaksot?.page.totalElements ?? 0
     }
 
     get erikoisalatSorted() {

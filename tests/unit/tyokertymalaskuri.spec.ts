@@ -93,7 +93,7 @@ describe('Tyokertymalaskuri', () => {
       hyvaksiluettavatCounter,
       parseISO('2021-12-29')
     )
-    expect(test).toBe(51.0)
+    expect(test).toBe(51)
   })
 
   it('pitaisi palauttaa oikea maara vahennettavia paivia', () => {

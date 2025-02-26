@@ -47,7 +47,7 @@
       </template>
       <template #cell(actions)="row">
         <elsa-button
-          v-if="row.item.isAvoinForCurrentKayttaja"
+          v-if="row.item.isAvoinForCurrentKayttaja && showButton(row.item.tila)"
           variant="primary"
           class="pt-1 pb-1"
           :to="{
@@ -201,7 +201,7 @@
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
             return this.$t('valmistumispyynnon-tila.avoin-odottaa-hyvaksyntaa')
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
-            return this.$t('avoin')
+            return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-virkailijan-tarkastusta')
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
             return this.$t('valmistumispyynnon-tila.avoin-virkailijan-tarkastus-kesken')
         }
@@ -220,12 +220,26 @@
       }
     }
 
+    showButton(tila: ValmistumispyynnonTila) {
+      if (this.$isVirkailija())
+        return (
+          tila === ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA ||
+          tila === ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN
+        )
+      else
+        return (
+          tila === ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA ||
+          tila === ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA
+        )
+    }
+
     get content() {
+      console.log(this.valmistumispyynnot)
       return this.valmistumispyynnot?.content
     }
 
     get rows() {
-      return this.valmistumispyynnot?.totalElements ?? 0
+      return this.valmistumispyynnot?.page.totalElements ?? 0
     }
 
     onPageInput(value: number) {

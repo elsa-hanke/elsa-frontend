@@ -51,7 +51,9 @@
           account.erikoistuvaLaakari.opintooikeusKaytossaId = form.opintooikeusId
         }
 
-        this.$router.push({ name: 'etusivu' })
+        this.$router.push({ name: 'etusivu' }).then(() => {
+          this.$router.go(0)
+        })
       } catch (err) {
         this.loading = false
         const axiosError = err as AxiosError<ElsaError>

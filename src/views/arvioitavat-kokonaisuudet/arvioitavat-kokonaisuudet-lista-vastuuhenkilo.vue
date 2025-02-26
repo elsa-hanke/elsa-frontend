@@ -79,7 +79,7 @@
           })
         ).data
         this.arvioitavatKokonaisuudet = this.arvioitavatKokonaisuudetPageable.content
-        this.rows = this.arvioitavatKokonaisuudetPageable.totalElements
+        this.rows = this.arvioitavatKokonaisuudetPageable.page.totalElements
         this.loading = false
       } catch {
         toastFail(this, this.$t('arvioitavien-kokonaisuuksien-hakeminen-epaonnistui'))

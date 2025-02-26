@@ -325,11 +325,11 @@
     }
 
     get avoimetRows() {
-      return this.avoimetJaksot?.totalElements ?? 0
+      return this.avoimetJaksot?.page.totalElements ?? 0
     }
 
     get muutRows() {
-      return this.muutJaksot?.totalElements ?? 0
+      return this.muutJaksot?.page.totalElements ?? 0
     }
 
     taskIcon(status: string) {

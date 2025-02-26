@@ -221,9 +221,24 @@
               v-model="form.email"
               :state="validateState('email')"
               :aria-describedby="`${uid}-feedback`"
+              @input="needEmailConfirm = true"
+              @copy.prevent
             ></b-form-input>
             <b-form-invalid-feedback :id="`${uid}-feedback`">
-              {{ $t('pakollinen-tieto') }}
+              {{ $t('tarkista-sahkoposti') }}
+            </b-form-invalid-feedback>
+          </template>
+        </elsa-form-group>
+        <elsa-form-group v-if="needEmailConfirm" :label="$t('vahvista-sahkopostiosoite')">
+          <template #default="{ uid }">
+            <b-form-input
+              :id="uid"
+              v-model="confirmEmailValue"
+              :state="validateState('emailConfirm')"
+              :aria-describedby="`${uid}-feedback`"
+            ></b-form-input>
+            <b-form-invalid-feedback :id="`${uid}-feedback`">
+              {{ $t('sahkopostiosoitteet-eivat-tasmaa') }}
             </b-form-invalid-feedback>
           </template>
         </elsa-form-group>
@@ -296,7 +311,7 @@
   import { TranslateResult } from 'vue-i18n'
   import { Component, Vue, Prop, Mixins } from 'vue-property-decorator'
   import { Validation, validationMixin } from 'vuelidate'
-  import { minLength, required } from 'vuelidate/lib/validators'
+  import { minLength, required, email } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
@@ -327,12 +342,20 @@
   export default class OmatTiedot extends Mixins(validationMixin) {
     @Prop({ required: false, default: false })
     editing!: boolean
+    needEmailConfirm = false
+    confirmEmailValue = ''
 
     validations() {
       return {
         form: {
           email: {
-            required
+            required,
+            email
+          },
+          confirmEmail: {
+            emailConfirmed: () => {
+              return this.needEmailConfirm ? this.form.email === this.confirmEmailValue : true
+            }
           },
           phoneNumber: {
             phoneNumber
@@ -475,6 +498,7 @@
         )
       } finally {
         this.params.saving = false
+        this.needEmailConfirm = false
       }
     }
 
