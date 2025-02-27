@@ -18,7 +18,7 @@ import {
   ReassignedVastuuhenkilonTehtavaTyyppi,
   AvoinAsiaTyyppi,
   TerveyskeskuskoulutusjaksonTila,
-  ValmistumispyynnonTila, ArviointityokaluKysymysTyyppi
+  ValmistumispyynnonTila, ArviointityokaluKysymysTyyppi, ArviointityokaluTila
 } from '@/utils/constants'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -875,6 +875,9 @@ export type Arviointityokalu = {
   ohjeteksti: string | null
   liite: File | null
   kysymykset: ArviointityokaluKysymys[]
+  liitetiedostonNimi?: string
+  liitetiedostonTyyppi?: string
+  tila: ArviointityokaluTila
 }
 
 export type ArviointityokaluKysymys = {

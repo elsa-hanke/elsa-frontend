@@ -276,3 +276,8 @@ export enum ArviointityokaluKysymysTyyppi {
   TEKSTIKENTTAKYSYMYS = 'TEKSTIKENTTAKYSYMYS',
   VALINTAKYSYMYS = 'VALINTAKYSYMYS'
 }
+
+export enum ArviointityokaluTila {
+  LUONNOS = 'LUONNOS',
+  JULKAISTU = 'JULKAISTU'
+}
