@@ -179,7 +179,7 @@
     Asiakirja,
     ElsaError
   } from '@/types'
-  import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
+  import { ArviointityokaluKysymysTyyppi, ArviointityokaluTila } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -231,7 +231,8 @@
       kategoria: null,
       ohjeteksti: null,
       liite: null,
-      kysymykset: []
+      kysymykset: [],
+      tila: ArviointityokaluTila.LUONNOS
     }
 
     asiakirjat: Asiakirja[] = []

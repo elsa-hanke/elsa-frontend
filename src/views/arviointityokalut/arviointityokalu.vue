@@ -9,7 +9,14 @@
           <b-form-row>
             <elsa-form-group :label="$t('tila')" class="col-sm-12 col-md-6 pr-md-3">
               <template #default="{ uid }">
-                <span :id="uid" class="text-success">{{ 'Julkaistu' }}</span>
+                <template v-if="form.tila.toLowerCase() === 'julkaistu'">
+                  <span :id="uid" class="text-success">
+                    {{ $t('arviointityokalu-tila-' + form.tila.toLowerCase()) }}
+                  </span>
+                </template>
+                <template v-else>
+                  {{ $t('arviointityokalu-tila-' + form.tila.toLowerCase()) }}
+                </template>
               </template>
             </elsa-form-group>
           </b-form-row>
@@ -147,6 +154,7 @@
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import { Arviointityokalu, Asiakirja } from '@/types'
   import { confirmExit } from '@/utils/confirm'
+  import { ArviointityokaluTila } from '@/utils/constants'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -188,7 +196,8 @@
       ohjeteksti: null,
       kategoria: null,
       kysymykset: [],
-      liite: null
+      liite: null,
+      tila: ArviointityokaluTila.LUONNOS
     }
 
     asiakirjat: Asiakirja[] = []

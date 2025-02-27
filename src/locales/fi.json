@@ -1931,5 +1931,7 @@
   "ei-liitetiedostoa": "Ei liitetiedostoa",
   "arviointityokalu-poista-arviointityokalu": "Poista arviointityökalu",
   "arviointityokalu-poista-arviointityokalu-selite": "Haluatko varmasti poistaa arviointityökalun? Arviointityökalulla tehdyt arvioinnit säilytetään, vaikka arviointityökalu poistetaankin.",
-  "arviointityokalun-hakeminen-epaonnistui": "Arviointityökalun hakeminen epäonnistui"
+  "arviointityokalun-hakeminen-epaonnistui": "Arviointityökalun hakeminen epäonnistui",
+  "arviointityokalu-tila-luonnos": "Luonnos",
+  "arviointityokalu-tila-julkaistu": "Julkaistu"
 }

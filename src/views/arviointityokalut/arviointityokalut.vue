@@ -52,9 +52,16 @@
               </template>
             </template>
 
-            <template #cell(tyyppi)="data">
+            <template #cell(tila)="data">
               <template v-if="!data.item.isCategory">
-                {{ $t('arviointityokalu-tila-' + data.item.tyyppi) }}
+                <template v-if="data.item.tila.toLowerCase() === 'julkaistu'">
+                  <span class="text-success">
+                    {{ $t('arviointityokalu-tila-' + data.item.tila.toLowerCase()) }}
+                  </span>
+                </template>
+                <template v-else>
+                  {{ $t('arviointityokalu-tila-' + data.item.tila.toLowerCase()) }}
+                </template>
               </template>
             </template>
           </b-table>
