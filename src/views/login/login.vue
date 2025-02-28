@@ -150,7 +150,8 @@
     get showMail() {
       return (
         this.$route.query.virhe === 'EI_KAYTTO_OIKEUTTA' ||
-        this.$route.query.virhe === 'VIRHEELLINEN_NIMI'
+        this.$route.query.virhe === 'VIRHEELLINEN_NIMI' ||
+        this.$route.query.virhe === 'OPINTO_OIKEUS_TULEVAISUUDESSA'
       )
     }
 
