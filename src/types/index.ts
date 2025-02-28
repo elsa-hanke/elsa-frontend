@@ -18,7 +18,9 @@ import {
   ReassignedVastuuhenkilonTehtavaTyyppi,
   AvoinAsiaTyyppi,
   TerveyskeskuskoulutusjaksonTila,
-  ValmistumispyynnonTila, ArviointityokaluKysymysTyyppi, ArviointityokaluTila
+  ValmistumispyynnonTila,
+  ArviointityokaluKysymysTyyppi,
+  ArviointityokaluTila
 } from '@/utils/constants'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 

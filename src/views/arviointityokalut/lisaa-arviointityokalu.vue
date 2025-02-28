@@ -180,7 +180,7 @@
     ElsaError
   } from '@/types'
   import { ArviointityokaluKysymysTyyppi, ArviointityokaluTila } from '@/utils/constants'
-  import { mapFiles } from '@/utils/fileMapper'
+  import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -361,6 +361,16 @@
     async fetchArviointityokalu(arviointityokaluId: number) {
       try {
         this.form = (await getArviointityokalu(arviointityokaluId)).data
+        if (this.form.liite) {
+          const data = Uint8Array.from(atob(this.form.liite.data), (c) => c.charCodeAt(0))
+          this.asiakirjat.push(
+            mapFile(
+              new File([data], this.form.liitetiedostonNimi || '', {
+                type: this.form.liitetiedostonTyyppi || ''
+              })
+            )
+          )
+        }
         this.editing = true
       } catch (err) {
         toastFail(this, this.$t('arviointityokalun-hakeminen-epaonnistui'))
