@@ -1933,5 +1933,6 @@
   "arviointityokalu-poista-arviointityokalu-selite": "Haluatko varmasti poistaa arviointityökalun? Arviointityökalulla tehdyt arvioinnit säilytetään, vaikka arviointityökalu poistetaankin.",
   "arviointityokalun-hakeminen-epaonnistui": "Arviointityökalun hakeminen epäonnistui",
   "arviointityokalu-tila-luonnos": "Luonnos",
-  "arviointityokalu-tila-julkaistu": "Julkaistu"
+  "arviointityokalu-tila-julkaistu": "Julkaistu",
+  "arviointityokalu-poistettu": "Arviointityokalu poistettu"
 }
