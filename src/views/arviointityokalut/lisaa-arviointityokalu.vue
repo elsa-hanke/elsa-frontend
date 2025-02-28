@@ -2,7 +2,7 @@
   <div class="lisaa-arviointityokalu">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-form @submit.stop.prevent="onSubmit">
+      <b-form @submit.stop.prevent="onSubmit(ArviointityokaluTila.JULKAISTU)">
         <b-row lg>
           <b-col>
             <h1>{{ editing ? $t('muokkaa-arviointityokalua') : $t('lisaa-arviointityokalu') }}</h1>
@@ -184,6 +184,11 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
+    computed: {
+      ArviointityokaluTila() {
+        return ArviointityokaluTila
+      }
+    },
     components: {
       ArviointityokaluLomakeKysymysLuontiForm,
       TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
@@ -246,7 +251,8 @@
     childDataReceived = false
     sortableInstance: Sortable | null = null
 
-    async onSubmit() {
+    async onSubmit(tila: ArviointityokaluTila) {
+      this.form.tila = tila
       const validations = [this.validateForm()]
       if (validations.includes(false)) {
         return
@@ -288,7 +294,7 @@
     }
 
     async onSaveAsDraft() {
-      toastFail(this, 'Toimintoa ei ole olemassa')
+      await this.onSubmit(ArviointityokaluTila.LUONNOS)
     }
 
     addTekstikenttaKysymys() {
