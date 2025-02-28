@@ -155,6 +155,7 @@
   import { Arviointityokalu, Asiakirja } from '@/types'
   import { confirmExit } from '@/utils/confirm'
   import { ArviointityokaluTila } from '@/utils/constants'
+  import { mapFile } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -214,6 +215,16 @@
         this.form = (
           await getArviointityokalu(Number(this.$route?.params?.arviointityokaluId))
         ).data
+        if (this.form.liite) {
+          const data = Uint8Array.from(atob(this.form.liite.data), (c) => c.charCodeAt(0))
+          this.asiakirjat.push(
+            mapFile(
+              new File([data], this.form.liitetiedostonNimi || '', {
+                type: this.form.liitetiedostonTyyppi || ''
+              })
+            )
+          )
+        }
       } catch (err) {
         toastFail(this, this.$t('arviointityokalun-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'arviointityokalut' })

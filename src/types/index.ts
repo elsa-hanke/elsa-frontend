@@ -873,7 +873,7 @@ export type Arviointityokalu = {
   nimi: string | null
   kategoria: ArviointityokaluKategoria | null
   ohjeteksti: string | null
-  liite: File | null
+  liite: File | null | any
   kysymykset: ArviointityokaluKysymys[]
   liitetiedostonNimi?: string
   liitetiedostonTyyppi?: string
