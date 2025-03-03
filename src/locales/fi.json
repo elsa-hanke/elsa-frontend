@@ -481,7 +481,8 @@
     "EI_OPINTO_OIKEUTTA": "Sisäänkirjautuminen epäonnistui. Kirjautumisen sallivaa opinto-oikeutta ei löytynyt.",
     "TILI_PASSIVOITU": "Sisäänkirjautuminen epäonnistui. Käyttäjätilisi on passivoitu. Ota yhteyttä omaan yliopistoosi tilin aktivoimiseksi.",
     "TUNTEMATON": "Sisäänkirjautuminen epäonnistui.",
-    "VIRHEELLINEN_NIMI": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Ota yhteys tekniseen pääkäyttäjään osoitteeseen "
+    "VIRHEELLINEN_NIMI": "Sisäänkirjautuminen epäonnistui. Kutsuun liitetty nimi ei vastaa kirjautumisessa saatua nimeä. Ota yhteys tekniseen pääkäyttäjään osoitteeseen ",
+    "OPINTO_OIKEUS_TULEVAISUUDESSA": "Sisäänkirjautuminen epäonnistui. Pääset kirjautumaan palveluun vasta, kun opinto-oikeutesi on alkanut. Jos sinulla pitäisi olla käyttöoikeus, ota yhteys tekniseen pääkäyttäjään osoitteeseen "
   },
   "kirjautuminen-epaonnistui": "Kirjautuminen epäonnistui",
   "kirjautuminen-huoltokatkoilmoitus": "Palvelussa 30 minuutin huoltokatko alkaen",
