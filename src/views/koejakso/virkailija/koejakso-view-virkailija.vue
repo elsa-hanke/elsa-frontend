@@ -307,7 +307,7 @@
         await getKoejaksot({
           page: this.currentMuutPage - 1,
           size: this.perPage,
-          sort: this.filtered.sortBy ?? 'muokkauspaiva,asc',
+          sort: this.filtered.sortBy ?? 'muokkauspaiva,desc',
           ...(this.filtered.nimi ? { 'nimi.contains': this.filtered.nimi } : {}),
           ...(this.filtered.erikoisala?.id
             ? { 'erikoisalaId.equals': this.filtered.erikoisala.id }

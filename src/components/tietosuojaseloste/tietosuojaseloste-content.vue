@@ -103,7 +103,7 @@
     <h2>5. Henkilötietojen käsittelyn oikeusperuste</h2>
     <p>
       Henkilötietojen käyttö ja käsittely ELSA-palvelussa perustuu yhteisrekisterinpitäjien
-      lakisääteisen tehtävän toteuttamiseen. ELSA-järjestelmään rekisteröidään vain erikoistuvan
+      lakisääteisen tehtävän toteuttamiseen. ELSA-palveluun rekisteröidään vain erikoistuvan
       lääkärin opintojen suunnittelun, toteutuksen, arvioinnin ja seurannan kannalta tarpeelliset
       tiedot. Rekisterin tietoja käsitellään ja ylläpidetään myös erikoistuvan lääkärin oikeuksien
       ja etujen turvaamiseksi osana yhteisrekisterinpitäjien yliopistolain mukaista tehtävää.
