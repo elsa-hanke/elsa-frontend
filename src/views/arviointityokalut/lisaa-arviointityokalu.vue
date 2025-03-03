@@ -2,7 +2,7 @@
   <div class="lisaa-arviointityokalu">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
-      <b-form @submit.stop.prevent="onSubmit(ArviointityokaluTila.JULKAISTU)">
+      <b-form @submit.stop.prevent="onSubmit(julkaistuTila)">
         <b-row lg>
           <b-col>
             <h1>{{ editing ? $t('muokkaa-arviointityokalua') : $t('lisaa-arviointityokalu') }}</h1>
@@ -436,6 +436,10 @@
     async onDeleteLiite() {
       this.form.liite = null
       this.asiakirjat = []
+    }
+
+    get julkaistuTila() {
+      return ArviointityokaluTila.JULKAISTU
     }
   }
 </script>
