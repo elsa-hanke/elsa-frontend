@@ -254,9 +254,10 @@
         <elsa-form-group
           v-if="value.itsearviointiAsiakirjat.length > 0"
           :label="$t('liitetiedostot')"
+          class="col-lg-12"
         >
           <asiakirjat-content
-            class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
+            class="px-0 col-lg-12 border-bottom-none"
             :asiakirjat="value.itsearviointiAsiakirjat"
             :sorting-enabled="false"
             :pagination-enabled="false"
@@ -295,7 +296,7 @@
         <hr />
       </div>
       <div v-else>
-        <div v-for="(kokonaisuus, index) in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
+        <div v-for="kokonaisuus in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
           <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
             {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
             {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
@@ -304,8 +305,69 @@
               <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
             </elsa-popover>
           </elsa-form-group>
+        </div>
+        <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
+          <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-12">
+            <template #default="{ uid }">
+              <elsa-form-multiselect
+                :id="uid"
+                v-model="form.arviointityokalut"
+                :options="arviointityokalut"
+                label="nimi"
+                :multiple="true"
+                :allow-empty="true"
+                track-by="nimi"
+                @input="$emit('skipRouteExitConfirm', false)"
+              ></elsa-form-multiselect>
+              <asiakirjat-upload
+                class="mt-1"
+                :is-primary-button="false"
+                :allow-multiples-files="false"
+                :button-text="$t('lisaa-liitetiedosto')"
+                :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
+                :allowed-file-types="['application/pdf']"
+                :is-text-button="true"
+                :file-upload-texts="fileUploadTexts"
+                @selectedFiles="onArviointiFileAdded"
+              />
+              <asiakirjat-content
+                class="col-lg-12"
+                :asiakirjat="asiakirjatTableItems"
+                :sorting-enabled="false"
+                :pagination-enabled="false"
+                :enable-search="false"
+                :show-info-if-empty="false"
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                @deleteAsiakirja="onArviointiFileDeleted"
+              />
+            </template>
+          </elsa-form-group>
+        </b-form-row>
+        <b-form-row>
+          <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-12">
+            <template #label-help>
+              <elsa-popover :title="$t('vaativuustaso')">
+                <elsa-vaativuustaso-tooltip-content />
+              </elsa-popover>
+            </template>
+            <template #default="{ uid }">
+              <elsa-form-multiselect
+                :id="uid"
+                v-model="form.vaativuustaso"
+                :options="vaativuustasot"
+                :custom-label="vaativuustasoLabel"
+                track-by="arvo"
+                @input="$emit('skipRouteExitConfirm', false)"
+              ></elsa-form-multiselect>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
+            </template>
+          </elsa-form-group>
+        </b-form-row>
+        <div v-for="(kokonaisuus, index) in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
           <b-form-row>
-            <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
+            <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-12">
               <template #label-help>
                 <elsa-popover :title="arviointiAsteikonNimi">
                   <elsa-arviointiasteikon-taso-tooltip-content
@@ -336,72 +398,6 @@
           <h3>{{ $t('yhteiset-arviointisisallot') }}</h3>
           <p>{{ $t('yhteiset-arviointisisallot-kuvaus') }}</p>
         </div>
-        <b-form-row>
-          <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-6">
-            <template #label-help>
-              <elsa-popover :title="$t('vaativuustaso')">
-                <elsa-vaativuustaso-tooltip-content />
-              </elsa-popover>
-            </template>
-            <template #default="{ uid }">
-              <elsa-form-multiselect
-                :id="uid"
-                v-model="form.vaativuustaso"
-                :options="vaativuustasot"
-                :custom-label="vaativuustasoLabel"
-                track-by="arvo"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></elsa-form-multiselect>
-              <b-form-invalid-feedback :id="`${uid}-feedback`">
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
-            </template>
-          </elsa-form-group>
-        </b-form-row>
-        <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
-          <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-6">
-            <template #default="{ uid }">
-              <elsa-form-multiselect
-                :id="uid"
-                v-model="form.arviointityokalut"
-                :options="arviointityokalut"
-                label="nimi"
-                :multiple="true"
-                :allow-empty="true"
-                track-by="nimi"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></elsa-form-multiselect>
-            </template>
-          </elsa-form-group>
-        </b-form-row>
-        <elsa-form-group v-if="$isKouluttaja() || $isVastuuhenkilo()" :label="$t('liitetiedostot')">
-          <template #label-help>
-            <elsa-popover>
-              {{ $t('arviointi-liite-tooltip') }}
-            </elsa-popover>
-          </template>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <span v-html="$t('arviointi-liitetiedostot-kuvaus', { linkki })"></span>
-          <asiakirjat-upload
-            class="mt-3"
-            :is-primary-button="false"
-            :allow-multiples-files="false"
-            :button-text="$t('lisaa-liitetiedosto')"
-            :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
-            :allowed-file-types="['application/pdf']"
-            @selectedFiles="onArviointiFileAdded"
-          />
-          <asiakirjat-content
-            class="px-0 col-md-8 col-lg-12 col-xl-8"
-            :asiakirjat="asiakirjatTableItems"
-            :sorting-enabled="false"
-            :pagination-enabled="false"
-            :enable-search="false"
-            :show-info-if-empty="false"
-            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
-            @deleteAsiakirja="onArviointiFileDeleted"
-          />
-        </elsa-form-group>
         <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
           <template #label-help>
             <elsa-popover :title="$t('arvioinnin-osa-alueita')">
@@ -545,6 +541,7 @@
     ArviointiasteikonTaso,
     Arviointityokalu,
     Asiakirja,
+    FileUploadText,
     Suoritusarviointi,
     SuoritusarviointiForm,
     Vaativuustaso
@@ -640,6 +637,32 @@
       {
         text: this.$t('arviointi-perustuu-muu'),
         value: ArvioinninPerustuminen.MUU
+      }
+    ]
+    fileUploadTexts: FileUploadText[] = [
+      {
+        text: this.$t('voit-myos-lisata-valmiin-arvioinnin') as string,
+        isLink: false,
+        link: '',
+        linkType: null
+      },
+      {
+        text: this.$t('liitteena') as string,
+        isLink: true,
+        link: '',
+        linkType: 'upload'
+      },
+      {
+        text: this.$t('erillisessa-nakymassa-voit') as string,
+        isLink: false,
+        link: '',
+        linkType: null
+      },
+      {
+        text: this.$t('tutustua-arviointityokaluihin') as string,
+        isLink: true,
+        link: '',
+        linkType: 'url'
       }
     ]
 

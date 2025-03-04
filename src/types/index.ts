@@ -1864,3 +1864,10 @@ export type ArviointityokaluKategoria = {
   id?: number
   nimi: string | null
 }
+
+export type FileUploadText = {
+  text: string
+  isLink: boolean
+  link: string
+  linkType: 'upload' | 'url' | null
+}
