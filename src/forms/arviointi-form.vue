@@ -312,11 +312,11 @@
               <elsa-form-multiselect
                 :id="uid"
                 v-model="form.arviointityokalut"
-                :options="arviointityokalut"
-                label="nimi"
+                :options="formattedArviointityokalut"
                 :multiple="true"
-                :allow-empty="true"
-                track-by="nimi"
+                group-values="nimi"
+                group-label="kategoria"
+                :group-select="true"
                 @input="$emit('skipRouteExitConfirm', false)"
               ></elsa-form-multiselect>
               <asiakirjat-upload
@@ -851,6 +851,23 @@
 
     muuPerustePituus() {
       return this.form.muuPeruste != null ? this.form.muuPeruste.length : 0
+    }
+
+    get formattedArviointityokalut() {
+      return Object.values(
+        this.arviointityokalut.reduce<Record<string, { kategoria: string; nimi: string[] }>>(
+          (acc, arviointityokalu) => {
+            const categoryName =
+              arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
+            if (!acc[categoryName]) {
+              acc[categoryName] = { kategoria: categoryName, nimi: [] }
+            }
+            acc[categoryName].nimi.push(arviointityokalu.nimi || '')
+            return acc
+          },
+          {}
+        )
+      )
     }
   }
 </script>
