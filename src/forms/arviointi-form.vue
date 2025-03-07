@@ -340,6 +340,16 @@
                 :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
                 @deleteAsiakirja="onArviointiFileDeleted"
               />
+              <elsa-button
+                variant="outline-primary"
+                class="mt-2"
+                @click="openArviointityokalutModal"
+              >
+                {{ $t('avaa-arviointityokalu') }}
+              </elsa-button>
+              <arviointityokalut-modal
+                v-model="isArviointityokalutModalOpen"
+              ></arviointityokalut-modal>
             </template>
           </elsa-form-group>
         </b-form-row>
@@ -525,6 +535,7 @@
 
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
+  import ArviointityokalutModal from '@/components/arviointityokalut/arviointityokalut-modal.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
@@ -533,6 +544,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import TyokertymalaskuriModal from '@/components/tyokertymalaskuri/tyokertymalaskuri-modal.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
@@ -557,6 +569,8 @@
 
   @Component({
     components: {
+      TyokertymalaskuriModal,
+      ArviointityokalutModal,
       ElsaFormGroup,
       ElsaFormError,
       ElsaFormMultiselect,
@@ -665,6 +679,7 @@
         linkType: 'url'
       }
     ]
+    isArviointityokalutModalOpen = false
 
     async mounted() {
       this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
@@ -796,7 +811,8 @@
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         }
 
-        this.$emit('submit', submitData, this.params)
+        console.log(submitData)
+        // this.$emit('submit', submitData, this.params)
       } else {
         const submitData = {
           suoritusarviointi: {
@@ -823,7 +839,8 @@
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         }
 
-        this.$emit('submit', submitData, this.params)
+        console.log(submitData)
+        // this.$emit('submit', submitData, this.params)
       }
     }
 
@@ -868,6 +885,10 @@
           {}
         )
       )
+    }
+
+    openArviointityokalutModal() {
+      this.isArviointityokalutModalOpen = true
     }
   }
 </script>
