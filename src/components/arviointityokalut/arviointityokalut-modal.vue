@@ -11,24 +11,23 @@
     @hide="onHide"
     @show="onShow"
   >
-    <!--
     <arviointityokalut-modal-content
       @skipRouteExitConfirm="onSkipRouteExitConfirm"
       @submit="onSubmit"
       @delete="onDelete"
       @closeModal="closeModal"
     />
-    -->
   </b-modal>
 </template>
 <script lang="ts">
   import { BvModalEvent } from 'bootstrap-vue'
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
+  import ArviointityokalutModalContent from '@/components/arviointityokalut/arviointityokalut-modal-content.vue'
   import { confirmExit } from '@/utils/confirm'
 
   @Component({
-    components: {}
+    components: { ArviointityokalutModalContent }
   })
   export default class ArviointityokalutModal extends Vue {
     items = [
