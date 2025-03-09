@@ -317,8 +317,9 @@
                 group-values="nimi"
                 group-label="kategoria"
                 :group-select="true"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></elsa-form-multiselect>
+                track-by="id"
+                :custom-label="arviointityokaluLabel"
+              />
               <asiakirjat-upload
                 class="mt-1"
                 :is-primary-button="false"
@@ -349,6 +350,7 @@
               </elsa-button>
               <arviointityokalut-modal
                 v-model="isArviointityokalutModalOpen"
+                :valitut-arviointityokalut="form.arviointityokalut"
               ></arviointityokalut-modal>
             </template>
           </elsa-form-group>
@@ -870,21 +872,41 @@
       return this.form.muuPeruste != null ? this.form.muuPeruste.length : 0
     }
 
+    // get formattedArviointityokalut() {
+    //   return Object.values(
+    //     this.arviointityokalut.reduce<Record<string, { kategoria: string; nimi: string[] }>>(
+    //       (acc, arviointityokalu) => {
+    //         const categoryName =
+    //           arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
+    //         if (!acc[categoryName]) {
+    //           acc[categoryName] = { kategoria: categoryName, nimi: [] }
+    //         }
+    //         acc[categoryName].nimi.push(arviointityokalu.nimi || '')
+    //         return acc
+    //       },
+    //       {}
+    //     )
+    //   )
+    // }
+
     get formattedArviointityokalut() {
       return Object.values(
-        this.arviointityokalut.reduce<Record<string, { kategoria: string; nimi: string[] }>>(
-          (acc, arviointityokalu) => {
-            const categoryName =
-              arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
-            if (!acc[categoryName]) {
-              acc[categoryName] = { kategoria: categoryName, nimi: [] }
-            }
-            acc[categoryName].nimi.push(arviointityokalu.nimi || '')
-            return acc
-          },
-          {}
-        )
+        this.arviointityokalut.reduce<
+          Record<string, { kategoria: string; nimi: Arviointityokalu[] }>
+        >((acc, arviointityokalu) => {
+          const categoryName =
+            arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
+          if (!acc[categoryName]) {
+            acc[categoryName] = { kategoria: categoryName, nimi: [] }
+          }
+          acc[categoryName].nimi.push(arviointityokalu)
+          return acc
+        }, {})
       )
+    }
+
+    arviointityokaluLabel(arviointityokalu: Arviointityokalu) {
+      return arviointityokalu.nimi || ''
     }
 
     openArviointityokalutModal() {

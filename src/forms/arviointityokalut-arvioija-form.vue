@@ -1,7 +1,49 @@
 <template>
   <b-form @submit.stop.prevent="onSubmit">
-    <div>lomakkeet</div>
-    <div class="d-flex flex-row-reverse flex-wrap">
+    <p v-if="!valitutArviointityokalut.length">{{ $t('ei-valittuja-arviointityokaluja') }}</p>
+    <div>
+      <div class="accordion" role="tablist">
+        <b-card
+          v-for="(arviointityokalu, index) in valitutArviointityokalut"
+          :key="arviointityokalu.id || index"
+          no-body
+          class="mb-1"
+        >
+          <b-card-header
+            header-tag="header"
+            class="p-1 d-flex justify-content-between align-items-center"
+            role="tab"
+            @click="toggleCollapse(index)"
+          >
+            <h1 class="mb-0">
+              {{ arviointityokalu.nimi }}
+            </h1>
+            <font-awesome-icon
+              :icon="collapsedIndex === index ? ['fas', 'chevron-up'] : ['fas', 'chevron-down']"
+              class="text-secondary"
+            />
+          </b-card-header>
+          <b-collapse
+            :id="'accordion-' + index"
+            :visible="collapsedIndex === index"
+            accordion="my-accordion"
+            role="tabpanel"
+          >
+            <b-card-body>
+              <arviointityokalu-lomake-kysymys-form
+                v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
+                :key="kysymysIndex"
+                :kysymys="kysymys"
+                :index="kysymysIndex"
+                :answer-mode="true"
+                :child-data-received="true"
+              />
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+      </div>
+    </div>
+    <div class="d-flex flex-row-reverse flex-wrap mt-4">
       <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2 mb-2">
         {{
           editing
@@ -21,8 +63,7 @@
 
 <script lang="ts">
   import Component from 'vue-class-component'
-  import { Vue } from 'vue-property-decorator'
-  import { between, integer, required } from 'vuelidate/lib/validators'
+  import { Prop, Vue } from 'vue-property-decorator'
 
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -33,11 +74,14 @@
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
+  import { Arviointityokalu } from '@/types'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
 
   @Component({
     components: {
+      ArviointityokaluLomakeKysymysForm,
       TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
       ElsaPoissaolonSyyt,
       KouluttajaKoulutussopimusForm,
@@ -51,30 +95,14 @@
       ElsaPopover
     },
     validations: {
-      form: {
-        tyoskentelypaikka: {
-          required,
-          nimi: {
-            required
-          }
-        },
-        osaaikaprosentti: {
-          required,
-          integer,
-          between: between(50, 100)
-        },
-        kaytannonKoulutus: {
-          required
-        },
-        kahdenvuodenosaaikaprosentti: {
-          required,
-          integer,
-          between: between(1, 100)
-        }
-      }
+      form: {}
     }
   })
   export default class ArviointityokalutArvioijaForm extends Vue {
+    @Prop({ required: true, type: Array, default: () => [] })
+    valitutArviointityokalut!: Arviointityokalu[]
+
+    collapsedIndex = 0
     params = {
       saving: false,
       deleting: false
@@ -103,6 +131,10 @@
     validateForm(): boolean {
       this.$v.form.$touch()
       return !this.$v.$anyError
+    }
+
+    toggleCollapse(index: number) {
+      this.collapsedIndex = this.collapsedIndex === index ? 0 : index
     }
 
     onSubmit() {

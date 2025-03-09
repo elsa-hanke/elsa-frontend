@@ -5,6 +5,7 @@
         <b-col>
           <arviointityokalut-arvioija-form
             v-if="!loading"
+            :valitut-arviointityokalut="valitutArviointityokalut"
             @submit="onSubmit"
             @delete="onDelete"
             @cancel="onCancel"
@@ -16,16 +17,17 @@
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
+  import { Vue, Component, Prop } from 'vue-property-decorator'
 
   import ArviointityokalutArvioijaForm from '@/forms/arviointityokalut-arvioija-form.vue'
+  import { Arviointityokalu } from '@/types'
 
   @Component({
     components: { ArviointityokalutArvioijaForm }
   })
   export default class TyokertymalaskuriModalContent extends Vue {
-    // @Prop({ required: false })
-    // tyoskentelyjakso!: TyokertymaLaskuriTyoskentelyjakso
+    @Prop({ required: true, type: Array, default: () => [] })
+    valitutArviointityokalut!: Arviointityokalu[]
 
     loading = false
 

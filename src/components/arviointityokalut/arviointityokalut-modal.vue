@@ -12,6 +12,7 @@
     @show="onShow"
   >
     <arviointityokalut-modal-content
+      :valitut-arviointityokalut="valitutArviointityokalut"
       @skipRouteExitConfirm="onSkipRouteExitConfirm"
       @submit="onSubmit"
       @delete="onDelete"
@@ -24,6 +25,7 @@
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
   import ArviointityokalutModalContent from '@/components/arviointityokalut/arviointityokalut-modal-content.vue'
+  import { Arviointityokalu } from '@/types'
   import { confirmExit } from '@/utils/confirm'
 
   @Component({
@@ -52,6 +54,9 @@
 
     @Prop({ required: true, type: Boolean, default: false })
     value!: boolean
+
+    @Prop({ required: true, type: Array, default: () => [] })
+    valitutArviointityokalut!: Arviointityokalu[]
 
     async onSkipRouteExitConfirm(value: boolean) {
       this.skipConfirm = value
