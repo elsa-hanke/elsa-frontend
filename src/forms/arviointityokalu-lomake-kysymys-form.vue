@@ -28,10 +28,21 @@
           class="d-flex align-items-center"
         >
           <b-form-row class="col-sm-12 col-md-12 d-flex align-items-center">
-            <span class="fake-checkbox m-sm-1"></span>
-            <p class="mb-0 ml-2">
-              {{ vaihtoehto.teksti }}
-            </p>
+            <template v-if="!answerMode">
+              <span class="fake-checkbox m-sm-1"></span>
+              <p class="mb-0 ml-2">
+                {{ vaihtoehto.teksti }}
+              </p>
+            </template>
+            <template v-else>
+              <b-form-radio
+                v-model="selectedAnswer"
+                :value="vaihtoehto.teksti"
+                class="custom-radio ml-2"
+              >
+                {{ vaihtoehto.teksti }}
+              </b-form-radio>
+            </template>
           </b-form-row>
         </b-form-row>
       </elsa-form-group>
@@ -49,14 +60,12 @@
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import { ArviointityokaluKysymys } from '@/types'
   import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
 
   @Component({
     components: {
-      ElsaPoissaolonSyyt,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormError,
@@ -83,6 +92,8 @@
     @Prop({ required: true, type: Number })
     index?: number
 
+    selectedAnswer: string | null = null
+
     validateState(name: string) {
       const { $dirty, $error } = this.kysymys[name] as any
       return $dirty ? ($error ? false : null) : null
@@ -97,7 +108,6 @@
     }
 
     validateForm(): boolean {
-      this.$v.poissaolo.$touch()
       return !this.$v.$anyError
     }
 
@@ -118,5 +128,29 @@
     background-color: #f5f5f6;
     border: 2px solid #b1b1b1;
     flex-shrink: 0;
+  }
+
+  .custom-radio {
+    .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .custom-control-label::before {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #b1b1b1;
+      background-color: #f5f5f6;
+      flex-shrink: 0;
+    }
+
+    .custom-control-label::after {
+      top: 5px;
+      left: 5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
   }
 </style>

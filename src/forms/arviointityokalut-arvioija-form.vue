@@ -65,34 +65,16 @@
   import Component from 'vue-class-component'
   import { Prop, Vue } from 'vue-property-decorator'
 
-  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
-  import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaButton from '@/components/button/button.vue'
-  import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
-  import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
-  import ElsaPopover from '@/components/popover/popover.vue'
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
-  import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import { Arviointityokalu } from '@/types'
-  import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
 
   @Component({
     components: {
       ArviointityokaluLomakeKysymysForm,
-      TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
-      ElsaPoissaolonSyyt,
-      KouluttajaKoulutussopimusForm,
-      AsiakirjatContent,
-      AsiakirjatUpload,
       ElsaButton,
-      ElsaFormGroup,
-      ElsaFormError,
-      ElsaFormMultiselect,
-      ElsaFormDatepicker,
-      ElsaPopover
+      ElsaFormError
     },
     validations: {
       form: {}
@@ -102,16 +84,19 @@
     @Prop({ required: true, type: Array, default: () => [] })
     valitutArviointityokalut!: Arviointityokalu[]
 
-    collapsedIndex = 0
+    collapsedIndex: number | null = null
     params = {
       saving: false,
       deleting: false
     }
-    childDataReceived = false
     editing = false
 
     async mounted() {
       /* */
+    }
+
+    toggleCollapse(index: number) {
+      this.collapsedIndex = this.collapsedIndex === index ? null : index
     }
 
     validateState(name: string) {
@@ -133,12 +118,8 @@
       return !this.$v.$anyError
     }
 
-    toggleCollapse(index: number) {
-      this.collapsedIndex = this.collapsedIndex === index ? 0 : index
-    }
-
     onSubmit() {
-      // this.$emit('submit', submitData, this.params)
+      console.log(this.valitutArviointityokalut)
     }
 
     onCancel() {
@@ -149,22 +130,10 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~@/styles/variables';
-  @import '~bootstrap/scss/mixins/breakpoints';
-
-  .datepicker-range::before {
-    content: '–';
-    position: absolute;
-    left: -1.5rem;
-    padding: 0.375rem 0.75rem;
-    @include media-breakpoint-down(xs) {
-      display: none;
-    }
-  }
-
   .card-header-custom {
-    color: black;
+    color: #222222;
     background-color: white;
+    cursor: pointer;
   }
 
   .card {

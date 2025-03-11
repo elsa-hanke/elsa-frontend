@@ -812,9 +812,7 @@
           addedFiles: this.addedFiles,
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         }
-
-        console.log(submitData)
-        // this.$emit('submit', submitData, this.params)
+        this.$emit('submit', submitData, this.params)
       } else {
         const submitData = {
           suoritusarviointi: {
@@ -840,9 +838,7 @@
           addedFiles: this.addedFiles,
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         }
-
-        console.log(submitData)
-        // this.$emit('submit', submitData, this.params)
+        this.$emit('submit', submitData, this.params)
       }
     }
 
