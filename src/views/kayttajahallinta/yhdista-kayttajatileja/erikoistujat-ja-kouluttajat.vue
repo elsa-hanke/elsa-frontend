@@ -266,17 +266,19 @@
     }
 
     get erikoistujat() {
-      return this.kayttajat?.content.filter((k) =>
-        k.authorities.some(
-          (authority: string) =>
-            authority === ELSA_ROLE.ErikoistuvaLaakari || authority === ELSA_ROLE.YEKKoulutettava
-        )
+      return this.kayttajat?.content.filter(
+        (k) =>
+          k.authorities === null ||
+          k.authorities.some(
+            (authority: string) =>
+              authority === ELSA_ROLE.ErikoistuvaLaakari || authority === ELSA_ROLE.YEKKoulutettava
+          )
       )
     }
 
     get kouluttajat() {
       return this.kayttajat?.content.filter((k) =>
-        k.authorities.some((authority: string) => authority === ELSA_ROLE.Kouluttaja)
+        k.authorities?.some((authority: string) => authority === ELSA_ROLE.Kouluttaja)
       )
     }
   }
