@@ -1,19 +1,13 @@
 <template>
   <div class="arviointityokalut">
-    <b-container fluid>
-      <b-row lg>
-        <b-col>
-          <arviointityokalut-arvioija-form
-            v-if="!loading"
-            :valitut-arviointityokalut="valitutArviointityokalut"
-            @submit="onSubmit"
-            @delete="onDelete"
-            @cancel="onCancel"
-            @skipRouteExitConfirm="skipRouteExitConfirm"
-          />
-        </b-col>
-      </b-row>
-    </b-container>
+    <arviointityokalut-arvioija-form
+      v-if="!loading"
+      :valitut-arviointityokalut="valitutArviointityokalut"
+      @submit="onSubmit"
+      @delete="onDelete"
+      @cancel="onCancel"
+      @skipRouteExitConfirm="skipRouteExitConfirm"
+    />
   </div>
 </template>
 <script lang="ts">

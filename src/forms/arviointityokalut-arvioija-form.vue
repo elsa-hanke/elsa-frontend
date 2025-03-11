@@ -7,17 +7,17 @@
           v-for="(arviointityokalu, index) in valitutArviointityokalut"
           :key="arviointityokalu.id || index"
           no-body
-          class="mb-1"
+          class="card"
         >
           <b-card-header
             header-tag="header"
-            class="p-1 d-flex justify-content-between align-items-center"
+            class="p-3 card-header-custom d-flex justify-content-between align-items-center"
             role="tab"
             @click="toggleCollapse(index)"
           >
-            <h1 class="mb-0">
+            <h2 class="mb-0">
               {{ arviointityokalu.nimi }}
-            </h1>
+            </h2>
             <font-awesome-icon
               :icon="collapsedIndex === index ? ['fas', 'chevron-up'] : ['fas', 'chevron-down']"
               class="text-secondary"
@@ -29,7 +29,7 @@
             accordion="my-accordion"
             role="tabpanel"
           >
-            <b-card-body>
+            <b-card-body class="p-3">
               <arviointityokalu-lomake-kysymys-form
                 v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
                 :key="kysymysIndex"
@@ -160,5 +160,15 @@
     @include media-breakpoint-down(xs) {
       display: none;
     }
+  }
+
+  .card-header-custom {
+    color: black;
+    background-color: white;
+  }
+
+  .card {
+    border: 1px solid #e8e9ec;
+    border-radius: 8px;
   }
 </style>
