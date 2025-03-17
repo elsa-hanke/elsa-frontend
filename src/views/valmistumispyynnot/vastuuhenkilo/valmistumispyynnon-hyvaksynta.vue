@@ -683,16 +683,18 @@
       try {
         this.sending = true
         if (this.valmistumispyynto.id) {
+          const puhelinnumero = this.form.puhelinnumero
+          const sahkoposti = this.form.sahkoposti
           this.form = (
             await putValmistumispyyntoHyvaksynta({
               id: this.valmistumispyynto.id,
-              puhelinnumero: this.form.puhelinnumero,
-              sahkoposti: this.form.sahkoposti
+              puhelinnumero,
+              sahkoposti
             })
           ).data
           const account = store.getters['auth/account']
-          account.email = this.form.sahkoposti
-          account.phoneNumber = this.form.puhelinnumero
+          account.email = sahkoposti
+          account.phoneNumber = puhelinnumero
           this.$emit('skipRouteExitConfirm', true)
           toastSuccess(this, this.$t('valmistumispyynto-hyvaksynta-lahetys-onnistui'))
           this.$router.replace({ name: 'valmistumispyynnot' })

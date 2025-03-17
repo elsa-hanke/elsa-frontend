@@ -234,7 +234,6 @@
     }
 
     get content() {
-      console.log(this.valmistumispyynnot)
       return this.valmistumispyynnot?.content
     }
 
