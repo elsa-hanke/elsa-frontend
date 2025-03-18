@@ -43,10 +43,6 @@
                 {{ vaihtoehto.teksti }}
               </b-form-radio>
             </template>
-            <span class="fake-checkbox m-sm-1"></span>
-            <p class="mb-0 ml-2">
-              {{ vaihtoehto.teksti }}
-            </p>
           </b-form-row>
         </b-form-row>
       </elsa-form-group>
