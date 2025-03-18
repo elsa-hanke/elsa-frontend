@@ -34,10 +34,11 @@
                 v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
                 :key="kysymysIndex"
                 :kysymys="kysymys"
+                :vastaus="getKysymyksenVastaus(kysymys.id, arviointityokalu.id)"
                 :index="kysymysIndex"
                 :answer-mode="true"
                 :child-data-received="true"
-                @update-answer="(vastaus) => updateAnswer(vastaus, arviointityokalu.id)"
+                @update-answer="(vastaus) => updateVastaus(vastaus, arviointityokalu.id)"
               />
             </b-card-body>
           </b-collapse>
@@ -141,7 +142,7 @@
       this.$emit('cancel')
     }
 
-    updateAnswer(
+    updateVastaus(
       vastaus: SuoritusarviointiArviointityokaluVastaus,
       arviointityokaluId: number | undefined
     ) {
@@ -162,6 +163,14 @@
       } else {
         this.arviointityokaluVastaukset.push(updatedVastaus)
       }
+    }
+
+    getKysymyksenVastaus(kysymysId: number | undefined, arviointityokaluId: number | undefined) {
+      const vastaus = this.arviointityokaluVastaukset.find(
+        (v) =>
+          v.arviointityokaluKysymysId === kysymysId && v.arviointityokaluId === arviointityokaluId
+      )
+      return vastaus || null
     }
   }
 </script>

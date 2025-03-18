@@ -918,6 +918,7 @@
 
     async lisaaArviointityokaluVastaukset(formData: SuoritusarviointiArviointityokaluVastaus[]) {
       this.form.arviointityokaluVastaukset = formData
+      this.isArviointityokalutModalOpen = false
     }
   }
 </script>

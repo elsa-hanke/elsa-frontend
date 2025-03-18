@@ -64,7 +64,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { ArviointityokaluKysymys } from '@/types'
+  import { ArviointityokaluKysymys, SuoritusarviointiArviointityokaluVastaus } from '@/types'
   import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
 
   @Component({
@@ -86,6 +86,9 @@
     @Prop({ type: Object, required: true })
     kysymys!: ArviointityokaluKysymys | any
 
+    @Prop({ type: Object, default: null })
+    vastaus!: SuoritusarviointiArviointityokaluVastaus | null
+
     @Prop({ type: Boolean, default: false })
     childDataReceived!: boolean
 
@@ -103,7 +106,9 @@
     }
 
     mounted() {
-      this.selectedAnswer = this.kysymys.tekstiVastaus || null
+      if (this.vastaus) {
+        this.selectedAnswer = this.vastaus.valittuVaihtoehtoId || this.vastaus.tekstiVastaus || null
+      }
       this.$parent.$on('validate-all-kysymykset', this.validateForm)
     }
 
