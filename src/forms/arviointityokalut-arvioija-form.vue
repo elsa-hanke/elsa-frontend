@@ -37,6 +37,7 @@
                 :index="kysymysIndex"
                 :answer-mode="true"
                 :child-data-received="true"
+                @update-answer="(vastaus) => updateAnswer(vastaus, arviointityokalu.id)"
               />
             </b-card-body>
           </b-collapse>
@@ -68,7 +69,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
-  import { Arviointityokalu } from '@/types'
+  import { Arviointityokalu, SuoritusarviointiArviointityokaluVastaus } from '@/types'
 
   @Component({
     components: {
@@ -83,6 +84,9 @@
   export default class ArviointityokalutArvioijaForm extends Vue {
     @Prop({ required: true, type: Array, default: () => [] })
     valitutArviointityokalut!: Arviointityokalu[]
+
+    @Prop({ required: true, type: Array, default: () => [] })
+    arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
 
     collapsedIndex: number | null = null
     params = {
@@ -118,13 +122,46 @@
       return !this.$v.$anyError
     }
 
-    onSubmit() {
-      console.log(this.valitutArviointityokalut)
+    async onSubmit() {
+      const validations = [this.validateForm()]
+
+      if (validations.includes(false)) {
+        return
+      }
+
+      const submitData: SuoritusarviointiArviointityokaluVastaus[] = [
+        ...this.arviointityokaluVastaukset
+      ]
+      this.$emit('skipRouteExitConfirm', true)
+      this.$emit('submit', submitData, this.params)
     }
 
     onCancel() {
       this.$emit('skipRouteExitConfirm', true)
       this.$emit('cancel')
+    }
+
+    updateAnswer(
+      vastaus: SuoritusarviointiArviointityokaluVastaus,
+      arviointityokaluId: number | undefined
+    ) {
+      if (arviointityokaluId === undefined) {
+        return
+      }
+      const index = this.arviointityokaluVastaukset.findIndex(
+        (v) => v.arviointityokaluKysymysId === vastaus.arviointityokaluKysymysId
+      )
+
+      const updatedVastaus = {
+        ...vastaus,
+        arviointityokaluId: arviointityokaluId
+      }
+
+      if (index !== -1) {
+        this.$set(this.arviointityokaluVastaukset, index, updatedVastaus)
+      } else {
+        this.arviointityokaluVastaukset.push(updatedVastaus)
+      }
     }
   }
 </script>

@@ -9,9 +9,11 @@
         <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
+            v-model="selectedAnswer"
             rows="3"
             :disabled="!answerMode"
             :placeholder="$t('vastaus')"
+            @input="updateAnswer($event)"
           />
         </template>
       </elsa-form-group>
@@ -37,8 +39,9 @@
             <template v-else>
               <b-form-radio
                 v-model="selectedAnswer"
-                :value="vaihtoehto.teksti"
+                :value="vaihtoehto.id"
                 class="custom-radio ml-2"
+                @change="updateAnswer(vaihtoehto.id)"
               >
                 {{ vaihtoehto.teksti }}
               </b-form-radio>
@@ -92,7 +95,7 @@
     @Prop({ required: true, type: Number })
     index?: number
 
-    selectedAnswer: string | null = null
+    selectedAnswer: string | number | null = null
 
     validateState(name: string) {
       const { $dirty, $error } = this.kysymys[name] as any
@@ -100,6 +103,7 @@
     }
 
     mounted() {
+      this.selectedAnswer = this.kysymys.tekstiVastaus || null
       this.$parent.$on('validate-all-kysymykset', this.validateForm)
     }
 
@@ -113,6 +117,15 @@
 
     get arviointityokaluKysymysTyyppit() {
       return ArviointityokaluKysymysTyyppi
+    }
+
+    updateAnswer(value: string | number | null) {
+      this.$emit('update-answer', {
+        arviointityokaluId: this.kysymys.arviointityokaluId,
+        arviointityokaluKysymysId: this.kysymys.id,
+        tekstiVastaus: typeof value === 'string' ? value : null,
+        valittuVaihtoehtoId: typeof value === 'number' ? value : null
+      })
     }
   }
 </script>

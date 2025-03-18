@@ -740,6 +740,16 @@ export type Suoritusarviointi = {
   muuPeruste: string
   arviointiAsiakirjat: Asiakirja[]
   itsearviointiAsiakirjat: Asiakirja[]
+  arviointityokaluVastaukset: SuoritusarviointiArviointityokaluVastaus[]
+}
+
+export type SuoritusarviointiArviointityokaluVastaus = {
+  id: number
+  suoritusarviointiId: number
+  arviointityokaluId: number
+  arviointityokaluKysymysId: number
+  tekstiVastaus: string | null
+  valittuVaihtoehtoId: number | null
 }
 
 export type SuoritusarviointiByKokonaisuus = {
@@ -903,6 +913,7 @@ export type SuoritusarviointiForm = {
   arvioitavatKokonaisuudet: SuoritusarvioinninArvioitavaKokonaisuus[] | null | undefined
   sanallinenArviointi: string | null
   arviointityokalut?: Arviointityokalu[]
+  arviointityokaluVastaukset?: SuoritusarviointiArviointityokaluVastaus[]
   arviointiPerustuu?: ArvioinninPerustuminen | null
   muuPeruste?: string | null
   perustuuMuuhun?: boolean

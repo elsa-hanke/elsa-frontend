@@ -13,6 +13,7 @@
   >
     <arviointityokalut-modal-content
       :valitut-arviointityokalut="valitutArviointityokalut"
+      :arviointityokalu-vastaukset="arviointityokaluVastaukset"
       @skipRouteExitConfirm="onSkipRouteExitConfirm"
       @submit="onSubmit"
       @delete="onDelete"
@@ -25,7 +26,7 @@
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
   import ArviointityokalutModalContent from '@/components/arviointityokalut/arviointityokalut-modal-content.vue'
-  import { Arviointityokalu } from '@/types'
+  import { Arviointityokalu, SuoritusarviointiArviointityokaluVastaus } from '@/types'
   import { confirmExit } from '@/utils/confirm'
 
   @Component({
@@ -57,6 +58,9 @@
 
     @Prop({ required: true, type: Array, default: () => [] })
     valitutArviointityokalut!: Arviointityokalu[]
+
+    @Prop({ required: true, type: Array, default: () => [] })
+    arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
 
     async onSkipRouteExitConfirm(value: boolean) {
       this.skipConfirm = value

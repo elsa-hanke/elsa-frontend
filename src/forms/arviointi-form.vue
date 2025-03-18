@@ -351,6 +351,8 @@
               <arviointityokalut-modal
                 v-model="isArviointityokalutModalOpen"
                 :valitut-arviointityokalut="form.arviointityokalut"
+                :arviointityokalu-vastaukset="form.arviointityokaluVastaukset"
+                @submit="lisaaArviointityokaluVastaukset"
               ></arviointityokalut-modal>
             </template>
           </elsa-form-group>
@@ -557,6 +559,7 @@
     Asiakirja,
     FileUploadText,
     Suoritusarviointi,
+    SuoritusarviointiArviointityokaluVastaus,
     SuoritusarviointiForm,
     Vaativuustaso
   } from '@/types'
@@ -628,6 +631,7 @@
       arvioitavatKokonaisuudet: null,
       sanallinenArviointi: null,
       arviointityokalut: [],
+      arviointityokaluVastaukset: [],
       arviointiPerustuu: null,
       muuPeruste: null,
       perustuuMuuhun: false
@@ -698,7 +702,8 @@
               )
             }
           }),
-          sanallinenArviointi: this.value.sanallinenItsearviointi
+          sanallinenArviointi: this.value.sanallinenItsearviointi,
+          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset
         }
       } else {
         this.form = {
@@ -721,7 +726,8 @@
           muuPeruste: this.value.muuPeruste,
           perustuuMuuhun:
             this.value.arviointiPerustuu !== null &&
-            this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA
+            this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA,
+          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset
         }
         this.arviointityokalut = (
           (await axios.get(`/arviointityokalut`)).data as Arviointityokalu[]
@@ -827,6 +833,7 @@
             vaativuustaso: this.form.vaativuustaso?.arvo,
             sanallinenArviointi: this.form.sanallinenArviointi,
             arviointityokalut: this.form.arviointityokalut,
+            arviointityokaluVastaukset: this.form.arviointityokaluVastaukset,
             arviointiPerustuu: this.form.perustuuMuuhun
               ? this.form.arviointiPerustuu
               : ArvioinninPerustuminen.LASNA,
@@ -907,6 +914,10 @@
 
     openArviointityokalutModal() {
       this.isArviointityokalutModalOpen = true
+    }
+
+    async lisaaArviointityokaluVastaukset(formData: SuoritusarviointiArviointityokaluVastaus[]) {
+      this.form.arviointityokaluVastaukset = formData
     }
   }
 </script>

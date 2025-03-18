@@ -3,6 +3,7 @@
     <arviointityokalut-arvioija-form
       v-if="!loading"
       :valitut-arviointityokalut="valitutArviointityokalut"
+      :arviointityokalu-vastaukset="arviointityokaluVastaukset"
       @submit="onSubmit"
       @delete="onDelete"
       @cancel="onCancel"
@@ -14,7 +15,7 @@
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
   import ArviointityokalutArvioijaForm from '@/forms/arviointityokalut-arvioija-form.vue'
-  import { Arviointityokalu } from '@/types'
+  import { Arviointityokalu, SuoritusarviointiArviointityokaluVastaus } from '@/types'
 
   @Component({
     components: { ArviointityokalutArvioijaForm }
@@ -22,6 +23,9 @@
   export default class TyokertymalaskuriModalContent extends Vue {
     @Prop({ required: true, type: Array, default: () => [] })
     valitutArviointityokalut!: Arviointityokalu[]
+
+    @Prop({ required: true, type: Array, default: () => [] })
+    arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
 
     loading = false
 
