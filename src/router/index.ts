@@ -15,6 +15,11 @@ import ArviointipyyntoLahetetty from '@/views/arvioinnit/arviointipyynto-lahetet
 import Arviointipyynto from '@/views/arvioinnit/arviointipyynto.vue'
 import Itsearviointi from '@/views/arvioinnit/itsearviointi.vue'
 import MuokkaaArviointia from '@/views/arvioinnit/muokkaa-arviointia.vue'
+import ArviointityokaluView from '@/views/arviointityokalut/arviointityokalu.vue'
+import Arviointityokalut from '@/views/arviointityokalut/arviointityokalut.vue'
+import KategoriaView from '@/views/arviointityokalut/kategoria.vue'
+import LisaaArviointityokalu from '@/views/arviointityokalut/lisaa-arviointityokalu.vue'
+import UusiKategoria from '@/views/arviointityokalut/uusi-kategoria.vue'
 import ArvioitavatKokonaisuudet from '@/views/arvioitavat-kokonaisuudet/arvioitavat-kokonaisuudet.vue'
 import YekAsiakirjat from '@/views/asiakirjat-yek/yek-asiakirjat.vue'
 import Asiakirjat from '@/views/asiakirjat/asiakirjat.vue'
@@ -1358,6 +1363,54 @@ const routes: Array<RouteConfig> = [
           allowedRoles: [ELSA_ROLE.YEKKoulutettava],
           confirmRouteExit: true
         }
+      },
+      {
+        path: '/arviointityokalut',
+        name: 'arviointityokalut',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: Arviointityokalut,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/arviointityokalut/kategoria/uusi',
+        name: 'uusi-kategoria',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: UusiKategoria,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/arviointityokalut/kategoria/:kategoriaId',
+        name: 'kategoria',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: KategoriaView,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja]
+        }
+      },
+      {
+        path: '/arviointityokalut/arviointityokalu/uusi',
+        name: 'lisaa-arviointityokalu',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: LisaaArviointityokalu,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja],
+          confirmRouteExit: true
+        }
+      },
+      {
+        path: '/arviointityokalut/arviointityokalu',
+        name: 'arviointityokalu',
+        component: RoleSpecificRoute,
+        props: {
+          routeComponent: ArviointityokaluView,
+          allowedRoles: [ELSA_ROLE.TekninenPaakayttaja],
+          confirmRouteExit: true
+        }
       }
     ]
   },
@@ -1465,7 +1518,6 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/tyokertymalaskuri',
-    name: 'tyokertymalaskuri',
     component: TyokertymalaskuriView,
     children: [
       {

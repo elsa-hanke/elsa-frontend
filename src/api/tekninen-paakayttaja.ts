@@ -12,7 +12,9 @@ import {
   SuoritteenKategoria,
   SuoritteenKategoriaWithErikoisala,
   SuoriteWithErikoisala,
-  Ilmoitus
+  Ilmoitus,
+  ArviointityokaluKategoria,
+  Arviointityokalu
 } from '@/types'
 
 export async function getErikoistuvatLaakarit(params: {
@@ -175,4 +177,70 @@ export async function putIlmoitus(ilmoitus: Ilmoitus) {
 export async function deleteIlmoitus(id: number) {
   const path = `/tekninen-paakayttaja/ilmoitukset/${id}`
   return await axios.delete<Ilmoitus>(path)
+}
+
+export async function postArviointityokalutKategoria(form: ArviointityokaluKategoria) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria`
+  return await axios.post<ArviointityokaluKategoria>(path, form)
+}
+
+export async function getArviointityokalutKategoriat() {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoriat`
+  return await axios.get<ArviointityokaluKategoria[]>(path)
+}
+
+export async function getArviointityokalutKategoria(id: string) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria/${id}`
+  return await axios.get<ArviointityokaluKategoria>(path)
+}
+
+export async function patchArviointityokalutKategoria(form: ArviointityokaluKategoria) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria`
+  return await axios.patch<ArviointityokaluKategoria>(path, form)
+}
+
+export async function deleteArviointityokalutKategoria(id: number) {
+  const path = `/tekninen-paakayttaja/arviointityokalut/kategoria/${id}`
+  return await axios.delete<ArviointityokaluKategoria>(path)
+}
+
+export async function getArviointityokalut() {
+  const path = `/tekninen-paakayttaja/arviointityokalut`
+  return await axios.get<Arviointityokalu[]>(path)
+}
+
+export async function getArviointityokalu(id: number) {
+  const path = `/tekninen-paakayttaja/arviointityokalu/${id}`
+  return await axios.get<Arviointityokalu>(path)
+}
+
+export async function postArviointityokalu(form: Arviointityokalu) {
+  const formData = new FormData()
+  formData.append('data', JSON.stringify(form))
+  if (form.liite) {
+    formData.append('liiteData', form.liite)
+  }
+  const path = `/tekninen-paakayttaja/arviointityokalu`
+  return await axios.post<Arviointityokalu>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
+}
+
+export async function patchArviointityokalu(form: Arviointityokalu) {
+  const formData = new FormData()
+  formData.append('data', JSON.stringify(form))
+  if (form.liite) {
+    formData.append('liiteData', form.liite)
+  }
+  const path = `/tekninen-paakayttaja/arviointityokalu`
+  return await axios.patch<Arviointityokalu>(path, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 120000
+  })
+}
+
+export async function deleteArviointityokalu(id: number) {
+  const path = `/tekninen-paakayttaja/arviointityokalu/${id}`
+  return await axios.delete<Arviointityokalu>(path)
 }

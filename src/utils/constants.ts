@@ -271,3 +271,13 @@ export const phoneNumber = helpers.regex(
 )
 
 export const ERIKOISALA_YEK_ID = 61
+
+export enum ArviointityokaluKysymysTyyppi {
+  TEKSTIKENTTAKYSYMYS = 'TEKSTIKENTTAKYSYMYS',
+  VALINTAKYSYMYS = 'VALINTAKYSYMYS'
+}
+
+export enum ArviointityokaluTila {
+  LUONNOS = 'LUONNOS',
+  JULKAISTU = 'JULKAISTU'
+}

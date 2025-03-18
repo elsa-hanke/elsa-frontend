@@ -18,7 +18,9 @@ import {
   ReassignedVastuuhenkilonTehtavaTyyppi,
   AvoinAsiaTyyppi,
   TerveyskeskuskoulutusjaksonTila,
-  ValmistumispyynnonTila
+  ValmistumispyynnonTila,
+  ArviointityokaluKysymysTyyppi,
+  ArviointityokaluTila
 } from '@/utils/constants'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -870,7 +872,30 @@ export type ArviointiasteikonTaso = {
 
 export type Arviointityokalu = {
   id?: number
-  nimi: string
+  nimi: string | null
+  kategoria: ArviointityokaluKategoria | null
+  ohjeteksti: string | null
+  liite: File | null | any
+  kysymykset: ArviointityokaluKysymys[]
+  liitetiedostonNimi?: string
+  liitetiedostonTyyppi?: string
+  tila: ArviointityokaluTila
+}
+
+export type ArviointityokaluKysymys = {
+  id?: number
+  otsikko: string | null
+  tyyppi: ArviointityokaluKysymysTyyppi
+  vaihtoehdot: ArviointityokaluKysymysVaihtoehto[]
+  pakollinen: boolean
+  tekstikenttavastaus?: string
+  jarjestysnumero: number
+}
+
+export type ArviointityokaluKysymysVaihtoehto = {
+  id?: number
+  teksti: string
+  valittu: boolean
 }
 
 export type SuoritusarviointiForm = {
@@ -1824,4 +1849,18 @@ export interface KayttajienYhdistaminenDTO {
   ensimmainenKayttajaId: number
   toinenKayttajaId: number
   yhteinenSahkoposti: string
+}
+
+export type PaaKayttajaArviointityokalu = {
+  id?: number
+  nimi: string
+  kategoriaId: number
+  kayttajaId: number
+  luontiaika: string
+  muokkausaika: string
+}
+
+export type ArviointityokaluKategoria = {
+  id?: number
+  nimi: string | null
 }
