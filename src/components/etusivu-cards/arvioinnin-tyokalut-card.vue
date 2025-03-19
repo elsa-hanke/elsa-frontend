@@ -4,13 +4,14 @@
       <font-awesome-icon icon="clipboard-list" fixed-width class="fa-5x text-primary icon" />
     </div>
     <div class="text-center">
-      <a
+      <!--<a
         href="https://www.laaketieteelliset.fi/ammatillinen-jatkokoulutus/elsa"
         target="_blank"
         rel="noopener noreferrer"
-      >
+      >-->
+      <RouterLink to="/arviointityokalut/esittely">
         {{ $t('arvioinnin-tyokalut-tutustu') }}
-      </a>
+      </RouterLink>
     </div>
   </b-card-skeleton>
 </template>
