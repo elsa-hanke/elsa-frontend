@@ -17,7 +17,7 @@
       </b-row>
       <b-row v-for="(k, index) in kategoriat" :key="index" lg>
         <b-col v-if="getArviontityokalutForKategoria(k.id).length > 0" lg>
-          <h3 class="mt-6">{{ k.nimi }}</h3>
+          <h3 v-if="k.id" class="mt-6">{{ k.nimi }}</h3>
           <b-row v-for="(at, atIndex) in getArviontityokalutForKategoria(k.id)" :key="atIndex">
             <b-col>
               <elsa-accordian :ref="k.nimi" :visible="false">
@@ -26,8 +26,8 @@
                 </template>
                 <div class="mt-3 mb-3">
                   <asiakirjat-content
-                    v-if="at.liite && at.liite.length > 0"
-                    :asiakirjat="at.liite"
+                    v-if="at.liite && at.liite.data && at.liite.data.length > 0"
+                    :asiakirjat="produceLiite(at)"
                     :sorting-enabled="false"
                     :pagination-enabled="false"
                     :enable-search="false"
@@ -70,14 +70,14 @@
   import ElsaAccordian from '@/components/accordian/accordian.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
-  import { Arviointityokalu, ArviointityokaluKategoria } from '@/types'
+  import { Arviointityokalu, ArviointityokaluKategoria, Asiakirja } from '@/types'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
-      ArviointityokaluLomakeKysymysForm,
       AsiakirjatContent,
+      ArviointityokaluLomakeKysymysForm,
       ElsaAccordian
     }
   })
@@ -103,9 +103,10 @@
         this.arviointityokalut = (await getArviointityokalut()).data.sort((a, b) =>
           sortByAsc(a.nimi, b.nimi)
         )
-        this.kategoriat = (await getArviointityokaluKategoriat()).data.sort((a, b) =>
-          sortByAsc(a.nimi, b.nimi)
-        )
+        this.kategoriat = [
+          { nimi: '' },
+          ...(await getArviointityokaluKategoriat()).data.sort((a, b) => sortByAsc(a.nimi, b.nimi))
+        ]
       } catch {
         toastFail(this, this.$t('arviointityokalujen-kategorioiden-hakeminen-epaonnistui'))
         this.arviointityokalut = []
@@ -113,8 +114,22 @@
       this.loading = false
     }
 
-    getArviontityokalutForKategoria(id: number) {
-      return this.arviointityokalut.filter((a) => a.kategoria?.id === id)
+    getArviontityokalutForKategoria(id: number | null) {
+      return id
+        ? this.arviointityokalut.filter((a) => a.kategoria?.id === id)
+        : this.arviointityokalut.filter((a) => a.kategoria == null)
+    }
+
+    produceLiite(tyokalu: Arviointityokalu): Asiakirja[] {
+      return [
+        {
+          id: tyokalu.liite.id,
+          nimi: tyokalu.liitetiedostonNimi || '',
+          contentType: tyokalu.liitetiedostonTyyppi,
+          data: tyokalu.liite.data,
+          isDirty: false
+        }
+      ]
     }
   }
 </script>
