@@ -16,18 +16,46 @@
         </b-col>
       </b-row>
       <b-row v-for="(k, index) in kategoriat" :key="index" lg>
-        <b-col>
+        <b-col v-if="getArviontityokalutForKategoria(k.id).length > 0" lg>
           <h3 class="mt-6">{{ k.nimi }}</h3>
           <b-row v-for="(at, atIndex) in getArviontityokalutForKategoria(k.id)" :key="atIndex">
-            <elsa-accordian :ref="k.nimi" :visible="false">
-              <template #title>
-                {{ at.nimi }}
-              </template>
-              <div class="mt-3 mb-3">
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <p v-html="at.ohjeteksti"></p>
-              </div>
-            </elsa-accordian>
+            <b-col>
+              <elsa-accordian :ref="k.nimi" :visible="false">
+                <template #title>
+                  {{ at.nimi }}
+                </template>
+                <div class="mt-3 mb-3">
+                  <asiakirjat-content
+                    v-if="at.liite && at.liite.length > 0"
+                    :asiakirjat="at.liite"
+                    :sorting-enabled="false"
+                    :pagination-enabled="false"
+                    :enable-search="false"
+                    :show-info-if-empty="false"
+                    :enable-delete="false"
+                  />
+                  <b-alert v-else variant="dark" show>
+                    <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
+                    <span>
+                      {{ $t('ei-liitetiedostoa') }}
+                    </span>
+                  </b-alert>
+                  <p>{{ at.ohjeteksti }}</p>
+                  <div
+                    v-for="(kysymys, kIndex) in at.kysymykset"
+                    :key="kysymys.jarjestysnumero"
+                    class="mt-4"
+                  >
+                    <arviointityokalu-lomake-kysymys-form
+                      :kysymys="kysymys"
+                      :child-data-received="!loading"
+                      :answer-mode="false"
+                      :index="kIndex"
+                    />
+                  </div>
+                </div>
+              </elsa-accordian>
+            </b-col>
           </b-row>
         </b-col>
       </b-row>
@@ -40,12 +68,16 @@
 
   import { getArviointityokalut, getArviointityokaluKategoriat } from '@/api/kouluttaja'
   import ElsaAccordian from '@/components/accordian/accordian.vue'
+  import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
+  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import { Arviointityokalu, ArviointityokaluKategoria } from '@/types'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
   @Component({
     components: {
+      ArviointityokaluLomakeKysymysForm,
+      AsiakirjatContent,
       ElsaAccordian
     }
   })
@@ -90,4 +122,9 @@
 <style scoped lang="scss">
   @import '~@/styles/variables';
   @import '~bootstrap/scss/mixins/breakpoints';
+
+  .card.border.mb-2 {
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+  }
 </style>
