@@ -199,6 +199,44 @@
             </b-tr>
           </b-tbody>
         </b-table-simple>
+        <div class="accordion mt-2 mb-4" role="tablist">
+          <b-card
+            v-for="(arviointityokalu, index) in form.arviointityokalut"
+            :key="arviointityokalu.id || index"
+            no-body
+            class="card"
+          >
+            <b-card-header
+              header-tag="header"
+              class="p-3 card-header-custom d-flex justify-content-between align-items-center"
+              role="tab"
+              @click="toggleCollapse(index)"
+            >
+              <h3 class="mb-0">
+                {{ arviointityokalu.nimi }}
+              </h3>
+              <font-awesome-icon
+                :icon="collapsedIndex === index ? ['fas', 'chevron-up'] : ['fas', 'chevron-down']"
+                class="text-secondary"
+              />
+            </b-card-header>
+            <b-collapse
+              :id="'accordion-' + index"
+              :visible="collapsedIndex === index"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body class="p-3">
+                <arviointityokalu-kysymys-lomake-vastauksilla
+                  v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
+                  :key="kysymysIndex"
+                  :kysymys="kysymys"
+                  :vastaus="getKysymyksenVastaus(kysymys.id, arviointityokalu.id)"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+        </div>
         <elsa-form-group :label="$t('sanallinen-arviointi')">
           <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
@@ -254,9 +292,10 @@
         <elsa-form-group
           v-if="value.itsearviointiAsiakirjat.length > 0"
           :label="$t('liitetiedostot')"
+          class="col-lg-12"
         >
           <asiakirjat-content
-            class="px-0 col-md-8 col-lg-12 col-xl-8 border-bottom-none"
+            class="px-0 col-lg-12 border-bottom-none"
             :asiakirjat="value.itsearviointiAsiakirjat"
             :sorting-enabled="false"
             :pagination-enabled="false"
@@ -295,7 +334,7 @@
         <hr />
       </div>
       <div v-else>
-        <div v-for="(kokonaisuus, index) in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
+        <div v-for="kokonaisuus in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
           <elsa-form-group :label="$t('arvioitava-kokonaisuus')">
             {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
             {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
@@ -304,8 +343,83 @@
               <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
             </elsa-popover>
           </elsa-form-group>
+        </div>
+        <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
+          <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-12">
+            <template #default="{ uid }">
+              <elsa-form-multiselect
+                :id="uid"
+                v-model="form.arviointityokalut"
+                :options="formattedArviointityokalut"
+                :multiple="true"
+                group-values="nimi"
+                group-label="kategoria"
+                :group-select="true"
+                track-by="id"
+                :custom-label="arviointityokaluLabel"
+              />
+              <asiakirjat-upload
+                class="mt-1"
+                :is-primary-button="false"
+                :allow-multiples-files="false"
+                :button-text="$t('lisaa-liitetiedosto')"
+                :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
+                :allowed-file-types="['application/pdf']"
+                :is-text-button="true"
+                :file-upload-texts="fileUploadTexts"
+                @selectedFiles="onArviointiFileAdded"
+              />
+              <asiakirjat-content
+                class="col-lg-12"
+                :asiakirjat="asiakirjatTableItems"
+                :sorting-enabled="false"
+                :pagination-enabled="false"
+                :enable-search="false"
+                :show-info-if-empty="false"
+                :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
+                @deleteAsiakirja="onArviointiFileDeleted"
+              />
+              <elsa-button
+                variant="outline-primary"
+                class="mt-2"
+                @click="openArviointityokalutModal"
+              >
+                {{ $t('avaa-arviointityokalu') }}
+              </elsa-button>
+              <arviointityokalut-modal
+                v-model="isArviointityokalutModalOpen"
+                :valitut-arviointityokalut="form.arviointityokalut"
+                :arviointityokalu-vastaukset="form.arviointityokaluVastaukset"
+                @submit="lisaaArviointityokaluVastaukset"
+              ></arviointityokalut-modal>
+            </template>
+          </elsa-form-group>
+        </b-form-row>
+        <b-form-row>
+          <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-12">
+            <template #label-help>
+              <elsa-popover :title="$t('vaativuustaso')">
+                <elsa-vaativuustaso-tooltip-content />
+              </elsa-popover>
+            </template>
+            <template #default="{ uid }">
+              <elsa-form-multiselect
+                :id="uid"
+                v-model="form.vaativuustaso"
+                :options="vaativuustasot"
+                :custom-label="vaativuustasoLabel"
+                track-by="arvo"
+                @input="$emit('skipRouteExitConfirm', false)"
+              ></elsa-form-multiselect>
+              <b-form-invalid-feedback :id="`${uid}-feedback`">
+                {{ $t('pakollinen-tieto') }}
+              </b-form-invalid-feedback>
+            </template>
+          </elsa-form-group>
+        </b-form-row>
+        <div v-for="(kokonaisuus, index) in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
           <b-form-row>
-            <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-6">
+            <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-12">
               <template #label-help>
                 <elsa-popover :title="arviointiAsteikonNimi">
                   <elsa-arviointiasteikon-taso-tooltip-content
@@ -336,72 +450,6 @@
           <h3>{{ $t('yhteiset-arviointisisallot') }}</h3>
           <p>{{ $t('yhteiset-arviointisisallot-kuvaus') }}</p>
         </div>
-        <b-form-row>
-          <elsa-form-group :label="$t('vaativuustaso')" class="col-lg-6">
-            <template #label-help>
-              <elsa-popover :title="$t('vaativuustaso')">
-                <elsa-vaativuustaso-tooltip-content />
-              </elsa-popover>
-            </template>
-            <template #default="{ uid }">
-              <elsa-form-multiselect
-                :id="uid"
-                v-model="form.vaativuustaso"
-                :options="vaativuustasot"
-                :custom-label="vaativuustasoLabel"
-                track-by="arvo"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></elsa-form-multiselect>
-              <b-form-invalid-feedback :id="`${uid}-feedback`">
-                {{ $t('pakollinen-tieto') }}
-              </b-form-invalid-feedback>
-            </template>
-          </elsa-form-group>
-        </b-form-row>
-        <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
-          <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-6">
-            <template #default="{ uid }">
-              <elsa-form-multiselect
-                :id="uid"
-                v-model="form.arviointityokalut"
-                :options="arviointityokalut"
-                label="nimi"
-                :multiple="true"
-                :allow-empty="true"
-                track-by="nimi"
-                @input="$emit('skipRouteExitConfirm', false)"
-              ></elsa-form-multiselect>
-            </template>
-          </elsa-form-group>
-        </b-form-row>
-        <elsa-form-group v-if="$isKouluttaja() || $isVastuuhenkilo()" :label="$t('liitetiedostot')">
-          <template #label-help>
-            <elsa-popover>
-              {{ $t('arviointi-liite-tooltip') }}
-            </elsa-popover>
-          </template>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <span v-html="$t('arviointi-liitetiedostot-kuvaus', { linkki })"></span>
-          <asiakirjat-upload
-            class="mt-3"
-            :is-primary-button="false"
-            :allow-multiples-files="false"
-            :button-text="$t('lisaa-liitetiedosto')"
-            :wrong-file-type-error-message="$t('sallitut-tiedostoformaatit-pdf')"
-            :allowed-file-types="['application/pdf']"
-            @selectedFiles="onArviointiFileAdded"
-          />
-          <asiakirjat-content
-            class="px-0 col-md-8 col-lg-12 col-xl-8"
-            :asiakirjat="asiakirjatTableItems"
-            :sorting-enabled="false"
-            :pagination-enabled="false"
-            :enable-search="false"
-            :show-info-if-empty="false"
-            :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
-            @deleteAsiakirja="onArviointiFileDeleted"
-          />
-        </elsa-form-group>
         <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
           <template #label-help>
             <elsa-popover :title="$t('arvioinnin-osa-alueita')">
@@ -529,6 +577,8 @@
 
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
+  import ArviointityokaluKysymysLomakeVastauksilla from '@/components/arviointityokalut/arviointityokalu-kysymys-lomake-vastauksilla.vue'
+  import ArviointityokalutModal from '@/components/arviointityokalut/arviointityokalut-modal.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
   import ElsaBadge from '@/components/badge/badge.vue'
@@ -537,15 +587,19 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import TyokertymalaskuriModal from '@/components/tyokertymalaskuri/tyokertymalaskuri-modal.vue'
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
+  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import store from '@/store'
   import {
     ArviointiasteikonTaso,
     Arviointityokalu,
     Asiakirja,
+    FileUploadText,
     Suoritusarviointi,
+    SuoritusarviointiArviointityokaluVastaus,
     SuoritusarviointiForm,
     Vaativuustaso
   } from '@/types'
@@ -560,6 +614,10 @@
 
   @Component({
     components: {
+      ArviointityokaluKysymysLomakeVastauksilla,
+      ArviointityokaluLomakeKysymysForm,
+      TyokertymalaskuriModal,
+      ArviointityokalutModal,
       ElsaFormGroup,
       ElsaFormError,
       ElsaFormMultiselect,
@@ -615,6 +673,7 @@
       arvioitavatKokonaisuudet: null,
       sanallinenArviointi: null,
       arviointityokalut: [],
+      arviointityokaluVastaukset: [],
       arviointiPerustuu: null,
       muuPeruste: null,
       perustuuMuuhun: false
@@ -642,6 +701,34 @@
         value: ArvioinninPerustuminen.MUU
       }
     ]
+    fileUploadTexts: FileUploadText[] = [
+      {
+        text: this.$t('voit-myos-lisata-valmiin-arvioinnin') as string,
+        isLink: false,
+        link: '',
+        linkType: null
+      },
+      {
+        text: this.$t('liitteena') as string,
+        isLink: true,
+        link: '',
+        linkType: 'upload'
+      },
+      {
+        text: this.$t('erillisessa-nakymassa-voit') as string,
+        isLink: false,
+        link: '',
+        linkType: null
+      },
+      {
+        text: this.$t('tutustua-arviointityokaluihin') as string,
+        isLink: true,
+        link: '',
+        linkType: 'url'
+      }
+    ]
+    isArviointityokalutModalOpen = false
+    collapsedIndex: number | null = null
 
     async mounted() {
       this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
@@ -658,7 +745,8 @@
               )
             }
           }),
-          sanallinenArviointi: this.value.sanallinenItsearviointi
+          sanallinenArviointi: this.value.sanallinenItsearviointi,
+          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset
         }
       } else {
         this.form = {
@@ -681,7 +769,8 @@
           muuPeruste: this.value.muuPeruste,
           perustuuMuuhun:
             this.value.arviointiPerustuu !== null &&
-            this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA
+            this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA,
+          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset
         }
         this.arviointityokalut = (
           (await axios.get(`/arviointityokalut`)).data as Arviointityokalu[]
@@ -772,7 +861,6 @@
           addedFiles: this.addedFiles,
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         }
-
         this.$emit('submit', submitData, this.params)
       } else {
         const submitData = {
@@ -788,6 +876,7 @@
             vaativuustaso: this.form.vaativuustaso?.arvo,
             sanallinenArviointi: this.form.sanallinenArviointi,
             arviointityokalut: this.form.arviointityokalut,
+            arviointityokaluVastaukset: this.form.arviointityokaluVastaukset,
             arviointiPerustuu: this.form.perustuuMuuhun
               ? this.form.arviointiPerustuu
               : ArvioinninPerustuminen.LASNA,
@@ -799,7 +888,6 @@
           addedFiles: this.addedFiles,
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
         }
-
         this.$emit('submit', submitData, this.params)
       }
     }
@@ -828,6 +916,50 @@
 
     muuPerustePituus() {
       return this.form.muuPeruste != null ? this.form.muuPeruste.length : 0
+    }
+
+    get formattedArviointityokalut() {
+      return Object.values(
+        this.arviointityokalut.reduce<
+          Record<string, { kategoria: string; nimi: Arviointityokalu[] }>
+        >((acc, arviointityokalu) => {
+          const categoryName =
+            arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
+          if (!acc[categoryName]) {
+            acc[categoryName] = { kategoria: categoryName, nimi: [] }
+          }
+          acc[categoryName].nimi.push(arviointityokalu)
+          return acc
+        }, {})
+      )
+    }
+
+    arviointityokaluLabel(arviointityokalu: Arviointityokalu) {
+      return arviointityokalu.nimi || ''
+    }
+
+    openArviointityokalutModal() {
+      this.isArviointityokalutModalOpen = true
+    }
+
+    async lisaaArviointityokaluVastaukset(formData: SuoritusarviointiArviointityokaluVastaus[]) {
+      this.form.arviointityokaluVastaukset = formData
+      this.isArviointityokalutModalOpen = false
+    }
+
+    toggleCollapse(index: number) {
+      this.collapsedIndex = this.collapsedIndex === index ? null : index
+    }
+
+    getKysymyksenVastaus(kysymysId: number | undefined, arviointityokaluId: number | undefined) {
+      if (this.form.arviointityokaluVastaukset === undefined) {
+        return null
+      }
+      const vastaus = this.form.arviointityokaluVastaukset.find(
+        (v) =>
+          v.arviointityokaluKysymysId === kysymysId && v.arviointityokaluId === arviointityokaluId
+      )
+      return vastaus || null
     }
   }
 </script>
@@ -903,5 +1035,16 @@
 
   .arviointi-perustuu {
     margin-left: 20px;
+  }
+
+  .card-header-custom {
+    color: #222222;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .card {
+    border: 1px solid #e8e9ec;
+    border-radius: 8px;
   }
 </style>
