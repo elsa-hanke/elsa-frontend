@@ -38,7 +38,8 @@
                 :index="kysymysIndex"
                 :answer-mode="true"
                 :child-data-received="true"
-                @update-answer="(vastaus) => updateVastaus(vastaus, arviointityokalu.id)"
+                :arviointityokalu-id="arviointityokalu.id"
+                @update-answer="updateVastaus"
               />
             </b-card-body>
           </b-collapse>
@@ -142,22 +143,14 @@
       this.$emit('cancel')
     }
 
-    updateVastaus(
-      vastaus: SuoritusarviointiArviointityokaluVastaus,
-      arviointityokaluId: number | undefined
-    ) {
-      if (arviointityokaluId === undefined) {
-        return
-      }
+    updateVastaus(vastaus: SuoritusarviointiArviointityokaluVastaus) {
       const index = this.arviointityokaluVastaukset.findIndex(
         (v) => v.arviointityokaluKysymysId === vastaus.arviointityokaluKysymysId
       )
-
       const updatedVastaus = {
         ...vastaus,
-        arviointityokaluId: arviointityokaluId
+        arviointityokaluId: vastaus.arviointityokaluId
       }
-
       if (index !== -1) {
         this.$set(this.arviointityokaluVastaukset, index, updatedVastaus)
       } else {

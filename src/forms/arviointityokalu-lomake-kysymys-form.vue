@@ -83,6 +83,9 @@
     }
   })
   export default class ArviointityokaluLomakeKysymysForm extends Vue {
+    @Prop({ required: true, type: Number })
+    arviointityokaluId = 0
+
     @Prop({ type: Object, required: true })
     kysymys!: ArviointityokaluKysymys | any
 
@@ -126,7 +129,7 @@
 
     updateAnswer(value: string | number | null) {
       this.$emit('update-answer', {
-        arviointityokaluId: this.kysymys.arviointityokaluId,
+        arviointityokaluId: this.arviointityokaluId,
         arviointityokaluKysymysId: this.kysymys.id,
         tekstiVastaus: typeof value === 'string' ? value : null,
         valittuVaihtoehtoId: typeof value === 'number' ? value : null
