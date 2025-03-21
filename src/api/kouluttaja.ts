@@ -15,7 +15,9 @@ import {
   Katseluoikeus,
   ErikoistujanEteneminen,
   Page,
-  ErikoistujienSeurantaKouluttajaRajaimet
+  ErikoistujienSeurantaKouluttajaRajaimet,
+  Arviointityokalu,
+  ArviointityokaluKategoria
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -140,6 +142,16 @@ export async function getEtusivuSeurantajaksot() {
 export async function getEtusivuVanhenevatKatseluoikeudet() {
   const path = `/kouluttaja/etusivu/vanhenevat-katseluoikeudet`
   return await axios.get<Katseluoikeus[]>(path)
+}
+
+export async function getArviointityokalut() {
+  const path = `/kouluttaja/arviointityokalut`
+  return await axios.get<Arviointityokalu[]>(path)
+}
+
+export async function getArviointityokaluKategoriat() {
+  const path = `/kouluttaja/arviointityokalut/kategoriat`
+  return await axios.get<ArviointityokaluKategoria[]>(path)
 }
 
 function resolveRolePath() {
