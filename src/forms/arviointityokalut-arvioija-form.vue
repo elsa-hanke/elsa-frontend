@@ -15,9 +15,9 @@
             role="tab"
             @click="toggleCollapse(index)"
           >
-            <h2 class="mb-0">
+            <h3 class="mb-0">
               {{ arviointityokalu.nimi }}
-            </h2>
+            </h3>
             <font-awesome-icon
               :icon="collapsedIndex === index ? ['fas', 'chevron-up'] : ['fas', 'chevron-down']"
               class="text-secondary"

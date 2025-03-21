@@ -199,6 +199,44 @@
             </b-tr>
           </b-tbody>
         </b-table-simple>
+        <div class="accordion mt-2 mb-4" role="tablist">
+          <b-card
+            v-for="(arviointityokalu, index) in form.arviointityokalut"
+            :key="arviointityokalu.id || index"
+            no-body
+            class="card"
+          >
+            <b-card-header
+              header-tag="header"
+              class="p-3 card-header-custom d-flex justify-content-between align-items-center"
+              role="tab"
+              @click="toggleCollapse(index)"
+            >
+              <h3 class="mb-0">
+                {{ arviointityokalu.nimi }}
+              </h3>
+              <font-awesome-icon
+                :icon="collapsedIndex === index ? ['fas', 'chevron-up'] : ['fas', 'chevron-down']"
+                class="text-secondary"
+              />
+            </b-card-header>
+            <b-collapse
+              :id="'accordion-' + index"
+              :visible="collapsedIndex === index"
+              accordion="my-accordion"
+              role="tabpanel"
+            >
+              <b-card-body class="p-3">
+                <arviointityokalu-kysymys-lomake-vastauksilla
+                  v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
+                  :key="kysymysIndex"
+                  :kysymys="kysymys"
+                  :vastaus="getKysymyksenVastaus(kysymys.id, arviointityokalu.id)"
+                />
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+        </div>
         <elsa-form-group :label="$t('sanallinen-arviointi')">
           <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
@@ -539,6 +577,7 @@
 
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
+  import ArviointityokaluKysymysLomakeVastauksilla from '@/components/arviointityokalut/arviointityokalu-kysymys-lomake-vastauksilla.vue'
   import ArviointityokalutModal from '@/components/arviointityokalut/arviointityokalut-modal.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import AsiakirjatUpload from '@/components/asiakirjat/asiakirjat-upload.vue'
@@ -552,6 +591,7 @@
   import UserAvatar from '@/components/user-avatar/user-avatar.vue'
   import ElsaVaativuustasoTooltipContent from '@/components/vaativuustaso/vaativuustaso-tooltip-content.vue'
   import ElsaVaativuustaso from '@/components/vaativuustaso/vaativuustaso.vue'
+  import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import store from '@/store'
   import {
     ArviointiasteikonTaso,
@@ -574,6 +614,8 @@
 
   @Component({
     components: {
+      ArviointityokaluKysymysLomakeVastauksilla,
+      ArviointityokaluLomakeKysymysForm,
       TyokertymalaskuriModal,
       ArviointityokalutModal,
       ElsaFormGroup,
@@ -686,6 +728,7 @@
       }
     ]
     isArviointityokalutModalOpen = false
+    collapsedIndex: number | null = null
 
     async mounted() {
       this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
@@ -875,23 +918,6 @@
       return this.form.muuPeruste != null ? this.form.muuPeruste.length : 0
     }
 
-    // get formattedArviointityokalut() {
-    //   return Object.values(
-    //     this.arviointityokalut.reduce<Record<string, { kategoria: string; nimi: string[] }>>(
-    //       (acc, arviointityokalu) => {
-    //         const categoryName =
-    //           arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
-    //         if (!acc[categoryName]) {
-    //           acc[categoryName] = { kategoria: categoryName, nimi: [] }
-    //         }
-    //         acc[categoryName].nimi.push(arviointityokalu.nimi || '')
-    //         return acc
-    //       },
-    //       {}
-    //     )
-    //   )
-    // }
-
     get formattedArviointityokalut() {
       return Object.values(
         this.arviointityokalut.reduce<
@@ -919,6 +945,21 @@
     async lisaaArviointityokaluVastaukset(formData: SuoritusarviointiArviointityokaluVastaus[]) {
       this.form.arviointityokaluVastaukset = formData
       this.isArviointityokalutModalOpen = false
+    }
+
+    toggleCollapse(index: number) {
+      this.collapsedIndex = this.collapsedIndex === index ? null : index
+    }
+
+    getKysymyksenVastaus(kysymysId: number | undefined, arviointityokaluId: number | undefined) {
+      if (this.form.arviointityokaluVastaukset === undefined) {
+        return null
+      }
+      const vastaus = this.form.arviointityokaluVastaukset.find(
+        (v) =>
+          v.arviointityokaluKysymysId === kysymysId && v.arviointityokaluId === arviointityokaluId
+      )
+      return vastaus || null
     }
   }
 </script>
@@ -994,5 +1035,16 @@
 
   .arviointi-perustuu {
     margin-left: 20px;
+  }
+
+  .card-header-custom {
+    color: #222222;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .card {
+    border: 1px solid #e8e9ec;
+    border-radius: 8px;
   }
 </style>
