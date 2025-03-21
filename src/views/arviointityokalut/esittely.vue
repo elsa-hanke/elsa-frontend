@@ -114,8 +114,8 @@
       this.loading = false
     }
 
-    getArviontityokalutForKategoria(id: number | null) {
-      return id
+    getArviontityokalutForKategoria(id: number | null | undefined) {
+      return id != null
         ? this.arviointityokalut.filter((a) => a.kategoria?.id === id)
         : this.arviointityokalut.filter((a) => a.kategoria == null)
     }
