@@ -199,44 +199,25 @@
             </b-tr>
           </b-tbody>
         </b-table-simple>
-        <div class="accordion mt-2 mb-4" role="tablist">
-          <b-card
-            v-for="(arviointityokalu, index) in form.arviointityokalut"
-            :key="arviointityokalu.id || index"
-            no-body
-            class="card"
-          >
-            <b-card-header
-              header-tag="header"
-              class="p-3 card-header-custom d-flex justify-content-between align-items-center"
-              role="tab"
-              @click="toggleCollapse(index)"
-            >
-              <h3 class="mb-0">
+        <b-row
+          v-for="(arviointityokalu, index) in form.arviointityokalut"
+          :key="arviointityokalu.id || index"
+          class="mb-2"
+        >
+          <b-col>
+            <elsa-accordian :ref="arviointityokalu.nimi" :visible="false">
+              <template #title>
                 {{ arviointityokalu.nimi }}
-              </h3>
-              <font-awesome-icon
-                :icon="collapsedIndex === index ? ['fas', 'chevron-up'] : ['fas', 'chevron-down']"
-                class="text-secondary"
+              </template>
+              <arviointityokalu-kysymys-lomake-vastauksilla
+                v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
+                :key="kysymysIndex"
+                :kysymys="kysymys"
+                :vastaus="getKysymyksenVastaus(kysymys.id, arviointityokalu.id)"
               />
-            </b-card-header>
-            <b-collapse
-              :id="'accordion-' + index"
-              :visible="collapsedIndex === index"
-              accordion="my-accordion"
-              role="tabpanel"
-            >
-              <b-card-body class="p-3">
-                <arviointityokalu-kysymys-lomake-vastauksilla
-                  v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
-                  :key="kysymysIndex"
-                  :kysymys="kysymys"
-                  :vastaus="getKysymyksenVastaus(kysymys.id, arviointityokalu.id)"
-                />
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-        </div>
+            </elsa-accordian>
+          </b-col>
+        </b-row>
         <elsa-form-group :label="$t('sanallinen-arviointi')">
           <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
@@ -575,6 +556,7 @@
   import { Validation, validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
 
+  import ElsaAccordian from '@/components/accordian/accordian.vue'
   import ElsaArviointiasteikonTasoTooltipContent from '@/components/arviointiasteikon-taso/arviointiasteikon-taso-tooltip.vue'
   import ElsaArviointiasteikonTaso from '@/components/arviointiasteikon-taso/arviointiasteikon-taso.vue'
   import ArviointityokaluKysymysLomakeVastauksilla from '@/components/arviointityokalut/arviointityokalu-kysymys-lomake-vastauksilla.vue'
@@ -614,6 +596,7 @@
 
   @Component({
     components: {
+      ElsaAccordian,
       ArviointityokaluKysymysLomakeVastauksilla,
       ArviointityokaluLomakeKysymysForm,
       TyokertymalaskuriModal,
@@ -728,7 +711,6 @@
       }
     ]
     isArviointityokalutModalOpen = false
-    collapsedIndex: number | null = null
 
     async mounted() {
       this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
@@ -945,10 +927,6 @@
     async lisaaArviointityokaluVastaukset(formData: SuoritusarviointiArviointityokaluVastaus[]) {
       this.form.arviointityokaluVastaukset = formData
       this.isArviointityokalutModalOpen = false
-    }
-
-    toggleCollapse(index: number) {
-      this.collapsedIndex = this.collapsedIndex === index ? null : index
     }
 
     getKysymyksenVastaus(kysymysId: number | undefined, arviointityokaluId: number | undefined) {
