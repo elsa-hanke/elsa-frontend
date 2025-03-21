@@ -62,7 +62,6 @@
             <b-spinner variant="primary" :label="$t('ladataan')" />
           </div>
         </b-col>
-        <b-col class="pl-3 pr-0" lg="2"></b-col>
       </b-row>
     </b-container>
   </div>
@@ -175,6 +174,6 @@
 
 <style lang="scss" scoped>
   .arviointi {
-    max-width: 970px;
+    max-width: 1024px;
   }
 </style>
