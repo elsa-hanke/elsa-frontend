@@ -51,6 +51,7 @@
                       :child-data-received="!loading"
                       :answer-mode="false"
                       :index="kIndex"
+                      :arviointityokalu-id="at.id"
                     />
                   </div>
                 </div>
@@ -141,5 +142,9 @@
   .card.border.mb-2 {
     border-radius: 0.5rem;
     padding: 0 1rem;
+  }
+
+  .esittely {
+    max-width: 1024px;
   }
 </style>
