@@ -352,7 +352,7 @@
             required,
             email
           },
-          confirmEmail: {
+          emailConfirm: {
             emailConfirmed: () => {
               return this.needEmailConfirm ? this.form.email === this.confirmEmailValue : true
             }
