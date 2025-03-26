@@ -741,6 +741,7 @@ export type Suoritusarviointi = {
   arviointiAsiakirjat: Asiakirja[]
   itsearviointiAsiakirjat: Asiakirja[]
   arviointityokaluVastaukset: SuoritusarviointiArviointityokaluVastaus[]
+  keskenerainen: boolean
 }
 
 export type SuoritusarviointiArviointityokaluVastaus = {
@@ -917,6 +918,7 @@ export type SuoritusarviointiForm = {
   arviointiPerustuu?: ArvioinninPerustuminen | null
   muuPeruste?: string | null
   perustuuMuuhun?: boolean
+  keskenerainen?: boolean
 }
 
 export type SuoritusarviointiFilter = {

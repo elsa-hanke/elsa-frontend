@@ -537,6 +537,14 @@
           >
             {{ $t('peruuta') }}
           </elsa-button>
+          <elsa-button
+            v-b-modal.confirm-save
+            style="min-width: 14rem"
+            variant="outline-primary"
+            class="ml-2"
+          >
+            {{ $t('tallenna-keskeneraisena') }}
+          </elsa-button>
           <elsa-button :loading="params.saving" type="submit" variant="primary" class="ml-2">
             {{ itsearviointi ? $t('tallenna') : $t('laheta') }}
           </elsa-button>
@@ -546,6 +554,13 @@
         <elsa-form-error :active="$v.$anyError" />
       </div>
     </b-form>
+    <elsa-confirmation-modal
+      id="confirm-save"
+      :title="$t('vahvista-tallennus-keskeneraisena-title')"
+      :text="$t('vahvista-tallennus-keskeneraisena-body')"
+      :submit-text="$t('tallenna-keskeneraisena')"
+      @submit="saveAndExit"
+    />
   </div>
 </template>
 
@@ -567,6 +582,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
+  import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
   import TyokertymalaskuriModal from '@/components/tyokertymalaskuri/tyokertymalaskuri-modal.vue'
@@ -596,6 +612,7 @@
 
   @Component({
     components: {
+      ElsaConfirmationModal,
       ElsaAccordian,
       ArviointityokaluKysymysLomakeVastauksilla,
       ArviointityokaluLomakeKysymysForm,
@@ -659,7 +676,8 @@
       arviointityokaluVastaukset: [],
       arviointiPerustuu: null,
       muuPeruste: null,
-      perustuuMuuhun: false
+      perustuuMuuhun: false,
+      keskenerainen: false
     }
     vaativuustasot = vaativuustasot
     arviointiasteikonTasot: ArviointiasteikonTaso[] = []
@@ -838,7 +856,8 @@
             sanallinenItsearviointi: this.form.sanallinenArviointi,
             arviointiasteikko: null,
             arviointiAsiakirjat: null,
-            itsearviointiAsiakirjat: null
+            itsearviointiAsiakirjat: null,
+            keskenerainen: this.form.keskenerainen
           },
           addedFiles: this.addedFiles,
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
@@ -865,7 +884,8 @@
             muuPeruste: this.muuValittu ? this.form.muuPeruste : null,
             arviointiAsiakirjat: null,
             itsearviointiAsiakirjat: null,
-            arviointiasteikko: null
+            arviointiasteikko: null,
+            keskenerainen: this.form.keskenerainen
           },
           addedFiles: this.addedFiles,
           deletedAsiakirjaIds: this.deletedAsiakirjat.map((asiakirja) => asiakirja.id)
@@ -938,6 +958,11 @@
           v.arviointityokaluKysymysId === kysymysId && v.arviointityokaluId === arviointityokaluId
       )
       return vastaus || null
+    }
+
+    saveAndExit() {
+      this.form.keskenerainen = true
+      this.onSubmit()
     }
   }
 </script>
