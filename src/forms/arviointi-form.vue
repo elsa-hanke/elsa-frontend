@@ -746,7 +746,8 @@
             }
           }),
           sanallinenArviointi: this.value.sanallinenItsearviointi,
-          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset
+          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset,
+          keskenerainen: false
         }
       } else {
         this.form = {
@@ -770,7 +771,8 @@
           perustuuMuuhun:
             this.value.arviointiPerustuu !== null &&
             this.value.arviointiPerustuu !== ArvioinninPerustuminen.LASNA,
-          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset
+          arviointityokaluVastaukset: this.value.arviointityokaluVastaukset,
+          keskenerainen: false
         }
         this.arviointityokalut = (
           (await axios.get(`/arviointityokalut`)).data as Arviointityokalu[]
