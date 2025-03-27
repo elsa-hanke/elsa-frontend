@@ -79,9 +79,7 @@
       ElsaButton,
       ElsaFormError
     },
-    validations: {
-      form: {}
-    }
+    validations: {}
   })
   export default class ArviointityokalutArvioijaForm extends Vue {
     @Prop({ required: true, type: Array, default: () => [] })
@@ -97,40 +95,11 @@
     }
     editing = false
 
-    async mounted() {
-      /* */
-    }
-
     toggleCollapse(index: number) {
       this.collapsedIndex = this.collapsedIndex === index ? null : index
     }
 
-    validateState(name: string) {
-      const get = (obj: any, path: any, defaultValue = undefined) => {
-        const travel = (regexp: any) =>
-          String.prototype.split
-            .call(path, regexp)
-            .filter(Boolean)
-            .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj)
-        const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/)
-        return result === undefined || result === obj ? defaultValue : result
-      }
-      const { $dirty, $error } = get(this.$v.form, name)
-      return $dirty ? ($error ? false : null) : null
-    }
-
-    validateForm(): boolean {
-      this.$v.form.$touch()
-      return !this.$v.$anyError
-    }
-
     async onSubmit() {
-      const validations = [this.validateForm()]
-
-      if (validations.includes(false)) {
-        return
-      }
-
       const submitData: SuoritusarviointiArviointityokaluVastaus[] = [
         ...this.arviointityokaluVastaukset
       ]

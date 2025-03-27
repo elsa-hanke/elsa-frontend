@@ -338,7 +338,14 @@
                 :group-select="true"
                 track-by="id"
                 :custom-label="arviointityokaluLabel"
+                :state="pakollisetVastauksetValid"
               />
+              <b-form-invalid-feedback
+                :id="`${uid}-feedback`"
+                :force-show="!pakollisetVastauksetValid"
+              >
+                {{ $t('arviointityokalu-kaikkia-pakollisia-vastauksia-ei-ole-annettu') }}
+              </b-form-invalid-feedback>
               <asiakirjat-upload
                 class="mt-1"
                 :is-primary-button="false"
@@ -538,6 +545,7 @@
             {{ $t('peruuta') }}
           </elsa-button>
           <elsa-button
+            v-if="!value.arviointiAika"
             v-b-modal.confirm-save
             style="min-width: 14rem"
             variant="outline-primary"
@@ -559,7 +567,7 @@
       :title="$t('vahvista-tallennus-keskeneraisena-title')"
       :text="$t('vahvista-tallennus-keskeneraisena-body')"
       :submit-text="$t('tallenna-keskeneraisena')"
-      @submit="saveAndExit"
+      @submit="saveUnfinishedAndExit"
     />
   </div>
 </template>
@@ -819,6 +827,20 @@
       return $dirty ? ($error ? false : null) : null
     }
 
+    get pakollisetVastauksetValid() {
+      if (!this.form.arviointityokalut) return true
+      return this.form.arviointityokalut.every((tool) =>
+        tool.kysymykset.every((kysymys) => {
+          if (!kysymys.pakollinen) return true
+          if (!this.form.arviointityokaluVastaukset) return false
+          const vastaus = this.form.arviointityokaluVastaukset.find(
+            (v) => v.arviointityokaluKysymysId === kysymys.id
+          )
+          return vastaus && (vastaus.tekstiVastaus || vastaus.valittuVaihtoehtoId)
+        })
+      )
+    }
+
     onArviointiFileAdded(files: File[]) {
       const file = files[0]
       this.newAsiakirjatMapped.push(mapFile(file))
@@ -836,10 +858,12 @@
       }
     }
 
-    onSubmit() {
-      this.$v.form.$touch()
-      if (this.$v.form.$anyError) {
-        return
+    onSubmit(validate = true) {
+      if (validate) {
+        this.$v.form.$touch()
+        if (this.$v.form.$anyError) {
+          return
+        }
       }
       if (this.itsearviointi) {
         const submitData = {
@@ -962,9 +986,9 @@
       return vastaus || null
     }
 
-    saveAndExit() {
+    saveUnfinishedAndExit() {
       this.form.keskenerainen = true
-      this.onSubmit()
+      this.onSubmit(false)
     }
   }
 </script>

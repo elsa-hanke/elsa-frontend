@@ -13,8 +13,12 @@
             rows="3"
             :disabled="!answerMode"
             :placeholder="$t('vastaus')"
+            :state="isAnswerValid"
             @input="updateAnswer($event)"
           />
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -41,6 +45,7 @@
                 v-model="selectedAnswer"
                 :value="vaihtoehto.id"
                 class="custom-radio ml-2"
+                :state="isAnswerValid"
                 @change="updateAnswer(vaihtoehto.id)"
               >
                 {{ vaihtoehto.teksti }}
@@ -56,7 +61,6 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Vue, Prop } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
@@ -76,15 +80,11 @@
       ElsaFormDatepicker,
       ElsaPopover
     },
-    validations: {
-      kysymys: {
-        otsikko: required
-      }
-    }
+    validations: {}
   })
   export default class ArviointityokaluLomakeKysymysForm extends Vue {
-    @Prop({ required: true, type: Number })
-    arviointityokaluId = 0
+    @Prop({ required: true, type: Number, default: 0 })
+    arviointityokaluId: number | undefined
 
     @Prop({ type: Object, required: true })
     kysymys!: ArviointityokaluKysymys | any
@@ -121,6 +121,11 @@
 
     validateForm(): boolean {
       return !this.$v.$anyError
+    }
+
+    get isAnswerValid() {
+      if (!this.kysymys.pakollinen) return null
+      return this.selectedAnswer !== null && this.selectedAnswer !== '' ? null : false
     }
 
     get arviointityokaluKysymysTyyppit() {
