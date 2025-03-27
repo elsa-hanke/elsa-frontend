@@ -281,3 +281,5 @@ export enum ArviointityokaluTila {
   LUONNOS = 'LUONNOS',
   JULKAISTU = 'JULKAISTU'
 }
+
+export const MUU_ARVIOINTITYOKALU_ID = 9

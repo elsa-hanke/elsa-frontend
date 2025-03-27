@@ -200,7 +200,7 @@
           </b-tbody>
         </b-table-simple>
         <b-row
-          v-for="(arviointityokalu, index) in form.arviointityokalut"
+          v-for="(arviointityokalu, index) in listattavatArviointityokalut"
           :key="arviointityokalu.id || index"
           class="mb-2"
         >
@@ -370,6 +370,7 @@
               <elsa-button
                 variant="outline-primary"
                 class="mt-2"
+                :disabled="arviointityokalujaEiValittuna"
                 @click="openArviointityokalutModal"
               >
                 {{ $t('avaa-arviointityokalu') }}
@@ -613,6 +614,7 @@
   import {
     ArvioinninPerustuminen,
     ArviointiasteikkoTyyppi,
+    MUU_ARVIOINTITYOKALU_ID,
     vaativuustasot
   } from '@/utils/constants'
   import { mapFile } from '@/utils/fileMapper'
@@ -947,18 +949,39 @@
     }
 
     get formattedArviointityokalut() {
-      return Object.values(
-        this.arviointityokalut.reduce<
-          Record<string, { kategoria: string; nimi: Arviointityokalu[] }>
-        >((acc, arviointityokalu) => {
-          const categoryName =
-            arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
-          if (!acc[categoryName]) {
-            acc[categoryName] = { kategoria: categoryName, nimi: [] }
-          }
-          acc[categoryName].nimi.push(arviointityokalu)
-          return acc
-        }, {})
+      const grouped = this.arviointityokalut
+        .filter((item) => item.id !== MUU_ARVIOINTITYOKALU_ID)
+        .reduce<Record<string, { kategoria: string; nimi: Arviointityokalu[] }>>(
+          (acc, arviointityokalu) => {
+            const categoryName =
+              arviointityokalu.kategoria?.nimi || (this.$t('ei-kategoriaa') as string)
+            if (!acc[categoryName]) {
+              acc[categoryName] = { kategoria: categoryName, nimi: [] }
+            }
+            acc[categoryName].nimi.push(arviointityokalu)
+            return acc
+          },
+          {}
+        )
+
+      const muuArviointityokalu = this.arviointityokalut.find((item) => item.id === 9)
+      if (muuArviointityokalu) {
+        const muuCategoryName = this.$t('muu') as string
+        if (!grouped[muuCategoryName]) {
+          grouped[muuCategoryName] = { kategoria: muuCategoryName, nimi: [] }
+        }
+        grouped[muuCategoryName].nimi.push(muuArviointityokalu)
+      }
+
+      return Object.values(grouped)
+    }
+
+    get arviointityokalujaEiValittuna() {
+      if (this.form.arviointityokalut && this.form.arviointityokalut.length === 0) return true
+      return (
+        this.form.arviointityokalut &&
+        this.form.arviointityokalut.length === 1 &&
+        this.form.arviointityokalut[0].id === MUU_ARVIOINTITYOKALU_ID
       )
     }
 
@@ -989,6 +1012,11 @@
     saveUnfinishedAndExit() {
       this.form.keskenerainen = true
       this.onSubmit(false)
+    }
+
+    get listattavatArviointityokalut() {
+      if (!this.form.arviointityokalut) return []
+      return this.form.arviointityokalut.filter((at) => at.id !== MUU_ARVIOINTITYOKALU_ID)
     }
   }
 </script>

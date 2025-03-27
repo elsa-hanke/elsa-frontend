@@ -4,7 +4,7 @@
     <div>
       <div class="accordion" role="tablist">
         <b-card
-          v-for="(arviointityokalu, index) in valitutArviointityokalut"
+          v-for="(arviointityokalu, index) in valitutArviointityokalut.filter((at) => at.id !== 9)"
           :key="arviointityokalu.id || index"
           no-body
           class="card"
