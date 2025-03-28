@@ -18,7 +18,6 @@
                   <b-form-input
                     :id="uid"
                     v-model="kysymys.otsikko"
-                    :state="validateState('otsikko')"
                     @input="$emit('skipRouteExitConfirm', false)"
                   ></b-form-input>
                   <b-form-invalid-feedback :id="`${uid}-feedback`">
@@ -104,7 +103,6 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Vue, Prop } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
@@ -126,26 +124,17 @@
       ElsaFormDatepicker,
       ElsaPopover
     },
-    validations: {
-      kysymys: {
-        otsikko: required
-      }
-    }
+    validations: {}
   })
   export default class ArviointityokaluLomakeKysymysLuontiForm extends Vue {
     @Prop({ type: Object, required: true })
-    kysymys!: ArviointityokaluKysymys | any
+    kysymys!: ArviointityokaluKysymys
 
     @Prop({ type: Boolean, default: false })
     childDataReceived!: boolean
 
     @Prop({ required: true, type: Number })
     index?: number
-
-    validateState(name: string) {
-      const { $dirty, $error } = this.kysymys[name] as any
-      return $dirty ? ($error ? false : null) : null
-    }
 
     onAddVastausVaihtoehto() {
       this.kysymys.vaihtoehdot.push({

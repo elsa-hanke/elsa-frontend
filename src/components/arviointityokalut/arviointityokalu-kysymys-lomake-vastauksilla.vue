@@ -45,7 +45,7 @@
   @Component
   export default class ArviointityokaluKysymysVastausNaytto extends Vue {
     @Prop({ type: Object, required: true })
-    kysymys!: ArviointityokaluKysymys | any
+    kysymys!: ArviointityokaluKysymys
 
     @Prop({ type: Object, default: null })
     vastaus!: SuoritusarviointiArviointityokaluVastaus | null

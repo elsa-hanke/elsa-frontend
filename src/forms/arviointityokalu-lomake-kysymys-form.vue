@@ -87,7 +87,7 @@
     arviointityokaluId: number | undefined
 
     @Prop({ type: Object, required: true })
-    kysymys!: ArviointityokaluKysymys | any
+    kysymys!: ArviointityokaluKysymys
 
     @Prop({ type: Object, default: null })
     vastaus!: SuoritusarviointiArviointityokaluVastaus | null
@@ -102,11 +102,6 @@
     index?: number
 
     selectedAnswer: string | number | null = null
-
-    validateState(name: string) {
-      const { $dirty, $error } = this.kysymys[name] as any
-      return $dirty ? ($error ? false : null) : null
-    }
 
     mounted() {
       if (this.vastaus) {
@@ -132,7 +127,7 @@
       return ArviointityokaluKysymysTyyppi
     }
 
-    updateAnswer(value: string | number | null) {
+    updateAnswer(value: string | number | undefined) {
       this.$emit('update-answer', {
         arviointityokaluId: this.arviointityokaluId,
         arviointityokaluKysymysId: this.kysymys.id,
