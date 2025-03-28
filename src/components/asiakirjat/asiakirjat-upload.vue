@@ -40,6 +40,9 @@
           >
             {{ item.text }}
           </a>
+          <b-link v-if="item.linkType === 'navigation'" :to="{ name: item.link }">
+            {{ item.text }}
+          </b-link>
           <label v-else class="p-0" :for="uid" :disabled="uploading || disabled" v-on="$listeners">
             <span class="page-link font-weight-normal p-0" style="cursor: pointer">
               {{ item.text }}

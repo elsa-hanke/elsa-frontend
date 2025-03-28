@@ -1882,5 +1882,5 @@ export type FileUploadText = {
   text: string
   isLink: boolean
   link: string
-  linkType: 'upload' | 'url' | null
+  linkType: 'upload' | 'url' | 'navigation' | null
 }

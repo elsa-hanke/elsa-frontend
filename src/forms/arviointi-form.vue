@@ -734,8 +734,8 @@
       {
         text: this.$t('tutustua-arviointityokaluihin') as string,
         isLink: true,
-        link: '',
-        linkType: 'url'
+        link: 'arviointityokalu-esittely',
+        linkType: 'navigation'
       }
     ]
     isArviointityokalutModalOpen = false
