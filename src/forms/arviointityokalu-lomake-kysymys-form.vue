@@ -107,15 +107,6 @@
       if (this.vastaus) {
         this.selectedAnswer = this.vastaus.valittuVaihtoehtoId || this.vastaus.tekstiVastaus || null
       }
-      this.$parent.$on('validate-all-kysymykset', this.validateForm)
-    }
-
-    beforeDestroy() {
-      this.$parent.$off('validate-all-kysymykset', this.validateForm)
-    }
-
-    validateForm(): boolean {
-      return !this.$v.$anyError
     }
 
     get isAnswerValid() {
