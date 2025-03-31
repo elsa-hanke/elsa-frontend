@@ -18,6 +18,7 @@
       @change="handleFileChange"
     />
     <label
+      v-if="!isTextButton"
       class="user-select-none"
       :class="[isPrimaryButton ? 'primary mb-4' : 'outline-primary mb-4']"
       :for="uid"
@@ -27,6 +28,34 @@
       <span>{{ buttonText }}</span>
       <b-spinner v-if="uploading" small class="ml-2"></b-spinner>
     </label>
+    <div v-else>
+      <span v-for="(item, index) in fileUploadTexts" :key="index">
+        <template v-if="item.isLink">
+          <a
+            v-if="item.linkType === 'url'"
+            :href="item.link"
+            class="text-size-normal"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            {{ item.text }}
+          </a>
+          <b-link v-if="item.linkType === 'navigation'" :to="{ name: item.link }">
+            {{ item.text }}
+          </b-link>
+          <label v-else class="p-0" :for="uid" :disabled="uploading || disabled" v-on="$listeners">
+            <span class="page-link font-weight-normal p-0" style="cursor: pointer">
+              {{ item.text }}
+            </span>
+          </label>
+        </template>
+        <template v-else>
+          {{ item.text }}
+        </template>
+        <span v-if="index < fileUploadTexts.length - 1"></span>
+      </span>
+      <b-spinner v-if="uploading" small class="ml-2"></b-spinner>
+    </div>
     <b-alert variant="danger" :show="hasErrors" dismissible @dismissed="onDismissAlert">
       <div class="d-flex flex-row">
         <em class="align-middle">
@@ -118,6 +147,9 @@
 
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator'
+
+  import { FileUploadText } from '@/types'
+
   // Maksimi tiedostokoko 20 Mt
   const maxFileSize = 20 * 1024 * 1024
   const maxFilesTotalSize = 100 * 1024 * 1024
@@ -163,6 +195,12 @@
 
     @Prop({ required: false, type: Boolean, default: false })
     disabled!: boolean
+
+    @Prop({ required: false, type: Boolean, default: false })
+    isTextButton!: boolean
+
+    @Prop({ required: false, type: Array, default: () => [] })
+    fileUploadTexts!: FileUploadText[]
 
     handleFileChange(e: Event) {
       const inputElement = e.target as HTMLInputElement

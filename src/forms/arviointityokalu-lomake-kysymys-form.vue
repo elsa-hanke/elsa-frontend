@@ -9,10 +9,16 @@
         <template #default="{ uid }">
           <b-form-textarea
             :id="uid"
+            v-model="selectedAnswer"
             rows="3"
             :disabled="!answerMode"
             :placeholder="$t('vastaus')"
+            :state="isAnswerValid"
+            @input="updateAnswer($event)"
           />
+          <b-form-invalid-feedback :id="`${uid}-feedback`">
+            {{ $t('pakollinen-tieto') }}
+          </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
     </b-form-row>
@@ -28,10 +34,23 @@
           class="d-flex align-items-center"
         >
           <b-form-row class="col-sm-12 col-md-12 d-flex align-items-center">
-            <span class="fake-checkbox m-sm-1"></span>
-            <p class="mb-0 ml-2">
-              {{ vaihtoehto.teksti }}
-            </p>
+            <template v-if="!answerMode">
+              <span class="fake-checkbox m-sm-1"></span>
+              <p class="mb-0 ml-2">
+                {{ vaihtoehto.teksti }}
+              </p>
+            </template>
+            <template v-else>
+              <b-form-radio
+                v-model="selectedAnswer"
+                :value="vaihtoehto.id"
+                class="custom-radio ml-2"
+                :state="isAnswerValid"
+                @change="updateAnswer(vaihtoehto.id)"
+              >
+                {{ vaihtoehto.teksti }}
+              </b-form-radio>
+            </template>
           </b-form-row>
         </b-form-row>
       </elsa-form-group>
@@ -42,21 +61,18 @@
 <script lang="ts">
   import Component from 'vue-class-component'
   import { Vue, Prop } from 'vue-property-decorator'
-  import { required } from 'vuelidate/lib/validators'
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormDatepicker from '@/components/datepicker/datepicker.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
-  import ElsaPoissaolonSyyt from '@/components/poissaolon-syyt/poissaolon-syyt.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
-  import { ArviointityokaluKysymys } from '@/types'
+  import { ArviointityokaluKysymys, SuoritusarviointiArviointityokaluVastaus } from '@/types'
   import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
 
   @Component({
     components: {
-      ElsaPoissaolonSyyt,
       ElsaButton,
       ElsaFormGroup,
       ElsaFormError,
@@ -64,15 +80,17 @@
       ElsaFormDatepicker,
       ElsaPopover
     },
-    validations: {
-      kysymys: {
-        otsikko: required
-      }
-    }
+    validations: {}
   })
   export default class ArviointityokaluLomakeKysymysForm extends Vue {
+    @Prop({ required: true, type: Number, default: 0 })
+    arviointityokaluId: number | undefined
+
     @Prop({ type: Object, required: true })
-    kysymys!: ArviointityokaluKysymys | any
+    kysymys!: ArviointityokaluKysymys
+
+    @Prop({ type: Object, default: null })
+    vastaus!: SuoritusarviointiArviointityokaluVastaus | null
 
     @Prop({ type: Boolean, default: false })
     childDataReceived!: boolean
@@ -83,26 +101,30 @@
     @Prop({ required: true, type: Number })
     index?: number
 
-    validateState(name: string) {
-      const { $dirty, $error } = this.kysymys[name] as any
-      return $dirty ? ($error ? false : null) : null
-    }
+    selectedAnswer: string | number | null = null
 
     mounted() {
-      this.$parent.$on('validate-all-kysymykset', this.validateForm)
+      if (this.vastaus) {
+        this.selectedAnswer = this.vastaus.valittuVaihtoehtoId || this.vastaus.tekstiVastaus || null
+      }
     }
 
-    beforeDestroy() {
-      this.$parent.$off('validate-all-kysymykset', this.validateForm)
-    }
-
-    validateForm(): boolean {
-      this.$v.poissaolo.$touch()
-      return !this.$v.$anyError
+    get isAnswerValid() {
+      if (!this.kysymys.pakollinen) return null
+      return this.selectedAnswer !== null && this.selectedAnswer !== '' ? null : false
     }
 
     get arviointityokaluKysymysTyyppit() {
       return ArviointityokaluKysymysTyyppi
+    }
+
+    updateAnswer(value: string | number | undefined) {
+      this.$emit('update-answer', {
+        arviointityokaluId: this.arviointityokaluId,
+        arviointityokaluKysymysId: this.kysymys.id,
+        tekstiVastaus: typeof value === 'string' ? value : null,
+        valittuVaihtoehtoId: typeof value === 'number' ? value : null
+      })
     }
   }
 </script>
@@ -118,5 +140,29 @@
     background-color: #f5f5f6;
     border: 2px solid #b1b1b1;
     flex-shrink: 0;
+  }
+
+  .custom-radio {
+    .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .custom-control-label::before {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #b1b1b1;
+      background-color: #f5f5f6;
+      flex-shrink: 0;
+    }
+
+    .custom-control-label::after {
+      top: 5px;
+      left: 5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
   }
 </style>

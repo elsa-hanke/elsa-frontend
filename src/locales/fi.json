@@ -125,7 +125,7 @@
   "arviointipyynto-poistettu-onnistuneesti": "Arviointipyyntö poistettu onnistuneesti",
   "arviointipyyntojen-hakeminen-epaonnistui": "Arviointipyyntöjen hakeminen epäonnistui",
   "arviointityokalu": "Arviointityökalu",
-  "arvioitava-kokonaisuus": "Arvioitava kokonaisuus",
+  "arvioitava-kokonaisuus": "Arvioitava kokonaisuus (EPA)",
   "arvioitava-kokonaisuus-muokkaus-huomio": "Huomioithan, että arvioitavan kokonaisuuden muokkaus vaikuttaa erikoistujien osaamisen arvioinnin sisältöön. Muutokset näkyvät kaikilla erikoisalan erikoistujilla, joilla on tämä arvioitava kokonaisuus. Niissä voi olla jo valmiita arviointeja.",
   "arvioitava-tapahtuma": "Arvioitava tapahtuma",
   "arvioitavan-kokonaisuuden": "Arvioitavan kokonaisuuden",
@@ -1934,5 +1934,15 @@
   "arviointityokalun-hakeminen-epaonnistui": "Arviointityökalun hakeminen epäonnistui",
   "arviointityokalu-tila-luonnos": "Luonnos",
   "arviointityokalu-tila-julkaistu": "Julkaistu",
-  "arviointityokalu-poistettu": "Arviointityokalu poistettu"
+  "arviointityokalu-poistettu": "Arviointityokalu poistettu",
+  "arviointityokalut-esittely": "Voit tutustua Elsa-palvelun arvioinneissa käytössä oleviin arviointityökaluihin ja tarvittaessa ladata ne liitetiedostoina.",
+  "voit-myos-lisata-valmiin-arvioinnin": "Voit myös lisätä valmin arvioinnin",
+  "liitteena": "liitteenä.",
+  "erillisessa-nakymassa-voit": "Erillisessa näkymässä voit",
+  "tutustua-arviointityokaluihin": "tutustua arviointityökaluihin.",
+  "avaa-arviointityokalu": "Avaa arviointityökalu",
+  "lisaa-vastaukset-ja-palaa-arviointiin": "Lisää vastaukset ja palaa arviointiin",
+  "ei-valittuja-arviointityokaluja": "Ei valittuja arviointityökaluja",
+  "avoin-tallennettu-keskeneraisena": "Avoin, tallennettu keskeneräisenä",
+  "arviointityokalu-kaikkia-pakollisia-vastauksia-ei-ole-annettu": "Kaikkia pakollisia vastauksia ei ole annettu"
 }

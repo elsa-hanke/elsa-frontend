@@ -76,6 +76,10 @@
                 <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
                 {{ $t('valmis') }}
               </span>
+              <span v-else-if="row.item.keskenerainen">
+                <font-awesome-icon :icon="['far', 'clock']" class="text-warning" />
+                {{ $t('avoin-tallennettu-keskeneraisena') }}
+              </span>
               <span v-else class="text-nowrap">
                 <font-awesome-icon :icon="['far', 'clock']" class="text-warning" />
                 {{ $t('avoin') }}
