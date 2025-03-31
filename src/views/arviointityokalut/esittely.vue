@@ -72,6 +72,7 @@
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import { Arviointityokalu, ArviointityokaluKategoria, Asiakirja } from '@/types'
+  import { MUU_ARVIOINTITYOKALU_ID } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
@@ -117,8 +118,12 @@
 
     getArviontityokalutForKategoria(id: number | null | undefined) {
       return id != null
-        ? this.arviointityokalut.filter((a) => a.kategoria?.id === id)
-        : this.arviointityokalut.filter((a) => a.kategoria == null)
+        ? this.arviointityokalut
+            .filter((item) => item.id !== MUU_ARVIOINTITYOKALU_ID)
+            .filter((a) => a.kategoria?.id === id)
+        : this.arviointityokalut
+            .filter((item) => item.id !== MUU_ARVIOINTITYOKALU_ID)
+            .filter((a) => a.kategoria == null)
     }
 
     produceLiite(tyokalu: Arviointityokalu): Asiakirja[] {
