@@ -79,6 +79,7 @@
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
   import { Arviointityokalu, ArviointityokaluKategoria } from '@/types'
+  import { MUU_ARVIOINTITYOKALU_ID } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
 
@@ -129,9 +130,9 @@
         this.arviointityokaluKategoriat = (await getArviointityokalutKategoriat()).data.sort(
           (a, b) => sortByAsc(a.nimi, b.nimi)
         )
-        this.arviointityokalut = (await getArviointityokalut()).data.sort((a, b) =>
-          sortByAsc(a.nimi, b.nimi)
-        )
+        this.arviointityokalut = (await getArviointityokalut()).data
+          .sort((a, b) => sortByAsc(a.nimi, b.nimi))
+          .filter((at) => at.id !== MUU_ARVIOINTITYOKALU_ID)
       } catch {
         toastFail(this, this.$t('arviointityokalujen-kategorioiden-hakeminen-epaonnistui'))
         this.arviointityokaluKategoriat = []
