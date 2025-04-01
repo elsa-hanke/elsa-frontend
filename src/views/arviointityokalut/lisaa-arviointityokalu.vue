@@ -96,8 +96,12 @@
         <hr />
         <h1>{{ $t('kysymykset') }}</h1>
         <div>
-          <div ref="sortableContainer">
-            <div v-for="(kysymys, index) in form.kysymykset" :key="kysymys.jarjestysnumero">
+          <draggable v-model="form.kysymykset" handle=".drag-handle" @end="updateOrder">
+            <div
+              v-for="(kysymys, index) in form.kysymykset"
+              :key="kysymys.jarjestysnumero"
+              class="drag-item"
+            >
               <arviointityokalu-lomake-kysymys-luonti-form
                 :kysymys="kysymys"
                 :child-data-received="childDataReceived"
@@ -105,7 +109,7 @@
                 @delete="onDeleteKysymys"
               />
             </div>
-          </div>
+          </draggable>
           <elsa-button
             variant="outline-primary"
             class="mb-2"
@@ -147,9 +151,8 @@
 
 <script lang="ts">
   import { AxiosError } from 'axios'
-  // eslint-disable-next-line import/no-named-as-default
-  import Sortable, { SortableEvent } from 'sortablejs'
   import { Component, Mixins } from 'vue-property-decorator'
+  import draggable from 'vuedraggable'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
@@ -184,11 +187,6 @@
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
-    computed: {
-      ArviointityokaluTila() {
-        return ArviointityokaluTila
-      }
-    },
     components: {
       ArviointityokaluLomakeKysymysLuontiForm,
       TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
@@ -202,7 +200,8 @@
       VastuuhenkiloForm,
       VirkailijaForm,
       PaakayttajaForm,
-      ElsaButton
+      ElsaButton,
+      draggable
     },
     validations: {
       form: {
@@ -213,9 +212,6 @@
     }
   })
   export default class LisaaArviointityokalu extends Mixins(validationMixin) {
-    $refs!: {
-      sortableContainer: any
-    }
     items = [
       {
         text: this.$t('etusivu'),
@@ -249,7 +245,6 @@
     newAsiakirjatMapped: Asiakirja[] = []
     deletedAsiakirjat: Asiakirja[] = []
     childDataReceived = false
-    sortableInstance: Sortable | null = null
 
     async onSubmit(tila: ArviointityokaluTila) {
       this.form.tila = tila
@@ -352,15 +347,6 @@
       if (arviointityokaluId > 0) {
         await this.fetchArviointityokalu(arviointityokaluId)
       }
-      this.$nextTick(() => {
-        if (this.$refs.sortableContainer) {
-          this.sortableInstance = Sortable.create(this.$refs.sortableContainer, {
-            handle: '.drag-handle',
-            animation: 200,
-            onEnd: this.updateOrder
-          })
-        }
-      })
       this.loading = false
     }
 
@@ -385,8 +371,10 @@
       }
     }
 
-    updateOrder = (event: SortableEvent) => {
-      if (event.oldIndex === undefined || event.newIndex === undefined) return
+    updateOrder() {
+      this.form.kysymykset.forEach((kysymys, index) => {
+        kysymys.jarjestysnumero = index + 1
+      })
     }
 
     async fetchKategoriat() {
