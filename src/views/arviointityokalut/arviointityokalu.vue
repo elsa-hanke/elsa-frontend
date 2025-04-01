@@ -87,6 +87,7 @@
                 :child-data-received="!loading"
                 :answer-mode="false"
                 :index="index"
+                :arviointityokalu-id="form.id"
               />
             </div>
             <hr />
