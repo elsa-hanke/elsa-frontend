@@ -339,6 +339,7 @@
                 track-by="id"
                 :custom-label="arviointityokaluLabel"
                 :state="pakollisetVastauksetValid"
+                @input="onArviointityokalutChange"
               />
               <b-form-invalid-feedback
                 :id="`${uid}-feedback`"
@@ -739,6 +740,7 @@
       }
     ]
     isArviointityokalutModalOpen = false
+    previousArviointityokaluCount = 0
 
     async mounted() {
       this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
@@ -1017,6 +1019,16 @@
     get listattavatArviointityokalut() {
       if (!this.form.arviointityokalut) return []
       return this.form.arviointityokalut.filter((at) => at.id !== MUU_ARVIOINTITYOKALU_ID)
+    }
+
+    onArviointityokalutChange() {
+      const at = this.listattavatArviointityokalut
+      if (at.length > 0) {
+        if (at.length > this.previousArviointityokaluCount) {
+          this.openArviointityokalutModal()
+        }
+        this.previousArviointityokaluCount = at.length
+      }
     }
   }
 </script>
