@@ -270,8 +270,8 @@
   }
 </script>
 <style lang="scss" scoped>
-  .kayttaja {
-    max-width: 768px;
+  .arviointityokalu {
+    max-width: 1024px;
   }
 
   .kayttajahallinta-link::before {

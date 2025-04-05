@@ -252,8 +252,8 @@
   }
 </script>
 <style lang="scss" scoped>
-  .kayttaja {
-    max-width: 768px;
+  .kategoria {
+    max-width: 1024px;
   }
 
   .kayttajahallinta-link::before {

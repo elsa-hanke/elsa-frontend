@@ -433,7 +433,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .uusi-kategoria {
-    max-width: 768px;
+  .lisaa-arviointityokalu {
+    max-width: 1024px;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="opetussuunnitelmat">
+  <div class="arviointityokalut">
     <b-breadcrumb :items="items" class="mb-0" />
     <b-container fluid>
       <b-row lg>
@@ -166,6 +166,6 @@
   @import '~bootstrap/scss/mixins/breakpoints';
 
   .arviointityokalut {
-    max-width: 1420px;
+    max-width: 1024px;
   }
 </style>
