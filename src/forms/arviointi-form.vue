@@ -328,19 +328,33 @@
         <b-form-row v-if="$isKouluttaja() || $isVastuuhenkilo()">
           <elsa-form-group :label="$t('arviointityokalu')" :required="false" class="col-lg-12">
             <template #default="{ uid }">
-              <elsa-form-multiselect
-                :id="uid"
-                v-model="form.arviointityokalut"
-                :options="formattedArviointityokalut"
-                :multiple="true"
-                group-values="nimi"
-                group-label="kategoria"
-                :group-select="true"
-                track-by="id"
-                :custom-label="arviointityokaluLabel"
-                :state="pakollisetVastauksetValid"
-                @input="onArviointityokalutChange"
-              />
+              <b-row class="align-items-end">
+                <b-col>
+                  <elsa-form-multiselect
+                    :id="uid"
+                    v-model="form.arviointityokalut"
+                    :options="formattedArviointityokalut"
+                    :multiple="true"
+                    group-values="nimi"
+                    group-label="kategoria"
+                    :group-select="true"
+                    track-by="id"
+                    :custom-label="arviointityokaluLabel"
+                    :state="pakollisetVastauksetValid"
+                    @input="onArviointityokalutChange"
+                  />
+                </b-col>
+                <b-col cols="auto">
+                  <elsa-button
+                    variant="outline-primary"
+                    class="mt-2"
+                    :disabled="arviointityokalujaEiValittuna"
+                    @click="openArviointityokalutModal"
+                  >
+                    {{ $t('avaa-arviointityokalu') }}
+                  </elsa-button>
+                </b-col>
+              </b-row>
               <b-form-invalid-feedback
                 :id="`${uid}-feedback`"
                 :force-show="!pakollisetVastauksetValid"
@@ -368,14 +382,6 @@
                 :asiakirja-data-endpoint-url="asiakirjaDataEndpointUrl"
                 @deleteAsiakirja="onArviointiFileDeleted"
               />
-              <elsa-button
-                variant="outline-primary"
-                class="mt-2"
-                :disabled="arviointityokalujaEiValittuna"
-                @click="openArviointityokalutModal"
-              >
-                {{ $t('avaa-arviointityokalu') }}
-              </elsa-button>
               <arviointityokalut-modal
                 v-model="isArviointityokalutModalOpen"
                 :valitut-arviointityokalut="form.arviointityokalut"
