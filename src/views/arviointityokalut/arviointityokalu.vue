@@ -55,7 +55,7 @@
             </b-form-row>
             <b-form-row>
               <elsa-form-group
-                class="col-sm-12 col-md-6 pr-md-3"
+                class="col-sm-12 col-md-12 pr-md-3"
                 :label="$t('arviointityokalu-liitetiedostona')"
               >
                 <asiakirjat-content
@@ -143,7 +143,7 @@
 
 <script lang="ts">
   import { Component, Mixins } from 'vue-property-decorator'
-  import { Validation, validationMixin } from 'vuelidate'
+  import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
   import { deleteArviointityokalu, getArviointityokalu } from '@/api/tekninen-paakayttaja'
@@ -258,14 +258,8 @@
           this.$router.replace({ name: 'arviointityokalut' })
         }
       } catch {
-        // todo error
         this.$router.replace({ name: 'arviointityokalut' })
       }
-    }
-
-    validateConfirm() {
-      const { $dirty, $error } = this.$v.reassignedKouluttaja as Validation
-      return $dirty ? ($error ? false : null) : null
     }
   }
 </script>
