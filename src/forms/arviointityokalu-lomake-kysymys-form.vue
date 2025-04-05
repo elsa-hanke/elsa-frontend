@@ -110,6 +110,7 @@
     }
 
     get isAnswerValid() {
+      if (!this.answerMode) return true
       if (!this.kysymys.pakollinen) return null
       return this.selectedAnswer !== null && this.selectedAnswer !== '' ? null : false
     }
