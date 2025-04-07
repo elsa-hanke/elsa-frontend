@@ -227,6 +227,7 @@
           )
         }
       } catch (err) {
+        console.warn(err) // eslint-disable-line no-console
         toastFail(this, this.$t('arviointityokalun-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'arviointityokalut' })
         this.loading = false

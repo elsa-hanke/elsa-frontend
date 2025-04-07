@@ -168,6 +168,7 @@
       try {
         this.form = (await getArviointityokalutKategoria(this.$route?.params?.kategoriaId)).data
       } catch (err) {
+        console.warn(err) // eslint-disable-line no-console
         toastFail(this, this.$t('arviointityokalut-kategorian-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'arviointityokalut' })
         this.loading = false
