@@ -414,7 +414,16 @@
           </elsa-form-group>
         </b-form-row>
         <div v-for="(kokonaisuus, index) in form.arvioitavatKokonaisuudet" :key="kokonaisuus.id">
+          <hr v-if="form.arvioitavatKokonaisuudet && form.arvioitavatKokonaisuudet.length > 1" />
           <b-form-row>
+            <elsa-form-group :label="$t('arvioitava-kokonaisuus')" class="col-lg-12">
+              {{ kokonaisuus.arvioitavaKokonaisuus.kategoria.nimi }}:
+              {{ kokonaisuus.arvioitavaKokonaisuus.nimi }}
+              <elsa-popover :title="kokonaisuus.arvioitavaKokonaisuus.nimi">
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <p v-html="kokonaisuus.arvioitavaKokonaisuus.kuvaus" />
+              </elsa-popover>
+            </elsa-form-group>
             <elsa-form-group :label="arviointiAsteikonNimi" :required="true" class="col-lg-12">
               <template #label-help>
                 <elsa-popover :title="arviointiAsteikonNimi">
@@ -440,7 +449,13 @@
               </template>
             </elsa-form-group>
           </b-form-row>
-          <hr v-if="form.arvioitavatKokonaisuudet && form.arvioitavatKokonaisuudet.length > 1" />
+          <hr
+            v-if="
+              form.arvioitavatKokonaisuudet &&
+              form.arvioitavatKokonaisuudet.length > 0 &&
+              index === form.arvioitavatKokonaisuudet.length - 1
+            "
+          />
         </div>
         <div v-if="form.arvioitavatKokonaisuudet && form.arvioitavatKokonaisuudet.length > 1">
           <h3>{{ $t('yhteiset-arviointisisallot') }}</h3>
