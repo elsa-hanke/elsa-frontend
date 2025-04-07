@@ -17,7 +17,7 @@
       </b-row>
       <b-row v-for="(k, index) in kategoriat" :key="index" lg>
         <b-col v-if="getArviontityokalutForKategoria(k.id).length > 0" lg>
-          <h3 v-if="k.id" class="mt-6">{{ k.nimi }}</h3>
+          <h3 v-if="k.id" class="mt-3">{{ k.nimi }}</h3>
           <b-row v-for="(at, atIndex) in getArviontityokalutForKategoria(k.id)" :key="atIndex">
             <b-col>
               <elsa-accordian :ref="k.nimi" :visible="false">
@@ -146,7 +146,6 @@
 
   .card.border.mb-2 {
     border-radius: 0.5rem;
-    padding: 0 1rem;
   }
 
   .esittely {

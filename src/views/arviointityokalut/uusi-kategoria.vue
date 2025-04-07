@@ -159,6 +159,6 @@
 
 <style lang="scss" scoped>
   .uusi-kategoria {
-    max-width: 768px;
+    max-width: 1024px;
   }
 </style>

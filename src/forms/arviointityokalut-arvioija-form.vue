@@ -88,7 +88,7 @@
     @Prop({ required: true, type: Array, default: () => [] })
     arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
 
-    collapsedIndex: number | null = null
+    collapsedIndex: number | null = 0
     params = {
       saving: false,
       deleting: false

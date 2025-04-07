@@ -40,7 +40,11 @@
           >
             {{ item.text }}
           </a>
-          <b-link v-if="item.linkType === 'navigation'" :to="{ name: item.link }">
+          <b-link
+            v-if="item.linkType === 'navigation'"
+            :href="getRouteHref(item.link)"
+            target="_blank"
+          >
             {{ item.text }}
           </b-link>
           <label v-else class="p-0" :for="uid" :disabled="uploading || disabled" v-on="$listeners">
@@ -270,6 +274,10 @@
         this.duplicateFilesInOtherViews.length > 0 ||
         this.filesBelowMinSize.length > 0
       )
+    }
+
+    getRouteHref(routeName: string) {
+      return this.$router.resolve({ name: routeName }).href
     }
   }
 </script>

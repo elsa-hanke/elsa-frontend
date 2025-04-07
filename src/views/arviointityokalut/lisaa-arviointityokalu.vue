@@ -242,8 +242,6 @@
     loading = false
     editing = false
     addedFiles: File[] = []
-    newAsiakirjatMapped: Asiakirja[] = []
-    deletedAsiakirjat: Asiakirja[] = []
     childDataReceived = false
 
     async onSubmit(tila: ArviointityokaluTila) {
@@ -254,7 +252,7 @@
       }
 
       try {
-        if (this.form.liite == null && this.asiakirjat.length > 0) {
+        if (this.asiakirjat.length > 0) {
           const file = this.asiakirjat[0]
           const data = await file.data
           if (data) {
@@ -365,6 +363,7 @@
         }
         this.editing = true
       } catch (err) {
+        console.warn(err) // eslint-disable-line no-console
         toastFail(this, this.$t('arviointityokalun-hakeminen-epaonnistui'))
         this.$router.replace({ name: 'arviointityokalut' })
         this.loading = false
@@ -394,28 +393,6 @@
       })
     }
 
-    onFilesAdded(files: File[]) {
-      const addedFilesInDeletedArray = files.filter((added) =>
-        this.deletedAsiakirjat.map((deleted) => deleted.nimi).includes(added.name)
-      )
-      const addedFilesNotInDeletedArray = files.filter(
-        (added) => !addedFilesInDeletedArray.includes(added)
-      )
-
-      this.deletedAsiakirjat = this.deletedAsiakirjat?.filter(
-        (deletedAsiakirja) =>
-          !addedFilesInDeletedArray
-            .map((addedFile) => addedFile.name)
-            .includes(deletedAsiakirja.nimi)
-      )
-      this.addedFiles = [...this.addedFiles, ...addedFilesNotInDeletedArray]
-      this.newAsiakirjatMapped = [
-        ...mapFiles(addedFilesNotInDeletedArray),
-        ...this.newAsiakirjatMapped
-      ]
-      this.$emit('skipRouteExitConfirm', false)
-    }
-
     onLiiteFilesAdded(files: File[]) {
       this.form.liite = files[0]
       this.asiakirjat.push(...mapFiles(files))
@@ -433,7 +410,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .uusi-kategoria {
-    max-width: 768px;
+  .lisaa-arviointityokalu {
+    max-width: 1024px;
   }
 </style>
