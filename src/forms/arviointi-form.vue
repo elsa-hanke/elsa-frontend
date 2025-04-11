@@ -341,6 +341,7 @@
                     track-by="id"
                     :custom-label="arviointityokaluLabel"
                     :state="pakollisetVastauksetValid"
+                    :allow-empty="true"
                     @input="onArviointityokalutChange"
                   />
                 </b-col>
@@ -1056,6 +1057,8 @@
           this.openArviointityokalutModal()
         }
         this.previousArviointityokaluCount = at.length
+      } else {
+        this.previousArviointityokaluCount = 0
       }
     }
   }
