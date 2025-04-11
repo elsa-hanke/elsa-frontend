@@ -14,6 +14,7 @@
     <arviointityokalut-modal-content
       :valitut-arviointityokalut="valitutArviointityokalut"
       :arviointityokalu-vastaukset="arviointityokaluVastaukset"
+      :can-validate="canValidate"
       @skipRouteExitConfirm="onSkipRouteExitConfirm"
       @submit="onSubmit"
       @delete="onDelete"
@@ -61,6 +62,9 @@
 
     @Prop({ required: true, type: Array, default: () => [] })
     arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
+
+    @Prop({ type: Boolean, default: false })
+    canValidate!: boolean
 
     async onSkipRouteExitConfirm(value: boolean) {
       this.skipConfirm = value

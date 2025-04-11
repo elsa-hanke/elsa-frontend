@@ -4,6 +4,7 @@
       v-if="!loading"
       :valitut-arviointityokalut="valitutArviointityokalut"
       :arviointityokalu-vastaukset="arviointityokaluVastaukset"
+      :can-validate="canValidate"
       @submit="onSubmit"
       @delete="onDelete"
       @cancel="onCancel"
@@ -26,6 +27,9 @@
 
     @Prop({ required: true, type: Array, default: () => [] })
     arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
+
+    @Prop({ type: Boolean, default: false })
+    canValidate!: boolean
 
     loading = false
 

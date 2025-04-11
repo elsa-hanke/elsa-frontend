@@ -100,6 +100,9 @@
     @Prop({ type: Boolean, default: false })
     answerMode!: boolean
 
+    @Prop({ type: Boolean, default: false })
+    canValidate!: boolean
+
     @Prop({ required: true, type: Number })
     index?: number
 
@@ -112,6 +115,7 @@
     }
 
     get isAnswerValid() {
+      if (!this.canValidate) return null
       if (!this.answerMode) return true
       if (!this.kysymys.pakollinen) return null
       return this.selectedAnswer !== null && this.selectedAnswer !== '' ? null : false
