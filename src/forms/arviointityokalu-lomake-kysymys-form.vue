@@ -35,10 +35,12 @@
         >
           <b-form-row class="col-sm-12 col-md-12 d-flex align-items-center">
             <template v-if="!answerMode">
-              <span class="fake-checkbox m-sm-1"></span>
-              <p class="mb-0 ml-2">
-                {{ vaihtoehto.teksti }}
-              </p>
+              <div class="d-flex align-items-center">
+                <span class="fake-checkbox m-sm-1"></span>
+                <p class="mb-0 ml-2 flex-text">
+                  {{ vaihtoehto.teksti }}
+                </p>
+              </div>
             </template>
             <template v-else>
               <b-form-radio
@@ -141,6 +143,12 @@
     background-color: #f5f5f6;
     border: 2px solid #b1b1b1;
     flex-shrink: 0;
+  }
+
+  .flex-text {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    flex: 1;
   }
 
   .custom-radio {
