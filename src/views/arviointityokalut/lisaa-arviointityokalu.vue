@@ -303,6 +303,10 @@
         {
           teksti: '',
           valittu: false
+        },
+        {
+          teksti: '',
+          valittu: false
         }
       ])
     }
