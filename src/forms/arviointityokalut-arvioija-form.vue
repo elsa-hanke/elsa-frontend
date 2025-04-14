@@ -39,6 +39,7 @@
                 :answer-mode="true"
                 :child-data-received="true"
                 :arviointityokalu-id="arviointityokalu.id"
+                :can-validate="canValidate"
                 @update-answer="updateVastaus"
               />
             </b-card-body>
@@ -87,6 +88,9 @@
 
     @Prop({ required: true, type: Array, default: () => [] })
     arviointityokaluVastaukset!: SuoritusarviointiArviointityokaluVastaus[]
+
+    @Prop({ type: Boolean, default: false })
+    canValidate!: boolean
 
     collapsedIndex: number | null = 0
     params = {

@@ -341,6 +341,7 @@
                     track-by="id"
                     :custom-label="arviointityokaluLabel"
                     :state="pakollisetVastauksetValid"
+                    :allow-empty="true"
                     @input="onArviointityokalutChange"
                   />
                 </b-col>
@@ -386,6 +387,7 @@
                 v-model="isArviointityokalutModalOpen"
                 :valitut-arviointityokalut="form.arviointityokalut"
                 :arviointityokalu-vastaukset="form.arviointityokaluVastaukset"
+                :can-validate="canValidate"
                 @submit="lisaaArviointityokaluVastaukset"
               ></arviointityokalut-modal>
             </template>
@@ -582,7 +584,7 @@
         </div>
       </div>
       <div class="row">
-        <elsa-form-error :active="$v.$anyError" />
+        <elsa-form-error :active="$v.$anyError || !pakollisetVastauksetValid" />
       </div>
     </b-form>
     <elsa-confirmation-modal
@@ -762,6 +764,7 @@
     ]
     isArviointityokalutModalOpen = false
     previousArviointityokaluCount = 0
+    canValidate = false
 
     async mounted() {
       this.arviointiasteikonTasot = this.value.arviointiasteikko.tasot
@@ -853,6 +856,7 @@
     }
 
     get pakollisetVastauksetValid() {
+      if (!this.canValidate) return true
       if (!this.form.arviointityokalut) return true
       return this.form.arviointityokalut.every((tool) =>
         tool.kysymykset.every((kysymys) => {
@@ -885,8 +889,12 @@
 
     onSubmit(validate = true) {
       if (validate) {
+        this.canValidate = true
         this.$v.form.$touch()
         if (this.$v.form.$anyError) {
+          return
+        }
+        if (!this.pakollisetVastauksetValid) {
           return
         }
       }
@@ -918,13 +926,15 @@
         const submitData = {
           suoritusarviointi: {
             ...this.value,
-            arvioitavatKokonaisuudet: this.form.arvioitavatKokonaisuudet?.map((k) => {
-              return {
-                ...k,
-                arviointiasteikonTaso: (k.arviointiasteikonTaso as ArviointiasteikonTaso).taso,
-                itsearviointiArviointiasteikonTaso: null
-              }
-            }),
+            arvioitavatKokonaisuudet:
+              this.form.arvioitavatKokonaisuudet?.map((k) => {
+                return {
+                  ...k,
+                  arviointiasteikonTaso:
+                    (k.arviointiasteikonTaso as ArviointiasteikonTaso)?.taso ?? null,
+                  itsearviointiArviointiasteikonTaso: null
+                }
+              }) ?? [],
             vaativuustaso: this.form.vaativuustaso?.arvo,
             sanallinenArviointi: this.form.sanallinenArviointi,
             arviointityokalut: this.form.arviointityokalut,
@@ -1049,6 +1059,8 @@
           this.openArviointityokalutModal()
         }
         this.previousArviointityokaluCount = at.length
+      } else {
+        this.previousArviointityokaluCount = 0
       }
     }
   }
