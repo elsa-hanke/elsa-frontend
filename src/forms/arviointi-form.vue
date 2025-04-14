@@ -926,13 +926,15 @@
         const submitData = {
           suoritusarviointi: {
             ...this.value,
-            arvioitavatKokonaisuudet: this.form.arvioitavatKokonaisuudet?.map((k) => {
-              return {
-                ...k,
-                arviointiasteikonTaso: (k.arviointiasteikonTaso as ArviointiasteikonTaso).taso,
-                itsearviointiArviointiasteikonTaso: null
-              }
-            }),
+            arvioitavatKokonaisuudet:
+              this.form.arvioitavatKokonaisuudet?.map((k) => {
+                return {
+                  ...k,
+                  arviointiasteikonTaso:
+                    (k.arviointiasteikonTaso as ArviointiasteikonTaso)?.taso ?? null,
+                  itsearviointiArviointiasteikonTaso: null
+                }
+              }) ?? [],
             vaativuustaso: this.form.vaativuustaso?.arvo,
             sanallinenArviointi: this.form.sanallinenArviointi,
             arviointityokalut: this.form.arviointityokalut,
