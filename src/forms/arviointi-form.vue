@@ -549,7 +549,7 @@
               <div v-if="muuValittu">
                 <b-form-input
                   v-model="form.muuPeruste"
-                  maxlength="5"
+                  maxlength="255"
                   :state="validateState('muuPeruste')"
                   @input="$emit('skipRouteExitConfirm', false)"
                 ></b-form-input>
