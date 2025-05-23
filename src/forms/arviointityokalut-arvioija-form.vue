@@ -30,6 +30,16 @@
             role="tabpanel"
           >
             <b-card-body class="p-3">
+              <b-form-row>
+                <elsa-form-group
+                  :label="$t('ohjeteksti-arviointityokalun-kayttoon')"
+                  class="col-sm-12 col-md-12 pr-md-3"
+                >
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <div v-html="arviointityokalu.ohjeteksti"></div>
+                </elsa-form-group>
+              </b-form-row>
+              <hr />
               <arviointityokalu-lomake-kysymys-form
                 v-for="(kysymys, kysymysIndex) in arviointityokalu.kysymykset"
                 :key="kysymysIndex"
@@ -71,11 +81,13 @@
 
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
+  import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
   import { Arviointityokalu, SuoritusarviointiArviointityokaluVastaus } from '@/types'
 
   @Component({
     components: {
+      ElsaFormGroup,
       ArviointityokaluLomakeKysymysForm,
       ElsaButton,
       ElsaFormError

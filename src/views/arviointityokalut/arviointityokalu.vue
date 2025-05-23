@@ -46,11 +46,8 @@
                 :label="$t('ohjeteksti-arviointityokalun-kayttoon')"
                 class="col-sm-12 col-md-12 pr-md-3"
               >
-                <template #default="{ uid }">
-                  <span :id="uid">
-                    {{ form.ohjeteksti }}
-                  </span>
-                </template>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div v-html="form.ohjeteksti"></div>
               </elsa-form-group>
             </b-form-row>
             <b-form-row>
