@@ -51,10 +51,9 @@
                 :required="false"
               >
                 <template #default="{ uid }">
-                  <b-form-textarea
+                  <elsa-text-editor
                     :id="uid"
                     v-model="form.ohjeteksti"
-                    rows="3"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
                 </template>
@@ -169,6 +168,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ElsaTextEditor from '@/components/text-editor/text-editor.vue'
   import ArviointityokaluLomakeKysymysLuontiForm from '@/forms/arviointityokalu-lomake-kysymys-luonti-form.vue'
   import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
@@ -188,6 +188,7 @@
 
   @Component({
     components: {
+      ElsaTextEditor,
       ArviointityokaluLomakeKysymysLuontiForm,
       TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
       ElsaFormMultiselect,

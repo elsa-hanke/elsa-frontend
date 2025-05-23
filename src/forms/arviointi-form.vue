@@ -218,7 +218,7 @@
             </elsa-accordian>
           </b-col>
         </b-row>
-        <elsa-form-group :label="$t('sanallinen-arviointi')">
+        <elsa-form-group :label="$t('sanallinen-kokonaisarviointi')">
           <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
           </template>
@@ -463,7 +463,11 @@
           <h3>{{ $t('yhteiset-arviointisisallot') }}</h3>
           <p>{{ $t('yhteiset-arviointisisallot-kuvaus') }}</p>
         </div>
-        <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
+        <elsa-form-group
+          v-if="editing"
+          :label="$t('sanallinen-kokonaisarviointi')"
+          :required="true"
+        >
           <template #label-help>
             <elsa-popover :title="$t('arvioinnin-osa-alueita')">
               <div class="d-flex flex-column canmeds-container">
