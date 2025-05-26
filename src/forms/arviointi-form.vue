@@ -205,7 +205,7 @@
           class="mb-2"
         >
           <b-col>
-            <elsa-accordian :ref="arviointityokalu.nimi" :visible="false">
+            <elsa-accordian :ref="arviointityokalu.nimi" :visible="true">
               <template #title>
                 {{ arviointityokalu.nimi }}
               </template>
