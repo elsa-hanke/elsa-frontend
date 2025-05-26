@@ -105,6 +105,14 @@
                 <span>{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
               </div>
             </b-alert>
+            <b-alert variant="success" class="mb-2" :show="accepted">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                <span>{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty-arkistointi') }}</span>
+              </div>
+            </b-alert>
           </b-col>
         </b-row>
         <hr />
@@ -334,7 +342,7 @@
           <hr />
         </div>
         <b-row>
-          <b-col v-if="acceptedByEveryone">
+          <b-col v-if="acceptedByEveryone || accepted">
             <elsa-form-group
               class="mt-2"
               :class="{ 'mb-4': form.koejaksoHyvaksytty === false }"
@@ -366,7 +374,7 @@
             </elsa-form-group>
           </b-col>
         </b-row>
-        <div v-if="acceptedByEveryone">
+        <div v-if="acceptedByEveryone || accepted">
           <hr />
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
@@ -606,6 +614,10 @@
 
     get acceptedByEveryone() {
       return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ALLEKIRJOITETTU
+    }
+
+    get accepted() {
+      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.HYVAKSYTTY
     }
 
     get koejaksoData(): Koejakso {

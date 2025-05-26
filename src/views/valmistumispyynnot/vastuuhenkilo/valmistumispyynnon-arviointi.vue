@@ -14,7 +14,7 @@
               <p>{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-3') }}</p>
             </div>
             <div v-else class="mt-3">
-              <b-alert :show="!allekirjoitettu" variant="dark">
+              <b-alert :show="!allekirjoitettu && !hyvaksytty" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon
@@ -71,6 +71,18 @@
                   <div>
                     <span>
                       {{ $t('valmistumispyynto-osaaminen-arvioitu-allekirjoitettu') }}
+                    </span>
+                  </div>
+                </div>
+              </b-alert>
+              <b-alert :show="hyvaksytty" variant="success">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                  </em>
+                  <div>
+                    <span>
+                      {{ $t('valmistumispyynto-hyvaksytty-vastuuhenkilon-toimesta') }}
                     </span>
                   </div>
                 </div>

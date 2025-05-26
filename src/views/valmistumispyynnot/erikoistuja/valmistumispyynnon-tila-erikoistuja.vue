@@ -92,38 +92,18 @@
                     : $t('valmistumispyynto-vastuuhenkilo-ei-viela-hyvaksynyt')
                 }}
               </span>
-            </div>
-          </div>
-        </div>
-        <div class="vertical-line" />
-        <div class="d-flex border rounded p-3" :class="{ greyed: !allekirjoitusaika }">
-          <div class="d-flex flex-row">
-            <em class="align-middle">
-              <font-awesome-icon
-                :icon="allekirjoitettuTilaIcon(allekirjoitusaika != null)"
-                class="justify-content-center text-size-md mr-2"
-                :class="tilaIconClass(allekirjoitusaika != null)"
-              />
-            </em>
-            <div>
-              <span class="text-size-md">
-                {{
-                  allekirjoitusaika
-                    ? $t('valmistumispyynto-allekirjoitettu', {
-                        allekirjoitusaika
-                      })
-                    : $t('valmistumispyynto-ei-viela-allekirjoitettu')
-                }}
-              </span>
-              <p class="mt-2 mb-0">
-                {{ $t('valmistumispyynto-allekirjoitettu-selite') }}
-              </p>
               <div
                 v-if="
-                  yhteenvetoAsiakirjaUrl || liitteetAsiakirjaUrl || koulutussuunnitelmaAsiakirjaUrl
+                  valmistumispyynto.arkistoitava &&
+                  (yhteenvetoAsiakirjaUrl ||
+                    liitteetAsiakirjaUrl ||
+                    koulutussuunnitelmaAsiakirjaUrl)
                 "
                 class="mt-2"
               >
+                <p class="mt-2 mb-0">
+                  {{ $t('valmistumispyynto-allekirjoitettu-selite') }}
+                </p>
                 <h3>{{ $t('lataa-dokumentit') }}</h3>
                 <asiakirja-button
                   v-if="yhteenvetoAsiakirjaUrl"
@@ -143,6 +123,62 @@
                   :asiakirja-data-endpoint-url="koulutussuunnitelmaAsiakirjaUrl"
                   :asiakirja-label="$t('koulutussuunnitelma-ja-osaaminen')"
                 />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="!valmistumispyynto.arkistoitava">
+          <div class="vertical-line" />
+          <div class="d-flex border rounded p-3" :class="{ greyed: !allekirjoitusaika }">
+            <div class="d-flex flex-row">
+              <em class="align-middle">
+                <font-awesome-icon
+                  :icon="allekirjoitettuTilaIcon(allekirjoitusaika != null)"
+                  class="justify-content-center text-size-md mr-2"
+                  :class="tilaIconClass(allekirjoitusaika != null)"
+                />
+              </em>
+              <div>
+                <span class="text-size-md">
+                  {{
+                    allekirjoitusaika
+                      ? $t('valmistumispyynto-allekirjoitettu', {
+                          allekirjoitusaika
+                        })
+                      : $t('valmistumispyynto-ei-viela-allekirjoitettu')
+                  }}
+                </span>
+                <p class="mt-2 mb-0">
+                  {{ $t('valmistumispyynto-allekirjoitettu-selite') }}
+                </p>
+                <div
+                  v-if="
+                    yhteenvetoAsiakirjaUrl ||
+                    liitteetAsiakirjaUrl ||
+                    koulutussuunnitelmaAsiakirjaUrl
+                  "
+                  class="mt-2"
+                >
+                  <h3>{{ $t('lataa-dokumentit') }}</h3>
+                  <asiakirja-button
+                    v-if="yhteenvetoAsiakirjaUrl"
+                    :id="valmistumispyynto.yhteenvetoAsiakirjaId"
+                    :asiakirja-data-endpoint-url="yhteenvetoAsiakirjaUrl"
+                    :asiakirja-label="$t('erikoistumiskoulutuksen-valmistumisen-yhteenveto')"
+                  />
+                  <asiakirja-button
+                    v-if="liitteetAsiakirjaUrl"
+                    :id="valmistumispyynto.liitteetAsiakirjaId"
+                    :asiakirja-data-endpoint-url="liitteetAsiakirjaUrl"
+                    :asiakirja-label="$t('valmistumispyynnon-liitteet')"
+                  />
+                  <asiakirja-button
+                    v-if="koulutussuunnitelmaAsiakirjaUrl"
+                    :id="valmistumispyynto.erikoistujanTiedotAsiakirjaId"
+                    :asiakirja-data-endpoint-url="koulutussuunnitelmaAsiakirjaUrl"
+                    :asiakirja-label="$t('koulutussuunnitelma-ja-osaaminen')"
+                  />
+                </div>
               </div>
             </div>
           </div>
