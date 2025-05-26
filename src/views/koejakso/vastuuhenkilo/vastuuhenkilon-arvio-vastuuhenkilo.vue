@@ -13,7 +13,11 @@
                   <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
                 </em>
                 <div>
-                  {{ $t('vastuuhenkilon-arvio-ingressi-vastuuhenkilo') }}
+                  {{
+                    vastuuhenkilonArvio.arkistoitava
+                      ? $t('vastuuhenkilon-arvio-ingressi-vastuuhenkilo-arkistointi')
+                      : $t('vastuuhenkilon-arvio-ingressi-vastuuhenkilo')
+                  }}
                   <div v-show="vastuuhenkilonArvio.lisatiedotVirkailijalta">
                     <p class="mb-2 mt-3">
                       <strong>{{ $t('lisatiedot-virkailijalta') }}:</strong>
@@ -52,6 +56,14 @@
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                 </em>
                 {{ $t('koejakso-on-hyvaksytty-allekirjoitettu-vastuuhenkilo-erikoistuja') }}
+              </div>
+            </b-alert>
+            <b-alert variant="success" :show="accepted">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                {{ $t('koejakso-on-hyvaksytty-vastuuhenkilo-erikoistuja') }}
               </div>
             </b-alert>
           </b-col>
@@ -607,7 +619,7 @@
             </div>
           </template>
         </elsa-form-group>
-        <div v-if="waitingForSignatures || acceptedByEveryone">
+        <div v-if="waitingForSignatures || acceptedByEveryone || accepted">
           <hr />
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
@@ -642,7 +654,11 @@
                 class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 @click="onValidateAndConfirm('confirm-sign')"
               >
-                {{ $t('laheta-allekirjoitettavaksi') }}
+                {{
+                  vastuuhenkilonArvio.arkistoitava
+                    ? $t('hyvaksy')
+                    : $t('laheta-allekirjoitettavaksi')
+                }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -654,10 +670,17 @@
     </b-container>
 
     <elsa-confirmation-modal
+      v-if="vastuuhenkilonArvio"
       id="confirm-sign"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('lahetyksen-jalkeen-koejakso-arvioitu')"
-      :submit-text="$t('laheta-allekirjoitettavaksi')"
+      :text="
+        vastuuhenkilonArvio.arkistoitava
+          ? $t('lahetyksen-jalkeen-koejakso-arvioitu-arkistointi')
+          : $t('lahetyksen-jalkeen-koejakso-arvioitu')
+      "
+      :submit-text="
+        vastuuhenkilonArvio.arkistoitava ? $t('hyvaksy') : $t('laheta-allekirjoitettavaksi')
+      "
       @submit="onSign"
     />
     <elsa-return-to-sender-modal
@@ -807,6 +830,10 @@
 
     get acceptedByEveryone() {
       return this.vastuuhenkilonArvioTila === LomakeTilat.ALLEKIRJOITETTU
+    }
+
+    get accepted() {
+      return this.vastuuhenkilonArvioTila === LomakeTilat.HYVAKSYTTY
     }
 
     get koejaksoData(): Koejakso {

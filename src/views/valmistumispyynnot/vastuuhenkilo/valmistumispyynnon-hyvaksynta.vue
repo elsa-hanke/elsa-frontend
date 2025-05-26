@@ -43,6 +43,18 @@
                   </div>
                 </div>
               </b-alert>
+              <b-alert :show="hyvaksytty" variant="success">
+                <div class="d-flex flex-row">
+                  <em class="align-middle">
+                    <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                  </em>
+                  <div>
+                    <span>
+                      {{ $t('valmistumispyynto-hyvaksytty-vastuuhenkilon-toimesta') }}
+                    </span>
+                  </div>
+                </div>
+              </b-alert>
               <b-alert :show="vastuuhenkiloHyvaksyjaPalauttanut" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
@@ -506,7 +518,11 @@
                   {{ $t('palauta-erikoistujalle') }}
                 </elsa-button>
                 <elsa-button :loading="sending" variant="primary" type="submit" class="ml-2">
-                  {{ $t('laheta-allekirjoitettavaksi') }}
+                  {{
+                    valmistumispyynto.arkistoitava
+                      ? $t('hyvaksy')
+                      : $t('laheta-allekirjoitettavaksi')
+                  }}
                 </elsa-button>
               </div>
             </b-form>
@@ -525,8 +541,14 @@
     <elsa-confirmation-modal
       id="confirm-send"
       :title="$t('vahvista-lomakkeen-lahetys')"
-      :text="$t('valmistumispyynto-hyvaksynta-vahvistus')"
-      :submit-text="$t('laheta-allekirjoitettavaksi')"
+      :text="
+        valmistumispyynto.arkistoitava
+          ? $t('valmistumispyynto-hyvaksynta-arkistointi')
+          : $t('valmistumispyynto-hyvaksynta-vahvistus')
+      "
+      :submit-text="
+        valmistumispyynto.arkistoitava ? $t('hyvaksy') : $t('laheta-allekirjoitettavaksi')
+      "
       @submit="onSend"
     />
   </div>

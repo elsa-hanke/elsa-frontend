@@ -194,6 +194,7 @@
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU:
             return ['fas', 'undo-alt']
           case ValmistumispyynnonTila.ALLEKIRJOITETTU:
+          case ValmistumispyynnonTila.HYVAKSYTTY:
             return ['fas', 'check-circle']
         }
       }
@@ -216,6 +217,7 @@
           case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
           case ValmistumispyynnonTila.ALLEKIRJOITETTU:
+          case ValmistumispyynnonTila.HYVAKSYTTY:
             return 'text-success'
         }
       }
@@ -248,6 +250,8 @@
           case ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU:
             return this.$t('valmistumispyynnon-tila.palautettu-erikoistujalle')
+          case ValmistumispyynnonTila.HYVAKSYTTY:
+            return this.$t('valmistumispyynnon-tila.hyvaksytty')
           case ValmistumispyynnonTila.ALLEKIRJOITETTU:
             return this.$t('valmistumispyynnon-tila.allekirjoitettu')
         }

@@ -110,13 +110,21 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ALLEKIRJOITETTU">
+      <koejakso-card-content
+        v-if="tila === lomaketilat.ALLEKIRJOITETTU || tila === lomaketilat.HYVAKSYTTY"
+      >
         <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <div class="d-inline-flex">
-            <span class="pr-6 mb-2">{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
+            <span class="pr-6 mb-2">
+              {{
+                tila === lomaketilat.ALLEKIRJOITETTU
+                  ? $t('vastuuhenkilon-arvio-tila-hyvaksytty')
+                  : $t('vastuuhenkilon-arvio-tila-hyvaksytty-arkistointi')
+              }}
+            </span>
           </div>
         </template>
         <template #button>

@@ -512,6 +512,7 @@ export interface VastuuhenkilonArvioLomake {
   tila?: string
   perusteluHylkaamiselle?: string | null
   asiakirjat?: Asiakirja[] | null
+  arkistoitava?: boolean
 }
 
 export interface VastuuhenkilonArvioLomakeErikoistuva {
@@ -1647,6 +1648,7 @@ export interface Valmistumispyynto {
   liitteetAsiakirjaId?: number | null
   erikoistujanTiedotAsiakirjaId?: number | null
   selvitysVanhentuneistaSuorituksista: string | null
+  arkistoitava: boolean
 }
 
 export interface ValmistumispyyntoArviointienTila {

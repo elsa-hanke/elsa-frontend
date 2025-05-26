@@ -73,6 +73,14 @@
                 {{ $t('koejakso-on-hyvaksytty-allekirjoitettu-vastuuhenkilo-erikoistuja') }}
               </div>
             </b-alert>
+            <b-alert variant="success" :show="accepted">
+              <div class="d-flex flex-row">
+                <em class="align-middle">
+                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
+                </em>
+                {{ $t('koejakso-on-hyvaksytty-vastuuhenkilo-erikoistuja') }}
+              </div>
+            </b-alert>
           </b-col>
         </b-row>
         <b-row v-if="!editable">
@@ -494,7 +502,7 @@
           </b-row>
           <hr />
         </div>
-        <div v-if="waitingForSignatures || acceptedByEveryone">
+        <div v-if="waitingForSignatures || acceptedByEveryone || accepted">
           <koejakson-vaihe-allekirjoitukset
             :allekirjoitukset="allekirjoitukset"
             title="hyvaksymispaivamaarat"
@@ -662,6 +670,10 @@
 
     get acceptedByEveryone() {
       return this.vastuuhenkilonArvio?.tila === LomakeTilat.ALLEKIRJOITETTU
+    }
+
+    get accepted() {
+      return this.vastuuhenkilonArvio?.tila === LomakeTilat.HYVAKSYTTY
     }
 
     get vastuuhenkilonArvioId() {
