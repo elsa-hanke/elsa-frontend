@@ -13,7 +13,7 @@
         <b-form-row>
           <div class="d-flex col-sm-12 col-md-12 justify-content-between align-items-start">
             <div class="d-flex flex-grow-1 pr-md-3">
-              <elsa-form-group :label="$t('kysymys')" class="w-100" :required="true">
+              <elsa-form-group :label="otsikko" class="w-100" :required="!isValiotsikko">
                 <template #default="{ uid }">
                   <b-form-input
                     :id="uid"
@@ -87,6 +87,7 @@
               {{ $t('lisaa-vastausvaihtoehto') }}
             </elsa-button>
             <b-form-checkbox
+              v-if="!isValiotsikko"
               v-model="kysymys.pakollinen"
               class="py-0 ml-auto"
               @input="$emit('skipRouteExitConfirm', false)"
@@ -169,6 +170,14 @@
 
     get arviointityokaluKysymysTyyppit() {
       return ArviointityokaluKysymysTyyppi
+    }
+
+    get isValiotsikko() {
+      return this.kysymys.tyyppi === 'VALIOTSIKKO'
+    }
+
+    get otsikko() {
+      return this.isValiotsikko ? this.$t('valiotsikko') : this.$t('kysymys')
     }
   }
 </script>

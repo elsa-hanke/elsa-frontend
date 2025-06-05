@@ -22,6 +22,9 @@
         </template>
       </elsa-form-group>
     </b-form-row>
+    <b-form-row v-if="kysymys.tyyppi === arviointityokaluKysymysTyyppit.VALIOTSIKKO">
+      <h3 class="col-sm-12 col-md-12 pr-md-3">{{ kysymys.otsikko }}</h3>
+    </b-form-row>
     <b-form-row v-else>
       <elsa-form-group
         :label="kysymys.otsikko"
