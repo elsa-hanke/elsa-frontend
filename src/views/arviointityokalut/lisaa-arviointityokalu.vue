@@ -123,6 +123,13 @@
           >
             {{ $t('lisaa-valintakysymys') }}
           </elsa-button>
+          <elsa-button
+            variant="outline-primary"
+            class="ml-2 mb-2"
+            @click.stop.prevent="addValiotsikko"
+          >
+            {{ $t('lisaa-valiotsikko') }}
+          </elsa-button>
         </div>
         <hr />
         <div class="d-flex flex-row-reverse flex-wrap">
@@ -310,6 +317,10 @@
           valittu: false
         }
       ])
+    }
+
+    addValiotsikko() {
+      this.addKysymys(ArviointityokaluKysymysTyyppi.VALIOTSIKKO, [])
     }
 
     private addKysymys(
