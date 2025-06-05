@@ -1067,6 +1067,7 @@ export interface BarChartRow {
 
 export interface Palaute {
   palautteenAihe: string | null
+  palauteYliopisto: string | null
   palaute: string | null
   anonyymiPalaute: boolean
 }

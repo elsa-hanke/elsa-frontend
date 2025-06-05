@@ -91,6 +91,21 @@
           </b-form-invalid-feedback>
         </template>
       </elsa-form-group>
+      <elsa-form-group :label="$t('palaute-yliopisto')">
+        <b-form-select
+          v-model="form.palauteYliopisto"
+          :options="[
+            { text: 'Valitse yliopisto', value: 'Tyhjä' },
+            { text: $t('palaute-yliopisto-helsinki'), value: 'Helsinki' },
+            { text: $t('palaute-yliopisto-ita-suomi'), value: 'Itä-Suomi' },
+            { text: $t('palaute-yliopisto-oulu'), value: 'Oulu' },
+            { text: $t('palaute-yliopisto-tampere'), value: 'Tampere' },
+            { text: $t('palaute-yliopisto-turku'), value: 'Turku' }
+          ]"
+          :state="validateState('palauteYliopisto')"
+          first-option-as-reset
+        ></b-form-select>
+      </elsa-form-group>
       <elsa-form-group :label="$t('palaute-ja-tuki')" :required="true">
         <template #default="{ uid }">
           <b-form-textarea
@@ -146,6 +161,7 @@
         palautteenAihe: {
           required
         },
+        palauteYliopisto: {},
         palaute: {
           required
         },
@@ -165,6 +181,7 @@
 
     form: Palaute = {
       palautteenAihe: null,
+      palauteYliopisto: 'Tyhjä',
       palaute: null,
       anonyymiPalaute: false
     }
@@ -188,6 +205,7 @@
       this.$v.form.$reset()
       this.form = {
         palautteenAihe: null,
+        palauteYliopisto: 'Tyhjä',
         palaute: null,
         anonyymiPalaute: false
       }
