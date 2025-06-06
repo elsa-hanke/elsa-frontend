@@ -892,6 +892,7 @@ export type Arviointityokalu = {
   liitetiedostonNimi?: string
   liitetiedostonTyyppi?: string
   tila: ArviointityokaluTila
+  kaytossa: boolean
 }
 
 export type ArviointityokaluKysymys = {

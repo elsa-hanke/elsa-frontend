@@ -1,42 +1,70 @@
 <template>
-  <div class="arviointityokalut">
-    <b-breadcrumb :items="items" class="mb-0" />
-    <b-container fluid>
-      <b-row lg>
-        <b-col>
-          <h1>{{ $t('arviointityokalut') }}</h1>
-          <p>{{ $t('arviointityokalut-kuvaus') }}</p>
-          <elsa-button variant="primary" :to="{ name: 'lisaa-arviointityokalu' }" class="mb-4 mr-2">
-            {{ $t('lisaa-arviointityokalu') }}
-          </elsa-button>
-          <elsa-button variant="primary" :to="{ name: 'uusi-kategoria' }" class="mb-4">
-            {{ $t('lisaa-kategoria') }}
-          </elsa-button>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <div v-if="loading" class="text-center">
-            <b-spinner variant="primary" :label="$t('ladataan')" />
+  <div>
+    <div v-if="loading" class="text-center">
+      <b-spinner variant="primary" :label="$t('ladataan')" />
+    </div>
+    <b-table
+      :items="flatList"
+      :fields="fields"
+      class="arviointityokalut-table"
+      stacked="md"
+      responsive
+    >
+      <template #cell(nimi)="data">
+        <template v-if="data.item.isCategory">
+          <b-link
+            :to="{
+              name: 'kategoria',
+              params: { kategoriaId: data.item.kategoriaId }
+            }"
+            class="font-weight-bold"
+          >
+            {{ data.item.nimi }}
+          </b-link>
+        </template>
+        <template v-else>
+          <div class="pl-4">
+            <b-link
+              :to="{
+                name: 'arviointityokalu',
+                params: { arviointityokaluId: data.item.arviointityokaluId }
+              }"
+            >
+              {{ data.item.nimi }}
+            </b-link>
           </div>
-          <b-tabs v-model="tabIndex" content-class="mt-3" :no-fade="true">
-            <b-tab :title="$t('julkaistut-ja-luonnokset')" href="#arviointityokalut">
-              <ArviointityokalutListaus :poistetut="false"></ArviointityokalutListaus>
-            </b-tab>
-            <b-tab :title="$t('poistetut')" lazy href="#poistetut-arviointityokalut">
-              <ArviointityokalutListaus :poistetut="true"></ArviointityokalutListaus>
-            </b-tab>
-          </b-tabs>
-        </b-col>
-      </b-row>
-    </b-container>
+        </template>
+      </template>
+
+      <template #cell(tila)="data">
+        <template v-if="!data.item.isCategory">
+          <template v-if="poistetut">
+            <span class="text-danger">
+              {{ $t('poistettu') }}
+            </span>
+          </template>
+          <template v-else-if="data.item.tila.toLowerCase() === 'julkaistu'">
+            <span class="text-success">
+              {{ $t('arviointityokalu-tila-' + data.item.tila.toLowerCase()) }}
+            </span>
+          </template>
+          <template v-else>
+            {{ $t('arviointityokalu-tila-' + data.item.tila.toLowerCase()) }}
+          </template>
+        </template>
+      </template>
+    </b-table>
   </div>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
 
-  import { getArviointityokalut, getArviointityokalutKategoriat } from '@/api/tekninen-paakayttaja'
+  import {
+    getArviointityokalut,
+    getArviointityokalutKategoriat,
+    getPoistetutArviointityokalut
+  } from '@/api/tekninen-paakayttaja'
   import ElsaButton from '@/components/button/button.vue'
   import Pagination from '@/components/pagination/pagination.vue'
   import SearchInput from '@/components/search-input/search-input.vue'
@@ -44,7 +72,6 @@
   import { MUU_ARVIOINTITYOKALU_ID } from '@/utils/constants'
   import { sortByAsc } from '@/utils/sort'
   import { toastFail } from '@/utils/toast'
-  import ArviointityokalutListaus from '@/views/arviointityokalut/arviointityokalut-listaus.vue'
   import ErikoistuvatLaakarit from '@/views/kayttajahallinta/erikoistuvat-laakarit.vue'
   import Kouluttajat from '@/views/kayttajahallinta/kouluttajat.vue'
   import Paakayttajat from '@/views/kayttajahallinta/paakayttajat.vue'
@@ -53,7 +80,6 @@
 
   @Component({
     components: {
-      ArviointityokalutListaus,
       Vastuuhenkilot,
       ErikoistuvatLaakarit,
       Kouluttajat,
@@ -64,7 +90,10 @@
       Pagination
     }
   })
-  export default class Arviointityokalut extends Vue {
+  export default class ArviointityokalutListaus extends Vue {
+    @Prop({ required: false, default: false })
+    poistetut!: boolean
+
     arviointityokaluKategoriat: ArviointityokaluKategoria[] = []
     arviointityokalut: Arviointityokalu[] = []
 
@@ -98,20 +127,15 @@
     perPage = 20
     currentPage = 1
 
-    tabIndex = 0
-    tabs = ['#arviointityokalut', '#poistetut-arviointityokalut']
-
-    beforeMount() {
-      this.tabIndex = this.tabs.findIndex((tab) => tab === this.$route.hash)
-    }
-
     async mounted() {
       this.loading = true
       try {
         this.arviointityokaluKategoriat = (await getArviointityokalutKategoriat()).data.sort(
           (a, b) => sortByAsc(a.nimi, b.nimi)
         )
-        this.arviointityokalut = (await getArviointityokalut()).data
+        this.arviointityokalut = (
+          this.poistetut ? await getPoistetutArviointityokalut() : await getArviointityokalut()
+        ).data
           .sort((a, b) => sortByAsc(a.nimi, b.nimi))
           .filter((at) => at.id !== MUU_ARVIOINTITYOKALU_ID)
       } catch {

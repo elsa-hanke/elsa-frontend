@@ -1957,5 +1957,10 @@
   "lisaa-vastaukset-ja-palaa-arviointiin": "Lisää vastaukset ja palaa arviointiin",
   "ei-valittuja-arviointityokaluja": "Ei valittuja arviointityökaluja",
   "avoin-tallennettu-keskeneraisena": "Avoin, tallennettu keskeneräisenä",
-  "arviointityokalu-kaikkia-pakollisia-vastauksia-ei-ole-annettu": "Kaikkia pakollisia vastauksia ei ole annettu"
+  "arviointityokalu-kaikkia-pakollisia-vastauksia-ei-ole-annettu": "Kaikkia pakollisia vastauksia ei ole annettu",
+  "julkaistut-ja-luonnokset": "Julkaistut ja luonnokset",
+  "poistetut": "Poistetut",
+  "poistettu": "Poistettu",
+  "palauta-luonnostilaan": "Palauta luonnostilaan",
+  "arviointityokalu-palautettu": "Arviointityokalu palautettu"
 }
