@@ -73,12 +73,31 @@
               />
             </elsa-button>
           </div>
-          <b-form-textarea
+          <div
             v-if="vaihtoehto.tyyppi === arviointityokaluKysymysVaihtoehtoTyypit.MUU_MIKA"
-            rows="3"
-            disabled
-            :placeholder="$t('vastaus')"
-          />
+            class="d-flex align-items-start col-sm-12 col-md-12 container"
+          >
+            <span class="fake-checkbox fake-checkbox--spacer mb-2"></span>
+            <div class="flex-grow-1 mb-2 mr-3">
+              <b-form-textarea
+                rows="3"
+                disabled
+                :placeholder="$t('vastaus')"
+                class="ml-2 muu-textarea"
+              />
+            </div>
+            <elsa-button
+              variant="link"
+              class="text-decoration-none shadow-none p-0 fake-trash-spacer"
+            >
+              <font-awesome-icon
+                :icon="['far', 'trash-alt']"
+                fixed-width
+                size="lg"
+                class="text-primary"
+              />
+            </elsa-button>
+          </div>
         </div>
         <b-form-row>
           <div class="col-sm-12 col-md-12 pr-md-3 d-flex align-items-end">
@@ -223,11 +242,26 @@
     flex-shrink: 0;
   }
 
+  .fake-checkbox--spacer {
+    visibility: hidden;
+  }
+
   .drag-handle {
     cursor: grab;
   }
 
   .kysymys-container {
     background-color: #ffffff;
+  }
+
+  .muu-textarea {
+    width: 100%;
+    resize: none;
+    background-color: #f5f5f5;
+    border-color: #ced4da;
+  }
+
+  .fake-trash-spacer {
+    visibility: hidden;
   }
 </style>
