@@ -209,6 +209,11 @@ export async function getArviointityokalut() {
   return await axios.get<Arviointityokalu[]>(path)
 }
 
+export async function getPoistetutArviointityokalut() {
+  const path = `/tekninen-paakayttaja/poistetut-arviointityokalut`
+  return await axios.get<Arviointityokalu[]>(path)
+}
+
 export async function getArviointityokalu(id: number) {
   const path = `/tekninen-paakayttaja/arviointityokalu/${id}`
   return await axios.get<Arviointityokalu>(path)
@@ -243,4 +248,9 @@ export async function patchArviointityokalu(form: Arviointityokalu) {
 export async function deleteArviointityokalu(id: number) {
   const path = `/tekninen-paakayttaja/arviointityokalu/${id}`
   return await axios.delete<Arviointityokalu>(path)
+}
+
+export async function palautaArviointityokalu(id: number) {
+  const path = `/tekninen-paakayttaja//arviointityokalu/${id}/palauta`
+  return await axios.patch(path)
 }

@@ -20,7 +20,8 @@ import {
   TerveyskeskuskoulutusjaksonTila,
   ValmistumispyynnonTila,
   ArviointityokaluKysymysTyyppi,
-  ArviointityokaluTila
+  ArviointityokaluTila,
+  ArviointityokaluKysymysVaihtoehtoTyyppi
 } from '@/utils/constants'
 import { ValmistumispyynnonHyvaksyjaRole } from '@/utils/roles'
 
@@ -892,6 +893,7 @@ export type Arviointityokalu = {
   liitetiedostonNimi?: string
   liitetiedostonTyyppi?: string
   tila: ArviointityokaluTila
+  kaytossa: boolean
 }
 
 export type ArviointityokaluKysymys = {
@@ -908,6 +910,7 @@ export type ArviointityokaluKysymysVaihtoehto = {
   id?: number
   teksti: string
   valittu: boolean
+  tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi
 }
 
 export type SuoritusarviointiForm = {
