@@ -278,6 +278,11 @@ export enum ArviointityokaluKysymysTyyppi {
   VALIOTSIKKO = 'VALIOTSIKKO'
 }
 
+export enum ArviointityokaluKysymysVaihtoehtoTyyppi {
+  NORMAALI_VALINTA = 'NORMAALI_VALINTA',
+  MUU_MIKA = 'MUU_MIKA'
+}
+
 export enum ArviointityokaluTila {
   LUONNOS = 'LUONNOS',
   JULKAISTU = 'JULKAISTU'

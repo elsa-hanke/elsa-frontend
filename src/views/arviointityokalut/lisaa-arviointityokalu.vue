@@ -189,7 +189,11 @@
     Asiakirja,
     ElsaError
   } from '@/types'
-  import { ArviointityokaluKysymysTyyppi, ArviointityokaluTila } from '@/utils/constants'
+  import {
+    ArviointityokaluKysymysTyyppi,
+    ArviointityokaluKysymysVaihtoehtoTyyppi,
+    ArviointityokaluTila
+  } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -307,15 +311,18 @@
       this.addKysymys(ArviointityokaluKysymysTyyppi.VALINTAKYSYMYS, [
         {
           teksti: '',
-          valittu: false
+          valittu: false,
+          tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi.NORMAALI_VALINTA
         },
         {
           teksti: '',
-          valittu: false
+          valittu: false,
+          tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi.NORMAALI_VALINTA
         },
         {
           teksti: '',
-          valittu: false
+          valittu: false,
+          tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi.NORMAALI_VALINTA
         }
       ])
     }
