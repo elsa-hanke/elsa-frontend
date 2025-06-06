@@ -1962,5 +1962,7 @@
   "poistetut": "Poistetut",
   "poistettu": "Poistettu",
   "palauta-luonnostilaan": "Palauta luonnostilaan",
-  "arviointityokalu-palautettu": "Arviointityokalu palautettu"
+  "arviointityokalu-palautettu": "Arviointityokalu palautettu",
+  "lisaa-muu-vaihtoehto": "Lisää \"Muu\"-vaihtoehto",
+  "muu-mika": "Muu, mikä?"
 }
