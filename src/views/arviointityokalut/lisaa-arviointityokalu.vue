@@ -241,7 +241,8 @@
       ohjeteksti: null,
       liite: null,
       kysymykset: [],
-      tila: ArviointityokaluTila.LUONNOS
+      tila: ArviointityokaluTila.LUONNOS,
+      kaytossa: true
     }
 
     asiakirjat: Asiakirja[] = []
