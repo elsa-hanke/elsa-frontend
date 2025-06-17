@@ -79,7 +79,8 @@
                   :disabled="!answerMode"
                   :placeholder="$t('vastaus')"
                   :state="isAnswerValid"
-                  @input="updateMuuVaihtoehtoAnswer($event)"
+                  :value="tekstiVastaus"
+                  @input="updateMuuVaihtoehtoAnswer($event, vaihtoehto.id)"
                 />
               </div>
             </template>
@@ -140,10 +141,14 @@
     index?: number
 
     selectedAnswer: string | number | null = null
+    tekstiVastaus: string | null = null
 
     mounted() {
       if (this.vastaus) {
         this.selectedAnswer = this.vastaus.valittuVaihtoehtoId || this.vastaus.tekstiVastaus || null
+      }
+      if (this.vastaus?.tekstiVastaus) {
+        this.tekstiVastaus = this.vastaus.tekstiVastaus
       }
     }
 
@@ -171,14 +176,13 @@
       })
     }
 
-    updateMuuVaihtoehtoAnswer(value: string | number | undefined) {
-      console.log(value)
-      // this.$emit('update-answer', {
-      //   arviointityokaluId: this.arviointityokaluId,
-      //   arviointityokaluKysymysId: this.kysymys.id,
-      //   tekstiVastaus: typeof value === 'string' ? value : null,
-      //   valittuVaihtoehtoId: typeof value === 'number' ? value : null
-      // })
+    updateMuuVaihtoehtoAnswer(muuVastaus: string, vaihtoehtoId: number) {
+      this.$emit('update-answer', {
+        arviointityokaluId: this.arviointityokaluId,
+        arviointityokaluKysymysId: this.kysymys.id,
+        tekstiVastaus: muuVastaus,
+        valittuVaihtoehtoId: vaihtoehtoId
+      })
     }
   }
 </script>

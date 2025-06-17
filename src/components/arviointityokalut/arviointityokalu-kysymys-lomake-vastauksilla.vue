@@ -40,7 +40,10 @@
   import { Vue, Prop } from 'vue-property-decorator'
 
   import { ArviointityokaluKysymys, SuoritusarviointiArviointityokaluVastaus } from '@/types'
-  import { ArviointityokaluKysymysTyyppi } from '@/utils/constants'
+  import {
+    ArviointityokaluKysymysTyyppi,
+    ArviointityokaluKysymysVaihtoehtoTyyppi
+  } from '@/utils/constants'
 
   @Component
   export default class ArviointityokaluKysymysVastausNaytto extends Vue {
@@ -51,15 +54,23 @@
     vastaus!: SuoritusarviointiArviointityokaluVastaus | null
 
     selectedAnswer: string | number | null = null
+    tekstiVastaus: string | null = null
 
     mounted() {
       if (this.vastaus) {
         this.selectedAnswer = this.vastaus.valittuVaihtoehtoId || this.vastaus.tekstiVastaus || null
       }
+      if (this.vastaus?.tekstiVastaus) {
+        this.tekstiVastaus = this.vastaus.tekstiVastaus
+      }
     }
 
     get arviointityokaluKysymysTyyppit() {
       return ArviointityokaluKysymysTyyppi
+    }
+
+    get arviointityokaluKysymysVaihtoehtoTyyppi() {
+      return ArviointityokaluKysymysVaihtoehtoTyyppi
     }
   }
 </script>
