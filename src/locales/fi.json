@@ -1964,5 +1964,6 @@
   "palauta-luonnostilaan": "Palauta luonnostilaan",
   "arviointityokalu-palautettu": "Arviointityokalu palautettu",
   "lisaa-muu-vaihtoehto": "Lisää \"Muu\"-vaihtoehto",
-  "muu-mika": "Muu, mikä?"
+  "muu-mika": "Muu, mikä?",
+  "canmeds-ohjeteksti": "Kokonaisarvio CanMEDS-kompetensseista, vahvistava palaute, kehittämisehdotukset, huolenaiheet"
 }

@@ -470,12 +470,7 @@
         >
           <template #label-help>
             <elsa-popover :title="$t('arvioinnin-osa-alueita')">
-              <div class="d-flex flex-column canmeds-container">
-                <img src="@/assets/canmeds.svg" class="m-2" alt="canmeds" />
-                <a href="#" class="text-size-normal" rel="noreferrer noopener" target="_blank">
-                  {{ $t('canmeds-linkki-teksti') }}
-                </a>
-              </div>
+              {{ $t('canmeds-ohjeteksti') }}
             </elsa-popover>
           </template>
           <template #default="{ uid }">
