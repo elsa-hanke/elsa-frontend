@@ -9,7 +9,12 @@
           <b-form-row>
             <elsa-form-group :label="$t('tila')" class="col-sm-12 col-md-6 pr-md-3">
               <template #default="{ uid }">
-                <template v-if="form.tila.toLowerCase() === 'julkaistu'">
+                <template v-if="!form.kaytossa">
+                  <span :id="uid" class="text-danger">
+                    {{ $t('poistettu') }}
+                  </span>
+                </template>
+                <template v-else-if="form.tila.toLowerCase() === 'julkaistu'">
                   <span :id="uid" class="text-success">
                     {{ $t('arviointityokalu-tila-' + form.tila.toLowerCase()) }}
                   </span>
@@ -46,11 +51,8 @@
                 :label="$t('ohjeteksti-arviointityokalun-kayttoon')"
                 class="col-sm-12 col-md-12 pr-md-3"
               >
-                <template #default="{ uid }">
-                  <span :id="uid">
-                    {{ form.ohjeteksti }}
-                  </span>
-                </template>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div v-html="form.ohjeteksti"></div>
               </elsa-form-group>
             </b-form-row>
             <b-form-row>
@@ -93,6 +95,15 @@
             <hr />
             <div class="d-flex flex-row-reverse flex-wrap">
               <elsa-button
+                v-if="!form.kaytossa"
+                variant="primary"
+                class="mb-3 ml-3"
+                @click="palautaLuonnostilaan()"
+              >
+                {{ $t('palauta-luonnostilaan') }}
+              </elsa-button>
+              <elsa-button
+                v-if="form.kaytossa"
                 variant="primary"
                 class="mb-3 ml-3"
                 :to="{
@@ -103,7 +114,7 @@
                 {{ $t('muokkaa-arviointityokalua') }}
               </elsa-button>
               <elsa-button
-                v-if="form.id"
+                v-if="form.id && form.kaytossa"
                 variant="outline-danger"
                 class="mb-3 ml-3"
                 @click="showDeleteConfirm()"
@@ -146,7 +157,11 @@
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
 
-  import { deleteArviointityokalu, getArviointityokalu } from '@/api/tekninen-paakayttaja'
+  import {
+    deleteArviointityokalu,
+    getArviointityokalu,
+    palautaArviointityokalu
+  } from '@/api/tekninen-paakayttaja'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ElsaButton from '@/components/button/button.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
@@ -199,7 +214,8 @@
       kategoria: null,
       kysymykset: [],
       liite: null,
-      tila: ArviointityokaluTila.LUONNOS
+      tila: ArviointityokaluTila.LUONNOS,
+      kaytossa: true
     }
 
     asiakirjat: Asiakirja[] = []
@@ -257,6 +273,18 @@
           toastSuccess(this, this.$t('arviointityokalu-poistettu'))
           this.skipRouteExitConfirm = true
           this.$router.replace({ name: 'arviointityokalut' })
+        }
+      } catch {
+        this.$router.replace({ name: 'arviointityokalut' })
+      }
+    }
+
+    async palautaLuonnostilaan() {
+      try {
+        if (this.form && this.form.id) {
+          await palautaArviointityokalu(this.form.id)
+          toastSuccess(this, this.$t('arviointityokalu-palautettu'))
+          this.fetchArviointityokalu()
         }
       } catch {
         this.$router.replace({ name: 'arviointityokalut' })

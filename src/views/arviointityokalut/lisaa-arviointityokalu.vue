@@ -51,10 +51,9 @@
                 :required="false"
               >
                 <template #default="{ uid }">
-                  <b-form-textarea
+                  <elsa-text-editor
                     :id="uid"
                     v-model="form.ohjeteksti"
-                    rows="3"
                     @input="$emit('skipRouteExitConfirm', false)"
                   />
                 </template>
@@ -124,6 +123,13 @@
           >
             {{ $t('lisaa-valintakysymys') }}
           </elsa-button>
+          <elsa-button
+            variant="outline-primary"
+            class="ml-2 mb-2"
+            @click.stop.prevent="addValiotsikko"
+          >
+            {{ $t('lisaa-valiotsikko') }}
+          </elsa-button>
         </div>
         <hr />
         <div class="d-flex flex-row-reverse flex-wrap">
@@ -169,6 +175,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
+  import ElsaTextEditor from '@/components/text-editor/text-editor.vue'
   import ArviointityokaluLomakeKysymysLuontiForm from '@/forms/arviointityokalu-lomake-kysymys-luonti-form.vue'
   import TyokertymalaskuriTyoskentelyjaksoPoissaoloForm from '@/forms/tyokertymalaskuri-tyoskentelyjakso-poissaolo-form.vue'
   import ErikoistuvaLaakariForm from '@/forms/uusi-erikoistuva-laakari-form.vue'
@@ -182,12 +189,17 @@
     Asiakirja,
     ElsaError
   } from '@/types'
-  import { ArviointityokaluKysymysTyyppi, ArviointityokaluTila } from '@/utils/constants'
+  import {
+    ArviointityokaluKysymysTyyppi,
+    ArviointityokaluKysymysVaihtoehtoTyyppi,
+    ArviointityokaluTila
+  } from '@/utils/constants'
   import { mapFile, mapFiles } from '@/utils/fileMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
     components: {
+      ElsaTextEditor,
       ArviointityokaluLomakeKysymysLuontiForm,
       TyokertymalaskuriTyoskentelyjaksoPoissaoloForm,
       ElsaFormMultiselect,
@@ -233,7 +245,8 @@
       ohjeteksti: null,
       liite: null,
       kysymykset: [],
-      tila: ArviointityokaluTila.LUONNOS
+      tila: ArviointityokaluTila.LUONNOS,
+      kaytossa: true
     }
 
     asiakirjat: Asiakirja[] = []
@@ -298,17 +311,24 @@
       this.addKysymys(ArviointityokaluKysymysTyyppi.VALINTAKYSYMYS, [
         {
           teksti: '',
-          valittu: false
+          valittu: false,
+          tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi.NORMAALI_VALINTA
         },
         {
           teksti: '',
-          valittu: false
+          valittu: false,
+          tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi.NORMAALI_VALINTA
         },
         {
           teksti: '',
-          valittu: false
+          valittu: false,
+          tyyppi: ArviointityokaluKysymysVaihtoehtoTyyppi.NORMAALI_VALINTA
         }
       ])
+    }
+
+    addValiotsikko() {
+      this.addKysymys(ArviointityokaluKysymysTyyppi.VALIOTSIKKO, [])
     }
 
     private addKysymys(

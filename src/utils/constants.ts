@@ -274,7 +274,13 @@ export const ERIKOISALA_YEK_ID = 61
 
 export enum ArviointityokaluKysymysTyyppi {
   TEKSTIKENTTAKYSYMYS = 'TEKSTIKENTTAKYSYMYS',
-  VALINTAKYSYMYS = 'VALINTAKYSYMYS'
+  VALINTAKYSYMYS = 'VALINTAKYSYMYS',
+  VALIOTSIKKO = 'VALIOTSIKKO'
+}
+
+export enum ArviointityokaluKysymysVaihtoehtoTyyppi {
+  NORMAALI_VALINTA = 'NORMAALI_VALINTA',
+  MUU_MIKA = 'MUU_MIKA'
 }
 
 export enum ArviointityokaluTila {

@@ -205,7 +205,7 @@
           class="mb-2"
         >
           <b-col>
-            <elsa-accordian :ref="arviointityokalu.nimi" :visible="false">
+            <elsa-accordian :ref="arviointityokalu.nimi" :visible="true">
               <template #title>
                 {{ arviointityokalu.nimi }}
               </template>
@@ -218,7 +218,7 @@
             </elsa-accordian>
           </b-col>
         </b-row>
-        <elsa-form-group :label="$t('sanallinen-arviointi')">
+        <elsa-form-group :label="$t('sanallinen-kokonaisarviointi')">
           <template #default="{ uid }">
             <p :id="uid" class="text-preline text-break">{{ value.sanallinenArviointi }}</p>
           </template>
@@ -463,15 +463,14 @@
           <h3>{{ $t('yhteiset-arviointisisallot') }}</h3>
           <p>{{ $t('yhteiset-arviointisisallot-kuvaus') }}</p>
         </div>
-        <elsa-form-group v-if="editing" :label="$t('sanallinen-arviointi')" :required="true">
+        <elsa-form-group
+          v-if="editing"
+          :label="$t('sanallinen-kokonaisarviointi')"
+          :required="true"
+        >
           <template #label-help>
             <elsa-popover :title="$t('arvioinnin-osa-alueita')">
-              <div class="d-flex flex-column canmeds-container">
-                <img src="@/assets/canmeds.svg" class="m-2" alt="canmeds" />
-                <a href="#" class="text-size-normal" rel="noreferrer noopener" target="_blank">
-                  {{ $t('canmeds-linkki-teksti') }}
-                </a>
-              </div>
+              {{ $t('canmeds-ohjeteksti') }}
             </elsa-popover>
           </template>
           <template #default="{ uid }">
