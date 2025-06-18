@@ -6,6 +6,9 @@
         <p class="mt-1 mb-0">{{ selectedAnswer }}</p>
       </div>
     </b-form-row>
+    <b-form-row v-else-if="kysymys.tyyppi === arviointityokaluKysymysTyyppit.VALIOTSIKKO">
+      <h3 class="col-sm-12 col-md-12 pr-md-3 mb-4">{{ kysymys.otsikko }}</h3>
+    </b-form-row>
     <b-form-row v-else>
       <div class="col-sm-12 col-md-12 mb-4">
         <h5>{{ kysymys.otsikko }}</h5>
