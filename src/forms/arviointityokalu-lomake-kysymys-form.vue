@@ -176,7 +176,7 @@
       })
     }
 
-    updateMuuVaihtoehtoAnswer(muuVastaus: string, vaihtoehtoId: number) {
+    updateMuuVaihtoehtoAnswer(muuVastaus: string, vaihtoehtoId: number | undefined) {
       this.$emit('update-answer', {
         arviointityokaluId: this.arviointityokaluId,
         arviointityokaluKysymysId: this.kysymys.id,
