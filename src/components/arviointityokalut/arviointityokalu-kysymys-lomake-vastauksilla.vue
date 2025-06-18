@@ -10,24 +10,41 @@
       <div class="col-sm-12 col-md-12 mb-4">
         <h5>{{ kysymys.otsikko }}</h5>
         <div class="mt-1">
-          <div
-            v-for="(vaihtoehto, index) in kysymys.vaihtoehdot"
-            :key="index"
-            class="d-flex align-items-center option-row mb-2"
-          >
-            <div class="icon-container">
-              <font-awesome-icon
-                v-if="selectedAnswer === vaihtoehto.id"
-                :icon="['fas', 'check-circle']"
-                fixed-width
-                size="lg"
-                class="text-darker-success"
-              />
+          <div v-for="(vaihtoehto, index) in kysymys.vaihtoehdot" :key="index" class="mb-2">
+            <div
+              v-if="selectedAnswer === vaihtoehto.id"
+              class="d-flex align-items-center option-row"
+            >
+              <div class="icon-container">
+                <font-awesome-icon
+                  :icon="['fas', 'check-circle']"
+                  fixed-width
+                  size="lg"
+                  class="text-darker-success"
+                />
+              </div>
+              <p class="mb-0 font-weight-400">
+                {{ vaihtoehto.teksti }}
+              </p>
             </div>
-            <p v-if="selectedAnswer === vaihtoehto.id" class="mb-0 font-weight-400">
-              {{ vaihtoehto.teksti }}
-            </p>
-            <p v-else class="mb-0 font-weight-400 text-muted">{{ vaihtoehto.teksti }}</p>
+            <div v-else class="d-flex align-items-center option-row">
+              <div class="icon-container"></div>
+              <p class="mb-0 font-weight-400 text-muted">
+                {{ vaihtoehto.teksti }}
+              </p>
+            </div>
+            <div
+              v-if="
+                selectedAnswer === vaihtoehto.id &&
+                vaihtoehto.tyyppi === arviointityokaluKysymysVaihtoehtoTyyppi.MUU_MIKA
+              "
+              class="d-flex"
+            >
+              <div class="icon-container"></div>
+              <p class="mt-1 mb-0">
+                {{ tekstiVastaus }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
