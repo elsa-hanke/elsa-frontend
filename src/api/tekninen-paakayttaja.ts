@@ -251,6 +251,6 @@ export async function deleteArviointityokalu(id: number) {
 }
 
 export async function palautaArviointityokalu(id: number) {
-  const path = `/tekninen-paakayttaja//arviointityokalu/${id}/palauta`
+  const path = `/tekninen-paakayttaja/arviointityokalu/${id}/palauta`
   return await axios.patch(path)
 }
