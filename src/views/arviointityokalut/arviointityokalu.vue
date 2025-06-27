@@ -282,8 +282,12 @@
     async palautaLuonnostilaan() {
       try {
         if (this.form && this.form.id) {
-          await palautaArviointityokalu(this.form.id)
-          toastSuccess(this, this.$t('arviointityokalu-palautettu'))
+          const result = await palautaArviointityokalu(this.form.id)
+          if (result.status === 200) {
+            toastSuccess(this, this.$t('arviointityokalu-palautettu'))
+          } else {
+            toastFail(this, this.$t('arviointityokalu-palautus-epaonnistui'))
+          }
           this.fetchArviointityokalu()
         }
       } catch {

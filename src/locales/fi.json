@@ -1963,6 +1963,7 @@
   "poistettu": "Poistettu",
   "palauta-luonnostilaan": "Palauta luonnostilaan",
   "arviointityokalu-palautettu": "Arviointityokalu palautettu",
+  "arviointityokalu-palautus-epaonnistui": "Arviointityokalun palautus epäonnistui",
   "lisaa-muu-vaihtoehto": "Lisää \"Muu\"-vaihtoehto",
   "muu-mika": "Muu, mikä?",
   "canmeds-ohjeteksti": "Kokonaisarvio CanMEDS-kompetensseista, vahvistava palaute, kehittämisehdotukset, huolenaiheet"
