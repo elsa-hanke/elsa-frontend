@@ -24,7 +24,9 @@ import {
   ErikoistujanEteneminen,
   ErikoistujienSeurantaVastuuhenkiloRajaimet,
   VastuuhenkilonVastuualueet,
-  KoulutettavanEteneminen
+  KoulutettavanEteneminen,
+  Arviointityokalu,
+  ArviointityokaluKategoria
 } from '@/types'
 
 export async function getKoejaksot() {
@@ -229,4 +231,14 @@ export async function getKoulutettavienSeurantaList(params: {
 export async function getYliopisto() {
   const path = '/vastuuhenkilo/etusivu/yliopisto'
   return await axios.get<string>(path)
+}
+
+export async function getArviointityokalutVastuuhenkilo() {
+  const path = `/vastuuhenkilo/arviointityokalut`
+  return await axios.get<Arviointityokalu[]>(path)
+}
+
+export async function getArviointityokaluKategoriatVastuuhenkilo() {
+  const path = `/vastuuhenkilo/arviointityokalut/kategoriat`
+  return await axios.get<ArviointityokaluKategoria[]>(path)
 }

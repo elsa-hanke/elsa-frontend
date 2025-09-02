@@ -1419,7 +1419,7 @@ const routes: Array<RouteConfig> = [
         component: RoleSpecificRoute,
         props: {
           routeComponent: ArviointityokalutEsittely,
-          allowedRoles: [ELSA_ROLE.Kouluttaja]
+          allowedRoles: [ELSA_ROLE.Kouluttaja, ELSA_ROLE.Vastuuhenkilo]
         }
       }
     ]

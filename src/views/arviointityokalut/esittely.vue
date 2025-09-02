@@ -69,6 +69,10 @@
   import { Vue, Component } from 'vue-property-decorator'
 
   import { getArviointityokalut, getArviointityokaluKategoriat } from '@/api/kouluttaja'
+  import {
+    getArviointityokaluKategoriatVastuuhenkilo,
+    getArviointityokalutVastuuhenkilo
+  } from '@/api/vastuuhenkilo'
   import ElsaAccordian from '@/components/accordian/accordian.vue'
   import AsiakirjatContent from '@/components/asiakirjat/asiakirjat-content.vue'
   import ArviointityokaluLomakeKysymysForm from '@/forms/arviointityokalu-lomake-kysymys-form.vue'
@@ -103,12 +107,17 @@
     async mounted() {
       this.loading = true
       try {
-        this.arviointityokalut = (await getArviointityokalut()).data.sort((a, b) =>
-          sortByAsc(a.nimi, b.nimi)
-        )
+        this.arviointityokalut = (
+          this.$isVastuuhenkilo()
+            ? await getArviointityokalutVastuuhenkilo()
+            : await getArviointityokalut()
+        ).data.sort((a, b) => sortByAsc(a.nimi, b.nimi))
         this.kategoriat = [
           { nimi: '' },
-          ...(await getArviointityokaluKategoriat()).data.sort((a, b) => sortByAsc(a.nimi, b.nimi))
+          ...(this.$isVastuuhenkilo()
+            ? await getArviointityokaluKategoriatVastuuhenkilo()
+            : await getArviointityokaluKategoriat()
+          ).data.sort((a, b) => sortByAsc(a.nimi, b.nimi))
         ]
       } catch {
         toastFail(this, this.$t('arviointityokalujen-kategorioiden-hakeminen-epaonnistui'))
