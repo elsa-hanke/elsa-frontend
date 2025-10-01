@@ -33,6 +33,7 @@
                     :enable-search="false"
                     :show-info-if-empty="false"
                     :enable-delete="false"
+                    :asiakirja-data-endpoint-url="asiakirjaDataEndpoint()"
                   />
                   <b-alert v-else variant="dark" show>
                     <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />
@@ -146,6 +147,16 @@
           isDirty: false
         }
       ]
+    }
+
+    asiakirjaDataEndpoint(): string {
+      if (this.$isVastuuhenkilo()) {
+        return 'vastuuhenkilo/asiakirjat/'
+      } else if (this.$isKouluttaja) {
+        return 'kouluttaja/asiakirjat/'
+      } else {
+        return 'erikoistuva-laakari/asiakirjat/'
+      }
     }
   }
 </script>
