@@ -41,8 +41,8 @@
     loading = true
 
     get isAllowedRoute() {
-      const authorities = store.getters['auth/account'].authorities
-      return this.allowedRoles.some((r) => authorities.includes(r))
+      const activeAuthority = store.getters['auth/account'].activeAuthority
+      return this.allowedRoles.includes(activeAuthority)
     }
 
     onSkipRouteExitConfirm(val: boolean) {
