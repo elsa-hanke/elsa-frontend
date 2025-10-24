@@ -1375,6 +1375,7 @@
   "terveyskeskustyo": "Terveyskeskustyö",
   "tiedoston-nimi": "Tiedoston nimi",
   "tietojen-tallennus-epaonnistui": "Tietojen tallennus epäonnistui",
+  "asiakirja-ei-loydy-uudelleennimeaminen-virhe": "Liitetiedostoa ei voitu lähettää, koska sitä ei löytynyt. Se on mahdollisesti nimetty uudelleen tai poistettu ennen lähetystä",
   "tietosuojaseloste": "Tietosuojaseloste",
   "tila": "Tila",
   "tilin-tila": "Tilin tila",
