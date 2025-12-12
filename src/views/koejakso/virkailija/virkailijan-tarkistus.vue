@@ -423,6 +423,31 @@
           </b-row>
         </div>
         <hr />
+        <elsa-form-group :label="$t('virkailijan-koejakso-yhteenveto')">
+          <div v-if="editable" class="editor-toolbar">
+            <button
+              type="button"
+              :class="['toolbar-btn', { active: isBoldActive, disabled: !canBold }]"
+              :aria-pressed="isBoldActive"
+              :disabled="!canBold"
+              title="Lihavointi"
+              @click="toggleBold"
+            >
+              <strong>B</strong>
+            </button>
+            <button
+              type="button"
+              :class="['toolbar-btn', { active: isBulletListActive, disabled: !canBullet }]"
+              :aria-pressed="isBulletListActive"
+              :disabled="!canBullet"
+              title="Luettelo"
+              @click="toggleBullet"
+            >
+              • List
+            </button>
+          </div>
+          <EditorContent :editor="editor" class="tiptap" />
+        </elsa-form-group>
         <elsa-form-group :label="$t('liitetiedostot')">
           <asiakirjat-content
             v-if="vastuuhenkilonArvio.asiakirjat && vastuuhenkilonArvio.asiakirjat.length > 0"
@@ -574,10 +599,12 @@
 </template>
 
 <script lang="ts">
+  import { Editor } from '@tiptap/core'
+  import { StarterKit } from '@tiptap/starter-kit'
+  import { EditorContent } from '@tiptap/vue-2'
   import { intervalToDuration, formatDuration, isBefore, isAfter } from 'date-fns'
   import { fi, sv, enUS } from 'date-fns/locale'
-  import Component from 'vue-class-component'
-  import { Mixins } from 'vue-property-decorator'
+  import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
 
   import { getVastuuhenkilonArvio, putVastuuhenkilonArvio } from '@/api/virkailija'
@@ -615,10 +642,12 @@
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
       KoejaksonVaiheAllekirjoitukset,
-      AsiakirjatContent
+      AsiakirjatContent,
+      EditorContent
     }
   })
   export default class VirkailijanTarkistus extends Mixins(validationMixin) {
+    editor: Editor | null = null
     items = [
       {
         text: this.$t('etusivu'),
@@ -828,6 +857,8 @@
         this.buttonStates.primaryButtonLoading = true
         if (this.vastuuhenkilonArvio != null) {
           this.vastuuhenkilonArvio.virkailijanKorjausehdotus = null
+          this.vastuuhenkilonArvio.virkailijanYhteenveto =
+            this.editor?.getHTML() ?? this.vastuuhenkilonArvio.virkailijanYhteenveto ?? null
           await putVastuuhenkilonArvio(this.vastuuhenkilonArvio)
           this.buttonStates.primaryButtonLoading = false
           checkCurrentRouteAndRedirect(this.$router, '/koejakso')
@@ -839,9 +870,13 @@
     }
 
     async onReturnToSender(korjausehdotus: string) {
+      const yhteenveto =
+        this.editor?.getHTML() ?? this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? null
+
       const form: VastuuhenkilonArvioLomake = {
         ...(this.vastuuhenkilonArvio as VastuuhenkilonArvioLomake),
-        virkailijanKorjausehdotus: korjausehdotus
+        virkailijanKorjausehdotus: korjausehdotus,
+        virkailijanYhteenveto: yhteenveto
       }
 
       try {
@@ -858,10 +893,20 @@
     async mounted() {
       this.loading = true
 
+      if (!this.editor) {
+        this.editor = new Editor({
+          extensions: [StarterKit],
+          content: '',
+          editable: this.editable
+        })
+      }
       try {
         const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
         this.vastuuhenkilonArvio = data
         this.vastuuhenkilonArvio = this.yhdistaPoissaolot(this.vastuuhenkilonArvio)
+        const html = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? ''
+        this.editor?.commands.setContent(html)
+        this.editor?.setEditable(this.editable)
         this.loading = false
       } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))
@@ -874,5 +919,80 @@
         ? this.vastuuhenkilonArvio?.virkailijanKorjausehdotus
         : this.vastuuhenkilonArvio?.vastuuhenkilonKorjausehdotus
     }
+
+    beforeDestroy() {
+      this.editor?.destroy()
+    }
+
+    get isBoldActive() {
+      return this.editor ? this.editor.isActive('bold') : false
+    }
+
+    get isBulletListActive() {
+      return this.editor ? this.editor.isActive('bulletList') : false
+    }
+
+    get canBold() {
+      return this.editor ? this.editor.can().chain().focus().toggleBold().run() : false
+    }
+    get canBullet() {
+      return this.editor ? this.editor.can().chain().focus().toggleBulletList().run() : false
+    }
+
+    toggleBold() {
+      if (!this.editor) return
+      this.editor.chain().focus().toggleBold().run()
+    }
+    toggleBullet() {
+      if (!this.editor) return
+      this.editor.chain().focus().toggleBulletList().run()
+    }
   }
 </script>
+
+<style scoped>
+  .tiptap ::v-deep .ProseMirror {
+    min-height: 160px;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background: #fff;
+    outline: none;
+  }
+  .tiptap ::v-deep .ProseMirror:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  .tiptap ::v-deep .ProseMirror.is-empty::before {
+    content: attr(data-placeholder);
+    color: #adb5bd; /* harmaa */
+    pointer-events: none;
+  }
+  .editor-toolbar .toolbar-btn {
+    appearance: none;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background: #f8f9fa;
+    color: #212529;
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .editor-toolbar .toolbar-btn:hover {
+    background: #e9ecef;
+  }
+  .editor-toolbar .toolbar-btn.active {
+    background: #e7f1ff;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.2);
+  }
+  .editor-toolbar .toolbar-btn.disabled,
+  .editor-toolbar .toolbar-btn:disabled {
+    background: #f1f3f5;
+    color: #adb5bd;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+</style>

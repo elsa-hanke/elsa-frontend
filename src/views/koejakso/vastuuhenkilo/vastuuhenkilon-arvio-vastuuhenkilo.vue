@@ -520,6 +520,10 @@
           </div>
         </div>
         <hr />
+        <div v-show="vastuuhenkilonArvio.virkailijanYhteenveto">
+          <h5 class="mt-3 mb-2">{{ $t('virkailijan-koejakso-yhteenveto') }}</h5>
+          <div v-html="vastuuhenkilonYhteenvetoSanitized"></div>
+        </div>
         <div v-if="vastuuhenkilonArvio.virkailija && vastuuhenkilonArvio.virkailija.kuittausaika">
           <b-row>
             <b-col>
@@ -692,6 +696,7 @@
 </template>
 
 <script lang="ts">
+  import DOMPurify from 'dompurify'
   import _get from 'lodash/get'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
@@ -880,6 +885,11 @@
 
     get asiakirjaDataEndpointUrl() {
       return `/vastuuhenkilo/koejakso/vastuuhenkilonarvio/${this.vastuuhenkilonArvio?.id}/liite`
+    }
+
+    get vastuuhenkilonYhteenvetoSanitized(): string {
+      const raw = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? ''
+      return DOMPurify.sanitize(raw)
     }
 
     hideModal(id: string) {
