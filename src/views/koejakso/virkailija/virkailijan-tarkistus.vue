@@ -883,9 +883,6 @@
         const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
         this.vastuuhenkilonArvio = data
         this.vastuuhenkilonArvio = this.yhdistaPoissaolot(this.vastuuhenkilonArvio)
-        const html = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? ''
-        this.editor?.commands.setContent(html)
-        this.editor?.setEditable(this.editable)
         this.loading = false
       } catch {
         toastFail(this, this.$t('vastuuhenkilon-arvion-hakeminen-epaonnistui'))
