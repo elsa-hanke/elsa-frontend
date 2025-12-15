@@ -439,6 +439,14 @@
               skin: false
             }"
           />
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            v-else
+            class="editor-readonly"
+            style="white-space: normal"
+            v-html="virkailijanYhteenvetoSanitized"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
         </elsa-form-group>
         <elsa-form-group :label="$t('liitetiedostot')">
           <asiakirjat-content
@@ -593,6 +601,7 @@
 <script lang="ts">
   import { intervalToDuration, formatDuration, isBefore, isAfter } from 'date-fns'
   import { fi, sv, enUS } from 'date-fns/locale'
+  import DOMPurify from 'dompurify'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
@@ -731,6 +740,11 @@
 
     get asiakirjaDataEndpointUrl() {
       return `/virkailija/koejakso/vastuuhenkilon-arvio/${this.vastuuhenkilonArvio?.id}/liite`
+    }
+
+    get virkailijanYhteenvetoSanitized(): string {
+      const raw = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? ''
+      return DOMPurify.sanitize(raw)
     }
 
     onValidateAndConfirm(modalId: string) {

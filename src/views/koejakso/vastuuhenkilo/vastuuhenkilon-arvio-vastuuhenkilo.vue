@@ -523,7 +523,7 @@
         <div v-show="vastuuhenkilonArvio.virkailijanYhteenveto">
           <h5 class="mt-3 mb-2">{{ $t('virkailijan-koejakso-yhteenveto') }}</h5>
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="vastuuhenkilonYhteenvetoSanitized"></div>
+          <div v-html="virkailijanYhteenvetoSanitized"></div>
         </div>
         <div v-if="vastuuhenkilonArvio.virkailija && vastuuhenkilonArvio.virkailija.kuittausaika">
           <b-row>
@@ -888,7 +888,7 @@
       return `/vastuuhenkilo/koejakso/vastuuhenkilonarvio/${this.vastuuhenkilonArvio?.id}/liite`
     }
 
-    get vastuuhenkilonYhteenvetoSanitized(): string {
+    get virkailijanYhteenvetoSanitized(): string {
       const raw = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? ''
       return DOMPurify.sanitize(raw)
     }
