@@ -423,6 +423,31 @@
           </b-row>
         </div>
         <hr />
+        <elsa-form-group :label="$t('virkailijan-koejakso-yhteenveto')">
+          <ElsaTextEditor
+            v-if="editable"
+            v-model="vastuuhenkilonArvio.virkailijanYhteenveto"
+            :init-options="{
+              plugins: ['lists'],
+              toolbar: 'undo redo | bold | bullist numlist',
+              block_formats: 'Paragraph=p',
+              valid_elements: 'p,br,strong/b,ul,ol,li',
+              statusbar: false,
+              height: 300,
+              menubar: false,
+              content_css: false,
+              skin: false
+            }"
+          />
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            v-else
+            class="editor-readonly"
+            style="white-space: normal"
+            v-html="virkailijanYhteenvetoSanitized"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
+        </elsa-form-group>
         <elsa-form-group :label="$t('liitetiedostot')">
           <asiakirjat-content
             v-if="vastuuhenkilonArvio.asiakirjat && vastuuhenkilonArvio.asiakirjat.length > 0"
@@ -576,6 +601,7 @@
 <script lang="ts">
   import { intervalToDuration, formatDuration, isBefore, isAfter } from 'date-fns'
   import { fi, sv, enUS } from 'date-fns/locale'
+  import DOMPurify from 'dompurify'
   import Component from 'vue-class-component'
   import { Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
@@ -590,6 +616,7 @@
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPoissaolotDisplay from '@/components/poissaolot-display/poissaolot-display.vue'
+  import ElsaTextEditor from '@/components/text-editor/text-editor.vue'
   import {
     KoejaksonVaiheAllekirjoitus,
     KoejaksonVaiheButtonStates,
@@ -615,7 +642,8 @@
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
       KoejaksonVaiheAllekirjoitukset,
-      AsiakirjatContent
+      AsiakirjatContent,
+      ElsaTextEditor
     }
   })
   export default class VirkailijanTarkistus extends Mixins(validationMixin) {
@@ -712,6 +740,11 @@
 
     get asiakirjaDataEndpointUrl() {
       return `/virkailija/koejakso/vastuuhenkilon-arvio/${this.vastuuhenkilonArvio?.id}/liite`
+    }
+
+    get virkailijanYhteenvetoSanitized(): string {
+      const raw = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? ''
+      return DOMPurify.sanitize(raw)
     }
 
     onValidateAndConfirm(modalId: string) {
@@ -839,9 +872,12 @@
     }
 
     async onReturnToSender(korjausehdotus: string) {
+      const yhteenveto = this.vastuuhenkilonArvio?.virkailijanYhteenveto ?? null
+
       const form: VastuuhenkilonArvioLomake = {
         ...(this.vastuuhenkilonArvio as VastuuhenkilonArvioLomake),
-        virkailijanKorjausehdotus: korjausehdotus
+        virkailijanKorjausehdotus: korjausehdotus,
+        virkailijanYhteenveto: yhteenveto
       }
 
       try {
@@ -857,7 +893,6 @@
 
     async mounted() {
       this.loading = true
-
       try {
         const { data } = await getVastuuhenkilonArvio(this.vastuuhenkilonArvioId)
         this.vastuuhenkilonArvio = data
@@ -873,6 +908,10 @@
       return this.vastuuhenkilonArvio?.virkailijanKorjausehdotus != null
         ? this.vastuuhenkilonArvio?.virkailijanKorjausehdotus
         : this.vastuuhenkilonArvio?.vastuuhenkilonKorjausehdotus
+    }
+
+    beforeDestroy() {
+      this.editor?.destroy()
     }
   }
 </script>

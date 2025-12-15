@@ -504,7 +504,8 @@
       vastuuhenkilo: null,
       vastuuhenkiloAllekirjoittanut: null,
       hylattyArviointiKaytyLapiKeskustellen: null,
-      vastuuhenkilonKuittausaika: undefined
+      vastuuhenkilonKuittausaika: undefined,
+      virkailijanYhteenveto: null
     }
     formData: VastuuhenkilonArvioLomakeErikoistuva = {
       muutOpintooikeudet: [],
