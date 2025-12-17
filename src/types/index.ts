@@ -1642,6 +1642,7 @@ export interface Valmistumispyynto {
   virkailijanPalautusaika?: string
   virkailijanKorjausehdotus?: string
   virkailijanSaate: string
+  virkailijanYhteenveto?: string | null
   vastuuhenkiloHyvaksyjaNimi?: string
   vastuuhenkiloHyvaksyjaNimike?: string
   vastuuhenkiloHyvaksyjaKuittausaika?: string
@@ -1726,6 +1727,7 @@ export interface ValmistumispyyntoVirkailijanTarkistus {
   korjausehdotus?: string | null
   tutkimustyotaTehty: boolean
   valmistumispyynto?: Valmistumispyynto
+  virkailijanYhteenveto?: string | null
 }
 
 export interface ValmistumispyynnonVirkailijanTarkistusLomake {
@@ -1750,6 +1752,7 @@ export interface ValmistumispyynnonVirkailijanTarkistusLomake {
   korjausehdotus?: string | null
   laillistamispaiva: string | null
   laillistamistodistus: File | null
+  virkailijanYhteenveto?: string | null
 }
 
 export interface ValmistumispyyntoHyvaksynta {

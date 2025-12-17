@@ -428,6 +428,11 @@
                   {{ valmistumispyynto.selvitysVanhentuneistaSuorituksista }}
                 </p>
               </div>
+              <div v-show="virkailijanTarkistus.virkailijanYhteenveto">
+                <h5 class="mt-3 mb-2">{{ $t('virkailijan-valmistumisen-yhteenveto') }}</h5>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div v-html="virkailijanYhteenvetoSanitized"></div>
+              </div>
               <div v-if="valmistumispyynto.virkailijanKuittausaika">
                 <hr />
                 <b-row>
@@ -556,6 +561,7 @@
 
 <script lang="ts">
   import { AxiosError } from 'axios'
+  import DOMPurify from 'dompurify'
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, email } from 'vuelidate/lib/validators'
@@ -673,6 +679,11 @@
 
     get account() {
       return store.getters['auth/account']
+    }
+
+    get virkailijanYhteenvetoSanitized(): string {
+      const raw = this.virkailijanTarkistus?.virkailijanYhteenveto ?? ''
+      return DOMPurify.sanitize(raw)
     }
 
     validateState(name: string) {

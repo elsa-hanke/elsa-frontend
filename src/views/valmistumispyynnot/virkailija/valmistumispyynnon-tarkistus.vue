@@ -684,6 +684,31 @@
                 </p>
               </div>
               <hr />
+              <elsa-form-group :label="$t('virkailijan-valmistumisen-yhteenveto')">
+                <ElsaTextEditor
+                  v-if="editable"
+                  v-model="form.virkailijanYhteenveto"
+                  :init-options="{
+              plugins: ['lists'],
+              toolbar: 'undo redo | bold | bullist numlist',
+              block_formats: 'Paragraph=p',
+              valid_elements: 'p,br,strong/b,ul,ol,li',
+              statusbar: false,
+              height: 300,
+              menubar: false,
+              content_css: false,
+              skin: false
+            }"
+                />
+                <!-- eslint-disable vue/no-v-html -->
+                <div
+                  v-else
+                  class="editor-readonly"
+                  style="white-space: normal"
+                  v-html="virkailijanYhteenvetoSanitized"
+                ></div>
+                <!-- eslint-enable vue/no-v-html -->
+              </elsa-form-group>
               <h2 class="mb-3">{{ $t('huomiot') }}</h2>
               <elsa-form-group
                 v-if="editable"
@@ -856,6 +881,7 @@
 
 <script lang="ts">
   import { AxiosError } from 'axios'
+  import DOMPurify from 'dompurify'
   import { Component, Mixins } from 'vue-property-decorator'
   import { validationMixin } from 'vuelidate'
   import { required, requiredIf } from 'vuelidate/lib/validators'
@@ -872,6 +898,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
+  import ElsaTextEditor from "@/components/text-editor/text-editor.vue"
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import {
     ValmistumispyyntoArviointienTila,
@@ -898,7 +925,8 @@
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
       OpintosuoritusTab,
-      AsiakirjaButton
+      AsiakirjaButton,
+      ElsaTextEditor
     }
   })
   export default class ValmistumispyynnonTarkistus extends Mixins<ValmistumispyyntoMixin>(
@@ -965,7 +993,8 @@
       lisatiedotVastuuhenkilolle: null,
       keskenerainen: false,
       laillistamispaiva: null,
-      laillistamistodistus: null
+      laillistamistodistus: null,
+      virkailijanYhteenveto: null
     }
 
     valmistumispyynnonTarkistus: ValmistumispyyntoVirkailijanTarkistus | null = null
@@ -985,6 +1014,10 @@
     laillistaminenMuokattavissa = false
     skipRouteExitConfirm = true
 
+    get virkailijanYhteenvetoSanitized(): string {
+      const raw = this.valmistumispyynnonTarkistus?.virkailijanYhteenveto ?? ''
+      return DOMPurify.sanitize(raw)
+    }
     async mounted() {
       const valmistumispyyntoId = this.$route?.params?.valmistumispyyntoId
       if (valmistumispyyntoId) {
@@ -1134,7 +1167,8 @@
           laillistamispaiva: this.laillistaminenMuokattavissa ? this.form.laillistamispaiva : null,
           laillistamistodistus: this.laillistaminenMuokattavissa
             ? this.form.laillistamistodistus
-            : null
+            : null,
+          virkailijanYhteenveto: this.form.virkailijanYhteenveto
         }
         this.response = (await putValmistumispyynto(form)).data
         this.$emit('skipRouteExitConfirm', true)
@@ -1179,6 +1213,7 @@
         teoriakoulutusTarkistettu: this.form.teoriakoulutusTarkistettu,
         koejaksoEiVaadittu: this.form.koejaksoEiVaadittu,
         kommentitVirkailijoille: this.form.kommentitVirkailijoille,
+        virkailijanYhteenveto: this.form.virkailijanYhteenveto,
         keskenerainen: false,
         korjausehdotus: korjausehdotus,
         laillistamispaiva: this.laillistaminenMuokattavissa ? this.form.laillistamispaiva : null,
