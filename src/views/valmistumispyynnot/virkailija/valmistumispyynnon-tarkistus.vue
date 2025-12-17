@@ -898,7 +898,7 @@
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
-  import ElsaTextEditor from "@/components/text-editor/text-editor.vue"
+  import ElsaTextEditor from '@/components/text-editor/text-editor.vue'
   import ValmistumispyyntoMixin from '@/mixins/valmistumispyynto'
   import {
     ValmistumispyyntoArviointienTila,
