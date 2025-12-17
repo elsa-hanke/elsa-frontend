@@ -504,6 +504,7 @@ export interface VastuuhenkilonArvioLomake {
   erikoistuvanKuittausaika?: string | null
   virkailija?: KoejaksonVaiheHyvaksyja
   lisatiedotVirkailijalta?: string | null
+  virkailijanYhteenveto?: string | null
   allekirjoitettu?: boolean
   koejaksonSuorituspaikat?: TyoskentelyjaksotTable | null
   aloituskeskustelu?: AloituskeskusteluLomake
