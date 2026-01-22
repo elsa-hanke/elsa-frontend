@@ -24,7 +24,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <h3>{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
+        <h3>{{ $t('valmiit-hyvaksytyt-palautetut') }}</h3>
         <valmistumispyynnot-list
           :valmistumispyynnot="valmistumispyynnotMuut"
           :current-page="currentMuutPage"

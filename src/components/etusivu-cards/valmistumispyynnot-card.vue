@@ -140,8 +140,6 @@
           return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-osaamisen-arviointia')
         case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-hyvaksyntaa')
-        case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
-          return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-allekirjoituksia')
         case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
           return this.$t('valmistumispyynnon-tila.avoimet-asiat-odottaa-virkailijan-tarkastusta')
         case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:

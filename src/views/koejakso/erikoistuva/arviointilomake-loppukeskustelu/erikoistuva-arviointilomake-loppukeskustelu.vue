@@ -121,10 +121,7 @@
         <hr />
 
         <div v-if="acceptedByEveryone">
-          <koejakson-vaihe-allekirjoitukset
-            :allekirjoitukset="allekirjoitukset"
-            title="hyvaksymispaivamaarat"
-          />
+          <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
         </div>
 
         <div v-if="deletable">
@@ -144,7 +141,7 @@
         </div>
 
         <div v-if="!account.impersonated && editable">
-          <hr v-if="allekirjoitukset.length > 0" />
+          <hr v-if="hyvaksynnat.length > 0" />
 
           <b-row>
             <b-col class="text-right">
@@ -203,7 +200,7 @@
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -214,11 +211,11 @@
     KoejaksonVaiheHyvaksyja,
     Koejakso,
     KoejaksonVaiheButtonStates,
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     Opintooikeus
   } from '@/types'
   import { LomakeTilat } from '@/utils/constants'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { resolveOpintooikeusKaytossa } from '@/utils/opintooikeus'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
@@ -232,7 +229,7 @@
       ElsaFormMultiselect,
       ElsaButton,
       ElsaConfirmationModal,
-      KoejaksonVaiheAllekirjoitukset,
+      KoejaksonVaiheHyvaksynnat,
       KoulutuspaikanArvioijat
     }
   })
@@ -283,7 +280,6 @@
     koejaksonVaihe = 'väliarviointi'
 
     loppukeskusteluLomake: Partial<LoppukeskusteluLomake> = {
-      erikoistuvaAllekirjoittanut: false,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
       erikoistuvanNimi: `${this.account.firstName} ${this.account.lastName}`,
       erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
@@ -363,26 +359,24 @@
       this.loppukeskusteluLomake.lahiesimies = lahiesimies
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.loppukeskusteluLomake?.erikoistuvanNimi,
         this.loppukeskusteluLomake?.erikoistuvanKuittausaika
       )
-      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+      const hyvaksyntaLahikouluttaja = hyvaksynnatHelper.mapHyvaksyntaLahikouluttaja(
         this,
         this.loppukeskusteluLomake?.lahikouluttaja
       )
-      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+      const hyvaksyntaLahiesimies = hyvaksynnatHelper.mapHyvaksyntaLahiesimies(
         this,
         this.loppukeskusteluLomake?.lahiesimies
       )
 
-      return [
-        allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies,
-        allekirjoitusErikoistuva
-      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+      return [hyvaksyntaLahikouluttaja, hyvaksyntaLahiesimies, hyvaksyntaErikoistuva].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
+      )
     }
 
     optionDisplayName(option: any) {

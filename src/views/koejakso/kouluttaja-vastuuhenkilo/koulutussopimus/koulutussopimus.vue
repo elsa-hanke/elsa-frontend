@@ -166,11 +166,8 @@
             @skipRouteExitConfirm="onSkipRouteExitConfirm"
           ></vastuuhenkilo-koulutussopimus-form>
           <hr />
-          <koejakson-vaihe-allekirjoitukset
-            :allekirjoitukset="allekirjoitukset"
-            title="hyvaksymispaivamaarat"
-          />
-          <hr v-if="allekirjoitukset.length > 0" />
+          <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
+          <hr v-if="hyvaksynnat.length > 0" />
           <b-row v-if="editable && !signed">
             <b-col class="text-right">
               <elsa-button
@@ -259,12 +256,12 @@
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import store from '@/store'
   import {
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     KoulutussopimusLomake,
     Kouluttaja,
     KoejaksonVaiheButtonStates,
@@ -274,7 +271,7 @@
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { defaultKoulutuspaikka, LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import KoulutussopimusReadonly from '@/views/koejakso/kouluttaja-vastuuhenkilo/koulutussopimus/koulutussopimus-readonly.vue'
   import KouluttajaKoulutussopimusForm from '@/views/koejakso/kouluttaja/kouluttaja-koulutussopimus-form.vue'
@@ -289,7 +286,7 @@
       ElsaButton,
       KoulutussopimusReadonly,
       ErikoistuvaDetails,
-      KoejaksonVaiheAllekirjoitukset,
+      KoejaksonVaiheHyvaksynnat,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal
     }
@@ -513,25 +510,22 @@
       }
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.form.erikoistuvanNimi,
         this.form.erikoistuvanAllekirjoitusaika
-      ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoituksetKouluttajat =
-        allekirjoituksetHelper.mapAllekirjoituksetSopimuksenKouluttajat(
-          this.form.kouluttajat
-        ) as KoejaksonVaiheAllekirjoitus[]
-      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+      ) as KoejaksonVaiheHyvaksynta
+      const hyvaksynnatKouluttajat = hyvaksynnatHelper.mapHyvaksynnatSopimuksenKouluttajat(
+        this.form.kouluttajat
+      ) as KoejaksonVaiheHyvaksynta[]
+      const hyvaksyntaVastuuhenkilo = hyvaksynnatHelper.mapHyvaksyntaVastuuhenkilo(
         this.form.vastuuhenkilo ?? null
-      ) as KoejaksonVaiheAllekirjoitus
+      ) as KoejaksonVaiheHyvaksynta
 
-      return [
-        allekirjoitusErikoistuva,
-        ...allekirjoituksetKouluttajat,
-        allekirjoitusVastuuhenkilo
-      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+      return [hyvaksyntaErikoistuva, ...hyvaksynnatKouluttajat, hyvaksyntaVastuuhenkilo].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
+      )
     }
 
     onSkipRouteExitConfirm(value: boolean) {

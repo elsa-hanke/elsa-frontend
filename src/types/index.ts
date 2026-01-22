@@ -416,7 +416,6 @@ export interface AloituskeskusteluLomake {
 
 export interface ValiarviointiLomake {
   edistyminenTavoitteidenMukaista: boolean | null
-  erikoistuvaAllekirjoittanut: boolean
   erikoistuvanKuittausaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
@@ -436,7 +435,6 @@ export interface ValiarviointiLomake {
 }
 
 export interface KehittamistoimenpiteetLomake {
-  erikoistuvaAllekirjoittanut: boolean
   erikoistuvanKuittausaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
@@ -455,7 +453,6 @@ export interface KehittamistoimenpiteetLomake {
 }
 
 export interface LoppukeskusteluLomake {
-  erikoistuvaAllekirjoittanut: boolean
   erikoistuvanKuittausaika?: string
   erikoistuvanErikoisala: string
   erikoistuvanNimi: string
@@ -493,7 +490,6 @@ export interface VastuuhenkilonArvioLomake {
   muutOpintooikeudet: Opintooikeus[]
   paataOpintooikeudet: boolean
   vastuuhenkilo: Vastuuhenkilo | null
-  vastuuhenkiloAllekirjoittanut: boolean | null
   virkailijanKorjausehdotus?: string | null
   vastuuhenkilonKorjausehdotus?: string | null
   hylattyArviointiKaytyLapiKeskustellen: boolean | null
@@ -505,7 +501,6 @@ export interface VastuuhenkilonArvioLomake {
   virkailija?: KoejaksonVaiheHyvaksyja
   lisatiedotVirkailijalta?: string | null
   virkailijanYhteenveto?: string | null
-  allekirjoitettu?: boolean
   koejaksonSuorituspaikat?: TyoskentelyjaksotTable | null
   aloituskeskustelu?: AloituskeskusteluLomake
   valiarviointi?: ValiarviointiLomake
@@ -596,7 +591,7 @@ export interface KoejaksonTyoskentelyjakso {
   disableDelete: boolean
 }
 
-export interface KoejaksonVaiheAllekirjoitus {
+export interface KoejaksonVaiheHyvaksynta {
   nimiAndNimike: string
   pvm: string
 }
@@ -1649,7 +1644,6 @@ export interface Valmistumispyynto {
   vastuuhenkiloHyvaksyjaKuittausaika?: string
   vastuuhenkiloHyvaksyjaPalautusaika?: string
   vastuuhenkiloHyvaksyjaKorjausehdotus?: string
-  allekirjoitusaika?: string
   yhteenvetoAsiakirjaId?: number | null
   liitteetAsiakirjaId?: number | null
   erikoistujanTiedotAsiakirjaId?: number | null

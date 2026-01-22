@@ -94,36 +94,14 @@
         </template>
       </koejakso-card-content>
 
-      <koejakso-card-content v-if="tila === lomaketilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA">
-        <template #content>
-          <div>
-            <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
-          </div>
-          <p class="pr-6 mb-2">
-            {{ $t('vastuuhenkilon-arvio-tila-odottaa-vastuuhenkilon-allekirjoitusta') }}
-          </p>
-        </template>
-        <template #button>
-          <elsa-button variant="outline-primary" class="mb-4" :to="{ name: url }">
-            {{ $t('nayta-arviointipyynto') }}
-          </elsa-button>
-        </template>
-      </koejakso-card-content>
-
-      <koejakso-card-content
-        v-if="tila === lomaketilat.ALLEKIRJOITETTU || tila === lomaketilat.HYVAKSYTTY"
-      >
+      <koejakso-card-content v-if="tila === lomaketilat.HYVAKSYTTY">
         <template #content>
           <div>
             <font-awesome-icon :icon="['fas', 'check-circle']" class="text-success mr-2" />
           </div>
           <div class="d-inline-flex">
             <span class="pr-6 mb-2">
-              {{
-                tila === lomaketilat.ALLEKIRJOITETTU
-                  ? $t('vastuuhenkilon-arvio-tila-hyvaksytty')
-                  : $t('vastuuhenkilon-arvio-tila-hyvaksytty-arkistointi')
-              }}
+              {{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}
             </span>
           </div>
         </template>

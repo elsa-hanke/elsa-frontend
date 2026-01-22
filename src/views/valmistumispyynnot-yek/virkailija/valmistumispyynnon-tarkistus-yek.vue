@@ -1050,10 +1050,6 @@
     max-width: 970px;
   }
 
-  .allekirjoitus-pvm {
-    min-width: 7rem;
-  }
-
   .lomakkeen-vahvistus {
     ::v-deep label {
       margin-bottom: 0;

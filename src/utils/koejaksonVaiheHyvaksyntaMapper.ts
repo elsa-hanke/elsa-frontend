@@ -1,17 +1,17 @@
 import Vue from 'vue'
 
 import {
-  KoejaksonVaiheAllekirjoitus,
+  KoejaksonVaiheHyvaksynta,
   Kouluttaja,
   KoejaksonVaiheHyvaksyja,
   Vastuuhenkilo
 } from '@/types'
 
-export function mapAllekirjoitusErikoistuva(
+export function mapHyvaksyntaErikoistuva(
   vue: Vue,
   erikoistuvanNimi?: string | null,
   allekirjoitusPvm?: string | null
-): KoejaksonVaiheAllekirjoitus | null {
+): KoejaksonVaiheHyvaksynta | null {
   return allekirjoitusPvm
     ? {
         nimiAndNimike: `${erikoistuvanNimi}, ${(vue.$t('erikoistuja') as string).toLowerCase()}`,
@@ -20,9 +20,9 @@ export function mapAllekirjoitusErikoistuva(
     : null
 }
 
-export function mapAllekirjoituksetSopimuksenKouluttajat(
+export function mapHyvaksynnatSopimuksenKouluttajat(
   kouluttajat: Kouluttaja[]
-): KoejaksonVaiheAllekirjoitus[] | null {
+): KoejaksonVaiheHyvaksynta[] | null {
   return kouluttajat
     .filter((k) => k.sopimusHyvaksytty)
     .map((k) => ({
@@ -31,10 +31,10 @@ export function mapAllekirjoituksetSopimuksenKouluttajat(
     }))
 }
 
-export function mapAllekirjoitusLahikouluttaja(
+export function mapHyvaksyntaLahikouluttaja(
   vue: Vue,
   kouluttaja?: KoejaksonVaiheHyvaksyja
-): KoejaksonVaiheAllekirjoitus | null {
+): KoejaksonVaiheHyvaksynta | null {
   return kouluttaja?.sopimusHyvaksytty
     ? {
         nimiAndNimike: `${kouluttaja.nimi}, ${(vue.$t('lahikouluttaja') as string).toLowerCase()}`,
@@ -43,10 +43,10 @@ export function mapAllekirjoitusLahikouluttaja(
     : null
 }
 
-export function mapAllekirjoitusLahiesimies(
+export function mapHyvaksyntaLahiesimies(
   vue: Vue,
   esimies?: KoejaksonVaiheHyvaksyja
-): KoejaksonVaiheAllekirjoitus | null {
+): KoejaksonVaiheHyvaksynta | null {
   return esimies?.sopimusHyvaksytty
     ? {
         nimiAndNimike: `${esimies.nimi}, ${(vue.$t('lahiesimies') as string).toLowerCase()}`,
@@ -55,9 +55,9 @@ export function mapAllekirjoitusLahiesimies(
     : null
 }
 
-export function mapAllekirjoitusVastuuhenkilo(
+export function mapHyvaksyntaVastuuhenkilo(
   vastuuhenkilo: Vastuuhenkilo | null
-): KoejaksonVaiheAllekirjoitus | null {
+): KoejaksonVaiheHyvaksynta | null {
   return vastuuhenkilo && vastuuhenkilo.sopimusHyvaksytty
     ? {
         nimiAndNimike: `${vastuuhenkilo.nimi}${

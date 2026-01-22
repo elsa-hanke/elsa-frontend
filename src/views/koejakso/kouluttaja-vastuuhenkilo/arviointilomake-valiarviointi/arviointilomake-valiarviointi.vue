@@ -17,7 +17,7 @@
               <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
             </em>
             <div>
-              {{ $t('valiarviointi-kouluttaja-allekirjoitettu') }}
+              {{ $t('valiarviointi-kouluttaja-hyvaksytty') }}
             </div>
           </div>
         </b-alert>
@@ -214,15 +214,12 @@
         />
         <hr />
 
-        <div v-if="allekirjoitukset.length > 0">
-          <koejakson-vaihe-allekirjoitukset
-            :allekirjoitukset="allekirjoitukset"
-            title="hyvaksymispaivamaarat"
-          />
+        <div v-if="hyvaksynnat.length > 0">
+          <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
         </div>
 
         <div v-if="editable || editableForEsimies">
-          <hr v-if="allekirjoitukset.length > 0" />
+          <hr v-if="hyvaksynnat.length > 0" />
           <b-row>
             <b-col class="text-right">
               <elsa-button
@@ -305,7 +302,7 @@
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
@@ -313,13 +310,13 @@
   import {
     ValiarviointiLomake,
     KoejaksonVaiheButtonStates,
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     KoejaksonVaihe
   } from '@/types'
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { KehittamistoimenpideKategoria, LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -331,7 +328,7 @@
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
       KoulutuspaikanArvioijat,
-      KoejaksonVaiheAllekirjoitukset
+      KoejaksonVaiheHyvaksynnat
     },
     validations: {
       valiarviointi: {
@@ -487,26 +484,24 @@
       return this.valiarvioinninTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.valiarviointi?.erikoistuvanNimi,
         this.valiarviointi?.erikoistuvanKuittausaika
       )
-      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+      const hyvaksyntaLahikouluttaja = hyvaksynnatHelper.mapHyvaksyntaLahikouluttaja(
         this,
         this.valiarviointi?.lahikouluttaja
       )
-      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+      const hyvaksyntaLahiesimies = hyvaksynnatHelper.mapHyvaksyntaLahiesimies(
         this,
         this.valiarviointi?.lahiesimies
       )
 
-      return [
-        allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies,
-        allekirjoitusErikoistuva
-      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+      return [hyvaksyntaLahikouluttaja, hyvaksyntaLahiesimies, hyvaksyntaErikoistuva].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
+      )
     }
 
     async onReturnToSender(korjausehdotus: string) {
@@ -546,7 +541,7 @@
         this.buttonStates.primaryButtonLoading = false
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('valiarviointi-allekirjoitettu-ja-lahetetty-onnistuneesti'))
+        toastSuccess(this, this.$t('valiarviointi-lahetetty-onnistuneesti'))
       } catch {
         toastFail(this, this.$t('valiarvioinnin-tallennus-epaonnistui'))
       }

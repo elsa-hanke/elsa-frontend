@@ -642,8 +642,4 @@
   .valmistumispyynto {
     max-width: 970px;
   }
-
-  .allekirjoitus-pvm {
-    min-width: 7rem;
-  }
 </style>

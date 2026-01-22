@@ -47,7 +47,7 @@
       </template>
       <template #cell(actions)="row">
         <elsa-button
-          v-if="row.item.isAvoinForCurrentKayttaja && !odottaaAllekirjoituksia(row.item)"
+          v-if="row.item.isAvoinForCurrentKayttaja"
           variant="primary"
           class="pt-1 pb-1"
           :to="{
@@ -177,7 +177,6 @@
         switch (status) {
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_TARKASTUSTA:
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
-          case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
             return ['far', 'clock']
@@ -186,14 +185,12 @@
         switch (status) {
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
-          case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
             return ['far', 'check-circle']
           case ValmistumispyynnonTila.VASTUUHENKILON_TARKASTUS_PALAUTETTU:
           case ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU:
             return ['fas', 'undo-alt']
-          case ValmistumispyynnonTila.ALLEKIRJOITETTU:
           case ValmistumispyynnonTila.HYVAKSYTTY:
             return ['fas', 'check-circle']
         }
@@ -207,16 +204,13 @@
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
-          case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
             return 'text-warning'
         }
       } else {
         switch (status) {
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
-          case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
-          case ValmistumispyynnonTila.ALLEKIRJOITETTU:
           case ValmistumispyynnonTila.HYVAKSYTTY:
             return 'text-success'
         }
@@ -231,8 +225,6 @@
             return this.$t('valmistumispyynnon-tila.avoin-odottaa-osaamisen-arviointia')
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
             return this.$t('valmistumispyynnon-tila.avoin-odottaa-hyvaksyntaa')
-          case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
-            return this.$t('valmistumispyynnon-tila.avoin-odottaa-allekirjoituksia')
           case ValmistumispyynnonTila.ODOTTAA_VIRKAILIJAN_TARKASTUSTA:
             return this.$t('valmistumispyynnon-tila.avoin-odottaa-virkailijan-tarkastusta')
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_KESKEN:
@@ -244,22 +236,14 @@
             return this.$t('valmistumispyynnon-tila.valmis-odottaa-virkailijan-tarkastusta')
           case ValmistumispyynnonTila.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
             return this.$t('valmistumispyynnon-tila.valmis-odottaa-hyvaksyntaa')
-          case ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA:
-            return this.$t('valmistumispyynnon-tila.valmis-odottaa-allekirjoituksia')
           case ValmistumispyynnonTila.VASTUUHENKILON_TARKASTUS_PALAUTETTU:
           case ValmistumispyynnonTila.VASTUUHENKILON_HYVAKSYNTA_PALAUTETTU:
           case ValmistumispyynnonTila.VIRKAILIJAN_TARKASTUS_PALAUTETTU:
             return this.$t('valmistumispyynnon-tila.palautettu-erikoistujalle')
           case ValmistumispyynnonTila.HYVAKSYTTY:
             return this.$t('valmistumispyynnon-tila.hyvaksytty')
-          case ValmistumispyynnonTila.ALLEKIRJOITETTU:
-            return this.$t('valmistumispyynnon-tila.allekirjoitettu')
         }
       }
-    }
-
-    odottaaAllekirjoituksia(valmistumispyynto: ValmistumispyyntoListItem) {
-      return valmistumispyynto.tila === ValmistumispyynnonTila.ODOTTAA_ALLEKIRJOITUKSIA
     }
 
     get content() {

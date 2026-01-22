@@ -14,7 +14,7 @@
               <p>{{ $t('valmistumispyynto-osaamisen-arviointi-ingressi-3') }}</p>
             </div>
             <div v-else class="mt-3">
-              <b-alert :show="!allekirjoitettu && !hyvaksytty" variant="dark">
+              <b-alert :show="!hyvaksytty" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon
@@ -30,9 +30,6 @@
                     </span>
                     <span v-else-if="odottaaHyvaksyntaa">
                       {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-hyvaksyntaa') }}
-                    </span>
-                    <span v-else-if="odottaaAllekirjoituksia">
-                      {{ $t('valmistumispyynto-osaaminen-arvioitu-odottaa-allekirjoituksia') }}
                     </span>
                     <span v-else-if="vastuuhenkiloOsaamisenArvioijaPalauttanut">
                       {{ $t('valmistumispyynto-osaaminen-arvioitu-palautettu-erikoistujalle') }}
@@ -59,18 +56,6 @@
                       <span>
                         {{ korjausehdotus }}
                       </span>
-                    </span>
-                  </div>
-                </div>
-              </b-alert>
-              <b-alert :show="allekirjoitettu" variant="success">
-                <div class="d-flex flex-row">
-                  <em class="align-middle">
-                    <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-                  </em>
-                  <div>
-                    <span>
-                      {{ $t('valmistumispyynto-osaaminen-arvioitu-allekirjoitettu') }}
                     </span>
                   </div>
                 </div>
@@ -241,7 +226,7 @@
               >
                 <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
                 <b-row>
-                  <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
+                  <b-col class="hyvaksynta-pvm col-xxl-1" lg="2">
                     <h5>{{ $t('paivays') }}</h5>
                     <p>
                       {{ vastuuhenkiloOsaamisenArvioijaKuittausOrPalautusaika }}
@@ -454,7 +439,7 @@
     max-width: 970px;
   }
 
-  .allekirjoitus-pvm {
+  .hyvaksynta-pvm {
     min-width: 7rem;
   }
 </style>

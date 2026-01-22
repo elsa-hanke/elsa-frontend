@@ -40,24 +40,6 @@
                 </div>
               </div>
             </b-alert>
-            <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                </em>
-                <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-allekirjoitusta') }}
-                </div>
-              </div>
-            </b-alert>
-            <b-alert variant="success" :show="acceptedByEveryone">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-                </em>
-                {{ $t('koejakso-on-hyvaksytty-allekirjoitettu-vastuuhenkilo-erikoistuja') }}
-              </div>
-            </b-alert>
             <b-alert variant="success" :show="accepted">
               <div class="d-flex flex-row">
                 <em class="align-middle">
@@ -624,12 +606,9 @@
             </div>
           </template>
         </elsa-form-group>
-        <div v-if="waitingForSignatures || acceptedByEveryone || accepted">
+        <div v-if="accepted">
           <hr />
-          <koejakson-vaihe-allekirjoitukset
-            :allekirjoitukset="allekirjoitukset"
-            title="hyvaksymispaivamaarat"
-          />
+          <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
         </div>
         <div v-if="editable">
           <hr />
@@ -659,11 +638,7 @@
                 class="my-2 d-block d-md-inline-block d-lg-block d-xl-inline-block"
                 @click="onValidateAndConfirm('confirm-sign')"
               >
-                {{
-                  vastuuhenkilonArvio.arkistoitava
-                    ? $t('hyvaksy')
-                    : $t('laheta-allekirjoitettavaksi')
-                }}
+                {{ $t('hyvaksy') }}
               </elsa-button>
             </b-col>
           </b-row>
@@ -683,9 +658,7 @@
           ? $t('lahetyksen-jalkeen-koejakso-arvioitu-arkistointi')
           : $t('lahetyksen-jalkeen-koejakso-arvioitu')
       "
-      :submit-text="
-        vastuuhenkilonArvio.arkistoitava ? $t('hyvaksy') : $t('laheta-allekirjoitettavaksi')
-      "
+      :submit-text="$t('hyvaksy')"
       @submit="onSign"
     />
     <elsa-return-to-sender-modal
@@ -709,7 +682,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -717,7 +690,7 @@
   import store from '@/store'
   import {
     Koejakso,
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     KoejaksonVaiheButtonStates,
     VastuuhenkilonArvioLomake,
     KoejaksonVaihe
@@ -730,7 +703,7 @@
     phoneNumber
   } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
   import {
     tyoskentelypaikkaTyyppiLabel,
@@ -746,7 +719,7 @@
       ElsaPoissaolotDisplay,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
-      KoejaksonVaiheAllekirjoitukset,
+      KoejaksonVaiheHyvaksynnat,
       AsiakirjatContent
     },
     validations: {
@@ -830,14 +803,6 @@
       return this.vastuuhenkilonArvio?.vastuuhenkilonKorjausehdotus != null
     }
 
-    get waitingForSignatures() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.ODOTTAA_ALLEKIRJOITUSTA
-    }
-
-    get acceptedByEveryone() {
-      return this.vastuuhenkilonArvioTila === LomakeTilat.ALLEKIRJOITETTU
-    }
-
     get accepted() {
       return this.vastuuhenkilonArvioTila === LomakeTilat.HYVAKSYTTY
     }
@@ -865,18 +830,18 @@
       return this.vastuuhenkilonArvio?.erikoistuvanNimi
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.vastuuhenkilonArvio?.erikoistuvanNimi,
         this.vastuuhenkilonArvio?.erikoistuvanKuittausaika
       )
-      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+      const hyvaksyntaVastuuhenkilo = hyvaksynnatHelper.mapHyvaksyntaVastuuhenkilo(
         this.vastuuhenkilonArvio?.vastuuhenkilo ?? null
-      ) as KoejaksonVaiheAllekirjoitus
+      ) as KoejaksonVaiheHyvaksynta
 
-      return [allekirjoitusVastuuhenkilo, allekirjoitusErikoistuva].filter(
-        (a): a is KoejaksonVaiheAllekirjoitus => a !== null
+      return [hyvaksyntaVastuuhenkilo, hyvaksyntaErikoistuva].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
       )
     }
 
@@ -937,9 +902,9 @@
         this.buttonStates.primaryButtonLoading = false
         this.$emit('skipRouteExitConfirm', true)
         checkCurrentRouteAndRedirect(this.$router, '/koejakso')
-        toastSuccess(this, this.$t('vastuuhenkilon-arvio-allekirjoitettu-onnistuneesti'))
+        toastSuccess(this, this.$t('vastuuhenkilon-arvio-hyvaksytty-onnistuneesti'))
       } catch {
-        toastFail(this, this.$t('vastuuhenkilon-arvio-allekirjoitus-epaonnistui'))
+        toastFail(this, this.$t('vastuuhenkilon-arvio-hyvaksynta-epaonnistui'))
       }
     }
 

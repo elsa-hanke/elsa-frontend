@@ -107,10 +107,7 @@
         </div>
 
         <div v-if="showAcceptedByEveryone">
-          <koejakson-vaihe-allekirjoitukset
-            :allekirjoitukset="allekirjoitukset"
-            title="hyvaksymispaivamaarat"
-          />
+          <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
         </div>
 
         <div v-if="deletable">
@@ -130,7 +127,7 @@
         </div>
 
         <div v-if="!account.impersonated && editable">
-          <hr v-if="allekirjoitukset.length > 0" />
+          <hr v-if="hyvaksynnat.length > 0" />
           <b-row>
             <b-col class="text-right">
               <elsa-button variant="back" :to="{ name: 'koejakso' }">
@@ -179,7 +176,7 @@
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
@@ -187,12 +184,12 @@
   import {
     ValiarviointiLomake,
     Koejakso,
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     KoejaksonVaiheHyvaksyja,
     KoejaksonVaiheButtonStates
   } from '@/types'
   import { KehittamistoimenpideKategoria, LomakeTilat } from '@/utils/constants'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -203,7 +200,7 @@
       ElsaButton,
       ElsaConfirmationModal,
       KoulutuspaikanArvioijat,
-      KoejaksonVaiheAllekirjoitukset
+      KoejaksonVaiheHyvaksynnat
     }
   })
   export default class ErikoistuvaArviointilomakeValiarviointi extends Vue {
@@ -236,7 +233,6 @@
 
     valiarviointiLomake: Partial<ValiarviointiLomake> = {
       edistyminenTavoitteidenMukaista: null,
-      erikoistuvaAllekirjoittanut: false,
       erikoistuvanErikoisala: this.account.erikoistuvaLaakari.erikoisalaNimi,
       erikoistuvanNimi: `${this.account.firstName} ${this.account.lastName}`,
       erikoistuvanOpiskelijatunnus: this.account.erikoistuvaLaakari.opiskelijatunnus,
@@ -328,26 +324,24 @@
       )
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.valiarviointiLomake?.erikoistuvanNimi,
         this.valiarviointiLomake?.erikoistuvanKuittausaika
       )
-      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+      const hyvaksyntaLahikouluttaja = hyvaksynnatHelper.mapHyvaksyntaLahikouluttaja(
         this,
         this.valiarviointiLomake?.lahikouluttaja
       )
-      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+      const hyvaksyntaLahiesimies = hyvaksynnatHelper.mapHyvaksyntaLahiesimies(
         this,
         this.valiarviointiLomake?.lahiesimies
       )
 
-      return [
-        allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies,
-        allekirjoitusErikoistuva
-      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+      return [hyvaksyntaLahikouluttaja, hyvaksyntaLahiesimies, hyvaksyntaErikoistuva].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
+      )
     }
 
     optionDisplayName(option: any) {
