@@ -46,10 +46,7 @@
       </b-col>
     </b-row>
     <hr />
-    <koejakson-vaihe-allekirjoitukset
-      :allekirjoitukset="allekirjoitukset"
-      title="hyvaksymispaivamaarat"
-    />
+    <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
   </div>
 </template>
 
@@ -58,15 +55,15 @@
   import Component from 'vue-class-component'
   import { Prop } from 'vue-property-decorator'
 
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
-  import { AloituskeskusteluLomake, KoejaksonVaiheAllekirjoitus } from '@/types'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import { AloituskeskusteluLomake, KoejaksonVaiheHyvaksynta } from '@/types'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
 
   @Component({
     components: {
       KoulutuspaikanArvioijat,
-      KoejaksonVaiheAllekirjoitukset
+      KoejaksonVaiheHyvaksynnat
     }
   })
   export default class ArviointilomakeAloituskeskusteluReadonly extends Vue {
@@ -77,26 +74,24 @@
       return this.data?.tyotunnitViikossa?.toString().replace('.', ',')
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.data.erikoistuvanNimi,
         this.data.erikoistuvanKuittausaika
-      ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+      ) as KoejaksonVaiheHyvaksynta
+      const hyvaksyntaLahikouluttaja = hyvaksynnatHelper.mapHyvaksyntaLahikouluttaja(
         this,
         this.data.lahikouluttaja
       )
-      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+      const hyvaksyntaLahiesimies = hyvaksynnatHelper.mapHyvaksyntaLahiesimies(
         this,
         this.data.lahiesimies
       )
 
-      return [
-        allekirjoitusErikoistuva,
-        allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies
-      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+      return [hyvaksyntaErikoistuva, hyvaksyntaLahikouluttaja, hyvaksyntaLahiesimies].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
+      )
     }
   }
 </script>

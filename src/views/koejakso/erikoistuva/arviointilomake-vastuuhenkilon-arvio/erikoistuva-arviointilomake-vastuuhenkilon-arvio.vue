@@ -30,16 +30,6 @@
                 </div>
               </div>
             </b-alert>
-            <b-alert :show="waitingForSignatures" variant="dark" class="mt-3">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
-                </em>
-                <div>
-                  {{ $t('vastuuhenkilon-arvio-tila-odottaa-vastuuhenkilon-allekirjoitusta') }}
-                </div>
-              </div>
-            </b-alert>
             <b-alert
               :show="editable"
               variant="dark"
@@ -97,20 +87,12 @@
                 </div>
               </div>
             </b-alert>
-            <b-alert variant="success" class="mb-2" :show="acceptedByEveryone">
-              <div class="d-flex flex-row">
-                <em class="align-middle">
-                  <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-                </em>
-                <span>{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
-              </div>
-            </b-alert>
             <b-alert variant="success" class="mb-2" :show="accepted">
               <div class="d-flex flex-row">
                 <em class="align-middle">
                   <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
                 </em>
-                <span>{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty-arkistointi') }}</span>
+                <span>{{ $t('vastuuhenkilon-arvio-tila-hyvaksytty') }}</span>
               </div>
             </b-alert>
           </b-col>
@@ -342,7 +324,7 @@
           <hr />
         </div>
         <b-row>
-          <b-col v-if="acceptedByEveryone || accepted">
+          <b-col v-if="accepted">
             <elsa-form-group
               class="mt-2"
               :class="{ 'mb-4': form.koejaksoHyvaksytty === false }"
@@ -374,12 +356,9 @@
             </elsa-form-group>
           </b-col>
         </b-row>
-        <div v-if="acceptedByEveryone || accepted">
+        <div v-if="accepted">
           <hr />
-          <koejakson-vaihe-allekirjoitukset
-            :allekirjoitukset="allekirjoitukset"
-            title="hyvaksymispaivamaarat"
-          />
+          <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
         </div>
         <div v-if="!account.impersonated && editable">
           <hr />
@@ -433,7 +412,7 @@
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormError from '@/components/form-error/form-error.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaFormMultiselect from '@/components/multiselect/multiselect.vue'
   import ElsaPopover from '@/components/popover/popover.vue'
@@ -441,7 +420,7 @@
   import {
     Asiakirja,
     Koejakso,
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     KoejaksonVaiheButtonStates,
     Opintooikeus,
     VastuuhenkilonArvioLomake,
@@ -450,7 +429,7 @@
   import { LomakeTilat, phoneNumber } from '@/utils/constants'
   import { mapFiles } from '@/utils/fileMapper'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -465,7 +444,7 @@
       ElsaButton,
       ElsaConfirmationModal,
       ElsaPopover,
-      KoejaksonVaiheAllekirjoitukset
+      KoejaksonVaiheHyvaksynnat
     }
   })
   export default class ErikoistuvaArviointilomakeVastuuhenkilonArvio extends Vue {
@@ -502,7 +481,6 @@
       muokkauspaiva: '',
       koejaksoHyvaksytty: null,
       vastuuhenkilo: null,
-      vastuuhenkiloAllekirjoittanut: null,
       hylattyArviointiKaytyLapiKeskustellen: null,
       vastuuhenkilonKuittausaika: undefined,
       virkailijanYhteenveto: null
@@ -578,13 +556,6 @@
       return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.PALAUTETTU_KORJATTAVAKSI
     }
 
-    get waitingForSignatures() {
-      return (
-        this.koejaksoData.vastuuhenkilonArvionTila ===
-        LomakeTilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA
-      )
-    }
-
     get korjausehdotus() {
       return this.koejaksoData.vastuuhenkilonArvio?.virkailijanKorjausehdotus != null
         ? this.koejaksoData.vastuuhenkilonArvio?.virkailijanKorjausehdotus
@@ -613,10 +584,6 @@
       )
     }
 
-    get acceptedByEveryone() {
-      return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.ALLEKIRJOITETTU
-    }
-
     get accepted() {
       return this.koejaksoData.vastuuhenkilonArvionTila === LomakeTilat.HYVAKSYTTY
     }
@@ -631,18 +598,18 @@
       }
     }
 
-    get allekirjoitukset(): KoejaksonVaiheAllekirjoitus[] {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat(): KoejaksonVaiheHyvaksynta[] {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.form?.erikoistuvanNimi,
         this.form?.erikoistuvanKuittausaika
       )
-      const allekirjoitusVastuuhenkilo = allekirjoituksetHelper.mapAllekirjoitusVastuuhenkilo(
+      const hyvaksyntaVastuuhenkilo = hyvaksynnatHelper.mapHyvaksyntaVastuuhenkilo(
         this.form.vastuuhenkilo
-      ) as KoejaksonVaiheAllekirjoitus
+      ) as KoejaksonVaiheHyvaksynta
 
-      return [allekirjoitusVastuuhenkilo, allekirjoitusErikoistuva].filter(
-        (a): a is KoejaksonVaiheAllekirjoitus => a !== null
+      return [hyvaksyntaVastuuhenkilo, hyvaksyntaErikoistuva].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
       )
     }
 

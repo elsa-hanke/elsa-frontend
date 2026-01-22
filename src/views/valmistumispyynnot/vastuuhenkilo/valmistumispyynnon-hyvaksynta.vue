@@ -7,7 +7,7 @@
           <h1>{{ $t('valmistumispyynnon-hyvaksynta') }}</h1>
           <div v-if="!loading && virkailijanTarkistus">
             <div class="mt-3">
-              <b-alert :show="odottaaHyvaksyntaa || odottaaAllekirjoituksia" variant="dark">
+              <b-alert :show="odottaaHyvaksyntaa" variant="dark">
                 <div class="d-flex flex-row">
                   <em class="align-middle">
                     <font-awesome-icon
@@ -15,7 +15,7 @@
                       class="text-muted text-size-md mr-2"
                     />
                   </em>
-                  <div v-if="odottaaHyvaksyntaa">
+                  <div>
                     <span>
                       {{ $t('valmistumispyynto-hyvaksynta-virkailija-tarkastanut') }}
                     </span>
@@ -24,21 +24,6 @@
                       <span>
                         {{ valmistumispyynto.virkailijanSaate }}
                       </span>
-                    </span>
-                  </div>
-                  <span v-if="odottaaAllekirjoituksia">
-                    {{ $t('valmistumispyynto-hyvaksynta-odottaa-allekirjoituksia') }}
-                  </span>
-                </div>
-              </b-alert>
-              <b-alert :show="allekirjoitettu" variant="success">
-                <div class="d-flex flex-row">
-                  <em class="align-middle">
-                    <font-awesome-icon :icon="['fas', 'check-circle']" class="mr-2" />
-                  </em>
-                  <div>
-                    <span>
-                      {{ $t('valmistumispyynto-allekirjoitettu-kaikkien-osapuolten-toimesta') }}
                     </span>
                   </div>
                 </div>
@@ -122,7 +107,7 @@
             <div v-if="valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika" class="mt-3">
               <h2 class="mb-3">{{ $t('erikoisalan-vastuuhenkilo') }}</h2>
               <b-row>
-                <b-col class="allekirjoitus-pvm col-xxl-1" lg="2">
+                <b-col class="hyvaksynta-pvm col-xxl-1" lg="2">
                   <h5>{{ $t('paivays') }}</h5>
                   <p>
                     {{ $date(valmistumispyynto.vastuuhenkiloOsaamisenArvioijaKuittausaika) }}
@@ -523,11 +508,7 @@
                   {{ $t('palauta-erikoistujalle') }}
                 </elsa-button>
                 <elsa-button :loading="sending" variant="primary" type="submit" class="ml-2">
-                  {{
-                    valmistumispyynto.arkistoitava
-                      ? $t('hyvaksy')
-                      : $t('laheta-allekirjoitettavaksi')
-                  }}
+                  {{ $t('hyvaksy') }}
                 </elsa-button>
               </div>
             </b-form>
@@ -551,9 +532,7 @@
           ? $t('valmistumispyynto-hyvaksynta-arkistointi')
           : $t('valmistumispyynto-hyvaksynta-vahvistus')
       "
-      :submit-text="
-        valmistumispyynto.arkistoitava ? $t('hyvaksy') : $t('laheta-allekirjoitettavaksi')
-      "
+      :submit-text="$t('hyvaksy')"
       @submit="onSend"
     />
   </div>
@@ -786,7 +765,7 @@
     max-width: 970px;
   }
 
-  .allekirjoitus-pvm {
+  .hyvaksynta-pvm {
     min-width: 7rem;
   }
 </style>

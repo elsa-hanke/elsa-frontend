@@ -239,12 +239,6 @@
           return ['fas', 'undo-alt']
         case LomakeTilat.HYVAKSYTTY:
           return ['fas', 'check-circle']
-        case LomakeTilat.ALLEKIRJOITETTU:
-          return ['fas', 'check-circle']
-        case LomakeTilat.ODOTTAA_ALLEKIRJOITUSTA:
-          return ['far', 'clock']
-        case LomakeTilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA:
-          return ['far', 'check-circle']
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
           return ['far', 'check-circle']
         case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:
@@ -261,12 +255,6 @@
         case LomakeTilat.PALAUTETTU_KORJATTAVAKSI:
           return ''
         case LomakeTilat.HYVAKSYTTY:
-          return 'text-success'
-        case LomakeTilat.ALLEKIRJOITETTU:
-          return 'text-success'
-        case LomakeTilat.ODOTTAA_ALLEKIRJOITUSTA:
-          return 'text-warning'
-        case LomakeTilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA:
           return 'text-success'
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
           return 'text-success'
@@ -285,14 +273,6 @@
           return this.$t('lomake-tila-' + TaskStatus.PALAUTETTU)
         case LomakeTilat.HYVAKSYTTY:
           return this.$t('lomake-tila-' + TaskStatus.HYVAKSYTTY)
-        case LomakeTilat.ALLEKIRJOITETTU:
-          return this.$t('lomake-tila-' + TaskStatus.ALLEKIRJOITETTU)
-        case LomakeTilat.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA:
-          return this.$isKouluttaja()
-            ? this.$t('lomake-tila-' + TaskStatus.VALMIS_ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA)
-            : this.$t('lomake-tila-' + TaskStatus.ODOTTAA_VASTUUHENKILON_ALLEKIRJOITUSTA)
-        case LomakeTilat.ODOTTAA_ALLEKIRJOITUSTA:
-          return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ALLEKIRJOITUSTA)
         case LomakeTilat.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA:
           return this.$t('lomake-tila-' + TaskStatus.ODOTTAA_ESIMIEHEN_HYVAKSYNTAA)
         case LomakeTilat.ODOTTAA_VASTUUHENKILON_HYVAKSYNTAA:

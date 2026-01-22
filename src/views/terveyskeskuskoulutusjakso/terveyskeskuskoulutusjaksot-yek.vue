@@ -95,7 +95,7 @@
         <div v-else class="text-center">
           <b-spinner variant="primary" :label="$t('ladataan')" />
         </div>
-        <h3 class="mt-4">{{ $t('valmiit-allekirjoitetut-palautetut') }}</h3>
+        <h3 class="mt-4">{{ $t('valmiit-hyvaksytyt-palautetut') }}</h3>
         <div v-if="!loading">
           <b-alert v-if="muutRows === 0" variant="dark" show>
             <font-awesome-icon icon="info-circle" fixed-width class="text-muted" />

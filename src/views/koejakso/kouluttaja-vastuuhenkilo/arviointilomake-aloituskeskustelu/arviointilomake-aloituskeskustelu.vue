@@ -17,7 +17,7 @@
             <font-awesome-icon :icon="['fas', 'info-circle']" class="text-muted mr-2" />
           </em>
           <div>
-            {{ $t('aloituskeskustelu-kouluttaja-allekirjoitettu') }}
+            {{ $t('aloituskeskustelu-kouluttaja-hyvaksytty') }}
           </div>
         </div>
       </b-alert>
@@ -111,12 +111,9 @@
           </b-col>
         </b-row>
         <hr />
-        <koejakson-vaihe-allekirjoitukset
-          :allekirjoitukset="allekirjoitukset"
-          title="hyvaksymispaivamaarat"
-        />
+        <koejakson-vaihe-hyvaksynnat :hyvaksynnat="hyvaksynnat" title="hyvaksymispaivamaarat" />
       </div>
-      <hr v-if="showAllekirjoitukset && editable" />
+      <hr v-if="showHyvaksynnat && editable" />
       <b-row v-if="editable">
         <b-col class="text-right">
           <elsa-button
@@ -180,13 +177,13 @@
   import ElsaButton from '@/components/button/button.vue'
   import ErikoistuvaDetails from '@/components/erikoistuva-details/erikoistuva-details.vue'
   import ElsaFormGroup from '@/components/form-group/form-group.vue'
-  import KoejaksonVaiheAllekirjoitukset from '@/components/koejakson-vaiheet/koejakson-vaihe-allekirjoitukset.vue'
+  import KoejaksonVaiheHyvaksynnat from '@/components/koejakson-vaiheet/koejakson-vaihe-hyvaksynnat.vue'
   import KoulutuspaikanArvioijat from '@/components/koejakson-vaiheet/koulutuspaikan-arvioijat.vue'
   import ElsaConfirmationModal from '@/components/modal/confirmation-modal.vue'
   import ElsaReturnToSenderModal from '@/components/modal/return-to-sender-modal.vue'
   import store from '@/store'
   import {
-    KoejaksonVaiheAllekirjoitus,
+    KoejaksonVaiheHyvaksynta,
     KoejaksonVaiheButtonStates,
     AloituskeskusteluLomake,
     KoejaksonVaihe
@@ -194,7 +191,7 @@
   import { resolveRolePath } from '@/utils/apiRolePathResolver'
   import { LomakeTilat, LomakeTyypit } from '@/utils/constants'
   import { checkCurrentRouteAndRedirect } from '@/utils/functions'
-  import * as allekirjoituksetHelper from '@/utils/koejaksonVaiheAllekirjoitusMapper'
+  import * as hyvaksynnatHelper from '@/utils/koejaksonVaiheHyvaksyntaMapper'
   import { toastFail, toastSuccess } from '@/utils/toast'
 
   @Component({
@@ -202,7 +199,7 @@
       ErikoistuvaDetails,
       ElsaFormGroup,
       ElsaButton,
-      KoejaksonVaiheAllekirjoitukset,
+      KoejaksonVaiheHyvaksynnat,
       ElsaConfirmationModal,
       ElsaReturnToSenderModal,
       KoulutuspaikanArvioijat
@@ -242,7 +239,7 @@
       )?.tila
     }
 
-    get showAllekirjoitukset() {
+    get showHyvaksynnat() {
       return (
         this.aloituskeskustelu?.erikoistuvanKuittausaika !== null ||
         this.aloituskeskustelu?.lahikouluttaja.sopimusHyvaksytty ||
@@ -298,26 +295,24 @@
       return this.aloituskeskustelu?.erikoistuvanNimi
     }
 
-    get allekirjoitukset() {
-      const allekirjoitusErikoistuva = allekirjoituksetHelper.mapAllekirjoitusErikoistuva(
+    get hyvaksynnat() {
+      const hyvaksyntaErikoistuva = hyvaksynnatHelper.mapHyvaksyntaErikoistuva(
         this,
         this.aloituskeskustelu?.erikoistuvanNimi,
         this.aloituskeskustelu?.erikoistuvanKuittausaika
-      ) as KoejaksonVaiheAllekirjoitus
-      const allekirjoitusLahikouluttaja = allekirjoituksetHelper.mapAllekirjoitusLahikouluttaja(
+      ) as KoejaksonVaiheHyvaksynta
+      const hyvaksyntaLahikouluttaja = hyvaksynnatHelper.mapHyvaksyntaLahikouluttaja(
         this,
         this.aloituskeskustelu?.lahikouluttaja
       )
-      const allekirjoitusLahiesimies = allekirjoituksetHelper.mapAllekirjoitusLahiesimies(
+      const hyvaksyntaLahiesimies = hyvaksynnatHelper.mapHyvaksyntaLahiesimies(
         this,
         this.aloituskeskustelu?.lahiesimies
       )
 
-      return [
-        allekirjoitusErikoistuva,
-        allekirjoitusLahikouluttaja,
-        allekirjoitusLahiesimies
-      ].filter((a): a is KoejaksonVaiheAllekirjoitus => a !== null)
+      return [hyvaksyntaErikoistuva, hyvaksyntaLahikouluttaja, hyvaksyntaLahiesimies].filter(
+        (a): a is KoejaksonVaiheHyvaksynta => a !== null
+      )
     }
 
     async returnToSender(korjausehdotus: string) {
