@@ -50,6 +50,8 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build --mode production-test
+      - name: Security scan
+        run: /bin/bash -c 'yarn audit --groups dependencies; [[ $? -ge 8 ]] && exit 1 || exit 0
       - name: Store dist
         uses: actions/upload-artifact@v4
         with:
