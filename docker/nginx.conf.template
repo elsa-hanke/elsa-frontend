@@ -14,12 +14,13 @@ server {
     # To expose a new top-level prefix (e.g. /graphql/) just append |graphql
     # to the regex – nothing else needs to change.
     #
-    # /api/        – application REST API  (new endpoints covered automatically)
-    # /oauth2/     – Spring Security OAuth2
-    # /auth/       – Spring Security auth endpoints
-    # /management/ – Spring Boot Actuator
-    # /saml2/      – Spring Security SAML2  (used by login page redirect)
-    location ~ ^/(api|oauth2|auth|management|saml2)/ {
+    # /api/          – application REST API  (new endpoints covered automatically)
+    # /oauth2/       – Spring Security OAuth2
+    # /auth/         – Spring Security auth endpoints
+    # /management/   – Spring Boot Actuator
+    # /saml2/        – SAML2 SP-initiated login  (→ /saml2/authenticate/suomifi)
+    # /login/saml2/  – SAML2 ACS callback        (← Suomi.fi POSTs here after login)
+    location ~ ^/(api|oauth2|auth|management|saml2|login/saml2)/ {
         proxy_pass ${BACKEND_URL};
         proxy_set_header Host              $http_host;
         proxy_set_header X-Real-IP         $remote_addr;
