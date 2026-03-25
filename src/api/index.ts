@@ -7,9 +7,8 @@ import { wrapToFormData } from '@/utils/functions'
 
 export const ELSA_API_LOCATION =
   process.env.NODE_ENV === 'production'
-    ? `${window.location.protocol}//api.${window.location.hostname}${
-        window.location.port ? ':' + window.location.port : ''
-      }`
+    ? `${window.location.protocol}//api.${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
+    }`
     : ''
 axios.defaults.baseURL = `${ELSA_API_LOCATION}/api/`
 axios.defaults.withCredentials = true
@@ -29,7 +28,7 @@ axios.interceptors.request.use((req) => {
   }
 
   if (accessKey) {
-    req.headers.common['X-Access-Key'] = accessKey
+    req.headers.set('X-Access-Key', accessKey)
   }
 
   return req
