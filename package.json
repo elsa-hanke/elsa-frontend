@@ -5,7 +5,7 @@
   "resolutions": {
     "vue": "2.6.14"
   },
-  "scripts": {
+"scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-tsc --noEmit && vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
@@ -26,7 +26,7 @@
     "@types/vuelidate": "^0.7.13",
     "@vue/composition-api": "^1.0.0-beta.21",
     "apexcharts": "^3.22.3",
-    "axios": "^1.13.6",
+    "axios": "^0.21.3",
     "babel-jest": "^27.5.1",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.17.0",
