@@ -29,7 +29,7 @@ axios.interceptors.request.use((req) => {
   }
 
   if (accessKey) {
-    req.headers.set('X-Access-Key', accessKey)
+    req.headers.common['X-Access-Key'] = accessKey
   }
 
   return req
